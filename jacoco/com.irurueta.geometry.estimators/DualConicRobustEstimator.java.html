@@ -30,80 +30,81 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public abstract class DualConicRobustEstimator {
-    
+
     /**
      * Minimum number of 2D lines required to estimate a Dual Conic.
      */
     public static final int MINIMUM_SIZE = 5;
-    
+
     /**
      * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta.
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
      * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Constant defining default confidence of the estimated result, which is
-     * 99%. This means that with a probability of 99% estimation will be 
+     * 99%. This means that with a probability of 99% estimation will be
      * accurate because chosen subsamples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
-    
+
     /**
      * Default maximum allowed number of iterations.
      */
     public static final int DEFAULT_MAX_ITERATIONS = 5000;
-    
+
     /**
      * Minimum allowed confidence value.
      */
     public static final double MIN_CONFIDENCE = 0.0;
-    
+
     /**
      * Maximum allowed confidence value.
      */
     public static final double MAX_CONFIDENCE = 1.0;
-    
+
     /**
      * Minimum allowed number of iterations.
      */
     public static final int MIN_ITERATIONS = 1;
-    
+
     /**
      * Default robust estimator method when none is provided.
      */
-<span class="fc" id="L86">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
+<span class="fc" id="L87">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
             RobustEstimatorMethod.PROMedS;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
     protected DualConicRobustEstimatorListener mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
     protected volatile boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
      * equivalent to 100%). The amount of confidence indicates the probability
@@ -111,14 +112,14 @@ public abstract class DualConicRobustEstimator {
      * to 1.0, but not exactly 1.0.
      */
     protected double mConfidence;
-    
+
     /**
-     * Maximum allowed number of iterations. When the maximum number of 
-     * iterations is exceeded, result will not be available, however an 
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
     protected int mMaxIterations;
-    
+
     /**
      * List of lines to be used to estimate a dual conic. Provided list must
      * have a size greater or equal than MINIMUM_SIZE.
@@ -136,650 +137,690 @@ public abstract class DualConicRobustEstimator {
      * residuals.
      */
     private Matrix mTestDualC;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L143">    public DualConicRobustEstimator() {</span>
-<span class="fc" id="L144">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L145">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L146">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L147">    }</span>
-    
+<span class="fc" id="L144">    protected DualConicRobustEstimator() {</span>
+<span class="fc" id="L145">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L146">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L147">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L148">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
-<span class="fc" id="L154">    public DualConicRobustEstimator(DualConicRobustEstimatorListener listener) {</span>
-<span class="fc" id="L155">        mListener = listener;</span>
-<span class="fc" id="L156">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L157">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L158">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L159">    }</span>
-    
+<span class="fc" id="L156">    protected DualConicRobustEstimator(final DualConicRobustEstimatorListener listener) {</span>
+<span class="fc" id="L157">        mListener = listener;</span>
+<span class="fc" id="L158">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L159">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L160">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L161">    }</span>
+
     /**
      * Constructor with lines.
+     *
      * @param lines 2D lines to estimate a dual conic.
      * @throws IllegalArgumentException if provided lsit of lines don't have
-     * a size greater or equal than MINIMUM_SIZE.
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-<span class="fc" id="L167">    public DualConicRobustEstimator(List&lt;Line2D&gt; lines) {</span>
-<span class="fc" id="L168">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L169">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L170">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L171">        internalSetLines(lines);</span>
-<span class="fc" id="L172">    }</span>
-    
+<span class="fc" id="L170">    public DualConicRobustEstimator(final List&lt;Line2D&gt; lines) {</span>
+<span class="fc" id="L171">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L172">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L173">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L174">        internalSetLines(lines);</span>
+<span class="fc" id="L175">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a dual conic.
+     *                 starts, ends or its progress significantly changes.
+     * @param lines    2D lines to estimate a dual conic.
      * @throws IllegalArgumentException if provided list of lines don't have a
-     * size greater or equal than MINIMUM_SIZE.
+     *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public DualConicRobustEstimator(DualConicRobustEstimatorListener listener,
-<span class="fc" id="L183">            List&lt;Line2D&gt; lines) {</span>
-<span class="fc" id="L184">        mListener = listener;</span>
-<span class="fc" id="L185">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L186">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L187">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L188">        internalSetLines(lines);</span>
-<span class="fc" id="L189">    }</span>
-    
+    public DualConicRobustEstimator(final DualConicRobustEstimatorListener listener,
+<span class="fc" id="L187">                                    final List&lt;Line2D&gt; lines) {</span>
+<span class="fc" id="L188">        mListener = listener;</span>
+<span class="fc" id="L189">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L190">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L191">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L192">        internalSetLines(lines);</span>
+<span class="fc" id="L193">    }</span>
+
     /**
      * Returns reference to listener to be notified of events such as when
      * estimation starts, ends or its progress significantly changes.
+     *
      * @return listener to be notified of events.
      */
     public DualConicRobustEstimatorListener getListener() {
-<span class="fc" id="L197">        return mListener;</span>
+<span class="fc" id="L202">        return mListener;</span>
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts,
      * ends or its progress significantly changes.
+     *
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(DualConicRobustEstimatorListener listener)
+    public void setListener(final DualConicRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L209">            throw new LockedException();</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L215">            throw new LockedException();</span>
         }
-<span class="fc" id="L211">        mListener = listener;</span>
-<span class="fc" id="L212">    }</span>
-    
+<span class="fc" id="L217">        mListener = listener;</span>
+<span class="fc" id="L218">    }</span>
+
     /**
      * Indicates whether listener has been provided and is available for
      * retrieval.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L220" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        return mListener != null;</span>
     }
-    
+
     /**
      * Indicates if this instance is locked because estimation is being computed
+     *
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L228">        return mLocked;</span>
+<span class="fc" id="L236">        return mLocked;</span>
     }
-    
+
     /**
      * Returns amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @return amount of progress variation before notiying a progres change
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L238">        return mProgressDelta;</span>
+<span class="fc" id="L247">        return mProgressDelta;</span>
     }
-    
+
     /**
      * Sets amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @param progressDelta amount of progress variation before notifying a
-     * progress change during estimation.
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setProgressDelta(float progressDelta) throws LockedException {
-<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L253">            throw new LockedException();</span>
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L263">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L255" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L265" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L257">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L267">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L259">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L260">    }</span>
-    
+<span class="fc" id="L269">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L270">    }</span>
+
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
      * (which is equivalent to 100%). The amount of confidence indicates that
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L270">        return mConfidence;</span>
+<span class="fc" id="L281">        return mConfidence;</span>
     }
-    
+
     /**
      * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
      * is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0
+     *
      * @param confidence confidence to be set as a value between 0.0 and 1.0.
      * @throws IllegalArgumentException if provided value is not between 0.0 and
-     * 1.0.
-     * @throws LockedException if this estimator is locked because an estimator 
-     * is being computed.
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
      */
-    public void setConfidence(double confidence) throws LockedException {
-<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L286">            throw new LockedException();</span>
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L298">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L288" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L289">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L300" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L301">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L291">        mConfidence = confidence;</span>
-<span class="fc" id="L292">    }</span>
-    
+<span class="fc" id="L303">        mConfidence = confidence;</span>
+<span class="fc" id="L304">    }</span>
+
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
      * of iterations is achieved without converging to a result when calling
      * estimate(), a RobustEstimatorException will be raised.
+     *
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L301">        return mMaxIterations;</span>
+<span class="fc" id="L314">        return mMaxIterations;</span>
     }
-    
+
     /**
      * Sets maximum allowed number of iterations. When the maximum number of
-     * iterations is exceeded, result will not be available, however an 
+     * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
+     *
      * @param maxIterations maximum allowed number of iterations to be set.
      * @throws IllegalArgumentException if provided value is less than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setMaxIterations(int maxIterations) throws LockedException {
-<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L315">            throw new LockedException();</span>
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L329">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L318">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L332">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L320">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L321">    }</span>
-    
+<span class="fc" id="L334">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L335">    }</span>
+
     /**
      * Returns list of lines to be used to estimate a dual conic.
      * Provided list have a size greater or equal than MINIMUM_SIZE.
+     *
      * @return list of lines to be used to estimate a dual conic.
      */
     public List&lt;Line2D&gt; getLines() {
-<span class="fc" id="L329">        return mLines;</span>
+<span class="fc" id="L344">        return mLines;</span>
     }
-    
+
     /**
      * Sets list of lines to be used to estimate a dual conic.
      * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
      * @param lines list of lines to be used to estimate a dual conic.
      * @throws IllegalArgumentException if provided list of lines doesn't have
-     * a size greater or equal than MINIMUM_SIZE.
-     * @throws LockedException if estimator is locked because a computation is
-     * already in progress.
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
      */
-    public void setLines(List&lt;Line2D&gt; lines) throws LockedException {
-<span class="fc bfc" id="L342" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L343">            throw new LockedException();</span>
+    public void setLines(final List&lt;Line2D&gt; lines) throws LockedException {
+<span class="fc bfc" id="L358" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L359">            throw new LockedException();</span>
         }
-<span class="fc" id="L345">        internalSetLines(lines);</span>
-<span class="fc" id="L346">    }</span>
-    
+<span class="fc" id="L361">        internalSetLines(lines);</span>
+<span class="fc" id="L362">    }</span>
+
     /**
      * Indicates if estimator is ready to start the dual conic estimation.
      * This is true when MINIMUM_SIZE lines are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L354" title="All 4 branches covered.">        return mLines != null &amp;&amp; mLines.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L371" title="All 4 branches covered.">        return mLines != null &amp;&amp; mLines.size() &gt;= MINIMUM_SIZE;</span>
     }
-    
+
     /**
      * Returns quality scores corresponding to each line.
      * The larger the score value the better the quality of the line measure.
      * This implementation always return null.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @return quality scores coresponding to each line.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L365">        return null;</span>
+<span class="fc" id="L383">        return null;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each line.
      * The larger the score value the better the quality of the matching.
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @param qualityScores quality scores corresponding to each line.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 9 samples).
+     *                                  smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
-<span class="fc" id="L379">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
-    
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc" id="L399">    }</span>
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided robust estimator method.
+     *
      * @param method method of a robust estimator algorithm to estimate bes dual
-     * conic.
+     *               conic.
      * @return an instance of a dual conic robust estimator.
      */
-    public static DualConicRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L389" title="All 5 branches covered.">        switch (method) {</span>
+    public static DualConicRobustEstimator create(final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L410" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L391">                return new LMedSDualConicRobustEstimator();</span>
+<span class="fc" id="L412">                return new LMedSDualConicRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L393">                return new MSACDualConicRobustEstimator();</span>
+<span class="fc" id="L414">                return new MSACDualConicRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L395">                return new PROSACDualConicRobustEstimator();</span>
+<span class="fc" id="L416">                return new PROSACDualConicRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L397">                return new PROMedSDualConicRobustEstimator();</span>
+<span class="fc" id="L418">                return new PROMedSDualConicRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L400">                return new RANSACDualConicRobustEstimator();</span>
+<span class="fc" id="L421">                return new RANSACDualConicRobustEstimator();</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided lines and robust estimator method.
-     * @param lines 2D lines to estimate a dual conic.
-     * @param method method of a robust estimator algorithm to estimate best 
-     * dual conic.
+     *
+     * @param lines  2D lines to estimate a dual conic.
+     * @param method method of a robust estimator algorithm to estimate best
+     *               dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have a
-     * size greater or equal than MINIMUM_SIZE.
+     *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines, 
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L416" title="All 5 branches covered.">        switch (method) {</span>
+    public static DualConicRobustEstimator create(
+            final List&lt;Line2D&gt; lines, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L438" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L418">                return new LMedSDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L440">                return new LMedSDualConicRobustEstimator(lines);</span>
             case MSAC:
-<span class="fc" id="L420">                return new MSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L442">                return new MSACDualConicRobustEstimator(lines);</span>
             case PROSAC:
-<span class="fc" id="L422">                return new PROSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L444">                return new PROSACDualConicRobustEstimator(lines);</span>
             case PROMedS:
-<span class="fc" id="L424">                return new PROMedSDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L446">                return new PROMedSDualConicRobustEstimator(lines);</span>
             case RANSAC:
             default:
-<span class="fc" id="L427">                return new RANSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L449">                return new RANSACDualConicRobustEstimator(lines);</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * dual conic.
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 dual conic.
      * @return an instance of a dual conic robust estimator.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, 
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L443" title="All 5 branches covered.">        switch (method) {</span>
+            final DualConicRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L466" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L445">                return new LMedSDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L468">                return new LMedSDualConicRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L447">                return new MSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L470">                return new MSACDualConicRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L449">                return new PROSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L472">                return new PROSACDualConicRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L451">                return new PROMedSDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L474">                return new PROMedSDualConicRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L454">                return new RANSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L477">                return new RANSACDualConicRobustEstimator(listener);</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener and lines.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a dual conic.
-     * @param method method of a robust estimator algorithm to estimate best 
-     * dual conic.
+     *                 starts, ends or its progress significantly changes.
+     * @param lines    2D lines to estimate a dual conic.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have a
-     * size greater or equal than MINIMUM_SIZE.
+     *                                  size greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines,
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L473" title="All 5 branches covered.">        switch (method) {</span>
+            final DualConicRobustEstimatorListener listener, final List&lt;Line2D&gt; lines,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L497" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L475">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L499">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
             case MSAC:
-<span class="fc" id="L477">                return new MSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L501">                return new MSACDualConicRobustEstimator(listener, lines);</span>
             case PROSAC:
-<span class="fc" id="L479">                return new PROSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L503">                return new PROSACDualConicRobustEstimator(listener, lines);</span>
             case PROMedS:
-<span class="fc" id="L481">                return new PROMedSDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L505">                return new PROMedSDualConicRobustEstimator(listener, lines);</span>
             case RANSAC:
             default:
-<span class="fc" id="L484">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L508">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each provided line.
-     * @param method method of a robust estimator algorithm to estimate bes dual
-     * conic.
+     * @param method        method of a robust estimator algorithm to estimate bes dual
+     *                      conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 5 lines).
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
-    public static DualConicRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L500" title="All 5 branches covered.">        switch (method) {</span>
+    public static DualConicRobustEstimator create(
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L525" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L502">                return new LMedSDualConicRobustEstimator();</span>
+<span class="fc" id="L527">                return new LMedSDualConicRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L504">                return new MSACDualConicRobustEstimator();</span>
+<span class="fc" id="L529">                return new MSACDualConicRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L506">                return new PROSACDualConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L531">                return new PROSACDualConicRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L508">                return new PROMedSDualConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L533">                return new PROMedSDualConicRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L511">                return new RANSACDualConicRobustEstimator();</span>
+<span class="fc" id="L536">                return new RANSACDualConicRobustEstimator();</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator method based on 2D line samples and
      * using provided lines and robust estimator method.
-     * @param lines 2D lines to estimate a dual conic.
+     *
+     * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores correspondign to each provided line.
-     * @param method method of a robust estimator algorithm to estimate best
-     * dual conic.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have
-     * the same size as the list of provided quality scores, or if their size
-     * is not greater or equal than MINIMUM_SIZE.
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines, 
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L529" title="All 5 branches covered.">        switch (method) {</span>
+    public static DualConicRobustEstimator create(
+            final List&lt;Line2D&gt; lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L556" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L531">                return new LMedSDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L558">                return new LMedSDualConicRobustEstimator(lines);</span>
             case MSAC:
-<span class="fc" id="L533">                return new MSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L560">                return new MSACDualConicRobustEstimator(lines);</span>
             case PROSAC:
-<span class="fc" id="L535">                return new PROSACDualConicRobustEstimator(lines, </span>
+<span class="fc" id="L562">                return new PROSACDualConicRobustEstimator(lines,</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L538">                return new PROMedSDualConicRobustEstimator(lines, </span>
+<span class="fc" id="L565">                return new PROMedSDualConicRobustEstimator(lines,</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L542">                return new RANSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L569">                return new RANSACDualConicRobustEstimator(lines);</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @param method method of a robust estimator algorithm to estimate best 
-     * dual conic.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 5 lines).
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, double[] qualityScores, 
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L561" title="All 5 branches covered.">        switch (method) {</span>
+            final DualConicRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L589" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L563">                return new LMedSDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L591">                return new LMedSDualConicRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L565">                return new MSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L593">                return new MSACDualConicRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L567">                return new PROSACDualConicRobustEstimator(listener, </span>
+<span class="fc" id="L595">                return new PROSACDualConicRobustEstimator(listener,</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L570">                return new PROMedSDualConicRobustEstimator(listener, </span>
+<span class="fc" id="L598">                return new PROMedSDualConicRobustEstimator(listener,</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L574">                return new RANSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L602">                return new RANSACDualConicRobustEstimator(listener);</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provied listener and lines.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a dual conic.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @param method method of a robust estimator algorithm to estimate best
-     * dual conic.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have
-     * the same size as the list of provided qualitys cores, or it their size is
-     * not greater or equal than MINIMUM_SIZE.
+     *                                  the same size as the list of provided qualitys cores, or it their size is
+     *                                  not greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L595" title="All 5 branches covered.">        switch (method) {</span>
+            final DualConicRobustEstimatorListener listener, final List&lt;Line2D&gt; lines,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L624" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L597">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L626">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
             case MSAC:
-<span class="fc" id="L599">                return new MSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L628">                return new MSACDualConicRobustEstimator(listener, lines);</span>
             case PROSAC:
-<span class="fc" id="L601">                return new PROSACDualConicRobustEstimator(listener, lines, </span>
+<span class="fc" id="L630">                return new PROSACDualConicRobustEstimator(listener, lines,</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L604">                return new PROMedSDualConicRobustEstimator(listener, lines, </span>
+<span class="fc" id="L633">                return new PROMedSDualConicRobustEstimator(listener, lines,</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L608">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L637">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
         }
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * default robust estimator method.
+     *
      * @return an instance of a dual conic robust estimator.
      */
     public static DualConicRobustEstimator create() {
-<span class="fc" id="L618">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L648">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided lines and default robust estimator method.
+     *
      * @param lines 2D lines to estimate a dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines doesn't have a
-     * size greater or equal than MINIMUM_SIZE.
+     *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines) {
-<span class="fc" id="L630">        return create(lines, DEFAULT_ROBUST_METHOD);        </span>
+    public static DualConicRobustEstimator create(final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L661">        return create(lines, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener and default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      * @return an instance of a dual conic robust estimator.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener) {
-<span class="fc" id="L642">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+            final DualConicRobustEstimatorListener listener) {
+<span class="fc" id="L674">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener and lines and default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a dual conic.
+     *                 starts, ends or its progress significantly changes.
+     * @param lines    2D lines to estimate a dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines doesn't have
-     * a size greater or equal than MINIMUM_SIZE.
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines) {
-<span class="fc" id="L657">        return create(listener, lines, DEFAULT_ROBUST_METHOD);</span>
+            final DualConicRobustEstimatorListener listener, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L690">        return create(listener, lines, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * default robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each provided line
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 5 lines).
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
-    public static DualConicRobustEstimator create(double[] qualityScores) {
-<span class="fc" id="L669">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static DualConicRobustEstimator create(final double[] qualityScores) {
+<span class="fc" id="L703">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided lines and default estimator method.
-     * @param lines 2D lines to estimate a dual conic.
+     *
+     * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores corresponding to each provided line
      * @return an instance of adual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have the
-     * same size as the list of provided quality scores, or if their size is not
-     * greater or equal than MINIMUM_SIZE.
+     *                                  same size as the list of provided quality scores, or if their size is not
+     *                                  greater or equal than MINIMUM_SIZE.
      */
-    public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines,
-            double[] qualityScores) {
-<span class="fc" id="L684">        return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static DualConicRobustEstimator create(
+            final List&lt;Line2D&gt; lines, final double[] qualityScores) {
+<span class="fc" id="L719">        return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
-     * Creates a dual conic robust estimator based on 2D line samples and using 
+     * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener and default estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided line
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 5 lines).
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, double[] qualityScores) {
-<span class="fc" id="L699">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            final DualConicRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L735">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
      * provided listener and lines and default estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a dual conic.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores corresponding to each provided line
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have the
-     * same size as the list of provided quality scores, or if their size is not
-     * greater or equal than MINIMUM_SIZE.
+     *                                  same size as the list of provided quality scores, or if their size is not
+     *                                  greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines,
-            double[] qualityScores) {
-<span class="fc" id="L717">        return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            final DualConicRobustEstimatorListener listener, final List&lt;Line2D&gt; lines,
+            final double[] qualityScores) {
+<span class="fc" id="L754">        return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Estimates a dual conic using a robust estimator and the best set of 2D
      * lines that fit into the locus of the estimated dual conic found using the
      * robust estimator.
+     *
      * @return a dual conic.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enouth to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enouth to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any readon (i.e.
-     * numerical instability, no solution available, etc).
+     *                                  numerical instability, no solution available, etc).
      */
     public abstract DualConic estimate() throws LockedException,
             NotReadyException, RobustEstimatorException;
-    
+
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
      */
     public abstract RobustEstimatorMethod getMethod();
-    
+
     /**
      * Internal method to set list of lines to be used to estimate a dual conic.
      * This method does not check whether estimator is locked or not.
+     *
      * @param lines list of lines to be used to estimate a dual conic.
      * @throws IllegalArgumentException if provided list of lines doesn't have
-     * a size greater or equal than MINIMUM_SIZE.
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetLines(List&lt;Line2D&gt; lines) {
-<span class="fc bfc" id="L749" title="All 2 branches covered.">        if (lines.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L750">            throw new IllegalArgumentException();</span>
+    private void internalSetLines(final List&lt;Line2D&gt; lines) {
+<span class="fc bfc" id="L789" title="All 2 branches covered.">        if (lines.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L790">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L752">        mLines = lines;</span>
-<span class="fc" id="L753">    }</span>
-    
+<span class="fc" id="L792">        mLines = lines;</span>
+<span class="fc" id="L793">    }</span>
+
     /**
      * Computes the residual between a dual conic and a 2D line.
-     * @param dc a dual conic.
+     *
+     * @param dc   a dual conic.
      * @param line a 2D line.
      * @return residual.
      */
-    protected double residual(DualConic dc, Line2D line) {
-<span class="fc" id="L762">        dc.normalize();</span>
+    protected double residual(final DualConic dc, final Line2D line) {
+<span class="fc" id="L803">        dc.normalize();</span>
         try {
-<span class="fc bfc" id="L764" title="All 2 branches covered.">            if (mTestDualC == null) {</span>
-<span class="fc" id="L765">                mTestDualC = dc.asMatrix();</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">            if (mTestDualC == null) {</span>
+<span class="fc" id="L806">                mTestDualC = dc.asMatrix();</span>
             } else {
-<span class="fc" id="L767">                dc.asMatrix(mTestDualC);</span>
+<span class="fc" id="L808">                dc.asMatrix(mTestDualC);</span>
             }
-            
-<span class="fc bfc" id="L770" title="All 2 branches covered.">            if (mTestLine == null) {</span>
-<span class="fc" id="L771">                mTestLine = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
+
+<span class="fc bfc" id="L811" title="All 2 branches covered.">            if (mTestLine == null) {</span>
+<span class="fc" id="L812">                mTestLine = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
             }
-<span class="fc" id="L773">            line.normalize();</span>
-<span class="fc" id="L774">            mTestLine.setElementAt(0, 0, line.getA());</span>
-<span class="fc" id="L775">            mTestLine.setElementAt(1, 0, line.getB());</span>
-<span class="fc" id="L776">            mTestLine.setElementAt(2, 0, line.getC());</span>
-<span class="fc" id="L777">            Matrix locusMatrix = mTestLine.transposeAndReturnNew();</span>
-<span class="fc" id="L778">            locusMatrix.multiply(mTestDualC);</span>
-<span class="fc" id="L779">            locusMatrix.multiply(mTestLine);</span>
-<span class="fc" id="L780">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
-<span class="nc" id="L781">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L782">            return Double.MAX_VALUE;</span>
+<span class="fc" id="L814">            line.normalize();</span>
+<span class="fc" id="L815">            mTestLine.setElementAt(0, 0, line.getA());</span>
+<span class="fc" id="L816">            mTestLine.setElementAt(1, 0, line.getB());</span>
+<span class="fc" id="L817">            mTestLine.setElementAt(2, 0, line.getC());</span>
+<span class="fc" id="L818">            final Matrix locusMatrix = mTestLine.transposeAndReturnNew();</span>
+<span class="fc" id="L819">            locusMatrix.multiply(mTestDualC);</span>
+<span class="fc" id="L820">            locusMatrix.multiply(mTestLine);</span>
+<span class="fc" id="L821">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L822">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L823">            return Double.MAX_VALUE;</span>
         }
     }
 }

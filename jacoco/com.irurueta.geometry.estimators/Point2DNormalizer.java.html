@@ -22,356 +22,375 @@ import com.irurueta.geometry.ProjectiveTransformation2D;
 import java.util.List;
 
 /**
- * This class takes a collection of points and computes its average 
+ * This class takes a collection of points and computes its average
  * inhomogeneous coordinates and their scale so that a metric transformation is
  * computed to transform points and normalize them.
  * Normalized points are useful in many algorithms because due to the nature
  * of floating point quantization, accuracy of the computations increase for
  * normalized values between -1.0 and 1.0.
- * This implementation uses point inhomogeneous coordinates, hence, it should 
- * not be used for points located at or close to infininity (i.e. very large 
+ * This implementation uses point inhomogeneous coordinates, hence, it should
+ * not be used for points located at or close to infininity (i.e. very large
  * inhomogeneous values).
  */
 public class Point2DNormalizer {
-    
+
     /**
      * Minimum amount of points required to perform normalization.
      */
     public static final int MIN_POINTS = 2;
-    
+
     /**
      * Collection of points used to compute normalization.
      */
     private List&lt;Point2D&gt; mPoints;
-    
+
     /**
      * Flag indicating that this instance is locked because computation is
      * in progress.
      */
     private boolean mLocked;
-    
+
     /**
      * Minimum x inhomogeneous coordinate found in provided points.
      */
     private double mMinInhomX;
-    
+
     /**
      * Minimum y inhomogeneous coordinate found in provided points.
      */
     private double mMinInhomY;
-    
+
     /**
      * Maximum x inhomogeneous coordinate found in provided points.
      */
     private double mMaxInhomX;
-    
+
     /**
      * Maximum y inhomogeneous coordinate found in provided points.
      */
     private double mMaxInhomY;
-    
+
     /**
      * Computed scale on x coordinates to normalize points.
      */
     private double mScaleX;
-    
+
     /**
      * Computed scale on y coordinates to normalize points.
      */
     private double mScaleY;
-    
+
     /**
      * Computed x coordinate of centroid of points.
      */
     private double mCentroidX;
-    
+
     /**
      * Computed y coordinate of centroid of points.
      */
     private double mCentroidY;
-    
+
     /**
      * Transformation to normalize points.
      */
     private ProjectiveTransformation2D mTransformation;
-    
+
     /**
      * Transformation to denormalize points, which corresponds to the inverse
      * transformation.
      */
-    private ProjectiveTransformation2D mInverseTransformation;    
-    
+    private ProjectiveTransformation2D mInverseTransformation;
+
     /**
      * Constructor.
+     *
      * @param points collection of points to be used to compute normalization.
      * @throws IllegalArgumentException if provided collection of points does
-     * not contain enough points, which is MIN_POINTS.
+     *                                  not contain enough points, which is MIN_POINTS.
      */
-<span class="fc" id="L110">    public Point2DNormalizer(List&lt;Point2D&gt; points) {</span>
-<span class="fc" id="L111">        internalSetPoints(points);</span>
-<span class="fc" id="L112">        reset();</span>
-<span class="fc" id="L113">    }</span>
-    
+<span class="fc" id="L111">    public Point2DNormalizer(final List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L112">        internalSetPoints(points);</span>
+<span class="fc" id="L113">        reset();</span>
+<span class="fc" id="L114">    }</span>
+
     /**
      * Returns collection of points used to compute normalization.
+     *
      * @return collection of points used to compute normalization.
      */
     public List&lt;Point2D&gt; getPoints() {
-<span class="fc" id="L120">        return mPoints;</span>
+<span class="fc" id="L122">        return mPoints;</span>
     }
-    
+
     /**
      * Sets collection of points used to compute normalization.
+     *
      * @param points collection of points used to compute normalization.
-     * @throws LockedException if instance is locked because another computation
-     * is already in progress.
+     * @throws LockedException          if instance is locked because another computation
+     *                                  is already in progress.
      * @throws IllegalArgumentException if provided collection of points does
-     * not contain enough points, which is MIN_POINTS.
+     *                                  not contain enough points, which is MIN_POINTS.
      */
-    public void setPoints(List&lt;Point2D&gt; points) throws LockedException {
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L133">            throw new LockedException();</span>
+    public void setPoints(final List&lt;Point2D&gt; points) throws LockedException {
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L136">            throw new LockedException();</span>
         }
-<span class="fc" id="L135">        internalSetPoints(points);</span>
-<span class="fc" id="L136">        reset();</span>
-<span class="fc" id="L137">    }    </span>
-        
+<span class="fc" id="L138">        internalSetPoints(points);</span>
+<span class="fc" id="L139">        reset();</span>
+<span class="fc" id="L140">    }</span>
+
     /**
      * Indicates whether this instance is ready (i.e. has enough data) to
      * start the computation.
+     *
      * @return true if this instance is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L145" title="1 of 4 branches missed.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MIN_POINTS;</span>
+<span class="pc bpc" id="L149" title="1 of 4 branches missed.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MIN_POINTS;</span>
     }
-    
+
     /**
      * Indicates whether this instance is locked because computation is
      * in progress.
      * While an instance is in progress, no parameter can be modified and
      * no furter computations can be done until instance becomes unlocked.
+     *
      * @return true if instance is locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L156">        return mLocked;</span>
+<span class="fc" id="L161">        return mLocked;</span>
     }
-    
+
     /**
      * Returns minimum x inhomogeneous coordinate found in provided points.
+     *
      * @return minimum x inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomX() {
-<span class="fc" id="L164">        return mMinInhomX;</span>
+<span class="fc" id="L170">        return mMinInhomX;</span>
     }
-    
+
     /**
      * Returns minimum y inhomogeneous coordinate found in provided points.
+     *
      * @return minimum y inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomY() {
-<span class="fc" id="L172">        return mMinInhomY;</span>
+<span class="fc" id="L179">        return mMinInhomY;</span>
     }
-    
+
     /**
      * Returns maximum x inhomogeneous coordinate found in provided points.
+     *
      * @return maximum x inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomX() {
-<span class="fc" id="L180">        return mMaxInhomX;</span>
+<span class="fc" id="L188">        return mMaxInhomX;</span>
     }
-    
+
     /**
      * Returns maximum y inhomogeneous coordinate found in provided points.
+     *
      * @return maximum y inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomY() {
-<span class="fc" id="L188">        return mMaxInhomY;</span>
+<span class="fc" id="L197">        return mMaxInhomY;</span>
     }
-    
+
     /**
      * Returns computed scale to normalize points on x coordinate.
+     *
      * @return computed scale to normalize points on x coordinate.
      */
     public double getScaleX() {
-<span class="fc" id="L196">        return mScaleX;</span>
+<span class="fc" id="L206">        return mScaleX;</span>
     }
-    
+
     /**
      * Returns computed scale to normalize points on y coordinate.
+     *
      * @return computed scale to normalize points on y coordinate.
      */
     public double getScaleY() {
-<span class="fc" id="L204">        return mScaleY;</span>
+<span class="fc" id="L215">        return mScaleY;</span>
     }
-    
+
     /**
      * Returns computed x coordinate of centroid of points.
+     *
      * @return computed x coordinate of centroid of points.
      */
     public double getCentroidX() {
-<span class="fc" id="L212">        return mCentroidX;</span>
+<span class="fc" id="L224">        return mCentroidX;</span>
     }
-    
+
     /**
      * Returns computed y coordinate of centroid of points.
+     *
      * @return computed y coordinate of centroid of points.
      */
     public double getCentroidY() {
-<span class="fc" id="L220">        return mCentroidY;</span>
+<span class="fc" id="L233">        return mCentroidY;</span>
     }
-    
+
     /**
      * Returns transformation to normalize points.
+     *
      * @return transformation to normalize points.
      */
     public ProjectiveTransformation2D getTransformation() {
-<span class="fc" id="L228">        return mTransformation;</span>
+<span class="fc" id="L242">        return mTransformation;</span>
     }
-    
+
     /**
      * Returns transformaiton to denormalize points, which corresponds to the
      * inverse transformation.
+     *
      * @return transformation to denormalize points.
      */
     public ProjectiveTransformation2D getInverseTransformation() {
-<span class="fc" id="L237">        return mInverseTransformation;</span>
+<span class="fc" id="L252">        return mInverseTransformation;</span>
     }
-    
+
     /**
      * Indicates whether result (i.e. transformation and inverse transformation)
      * are available or not.
+     *
      * @return true if result is available, false otherwise.
      */
     public boolean isResultAvailable() {
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">        return mTransformation != null;</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        return mTransformation != null;</span>
     }
-    
+
     /**
      * Computes normalization and denormalization transformaitons.
-     * @throws NotReadyException if not enough data has been provided to
-     * compute normalization.
-     * @throws LockedException if instance is locked because another computation
-     * is already in progress.
-     * @throws NormalizerException if normalization failed due to numerical 
-     * degeneracy. This usually happens when all provided points are located too
-     * close to each other, which results in a singularity when computing proper
-     * normalization scale.
+     *
+     * @throws NotReadyException   if not enough data has been provided to
+     *                             compute normalization.
+     * @throws LockedException     if instance is locked because another computation
+     *                             is already in progress.
+     * @throws NormalizerException if normalization failed due to numerical
+     *                             degeneracy. This usually happens when all provided points are located too
+     *                             close to each other, which results in a singularity when computing proper
+     *                             normalization scale.
      */
     public void compute() throws NotReadyException, LockedException,
             NormalizerException {
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L263">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L280">            throw new NotReadyException();</span>
         }
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L266">            throw new LockedException();</span>
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L283">            throw new LockedException();</span>
         }
         try {
-<span class="fc" id="L269">            mLocked = true;</span>
-            
-<span class="fc" id="L271">            reset();</span>
-<span class="fc" id="L272">            computeLimits();</span>
-            
-            //compute scale and centroids
-<span class="fc" id="L275">            double width = mMaxInhomX - mMinInhomX;</span>
-<span class="fc" id="L276">            double height = mMaxInhomY - mMinInhomY;</span>
-            
-<span class="pc bpc" id="L278" title="2 of 4 branches missed.">            if (width &lt; Double.MIN_VALUE || height &lt; Double.MIN_VALUE) {</span>
-                //numerical degeneracy
-<span class="nc" id="L280">                throw new NormalizerException();</span>
+<span class="fc" id="L286">            mLocked = true;</span>
+
+<span class="fc" id="L288">            reset();</span>
+<span class="fc" id="L289">            computeLimits();</span>
+
+            // compute scale and centroids
+<span class="fc" id="L292">            final double width = mMaxInhomX - mMinInhomX;</span>
+<span class="fc" id="L293">            final double height = mMaxInhomY - mMinInhomY;</span>
+
+<span class="pc bpc" id="L295" title="2 of 4 branches missed.">            if (width &lt; Double.MIN_VALUE || height &lt; Double.MIN_VALUE) {</span>
+                // numerical degeneracy
+<span class="nc" id="L297">                throw new NormalizerException();</span>
             }
-            
-<span class="fc" id="L283">            mScaleX = 1.0 / width;</span>
-<span class="fc" id="L284">            mScaleY = 1.0 / height;</span>
-            
-            //centroids of points
-<span class="fc" id="L287">            mCentroidX = (mMinInhomX + mMaxInhomX) / 2.0;</span>
-<span class="fc" id="L288">            mCentroidY = (mMinInhomY + mMaxInhomY) / 2.0;</span>
-            
-            //transformation to normalize points            
-<span class="fc" id="L291">            Matrix t = new Matrix(</span>
+
+<span class="fc" id="L300">            mScaleX = 1.0 / width;</span>
+<span class="fc" id="L301">            mScaleY = 1.0 / height;</span>
+
+            // centroids of points
+<span class="fc" id="L304">            mCentroidX = (mMinInhomX + mMaxInhomX) / 2.0;</span>
+<span class="fc" id="L305">            mCentroidY = (mMinInhomY + mMaxInhomY) / 2.0;</span>
+
+            // transformation to normalize points
+<span class="fc" id="L308">            final Matrix t = new Matrix(</span>
                     ProjectiveTransformation2D.HOM_COORDS,
                     ProjectiveTransformation2D.HOM_COORDS);
 
-            //X' = s * X + s * t --&gt;
-            //s * X = X' - s * t --&gt;
-            //X = 1/s*X' - t            
-<span class="fc" id="L298">            t.setElementAt(0, 0, mScaleX);</span>
-<span class="fc" id="L299">            t.setElementAt(1, 1, mScaleY);</span>
-<span class="fc" id="L300">            t.setElementAt(0, 2, -mScaleX * mCentroidX);</span>
-<span class="fc" id="L301">            t.setElementAt(1, 2, -mScaleY * mCentroidY);</span>
-<span class="fc" id="L302">            t.setElementAt(2, 2, 1.0);</span>
-            
-<span class="fc" id="L304">            mTransformation = new ProjectiveTransformation2D(t);</span>
-<span class="fc" id="L305">            mTransformation.normalize();</span>
-            
-            //transformation to denormalize points
-<span class="fc" id="L308">            Matrix invT = new Matrix(</span>
+            // X' = s * X + s * t --&gt;
+            // s * X = X' - s * t --&gt;
+            // X = 1/s*X' - t
+<span class="fc" id="L315">            t.setElementAt(0, 0, mScaleX);</span>
+<span class="fc" id="L316">            t.setElementAt(1, 1, mScaleY);</span>
+<span class="fc" id="L317">            t.setElementAt(0, 2, -mScaleX * mCentroidX);</span>
+<span class="fc" id="L318">            t.setElementAt(1, 2, -mScaleY * mCentroidY);</span>
+<span class="fc" id="L319">            t.setElementAt(2, 2, 1.0);</span>
+
+<span class="fc" id="L321">            mTransformation = new ProjectiveTransformation2D(t);</span>
+<span class="fc" id="L322">            mTransformation.normalize();</span>
+
+            // transformation to denormalize points
+<span class="fc" id="L325">            final Matrix invT = new Matrix(</span>
                     ProjectiveTransformation2D.HOM_COORDS,
                     ProjectiveTransformation2D.HOM_COORDS);
-            
-<span class="fc" id="L312">            invT.setElementAt(0, 0, width);</span>
-<span class="fc" id="L313">            invT.setElementAt(1, 1, height);</span>
-<span class="fc" id="L314">            invT.setElementAt(0, 2, mCentroidX);</span>
-<span class="fc" id="L315">            invT.setElementAt(1, 2, mCentroidY);</span>
-<span class="fc" id="L316">            invT.setElementAt(2, 2, 1.0);</span>
-            
-<span class="fc" id="L318">            mInverseTransformation = new ProjectiveTransformation2D(invT);</span>
-<span class="fc" id="L319">            mInverseTransformation.normalize();</span>
-<span class="nc" id="L320">        } catch (Exception e) {</span>
-<span class="nc" id="L321">            throw new NormalizerException(e);</span>
+
+<span class="fc" id="L329">            invT.setElementAt(0, 0, width);</span>
+<span class="fc" id="L330">            invT.setElementAt(1, 1, height);</span>
+<span class="fc" id="L331">            invT.setElementAt(0, 2, mCentroidX);</span>
+<span class="fc" id="L332">            invT.setElementAt(1, 2, mCentroidY);</span>
+<span class="fc" id="L333">            invT.setElementAt(2, 2, 1.0);</span>
+
+<span class="fc" id="L335">            mInverseTransformation = new ProjectiveTransformation2D(invT);</span>
+<span class="fc" id="L336">            mInverseTransformation.normalize();</span>
+<span class="nc" id="L337">        } catch (final Exception e) {</span>
+<span class="nc" id="L338">            throw new NormalizerException(e);</span>
         } finally {
-<span class="fc" id="L323">            mLocked = false;</span>
+<span class="fc" id="L340">            mLocked = false;</span>
         }
-<span class="fc" id="L325">    }</span>
-    
+<span class="fc" id="L342">    }</span>
+
     /**
      * Computes minimum and maximum inhomogeneous point coordinates from the
      * list of provided 2D points.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     private void computeLimits() {
-<span class="fc bfc" id="L332" title="All 2 branches covered.">        for (Point2D point : mPoints) {</span>
-<span class="fc" id="L333">            double inhomX = point.getInhomX();</span>
-<span class="fc" id="L334">            double inhomY = point.getInhomY();</span>
-<span class="fc bfc" id="L335" title="All 2 branches covered.">            if (inhomX &lt; mMinInhomX) {</span>
-<span class="fc" id="L336">                mMinInhomX = inhomX;</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        for (final Point2D point : mPoints) {</span>
+<span class="fc" id="L351">            final double inhomX = point.getInhomX();</span>
+<span class="fc" id="L352">            final double inhomY = point.getInhomY();</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            if (inhomX &lt; mMinInhomX) {</span>
+<span class="fc" id="L354">                mMinInhomX = inhomX;</span>
             }
-<span class="fc bfc" id="L338" title="All 2 branches covered.">            if (inhomY &lt; mMinInhomY) {</span>
-<span class="fc" id="L339">                mMinInhomY = inhomY;</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">            if (inhomY &lt; mMinInhomY) {</span>
+<span class="fc" id="L357">                mMinInhomY = inhomY;</span>
             }
-            
-<span class="fc bfc" id="L342" title="All 2 branches covered.">            if (inhomX &gt; mMaxInhomX) {</span>
-<span class="fc" id="L343">                mMaxInhomX = inhomX;</span>
+
+<span class="fc bfc" id="L360" title="All 2 branches covered.">            if (inhomX &gt; mMaxInhomX) {</span>
+<span class="fc" id="L361">                mMaxInhomX = inhomX;</span>
             }
-<span class="fc bfc" id="L345" title="All 2 branches covered.">            if (inhomY &gt; mMaxInhomY) {</span>
-<span class="fc" id="L346">                mMaxInhomY = inhomY;</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">            if (inhomY &gt; mMaxInhomY) {</span>
+<span class="fc" id="L364">                mMaxInhomY = inhomY;</span>
             }
-<span class="fc" id="L348">        }</span>
-<span class="fc" id="L349">    }</span>
-    
+<span class="fc" id="L366">        }</span>
+<span class="fc" id="L367">    }</span>
+
     /**
      * Sets list of points.
+     *
      * @param points list of points to be set.
      * @throws IllegalArgumentException if not enough points are provided, which
-     * is MIN_POINTS.
+     *                                  is MIN_POINTS.
      */
-    private void internalSetPoints(List&lt;Point2D&gt; points) {
-<span class="fc bfc" id="L358" title="All 2 branches covered.">        if (points.size() &lt; MIN_POINTS) {</span>
-<span class="fc" id="L359">            throw new IllegalArgumentException();</span>
+    private void internalSetPoints(final List&lt;Point2D&gt; points) {
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        if (points.size() &lt; MIN_POINTS) {</span>
+<span class="fc" id="L378">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L361">        mPoints = points;   </span>
-<span class="fc" id="L362">    }</span>
-    
+<span class="fc" id="L380">        mPoints = points;</span>
+<span class="fc" id="L381">    }</span>
+
     /**
      * Resets internal values.
      */
     private void reset() {
-        //reset result
-<span class="fc" id="L369">        mTransformation = mInverseTransformation = null;</span>
-        //reset limits
-<span class="fc" id="L371">        mMinInhomX = mMinInhomY = Double.MAX_VALUE;</span>
-<span class="fc" id="L372">        mMaxInhomX = mMaxInhomY = -Double.MAX_VALUE;</span>
-<span class="fc" id="L373">        mScaleX = mScaleY = 1.0;</span>
-<span class="fc" id="L374">        mCentroidX = mCentroidY = 0.0;</span>
-<span class="fc" id="L375">    }</span>
+        // reset result
+<span class="fc" id="L388">        mTransformation = mInverseTransformation = null;</span>
+        // reset limits
+<span class="fc" id="L390">        mMinInhomX = mMinInhomY = Double.MAX_VALUE;</span>
+<span class="fc" id="L391">        mMaxInhomX = mMaxInhomY = -Double.MAX_VALUE;</span>
+<span class="fc" id="L392">        mScaleX = mScaleY = 1.0;</span>
+<span class="fc" id="L393">        mCentroidX = mCentroidY = 0.0;</span>
+<span class="fc" id="L394">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

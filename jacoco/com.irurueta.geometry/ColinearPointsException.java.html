@@ -25,30 +25,33 @@ public class ColinearPointsException extends GeometryException {
     public ColinearPointsException() {
 <span class="fc" id="L26">        super();</span>
 <span class="fc" id="L27">    }</span>
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public ColinearPointsException(String message) {
-<span class="fc" id="L34">        super(message);</span>
-<span class="fc" id="L35">    }</span>
-    
+    public ColinearPointsException(final String message) {
+<span class="fc" id="L35">        super(message);</span>
+<span class="fc" id="L36">    }</span>
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public ColinearPointsException(String message, Throwable cause) {
-<span class="fc" id="L43">        super(message, cause);</span>
-<span class="fc" id="L44">    }</span>
-    
+    public ColinearPointsException(final String message, final Throwable cause) {
+<span class="fc" id="L45">        super(message, cause);</span>
+<span class="fc" id="L46">    }</span>
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public ColinearPointsException(Throwable cause) {
-<span class="fc" id="L51">        super(cause);</span>
-<span class="fc" id="L52">    }    </span>
+    public ColinearPointsException(final Throwable cause) {
+<span class="fc" id="L54">        super(cause);</span>
+<span class="fc" id="L55">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -18,7 +18,11 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.ColinearPointsException;
 import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.List;
 
@@ -26,17 +30,18 @@ import java.util.List;
  * Finds the best 2D plane for provided collection of 3D points using PROMedS
  * algorithm.
  */
-public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
     /**
-     * Default value to be used for stop threshold. Stop threshold can be used 
-     * to keep the algorithm iterating in case that best estimated threshold 
-     * using median of residuals is not small enough. Once a solution is found 
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
      * that generates a threshold below this value, the algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
@@ -44,385 +49,400 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-3;
-    
+
     /**
      * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
     /**
-     * Threshold to be used to keep the algorithm iterating in case that best 
-     * estimated threshold using median of residuals is not small enough. Once 
-     * a solution is found that generates a threshold below this value, the 
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;      
-    
+    private double mStopThreshold;
+
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the betther the quality of the sample.
      */
-    private double[] mQualityScores;      
-    
+    private double[] mQualityScores;
+
     /**
      * Constructor.
      */
     public PROMedSPlaneRobustEstimator() {
-<span class="fc" id="L81">        super();</span>
-<span class="fc" id="L82">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L86">        super();</span>
+<span class="fc" id="L87">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * Constructor with points.
+     *
      * @param points 3D points to estimate a 3D plane.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(List&lt;Point3D&gt; points) {
-<span class="fc" id="L92">        super(points);</span>
-<span class="fc" id="L93">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L94">    }</span>
-    
+    public PROMedSPlaneRobustEstimator(final List&lt;Point3D&gt; points) {
+<span class="fc" id="L98">        super(points);</span>
+<span class="fc" id="L99">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L100">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
-    public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener) {
-<span class="fc" id="L102">        super(listener);</span>
-<span class="fc" id="L103">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L104">    }</span>
-    
-    
+    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener) {
+<span class="fc" id="L109">        super(listener);</span>
+<span class="fc" id="L110">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L111">    }</span>
+
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 3D points to estimate a 3D plane.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     *                 starts, ends or its progress significantly changes.
+     * @param points   3D points to estimate a 3D plane.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points) {
-<span class="fc" id="L117">        super(listener, points);</span>
-<span class="fc" id="L118">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L119">    }</span>
-    
+    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
+                                       final List&lt;Point3D&gt; points) {
+<span class="fc" id="L125">        super(listener, points);</span>
+<span class="fc" id="L126">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L127">    }</span>
+
     /**
      * Constructor.
+     *
      * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROMedSPlaneRobustEstimator(double[] qualityScores) {
-<span class="fc" id="L128">        super();</span>
-<span class="fc" id="L129">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L130">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L131">    }</span>
+    public PROMedSPlaneRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L137">        super();</span>
+<span class="fc" id="L138">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L139">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L140">    }</span>
 
     /**
      * Constructor with points.
-     * @param points 3D points to estimate a 3D plane.
+     *
+     * @param points        3D points to estimate a 3D plane.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(List&lt;Point3D&gt; points,
-            double[] qualityScores) {
-<span class="fc" id="L143">        super(points);</span>
-        
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L146">            throw new IllegalArgumentException();</span>
+    public PROMedSPlaneRobustEstimator(final List&lt;Point3D&gt; points,
+                                       final double[] qualityScores) {
+<span class="fc" id="L153">        super(points);</span>
+
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L156">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L149">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L150">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L151">    }</span>
-    
+
+<span class="fc" id="L159">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L160">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L161">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            double[] qualityScores) {
-<span class="fc" id="L163">        super(listener);</span>
-<span class="fc" id="L164">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L165">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L166">    }</span>
-    
-    
+    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
+                                       final double[] qualityScores) {
+<span class="fc" id="L174">        super(listener);</span>
+<span class="fc" id="L175">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L176">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L177">    }</span>
+
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 3D points to estimate a 3D plane.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        3D points to estimate a 3D plane.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points, double[] qualityScores) {
-<span class="fc" id="L181">        super(listener, points);</span>
-        
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L184">            throw new IllegalArgumentException();</span>
+    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
+                                       final List&lt;Point3D&gt; points, final double[] qualityScores) {
+<span class="fc" id="L193">        super(listener, points);</span>
+
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L187">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L188">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L189">    }    </span>
-    
+
+<span class="fc" id="L199">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L200">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L201">    }</span>
+
     /**
-     * Returns threshold to be used to keep the algorithm iterating in case that 
-     * best estimated threshold using median of residuals is not small enough. 
-     * Once a solution is found that generates a threshold below this value, the 
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
+     *
      * @return stop threshold to stop the algorithm prematurely when a certain
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L210">        return mStopThreshold;</span>
+<span class="fc" id="L223">        return mStopThreshold;</span>
     }
-    
+
     /**
      * Sets threshold to be used to keep the algorithm iterating in case that
-     * best estimated threshold using median of residuals is not small enough. 
-     * Once a solution is found that generates a threshold below this value, the 
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
-     * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
      * @throws IllegalArgumentException if provided value is zero or negative.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) throws LockedException {
-<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L236">            throw new LockedException();</span>
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L250">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L239">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L253">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L242">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L243">    }</span>
+
+<span class="fc" id="L256">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L257">    }</span>
 
     /**
      * Returns quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sampled point.
+     *
      * @return quality scores corresponding to each point.
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L252">        return mQualityScores;</span>
+<span class="fc" id="L267">        return mQualityScores;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sampled point.
+     *
      * @param qualityScores quality scores corresponding to each point.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException {
-<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L267">            throw new LockedException();</span>
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L283">            throw new LockedException();</span>
         }
-<span class="fc" id="L269">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L270">    }</span>
-    
+<span class="fc" id="L285">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L286">    }</span>
+
     /**
      * Indicates if estimator is ready to start the 2D line estimation.
-     * This is true when input data (i.e. 2D points and quality scores) are 
+     * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L280" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L281" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
-    }     
-            
+<span class="fc bfc" id="L297" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
+    }
+
     /**
-     * Estimates a 3D plane using a robust estimator and the best set of 3D 
-     * points that pass through the estimated 3D plane (i.e. belong to its 
+     * Estimates a 3D plane using a robust estimator and the best set of 3D
+     * points that pass through the estimated 3D plane (i.e. belong to its
      * locus).
+     *
      * @return a 3D plane.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Plane estimate() throws LockedException, NotReadyException, 
+    public Plane estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L300">            throw new LockedException();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L318">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L303">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L321">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L306">        PROMedSRobustEstimator&lt;Plane&gt; innerEstimator =</span>
+
+<span class="fc" id="L324">        final PROMedSRobustEstimator&lt;Plane&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L308">                        new PROMedSRobustEstimatorListener&lt;Plane&gt;() {</span>
+<span class="fc" id="L326">                        new PROMedSRobustEstimatorListener&lt;Plane&gt;() {</span>
 
-            @Override
-            public double getThreshold() {
-<span class="fc" id="L312">                return mStopThreshold;</span>
-            }
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L330">                                return mStopThreshold;</span>
+                            }
 
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L317">                return mPoints.size();</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L335">                                return mPoints.size();</span>
+                            }
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L322">                return PlaneRobustEstimator.MINIMUM_SIZE;</span>
-            }
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L340">                                return PlaneRobustEstimator.MINIMUM_SIZE;</span>
+                            }
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;Plane&gt; solutions) {
-<span class="fc" id="L328">                Point3D point1 = mPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L329">                Point3D point2 = mPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L330">                Point3D point3 = mPoints.get(samplesIndices[2]);</span>
-                
-                try {
-<span class="fc" id="L333">                    Plane plane = new Plane(point1, point2, point3);</span>
-<span class="fc" id="L334">                    solutions.add(plane);</span>
-<span class="nc" id="L335">                } catch (ColinearPointsException e) {</span>
-                    //if points are coincident, no solution is added
-<span class="fc" id="L337">                }</span>
-<span class="fc" id="L338">            }</span>
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;Plane&gt; solutions) {
+<span class="fc" id="L346">                                final Point3D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L347">                                final Point3D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L348">                                final Point3D point3 = mPoints.get(samplesIndices[2]);</span>
 
-            @Override
-            public double computeResidual(Plane currentEstimation, int i) {
-<span class="fc" id="L342">                return residual(currentEstimation, mPoints.get(i));</span>
-            }
+                                try {
+<span class="fc" id="L351">                                    final Plane plane = new Plane(point1, point2, point3);</span>
+<span class="fc" id="L352">                                    solutions.add(plane);</span>
+<span class="nc" id="L353">                                } catch (final ColinearPointsException e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L355">                                }</span>
+<span class="fc" id="L356">                            }</span>
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L347">                return PROMedSPlaneRobustEstimator.this.isReady();</span>
-            }
+                            @Override
+                            public double computeResidual(Plane currentEstimation, int i) {
+<span class="fc" id="L360">                                return residual(currentEstimation, mPoints.get(i));</span>
+                            }
 
-            @Override
-            public void onEstimateStart(RobustEstimator&lt;Plane&gt; estimator) {
-<span class="pc bpc" id="L352" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L353">                    mListener.onEstimateStart(PROMedSPlaneRobustEstimator.this);</span>
-                }
-<span class="fc" id="L355">            }</span>
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L365">                                return PROMedSPlaneRobustEstimator.this.isReady();</span>
+                            }
 
-            @Override
-            public void onEstimateEnd(RobustEstimator&lt;Plane&gt; estimator) {
-<span class="pc bpc" id="L359" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L360">                    mListener.onEstimateEnd(PROMedSPlaneRobustEstimator.this);</span>
-                }
-<span class="fc" id="L362">            }</span>
+                            @Override
+                            public void onEstimateStart(final RobustEstimator&lt;Plane&gt; estimator) {
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L371">                                    mListener.onEstimateStart(PROMedSPlaneRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L373">                            }</span>
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;Plane&gt; estimator, int iteration) {
-<span class="pc bpc" id="L367" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L368">                    mListener.onEstimateNextIteration(</span>
-                            PROMedSPlaneRobustEstimator.this, iteration);
-                }
-<span class="fc" id="L371">            }</span>
+                            @Override
+                            public void onEstimateEnd(final RobustEstimator&lt;Plane&gt; estimator) {
+<span class="pc bpc" id="L377" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L378">                                    mListener.onEstimateEnd(PROMedSPlaneRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L380">                            }</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;Plane&gt; estimator, float progress) {
-<span class="nc bnc" id="L376" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L377">                    mListener.onEstimateProgressChange(</span>
-                            PROMedSPlaneRobustEstimator.this, progress);
-                }
-<span class="nc" id="L380">            }</span>
-            
-            @Override
-            public double[] getQualityScores() {
-<span class="fc" id="L384">                return mQualityScores;</span>
-            }              
-        });
-        
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;Plane&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L386">                                    mListener.onEstimateNextIteration(</span>
+                                            PROMedSPlaneRobustEstimator.this, iteration);
+                                }
+<span class="fc" id="L389">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;Plane&gt; estimator, final float progress) {
+<span class="nc bnc" id="L394" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L395">                                    mListener.onEstimateProgressChange(</span>
+                                            PROMedSPlaneRobustEstimator.this, progress);
+                                }
+<span class="nc" id="L398">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L402">                                return mQualityScores;</span>
+                            }
+                        });
+
         try {
-<span class="fc" id="L389">            mLocked = true;</span>
-<span class="fc" id="L390">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L391">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L392">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L393">            return innerEstimator.estimate();</span>
-<span class="nc" id="L394">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L395">            throw new LockedException(e);</span>
-<span class="nc" id="L396">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L397">            throw new NotReadyException(e);</span>
+<span class="fc" id="L407">            mLocked = true;</span>
+<span class="fc" id="L408">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L409">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L410">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L411">            return innerEstimator.estimate();</span>
+<span class="nc" id="L412">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L413">            throw new LockedException(e);</span>
+<span class="nc" id="L414">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L415">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L399">            mLocked = false;</span>
+<span class="fc" id="L417">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */    
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L409">        return RobustEstimatorMethod.PROMedS;</span>
-    } 
-    
+<span class="fc" id="L428">        return RobustEstimatorMethod.PROMedS;</span>
+    }
+
     /**
      * Sets quality scores corresponding to each provided point.
      * This method is used internally and does not check whether instance is
      * locked or not.
+     *
      * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE.
+     *                                  smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) {
-<span class="fc bfc" id="L421" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L422">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L441" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L442">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L425">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L426">    }          </span>
+
+<span class="fc" id="L445">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L446">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

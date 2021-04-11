@@ -28,101 +28,102 @@ import java.util.List;
 /**
  * This is an abstract class to robustly find the best euclidean transformation
  * for collections mof matching 3D points.
- * Implementations of this class should be able to detect and discard outliers 
+ * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public abstract class EuclideanTransformation3DRobustEstimator {
     /**
-     * Minimum number of matched points required to estimate an euclidea 2D 
+     * Minimum number of matched points required to estimate an euclidea 2D
      * transformation.
      */
-    public static final int MINIMUM_SIZE = 
+    public static final int MINIMUM_SIZE =
             EuclideanTransformation3DEstimator.MINIMUM_SIZE;
-    
+
     /**
      * For some point configurations a solution can be found with only 3 points.
      */
-    public static final int WEAK_MINIMUM_SIZE = 
+    public static final int WEAK_MINIMUM_SIZE =
             EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE;
-    
+
     /**
-     * Default amount of progress variation before notifying a change in 
+     * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta.
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
      * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Constant defining default confidence of the estimated result, which is
-     * 99%. This means that with a probability of 99% estimation will be 
+     * 99%. This means that with a probability of 99% estimation will be
      * accurate because chosen subsamples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
-    
+
     /**
      * Default maximum allowed number of iterations.
      */
     public static final int DEFAULT_MAX_ITERATIONS = 5000;
-    
+
     /**
      * Minimum allowed confidence value.
      */
     public static final double MIN_CONFIDENCE = 0.0;
-    
+
     /**
      * Maximum allowed confidence value.
      */
     public static final double MAX_CONFIDENCE = 1.0;
-    
+
     /**
      * Minimum allowed number of iterations.
      */
     public static final int MIN_ITERATIONS = 1;
-    
+
     /**
      * Indicates that is refined by default using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      */
     public static final boolean DEFAULT_REFINE_RESULT = true;
-    
+
     /**
      * Indicates that covariance is not kept by default after refining result.
      */
     public static final boolean DEFAULT_KEEP_COVARIANCE = false;
-    
+
     /**
      * Default robust estimator method when none is provided.
      */
-<span class="fc" id="L105">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
+<span class="fc" id="L106">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
             RobustEstimatorMethod.PROMedS;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
     protected EuclideanTransformation3DRobustEstimatorListener mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
     protected boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
      * equivalent to 100%). The amount of confidence indicates the probability
@@ -130,19 +131,19 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * to 1.0, but not exaclty 1.0.
      */
     protected double mConfidence;
-    
+
     /**
-     * Maximum allowed number of iterations. When the maximum number of 
+     * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
     protected int mMaxIterations;
-    
+
     /**
      * Data related to inliers found after estimation.
      */
     protected InliersData mInliersData;
-    
+
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
@@ -150,177 +151,185 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * regardless of the settings.
      */
     protected boolean mRefineResult;
-    
+
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
     protected boolean mKeepCovariance;
-    
+
     /**
      * Estimated covariance of estimated 2D euclidean transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
     protected Matrix mCovariance;
-    
+
     /**
      * List of points to be used to estimate an euclidean 3D transformation.
-     * Each point in the list of input points must be matched with the 
+     * Each point in the list of input points must be matched with the
      * corresponding point in the list of outputp oints located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List&lt;Point3D&gt; mInputPoints;
-    
+
     /**
      * List of points to be used to estimate an eculidean 3D transformation.
-     * Each point in the lis tof output points must be matched with the 
+     * Each point in the lis tof output points must be matched with the
      * corresponding point in the list of input points located at the same
      * position. Hence, both input points and output ponits must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List&lt;Point3D&gt; mOutputPoints;
-    
+
     /**
      * Indicates whether estimation can start with only 3 points or not.
      * True allows 3 points, false requires 4.
      */
-    private boolean mWeakMinimumSizeAllowed;    
-    
+    private boolean mWeakMinimumSizeAllowed;
+
     /**
      * Constructor.
      */
-<span class="fc" id="L194">    public EuclideanTransformation3DRobustEstimator() {</span>
-<span class="fc" id="L195">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L196">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L197">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L198">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
-<span class="fc" id="L199">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
-<span class="fc" id="L200">    }</span>
-    
+<span class="fc" id="L195">    protected EuclideanTransformation3DRobustEstimator() {</span>
+<span class="fc" id="L196">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L197">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L198">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L199">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L200">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L201">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
-    public EuclideanTransformation3DRobustEstimator(
-            EuclideanTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L209">        this();</span>
-<span class="fc" id="L210">        mListener = listener;</span>
-<span class="fc" id="L211">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L211">        this();</span>
+<span class="fc" id="L212">        mListener = listener;</span>
+<span class="fc" id="L213">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate an euclidean 3D
      * transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public EuclideanTransformation3DRobustEstimator(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) {
-<span class="fc" id="L228">        this();</span>
-<span class="fc" id="L229">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L230">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L231">        this();</span>
+<span class="fc" id="L232">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L233">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used to estimate an
      * euclidean 3D transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public EuclideanTransformation3DRobustEstimator(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
-<span class="fc" id="L250">        this(listener);</span>
-<span class="fc" id="L251">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L252">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L254">        this(listener);</span>
+<span class="fc" id="L255">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L256">    }</span>
+
     /**
      * Constructor.
+     *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
-    public EuclideanTransformation3DRobustEstimator(
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L260">        this();</span>
-<span class="fc" id="L261">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L262">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L265">        this();</span>
+<span class="fc" id="L266">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L267">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
-    public EuclideanTransformation3DRobustEstimator(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L273">        this();</span>
-<span class="fc" id="L274">        mListener = listener;</span>
-<span class="fc" id="L275">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L276">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L279">        this();</span>
+<span class="fc" id="L280">        mListener = listener;</span>
+<span class="fc" id="L281">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L282">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate an euclidean 3D
      * transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public EuclideanTransformation3DRobustEstimator(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L294">        this();</span>
-<span class="fc" id="L295">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L296">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L297">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L302">        this();</span>
+<span class="fc" id="L303">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L304">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L305">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used to estimate an
      * euclidean 3D transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public EuclideanTransformation3DRobustEstimator(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L319">        this(listener);</span>
-<span class="fc" id="L320">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L321">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L322">    }</span>
-    
+    protected EuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L328">        this(listener);</span>
+<span class="fc" id="L329">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L330">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L331">    }</span>
+
     /**
      * Returns list of input points to be used to estimate an euclidean 3D
      * transformation.
@@ -328,13 +337,14 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * corresponding point in the list of output points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
      * @return list of input points to be used to estimate an euclidean 3D
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L335">        return mInputPoints;</span>
+<span class="fc" id="L345">        return mInputPoints;</span>
     }
-    
+
     /**
      * Returns list of output points to be used to estimate an euclidean 3D
      * transformation.
@@ -342,1244 +352,1305 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * corresponding point in the list of input points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
      * @return list of output points to be used to estimate an euclidean 3D
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L349">        return mOutputPoints;</span>
+<span class="fc" id="L360">        return mOutputPoints;</span>
     }
-    
+
     /**
-     * Sets list of points to be used to estimate an euclidean 3D 
+     * Sets list of points to be used to estimate an euclidean 3D
      * transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     * @throws LockedException if estimator is locked because a computation is 
-     * already in progress.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
      */
-    public void setPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws LockedException {
-<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L370">            throw new LockedException();</span>
+    public void setPoints(final List&lt;Point3D&gt; inputPoints,
+                          final List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L381" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L382">            throw new LockedException();</span>
         }
-<span class="fc" id="L372">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L373">    }</span>
-    
+<span class="fc" id="L384">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L385">    }</span>
+
     /**
      * Indicates if estimator is ready to start the euclidean 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points) are provided
      * and a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L383" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
-<span class="pc bpc" id="L384" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L385" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+<span class="pc bpc" id="L396" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
     }
-    
+
     /**
      * Returns quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L396">        return null;</span>
+<span class="fc" id="L410">        return null;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-<span class="fc" id="L411">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
-    
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc" id="L427">    }</span>
+
     /**
      * Returns reference to listener to be notified of events such as when
      * estimation starts, ends or its progress significantly changes.
+     *
      * @return listener to be notified of events.
      */
     public EuclideanTransformation3DRobustEstimatorListener getListener() {
-<span class="fc" id="L419">        return mListener;</span>
+<span class="fc" id="L436">        return mListener;</span>
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts,
      * ends or its progress significantly changes.
+     *
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
     public void setListener(
-            EuclideanTransformation3DRobustEstimatorListener listener)
+            final EuclideanTransformation3DRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L431" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L432">            throw new LockedException();</span>
+<span class="fc bfc" id="L449" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L450">            throw new LockedException();</span>
         }
-<span class="fc" id="L434">        mListener = listener;</span>
-<span class="fc" id="L435">    }</span>
-    
+<span class="fc" id="L452">        mListener = listener;</span>
+<span class="fc" id="L453">    }</span>
+
     /**
      * Indicates whether listener has been provided and is available for
      * retrieval.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L443" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L462" title="All 2 branches covered.">        return mListener != null;</span>
     }
-    
+
     /**
      * Indicates whether estimation can start with only 3 points or not.
+     *
      * @return true allows 3 points, false requires 4.
      */
     public boolean isWeakMinimumSizeAllowed() {
-<span class="fc" id="L451">        return mWeakMinimumSizeAllowed;</span>
+<span class="fc" id="L471">        return mWeakMinimumSizeAllowed;</span>
     }
-    
+
     /**
      * Specifies whether estimation can start with only 3 points or not.
+     *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws LockedException if estimator is locked.
      */
-    public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed)
             throws LockedException {
-<span class="fc bfc" id="L461" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L462">            throw new LockedException();</span>
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L483">            throw new LockedException();</span>
         }
-<span class="fc" id="L464">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L465">    }</span>
-    
+<span class="fc" id="L485">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L486">    }</span>
+
     /**
      * Required minimum number of point correspondences to start the estimation.
      * Can be either 3 or 4.
+     *
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-<span class="fc bfc" id="L473" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
-    }        
-    
+<span class="fc bfc" id="L495" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+    }
+
     /**
-     * Indicates if this instance is locked because estimation is being 
+     * Indicates if this instance is locked because estimation is being
      * computed.
+     *
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L482">        return mLocked;</span>
+<span class="fc" id="L505">        return mLocked;</span>
     }
-    
+
     /**
      * Returns amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @return amount of progress variation before notifying a progress change
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L492">        return mProgressDelta;</span>
+<span class="fc" id="L516">        return mProgressDelta;</span>
     }
-    
+
     /**
      * Sets amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @param progressDelta amount of progress variation before notifying a
-     * progress change during estimation.
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setProgressDelta(float progressDelta)
+    public void setProgressDelta(final float progressDelta)
             throws LockedException {
-<span class="fc bfc" id="L507" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L508">            throw new LockedException();</span>
+<span class="fc bfc" id="L532" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L533">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L510" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L535" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L512">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L537">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L514">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L515">    }</span>
-    
+<span class="fc" id="L539">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L540">    }</span>
+
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
      * (which is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L525">        return mConfidence;</span>
+<span class="fc" id="L551">        return mConfidence;</span>
     }
-    
+
     /**
      * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
      * is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @param confidence confidence to be set as a value between 0.0 and 1.0.
-     * @throws IllegalArgumentException if provided value is not between 0.0 and 
-     * 1.0.
-     * @throws LockedException if this estimator is locked because an estimator
-     * is being computed.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
      */
-    public void setConfidence(double confidence) throws LockedException {
-<span class="fc bfc" id="L540" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L541">            throw new LockedException();</span>
-        }        
-<span class="fc bfc" id="L543" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L544">            throw new IllegalArgumentException();</span>
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L567" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L568">            throw new LockedException();</span>
         }
-<span class="fc" id="L546">        mConfidence = confidence;</span>
-<span class="fc" id="L547">    }</span>
-    
+<span class="fc bfc" id="L570" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L571">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L573">        mConfidence = confidence;</span>
+<span class="fc" id="L574">    }</span>
+
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
      * of iterations is achieved without converging to a result when calling
      * estimate(), a RobustEstimatorException will be raised.
+     *
      * @return maximum allowed number of itertions.
      */
     public int getMaxIterations() {
-<span class="fc" id="L556">        return mMaxIterations;</span>
+<span class="fc" id="L584">        return mMaxIterations;</span>
     }
-    
+
     /**
      * Sets maximum allowed number of iterations. When the maximum number of
-     * iterations is exceeded, result will not be available, however an 
+     * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
+     *
      * @param maxIterations maximum allowed number of iterations to be set.
      * @throws IllegalArgumentException if provided value is less than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setMaxIterations(int maxIterations) throws LockedException {
-<span class="fc bfc" id="L569" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L570">            throw new LockedException();</span>
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L598" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L599">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L572" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L573">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L601" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L602">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L575">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L576">    }</span>
-    
+<span class="fc" id="L604">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L605">    }</span>
+
     /**
      * Gets data related to inliers found after estimation.
+     *
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L583">        return mInliersData;</span>
+<span class="fc" id="L613">        return mInliersData;</span>
     }
-    
+
     /**
-     * Indicates whether result must be refined using Levenberg-Marquardt 
+     * Indicates whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      * If ture, inliers will be computed and kept in any implementation
      * regardless of the settings.
+     *
      * @return true to refine result, false to simply use result found by
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L595">        return mRefineResult;</span>
-    }    
-    
+<span class="fc" id="L626">        return mRefineResult;</span>
+    }
+
     /**
-     * Specifies whether result must be refined using LEvenberg-Marquardt 
+     * Specifies whether result must be refined using LEvenberg-Marquardt
      * fitting algorithm over found inliers.
+     *
      * @param refineResult true to refine result, false to simply use result
-     * found by robust estimator without further refining.
+     *                     found by robust estimator without further refining.
      * @throws LockedException if estimator is locked.
      */
-    public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L606" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L607">            throw new LockedException();</span>
+    public void setResultRefined(final boolean refineResult) throws LockedException {
+<span class="pc bpc" id="L638" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L639">            throw new LockedException();</span>
         }
-<span class="fc" id="L609">        mRefineResult = refineResult;</span>
-<span class="fc" id="L610">    }</span>
-    
+<span class="fc" id="L641">        mRefineResult = refineResult;</span>
+<span class="fc" id="L642">    }</span>
+
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
+     *
      * @return true if covariance must be kept after refining result, false
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L619">        return mKeepCovariance;</span>
+<span class="fc" id="L652">        return mKeepCovariance;</span>
     }
-    
+
     /**
      * Specifies whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
+     *
      * @param keepCovariance true if covariance must be kept after refining
-     * result, false otherwise.
+     *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(boolean keepCovariance)
+    public void setCovarianceKept(final boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L631" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L632">            throw new LockedException();</span>
+<span class="pc bpc" id="L665" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L666">            throw new LockedException();</span>
         }
-<span class="fc" id="L634">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L635">    }</span>
-    
+<span class="fc" id="L668">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L669">    }</span>
+
     /**
      * Gets estimated covariance of estimated 3D point if available.
-     * This is only available when result has been refined and covariance is 
+     * This is only available when result has been refined and covariance is
      * kept.
+     *
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L644">        return mCovariance;</span>
+<span class="fc" id="L679">        return mCovariance;</span>
     }
-    
+
     /**
      * Estimates an euclidean 3D transformation using a robust estimator and the
-     * best set of matched 3D point correspondences found using the robust 
+     * best set of matched 3D point correspondences found using the robust
      * estimator.
+     *
      * @return an euclidean 3D transformation.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
     public abstract EuclideanTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException;
-    
+
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
      */
     public abstract RobustEstimatorMethod getMethod();
-    
-    
+
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
+     *
      * @param method method of a robust estimator algorithm to estimate
-     * best euclidean 3D transformation.
+     *               best euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            RobustEstimatorMethod method) {
-<span class="nc bnc" id="L678" title="All 5 branches missed.">        switch (method) {</span>
+            final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L716" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L680">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L718">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L682">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L720">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L684">                return new PROSACEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L722">                return new PROSACEuclideanTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="nc" id="L686">                return new PROMedSEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L724">                return new PROMedSEuclideanTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="nc" id="L689">                return new RANSACEuclideanTransformation3DRobustEstimator();                </span>
+<span class="nc" id="L727">                return new RANSACEuclideanTransformation3DRobustEstimator();</span>
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate best
+     *                     euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L709" title="All 5 branches covered.">        switch (method) {</span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L748" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L711">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L750">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L714">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L753">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L717">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L756">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L720">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L759">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L724">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L763">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust esitmator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * eculidean 3D transformation.
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 eculidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            RobustEstimatorMethod method) {
-<span class="nc bnc" id="L741" title="All 5 branches missed.">        switch (method) {</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L781" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L743">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L783">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L746">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L786">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L749">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L789">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="nc" id="L752">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L792">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="nc" id="L756">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L796">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate best
+     *                     euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L780" title="All 5 branches covered.">        switch (method) {</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L821" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L782">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L823">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L785">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L826">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L788">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L829">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L791">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L832">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L795">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L836">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 matched points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L813" title="All 5 branches missed.">        switch (method) {</span>
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L855" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L815">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L857">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L817">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L859">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L819">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L861">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="nc" id="L822">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L864">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L826">                return new RANSACEuclideanTransformation3DRobustEstimator();                </span>
+<span class="nc" id="L868">                return new RANSACEuclideanTransformation3DRobustEstimator();</span>
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      euclidean 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      euclidean 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points or scores
-     * don't have the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  don't have the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L848" title="All 5 branches covered.">        switch (method) {</span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L891" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L850">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L893">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L853">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L896">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L856">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L899">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L859">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L902">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L863">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
-                        inputPoints, outputPoints);                
+<span class="fc" id="L906">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+                        inputPoints, outputPoints);
         }
     }
-    
-    /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
-     * @return an instance of euclidean 3D transformation estimator.
-     * @throws IllegalArgumentException if provided quality scores don't have
-     * the required minimum size.
-     */
-    public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L884" title="All 5 branches missed.">        switch (method) {</span>
-            case LMedS:
-<span class="nc" id="L886">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener);
-            case MSAC:
-<span class="nc" id="L889">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener);
-            case PROSAC:
-<span class="nc" id="L892">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, qualityScores);
-            case PROMedS:
-<span class="nc" id="L895">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-<span class="nc" id="L899">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener);                
-        }
-    }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      euclidean 3D transformation.
+     * @return an instance of euclidean 3D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     *                                  the required minimum size.
+     */
+    public static EuclideanTransformation3DRobustEstimator create(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L928" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L930">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="nc" id="L933">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="nc" id="L936">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, qualityScores);
+            case PROMedS:
+<span class="nc" id="L939">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, qualityScores);
+            case RANSAC:
+            default:
+<span class="nc" id="L943">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener);
+        }
+    }
+
+    /**
+     * Creates an euclidean 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      euclidean 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      euclidean 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size of their size is smaller than MINIMUM_SIZE.
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L925" title="All 5 branches covered.">        switch (method) {</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L970" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L927">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L972">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L930">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L975">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L933">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L978">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L936">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L981">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L940">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints);                
+<span class="fc" id="L985">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
         }
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
+     *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate
-     * best euclidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate
+     *                               best euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L955" title="All 5 branches missed.">        switch (method) {</span>
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1001" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L957">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1003">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L960">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1006">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L963">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1009">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L966">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1012">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L970">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1016">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L992" title="All 5 branches covered.">        switch (method) {</span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1039" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L994">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1041">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L997">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1044">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1000">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1047">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1003">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1050">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1007">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1054">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
         }
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust esitmator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * eculidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               eculidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L1025" title="All 5 branches missed.">        switch (method) {</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1073" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1027">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1075">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1030">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1078">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1033">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1081">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1036">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1084">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1040">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1088">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L1065" title="All 5 branches covered.">        switch (method) {</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1114" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1067">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1116">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1071">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1120">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1075">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1124">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1079">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1128">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1084">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1133">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 matched points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) {
-<span class="nc bnc" id="L1105" title="All 5 branches missed.">        switch (method) {</span>
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1155" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1107">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1157">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1110">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1160">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1113">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1163">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1116">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1166">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1120">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1170">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
         }
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points or scores
-     * don't have the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  don't have the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L1145" title="All 5 branches covered.">        switch (method) {</span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1196" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1147">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1198">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1150">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1201">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1153">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
-                        inputPoints, outputPoints, qualityScores, 
+<span class="fc" id="L1204">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+                        inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1157">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
-                        inputPoints, outputPoints, qualityScores, 
+<span class="fc" id="L1208">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+                        inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1162">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1213">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
         }
     }
-    
-    /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
-     * @return an instance of euclidean 3D transformation estimator.
-     * @throws IllegalArgumentException if provided quality scores don't have
-     * the required minimum size.
-     */
-    public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) {
-<span class="nc bnc" id="L1185" title="All 5 branches missed.">        switch (method) {</span>
-            case LMedS:
-<span class="nc" id="L1187">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, weakMinimumSizeAllowed);
-            case MSAC:
-<span class="nc" id="L1190">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, weakMinimumSizeAllowed);
-            case PROSAC:
-<span class="nc" id="L1193">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, qualityScores, weakMinimumSizeAllowed);
-            case PROMedS:
-<span class="nc" id="L1196">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, qualityScores, weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-<span class="nc" id="L1200">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, weakMinimumSizeAllowed);
-        }
-    }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @param method method of a robust estimator algorithm to estimate best
-     * euclidean 3D transformation.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size of their size is smaller than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     *                                  the required minimum size.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L1228" title="All 5 branches covered.">        switch (method) {</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1237" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1230">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="nc" id="L1239">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case MSAC:
+<span class="nc" id="L1242">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="nc" id="L1245">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, qualityScores, weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="nc" id="L1248">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, qualityScores, weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="nc" id="L1252">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+        }
+    }
+
+    /**
+     * Creates an euclidean 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @param method                 method of a robust estimator algorithm to estimate best
+     *                               euclidean 3D transformation.
+     * @return an instance of euclidean 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation3DRobustEstimator create(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1281" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L1283">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1234">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1287">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1238">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1291">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1242">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, qualityScores, 
+<span class="fc" id="L1295">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1247">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
-                        listener, inputPoints, outputPoints, 
+<span class="fc" id="L1300">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
         }
-    }    
-    
+    }
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
+     *
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create() {
-<span class="nc" id="L1259">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1313">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size of their size is smaller than MINIMUM_SIZE.
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
-<span class="fc" id="L1275">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L1330">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener) {
-<span class="nc" id="L1287">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener) {
+<span class="nc" id="L1343">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
-<span class="fc" id="L1306">        return create(listener, inputPoints, outputPoints, </span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L1363">        return create(listener, inputPoints, outputPoints,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @return an instance of euclidean 3D transformation estimator. 
+     *                      points.
+     * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            double[] qualityScores) {
-<span class="nc" id="L1319">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            final double[] qualityScores) {
+<span class="nc" id="L1377">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points ot be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      euclidean 3D transformation.
+     * @param outputPoints  list of output points ot be used to estimate an
+     *                      euclidean 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of points.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) {
-<span class="fc" id="L1337">        return create(inputPoints, outputPoints, qualityScores, </span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L1396">        return create(inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @return an instance of euclidean 3D transformation estimator. 
+     *                      points.
+     * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            double[] qualityScores) {
-<span class="nc" id="L1353">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="nc" id="L1413">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points ot be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      euclidean 3D transformation.
+     * @param outputPoints  list of output points ot be used to estimate an
+     *                      euclidean 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *                      points.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores) {
-<span class="fc" id="L1375">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L1436">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
+     *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1387">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+            final boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1449">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size of their size is smaller than MINIMUM_SIZE.
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L1405">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1468">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1420">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1484">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 3D transformation.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L1441">        return create(listener, inputPoints, outputPoints, </span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1506">        return create(listener, inputPoints, outputPoints,</span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @return an instance of euclidean 3D transformation estimator. 
+     * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1455">        return create(qualityScores, weakMinimumSizeAllowed, </span>
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1521">        return create(qualityScores, weakMinimumSizeAllowed,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points ot be used to estimate an
-     * euclidean 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of points.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points ot be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L1475">        return create(inputPoints, outputPoints, qualityScores, </span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1542">        return create(inputPoints, outputPoints, qualityScores,</span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     * @return an instance of euclidean 3D transformation estimator. 
+     * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener, 
-            double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1492">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1560">        return create(listener, qualityScores, weakMinimumSizeAllowed,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates an euclidean 3D transformation estimator based on 3D point 
+     * Creates an euclidean 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
-     * @param outputPoints list of output points ot be used to estimate an
-     * euclidean 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param outputPoints           list of output points ot be used to estimate an
+     *                               euclidean 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @return an instance of euclidean 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L1516">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1585">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
-    
-    
+
+
     /**
-     * Internal method to set lists of points to be used to estimate an 
+     * Internal method to set lists of points to be used to estimate an
      * euclidean 3D transformation.
      * This method does not check whether estimator is locked or not.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) {
-<span class="fc bfc" id="L1534" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L1535">            throw new IllegalArgumentException();</span>
+    private void internalSetPoints(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L1604" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L1605">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L1537" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L1538">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1607" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L1608">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L1540">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L1541">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L1542">    }   </span>
-    
+<span class="fc" id="L1610">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L1611">        mOutputPoints = outputPoints;</span>
+<span class="fc" id="L1612">    }</span>
+
     /**
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
      * If refinement is enabled and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
-     * @param transformation transformation estimated by a robust estimator 
-     * without refinement.
-     * @return solution after refinement (if requested) or the provided 
+     *
+     * @param transformation transformation estimated by a robust estimator
+     *                       without refinement.
+     * @return solution after refinement (if requested) or the provided
      * non-refined solution if not requested or refinement failed.
-     */    
+     */
     protected EuclideanTransformation3D attemptRefine(
-            EuclideanTransformation3D transformation) {
-<span class="fc bfc" id="L1557" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L1558">            EuclideanTransformation3DRefiner refiner =</span>
+            final EuclideanTransformation3D transformation) {
+<span class="fc bfc" id="L1628" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L1629">            final EuclideanTransformation3DRefiner refiner =</span>
                     new EuclideanTransformation3DRefiner(transformation,
-<span class="fc" id="L1560">                    mKeepCovariance, getInliersData(), mInputPoints,</span>
-<span class="fc" id="L1561">                    mOutputPoints, getRefinementStandardDeviation());</span>
-            
+<span class="fc" id="L1631">                            mKeepCovariance, getInliersData(), mInputPoints,</span>
+<span class="fc" id="L1632">                            mOutputPoints, getRefinementStandardDeviation());</span>
+
             try {
-<span class="fc" id="L1564">                EuclideanTransformation3D result =</span>
+<span class="fc" id="L1635">                final EuclideanTransformation3D result =</span>
                         new EuclideanTransformation3D();
-<span class="fc" id="L1566">                boolean improved = refiner.refine(result);</span>
-                
-<span class="pc bpc" id="L1568" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
-                    //keep covariance
-<span class="fc" id="L1570">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L1637">                final boolean improved = refiner.refine(result);</span>
+
+<span class="pc bpc" id="L1639" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+                    // keep covariance
+<span class="fc" id="L1641">                    mCovariance = refiner.getCovariance();</span>
                 }
-                
-<span class="fc bfc" id="L1573" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="nc" id="L1574">            } catch (Exception e) {</span>
-                //refinement failed, so we return input value
-<span class="nc" id="L1576">                return transformation;</span>
+
+<span class="fc bfc" id="L1644" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L1645">            } catch (final Exception e) {</span>
+                // refinement failed, so we return input value
+<span class="fc" id="L1647">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L1579">            return transformation;</span>
+<span class="fc" id="L1650">            return transformation;</span>
         }
     }
-    
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -1588,8 +1659,9 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
-    protected abstract double getRefinementStandardDeviation();    
+    protected abstract double getRefinementStandardDeviation();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

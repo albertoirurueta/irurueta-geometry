@@ -32,72 +32,76 @@ import java.util.List;
  * LMSE terms.
  * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
+ *
  * @param &lt;S1&gt; type of matched samples in 1st set.
  * @param &lt;S2&gt; type of matched samples in 2nd set.
  */
-public abstract class ProjectiveTransformation3DRefiner&lt;S1, S2&gt; extends 
+public abstract class ProjectiveTransformation3DRefiner&lt;S1, S2&gt; extends
         PairMatchesAndInliersDataRefiner&lt;ProjectiveTransformation3D, S1, S2&gt; {
 
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
     protected double mRefinementStandardDeviation;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L55">    public ProjectiveTransformation3DRefiner() { }</span>
-    
+<span class="fc" id="L56">    protected ProjectiveTransformation3DRefiner() {</span>
+<span class="fc" id="L57">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
-    public ProjectiveTransformation3DRefiner(
-            ProjectiveTransformation3D initialEstimation, 
-            boolean keepCovariance, BitSet inliers, double[] residuals, 
-            int numInliers, List&lt;S1&gt; samples1, List&lt;S2&gt; samples2, 
-            double refinementStandardDeviation) {
-<span class="fc" id="L75">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+    protected ProjectiveTransformation3DRefiner(
+            final ProjectiveTransformation3D initialEstimation,
+            final boolean keepCovariance, final BitSet inliers, final double[] residuals,
+            final int numInliers, final List&lt;S1&gt; samples1, final List&lt;S2&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L78">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples1, samples2);
-<span class="fc" id="L77">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L78">    }</span>
-    
+<span class="fc" id="L80">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L81">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
     public ProjectiveTransformation3DRefiner(
-            ProjectiveTransformation3D initialEstimation, 
-            boolean keepCovariance, InliersData inliersData, List&lt;S1&gt; samples1, 
-            List&lt;S2&gt; samples2, double refinementStandardDeviation) {
-<span class="fc" id="L96">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
+            final ProjectiveTransformation3D initialEstimation,
+            final boolean keepCovariance, final InliersData inliersData, final List&lt;S1&gt; samples1,
+            final List&lt;S2&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L100">        super(initialEstimation, keepCovariance, inliersData, samples1,</span>
                 samples2);
-<span class="fc" id="L98">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L99">    }</span>
-    
+<span class="fc" id="L102">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L103">    }</span>
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -106,46 +110,49 @@ public abstract class ProjectiveTransformation3DRefiner&lt;S1, S2&gt; extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-<span class="fc" id="L112">        return mRefinementStandardDeviation;</span>
+<span class="fc" id="L117">        return mRefinementStandardDeviation;</span>
     }
-    
+
     /**
-     * Sets standard deviation used for Levenberg-Marquardt fitting during 
+     * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
-     * @param refinementStandardDeviation standard deviation used for 
-     * refinement.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L130">            throw new LockedException();</span>
+            final double refinementStandardDeviation) throws LockedException {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L136">            throw new LockedException();</span>
         }
-<span class="fc" id="L132">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L133">    }    </span>
-    
+<span class="fc" id="L138">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L139">    }</span>
+
     /**
      * Refines provided initial estimation.
+     *
      * @return refines estimation.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is 
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
-     */    
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
     @Override
     public ProjectiveTransformation3D refine() throws NotReadyException, LockedException, RefinerException {
-<span class="fc" id="L146">        ProjectiveTransformation3D result = new ProjectiveTransformation3D();</span>
-<span class="fc" id="L147">        refine(result);</span>
-<span class="fc" id="L148">        return result;</span>
-    }    
+<span class="fc" id="L153">        final ProjectiveTransformation3D result = new ProjectiveTransformation3D();</span>
+<span class="fc" id="L154">        refine(result);</span>
+<span class="fc" id="L155">        return result;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

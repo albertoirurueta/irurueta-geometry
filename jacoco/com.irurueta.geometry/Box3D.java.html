@@ -36,15 +36,17 @@ public class Box3D extends Box&lt;Point3D&gt; {
 
     /**
      * Constructor.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public Box3D(Point3D lo, Point3D hi) {
-<span class="fc" id="L43">        super(lo, hi);</span>
-<span class="fc" id="L44">    }</span>
+    public Box3D(final Point3D lo, final Point3D hi) {
+<span class="fc" id="L44">        super(lo, hi);</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Sets boundaries.
+     *
      * @param loX x low coordinate.
      * @param loY y low coordinate
      * @param loZ z low coordinate.
@@ -52,10 +54,10 @@ public class Box3D extends Box&lt;Point3D&gt; {
      * @param hiY y high coordinate.
      * @param hiZ z high coordinate.
      */
-    public final void setBounds(double loX, double loY, double loZ,
-                                double hiX, double hiY, double hiZ) {
-<span class="fc" id="L57">        setBounds(new InhomogeneousPoint3D(loX, loY, loZ),</span>
+    public final void setBounds(final double loX, final double loY, final double loZ,
+                                final double hiX, final double hiY, final double hiZ) {
+<span class="fc" id="L59">        setBounds(new InhomogeneousPoint3D(loX, loY, loZ),</span>
                 new InhomogeneousPoint3D(hiX, hiY, hiZ));
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L61">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -22,13 +22,13 @@ import java.io.Serializable;
 
 /**
  * This class defines the amount of rotation for 3D points or planes.
- * Rotation is defined internally as axis coordinates and rotation angle, 
+ * Rotation is defined internally as axis coordinates and rotation angle,
  * following Rodrigues formulas.
  * This class is based in:
  * http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/sfrotation_java.htm
  */
 public class AxisRotation3D extends Rotation3D implements Serializable {
-    
+
     /**
      * Number of parameters defining a rotation axis.
      */
@@ -43,18 +43,18 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * x element of axis angle.
      */
 <span class="pc" id="L45">    private double mAxisX = 0.0;</span>
-    
+
     /**
      * y element of axis angle.
      */
 <span class="pc" id="L50">    private double mAxisY = 0.0;</span>
-    
-    /** 
+
+    /**
      * z element of axis angle.
      */
 <span class="pc" id="L55">    private double mAxisZ = 1.0;</span>
-   
-    /** 
+
+    /**
      * angle element of axis angle.
      */
 <span class="pc" id="L60">    private double mTheta = 0.0;</span>
@@ -62,676 +62,724 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     /**
      * Constructor which allows initial value to be supplied as axis and angle.
      * For better accuracy, axis values should be normalized.
+     *
      * @param axisX x dimension of normalized axis.
      * @param axisY y dimension of normalized axis.
      * @param axisZ z dimension of normalized axis.
      * @param theta angle in radians.
      */
-    public AxisRotation3D(double axisX, double axisY, double axisZ, 
-<span class="fc" id="L71">           double theta) {</span>
-<span class="fc" id="L72">        setAxisAndRotation(axisX, axisY, axisZ, theta);</span>
-<span class="fc" id="L73">    }</span>
-   
+    public AxisRotation3D(final double axisX, final double axisY, final double axisZ,
+<span class="fc" id="L72">                          final double theta) {</span>
+<span class="fc" id="L73">        setAxisAndRotation(axisX, axisY, axisZ, theta);</span>
+<span class="fc" id="L74">    }</span>
+
     /**
      * Constructor where array of axis values and rotation angle are provided
      * For better accuracy, axis values should be normalized.
-     * @param axis Array containing x,y and z values of axis.
+     *
+     * @param axis  Array containing x,y and z values of axis.
      * @param theta rotation angle in radians.
      * @throws IllegalArgumentException if provided axis length is not 3.
      */
-<span class="fc" id="L82">    public AxisRotation3D(double[] axis, double theta) {</span>
-<span class="fc" id="L83">        setAxisAndRotation(axis, theta);</span>
-<span class="fc" id="L84">    }</span>
-       
-    /** constructor to create sfrotation from euler angles.
-     * @param heading rotation about z axis.
+<span class="fc" id="L84">    public AxisRotation3D(final double[] axis, final double theta) {</span>
+<span class="fc" id="L85">        setAxisAndRotation(axis, theta);</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * constructor to create sfrotation from euler angles.
+     *
+     * @param heading  rotation about z axis.
      * @param attitude rotation about y axis.
-     * @param bank rotation about x axis.
+     * @param bank     rotation about x axis.
      */
-    public AxisRotation3D(double heading, double attitude, 
-<span class="nc" id="L92">           double bank) {</span>
-<span class="nc" id="L93">       setAngles(heading, attitude, bank);</span>
-<span class="nc" id="L94">    }</span>
-   
-    /** 
+    public AxisRotation3D(final double heading, final double attitude,
+<span class="nc" id="L96">                          final double bank) {</span>
+<span class="nc" id="L97">        setAngles(heading, attitude, bank);</span>
+<span class="nc" id="L98">    }</span>
+
+    /**
      * Copy constructor.
+     *
      * @param rotation instance to copy.
      */
-<span class="fc" id="L100">    public AxisRotation3D(AxisRotation3D rotation) {</span>
-<span class="fc" id="L101">           fromRotation(rotation);</span>
-<span class="fc" id="L102">    }</span>
-    
+<span class="fc" id="L105">    public AxisRotation3D(final AxisRotation3D rotation) {</span>
+<span class="fc" id="L106">        fromRotation(rotation);</span>
+<span class="fc" id="L107">    }</span>
+
     /**
      * Copy constructor.
+     *
      * @param rot Converts and copies provided rotation instance.
      */
-<span class="nc" id="L108">    public AxisRotation3D(Rotation3D rot) {</span>
+<span class="nc" id="L114">    public AxisRotation3D(final Rotation3D rot) {</span>
         try {
-<span class="nc" id="L110">            fromMatrix(rot.asInhomogeneousMatrix());</span>
-<span class="nc" id="L111">        } catch (InvalidRotationMatrixException ignore) {</span>
-            //never happens
-<span class="nc" id="L113">        }</span>
-<span class="nc" id="L114">    }</span>
-   
-    /** 
+<span class="nc" id="L116">            fromMatrix(rot.asInhomogeneousMatrix());</span>
+<span class="nc" id="L117">        } catch (final InvalidRotationMatrixException ignore) {</span>
+            // never happens
+<span class="nc" id="L119">        }</span>
+<span class="nc" id="L120">    }</span>
+
+    /**
      * Empty constructor.
      */
-<span class="fc" id="L119">    public AxisRotation3D() { }</span>
-    
+<span class="fc" id="L125">    public AxisRotation3D() {</span>
+<span class="fc" id="L126">    }</span>
+
     /**
      * Returns type of this rotation.
+     *
      * @return Type of this rotation.
      */
     @Override
     public Rotation3DType getType() {
-<span class="fc" id="L127">        return Rotation3DType.AXIS_ROTATION3D;</span>
+<span class="fc" id="L135">        return Rotation3DType.AXIS_ROTATION3D;</span>
     }
-   
+
     /**
      * Sets rotation angles as heading, attitude and bank, which are commonly
      * used in areas such as aviation.
-     * @param heading Heading angle expressed in radians.
+     *
+     * @param heading  Heading angle expressed in radians.
      * @param attitude Attitude angle expressed in radians.
-     * @param bank Bank angle expressed in radians.
+     * @param bank     Bank angle expressed in radians.
      */
-    @SuppressWarnings(&quot;WeakerAccess&quot;)
-    public final void setAngles(double heading, double attitude, double bank) {
-<span class="nc" id="L139">        double c1 = Math.cos(heading/2);</span>
-<span class="nc" id="L140">        double s1 = Math.sin(heading/2);</span>
-<span class="nc" id="L141">        double c2 = Math.cos(attitude/2);</span>
-<span class="nc" id="L142">        double s2 = Math.sin(attitude/2);</span>
-<span class="nc" id="L143">        double c3 = Math.cos(bank/2);</span>
-<span class="nc" id="L144">        double s3 = Math.sin(bank/2);</span>
-<span class="nc" id="L145">        double c1c2 = c1 * c2;</span>
-<span class="nc" id="L146">        double s1s2 = s1 * s2;</span>
-<span class="nc" id="L147">        mTheta = c1c2 * c3 + s1s2 * s3;</span>
-<span class="nc" id="L148">        mAxisX = c1c2 * s3 - s1s2 * c3;</span>
-<span class="nc" id="L149">        mAxisY = c1 * s2 * c3 + s1 * c2 * s3;</span>
-<span class="nc" id="L150">        mAxisZ = s1 * c2 * c3 - c1 * s2 * s3;</span>
-<span class="nc" id="L151">    }</span>
-   
+    public final void setAngles(
+            final double heading, final double attitude, final double bank) {
+<span class="nc" id="L148">        final double c1 = Math.cos(heading / 2);</span>
+<span class="nc" id="L149">        final double s1 = Math.sin(heading / 2);</span>
+<span class="nc" id="L150">        final double c2 = Math.cos(attitude / 2);</span>
+<span class="nc" id="L151">        final double s2 = Math.sin(attitude / 2);</span>
+<span class="nc" id="L152">        final double c3 = Math.cos(bank / 2);</span>
+<span class="nc" id="L153">        final double s3 = Math.sin(bank / 2);</span>
+<span class="nc" id="L154">        final double c1c2 = c1 * c2;</span>
+<span class="nc" id="L155">        final double s1s2 = s1 * s2;</span>
+<span class="nc" id="L156">        mTheta = c1c2 * c3 + s1s2 * s3;</span>
+<span class="nc" id="L157">        mAxisX = c1c2 * s3 - s1s2 * c3;</span>
+<span class="nc" id="L158">        mAxisY = c1 * s2 * c3 + s1 * c2 * s3;</span>
+<span class="nc" id="L159">        mAxisZ = s1 * c2 * c3 - c1 * s2 * s3;</span>
+<span class="nc" id="L160">    }</span>
+
     /**
      * Sets rotation of this instance by copying provided rotation.
+     *
      * @param rot Rotation to be copied.
      */
     @Override
-    public final void fromRotation(AxisRotation3D rot) {
-<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        mAxisX = (rot!=null) ? rot.mAxisX : 0;</span>
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        mAxisY = (rot!=null) ? rot.mAxisY : 0;</span>
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        mAxisZ = (rot!=null) ? rot.mAxisZ : 1;</span>
-<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        mTheta = (rot!=null) ? rot.mTheta : 0;</span>
-<span class="fc" id="L163">    }</span>
+    public final void fromRotation(final AxisRotation3D rot) {
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        mAxisX = (rot != null) ? rot.mAxisX : 0;</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        mAxisY = (rot != null) ? rot.mAxisY : 0;</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        mAxisZ = (rot != null) ? rot.mAxisZ : 1;</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        mTheta = (rot != null) ? rot.mTheta : 0;</span>
+<span class="fc" id="L173">    }</span>
 
     /**
      * Sets rotation axis of this instance while preserving the rotation angle.
      * Once set, points will rotate around provided axis.
+     *
      * @param axisX X coordinate of rotation axis.
      * @param axisY Y coordinate of rotation axis.
      * @param axisZ Z coordinate of rotation axis.
      */
-    public void setAxis(double axisX, double axisY, double axisZ) {
-<span class="nc" id="L173">        mTheta = Math.sqrt(axisX*axisX + axisY*axisY + axisZ*axisZ);</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">        if(mTheta == 0.0){</span>
-<span class="nc" id="L175">            mAxisX = 1; </span>
-<span class="nc" id="L176">            mAxisY = mAxisZ = 0.0; </span>
-<span class="nc" id="L177">            return;</span>
+    public void setAxis(final double axisX, final double axisY, final double axisZ) {
+<span class="nc" id="L184">        mTheta = Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (mTheta == 0.0) {</span>
+<span class="nc" id="L186">            mAxisX = 1;</span>
+<span class="nc" id="L187">            mAxisY = mAxisZ = 0.0;</span>
+<span class="nc" id="L188">            return;</span>
         }
-<span class="nc" id="L179">        mAxisX = axisX / mTheta;</span>
-<span class="nc" id="L180">        mAxisY = axisY / mTheta;</span>
-<span class="nc" id="L181">        mAxisZ = axisZ / mTheta;</span>
-<span class="nc" id="L182">    }</span>
-   
+<span class="nc" id="L190">        mAxisX = axisX / mTheta;</span>
+<span class="nc" id="L191">        mAxisY = axisY / mTheta;</span>
+<span class="nc" id="L192">        mAxisZ = axisZ / mTheta;</span>
+<span class="nc" id="L193">    }</span>
+
     /**
      * Sets the axis and rotation of this instance.
      * Once set, points will rotate around provided axis an amount equal to
      * provided rotation angle in radians.
      * Note: to avoid numerical instabilities and improve accuracy, axis
      * coordinates should be normalized (e.g. norm equal to 1).
+     *
      * @param axisX X coordinate of rotation axis.
      * @param axisY Y coordinate of rotation axis.
      * @param axisZ Z coordinate of rotation axis.
      * @param theta Amount of rotation in radians.
      */
     @Override
-    public final void setAxisAndRotation(double axisX, double axisY, 
-            double axisZ, double theta) {
-<span class="fc" id="L198">        mAxisX = axisX;</span>
-<span class="fc" id="L199">        mAxisY = axisY;</span>
-<span class="fc" id="L200">        mAxisZ = axisZ;</span>
-<span class="fc" id="L201">        mTheta = theta;</span>
-<span class="fc" id="L202">    }</span>
-           
-    /** 
+    public final void setAxisAndRotation(final double axisX, final double axisY,
+                                         final double axisZ, final double theta) {
+<span class="fc" id="L210">        mAxisX = axisX;</span>
+<span class="fc" id="L211">        mAxisY = axisY;</span>
+<span class="fc" id="L212">        mAxisZ = axisZ;</span>
+<span class="fc" id="L213">        mTheta = theta;</span>
+<span class="fc" id="L214">    }</span>
+
+    /**
      * Returns X coordinate of rotation axis.
+     *
      * @return X coordinate of rotation axis.
      */
     public double getAxisX() {
-<span class="fc" id="L209">        return mAxisX;</span>
+<span class="fc" id="L222">        return mAxisX;</span>
     }
 
     /**
      * Returns Y coordinate of rotation axis.
+     *
      * @return Y coordinate of rotation axis.
      */
     public double getAxisY() {
-<span class="fc" id="L217">        return mAxisY;</span>
+<span class="fc" id="L231">        return mAxisY;</span>
     }
 
     /**
      * Returns Z coordinate of rotation axis.
+     *
      * @return Z coordinate of rotation axis.
      */
     public double getAxisZ() {
-<span class="fc" id="L225">        return mAxisZ;</span>
+<span class="fc" id="L240">        return mAxisZ;</span>
     }
-       
+
     /**
      * Returns rotation axis corresponding to this instance.
      * Result is stored in provided axis array, which must have length 3
+     *
      * @param axis Array where axis coordinates will be stored.
      * @throws IllegalArgumentException Raised if provided array does not have
-     * length 3.
-     */    
+     *                                  length 3.
+     */
     @Override
-    public void rotationAxis(double[] axis) {
-<span class="pc bpc" id="L237" title="1 of 2 branches missed.">        if (axis.length != INHOM_COORDS) {</span>
-<span class="nc" id="L238">            throw new IllegalArgumentException();</span>
+    public void rotationAxis(final double[] axis) {
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (axis.length != INHOM_COORDS) {</span>
+<span class="nc" id="L254">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L241">        axis[0] = mAxisX;</span>
-<span class="fc" id="L242">        axis[1] = mAxisY;</span>
-<span class="fc" id="L243">        axis[2] = mAxisZ;        </span>
-<span class="fc" id="L244">    }</span>
-    
+
+<span class="fc" id="L257">        axis[0] = mAxisX;</span>
+<span class="fc" id="L258">        axis[1] = mAxisY;</span>
+<span class="fc" id="L259">        axis[2] = mAxisZ;</span>
+<span class="fc" id="L260">    }</span>
+
     /**
      * Returns rotation amount or angle in radians around the rotation axis
      * associated to this instance.
+     *
      * @return Rotation angle in radians.
-     */    
+     */
     @Override
     public double getRotationAngle() {
-<span class="fc" id="L253">        return mTheta;</span>
+<span class="fc" id="L270">        return mTheta;</span>
     }
-   
+
     /**
      * Returns a 3D rotation which is inverse to this instance.
-     * In other words, the combination of this rotation with its inverse 
+     * In other words, the combination of this rotation with its inverse
      * produces no change.
+     *
      * @return Inverse 3D rotation.
-     */    
+     */
     @Override
     public AxisRotation3D inverseRotationAndReturnNew() {
-<span class="fc" id="L264">        AxisRotation3D rot = new AxisRotation3D();</span>
-<span class="fc" id="L265">        inverseRotation(rot);</span>
-<span class="fc" id="L266">        return rot;</span>
+<span class="fc" id="L282">        final AxisRotation3D rot = new AxisRotation3D();</span>
+<span class="fc" id="L283">        inverseRotation(rot);</span>
+<span class="fc" id="L284">        return rot;</span>
     }
-    
+
     /**
-     * Sets into provided MatrixRotation3D instance a rotation inverse to this 
+     * Sets into provided MatrixRotation3D instance a rotation inverse to this
      * instance.
      * The combination of this rotation with its inverse produces no change.
+     *
      * @param result Instance where inverse rotation will be set.
      */
-    public void inverseRotation(AxisRotation3D result) {
-        //copy this rotation into result
-<span class="fc" id="L277">        result.fromRotation(this);</span>
-        //reverse angle
-<span class="fc" id="L279">        result.mTheta = -mTheta;</span>
-<span class="fc" id="L280">    }</span>
-    
+    public void inverseRotation(final AxisRotation3D result) {
+        // copy this rotation into result
+<span class="fc" id="L296">        result.fromRotation(this);</span>
+        // reverse angle
+<span class="fc" id="L298">        result.mTheta = -mTheta;</span>
+<span class="fc" id="L299">    }</span>
+
     /**
-     * Sets into provided MatrixRotation3D instance a rotation inverse to this 
+     * Sets into provided MatrixRotation3D instance a rotation inverse to this
      * instance.
      * The combination of this rotation with its inverse produces no change.
+     *
      * @param result Instance where inverse rotation will be set.
-     */    
+     */
     @Override
-    public void inverseRotation(Rotation3D result) {
-<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (result instanceof AxisRotation3D) {</span>
-<span class="nc" id="L291">            inverseRotation((AxisRotation3D)result);</span>
-            
-<span class="nc bnc" id="L293" title="All 2 branches missed.">        } else if (result instanceof MatrixRotation3D) {</span>
-<span class="nc" id="L294">            AxisRotation3D rot = new AxisRotation3D();</span>
-<span class="nc" id="L295">            inverseRotation(rot);</span>
+    public void inverseRotation(final Rotation3D result) {
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        if (result instanceof AxisRotation3D) {</span>
+<span class="nc" id="L311">            inverseRotation((AxisRotation3D) result);</span>
+
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        } else if (result instanceof MatrixRotation3D) {</span>
+<span class="nc" id="L314">            final AxisRotation3D rot = new AxisRotation3D();</span>
+<span class="nc" id="L315">            inverseRotation(rot);</span>
             try {
-<span class="nc" id="L297">                result.fromMatrix(rot.asInhomogeneousMatrix());</span>
-<span class="nc" id="L298">            } catch (InvalidRotationMatrixException ignore) {</span>
-                //never happens
-<span class="nc" id="L300">            }</span>
+<span class="nc" id="L317">                result.fromMatrix(rot.asInhomogeneousMatrix());</span>
+<span class="nc" id="L318">            } catch (final InvalidRotationMatrixException ignore) {</span>
+                // never happens
+<span class="nc" id="L320">            }</span>
         }
-<span class="nc" id="L302">    }</span>
-    
+<span class="nc" id="L322">    }</span>
+
     /**
      * Reverses the rotation of this instance.
-     */    
+     */
     @Override
     public void inverseRotation() {
-<span class="fc" id="L309">        inverseRotation(this);</span>
-<span class="fc" id="L310">    }</span>
-        
+<span class="fc" id="L329">        inverseRotation(this);</span>
+<span class="fc" id="L330">    }</span>
+
     /**
-     * Returns this 3D rotation instance expressed as a 3x3 inhomogeneous 
+     * Returns this 3D rotation instance expressed as a 3x3 inhomogeneous
      * matrix.
      * This is equivalent to call getInternalMatrix().
+     *
      * @return Rotation matrix expressed in inhomogeneous coordinates.
-     */    
+     */
     @Override
     public Matrix asInhomogeneousMatrix() {
-<span class="fc" id="L320">        Matrix result = null;</span>
+<span class="fc" id="L341">        Matrix result = null;</span>
         try {
-<span class="fc" id="L322">            result = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
-<span class="nc" id="L323">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L325">        }</span>
-<span class="fc" id="L326">        asInhomogeneousMatrix(result);</span>
-<span class="fc" id="L327">        return result;</span>
+<span class="fc" id="L343">            result = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="fc" id="L344">            asInhomogeneousMatrix(result);</span>
+<span class="nc" id="L345">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L347">        }</span>
+
+<span class="fc" id="L349">        return result;</span>
     }
-    
+
     /**
      * Sets into provided Matrix instance this 3D rotation expressed as a
      * 3x3 inhomogeneous matrix.
+     *
      * @param result Matrix where rotation will be set.
      * @throws IllegalArgumentException Raised if provided instance does not
-     * have size 3x3.
-     */    
+     *                                  have size 3x3.
+     */
     @Override
-    public void asInhomogeneousMatrix(Matrix result) {
-<span class="fc bfc" id="L339" title="All 2 branches covered.">        if (result.getRows() != INHOM_COORDS ||</span>
-<span class="pc bpc" id="L340" title="1 of 2 branches missed.">                result.getColumns() != INHOM_COORDS) {</span>
-<span class="fc" id="L341">            throw new IllegalArgumentException();</span>
+    public void asInhomogeneousMatrix(final Matrix result) {
+<span class="fc bfc" id="L362" title="All 2 branches covered.">        if (result.getRows() != INHOM_COORDS ||</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">                result.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L364">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L344">        double c = Math.cos(mTheta);</span>
-<span class="fc" id="L345">        double s = Math.sin(mTheta);</span>
-<span class="fc" id="L346">        double t = 1.0 - c;</span>
-	    //normalize axis
-<span class="fc" id="L348">	    double magnitude = Math.sqrt(mAxisX * mAxisX + mAxisY * mAxisY +</span>
+
+<span class="fc" id="L367">        final double c = Math.cos(mTheta);</span>
+<span class="fc" id="L368">        final double s = Math.sin(mTheta);</span>
+<span class="fc" id="L369">        final double t = 1.0 - c;</span>
+        // normalize axis
+<span class="fc" id="L371">        final double magnitude = Math.sqrt(mAxisX * mAxisX + mAxisY * mAxisY +</span>
                 mAxisZ * mAxisZ);
-<span class="pc bpc" id="L350" title="1 of 2 branches missed.">	    if (magnitude &gt; EPS) {</span>
-            //normalize only if axis norm is large enough to avoid numerical
-            //instability
-<span class="fc" id="L353">            mAxisX /= magnitude;</span>
-<span class="fc" id="L354">            mAxisY /= magnitude;</span>
-<span class="fc" id="L355">            mAxisZ /= magnitude;</span>
+<span class="pc bpc" id="L373" title="1 of 2 branches missed.">        if (magnitude &gt; EPS) {</span>
+            // normalize only if axis norm is large enough to avoid numerical
+            // instability
+<span class="fc" id="L376">            mAxisX /= magnitude;</span>
+<span class="fc" id="L377">            mAxisY /= magnitude;</span>
+<span class="fc" id="L378">            mAxisZ /= magnitude;</span>
         }
 
-<span class="fc" id="L358">        result.setElementAt(0, 0, c + mAxisX * mAxisX * t);</span>
-<span class="fc" id="L359">        result.setElementAt(1, 1, c + mAxisY * mAxisY * t);</span>
-<span class="fc" id="L360">        result.setElementAt(2, 2, c + mAxisZ * mAxisZ * t);</span>
+<span class="fc" id="L381">        result.setElementAt(0, 0, c + mAxisX * mAxisX * t);</span>
+<span class="fc" id="L382">        result.setElementAt(1, 1, c + mAxisY * mAxisY * t);</span>
+<span class="fc" id="L383">        result.setElementAt(2, 2, c + mAxisZ * mAxisZ * t);</span>
 
 
-<span class="fc" id="L363">        double tmp1 = mAxisX * mAxisY * t;</span>
-<span class="fc" id="L364">        double tmp2 = mAxisZ * s;</span>
-<span class="fc" id="L365">        result.setElementAt(1, 0, tmp1 + tmp2);</span>
-<span class="fc" id="L366">        result.setElementAt(0, 1, tmp1 - tmp2);</span>
-<span class="fc" id="L367">        tmp1 = mAxisX * mAxisZ * t;</span>
-<span class="fc" id="L368">        tmp2 = mAxisY * s;</span>
-<span class="fc" id="L369">        result.setElementAt(2, 0, tmp1 - tmp2);</span>
-<span class="fc" id="L370">        result.setElementAt(0, 2, tmp1 + tmp2);</span>
-<span class="fc" id="L371">        tmp1 = mAxisY * mAxisZ * t;</span>
-<span class="fc" id="L372">        tmp2 = mAxisX * s;</span>
-<span class="fc" id="L373">        result.setElementAt(2, 1, tmp1 + tmp2);</span>
-<span class="fc" id="L374">        result.setElementAt(1, 2, tmp1 - tmp2);</span>
-<span class="fc" id="L375">    }</span>
-    
+<span class="fc" id="L386">        double tmp1 = mAxisX * mAxisY * t;</span>
+<span class="fc" id="L387">        double tmp2 = mAxisZ * s;</span>
+<span class="fc" id="L388">        result.setElementAt(1, 0, tmp1 + tmp2);</span>
+<span class="fc" id="L389">        result.setElementAt(0, 1, tmp1 - tmp2);</span>
+<span class="fc" id="L390">        tmp1 = mAxisX * mAxisZ * t;</span>
+<span class="fc" id="L391">        tmp2 = mAxisY * s;</span>
+<span class="fc" id="L392">        result.setElementAt(2, 0, tmp1 - tmp2);</span>
+<span class="fc" id="L393">        result.setElementAt(0, 2, tmp1 + tmp2);</span>
+<span class="fc" id="L394">        tmp1 = mAxisY * mAxisZ * t;</span>
+<span class="fc" id="L395">        tmp2 = mAxisX * s;</span>
+<span class="fc" id="L396">        result.setElementAt(2, 1, tmp1 + tmp2);</span>
+<span class="fc" id="L397">        result.setElementAt(1, 2, tmp1 - tmp2);</span>
+<span class="fc" id="L398">    }</span>
+
     /**
      * Returns this 3D rotation instance expressed as a 4x4 homogeneous matrix.
+     *
      * @return Rotation matrix expressed in homogeneous coordinates.
-     */        
+     */
     @Override
     public Matrix asHomogeneousMatrix() {
-<span class="fc" id="L383">        Matrix result = null;</span>
+<span class="fc" id="L407">        Matrix result = null;</span>
         try {
-<span class="fc" id="L385">            result = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
-            //sets into 3x3 top-left submatrix the internal matrix of this
-            //instance, the remaining part will continue to be the identity
-<span class="fc" id="L388">            result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, </span>
-<span class="fc" id="L389">                    asInhomogeneousMatrix());</span>
-<span class="nc" id="L390">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L392">        }</span>
-<span class="fc" id="L393">        return result;</span>
+<span class="fc" id="L409">            result = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+            // sets into 3x3 top-left submatrix the internal matrix of this
+            // instance, the remaining part will continue to be the identity
+<span class="fc" id="L412">            result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,</span>
+<span class="fc" id="L413">                    asInhomogeneousMatrix());</span>
+<span class="nc" id="L414">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L416">        }</span>
+<span class="fc" id="L417">        return result;</span>
     }
-    
+
     /**
      * Sets into provided Matrix instance this 3D rotation expressed as a
      * 4x4 homogeneous matrix.
+     *
      * @param result Matrix where rotation will be set.
      * @throws IllegalArgumentException Raised if provided instance does not
-     * have size 4x4.
-     */    
+     *                                  have size 4x4.
+     */
     @Override
-    public void asHomogeneousMatrix(Matrix result) {
-<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (result.getRows() != HOM_COORDS ||</span>
-<span class="pc bpc" id="L406" title="1 of 2 branches missed.">                result.getColumns() != HOM_COORDS) {</span>
-<span class="fc" id="L407">            throw new IllegalArgumentException();</span>
+    public void asHomogeneousMatrix(final Matrix result) {
+<span class="fc bfc" id="L430" title="All 2 branches covered.">        if (result.getRows() != HOM_COORDS ||</span>
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">                result.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L432">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L410">        result.initialize(0.0);</span>
-        //sets into 3x3 top-left submatrix the internal matrix of this instance
-<span class="fc" id="L412">        result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, </span>
-<span class="fc" id="L413">                asInhomogeneousMatrix());</span>
-        //set las element to 1.0 (to be like the identity
-<span class="fc" id="L415">        result.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        </span>
-<span class="fc" id="L416">    }</span>
-     
+
+<span class="fc" id="L435">        result.initialize(0.0);</span>
+        // sets into 3x3 top-left submatrix the internal matrix of this instance
+<span class="fc" id="L437">        result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,</span>
+<span class="fc" id="L438">                asInhomogeneousMatrix());</span>
+        // set las element to 1.0 (to be like the identity
+<span class="fc" id="L440">        result.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);</span>
+<span class="fc" id="L441">    }</span>
+
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
      * transpose must be it's inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
-     * @param m Provided rotation matrix.
+     *
+     * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     * valid (has wrong size or it is not orthonormal).
-     * @throws IllegalArgumentException Raised if provided threshold is negative
-     * {@link #isValidRotationMatrix(Matrix)}
-     */        
+     *                                        valid (has wrong size or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is negative
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
     @Override
-    public void fromInhomogeneousMatrix(Matrix m, double threshold)
+    public void fromInhomogeneousMatrix(final Matrix m, final double threshold)
             throws InvalidRotationMatrixException {
-        
-<span class="pc bpc" id="L434" title="1 of 2 branches missed.">        if (m.getRows() != INHOM_COORDS ||</span>
-<span class="pc bpc" id="L435" title="1 of 2 branches missed.">                m.getColumns() != INHOM_COORDS) {</span>
-<span class="nc" id="L436">            throw new InvalidRotationMatrixException();</span>
+
+<span class="pc bpc" id="L460" title="1 of 2 branches missed.">        if (m.getRows() != INHOM_COORDS ||</span>
+<span class="pc bpc" id="L461" title="1 of 2 branches missed.">                m.getColumns() != INHOM_COORDS) {</span>
+<span class="nc" id="L462">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="fc bfc" id="L438" title="All 2 branches covered.">        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {</span>
-<span class="fc" id="L439">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L465">            throw new InvalidRotationMatrixException();</span>
         }
-                
+
         double angle;
         double x;
         double y;
-        double z; // variables for result
-<span class="fc" id="L446">	    double epsilon = 0.01; // margin to allow for rounding errors</span>
-<span class="fc" id="L447">	    double epsilon2 = 0.1; // margin to distinguish between 0 and 180 degrees</span>
+        // variables for result
+        double z;
+        // margin to allow for rounding errors
+<span class="fc" id="L474">        double epsilon = 0.01;</span>
+        // margin to distinguish between 0 and 180 degrees
+<span class="fc" id="L476">        double epsilon2 = 0.1;</span>
 
-<span class="pc bpc" id="L449" title="1 of 2 branches missed.">        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) &lt; epsilon)</span>
-<span class="nc bnc" id="L450" title="All 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) &lt; epsilon)</span>
-<span class="nc bnc" id="L451" title="All 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) &lt; epsilon)) {</span>
-		        // singularity found
-		        // first check for identity matrix which must have +1 for all terms
-		        //  in leading diagonaland zero in other terms
-<span class="nc bnc" id="L455" title="All 2 branches missed.">		        if ((Math.abs(m.getElementAt(0, 1) +</span>
-<span class="nc" id="L456">                        m.getElementAt(1, 0)) &lt; epsilon2)</span>
-<span class="nc bnc" id="L457" title="All 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(0, 2) +</span>
-<span class="nc" id="L458">                        m.getElementAt(2, 0)) &lt; epsilon2)</span>
-<span class="nc bnc" id="L459" title="All 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(1, 2) +</span>
-<span class="nc" id="L460">                        m.getElementAt(2, 1)) &lt; epsilon2)</span>
-<span class="nc bnc" id="L461" title="All 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(0, 0) + m.getElementAt(1, 1) +</span>
-<span class="nc" id="L462">                        m.getElementAt(2, 2) - 3.0) &lt; epsilon2)) {</span>
-			        // this singularity is identity matrix so angle = 0
-<span class="nc" id="L464">			        setAxisAndRotation(0.0,0.0,1.0,0.0);  // zero angle,</span>
-                                                                                    //arbitrary axis
-<span class="nc" id="L466">                        return;</span>
-		        }
-		        // otherwise this singularity is angle = 180
-<span class="nc" id="L469">		        angle = Math.PI;</span>
-<span class="nc" id="L470">		        double xx = (m.getElementAt(0, 0) + 1.0) / 2.0;</span>
-<span class="nc" id="L471">		        double yy = (m.getElementAt(1, 1) + 1.0) / 2.0;</span>
-<span class="nc" id="L472">		        double zz = (m.getElementAt(2, 2) + 1.0) / 2.0;</span>
-<span class="nc" id="L473">		        double xy = (m.getElementAt(0, 1) + m.getElementAt(1, 0)) / 4.0;</span>
-<span class="nc" id="L474">		        double xz = (m.getElementAt(0, 2) + m.getElementAt(2, 0)) / 4.0;</span>
-<span class="nc" id="L475">		        double yz = (m.getElementAt(1, 2) + m.getElementAt(2, 1)) / 4.0;</span>
-<span class="nc bnc" id="L476" title="All 4 branches missed.">		        if ((xx &gt; yy) &amp;&amp; (xx &gt; zz)) { // m.getElementAt(0, 0) is the</span>
-                                                //largest diagonal term
-<span class="nc bnc" id="L478" title="All 2 branches missed.">			        if (xx &lt; epsilon) {</span>
-<span class="nc" id="L479">				        x = 0.0;</span>
-<span class="nc" id="L480">				        y = Math.sqrt(2.0) / 2.0;</span>
-<span class="nc" id="L481">				        z = Math.sqrt(2.0) / 2.0;</span>
-			        } else {
-<span class="nc" id="L483">				        x = Math.sqrt(xx);</span>
-<span class="nc" id="L484">				        y = xy / x;</span>
-<span class="nc" id="L485">				        z = xz / x;</span>
-			        }
-<span class="nc bnc" id="L487" title="All 2 branches missed.">		        } else if (yy &gt; zz) { // m.getElementAt(1, 1) is the largest</span>
-                                        //diagonal term
-<span class="nc bnc" id="L489" title="All 2 branches missed.">			        if (yy &lt; epsilon) {</span>
-<span class="nc" id="L490">				        x = Math.sqrt(2.0) / 2.0;</span>
-<span class="nc" id="L491">				        y = 0.0;</span>
-<span class="nc" id="L492">				        z = Math.sqrt(2.0) / 2.0;</span>
-			        } else {
-<span class="nc" id="L494">				        y = Math.sqrt(yy);</span>
-<span class="nc" id="L495">				        x = xy / y;</span>
-<span class="nc" id="L496">				        z = yz / y;</span>
-			        }
-		        } else { // m.getElementAt(2, 2) is the largest diagonal term so
-                        //base result on this
-<span class="nc bnc" id="L500" title="All 2 branches missed.">			        if (zz &lt; epsilon) {</span>
-<span class="nc" id="L501">				        x = Math.sqrt(2.0) / 2.0;</span>
-<span class="nc" id="L502">				        y = Math.sqrt(2.0) / 2.0;</span>
-<span class="nc" id="L503">				        z = 0.0;</span>
-			        } else {
-<span class="nc" id="L505">				        z = Math.sqrt(zz);</span>
-<span class="nc" id="L506">				        x = xz / z;</span>
-<span class="nc" id="L507">				        y = yz / z;</span>
-			        }
-		        }
-<span class="nc" id="L510">                setAxisAndRotation(x, y, z, angle);</span>
-<span class="nc" id="L511">                return; // return 180 deg rotation</span>
-	    }
-        
-	    // as we have reached here there are no singularities so we can handle
-        //normally
-<span class="fc" id="L516">	    double s = Math.sqrt((m.getElementAt(2, 1) - m.getElementAt(1, 2)) *</span>
-<span class="fc" id="L517">                (m.getElementAt(2, 1) - m.getElementAt(1, 2))</span>
-<span class="fc" id="L518">		    +(m.getElementAt(0, 2) - m.getElementAt(2, 0)) *</span>
-<span class="fc" id="L519">                (m.getElementAt(0, 2) - m.getElementAt(2, 0))</span>
-<span class="fc" id="L520">		    +(m.getElementAt(1, 0) - m.getElementAt(0, 1))*</span>
-<span class="fc" id="L521">                (m.getElementAt(1, 0) - m.getElementAt(0, 1))); // used to </span>
-                                                                //normalise
-<span class="pc bpc" id="L523" title="1 of 2 branches missed.">	    if (Math.abs(s) &lt; 0.001) {</span>
-<span class="nc" id="L524">	        s = 1.0;</span>
+<span class="pc bpc" id="L478" title="1 of 2 branches missed.">        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) &lt; epsilon)</span>
+<span class="nc bnc" id="L479" title="All 2 branches missed.">                &amp;&amp; (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) &lt; epsilon)</span>
+<span class="nc bnc" id="L480" title="All 2 branches missed.">                &amp;&amp; (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) &lt; epsilon)) {</span>
+            // singularity found
+            // first check for identity matrix which must have +1 for all terms
+            // in leading diagonal and zero in other terms
+<span class="nc bnc" id="L484" title="All 2 branches missed.">            if ((Math.abs(m.getElementAt(0, 1) +</span>
+<span class="nc" id="L485">                    m.getElementAt(1, 0)) &lt; epsilon2)</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">                    &amp;&amp; (Math.abs(m.getElementAt(0, 2) +</span>
+<span class="nc" id="L487">                    m.getElementAt(2, 0)) &lt; epsilon2)</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">                    &amp;&amp; (Math.abs(m.getElementAt(1, 2) +</span>
+<span class="nc" id="L489">                    m.getElementAt(2, 1)) &lt; epsilon2)</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">                    &amp;&amp; (Math.abs(m.getElementAt(0, 0) + m.getElementAt(1, 1) +</span>
+<span class="nc" id="L491">                    m.getElementAt(2, 2) - 3.0) &lt; epsilon2)) {</span>
+                // this singularity is identity matrix so angle = 0
+<span class="nc" id="L493">                setAxisAndRotation(0.0, 0.0, 1.0, 0.0);  // zero angle,</span>
+                // arbitrary axis
+<span class="nc" id="L495">                return;</span>
+            }
+            // otherwise this singularity is angle = 180
+<span class="nc" id="L498">            angle = Math.PI;</span>
+<span class="nc" id="L499">            final double xx = (m.getElementAt(0, 0) + 1.0) / 2.0;</span>
+<span class="nc" id="L500">            final double yy = (m.getElementAt(1, 1) + 1.0) / 2.0;</span>
+<span class="nc" id="L501">            final double zz = (m.getElementAt(2, 2) + 1.0) / 2.0;</span>
+<span class="nc" id="L502">            final double xy = (m.getElementAt(0, 1) + m.getElementAt(1, 0)) / 4.0;</span>
+<span class="nc" id="L503">            final double xz = (m.getElementAt(0, 2) + m.getElementAt(2, 0)) / 4.0;</span>
+<span class="nc" id="L504">            final double yz = (m.getElementAt(1, 2) + m.getElementAt(2, 1)) / 4.0;</span>
+<span class="nc bnc" id="L505" title="All 4 branches missed.">            if ((xx &gt; yy) &amp;&amp; (xx &gt; zz)) {</span>
+                // m.getElementAt(0, 0) is the
+                // largest diagonal term
+<span class="nc bnc" id="L508" title="All 2 branches missed.">                if (xx &lt; epsilon) {</span>
+<span class="nc" id="L509">                    x = 0.0;</span>
+<span class="nc" id="L510">                    y = Math.sqrt(2.0) / 2.0;</span>
+<span class="nc" id="L511">                    z = Math.sqrt(2.0) / 2.0;</span>
+                } else {
+<span class="nc" id="L513">                    x = Math.sqrt(xx);</span>
+<span class="nc" id="L514">                    y = xy / x;</span>
+<span class="nc" id="L515">                    z = xz / x;</span>
+                }
+<span class="nc bnc" id="L517" title="All 2 branches missed.">            } else if (yy &gt; zz) {</span>
+                // m.getElementAt(1, 1) is the largest
+                // diagonal term
+<span class="nc bnc" id="L520" title="All 2 branches missed.">                if (yy &lt; epsilon) {</span>
+<span class="nc" id="L521">                    x = Math.sqrt(2.0) / 2.0;</span>
+<span class="nc" id="L522">                    y = 0.0;</span>
+<span class="nc" id="L523">                    z = Math.sqrt(2.0) / 2.0;</span>
+                } else {
+<span class="nc" id="L525">                    y = Math.sqrt(yy);</span>
+<span class="nc" id="L526">                    x = xy / y;</span>
+<span class="nc" id="L527">                    z = yz / y;</span>
+                }
+            } else {
+                // m.getElementAt(2, 2) is the largest diagonal term so
+                // base result on this
+<span class="nc bnc" id="L532" title="All 2 branches missed.">                if (zz &lt; epsilon) {</span>
+<span class="nc" id="L533">                    x = Math.sqrt(2.0) / 2.0;</span>
+<span class="nc" id="L534">                    y = Math.sqrt(2.0) / 2.0;</span>
+<span class="nc" id="L535">                    z = 0.0;</span>
+                } else {
+<span class="nc" id="L537">                    z = Math.sqrt(zz);</span>
+<span class="nc" id="L538">                    x = xz / z;</span>
+<span class="nc" id="L539">                    y = yz / z;</span>
+                }
+            }
+<span class="nc" id="L542">            setAxisAndRotation(x, y, z, angle);</span>
+            // return 180 deg rotation
+<span class="nc" id="L544">            return;</span>
         }
-	    // prevent divide by zero, should not happen if matrix is orthogonal and
-        //should be caught by singularity test above, but I've left it in just 
-        //in case
-<span class="fc" id="L529">	    mTheta = Math.acos((m.getElementAt(0, 0) + m.getElementAt(1, 1) +</span>
-<span class="fc" id="L530">                m.getElementAt(2, 2) - 1.0) / 2.0);</span>
-<span class="fc" id="L531">	    mAxisX = (m.getElementAt(2, 1) - m.getElementAt(1, 2)) / s;</span>
-<span class="fc" id="L532">	    mAxisY = (m.getElementAt(0, 2) - m.getElementAt(2, 0)) / s;</span>
-<span class="fc" id="L533">	    mAxisZ = (m.getElementAt(1, 0) - m.getElementAt(0, 1)) / s;</span>
-<span class="fc" id="L534">    }    </span>
-       
+
+        // as we have reached here there are no singularities so we can handle
+        // normally
+<span class="fc" id="L549">        double s = Math.sqrt((m.getElementAt(2, 1) - m.getElementAt(1, 2)) *</span>
+<span class="fc" id="L550">                (m.getElementAt(2, 1) - m.getElementAt(1, 2))</span>
+<span class="fc" id="L551">                + (m.getElementAt(0, 2) - m.getElementAt(2, 0)) *</span>
+<span class="fc" id="L552">                (m.getElementAt(0, 2) - m.getElementAt(2, 0))</span>
+<span class="fc" id="L553">                + (m.getElementAt(1, 0) - m.getElementAt(0, 1)) *</span>
+<span class="fc" id="L554">                (m.getElementAt(1, 0) - m.getElementAt(0, 1))); // used to </span>
+        // normalise
+<span class="pc bpc" id="L556" title="1 of 2 branches missed.">        if (Math.abs(s) &lt; 0.001) {</span>
+<span class="nc" id="L557">            s = 1.0;</span>
+        }
+        // prevent divide by zero, should not happen if matrix is orthogonal and
+        // should be caught by singularity test above, but I've left it in just
+        // in case
+<span class="fc" id="L562">        mTheta = Math.acos((m.getElementAt(0, 0) + m.getElementAt(1, 1) +</span>
+<span class="fc" id="L563">                m.getElementAt(2, 2) - 1.0) / 2.0);</span>
+<span class="fc" id="L564">        mAxisX = (m.getElementAt(2, 1) - m.getElementAt(1, 2)) / s;</span>
+<span class="fc" id="L565">        mAxisY = (m.getElementAt(0, 2) - m.getElementAt(2, 0)) / s;</span>
+<span class="fc" id="L566">        mAxisZ = (m.getElementAt(1, 0) - m.getElementAt(0, 1)) / s;</span>
+<span class="fc" id="L567">    }</span>
+
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
      * transpose must be it's inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 4x4, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
-     * @param m Provided rotation matrix.
+     *
+     * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     * valid (has wrong size or it is not orthonormal).
-     * @throws IllegalArgumentException Raised if provided threshold is 
-     * negative.
-     * {@link #isValidRotationMatrix(Matrix)}.
-     */          
+     *                                        valid (has wrong size or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
-    public void fromHomogeneousMatrix(Matrix m, double threshold)
+    public void fromHomogeneousMatrix(final Matrix m, final double threshold)
             throws InvalidRotationMatrixException {
-<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (m.getRows() != HOM_COORDS ||</span>
-<span class="pc bpc" id="L554" title="1 of 2 branches missed.">                m.getColumns() != HOM_COORDS) {</span>
-<span class="fc" id="L555">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L588" title="All 2 branches covered.">        if (m.getRows() != HOM_COORDS ||</span>
+<span class="pc bpc" id="L589" title="1 of 2 branches missed.">                m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L590">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="fc bfc" id="L557" title="All 2 branches covered.">        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {</span>
-<span class="fc" id="L558">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L592" title="All 2 branches covered.">        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L593">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="pc bpc" id="L560" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold ||</span>
-<span class="pc bpc" id="L561" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 1)) &gt; threshold ||</span>
-<span class="pc bpc" id="L562" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 2)) &gt; threshold ||</span>
-<span class="pc bpc" id="L563" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 3)) &gt; threshold ||</span>
-<span class="pc bpc" id="L564" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 3)) &gt; threshold ||</span>
-<span class="pc bpc" id="L565" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 3)) &gt; threshold ||</span>
-<span class="pc bpc" id="L566" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
-<span class="nc" id="L567">            throw new InvalidRotationMatrixException();</span>
+<span class="pc bpc" id="L595" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold ||</span>
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 1)) &gt; threshold ||</span>
+<span class="pc bpc" id="L597" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 2)) &gt; threshold ||</span>
+<span class="pc bpc" id="L598" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 3)) &gt; threshold ||</span>
+<span class="pc bpc" id="L599" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 3)) &gt; threshold ||</span>
+<span class="pc bpc" id="L600" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 3)) &gt; threshold ||</span>
+<span class="pc bpc" id="L601" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
+<span class="nc" id="L602">            throw new InvalidRotationMatrixException();</span>
         }
-        
-<span class="fc" id="L570">        fromInhomogeneousMatrix(m.getSubmatrix(0, 0, INHOM_COORDS - 1, </span>
+
+<span class="fc" id="L605">        fromInhomogeneousMatrix(m.getSubmatrix(0, 0, INHOM_COORDS - 1,</span>
                 INHOM_COORDS - 1), threshold);
-<span class="fc" id="L572">    }</span>
-       
-    /**
-     * Rotates a 3D point using the origin of coordinates as the axis of 
-     * rotation.
-     * Point will be rotated by the amount of rotation contained in this 
-     * instance.
-     * @param inputPoint Input point to be rotated.
-     * @param resultPoint Rotated point.
-     */    
-    @Override
-    public void rotate(Point3D inputPoint, Point3D resultPoint) {
-<span class="fc" id="L584">        double s = Math.sin(mTheta / 2.0);</span>
-<span class="fc" id="L585">        double xh = mAxisX * s;</span>
-<span class="fc" id="L586">        double yh = mAxisY * s;</span>
-<span class="fc" id="L587">        double zh = mAxisZ * s;</span>
-<span class="fc" id="L588">        double wh = Math.cos(mTheta / 2.0);</span>
-        
-<span class="fc" id="L590">        double inhomX = inputPoint.getInhomX();</span>
-<span class="fc" id="L591">        double inhomY = inputPoint.getInhomY();</span>
-<span class="fc" id="L592">        double inhomZ = inputPoint.getInhomZ();</span>
-        
-<span class="fc" id="L594">        double resultX = wh * wh * inhomX + 2.0 * yh * wh * inhomZ - </span>
-                2.0 * zh * wh * inhomY + xh * xh * inhomX + 
-                2.0 * yh * xh * inhomY + 2 * zh * xh * inhomZ - 
-                zh * zh * inhomX - yh * yh * inhomX;
-<span class="fc" id="L598">        double resultY = 2.0 * xh * yh * inhomX + yh * yh * inhomY + </span>
-                2.0 * zh * yh * inhomZ + 2.0 * wh * zh * inhomX - 
-                zh * zh * inhomY + wh * wh * inhomY - 2 * xh * wh * inhomZ - 
-                xh * xh * inhomY;
-<span class="fc" id="L602">        double resultZ = 2.0 * xh * zh * inhomX + 2.0 * yh * zh * inhomY + </span>
-                zh * zh * inhomZ - 2.0 * wh * yh * inhomX - 
-                yh * yh * inhomZ + 2.0 * wh * xh * inhomY - xh * xh * inhomZ + 
-                wh * wh * inhomZ;
-<span class="fc" id="L606">        resultPoint.setInhomogeneousCoordinates(resultX, resultY, resultZ);        </span>
 <span class="fc" id="L607">    }</span>
-            
+
+    /**
+     * Rotates a 3D point using the origin of coordinates as the axis of
+     * rotation.
+     * Point will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param inputPoint  Input point to be rotated.
+     * @param resultPoint Rotated point.
+     */
+    @Override
+    public void rotate(final Point3D inputPoint, final Point3D resultPoint) {
+<span class="fc" id="L620">        final double s = Math.sin(mTheta / 2.0);</span>
+<span class="fc" id="L621">        final double xh = mAxisX * s;</span>
+<span class="fc" id="L622">        final double yh = mAxisY * s;</span>
+<span class="fc" id="L623">        final double zh = mAxisZ * s;</span>
+<span class="fc" id="L624">        final double wh = Math.cos(mTheta / 2.0);</span>
+
+<span class="fc" id="L626">        final double inhomX = inputPoint.getInhomX();</span>
+<span class="fc" id="L627">        final double inhomY = inputPoint.getInhomY();</span>
+<span class="fc" id="L628">        final double inhomZ = inputPoint.getInhomZ();</span>
+
+<span class="fc" id="L630">        final double resultX = wh * wh * inhomX + 2.0 * yh * wh * inhomZ -</span>
+                2.0 * zh * wh * inhomY + xh * xh * inhomX +
+                2.0 * yh * xh * inhomY + 2 * zh * xh * inhomZ -
+                zh * zh * inhomX - yh * yh * inhomX;
+<span class="fc" id="L634">        final double resultY = 2.0 * xh * yh * inhomX + yh * yh * inhomY +</span>
+                2.0 * zh * yh * inhomZ + 2.0 * wh * zh * inhomX -
+                zh * zh * inhomY + wh * wh * inhomY - 2 * xh * wh * inhomZ -
+                xh * xh * inhomY;
+<span class="fc" id="L638">        final double resultZ = 2.0 * xh * zh * inhomX + 2.0 * yh * zh * inhomY +</span>
+                zh * zh * inhomZ - 2.0 * wh * yh * inhomX -
+                yh * yh * inhomZ + 2.0 * wh * xh * inhomY - xh * xh * inhomZ +
+                wh * wh * inhomZ;
+<span class="fc" id="L642">        resultPoint.setInhomogeneousCoordinates(resultX, resultY, resultZ);</span>
+<span class="fc" id="L643">    }</span>
+
     /**
      * Combines provided rotation with this rotation and returns the result as
      * a new MatrixRotation3D instance.
+     *
      * @param rotation Input rotation to be combined.
      * @return Combined rotation, which is equal to the multiplication of the
-     * internal matrix of provided rotation with the internal matrix of this 
+     * internal matrix of provided rotation with the internal matrix of this
      * instance.
-     */        
+     */
     public AxisRotation3D combineAndReturnNew(
-            AxisRotation3D rotation) {
-<span class="fc" id="L619">        AxisRotation3D result = new AxisRotation3D();</span>
-<span class="fc" id="L620">        combine(this, rotation, result);</span>
-<span class="fc" id="L621">        return result;</span>
+            final AxisRotation3D rotation) {
+<span class="fc" id="L656">        final AxisRotation3D result = new AxisRotation3D();</span>
+<span class="fc" id="L657">        combine(this, rotation, result);</span>
+<span class="fc" id="L658">        return result;</span>
     }
-    
+
     /**
      * Combines provided rotation with this rotation and returns the result as
      * a new MatrixRotation3D instance.
+     *
      * @param rotation Input rotation to be combined.
      * @return Combined rotation, which is equal to the multiplication of the
-     * internal matrix of provided rotation with the internal matrix of this 
+     * internal matrix of provided rotation with the internal matrix of this
      * instance.
-     */        
+     */
     @Override
-    public Rotation3D combineAndReturnNew(Rotation3D rotation) {
-<span class="pc bpc" id="L634" title="1 of 2 branches missed.">        if (rotation instanceof AxisRotation3D) {</span>
-<span class="fc" id="L635">            return combineAndReturnNew((AxisRotation3D)rotation);</span>
+    public Rotation3D combineAndReturnNew(final Rotation3D rotation) {
+<span class="pc bpc" id="L672" title="1 of 2 branches missed.">        if (rotation instanceof AxisRotation3D) {</span>
+<span class="fc" id="L673">            return combineAndReturnNew((AxisRotation3D) rotation);</span>
         } else {
-<span class="nc" id="L637">            return combineAndReturnNew(new AxisRotation3D(rotation));</span>
+<span class="nc" id="L675">            return combineAndReturnNew(new AxisRotation3D(rotation));</span>
         }
-    }    
-    
+    }
+
     /**
-     * Combines provided rotation into this rotation resulting in the 
+     * Combines provided rotation into this rotation resulting in the
      * multiplication of the internal matrices of both rotations.
-     * @param rotation  Input rotation to be combined.
-     */    
-    public void combine(AxisRotation3D rotation) {
-<span class="fc" id="L647">        combine(this, rotation, this);</span>
-<span class="fc" id="L648">    }</span>
-    
+     *
+     * @param rotation Input rotation to be combined.
+     */
+    public void combine(final AxisRotation3D rotation) {
+<span class="fc" id="L686">        combine(this, rotation, this);</span>
+<span class="fc" id="L687">    }</span>
+
     /**
-     * Combines provided rotation into this rotation resulting in the 
+     * Combines provided rotation into this rotation resulting in the
      * multiplication of the internal matrices of both rotations.
-     * @param rotation  Input rotation to be combined.
-     */        
+     *
+     * @param rotation Input rotation to be combined.
+     */
     @Override
-    public void combine(Rotation3D rotation) {
-<span class="pc bpc" id="L657" title="1 of 2 branches missed.">        if (rotation instanceof AxisRotation3D) {</span>
-<span class="fc" id="L658">            combine((AxisRotation3D)rotation);</span>
+    public void combine(final Rotation3D rotation) {
+<span class="pc bpc" id="L697" title="1 of 2 branches missed.">        if (rotation instanceof AxisRotation3D) {</span>
+<span class="fc" id="L698">            combine((AxisRotation3D) rotation);</span>
         } else {
-<span class="nc" id="L660">            combine(new AxisRotation3D(rotation));</span>
+<span class="nc" id="L700">            combine(new AxisRotation3D(rotation));</span>
         }
-<span class="fc" id="L662">    }</span>
-       
+<span class="fc" id="L702">    }</span>
+
     /**
      * Combines the rotation of instances rot1 and rot1 into provided result
      * instance.
-     * @param rot1 1st input rotation.
-     * @param rot2 2nd input rotation.
+     *
+     * @param rot1   1st input rotation.
+     * @param rot2   2nd input rotation.
      * @param result Combined rotation, which is equal to the multiplication of
-     * the internal matrix of provided rotation with the internal matrix of this
-     * instance.
-     */        
-    public static void combine(AxisRotation3D rot1, 
-            AxisRotation3D rot2, AxisRotation3D result) {
-        
-<span class="fc" id="L676">        Matrix m1 = rot1.asInhomogeneousMatrix();</span>
-<span class="fc" id="L677">        Matrix m2 = rot2.asInhomogeneousMatrix();</span>
+     *               the internal matrix of provided rotation with the internal matrix of this
+     *               instance.
+     */
+    public static void combine(final AxisRotation3D rot1,
+                               final AxisRotation3D rot2, final AxisRotation3D result) {
+
+<span class="fc" id="L717">        final Matrix m1 = rot1.asInhomogeneousMatrix();</span>
+<span class="fc" id="L718">        final Matrix m2 = rot2.asInhomogeneousMatrix();</span>
         try {
-<span class="fc" id="L679">            m1.multiply(m2);</span>
-<span class="fc" id="L680">            result.fromMatrix(m1);</span>
-<span class="nc" id="L681">        } catch (InvalidRotationMatrixException | WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L683">        }</span>
-<span class="fc" id="L684">    }       </span>
-    
+<span class="fc" id="L720">            m1.multiply(m2);</span>
+<span class="fc" id="L721">            result.fromMatrix(m1);</span>
+<span class="nc" id="L722">        } catch (final InvalidRotationMatrixException | WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L724">        }</span>
+<span class="fc" id="L725">    }</span>
+
     /**
      * Sets values of this rotation from a 3D matrix rotation.
+     *
      * @param rot 3D matrix rotation to set values from.
      */
     @Override
-    public void fromRotation(MatrixRotation3D rot) {
+    public void fromRotation(final MatrixRotation3D rot) {
         try {
-<span class="fc" id="L693">            fromInhomogeneousMatrix(rot.internalMatrix);</span>
-<span class="pc" id="L694">        } catch (InvalidRotationMatrixException ignore) { /* never thrown */ }</span>
-<span class="fc" id="L695">    }</span>
+<span class="fc" id="L735">            fromInhomogeneousMatrix(rot.internalMatrix);</span>
+<span class="nc" id="L736">        } catch (InvalidRotationMatrixException ignore) {</span>
+            // never thrown
+<span class="fc" id="L738">        }</span>
+<span class="fc" id="L739">    }</span>
 
     /**
      * Sets values of this rotation from a quaternion.
+     *
      * @param q a quaternion to set values from.
      */
     @Override
-    public void fromRotation(Quaternion q) {
-<span class="fc" id="L703">        q.toAxisRotation(this);</span>
-<span class="fc" id="L704">    }    </span>
-    
+    public void fromRotation(final Quaternion q) {
+<span class="fc" id="L748">        q.toAxisRotation(this);</span>
+<span class="fc" id="L749">    }</span>
+
     /**
      * Converts this 3D rotation into a matrix rotation storing the result
      * into provided instance.
+     *
      * @param result instance where result wil be stored.
      */
     @Override
-    public void toMatrixRotation(MatrixRotation3D result) {
-<span class="fc" id="L713">        result.setAxisAndRotation(new double[] { mAxisX, mAxisY, mAxisZ },</span>
+    public void toMatrixRotation(final MatrixRotation3D result) {
+<span class="fc" id="L759">        result.setAxisAndRotation(new double[]{mAxisX, mAxisY, mAxisZ},</span>
                 mTheta);
-<span class="fc" id="L715">    }    </span>
-    
+<span class="fc" id="L761">    }</span>
+
     /**
      * Converts this 3D rotation into an axis rotation storing the result into
      * provided instance.
+     *
      * @param result instance where result will be stored.
      */
     @Override
-    public void toAxisRotation(AxisRotation3D result) {
-<span class="fc" id="L724">        result.fromRotation(this);</span>
-<span class="fc" id="L725">    }  </span>
-    
+    public void toAxisRotation(final AxisRotation3D result) {
+<span class="fc" id="L771">        result.fromRotation(this);</span>
+<span class="fc" id="L772">    }</span>
+
     /**
-     * Converts this 3D rotation into a quaterion storing the result into 
+     * Converts this 3D rotation into a quaterion storing the result into
      * provided instance.
+     *
      * @param result instance where result will be stored.
      */
     @Override
-    public void toQuaternion(Quaternion result) {
-<span class="fc" id="L734">        result.setFromAxisAndRotation(mAxisX, mAxisY, mAxisZ, mTheta);</span>
-<span class="fc" id="L735">    }    </span>
+    public void toQuaternion(final Quaternion result) {
+<span class="fc" id="L782">        result.setFromAxisAndRotation(mAxisX, mAxisY, mAxisZ, mTheta);</span>
+<span class="fc" id="L783">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

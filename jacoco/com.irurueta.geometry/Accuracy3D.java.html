@@ -25,156 +25,164 @@ import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
  * Contains methods to convert covariance matrices into ellipsoids representing accuracy
  * with requested confidence.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class Accuracy3D extends Accuracy {
 
     /**
      * Constructor.
      */
     public Accuracy3D() {
-<span class="fc" id="L35">        super();</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L34">        super();</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be 3x3 and positive
      *                         definite.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to an ellipsoid).
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to an ellipsoid).
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy3D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+    public Accuracy3D(final Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
 <span class="fc" id="L48">        super(covarianceMatrix);</span>
 <span class="fc" id="L49">    }</span>
 
     /**
      * Constructor.
+     *
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy3D(double confidence) {
-<span class="fc" id="L57">        super(confidence);</span>
-<span class="fc" id="L58">    }</span>
+    public Accuracy3D(final double confidence) {
+<span class="fc" id="L58">        super(confidence);</span>
+<span class="fc" id="L59">    }</span>
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be 3x3 and positive
      *                         definite.
-     * @param confidence confidence of provided accuracy of an estimated position.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to an ellipsoid, or if provided
-     * confidence value is not within 0 and 1.
+     * @param confidence       confidence of provided accuracy of an estimated position.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to an ellipsoid, or if provided
+     *                                                     confidence value is not within 0 and 1.
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy3D(Matrix covarianceMatrix, double confidence)
+    public Accuracy3D(final Matrix covarianceMatrix, final double confidence)
             throws NonSymmetricPositiveDefiniteMatrixException {
-<span class="fc" id="L73">        super(covarianceMatrix, confidence);</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L75">        super(covarianceMatrix, confidence);</span>
+<span class="fc" id="L76">    }</span>
 
     /**
      * Gets number of dimensions.
+     *
      * @return always returns 3.
      */
     @Override
     public int getNumberOfDimensions() {
-<span class="fc" id="L82">        return Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L85">        return Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
     }
 
     /**
      * Converts provided covariance matrix into a 3D ellipsoid taking into account current
      * confidence and standard deviation factor.
+     *
      * @return ellipsoid representing accuracy of covariance matrix with current confidence and
      * standard deviation factor.
-     * @throws NullPointerException if covariance matrix has not been provided yet.
+     * @throws NullPointerException           if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
     public Ellipsoid toEllipsoid() throws InvalidRotationMatrixException {
-<span class="fc" id="L94">        return toEllipsoid(mStandardDeviationFactor);</span>
+<span class="fc" id="L98">        return toEllipsoid(mStandardDeviationFactor);</span>
     }
 
     /**
      * Flattens accuracy representation to 2D by taking into account only x and y coordinates and
      * ignoring variance related to z coordinates.
+     *
      * @return flattenned accuracy representation in 2D.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if intersection cannot be computed.
+     * @throws GeometryException    if intersection cannot be computed.
      */
     public Accuracy2D flattenTo2D() throws GeometryException {
-        //get intersected ellipse for unitary standard deviation
-<span class="fc" id="L106">        Ellipse ellipse = intersectWithPlane(1.0);</span>
+        // get intersected ellipse for unitary standard deviation
+<span class="fc" id="L111">        final Ellipse ellipse = intersectWithPlane(1.0);</span>
 
-<span class="fc" id="L108">        double semiMajorAxis = ellipse.getSemiMajorAxis();</span>
-<span class="fc" id="L109">        double semiMinorAxis = ellipse.getSemiMinorAxis();</span>
-<span class="fc" id="L110">        Rotation2D rotation = ellipse.getRotation();</span>
+<span class="fc" id="L113">        final double semiMajorAxis = ellipse.getSemiMajorAxis();</span>
+<span class="fc" id="L114">        final double semiMinorAxis = ellipse.getSemiMinorAxis();</span>
+<span class="fc" id="L115">        final Rotation2D rotation = ellipse.getRotation();</span>
 
-<span class="fc" id="L112">        Matrix u = rotation.asInhomogeneousMatrix();</span>
-<span class="fc" id="L113">        Matrix s2 = Matrix.diagonal(new double[] {</span>
+<span class="fc" id="L117">        final Matrix u = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L118">        final Matrix s2 = Matrix.diagonal(new double[]{</span>
                 semiMajorAxis * semiMajorAxis,
-                semiMinorAxis * semiMinorAxis}) ;
+                semiMinorAxis * semiMinorAxis});
 
         try {
-            //compute covariance as the squared matrix M = U*S*V'
-            //Hence: M*M' = U*S*V'*(U*S*V')' = U*S*V'*V'*S*U' = U*S^2*U'
+            // compute covariance as the squared matrix M = U*S*V'
+            // Hence: M*M' = U*S*V'*(U*S*V')' = U*S*V'*V'*S*U' = U*S^2*U'
 
-<span class="fc" id="L121">            s2.multiply(u);</span>
-<span class="fc" id="L122">            u.multiply(s2);</span>
+<span class="fc" id="L126">            s2.multiply(u);</span>
+<span class="fc" id="L127">            u.multiply(s2);</span>
 
-<span class="fc" id="L124">            return new Accuracy2D(u, mConfidence);</span>
-<span class="nc" id="L125">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L126">            throw new GeometryException(e);</span>
+<span class="fc" id="L129">            return new Accuracy2D(u, mConfidence);</span>
+<span class="nc" id="L130">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L131">            throw new GeometryException(e);</span>
         }
     }
 
     /**
      * Intersects ellipsoid representing this accuracy with horizontal xy plane.
+     *
      * @return intersected ellipse.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if intersection cannot be computed.
+     * @throws GeometryException    if intersection cannot be computed.
      */
     public Ellipse intersectWithPlane() throws GeometryException {
-<span class="fc" id="L137">        return intersectWithPlane(mStandardDeviationFactor);</span>
+<span class="fc" id="L143">        return intersectWithPlane(mStandardDeviationFactor);</span>
     }
 
     /**
      * Converts provided covariance matrix into a 3D ellipsoid taking into account current
      * confidence and standard deviation factor.
+     *
      * @param standardDeviationFactor standard deviation factor.
      * @return ellipsoid representinc accuracy of covariance matrix with provided standard
      * deviation factor.
-     * @throws NullPointerException if covariance matrix has not been provided yet.
+     * @throws NullPointerException           if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    private Ellipsoid toEllipsoid(double standardDeviationFactor)
+    private Ellipsoid toEllipsoid(final double standardDeviationFactor)
             throws InvalidRotationMatrixException {
-<span class="fc" id="L151">        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(</span>
+<span class="fc" id="L158">        final double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(</span>
                 mSqrtSingularValues, standardDeviationFactor);
-<span class="fc" id="L153">        Rotation3D rotation = new MatrixRotation3D(mU);</span>
-<span class="fc" id="L154">        return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);</span>
+<span class="fc" id="L160">        final Rotation3D rotation = new MatrixRotation3D(mU);</span>
+<span class="fc" id="L161">        return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);</span>
     }
 
     /**
      * Intersects ellipsoid representing this accuracy with provided standard
      * deviation factor and with horizontal xy plane.
+     *
      * @param standardDeviationFactor standard deviation factor.
      * @return intersected ellipse.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if intersection cannot be computed.
+     * @throws GeometryException    if intersection cannot be computed.
      */
-    private Ellipse intersectWithPlane(double standardDeviationFactor)
+    private Ellipse intersectWithPlane(final double standardDeviationFactor)
             throws GeometryException {
-<span class="fc" id="L167">        Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);</span>
-<span class="fc" id="L168">        Quadric quadric = ellipsoid.toQuadric();</span>
+<span class="fc" id="L175">        final Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);</span>
+<span class="fc" id="L176">        final Quadric quadric = ellipsoid.toQuadric();</span>
 
-        //create horizontal xy plane located at ellipsoid center
-<span class="fc" id="L171">        Point3D center = ellipsoid.getCenter();</span>
-<span class="fc" id="L172">        double[] directorVector = new double[] { 0.0, 0.0, 1.0 };</span>
-<span class="fc" id="L173">        Plane plane = new Plane(center, directorVector);</span>
+        // create horizontal xy plane located at ellipsoid center
+<span class="fc" id="L179">        final Point3D center = ellipsoid.getCenter();</span>
+<span class="fc" id="L180">        final double[] directorVector = new double[]{0.0, 0.0, 1.0};</span>
+<span class="fc" id="L181">        final Plane plane = new Plane(center, directorVector);</span>
 
-<span class="fc" id="L175">        Conic conic = quadric.intersectWith(plane);</span>
+<span class="fc" id="L183">        final Conic conic = quadric.intersectWith(plane);</span>
 
-<span class="fc" id="L177">        return new Ellipse(conic);</span>
+<span class="fc" id="L185">        return new Ellipse(conic);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

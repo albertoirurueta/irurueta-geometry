@@ -22,13 +22,11 @@ public class Utils {
     /**
      * Amount to add/subtract to an angle in degrees to make a half turn.
      */
-    @SuppressWarnings(&quot;WeakerAccess&quot;)
     public static final double HALF_TURN_DEGREES = 180.0;
     
     /**
      * Amount to add/subtract to an angle in radians to make a half turn.
      */
-    @SuppressWarnings(&quot;WeakerAccess&quot;)
     public static final double HALF_TURN_RADIANS = Math.PI;
 
     /**
@@ -42,8 +40,8 @@ public class Utils {
      * @param radians Angle in radians.
      * @return Converted angle in degrees.
      */
-    public static double convertToDegrees(double radians) {
-<span class="fc" id="L46">        return radians / Math.PI * 180.0;</span>
+    public static double convertToDegrees(final double radians) {
+<span class="fc" id="L44">        return radians / Math.PI * 180.0;</span>
     }
     
     /**
@@ -51,8 +49,8 @@ public class Utils {
      * @param degrees Angle in degrees.
      * @return Converted angle in radians.
      */
-    public static double convertToRadians(double degrees) {
-<span class="fc" id="L55">        return degrees / 180.0 * Math.PI;</span>
+    public static double convertToRadians(final double degrees) {
+<span class="fc" id="L53">        return degrees / 180.0 * Math.PI;</span>
     }   
         
     /**
@@ -61,8 +59,8 @@ public class Utils {
      * @param angle angle to be normalized expressed in degrees.
      * @return the same angle but normalized.
      */
-    public static double normalizeAngleDegrees(double angle) {
-<span class="fc" id="L65">        return normalizeAngle(angle, HALF_TURN_DEGREES);</span>
+    public static double normalizeAngleDegrees(final double angle) {
+<span class="fc" id="L63">        return normalizeAngle(angle, HALF_TURN_DEGREES);</span>
     }
     
     /**
@@ -71,8 +69,8 @@ public class Utils {
      * @param angle angle to be normalized expressed in degrees.
      * @return the same angle but normalized.
      */
-    public static double normalizeAngleRadians(double angle) {
-<span class="fc" id="L75">        return normalizeAngle(angle, HALF_TURN_RADIANS);</span>
+    public static double normalizeAngleRadians(final double angle) {
+<span class="fc" id="L73">        return normalizeAngle(angle, HALF_TURN_RADIANS);</span>
     }
     
     /**
@@ -85,25 +83,25 @@ public class Utils {
      * radians).
      * @return the same angle but normalized.
      */
-    private static double normalizeAngle(double angle, double halfTurn) {
-<span class="fc" id="L89">        double result = angle;</span>
-<span class="fc" id="L90">        double fullTurn = 2.0 * halfTurn;</span>
+    private static double normalizeAngle(final double angle, final double halfTurn) {
+<span class="fc" id="L87">        double result = angle;</span>
+<span class="fc" id="L88">        final double fullTurn = 2.0 * halfTurn;</span>
         
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (result &lt;= -halfTurn) {</span>
-<span class="fc" id="L93">            int nTurns = (int)Math.ceil(-result / fullTurn);</span>
-<span class="fc" id="L94">            result += nTurns * fullTurn;</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (result &gt; halfTurn) {</span>
-<span class="fc" id="L96">                result -= fullTurn;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (result &lt;= -halfTurn) {</span>
+<span class="fc" id="L91">            int nTurns = (int)Math.ceil(-result / fullTurn);</span>
+<span class="fc" id="L92">            result += nTurns * fullTurn;</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (result &gt; halfTurn) {</span>
+<span class="nc" id="L94">                result -= fullTurn;</span>
             }
         }
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (result &gt; halfTurn) {</span>
-<span class="fc" id="L100">            int nTurns = (int)Math.ceil(result / fullTurn);</span>
-<span class="fc" id="L101">            result -= nTurns * fullTurn;</span>
-<span class="fc bfc" id="L102" title="All 2 branches covered.">            if(result &lt;= -halfTurn){</span>
-<span class="fc" id="L103">                result += fullTurn;</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (result &gt; halfTurn) {</span>
+<span class="nc" id="L98">            int nTurns = (int)Math.ceil(result / fullTurn);</span>
+<span class="nc" id="L99">            result -= nTurns * fullTurn;</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if(result &lt;= -halfTurn){</span>
+<span class="nc" id="L101">                result += fullTurn;</span>
             }
         }
-<span class="fc" id="L106">        return result;</span>
+<span class="fc" id="L104">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

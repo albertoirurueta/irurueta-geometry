@@ -38,201 +38,209 @@ import java.util.List;
  * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
-public class InhomogeneousPoint2DRefiner extends 
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class InhomogeneousPoint2DRefiner extends
         Point2DRefiner&lt;InhomogeneousPoint2D&gt; {
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L47">    public InhomogeneousPoint2DRefiner() { }</span>
-    
+<span class="fc" id="L48">    public InhomogeneousPoint2DRefiner() {</span>
+<span class="fc" id="L49">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples collection of samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples                     collection of samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public InhomogeneousPoint2DRefiner(InhomogeneousPoint2D initialEstimation,
-            boolean keepCovariance, BitSet inliers, double[] residuals,
-            int numInliers, List&lt;Line2D&gt; samples,
-            double refinementStandardDeviation) {
-<span class="fc" id="L65">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+    public InhomogeneousPoint2DRefiner(
+            final InhomogeneousPoint2D initialEstimation,
+            final boolean keepCovariance, final BitSet inliers, final double[] residuals,
+            final int numInliers, final List&lt;Line2D&gt; samples,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L69">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples, refinementStandardDeviation);
-<span class="fc" id="L67">    }</span>
-    
+<span class="fc" id="L71">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples collection of samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples                     collection of samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public InhomogeneousPoint2DRefiner(InhomogeneousPoint2D initialEstimation,
-            boolean keepCovariance, InliersData inliersData,
-            List&lt;Line2D&gt; samples, double refinementStandardDeviation) {
-<span class="fc" id="L83">        super(initialEstimation, keepCovariance, inliersData, samples,</span>
+    public InhomogeneousPoint2DRefiner(
+            final InhomogeneousPoint2D initialEstimation,
+            final boolean keepCovariance, final InliersData inliersData,
+            final List&lt;Line2D&gt; samples, final double refinementStandardDeviation) {
+<span class="fc" id="L89">        super(initialEstimation, keepCovariance, inliersData, samples,</span>
                 refinementStandardDeviation);
-<span class="fc" id="L85">    }</span>
-    
+<span class="fc" id="L91">    }</span>
+
     /**
      * Refines provided initial estimation.
+     *
      * @return refined estimation.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
      */
     @Override
-    public InhomogeneousPoint2D refine() throws NotReadyException, 
+    public InhomogeneousPoint2D refine() throws NotReadyException,
             LockedException, RefinerException {
-<span class="fc" id="L99">        InhomogeneousPoint2D result = new InhomogeneousPoint2D();</span>
-<span class="fc" id="L100">        refine(result);</span>
-<span class="fc" id="L101">        return result;</span>
+<span class="fc" id="L106">        final InhomogeneousPoint2D result = new InhomogeneousPoint2D();</span>
+<span class="fc" id="L107">        refine(result);</span>
+<span class="fc" id="L108">        return result;</span>
     }
-    
+
     /**
      * Refines provided initial estimation.
      * This method always sets a value into provided result instance regardless
      * of the fact that error has actually improved in LMSE terms or not.
+     *
      * @param result instance where refined estimation will be stored.
      * @return true if result improved (decreases) in LMSE terms respect to
      * initial estimation, false if no improvement has been achieved.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
      */
     @Override
-    public boolean refine(InhomogeneousPoint2D result) throws NotReadyException,
+    public boolean refine(final InhomogeneousPoint2D result) throws NotReadyException,
             LockedException, RefinerException {
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L121">            throw new LockedException();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L129">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L124">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L132">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L127">        mLocked = true;</span>
-        
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L130">            mListener.onRefineStart(this, mInitialEstimation);</span>
+
+<span class="fc" id="L135">        mLocked = true;</span>
+
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L138">            mListener.onRefineStart(this, mInitialEstimation);</span>
         }
-        
-<span class="fc" id="L133">        double initialTotalResidual = totalResidual(mInitialEstimation);</span>
-        
+
+<span class="fc" id="L141">        final double initialTotalResidual = totalResidual(mInitialEstimation);</span>
+
         try {
-<span class="fc" id="L136">            final double[] initParams = mInitialEstimation.asArray();</span>
-            
-            //output values to be fitted/optimized will contain residuals
-<span class="fc" id="L139">            double[] y = new double[mNumInliers];</span>
-            //input values will contain lines to compute residuals
-<span class="fc" id="L141">            final int nDims = Line2D.LINE_NUMBER_PARAMS;</span>
-<span class="fc" id="L142">            Matrix x = new Matrix(mNumInliers, nDims);</span>
-<span class="fc" id="L143">            int nSamples = mInliers.length();</span>
-<span class="fc" id="L144">            int pos = 0;</span>
+<span class="fc" id="L144">            final double[] initParams = mInitialEstimation.asArray();</span>
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L147">            final double[] y = new double[mNumInliers];</span>
+            // input values will contain lines to compute residuals
+<span class="fc" id="L149">            final int nDims = Line2D.LINE_NUMBER_PARAMS;</span>
+<span class="fc" id="L150">            final Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L151">            final int nSamples = mInliers.length();</span>
+<span class="fc" id="L152">            int pos = 0;</span>
             Line2D line;
-<span class="fc bfc" id="L146" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
-                    //sample is inlier
-<span class="fc" id="L149">                    line = mSamples.get(i);</span>
-<span class="fc" id="L150">                    line.normalize();</span>
-<span class="fc" id="L151">                    x.setElementAt(pos, 0, line.getA());</span>
-<span class="fc" id="L152">                    x.setElementAt(pos, 1, line.getB());</span>
-<span class="fc" id="L153">                    x.setElementAt(pos, 2, line.getC());</span>
-                    
-<span class="fc" id="L155">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L156">                    pos++;</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L157">                    line = mSamples.get(i);</span>
+<span class="fc" id="L158">                    line.normalize();</span>
+<span class="fc" id="L159">                    x.setElementAt(pos, 0, line.getA());</span>
+<span class="fc" id="L160">                    x.setElementAt(pos, 1, line.getB());</span>
+<span class="fc" id="L161">                    x.setElementAt(pos, 2, line.getC());</span>
+
+<span class="fc" id="L163">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L164">                    pos++;</span>
                 }
             }
-            
-<span class="fc" id="L160">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L161">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
-                        
-<span class="fc" id="L163">                private Line2D mLine = new Line2D();</span>
-                
-<span class="fc" id="L165">                private InhomogeneousPoint2D mPoint =</span>
-                        new InhomogeneousPoint2D();
-                
-<span class="fc" id="L168">                private GradientEstimator mGradientEstimator =</span>
-                        new GradientEstimator(
-<span class="fc" id="L170">                                new MultiDimensionFunctionEvaluatorListener() {</span>
-                    @Override
-                    public double evaluate(double[] point) {
-                        
-<span class="fc" id="L174">                        mPoint.setCoordinates(point);</span>
-<span class="fc" id="L175">                        return residual(mPoint, mLine);</span>
-                    }
-                });
-                        
-                @Override
-                public int getNumberOfDimensions() {
-<span class="fc" id="L181">                    return nDims;</span>
-                }
 
-                @Override
-                public double[] createInitialParametersArray() {
-<span class="fc" id="L186">                    return initParams;</span>
-                }
+<span class="fc" id="L168">            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L169">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
 
-                @Override
-                public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws EvaluationException {
-                    //point contains, a,b,c values for line
-<span class="fc" id="L193">                    mLine.setParameters(point);</span>
-                    
-                    //param contains coordinates of point
-<span class="fc" id="L196">                    mPoint.setCoordinates(params);</span>
-                    
-<span class="fc" id="L198">                    double y = residual(mPoint, mLine);</span>
-<span class="fc" id="L199">                    mGradientEstimator.gradient(params, derivatives);</span>
-                    
-<span class="fc" id="L201">                    return y;</span>
-                }
-            };
-            
-<span class="fc" id="L205">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L171">                        private final Line2D mLine = new Line2D();</span>
+
+<span class="fc" id="L173">                        private final InhomogeneousPoint2D mPoint =</span>
+                                new InhomogeneousPoint2D();
+
+<span class="fc" id="L176">                        private final GradientEstimator mGradientEstimator =</span>
+                                new GradientEstimator(
+<span class="fc" id="L178">                                        new MultiDimensionFunctionEvaluatorListener() {</span>
+                                            @Override
+                                            public double evaluate(final double[] point) {
+
+<span class="fc" id="L182">                                                mPoint.setCoordinates(point);</span>
+<span class="fc" id="L183">                                                return residual(mPoint, mLine);</span>
+                                            }
+                                        });
+
+                        @Override
+                        public int getNumberOfDimensions() {
+<span class="fc" id="L189">                            return nDims;</span>
+                        }
+
+                        @Override
+                        public double[] createInitialParametersArray() {
+<span class="fc" id="L194">                            return initParams;</span>
+                        }
+
+                        @Override
+                        public double evaluate(final int i, final double[] point, final double[] params,
+                                               final double[] derivatives) throws EvaluationException {
+                            // point contains, a,b,c values for line
+<span class="fc" id="L201">                            mLine.setParameters(point);</span>
+
+                            // param contains coordinates of point
+<span class="fc" id="L204">                            mPoint.setCoordinates(params);</span>
+
+<span class="fc" id="L206">                            final double y = residual(mPoint, mLine);</span>
+<span class="fc" id="L207">                            mGradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L209">                            return y;</span>
+                        }
+                    };
+
+<span class="fc" id="L213">            final LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L207">                    getRefinementStandardDeviation());</span>
-            
-<span class="fc" id="L209">            fitter.fit();</span>
-            
-            //obtain estimated params
-<span class="fc" id="L212">            double[] params = fitter.getA();</span>
-            
-            //update point
-<span class="fc" id="L215">            result.setCoordinates(params);</span>
-            
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
-                //keep covariance
-<span class="fc" id="L219">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L215">                            getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L217">            fitter.fit();</span>
+
+            // obtain estimated params
+<span class="fc" id="L220">            final double[] params = fitter.getA();</span>
+
+            // update point
+<span class="fc" id="L223">            result.setCoordinates(params);</span>
+
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+                // keep covariance
+<span class="fc" id="L227">                mCovariance = fitter.getCovar();</span>
             }
-            
-<span class="fc" id="L222">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
-            
-<span class="fc bfc" id="L225" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L226">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+
+<span class="fc" id="L230">            final double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">            final boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+
+<span class="fc bfc" id="L233" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L234">                mListener.onRefineEnd(this, mInitialEstimation, result,</span>
                         errorDecreased);
             }
-            
-<span class="fc" id="L230">            return errorDecreased;</span>
-<span class="nc" id="L231">        } catch (Exception e) {</span>
-<span class="nc" id="L232">            throw new RefinerException(e);</span>
+
+<span class="fc" id="L238">            return errorDecreased;</span>
+<span class="nc" id="L239">        } catch (final Exception e) {</span>
+<span class="nc" id="L240">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L234">            mLocked = false;</span>
+<span class="fc" id="L242">            mLocked = false;</span>
         }
-    }    
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

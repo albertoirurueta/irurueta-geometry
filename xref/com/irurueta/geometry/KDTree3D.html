@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">     * @param pts collection of points to store in the tree.</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/KDTree3D.html">KDTree3D</a>(Collection&lt;Point3D&gt; pts) {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/KDTree3D.html">KDTree3D</a>(<strong class="jxr_keyword">final</strong> Collection&lt;Point3D&gt; pts) {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">super</strong>(pts, Point3D.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      }
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * @return created point.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Override
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> createPoint(<strong class="jxr_keyword">double</strong> value) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> createPoint(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> value) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/InhomogeneousPoint3D.html">InhomogeneousPoint3D</a>(value, value, value);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
@@ -66,12 +66,12 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * @return copied point.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Override
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> copyPoint(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> point) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> copyPoint(<strong class="jxr_keyword">final</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> point) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/InhomogeneousPoint3D.html">InhomogeneousPoint3D</a>(point);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>
 </body>
 </html>

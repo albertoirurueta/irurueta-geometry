@@ -19,7 +19,11 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.AffineTransformation3D;
 import com.irurueta.geometry.CoincidentPlanesException;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.MSACRobustEstimator;
+import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.List;
 
@@ -27,47 +31,48 @@ import java.util.List;
  * Finds the best affine 3D transformation for provided collections of matched
  * planes using MSAC algorithm.
  */
-public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator 
-        extends PlaneCorrespondenceAffineTransformation3DRobustEstimator{
-    
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
+        extends PlaneCorrespondenceAffineTransformation3DRobustEstimator {
+
     /**
      * Constant defining default threshold to determine whether planes are
-     * inliers or not. 
+     * inliers or not.
      * Residuals to determine whether planes are inliers or not are computed by
-     * comparing two planes algebraically (e.g. doing the dot product of their 
+     * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).
-     * A residual of 0 indicates that dot product was 1 or -1 and planes were 
+     * A residual of 0 indicates that dot product was 1 or -1 and planes were
      * equal.
-     * A residual of 1 indicates that dot product was 0 and planes were 
+     * A residual of 1 indicates that dot product was 0 and planes were
      * orthogonal.
-     * If dot product between planes is -1, then although their director vectors 
-     * are opposed, planes are considered equal, since sign changes are not 
+     * If dot product between planes is -1, then although their director vectors
+     * are opposed, planes are considered equal, since sign changes are not
      * taken into account and their residuals will be 0.
      */
     public static final double DEFAULT_THRESHOLD = 1e-6;
-    
+
     /**
      * Minimum value that can be set as threshold.
      * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
-        
+
     /**
      * Threshold to determine whether planes are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance and director
-     * vector angle difference) a possible solution has on a matched pair of 
+     * vector angle difference) a possible solution has on a matched pair of
      * planes.
      */
-    private double mThreshold;   
-    
+    private double mThreshold;
+
     /**
      * Constructor.
      */
     public MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
-<span class="fc" id="L68">        super();</span>
-<span class="fc" id="L69">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L73">        super();</span>
+<span class="fc" id="L74">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L75">    }</span>
 
     /**
      * Constructor with lists of planes to be used to estimate an affine 2D
@@ -75,262 +80,269 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an affine
-     * 3D transformation.
-     * @throws IllegalArgumentException if provided lists of planes don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                     3D transformation.
+     * @throws IllegalArgumentException if provided lists of planes don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L87">        super(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L88">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L89">    }</span>
-    
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L93">        super(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L94">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L95">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
     public MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L98">        super(listener);</span>
-<span class="fc" id="L99">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L100">    }</span>
-    
+            final AffineTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L105">        super(listener);</span>
+<span class="fc" id="L106">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L107">    }</span>
+
     /**
      * Constructor with listener and lists of planes to be used to estimate an
      * affine 3D transformation.
-     * Planes in the list located at the same position are considered to be 
+     * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L120">        super(listener, inputPlanes, outputPlanes);</span>
-<span class="fc" id="L121">        mThreshold = DEFAULT_THRESHOLD;     </span>
-<span class="fc" id="L122">    }</span>
-    
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L128">        super(listener, inputPlanes, outputPlanes);</span>
+<span class="fc" id="L129">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L130">    }</span>
+
     /**
-     * Returns threshold to determine whether planes are inliers or not when 
+     * Returns threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
      * Residuals to determine whether planes are inliers or not are computed by
-     * comparing two planes algebraically (e.g. doing the dot product of their 
+     * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).
-     * A residual of 0 indicates that dot product was 1 or -1 and planes were 
+     * A residual of 0 indicates that dot product was 1 or -1 and planes were
      * equal.
-     * A residual of 1 indicates that dot product was 0 and planes were 
+     * A residual of 1 indicates that dot product was 0 and planes were
      * orthogonal.
-     * If dot product between lines is -1, then although their director vectors 
-     * are opposed, planes are considered equal, since sign changes are not 
+     * If dot product between lines is -1, then although their director vectors
+     * are opposed, planes are considered equal, since sign changes are not
      * taken into account and their residuals will be 0.
+     *
      * @return threshold to determine whether matched planes are inliers or not.
      */
     public double getThreshold() {
-<span class="fc" id="L140">        return mThreshold;</span>
+<span class="fc" id="L149">        return mThreshold;</span>
     }
-    
+
     /**
      * Sets threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
      * Residuals to determine whether planes are inliers or not are computed by
-     * comparing two planes algebraically (e.g. doing the dot product of their 
+     * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).
-     * A residual of 0 indicates that dot product was 1 or -1 and planes were 
+     * A residual of 0 indicates that dot product was 1 or -1 and planes were
      * equal.
-     * A residual of 1 indicates that dot product was 0 and planes were 
+     * A residual of 1 indicates that dot product was 0 and planes were
      * orthogonal.
-     * If dot product between planes is -1, then although their director vectors 
-     * are opposed, planes are considered equal, since sign changes are not 
+     * If dot product between planes is -1, then although their director vectors
+     * are opposed, planes are considered equal, since sign changes are not
      * taken into account and their residuals will be 0.
-     * @param threshold threshold to determine whether matched planes are 
-     * inliers or not.
+     *
+     * @param threshold threshold to determine whether matched planes are
+     *                  inliers or not.
      * @throws IllegalArgumentException if provided value is equal or less than
-     * zero.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws LockedException {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L165">            throw new LockedException();</span>
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L175">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L168">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L170">        mThreshold = threshold;</span>
-<span class="fc" id="L171">    }    </span>
-    
+<span class="fc" id="L180">        mThreshold = threshold;</span>
+<span class="fc" id="L181">    }</span>
+
     /**
      * Estimates an affine 2D transformation using a robust estimator and
      * the best set of matched 2D planes correspondences found using the robust
      * estimator.
+     *
      * @return an affine 2D transformation.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
-     */        
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
     @Override
-    public AffineTransformation3D estimate() throws LockedException, 
+    public AffineTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L189">            throw new LockedException();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L200">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L192">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L203">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L195">        MSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator =</span>
+
+<span class="fc" id="L206">        final MSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator =</span>
                 new MSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L197">                new MSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
-                    
-            //plane to be reused when computing residuals
-<span class="fc" id="L200">            private Plane mTestPlane = new Plane();</span>
+<span class="fc" id="L208">                        new MSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
 
-            @Override
-            public double getThreshold() {
-<span class="fc" id="L204">                return mThreshold;</span>
-            }
+                            // plane to be reused when computing residuals
+<span class="fc" id="L211">                            private final Plane mTestPlane = new Plane();</span>
 
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L209">                return mInputPlanes.size();</span>
-            }
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L215">                                return mThreshold;</span>
+                            }
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L214">                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L220">                                return mInputPlanes.size();</span>
+                            }
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;AffineTransformation3D&gt; solutions) {
-<span class="fc" id="L220">                Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L221">                Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L222">                Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L223">                Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);</span>
-                
-<span class="fc" id="L225">                Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L226">                Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L227">                Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L228">                Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);</span>
-                
-                try {
-<span class="fc" id="L231">                    AffineTransformation3D transformation =</span>
-                            new AffineTransformation3D(inputPlane1, inputPlane2, 
-                            inputPlane3, inputPlane4, outputPlane1, 
-                            outputPlane2, outputPlane3, outputPlane4);
-<span class="fc" id="L235">                    solutions.add(transformation);</span>
-<span class="nc" id="L236">                } catch (CoincidentPlanesException e) {</span>
-                    //if lines are coincident, no solution is added
-<span class="fc" id="L238">                }</span>
-<span class="fc" id="L239">            }</span>
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L225">                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+                            }
 
-            @Override
-            public double computeResidual(
-                    AffineTransformation3D currentEstimation, int i) {
-<span class="fc" id="L244">                Plane inputPlane = mInputPlanes.get(i);</span>
-<span class="fc" id="L245">                Plane outputPlane = mOutputPlanes.get(i);</span>
-                
-                //transform input line and store result in mTestLine
-                try {
-<span class="fc" id="L249">                    currentEstimation.transform(inputPlane, mTestPlane);</span>
-                    
-<span class="fc" id="L251">                    return getResidual(outputPlane, mTestPlane);</span>
-<span class="nc" id="L252">                } catch (AlgebraException e) {</span>
-                    //this happens when internal matrix of affine transformation
-                    //cannot be reverse (i.e. transformation is not well defined,
-                    //numerical instabilities, etc)
-<span class="nc" id="L256">                    return Double.MAX_VALUE;</span>
-                }
-            }
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;AffineTransformation3D&gt; solutions) {
+<span class="fc" id="L231">                                final Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L232">                                final Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L233">                                final Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L234">                                final Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);</span>
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L262">                return MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.</span>
-<span class="fc" id="L263">                        this.isReady();</span>
-            }
+<span class="fc" id="L236">                                final Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L237">                                final Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L238">                                final Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L239">                                final Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);</span>
 
-            @Override
-            public void onEstimateStart(
-                    RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L269" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L270">                    mListener.onEstimateStart(</span>
-                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
-                }
-<span class="fc" id="L273">            }</span>
+                                try {
+<span class="fc" id="L242">                                    final AffineTransformation3D transformation =</span>
+                                            new AffineTransformation3D(inputPlane1, inputPlane2,
+                                                    inputPlane3, inputPlane4, outputPlane1,
+                                                    outputPlane2, outputPlane3, outputPlane4);
+<span class="fc" id="L246">                                    solutions.add(transformation);</span>
+<span class="nc" id="L247">                                } catch (final CoincidentPlanesException e) {</span>
+                                    // if lines are coincident, no solution is added
+<span class="fc" id="L249">                                }</span>
+<span class="fc" id="L250">                            }</span>
 
-            @Override
-            public void onEstimateEnd(
-                    RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L278" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L279">                    mListener.onEstimateEnd(</span>
-                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
-                }
-<span class="fc" id="L282">            }</span>
+                            @Override
+                            public double computeResidual(
+                                    final AffineTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L255">                                final Plane inputPlane = mInputPlanes.get(i);</span>
+<span class="fc" id="L256">                                final Plane outputPlane = mOutputPlanes.get(i);</span>
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;AffineTransformation3D&gt; estimator, 
-                    int iteration) {
-<span class="pc bpc" id="L288" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L289">                    mListener.onEstimateNextIteration(</span>
-                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this, 
-                            iteration);
-                }
-<span class="fc" id="L293">            }</span>
+                                // transform input line and store result in mTestLine
+                                try {
+<span class="fc" id="L260">                                    currentEstimation.transform(inputPlane, mTestPlane);</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;AffineTransformation3D&gt; estimator, 
-                    float progress) {
-<span class="pc bpc" id="L299" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L300">                    mListener.onEstimateProgressChange(</span>
-                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this, 
-                            progress);
-                }
-<span class="fc" id="L304">            }</span>
-        });
-        
+<span class="fc" id="L262">                                    return getResidual(outputPlane, mTestPlane);</span>
+<span class="nc" id="L263">                                } catch (final AlgebraException e) {</span>
+                                    // this happens when internal matrix of affine transformation
+                                    // cannot be reverse (i.e. transformation is not well defined,
+                                    // numerical instabilities, etc)
+<span class="nc" id="L267">                                    return Double.MAX_VALUE;</span>
+                                }
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L273">                                return MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.</span>
+<span class="fc" id="L274">                                        this.isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(
+                                    final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L281">                                    mListener.onEstimateStart(</span>
+                                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                                }
+<span class="fc" id="L284">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(
+                                    final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L290">                                    mListener.onEstimateEnd(</span>
+                                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                                }
+<span class="fc" id="L293">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
+                                    final int iteration) {
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L300">                                    mListener.onEstimateNextIteration(</span>
+                                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                            iteration);
+                                }
+<span class="fc" id="L304">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
+                                    final float progress) {
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L311">                                    mListener.onEstimateProgressChange(</span>
+                                            MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                            progress);
+                                }
+<span class="fc" id="L315">                            }</span>
+                        });
+
         try {
-<span class="fc" id="L308">            mLocked = true;</span>
-<span class="fc" id="L309">            mInliersData = null;</span>
-<span class="fc" id="L310">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L311">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L312">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L313">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L314">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L315">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L316">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L317">            throw new LockedException(e);</span>
-<span class="nc" id="L318">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L319">            throw new NotReadyException(e);</span>
+<span class="fc" id="L319">            mLocked = true;</span>
+<span class="fc" id="L320">            mInliersData = null;</span>
+<span class="fc" id="L321">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L322">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L323">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L324">            final AffineTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L325">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L326">            return attemptRefine(transformation);</span>
+<span class="nc" id="L327">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L328">            throw new LockedException(e);</span>
+<span class="nc" id="L329">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L330">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L321">            mLocked = false;</span>
-        }        
+<span class="fc" id="L332">            mLocked = false;</span>
+        }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */        
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L331">        return RobustEstimatorMethod.MSAC;</span>
-    }   
-    
+<span class="fc" id="L343">        return RobustEstimatorMethod.MSAC;</span>
+    }
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -339,11 +351,12 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L346">        return mThreshold;</span>
-    }    
+<span class="fc" id="L359">        return mThreshold;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

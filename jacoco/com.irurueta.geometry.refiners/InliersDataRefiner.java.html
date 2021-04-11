@@ -21,12 +21,13 @@ import com.irurueta.numerical.robust.InliersData;
 import java.util.BitSet;
 
 /**
- * Refines an instance of type T by taking into account an initial estimation, 
+ * Refines an instance of type T by taking into account an initial estimation,
  * inlier matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
+ *
  * @param &lt;T&gt; type of instance to be refined.
  */
 public abstract class InliersDataRefiner&lt;T&gt; extends Refiner&lt;T&gt; {
@@ -42,143 +43,154 @@ public abstract class InliersDataRefiner&lt;T&gt; extends Refiner&lt;T&gt; {
      * inlier matches.
      */
     protected double[] mResiduals;
-    
+
     /**
      * Number of inliers on initial estimation.
      */
-    protected int mNumInliers;   
-    
+    protected int mNumInliers;
+
     /**
      * Constructor.
      */
-<span class="fc" id="L54">    public InliersDataRefiner() { }</span>
-        
+<span class="fc" id="L55">    protected InliersDataRefiner() {</span>
+<span class="fc" id="L56">    }</span>
+
     /**
      * Constructor.
+     *
      * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
+     * @param keepCovariance    true if covariance of estimation must be kept after
+     *                          refinement, false otherwise.
+     * @param inliers           set indicating which of the provided matches are inliers.
+     * @param residuals         residuals for matched samples.
+     * @param numInliers        number of inliers on initial estimation.
      */
-    public InliersDataRefiner(T initialEstimation, boolean keepCovariance,
-            BitSet inliers, double[] residuals, int numInliers) {
-<span class="fc" id="L67">        super(initialEstimation, keepCovariance);</span>
-<span class="fc" id="L68">        mInliers = inliers;</span>
-<span class="fc" id="L69">        mResiduals = residuals;</span>
-<span class="fc" id="L70">        mNumInliers = numInliers;        </span>
-<span class="fc" id="L71">    }    </span>
-    
+    protected InliersDataRefiner(final T initialEstimation, final boolean keepCovariance,
+                                 final BitSet inliers, final double[] residuals, final int numInliers) {
+<span class="fc" id="L70">        super(initialEstimation, keepCovariance);</span>
+<span class="fc" id="L71">        mInliers = inliers;</span>
+<span class="fc" id="L72">        mResiduals = residuals;</span>
+<span class="fc" id="L73">        mNumInliers = numInliers;</span>
+<span class="fc" id="L74">    }</span>
+
     /**
      * Constructor.
+     *
      * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
+     * @param keepCovariance    true if covariance of estimation must be kept after
+     *                          refinement, false otherwise.
+     * @param inliersData       inlier data, typically obtained from a robust
+     *                          estimator.
      */
-    public InliersDataRefiner(T initialEstimation, boolean keepCovariance,
-            InliersData inliersData) {
-<span class="fc" id="L83">        super(initialEstimation, keepCovariance);</span>
-<span class="fc" id="L84">        mInliers = inliersData.getInliers();</span>
-<span class="fc" id="L85">        mResiduals = inliersData.getResiduals();</span>
-<span class="fc" id="L86">        mNumInliers = inliersData.getNumInliers();        </span>
-<span class="fc" id="L87">    }</span>
-    
+    protected InliersDataRefiner(final T initialEstimation, final boolean keepCovariance,
+                                 final InliersData inliersData) {
+<span class="fc" id="L87">        super(initialEstimation, keepCovariance);</span>
+<span class="fc" id="L88">        mInliers = inliersData.getInliers();</span>
+<span class="fc" id="L89">        mResiduals = inliersData.getResiduals();</span>
+<span class="fc" id="L90">        mNumInliers = inliersData.getNumInliers();</span>
+<span class="fc" id="L91">    }</span>
+
     /**
      * Gets set indicating which of the provided matches are inliers.
+     *
      * @return set indicating which of the provided matches are inliers.
      */
     public BitSet getInliers() {
-<span class="fc" id="L94">        return mInliers;</span>
+<span class="fc" id="L99">        return mInliers;</span>
     }
-    
+
     /**
      * Specifies set indicating which of the provided matches are inliers.
+     *
      * @param inliers set indicating which of the provided matches are inliers.
      * @throws LockedException if estimator is locked.
      */
-    public void setInliers(BitSet inliers) throws LockedException {
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L104">            throw new LockedException();</span>
+    public void setInliers(final BitSet inliers) throws LockedException {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L110">            throw new LockedException();</span>
         }
-<span class="fc" id="L106">        mInliers = inliers;</span>
-<span class="fc" id="L107">    }</span>
-    
+<span class="fc" id="L112">        mInliers = inliers;</span>
+<span class="fc" id="L113">    }</span>
+
     /**
-     * Gets residuals for matched samples corresponding to the initial 
+     * Gets residuals for matched samples corresponding to the initial
      * estimation.
      * Residuals are used to determine the amount of precision of each matched
      * sample in order to find a refined solution that minimizes the LMSE error
      * of all inlier matches.
+     *
      * @return residuals for matched samples.
      */
     public double[] getResiduals() {
-<span class="fc" id="L118">        return mResiduals;</span>
+<span class="fc" id="L125">        return mResiduals;</span>
     }
-    
+
     /**
-     * Sets residuals for matched samples corresponding to the initial 
+     * Sets residuals for matched samples corresponding to the initial
      * estimation.
      * Residuals are used to determine the amount of precision of each matched
      * sample in order to find a refined solution that minimizes the LMSE error
      * of all inlier matches.
+     *
      * @param residuals residuals for matched samples.
      * @throws LockedException if estimator is locked.
      */
-    public void setResiduals(double[] residuals) throws LockedException {
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L132">            throw new LockedException();</span>
+    public void setResiduals(final double[] residuals) throws LockedException {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L140">            throw new LockedException();</span>
         }
-<span class="fc" id="L134">        mResiduals = residuals;</span>
-<span class="fc" id="L135">    }</span>
-    
+<span class="fc" id="L142">        mResiduals = residuals;</span>
+<span class="fc" id="L143">    }</span>
+
     /**
      * Gets number of inliers on initial estimation.
+     *
      * @return number of inliers on initial estimation.
      */
     public int getNumInliers() {
-<span class="fc" id="L142">        return mNumInliers;</span>
+<span class="fc" id="L151">        return mNumInliers;</span>
     }
-    
+
     /**
      * Sets number of inliers on initial estimation.
+     *
      * @param numInliers number of inliers on initial estimation.
-     * @throws LockedException if estimator is locked.
+     * @throws LockedException          if estimator is locked.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setNumInliers(int numInliers) throws LockedException {
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L153">            throw new LockedException();</span>
+    public void setNumInliers(final int numInliers) throws LockedException {
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L163">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (numInliers &lt;= 0) {</span>
-<span class="fc" id="L156">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (numInliers &lt;= 0) {</span>
+<span class="fc" id="L166">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L158">        mNumInliers = numInliers;</span>
-<span class="fc" id="L159">    }</span>
-    
+<span class="fc" id="L168">        mNumInliers = numInliers;</span>
+<span class="fc" id="L169">    }</span>
+
     /**
      * Gets total number of provided matched samples.
+     *
      * @return total number of provided matched samples.
      */
     public int getTotalSamples() {
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        return mResiduals != null ? mResiduals.length : 0;</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        return mResiduals != null ? mResiduals.length : 0;</span>
     }
-    
+
     /**
      * Sets inlier data.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
+     *
+     * @param inliersData inlier data, typically obtained from a robust
+     *                    estimator.
      * @throws LockedException if estimator is locked.
      */
-    public void setInliersData(InliersData inliersData) throws LockedException {
-<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L177">            throw new LockedException();</span>
+    public void setInliersData(final InliersData inliersData) throws LockedException {
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L189">            throw new LockedException();</span>
         }
-<span class="fc" id="L179">        mInliers = inliersData.getInliers();</span>
-<span class="fc" id="L180">        mResiduals = inliersData.getResiduals();</span>
-<span class="fc" id="L181">        mNumInliers = inliersData.getNumInliers();</span>
-<span class="fc" id="L182">    }    </span>
+<span class="fc" id="L191">        mInliers = inliersData.getInliers();</span>
+<span class="fc" id="L192">        mResiduals = inliersData.getResiduals();</span>
+<span class="fc" id="L193">        mNumInliers = inliersData.getNumInliers();</span>
+<span class="fc" id="L194">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

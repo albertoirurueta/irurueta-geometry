@@ -18,7 +18,11 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.NoIntersectionException;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.List;
 
@@ -26,18 +30,19 @@ import java.util.List;
  * Finds the best 2D point for provided collection of 2D lines using PROMedS
  * algorithm.
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
-    
+
     /**
-     * Default value to be used for stop threshold. Stop threshold can be used 
-     * to keep the algorithm iterating in case that best estimated threshold 
-     * using median of residuals is not small enough. Once a solution is found 
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
      * that generates a threshold below this value, the algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
@@ -45,408 +50,424 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-3;
-    
+
     /**
      * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
     /**
-     * Threshold to be used to keep the algorithm iterating in case that best 
-     * estimated threshold using median of residuals is not small enough. Once 
-     * a solution is found that generates a threshold below this value, the 
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;    
-    
+    private double mStopThreshold;
+
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;   
-    
+    private double[] mQualityScores;
+
     /**
      * Constructor.
      */
     public PROMedSPoint2DRobustEstimator() {
-<span class="fc" id="L82">        super();</span>
-<span class="fc" id="L83">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L87">        super();</span>
+<span class="fc" id="L88">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * Constructor with lines.
+     *
      * @param lines 2D lines to estimate a 2D point.
-     * @throws IllegalArgumentException if provided list of lines don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of lines don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPoint2DRobustEstimator(List&lt;Line2D&gt; lines) {
-<span class="fc" id="L93">        super(lines);</span>
-<span class="fc" id="L94">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L95">    }</span>
-    
+    public PROMedSPoint2DRobustEstimator(final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L99">        super(lines);</span>
+<span class="fc" id="L100">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L101">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
     public PROMedSPoint2DRobustEstimator(
-            Point2DRobustEstimatorListener listener) {
-<span class="fc" id="L104">        super(listener);</span>
-<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L106">    }</span>
-    
-    
+            final Point2DRobustEstimatorListener listener) {
+<span class="fc" id="L111">        super(listener);</span>
+<span class="fc" id="L112">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L113">    }</span>
+
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a 2D point.
-     * @throws IllegalArgumentException if provided list of lines don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     *                 starts, ends or its progress significantly changes.
+     * @param lines    2D lines to estimate a 2D point.
+     * @throws IllegalArgumentException if provided list of lines don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPoint2DRobustEstimator(
-            Point2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; lines) {
-<span class="fc" id="L120">        super(listener, lines);</span>
-<span class="fc" id="L121">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L122">    }</span>
-    
+            final Point2DRobustEstimatorListener listener,
+            final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L128">        super(listener, lines);</span>
+<span class="fc" id="L129">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L130">    }</span>
+
     /**
      * Constructor.
+     *
      * @param qualityScores quality scores corresponding to each provided line.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 lines).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
-    public PROMedSPoint2DRobustEstimator(double[] qualityScores) {
-<span class="fc" id="L131">        super();</span>
-<span class="fc" id="L132">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L133">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L134">    }</span>
+    public PROMedSPoint2DRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L140">        super();</span>
+<span class="fc" id="L141">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L142">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L143">    }</span>
 
     /**
      * Constructor with lines.
-     * @param lines 2D lines to estimate a 2D point.
+     *
+     * @param lines         2D lines to estimate a 2D point.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @throws IllegalArgumentException if provided list of lines don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of lines don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPoint2DRobustEstimator(List&lt;Line2D&gt; lines,
-            double[] qualityScores) {
-<span class="fc" id="L146">        super(lines);</span>
-        
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
+    public PROMedSPoint2DRobustEstimator(final List&lt;Line2D&gt; lines,
+                                         final double[] qualityScores) {
+<span class="fc" id="L156">        super(lines);</span>
+
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
+<span class="fc" id="L159">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L154">    }</span>
-    
+
+<span class="fc" id="L162">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L163">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L164">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided line.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 lines).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public PROMedSPoint2DRobustEstimator(
-            Point2DRobustEstimatorListener listener,
-            double[] qualityScores) {
-<span class="fc" id="L167">        super(listener);</span>
-<span class="fc" id="L168">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L169">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L170">    }</span>
-    
-    
+            final Point2DRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="fc" id="L178">        super(listener);</span>
+<span class="fc" id="L179">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L180">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L181">    }</span>
+
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a 2D point.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param lines         2D lines to estimate a 2D point.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @throws IllegalArgumentException if provided list of lines don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of lines don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPoint2DRobustEstimator(
-            Point2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; lines, double[] qualityScores) {
-<span class="fc" id="L186">        super(listener, lines);</span>
-        
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
-<span class="fc" id="L189">            throw new IllegalArgumentException();</span>
+            final Point2DRobustEstimatorListener listener,
+            final List&lt;Line2D&gt; lines, final double[] qualityScores) {
+<span class="fc" id="L198">        super(listener, lines);</span>
+
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
+<span class="fc" id="L201">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L192">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L193">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L194">    }</span>
-    
+
+<span class="fc" id="L204">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L205">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L206">    }</span>
+
     /**
-     * Returns threshold to be used to keep the algorithm iterating in case that 
-     * best estimated threshold using median of residuals is not small enough. 
-     * Once a solution is found that generates a threshold below this value, the 
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
+     *
      * @return stop threshold to stop the algorithm prematurely when a certain
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L215">        return mStopThreshold;</span>
+<span class="fc" id="L228">        return mStopThreshold;</span>
     }
-    
+
     /**
      * Sets threshold to be used to keep the algorithm iterating in case that
-     * best estimated threshold using median of residuals is not small enough. 
-     * Once a solution is found that generates a threshold below this value, the 
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
-     * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
      * @throws IllegalArgumentException if provided value is zero or negative.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) throws LockedException {
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L241">            throw new LockedException();</span>
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L255">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L243" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L244">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L258">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L247">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L248">    }</span>
-    
+
+<span class="fc" id="L261">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L262">    }</span>
+
     /**
      * Returns quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sampled point
+     *
      * @return quality scores corresponding to each point.
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L257">        return mQualityScores;</span>
+<span class="fc" id="L272">        return mQualityScores;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sampled point.
+     *
      * @param qualityScores quality scores corresponding to each point.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException {
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L272">            throw new LockedException();</span>
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L288">            throw new LockedException();</span>
         }
-<span class="fc" id="L274">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L275">    }</span>
-    
+<span class="fc" id="L290">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L291">    }</span>
+
     /**
      * Indicates if estimator is ready to start the 2D point estimation.
-     * This is true when input data (i.e. 2D points and quality scores) are 
+     * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L285" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L286" title="1 of 2 branches missed.">                mQualityScores.length == mLines.size();</span>
-    }      
-            
+<span class="fc bfc" id="L302" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">                mQualityScores.length == mLines.size();</span>
+    }
+
     /**
-     * Estimates a 2D point using a robust estimator and the best set of 2D 
+     * Estimates a 2D point using a robust estimator and the best set of 2D
      * lines that intersect into the estimated 2D point.
+     *
      * @return a 2D point.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Point2D estimate() throws LockedException, NotReadyException, 
+    public Point2D estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L304">            throw new LockedException();</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L322">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L307">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L325">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L310">        PROMedSRobustEstimator&lt;Point2D&gt; innerEstimator =</span>
+
+<span class="fc" id="L328">        final PROMedSRobustEstimator&lt;Point2D&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L312">                        new PROMedSRobustEstimatorListener&lt;Point2D&gt;() {</span>
+<span class="fc" id="L330">                        new PROMedSRobustEstimatorListener&lt;Point2D&gt;() {</span>
 
-            @Override
-            public double getThreshold() {
-<span class="fc" id="L316">                return mStopThreshold;</span>
-            }
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L334">                                return mStopThreshold;</span>
+                            }
 
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L321">                return mLines.size();</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L339">                                return mLines.size();</span>
+                            }
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L326">                return Point2DRobustEstimator.MINIMUM_SIZE;</span>
-            }
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L344">                                return Point2DRobustEstimator.MINIMUM_SIZE;</span>
+                            }
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;Point2D&gt; solutions) {
-<span class="fc" id="L332">                Line2D line1 = mLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L333">                Line2D line2 = mLines.get(samplesIndices[1]);</span>
-                
-                try {
-<span class="fc" id="L336">                    Point2D point = line1.getIntersection(line2);</span>
-<span class="fc" id="L337">                    solutions.add(point);</span>
-<span class="nc" id="L338">                } catch (NoIntersectionException e) {</span>
-                    //if points are coincident, no solution is added
-<span class="fc" id="L340">                }</span>
-<span class="fc" id="L341">            }</span>
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;Point2D&gt; solutions) {
+<span class="fc" id="L350">                                final Line2D line1 = mLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L351">                                final Line2D line2 = mLines.get(samplesIndices[1]);</span>
 
-            @Override
-            public double computeResidual(Point2D currentEstimation, int i) {
-<span class="fc" id="L345">                return residual(currentEstimation, mLines.get(i));</span>
-            }
+                                try {
+<span class="fc" id="L354">                                    final Point2D point = line1.getIntersection(line2);</span>
+<span class="fc" id="L355">                                    solutions.add(point);</span>
+<span class="nc" id="L356">                                } catch (final NoIntersectionException e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L358">                                }</span>
+<span class="fc" id="L359">                            }</span>
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L350">                return PROMedSPoint2DRobustEstimator.this.isReady();</span>
-            }
+                            @Override
+                            public double computeResidual(final Point2D currentEstimation, final int i) {
+<span class="fc" id="L363">                                return residual(currentEstimation, mLines.get(i));</span>
+                            }
 
-            @Override
-            public void onEstimateStart(RobustEstimator&lt;Point2D&gt; estimator) {
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L356">                    mListener.onEstimateStart(</span>
-                            PROMedSPoint2DRobustEstimator.this);
-                }
-<span class="fc" id="L359">            }</span>
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L368">                                return PROMedSPoint2DRobustEstimator.this.isReady();</span>
+                            }
 
-            @Override
-            public void onEstimateEnd(RobustEstimator&lt;Point2D&gt; estimator) {
-<span class="pc bpc" id="L363" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L364">                    mListener.onEstimateEnd(PROMedSPoint2DRobustEstimator.this);</span>
-                }
-<span class="fc" id="L366">            }</span>
+                            @Override
+                            public void onEstimateStart(final RobustEstimator&lt;Point2D&gt; estimator) {
+<span class="pc bpc" id="L373" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L374">                                    mListener.onEstimateStart(</span>
+                                            PROMedSPoint2DRobustEstimator.this);
+                                }
+<span class="fc" id="L377">                            }</span>
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;Point2D&gt; estimator, int iteration) {
-<span class="pc bpc" id="L371" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L372">                    mListener.onEstimateNextIteration(</span>
-                            PROMedSPoint2DRobustEstimator.this, iteration);
-                }
-<span class="fc" id="L375">            }</span>
+                            @Override
+                            public void onEstimateEnd(final RobustEstimator&lt;Point2D&gt; estimator) {
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L382">                                    mListener.onEstimateEnd(PROMedSPoint2DRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L384">                            }</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;Point2D&gt; estimator, float progress) {
-<span class="nc bnc" id="L380" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L381">                    mListener.onEstimateProgressChange(</span>
-                            PROMedSPoint2DRobustEstimator.this, progress);
-                }
-<span class="nc" id="L384">            }</span>
-            
-            @Override
-            public double[] getQualityScores() {
-<span class="fc" id="L388">                return mQualityScores;</span>
-            }            
-        });
-        
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;Point2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L390">                                    mListener.onEstimateNextIteration(</span>
+                                            PROMedSPoint2DRobustEstimator.this, iteration);
+                                }
+<span class="fc" id="L393">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;Point2D&gt; estimator, final float progress) {
+<span class="nc bnc" id="L398" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L399">                                    mListener.onEstimateProgressChange(</span>
+                                            PROMedSPoint2DRobustEstimator.this, progress);
+                                }
+<span class="nc" id="L402">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L406">                                return mQualityScores;</span>
+                            }
+                        });
+
         try {
-<span class="fc" id="L393">            mLocked = true;</span>
-<span class="fc" id="L394">            mInliersData = null;</span>
-<span class="fc" id="L395">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L396">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L397">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L398">            Point2D result = innerEstimator.estimate();</span>
-<span class="fc" id="L399">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L400">            return attemptRefine(result);</span>
-<span class="nc" id="L401">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L402">            throw new LockedException(e);</span>
-<span class="nc" id="L403">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L404">            throw new NotReadyException(e);</span>
+<span class="fc" id="L411">            mLocked = true;</span>
+<span class="fc" id="L412">            mInliersData = null;</span>
+<span class="fc" id="L413">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L414">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L415">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L416">            final Point2D result = innerEstimator.estimate();</span>
+<span class="fc" id="L417">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L418">            return attemptRefine(result);</span>
+<span class="nc" id="L419">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L420">            throw new LockedException(e);</span>
+<span class="nc" id="L421">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L422">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L406">            mLocked = false;</span>
+<span class="fc" id="L424">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */    
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L416">        return RobustEstimatorMethod.PROMedS;</span>
-    }   
-    
+<span class="fc" id="L435">        return RobustEstimatorMethod.PROMedS;</span>
+    }
+
     /**
-     * Gets standard deviation used for Levenberg-Marquardt fitting during 
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust 
-     * estimation, since residuals of found inliers are within the range of 
+     * Typically this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L431">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
-<span class="fc" id="L432">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
-<span class="fc" id="L433">        return inliersData.getEstimatedThreshold();</span>
-    }    
-    
+<span class="fc" id="L451">        final PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L452">                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();</span>
+<span class="fc" id="L453">        return inliersData.getEstimatedThreshold();</span>
+    }
+
     /**
      * Sets quality scores corresponding to each provided point.
      * This method is used internally and does not check whether instance is
      * locked or not.
+     *
      * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE.
+     *                                  smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) {
-<span class="fc bfc" id="L445" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L446">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L467">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L449">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L450">    }        </span>
+
+<span class="fc" id="L470">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L471">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -15,781 +15,818 @@
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.*;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Finds the best pinhole camera for provided collections of matched 2D/3D 
+ * Finds the best pinhole camera for provided collections of matched 2D/3D
  * points using PROSAC + EPnP algorithms.
  */
-public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends 
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
         EPnPPointCorrespondencePinholeCameraRobustEstimator {
 
     /**
-     * Constant defining default threshold to determine whether points are 
+     * Constant defining default threshold to determine whether points are
      * inliers or not.
      * By default 1.0 is considered a good value for cases where measures are
      * done on pixels, since typically the minimum resolution is 1 pixel.
      */
     public static final double DEFAULT_THRESHOLD = 1.0;
-        
+
     /**
      * Minimum value that can be set as threshold.
      * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
-    
+
     /**
      * Indicates that by default inliers will only be computed but not kept.
      */
     public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
-    
+
     /**
      * Indicates that by default residuals will only be computed but not kept.
      */
-    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;        
-    
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+
     /**
      * Threshold to determine whether points are inliers or not when testing
      * possible estimation solutions.
-     * The threshold refers to the amount of error (i.e. distance) a possible 
+     * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;            
-    
+    private double mThreshold;
+
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the betther the quality of the matching.
      */
     private double[] mQualityScores;
-    
+
     /**
      * Indicates whether inliers must be computed and kept.
      */
     private boolean mComputeAndKeepInliers;
-    
+
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;    
-    
+    private boolean mComputeAndKeepResiduals;
+
     /**
      * Constructor.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator() {
-<span class="fc" id="L83">        super();</span>
-<span class="fc" id="L84">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L85">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L86">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L87">    }</span>
-    
+<span class="fc" id="L92">        super();</span>
+<span class="fc" id="L93">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L94">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L95">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L96">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *
      * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than required minimum size 
-     * (6 correspondences).
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L103">        super(points3D, points2D);</span>
-<span class="fc" id="L104">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L105">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L106">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L107">    }</span>
-    
-    /**
-     * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     */
-    public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L116">        super(listener);</span>
-<span class="fc" id="L117">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L118">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L119">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L120">    }</span>
-    
-    /**
-     * Constructor with listener and lists of points to be used ot estimate a
-     * pinhole camera.
-     * Points in the list located at the same position are considered to be 
-     * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than required minimum size 
-     * (6 correspondences).
-     */
-    public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L140">        super(listener, points3D, points2D);</span>
-<span class="fc" id="L141">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L142">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L143">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L144">    }</span>
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L113">        super(points3D, points2D);</span>
+<span class="fc" id="L114">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L115">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L116">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L117">    }</span>
 
     /**
      * Constructor.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) {
-<span class="fc" id="L155">        super();</span>
-<span class="fc" id="L156">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L157">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L158">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L159">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L160">    }</span>
-    
+            final PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L127">        super(listener);</span>
+<span class="fc" id="L128">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L129">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L130">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L131">    }</span>
+
     /**
-     * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the list located at the same position are considered to be 
+     * Constructor with listener and lists of points to be used ot estimate a
+     * pinhole camera.
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
      * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L152">        super(listener, points3D, points2D);</span>
+<span class="fc" id="L153">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L154">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L155">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L156">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+            final double[] qualityScores) {
+<span class="fc" id="L168">        super();</span>
+<span class="fc" id="L169">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L170">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L171">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L172">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L173">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a pinhole camera.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
      * @throws IllegalArgumentException if provided lists of points and array
-     * of quality scores don't have the same size or their size is smaller than 
-     * 6 correspondences.
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  6 correspondences.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) {
-<span class="fc" id="L179">        super(points3D, points2D);</span>
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores) {
+<span class="fc" id="L193">        super(points3D, points2D);</span>
 
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
-<span class="fc" id="L182">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
+<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L185">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L186">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L187">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L188">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L189">    }</span>
-    
+
+<span class="fc" id="L199">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L200">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L201">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L202">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L203">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            double[] qualityScores) {
-<span class="fc" id="L203">        super(listener);</span>
-<span class="fc" id="L204">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L205">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L206">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L207">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L208">    }</span>
-    
+            final PinholeCameraRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="fc" id="L218">        super(listener);</span>
+<span class="fc" id="L219">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L220">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L221">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L222">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L223">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used ot estimate a
      * pinhole camera.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.     
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than 
-     * MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *                                  the same size or their size is smaller than
+     *                                  MIN_NUMBER_OF_POINT_CORRESPONDENCES.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) {
-<span class="fc" id="L231">        super(listener, points3D, points2D);</span>
-        
-<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
-<span class="fc" id="L234">            throw new IllegalArgumentException();</span>
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores) {
+<span class="fc" id="L247">        super(listener, points3D, points2D);</span>
+
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
+<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L237">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L238">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L239">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L240">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L241">    }</span>
+
+<span class="fc" id="L253">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L254">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L255">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L256">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L257">    }</span>
 
     /**
      * Constructor with intrinsic parameters.
+     *
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraIntrinsicParameters intrinsic) {
-<span class="fc" id="L249">        super(intrinsic);</span>
-<span class="fc" id="L250">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L251">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L252">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L253">    }</span>
-    
+            final PinholeCameraIntrinsicParameters intrinsic) {
+<span class="fc" id="L266">        super(intrinsic);</span>
+<span class="fc" id="L267">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L268">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L269">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L270">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera
      * and intrinsic parameters.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *
      * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than required minimum size 
-     * (6 correspondences).
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L272">        super(intrinsic, points3D, points2D);</span>
-<span class="fc" id="L273">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L274">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L275">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L276">    }</span>
-    
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L290">        super(intrinsic, points3D, points2D);</span>
+<span class="fc" id="L291">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L292">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L293">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L294">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener  listener to be notified of events such as when estimation
+     *                  starts, ends or its progress significantly changes.
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            PinholeCameraIntrinsicParameters intrinsic) {
-<span class="fc" id="L287">        super(listener, intrinsic);</span>
-<span class="fc" id="L288">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L289">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L290">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L291">    }</span>
-    
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic) {
+<span class="fc" id="L306">        super(listener, intrinsic);</span>
+<span class="fc" id="L307">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L308">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L309">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L310">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used ot estimate a
      * pinhole camera.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener  listener to be notified of events such as when estimation
+     *                  starts, ends or its progress significantly changes.
      * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than required minimum size 
-     * (6 correspondences).
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L313">        super(listener, intrinsic, points3D, points2D);</span>
-<span class="fc" id="L314">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L315">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L316">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L317">    }</span>
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L333">        super(listener, intrinsic, points3D, points2D);</span>
+<span class="fc" id="L334">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L335">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L336">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L337">    }</span>
 
     /**
      * Constructor with quality scores and intrinsic parameters.
-     * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraIntrinsicParameters intrinsic, double[] qualityScores) {
-<span class="fc" id="L329">        super(intrinsic);</span>
-<span class="fc" id="L330">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L331">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L332">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L333">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L334">    }</span>
-    
+            final PinholeCameraIntrinsicParameters intrinsic, final double[] qualityScores) {
+<span class="fc" id="L350">        super(intrinsic);</span>
+<span class="fc" id="L351">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L352">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L353">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L354">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L355">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
-     * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
+     *
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
      * @throws IllegalArgumentException if provided lists of points and array
-     * of quality scores don't have the same size or their size is smaller than 
-     * 6 correspondences.
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  6 correspondences.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraIntrinsicParameters intrinsic,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) {
-<span class="fc" id="L355">        super(intrinsic, points3D, points2D);</span>
+            final PinholeCameraIntrinsicParameters intrinsic,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores) {
+<span class="fc" id="L377">        super(intrinsic, points3D, points2D);</span>
 
-<span class="fc bfc" id="L357" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
-<span class="fc" id="L358">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
+<span class="fc" id="L380">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L361">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L362">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L363">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L364">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L365">    }</span>
-    
+
+<span class="fc" id="L383">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L384">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L385">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L386">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L387">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores) {
-<span class="fc" id="L381">        super(listener, intrinsic);</span>
-<span class="fc" id="L382">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L383">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L384">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L385">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L386">    }</span>
-    
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic,
+            final double[] qualityScores) {
+<span class="fc" id="L404">        super(listener, intrinsic);</span>
+<span class="fc" id="L405">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L406">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L407">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L408">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L409">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used ot estimate a
      * pinhole camera.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.     
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param points3D list of 3D points used to estimate a pinhole camera.
-     * @param points2D list of corresponding projected 2D points used to 
-     * estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than 
-     * MIN_NUMBER_OF_POINT_CORRESPONDENCES.
+     *                                  the same size or their size is smaller than
+     *                                  MIN_NUMBER_OF_POINT_CORRESPONDENCES.
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            PinholeCameraIntrinsicParameters intrinsic,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) {
-<span class="fc" id="L411">        super(listener, intrinsic, points3D, points2D);</span>
-        
-<span class="fc bfc" id="L413" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
-<span class="fc" id="L414">            throw new IllegalArgumentException();</span>
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic,
+            final List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
+            final double[] qualityScores) {
+<span class="fc" id="L435">        super(listener, intrinsic, points3D, points2D);</span>
+
+<span class="fc bfc" id="L437" title="All 2 branches covered.">        if (qualityScores.length != points3D.size()) {</span>
+<span class="fc" id="L438">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L417">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L418">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L419">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L420">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L421">    }</span>
-    
+
+<span class="fc" id="L441">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L442">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L443">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L444">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L445">    }</span>
+
     /**
-     * Returns threshold to determine whether points are inliers or not when 
+     * Returns threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * The threshold refers to the amount of error (i.e. euclidean distance) a 
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
-     * @return threshold to determine whether points are inliers or not when 
+     *
+     * @return threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L432">        return mThreshold;</span>
+<span class="fc" id="L457">        return mThreshold;</span>
     }
-    
+
     /**
-     * Sets threshold to determine whether points are inliers or not when 
+     * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
      * Thre threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
-     * @param threshold threshold to determine whether points are inliers or 
-     * not.
-     * @throws IllegalArgumentException if provided values is equal or less than 
-     * zero.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     *
+     * @param threshold threshold to determine whether points are inliers or
+     *                  not.
+     * @throws IllegalArgumentException if provided values is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws LockedException {
-<span class="fc bfc" id="L448" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L449">            throw new LockedException();</span>
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L474" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L475">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L451" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L452">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L478">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L454">        mThreshold = threshold;</span>
-<span class="fc" id="L455">    }</span>
-    
+<span class="fc" id="L480">        mThreshold = threshold;</span>
+<span class="fc" id="L481">    }</span>
+
     /**
      * Returns quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
+     *
      * @return quality scores corresponding to each pair of matched points.
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L464">        return mQualityScores;</span>
+<span class="fc" id="L491">        return mQualityScores;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException {
-<span class="fc bfc" id="L479" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L480">            throw new LockedException();</span>
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L507" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L508">            throw new LockedException();</span>
         }
-<span class="fc" id="L482">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L483">    }</span>
-    
+<span class="fc" id="L510">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L511">    }</span>
+
     /**
      * Indicates if eatimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L494" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L495" title="1 of 2 branches missed.">                mQualityScores.length == mPoints3D.size();</span>
+<span class="fc bfc" id="L523" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">                mQualityScores.length == mPoints3D.size();</span>
     }
-    
+
     /**
      * Indicates whether inliers must be computed and kept.
+     *
      * @return true if inliers must be computed and kept, false if inliers
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L504">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L534">        return mComputeAndKeepInliers;</span>
     }
-    
+
     /**
      * Specifies whether inliers must be computed and kept.
+     *
      * @param computeAndKeepInliers true if inliers must be computed and kept,
-     * false if inliers only need to be computed but not kept.
+     *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers) 
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L515" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L516">            throw new LockedException();</span>
+<span class="pc bpc" id="L546" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L547">            throw new LockedException();</span>
         }
-<span class="fc" id="L518">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L519">    }</span>
-    
+<span class="fc" id="L549">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L550">    }</span>
+
     /**
      * Indicates whether residuals must be computed and kept.
+     *
      * @return true if residuals must be computed and kept, false if residuals
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L527">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L559">        return mComputeAndKeepResiduals;</span>
     }
-    
+
     /**
      * Specifies whether residuals must be computed and kept.
+     *
      * @param computeAndKeepResiduals true if residuals must be computed and
-     * kept, false if residuals only need to be computed but not kept.
+     *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
     public void setComputeAndKeepResidualsEnabled(
-            boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L538" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L539">            throw new LockedException();</span>
+            final boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L572">            throw new LockedException();</span>
         }
-<span class="fc" id="L541">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L542">    }</span>
-    
+<span class="fc" id="L574">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L575">    }</span>
+
     /**
      * Estimates an affine 2D transformation using a robust estimator and
      * the best set of matched 2D point correspondences found using the robust
      * estimator.
+     *
      * @return an affine 2D transformation.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
-     */    
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException, 
+    public PinholeCamera estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L559" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L560">            throw new LockedException();</span>
+<span class="fc bfc" id="L593" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L594">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L562" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L563">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L597">            throw new NotReadyException();</span>
         }
-        
-        //pinhole camera estimator using DLT (Direct Linear Transform) algorithm
-<span class="fc" id="L567">        final EPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
+
+        // pinhole camera estimator using DLT (Direct Linear Transform) algorithm
+<span class="fc" id="L601">        final EPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
                 new EPnPPointCorrespondencePinholeCameraEstimator(mIntrinsic);
-        
-<span class="fc" id="L570">        nonRobustEstimator.setPlanarConfigurationAllowed(</span>
+
+<span class="fc" id="L604">        nonRobustEstimator.setPlanarConfigurationAllowed(</span>
                 mPlanarConfigurationAllowed);
-<span class="fc" id="L572">        nonRobustEstimator.setNullspaceDimension2Allowed(</span>
+<span class="fc" id="L606">        nonRobustEstimator.setNullspaceDimension2Allowed(</span>
                 mNullspaceDimension2Allowed);
-<span class="fc" id="L574">        nonRobustEstimator.setNullspaceDimension3Allowed(</span>
+<span class="fc" id="L608">        nonRobustEstimator.setNullspaceDimension3Allowed(</span>
                 mNullspaceDimension3Allowed);
-<span class="fc" id="L576">        nonRobustEstimator.setPlanarThreshold(mPlanarThreshold);</span>
-        
-        //suggestions
-<span class="fc" id="L579">        nonRobustEstimator.setSuggestSkewnessValueEnabled(</span>
-<span class="fc" id="L580">                isSuggestSkewnessValueEnabled());</span>
-<span class="fc" id="L581">        nonRobustEstimator.setSuggestedSkewnessValue(</span>
-<span class="fc" id="L582">                getSuggestedSkewnessValue());</span>
-<span class="fc" id="L583">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(</span>
-<span class="fc" id="L584">                isSuggestHorizontalFocalLengthEnabled());</span>
-<span class="fc" id="L585">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(</span>
-<span class="fc" id="L586">                getSuggestedHorizontalFocalLengthValue());</span>
-<span class="fc" id="L587">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(</span>
-<span class="fc" id="L588">                isSuggestVerticalFocalLengthEnabled());</span>
-<span class="fc" id="L589">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(</span>
-<span class="fc" id="L590">                getSuggestedVerticalFocalLengthValue());</span>
-<span class="fc" id="L591">        nonRobustEstimator.setSuggestAspectRatioEnabled(</span>
-<span class="fc" id="L592">                isSuggestAspectRatioEnabled());</span>
-<span class="fc" id="L593">        nonRobustEstimator.setSuggestedAspectRatioValue(</span>
-<span class="fc" id="L594">                getSuggestedAspectRatioValue());</span>
-<span class="fc" id="L595">        nonRobustEstimator.setSuggestPrincipalPointEnabled(</span>
-<span class="fc" id="L596">                isSuggestPrincipalPointEnabled());</span>
-<span class="fc" id="L597">        nonRobustEstimator.setSuggestedPrincipalPointValue(</span>
-<span class="fc" id="L598">                getSuggestedPrincipalPointValue());</span>
-<span class="fc" id="L599">        nonRobustEstimator.setSuggestRotationEnabled(</span>
-<span class="fc" id="L600">                isSuggestRotationEnabled());</span>
-<span class="fc" id="L601">        nonRobustEstimator.setSuggestedRotationValue(</span>
-<span class="fc" id="L602">                getSuggestedRotationValue());</span>
-<span class="fc" id="L603">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
-<span class="fc" id="L604">        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());</span>
-                
-<span class="fc" id="L606">        PROSACRobustEstimator&lt;PinholeCamera&gt; innerEstimator = </span>
+<span class="fc" id="L610">        nonRobustEstimator.setPlanarThreshold(mPlanarThreshold);</span>
+
+        // suggestions
+<span class="fc" id="L613">        nonRobustEstimator.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L614">                isSuggestSkewnessValueEnabled());</span>
+<span class="fc" id="L615">        nonRobustEstimator.setSuggestedSkewnessValue(</span>
+<span class="fc" id="L616">                getSuggestedSkewnessValue());</span>
+<span class="fc" id="L617">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L618">                isSuggestHorizontalFocalLengthEnabled());</span>
+<span class="fc" id="L619">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L620">                getSuggestedHorizontalFocalLengthValue());</span>
+<span class="fc" id="L621">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L622">                isSuggestVerticalFocalLengthEnabled());</span>
+<span class="fc" id="L623">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L624">                getSuggestedVerticalFocalLengthValue());</span>
+<span class="fc" id="L625">        nonRobustEstimator.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L626">                isSuggestAspectRatioEnabled());</span>
+<span class="fc" id="L627">        nonRobustEstimator.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L628">                getSuggestedAspectRatioValue());</span>
+<span class="fc" id="L629">        nonRobustEstimator.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L630">                isSuggestPrincipalPointEnabled());</span>
+<span class="fc" id="L631">        nonRobustEstimator.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L632">                getSuggestedPrincipalPointValue());</span>
+<span class="fc" id="L633">        nonRobustEstimator.setSuggestRotationEnabled(</span>
+<span class="fc" id="L634">                isSuggestRotationEnabled());</span>
+<span class="fc" id="L635">        nonRobustEstimator.setSuggestedRotationValue(</span>
+<span class="fc" id="L636">                getSuggestedRotationValue());</span>
+<span class="fc" id="L637">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
+<span class="fc" id="L638">        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());</span>
+
+<span class="fc" id="L640">        final PROSACRobustEstimator&lt;PinholeCamera&gt; innerEstimator =</span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L608">                    new PROSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
-                    
-            //point to be reused when computing residuals
-<span class="fc" id="L611">            private Point2D mTestPoint = Point2D.create(</span>
-                    CoordinatesType.HOMOGENEOUS_COORDINATES); 
-            
-            //3D points for a subset of samples
-<span class="fc" id="L615">            private List&lt;Point3D&gt; mSubset3D = new ArrayList&lt;&gt;();</span>
-            
-            //2D points for a subset of samples
-<span class="fc" id="L618">            private List&lt;Point2D&gt; mSubset2D = new ArrayList&lt;&gt;();</span>
-            
-            @Override
-            public double getThreshold() {
-<span class="fc" id="L622">                return mThreshold;</span>
-            }
+<span class="fc" id="L642">                        new PROSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
 
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L627">                return mPoints3D.size();</span>
-            }
+                            // point to be reused when computing residuals
+<span class="fc" id="L645">                            private final Point2D mTestPoint = Point2D.create(</span>
+                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L632">                return PointCorrespondencePinholeCameraRobustEstimator.</span>
-                        MIN_NUMBER_OF_POINT_CORRESPONDENCES;
-            }
+                            // 3D points for a subset of samples
+<span class="fc" id="L649">                            private final List&lt;Point3D&gt; mSubset3D = new ArrayList&lt;&gt;();</span>
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;PinholeCamera&gt; solutions) {
-<span class="fc" id="L639">                mSubset3D.clear();</span>
-<span class="fc" id="L640">                mSubset3D.add(mPoints3D.get(samplesIndices[0]));</span>
-<span class="fc" id="L641">                mSubset3D.add(mPoints3D.get(samplesIndices[1]));</span>
-<span class="fc" id="L642">                mSubset3D.add(mPoints3D.get(samplesIndices[2]));</span>
-<span class="fc" id="L643">                mSubset3D.add(mPoints3D.get(samplesIndices[3]));</span>
-<span class="fc" id="L644">                mSubset3D.add(mPoints3D.get(samplesIndices[4]));</span>
-<span class="fc" id="L645">                mSubset3D.add(mPoints3D.get(samplesIndices[5]));</span>
+                            // 2D points for a subset of samples
+<span class="fc" id="L652">                            private final List&lt;Point2D&gt; mSubset2D = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L647">                mSubset2D.clear();</span>
-<span class="fc" id="L648">                mSubset2D.add(mPoints2D.get(samplesIndices[0]));</span>
-<span class="fc" id="L649">                mSubset2D.add(mPoints2D.get(samplesIndices[1]));</span>
-<span class="fc" id="L650">                mSubset2D.add(mPoints2D.get(samplesIndices[2]));</span>
-<span class="fc" id="L651">                mSubset2D.add(mPoints2D.get(samplesIndices[3]));</span>
-<span class="fc" id="L652">                mSubset2D.add(mPoints2D.get(samplesIndices[4]));</span>
-<span class="fc" id="L653">                mSubset2D.add(mPoints2D.get(samplesIndices[5]));</span>
-                
-                try {
-<span class="fc" id="L656">                    nonRobustEstimator.setLists(mSubset3D, mSubset2D);</span>
-                                    
-<span class="fc" id="L658">                    PinholeCamera cam = nonRobustEstimator.estimate();</span>
-<span class="fc" id="L659">                    solutions.add(cam);</span>
-<span class="nc" id="L660">                } catch (Exception e) {</span>
-                    //if points configuration is degenerate, no solution is
-                    //added
-<span class="fc" id="L663">                }</span>
-<span class="fc" id="L664">            }</span>
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L656">                                return mThreshold;</span>
+                            }
 
-            @Override
-            public double computeResidual(PinholeCamera currentEstimation, 
-                    int i) {
-                //pick i-th points
-<span class="fc" id="L670">                Point3D point3D = mPoints3D.get(i);</span>
-<span class="fc" id="L671">                Point2D point2D = mPoints2D.get(i);</span>
-                
-                //project point3D into test point
-<span class="fc" id="L674">                currentEstimation.project(point3D, mTestPoint);</span>
-                
-                //compare test point and 2D point
-<span class="fc" id="L677">                return mTestPoint.distanceTo(point2D);</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L661">                                return mPoints3D.size();</span>
+                            }
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L682">                return PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.</span>
-<span class="fc" id="L683">                        this.isReady();</span>
-            }
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L666">                                return PointCorrespondencePinholeCameraRobustEstimator.</span>
+                                        MIN_NUMBER_OF_POINT_CORRESPONDENCES;
+                            }
 
-            @Override
-            public void onEstimateStart(
-                    RobustEstimator&lt;PinholeCamera&gt; estimator) {
-<span class="pc bpc" id="L689" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L690">                    mListener.onEstimateStart(</span>
-                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
-                }
-<span class="fc" id="L693">            }</span>
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;PinholeCamera&gt; solutions) {
+<span class="fc" id="L673">                                mSubset3D.clear();</span>
+<span class="fc" id="L674">                                mSubset3D.add(mPoints3D.get(samplesIndices[0]));</span>
+<span class="fc" id="L675">                                mSubset3D.add(mPoints3D.get(samplesIndices[1]));</span>
+<span class="fc" id="L676">                                mSubset3D.add(mPoints3D.get(samplesIndices[2]));</span>
+<span class="fc" id="L677">                                mSubset3D.add(mPoints3D.get(samplesIndices[3]));</span>
+<span class="fc" id="L678">                                mSubset3D.add(mPoints3D.get(samplesIndices[4]));</span>
+<span class="fc" id="L679">                                mSubset3D.add(mPoints3D.get(samplesIndices[5]));</span>
 
-            @Override
-            public void onEstimateEnd(
-                    RobustEstimator&lt;PinholeCamera&gt; estimator) {
-<span class="pc bpc" id="L698" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L699">                    mListener.onEstimateEnd(</span>
-                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
-                }
-<span class="fc" id="L702">            }</span>
+<span class="fc" id="L681">                                mSubset2D.clear();</span>
+<span class="fc" id="L682">                                mSubset2D.add(mPoints2D.get(samplesIndices[0]));</span>
+<span class="fc" id="L683">                                mSubset2D.add(mPoints2D.get(samplesIndices[1]));</span>
+<span class="fc" id="L684">                                mSubset2D.add(mPoints2D.get(samplesIndices[2]));</span>
+<span class="fc" id="L685">                                mSubset2D.add(mPoints2D.get(samplesIndices[3]));</span>
+<span class="fc" id="L686">                                mSubset2D.add(mPoints2D.get(samplesIndices[4]));</span>
+<span class="fc" id="L687">                                mSubset2D.add(mPoints2D.get(samplesIndices[5]));</span>
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;PinholeCamera&gt; estimator, 
-                    int iteration) {
-<span class="pc bpc" id="L708" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L709">                    mListener.onEstimateNextIteration(</span>
-                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this, 
-                            iteration);
-                }
-<span class="fc" id="L713">            }</span>
+                                try {
+<span class="fc" id="L690">                                    nonRobustEstimator.setLists(mSubset3D, mSubset2D);</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;PinholeCamera&gt; estimator, 
-                    float progress) {
-<span class="pc bpc" id="L719" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L720">                    mListener.onEstimateProgressChange(</span>
-                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this, 
-                            progress);
-                }
-<span class="fc" id="L724">            }</span>
+<span class="fc" id="L692">                                    final PinholeCamera cam = nonRobustEstimator.estimate();</span>
+<span class="fc" id="L693">                                    solutions.add(cam);</span>
+<span class="nc" id="L694">                                } catch (final Exception e) {</span>
+                                    // if points configuration is degenerate, no solution is
+                                    // added
+<span class="fc" id="L697">                                }</span>
+<span class="fc" id="L698">                            }</span>
 
-            @Override
-            public double[] getQualityScores() {
-<span class="fc" id="L728">                return mQualityScores;</span>
-            }
-        });
-        
+                            @Override
+                            public double computeResidual(final PinholeCamera currentEstimation,
+                                                          final int i) {
+                                // pick i-th points
+<span class="fc" id="L704">                                final Point3D point3D = mPoints3D.get(i);</span>
+<span class="fc" id="L705">                                final Point2D point2D = mPoints2D.get(i);</span>
+
+                                // project point3D into test point
+<span class="fc" id="L708">                                currentEstimation.project(point3D, mTestPoint);</span>
+
+                                // compare test point and 2D point
+<span class="fc" id="L711">                                return mTestPoint.distanceTo(point2D);</span>
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L716">                                return PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.</span>
+<span class="fc" id="L717">                                        this.isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(
+                                    final RobustEstimator&lt;PinholeCamera&gt; estimator) {
+<span class="pc bpc" id="L723" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L724">                                    mListener.onEstimateStart(</span>
+                                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
+                                }
+<span class="fc" id="L727">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(
+                                    final RobustEstimator&lt;PinholeCamera&gt; estimator) {
+<span class="pc bpc" id="L732" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L733">                                    mListener.onEstimateEnd(</span>
+                                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
+                                }
+<span class="fc" id="L736">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;PinholeCamera&gt; estimator,
+                                    final int iteration) {
+<span class="pc bpc" id="L742" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L743">                                    mListener.onEstimateNextIteration(</span>
+                                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this,
+                                            iteration);
+                                }
+<span class="fc" id="L747">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;PinholeCamera&gt; estimator,
+                                    final float progress) {
+<span class="pc bpc" id="L753" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L754">                                    mListener.onEstimateProgressChange(</span>
+                                            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this,
+                                            progress);
+                                }
+<span class="fc" id="L758">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L762">                                return mQualityScores;</span>
+                            }
+                        });
+
         try {
-<span class="fc" id="L733">            mLocked = true;</span>
-<span class="fc" id="L734">            mInliersData = null;</span>
-<span class="pc bpc" id="L735" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L767">            mLocked = true;</span>
+<span class="fc" id="L768">            mInliersData = null;</span>
+<span class="pc bpc" id="L769" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L737" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
-                    mComputeAndKeepResiduals || mRefineResult);            
-<span class="fc" id="L739">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L740">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L741">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L742">            PinholeCamera result = innerEstimator.estimate();</span>
-<span class="fc" id="L743">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L744">            return attemptRefine(result, </span>
-<span class="fc" id="L745">                    nonRobustEstimator.getMaxSuggestionWeight());</span>
-<span class="nc" id="L746">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L747">            throw new LockedException(e);</span>
-<span class="nc" id="L748">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L749">            throw new NotReadyException(e);</span>
+<span class="pc bpc" id="L771" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+                    mComputeAndKeepResiduals || mRefineResult);
+<span class="fc" id="L773">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L774">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L775">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L776">            final PinholeCamera result = innerEstimator.estimate();</span>
+<span class="fc" id="L777">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L778">            return attemptRefine(result,</span>
+<span class="fc" id="L779">                    nonRobustEstimator.getMaxSuggestionWeight());</span>
+<span class="nc" id="L780">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L781">            throw new LockedException(e);</span>
+<span class="nc" id="L782">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L783">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L751">            mLocked = false;</span>
+<span class="fc" id="L785">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */    
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L761">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L796">        return RobustEstimatorMethod.PROSAC;</span>
     }
 
     /**
-     * Gets standard deviation used for Levenberg-Marquardt fitting during 
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust 
-     * estimation, since residuals of found inliers are within the range of 
+     * Typically this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
-     */    
+     */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L776">        return mThreshold;</span>
+<span class="fc" id="L812">        return mThreshold;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each pair of matched points.
      * This method is used internally and does not check whether instance is
      * locked or not.
+     *
      * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE.
+     *                                  smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) {
-<span class="fc bfc" id="L788" title="All 2 branches covered.">        if (qualityScores.length &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
-<span class="fc" id="L789">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L825" title="All 2 branches covered.">        if (qualityScores.length &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
+<span class="fc" id="L826">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L792">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L793">    }    </span>
+
+<span class="fc" id="L829">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L830">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

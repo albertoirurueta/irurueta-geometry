@@ -28,15 +28,16 @@ import java.util.List;
  * samples and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
+ *
  * @param &lt;T&gt; an implementation of a 3D point.
  */
-public abstract class Point3DRefiner&lt;T extends Point3D&gt; extends 
+public abstract class Point3DRefiner&lt;T extends Point3D&gt; extends
         SamplesAndInliersDataRefiner&lt;T, Plane&gt; {
-    
+
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
@@ -45,51 +46,55 @@ public abstract class Point3DRefiner&lt;T extends Point3D&gt; extends
      * such threshold.
      */
     protected double mRefinementStandardDeviation;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L52">    public Point3DRefiner() { }</span>
-    
+<span class="fc" id="L53">    protected Point3DRefiner() {</span>
+<span class="fc" id="L54">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples collection of samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
-     */
-    public Point3DRefiner(T initialEstimation,
-            boolean keepCovariance, BitSet inliers, double[] residuals,
-            int numInliers, List&lt;Plane&gt; samples, 
-            double refinementStandardDeviation) {
-<span class="fc" id="L70">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
-                samples);
-<span class="fc" id="L72">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L73">    }</span>
-    
-    /**
-     * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples collection of samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples                     collection of samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public Point3DRefiner(T initialEstimation, boolean keepCovariance,
-            InliersData inliersData, List&lt;Plane&gt; samples,
-            double refinementStandardDeviation) {
-<span class="fc" id="L89">        super(initialEstimation, keepCovariance, inliersData, samples);</span>
-<span class="fc" id="L90">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L91">    }</span>
-    
+    protected Point3DRefiner(
+            final T initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, double[] residuals, final int numInliers,
+            final List&lt;Plane&gt; samples, final double refinementStandardDeviation) {
+<span class="fc" id="L73">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+                samples);
+<span class="fc" id="L75">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples                     collection of samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected Point3DRefiner(
+            final T initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Plane&gt; samples,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L94">        super(initialEstimation, keepCovariance, inliersData, samples);</span>
+<span class="fc" id="L95">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L96">    }</span>
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -98,12 +103,13 @@ public abstract class Point3DRefiner&lt;T extends Point3D&gt; extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-<span class="fc" id="L104">        return mRefinementStandardDeviation;</span>
+<span class="fc" id="L110">        return mRefinementStandardDeviation;</span>
     }
-    
+
     /**
      * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -112,49 +118,52 @@ public abstract class Point3DRefiner&lt;T extends Point3D&gt; extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
-     * @param refinementStandardDeviation standard deviation used for 
-     * refinement.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L122">            throw new LockedException();</span>
+            final double refinementStandardDeviation) throws LockedException {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L129">            throw new LockedException();</span>
         }
-<span class="fc" id="L124">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L125">    }   </span>
-    
+<span class="fc" id="L131">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L132">    }</span>
+
     /**
      * Computes the residual between a point and a plane as their distance.
+     *
      * @param point a point.
      * @param plane a plane.
      * @return residual (distance between provided point and plane).
      */
-    protected double residual(Point3D point, Plane plane) {
-<span class="fc" id="L134">        point.normalize();</span>
-<span class="fc" id="L135">        plane.normalize();</span>
-<span class="fc" id="L136">        return Math.abs(plane.signedDistance(point));</span>
+    protected double residual(final Point3D point, final Plane plane) {
+<span class="fc" id="L142">        point.normalize();</span>
+<span class="fc" id="L143">        plane.normalize();</span>
+<span class="fc" id="L144">        return Math.abs(plane.signedDistance(point));</span>
     }
-    
+
     /**
      * Computes total residual among all provided inlier samples.
+     *
      * @param point a point.
      * @return total residual.
      */
-    protected double totalResidual(Point3D point) {
-<span class="fc" id="L145">        double result = 0.0;</span>
-        
-<span class="fc" id="L147">        int nSamples = mInliers.length();</span>
+    protected double totalResidual(final Point3D point) {
+<span class="fc" id="L154">        double result = 0.0;</span>
+
+<span class="fc" id="L156">        final int nSamples = mInliers.length();</span>
         Plane plane;
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
-                //sample is inlier
-<span class="fc" id="L152">                plane = mSamples.get(i);</span>
-<span class="fc" id="L153">                result += residual(point, plane);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L161">                plane = mSamples.get(i);</span>
+<span class="fc" id="L162">                result += residual(point, plane);</span>
             }
         }
-        
-<span class="fc" id="L157">        return result;</span>
-    }    
+
+<span class="fc" id="L166">        return result;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

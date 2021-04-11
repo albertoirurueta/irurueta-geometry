@@ -32,83 +32,87 @@ import java.util.BitSet;
 import java.util.List;
 
 /**
- * Refine a 2D metric transformation by taking into account an initial 
+ * Refine a 2D metric transformation by taking into account an initial
  * estimation, inlier point matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class MetricTransformation2DRefiner extends
-        PairMatchesAndInliersDataRefiner&lt;MetricTransformation2D, Point2D, 
-        Point2D&gt; {
-    
+        PairMatchesAndInliersDataRefiner&lt;MetricTransformation2D, Point2D,
+                Point2D&gt; {
+
     /**
      * Point to be reused when computing residuals.
      */
-<span class="fc" id="L49">    private Point2D mResidualTestPoint = Point2D.create(</span>
+<span class="fc" id="L50">    private final Point2D mResidualTestPoint = Point2D.create(</span>
             CoordinatesType.HOMOGENEOUS_COORDINATES);
 
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
     protected double mRefinementStandardDeviation;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L66">    public MetricTransformation2DRefiner() { }</span>
-    
+<span class="fc" id="L67">    public MetricTransformation2DRefiner() {</span>
+<span class="fc" id="L68">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
     public MetricTransformation2DRefiner(
-            MetricTransformation2D initialEstimation, boolean keepCovariance,
-            BitSet inliers, double[] residuals, int numInliers, 
-            List&lt;Point2D&gt; samples1, List&lt;Point2D&gt; samples2, 
-            double refinementStandardDeviation) {
-<span class="fc" id="L86">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+            final MetricTransformation2D initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List&lt;Point2D&gt; samples1, final List&lt;Point2D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L89">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples1, samples2);
-<span class="fc" id="L88">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L89">    }</span>
-    
+<span class="fc" id="L91">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L92">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
     public MetricTransformation2DRefiner(
-            MetricTransformation2D initialEstimation, boolean keepCovariance,
-            InliersData inliersData, List&lt;Point2D&gt; samples1, 
-            List&lt;Point2D&gt; samples2, double refinementStandardDeviation) {
-<span class="fc" id="L107">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
+            final MetricTransformation2D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Point2D&gt; samples1,
+            final List&lt;Point2D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L111">        super(initialEstimation, keepCovariance, inliersData, samples1,</span>
                 samples2);
-<span class="fc" id="L109">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L110">    }</span>
-    
+<span class="fc" id="L113">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L114">    }</span>
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -117,258 +121,264 @@ public class MetricTransformation2DRefiner extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-<span class="fc" id="L123">        return mRefinementStandardDeviation;</span>
+<span class="fc" id="L128">        return mRefinementStandardDeviation;</span>
     }
-    
+
     /**
-     * Sets standard deviation used for Levenberg-Marquardt fitting during 
+     * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
-     * @param refinementStandardDeviation standard deviation used for 
-     * refinement.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
-<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L141">            throw new LockedException();</span>
+            final double refinementStandardDeviation) throws LockedException {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L147">            throw new LockedException();</span>
         }
-<span class="fc" id="L143">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L144">    }</span>
-    
+<span class="fc" id="L149">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L150">    }</span>
+
     /**
      * Refines provided initial estimation.
+     *
      * @return refines estimation.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is 
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
-     */    
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
     @Override
-    public MetricTransformation2D refine() throws NotReadyException, 
+    public MetricTransformation2D refine() throws NotReadyException,
             LockedException, RefinerException {
-<span class="fc" id="L158">        MetricTransformation2D result = new MetricTransformation2D();</span>
-<span class="fc" id="L159">        refine(result);</span>
-<span class="fc" id="L160">        return result;</span>
+<span class="fc" id="L165">        final MetricTransformation2D result = new MetricTransformation2D();</span>
+<span class="fc" id="L166">        refine(result);</span>
+<span class="fc" id="L167">        return result;</span>
     }
-    
+
     /**
      * Refines provided initial estimation.
      * This method always sets a value into provided result instance regardless
      * of the fact that error has actually improved in LMSE terms or not.
+     *
      * @param result instance where refined estimation will be stored.
-     * @return true if result improves (error decreases) in LMSE terms respect 
+     * @return true if result improves (error decreases) in LMSE terms respect
      * to initial estimation, false if no improvement has been achieved.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is 
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
-     */    
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
     @Override
-    public boolean refine(MetricTransformation2D result) 
+    public boolean refine(final MetricTransformation2D result)
             throws NotReadyException, LockedException, RefinerException {
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L180">            throw new LockedException();</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L188">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L183">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L191">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L186">        mLocked = true;</span>
-        
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L189">            mListener.onRefineStart(this, mInitialEstimation);</span>
+
+<span class="fc" id="L194">        mLocked = true;</span>
+
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L197">            mListener.onRefineStart(this, mInitialEstimation);</span>
         }
-        
-<span class="fc" id="L192">        double initialTotalResidual = totalResidual(mInitialEstimation);</span>
-        
+
+<span class="fc" id="L200">        final double initialTotalResidual = totalResidual(mInitialEstimation);</span>
+
         try {
-            //parameters: rotation angle + scale + translation
-<span class="fc" id="L196">            final double[] initParams = new double[2 + </span>
+            // parameters: rotation angle + scale + translation
+<span class="fc" id="L204">            final double[] initParams = new double[2 +</span>
                     MetricTransformation2D.NUM_TRANSLATION_COORDS];
-            //copy values
-<span class="fc" id="L199">            initParams[0] = mInitialEstimation.getScale();</span>
-<span class="fc" id="L200">            initParams[1] = mInitialEstimation.getRotation().getTheta();</span>
-<span class="fc" id="L201">            System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,</span>
+            // copy values
+<span class="fc" id="L207">            initParams[0] = mInitialEstimation.getScale();</span>
+<span class="fc" id="L208">            initParams[1] = mInitialEstimation.getRotation().getTheta();</span>
+<span class="fc" id="L209">            System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,</span>
                     2, MetricTransformation2D.NUM_TRANSLATION_COORDS);
 
-            //output values to be fitted/optimized will contain residuals
-<span class="fc" id="L205">            double[] y = new double[mNumInliers];</span>
-            //input values will contain 2 sets of 2D points to compute residuals
-<span class="fc" id="L207">            final int nDims = </span>
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L213">            final double[] y = new double[mNumInliers];</span>
+            // input values will contain 2 sets of 2D points to compute residuals
+<span class="fc" id="L215">            final int nDims =</span>
                     2 * Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH;
-<span class="fc" id="L209">            Matrix x = new Matrix(mNumInliers, nDims);</span>
-<span class="fc" id="L210">            int nSamples = mInliers.length();</span>
-<span class="fc" id="L211">            int pos = 0;</span>
+<span class="fc" id="L217">            final Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L218">            final int nSamples = mInliers.length();</span>
+<span class="fc" id="L219">            int pos = 0;</span>
             Point2D inputPoint;
             Point2D outputPoint;
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
-                    //sample is inlier
-<span class="fc" id="L217">                    inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L218">                    outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L219">                    inputPoint.normalize();</span>
-<span class="fc" id="L220">                    outputPoint.normalize();</span>
-<span class="fc" id="L221">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L222">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
-<span class="fc" id="L223">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
-<span class="fc" id="L224">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
-<span class="fc" id="L225">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
-<span class="fc" id="L226">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
-                    
-<span class="fc" id="L228">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L229">                    pos++;</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L225">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L226">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L227">                    inputPoint.normalize();</span>
+<span class="fc" id="L228">                    outputPoint.normalize();</span>
+<span class="fc" id="L229">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L230">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L231">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
+<span class="fc" id="L232">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
+<span class="fc" id="L233">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
+<span class="fc" id="L234">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
+
+<span class="fc" id="L236">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L237">                    pos++;</span>
                 }
             }
-            
-<span class="fc" id="L233">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L234">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
-                        
-<span class="fc" id="L236">                private Point2D mInputPoint = Point2D.create(</span>
-                        CoordinatesType.HOMOGENEOUS_COORDINATES);
-                
-<span class="fc" id="L239">                private Point2D mOutputPoint = Point2D.create(</span>
-                        CoordinatesType.HOMOGENEOUS_COORDINATES);
-                
-<span class="fc" id="L242">                private MetricTransformation2D mTransformation = </span>
-                        new MetricTransformation2D();
-                
-<span class="fc" id="L245">                private GradientEstimator mGradientEstimator =</span>
-                        new GradientEstimator(
-<span class="fc" id="L247">                                new MultiDimensionFunctionEvaluatorListener() {</span>
-                    @Override
-                    public double evaluate(double[] params) {
-                        //copy values
-<span class="fc" id="L251">                        mTransformation.setScale(params[0]);</span>
-<span class="fc" id="L252">                        mTransformation.getRotation().setTheta(params[1]);</span>
-<span class="fc" id="L253">                        System.arraycopy(params, 2, </span>
-<span class="fc" id="L254">                            mTransformation.getTranslation(), 0, </span>
-                            MetricTransformation2D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L257">                        return residual(mTransformation, mInputPoint, </span>
-<span class="fc" id="L258">                                mOutputPoint);</span>
-                    }
-                });
-                
-                @Override
-                public int getNumberOfDimensions() {
-<span class="fc" id="L264">                    return nDims;</span>
-                }
+<span class="fc" id="L241">            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L242">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
 
-                @Override
-                public double[] createInitialParametersArray() {
-<span class="fc" id="L269">                    return initParams;</span>
-                }
+<span class="fc" id="L244">                        private final Point2D mInputPoint = Point2D.create(</span>
+                                CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                @Override
-                public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws EvaluationException {
-<span class="fc" id="L275">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
-                            point[2]);
-<span class="fc" id="L277">                    mOutputPoint.setHomogeneousCoordinates(point[3], point[4], </span>
-                            point[5]);
-                    
-                    //copy values
-<span class="fc" id="L281">                    mTransformation.setScale(params[0]);</span>
-<span class="fc" id="L282">                    mTransformation.getRotation().setTheta(params[1]);</span>
-<span class="fc" id="L283">                    System.arraycopy(params, 2, </span>
-<span class="fc" id="L284">                        mTransformation.getTranslation(), 0, </span>
-                        MetricTransformation2D.NUM_TRANSLATION_COORDS);
+<span class="fc" id="L247">                        private final Point2D mOutputPoint = Point2D.create(</span>
+                                CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-<span class="fc" id="L287">                    double y = residual(mTransformation, mInputPoint, </span>
-                            mOutputPoint);
-<span class="fc" id="L289">                    mGradientEstimator.gradient(params, derivatives);</span>
-                    
-<span class="fc" id="L291">                    return y;</span>
-                }
-            };
-            
-<span class="fc" id="L295">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L250">                        private final MetricTransformation2D mTransformation =</span>
+                                new MetricTransformation2D();
+
+<span class="fc" id="L253">                        private final GradientEstimator mGradientEstimator =</span>
+                                new GradientEstimator(
+<span class="fc" id="L255">                                        new MultiDimensionFunctionEvaluatorListener() {</span>
+                                            @Override
+                                            public double evaluate(final double[] params) {
+                                                // copy values
+<span class="fc" id="L259">                                                mTransformation.setScale(params[0]);</span>
+<span class="fc" id="L260">                                                mTransformation.getRotation().setTheta(params[1]);</span>
+<span class="fc" id="L261">                                                System.arraycopy(params, 2,</span>
+<span class="fc" id="L262">                                                        mTransformation.getTranslation(), 0,</span>
+                                                        MetricTransformation2D.NUM_TRANSLATION_COORDS);
+
+<span class="fc" id="L265">                                                return residual(mTransformation, mInputPoint,</span>
+<span class="fc" id="L266">                                                        mOutputPoint);</span>
+                                            }
+                                        });
+
+                        @Override
+                        public int getNumberOfDimensions() {
+<span class="fc" id="L272">                            return nDims;</span>
+                        }
+
+                        @Override
+                        public double[] createInitialParametersArray() {
+<span class="fc" id="L277">                            return initParams;</span>
+                        }
+
+                        @Override
+                        public double evaluate(final int i, final double[] point, final double[] params,
+                                               final double[] derivatives) throws EvaluationException {
+<span class="fc" id="L283">                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],</span>
+                                    point[2]);
+<span class="fc" id="L285">                            mOutputPoint.setHomogeneousCoordinates(point[3], point[4],</span>
+                                    point[5]);
+
+                            // copy values
+<span class="fc" id="L289">                            mTransformation.setScale(params[0]);</span>
+<span class="fc" id="L290">                            mTransformation.getRotation().setTheta(params[1]);</span>
+<span class="fc" id="L291">                            System.arraycopy(params, 2,</span>
+<span class="fc" id="L292">                                    mTransformation.getTranslation(), 0,</span>
+                                    MetricTransformation2D.NUM_TRANSLATION_COORDS);
+
+<span class="fc" id="L295">                            final double y = residual(mTransformation, mInputPoint,</span>
+                                    mOutputPoint);
+<span class="fc" id="L297">                            mGradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L299">                            return y;</span>
+                        }
+                    };
+
+<span class="fc" id="L303">            final LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L297">                    getRefinementStandardDeviation());</span>
-            
-<span class="fc" id="L299">            fitter.fit();</span>
-            
-            //obtain estimated params
-<span class="fc" id="L302">            double[] params = fitter.getA();</span>
-            
-            //update transformation
-<span class="fc" id="L305">            result.setScale(params[0]);</span>
-<span class="fc" id="L306">            result.getRotation().setTheta(params[1]);</span>
-<span class="fc" id="L307">            System.arraycopy(params, 2, result.getTranslation(), 0, </span>
+<span class="fc" id="L305">                            getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L307">            fitter.fit();</span>
+
+            // obtain estimated params
+<span class="fc" id="L310">            final double[] params = fitter.getA();</span>
+
+            // update transformation
+<span class="fc" id="L313">            result.setScale(params[0]);</span>
+<span class="fc" id="L314">            result.getRotation().setTheta(params[1]);</span>
+<span class="fc" id="L315">            System.arraycopy(params, 2, result.getTranslation(), 0,</span>
                     MetricTransformation2D.NUM_TRANSLATION_COORDS);
-            
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
-                //keep covariance
-<span class="fc" id="L312">                mCovariance = fitter.getCovar();</span>
+
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+                // keep covariance
+<span class="fc" id="L320">                mCovariance = fitter.getCovar();</span>
             }
-            
-<span class="fc" id="L315">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L316" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
-            
-<span class="fc bfc" id="L318" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L319">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+
+<span class="fc" id="L323">            final double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">            final boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+
+<span class="fc bfc" id="L326" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L327">                mListener.onRefineEnd(this, mInitialEstimation, result,</span>
                         errorDecreased);
             }
-            
-<span class="fc" id="L323">            return errorDecreased;</span>
-            
-<span class="fc" id="L325">        } catch (Exception e) {</span>
-<span class="fc" id="L326">            throw new RefinerException(e);</span>
+
+<span class="fc" id="L331">            return errorDecreased;</span>
+
+<span class="fc" id="L333">        } catch (final Exception e) {</span>
+<span class="fc" id="L334">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L328">            mLocked = false;</span>
-        }        
+<span class="fc" id="L336">            mLocked = false;</span>
+        }
     }
 
     /**
      * Computes the residual between the euclidean transformation and a pair or
      * matched points.
+     *
      * @param transformation a transformation.
-     * @param inputPoint input 2D point.
-     * @param outputPoint output 2D point.
+     * @param inputPoint     input 2D point.
+     * @param outputPoint    output 2D point.
      * @return residual.
      */
-    private double residual (MetricTransformation2D transformation, 
-            Point2D inputPoint, Point2D outputPoint) {
-<span class="fc" id="L342">        inputPoint.normalize();</span>
-<span class="fc" id="L343">        outputPoint.normalize();</span>
-        
-<span class="fc" id="L345">        transformation.transform(inputPoint, mResidualTestPoint);</span>
-<span class="fc" id="L346">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+    private double residual(final MetricTransformation2D transformation,
+                            final Point2D inputPoint, final Point2D outputPoint) {
+<span class="fc" id="L351">        inputPoint.normalize();</span>
+<span class="fc" id="L352">        outputPoint.normalize();</span>
+
+<span class="fc" id="L354">        transformation.transform(inputPoint, mResidualTestPoint);</span>
+<span class="fc" id="L355">        return mResidualTestPoint.distanceTo(outputPoint);</span>
     }
-    
+
     /**
      * Computes total residual among all provided inlier samples.
+     *
      * @param transformation a transformation.
      * @return total residual.
      */
-    private double totalResidual(MetricTransformation2D transformation) {
-<span class="fc" id="L355">        double result = 0.0;</span>
-        
-<span class="fc" id="L357">        int nSamples = mInliers.length();</span>
+    private double totalResidual(final MetricTransformation2D transformation) {
+<span class="fc" id="L365">        double result = 0.0;</span>
+
+<span class="fc" id="L367">        final int nSamples = mInliers.length();</span>
         Point2D inputPoint;
         Point2D outputPoint;
-<span class="fc bfc" id="L360" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L361" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
-                //sample is inlier
-<span class="fc" id="L363">                inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L364">                outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L365">                inputPoint.normalize();</span>
-<span class="fc" id="L366">                outputPoint.normalize();</span>
-<span class="fc" id="L367">                result += residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L373">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L374">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L375">                inputPoint.normalize();</span>
+<span class="fc" id="L376">                outputPoint.normalize();</span>
+<span class="fc" id="L377">                result += residual(transformation, inputPoint, outputPoint);</span>
             }
         }
-        
-<span class="fc" id="L371">        return result;        </span>
-    }    
+
+<span class="fc" id="L381">        return result;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

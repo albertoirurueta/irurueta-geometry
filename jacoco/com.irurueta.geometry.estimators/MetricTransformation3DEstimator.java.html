@@ -15,9 +15,16 @@
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.algebra.Utils;
-import com.irurueta.geometry.*;
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.InvalidRotationMatrixException;
+import com.irurueta.geometry.MatrixRotation3D;
+import com.irurueta.geometry.MetricTransformation3D;
+import com.irurueta.geometry.Point3D;
 
 import java.util.List;
 
@@ -28,481 +35,506 @@ import java.util.List;
  * For some point configurations 3 points are enough to find a valid solution.
  * If more points are provided an LMSE (Least Mean Squared Error) solution will
  * be found.
- * Based on: 
+ * Based on:
  * http://stackoverflow.com/questions/13432805/finding-translation-and-scale-on-two-sets-of-points-to-get-least-square-error-in
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class MetricTransformation3DEstimator {
-    
+
     /**
      * Minimum required number of matched points.
      */
     public static final int MINIMUM_SIZE = 4;
-    
+
     /**
      * For some point configurations a solution can be found with only 3 points.
      */
     public static final int WEAK_MINIMUM_SIZE = 3;
-        
+
     /**
      * 3D input points.
      */
     private List&lt;Point3D&gt; mInputPoints;
-    
+
     /**
      * 3D output points.
      */
-    private List&lt;Point3D&gt; mOutputPoints; 
-    
+    private List&lt;Point3D&gt; mOutputPoints;
+
     /**
      * Listener to be notified of events such as when estimation starts or ends.
      */
     private MetricTransformation3DEstimatorListener mListener;
-    
+
     /**
      * Indicates whether estimation can start with only 3 points or not.
      * True allows 3 points, false requires 4.
      */
     private boolean mWeakMinimumSizeAllowed;
-    
+
     /**
-     * Indicates if this estimator is locked because an estimation is being 
+     * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
     private boolean mLocked;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L76">    public MetricTransformation3DEstimator() { }</span>
-    
+<span class="fc" id="L84">    public MetricTransformation3DEstimator() {</span>
+<span class="fc" id="L85">    }</span>
+
     /**
      * Constructor.
-     * @param inputPoints 3D input points.
+     *
+     * @param inputPoints  3D input points.
      * @param outputPoints 3D output points.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than 4.
+     *                                  the same size or their size is smaller than 4.
      */
-    public MetricTransformation3DEstimator(List&lt;Point3D&gt; inputPoints, 
-<span class="fc" id="L86">            List&lt;Point3D&gt; outputPoints) {</span>
-<span class="fc" id="L87">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L88">    }</span>
-    
-    /**
-     * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts or ends.
-     */
-    public MetricTransformation3DEstimator(
-<span class="fc" id="L96">            MetricTransformation3DEstimatorListener listener) {</span>
-<span class="fc" id="L97">        mListener = listener;</span>
+    public MetricTransformation3DEstimator(final List&lt;Point3D&gt; inputPoints,
+<span class="fc" id="L96">                                           final List&lt;Point3D&gt; outputPoints) {</span>
+<span class="fc" id="L97">        internalSetPoints(inputPoints, outputPoints);</span>
 <span class="fc" id="L98">    }</span>
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts or ends.
-     * @param inputPoints 3D input points.
-     * @param outputPoints 3D output points.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than 4.
+     *                 starts or ends.
      */
     public MetricTransformation3DEstimator(
-            MetricTransformation3DEstimatorListener listener,
-<span class="fc" id="L111">            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {</span>
-<span class="fc" id="L112">        mListener = listener;</span>
-<span class="fc" id="L113">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L114">    }</span>
-    
+<span class="fc" id="L107">            final MetricTransformation3DEstimatorListener listener) {</span>
+<span class="fc" id="L108">        mListener = listener;</span>
+<span class="fc" id="L109">    }</span>
+
     /**
      * Constructor.
-     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     */
-<span class="fc" id="L120">    public MetricTransformation3DEstimator(boolean weakMinimumSizeAllowed) {</span>
-<span class="fc" id="L121">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L122">    }</span>
-    
-    /**
-     * Constructor.
-     * @param inputPoints 3D input points.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts or ends.
+     * @param inputPoints  3D input points.
      * @param outputPoints 3D output points.
-     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than 4.
+     *                                  the same size or their size is smaller than 4.
      */
-    public MetricTransformation3DEstimator(List&lt;Point3D&gt; inputPoints, 
-<span class="fc" id="L133">            List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) {</span>
+    public MetricTransformation3DEstimator(
+            final MetricTransformation3DEstimatorListener listener,
+<span class="fc" id="L123">            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {</span>
+<span class="fc" id="L124">        mListener = listener;</span>
+<span class="fc" id="L125">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+<span class="fc" id="L133">    public MetricTransformation3DEstimator(final boolean weakMinimumSizeAllowed) {</span>
 <span class="fc" id="L134">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L135">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L136">    }</span>
-    
+<span class="fc" id="L135">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts or ends.
-     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
-     */
-    public MetricTransformation3DEstimator(
-            MetricTransformation3DEstimatorListener listener,
-<span class="fc" id="L146">            boolean weakMinimumSizeAllowed) {</span>
-<span class="fc" id="L147">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L148">        mListener = listener;</span>
-<span class="fc" id="L149">    }</span>
-    
-    /**
-     * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts or ends.
-     * @param inputPoints 3D input points.
-     * @param outputPoints 3D output points.
+     *
+     * @param inputPoints            3D input points.
+     * @param outputPoints           3D output points.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than 4.
+     *                                  the same size or their size is smaller than 4.
      */
     public MetricTransformation3DEstimator(
-            MetricTransformation3DEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-<span class="fc" id="L164">            boolean weakMinimumSizeAllowed) {</span>
-<span class="fc" id="L165">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L166">        mListener = listener;</span>
-<span class="fc" id="L167">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L168">    }</span>
-    
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+<span class="fc" id="L148">            final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L149">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L150">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L151">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public MetricTransformation3DEstimator(
+            final MetricTransformation3DEstimatorListener listener,
+<span class="fc" id="L162">            final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L163">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L164">        mListener = listener;</span>
+<span class="fc" id="L165">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param inputPoints            3D input points.
+     * @param outputPoints           3D output points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 4.
+     */
+    public MetricTransformation3DEstimator(
+            final MetricTransformation3DEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+<span class="fc" id="L181">            final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L182">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L183">        mListener = listener;</span>
+<span class="fc" id="L184">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L185">    }</span>
+
     /**
      * Returns list of input points to be used to estimate a metric 3D
      * transformation.
-     * Each point in the list of input points must be matched with the 
+     * Each point in the list of input points must be matched with the
      * corresponding point in the list of output points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than #getMinimumPoints.
-     * @return list of input points to be used to estimate a metric 3D 
+     *
+     * @return list of input points to be used to estimate a metric 3D
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L181">        return mInputPoints;</span>
+<span class="fc" id="L199">        return mInputPoints;</span>
     }
-    
+
     /**
      * Returns list of output points to be used to estimate a metric 3D
      * transformation.
-     * Each point in the list of output points must be matched with the 
+     * Each point in the list of output points must be matched with the
      * corresponding point in the list of input points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than #getMinimumPoints.
-     * @return list of output points to be used to estimate a metric 3D 
+     *
+     * @return list of output points to be used to estimate a metric 3D
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L195">        return mOutputPoints;</span>
+<span class="fc" id="L214">        return mOutputPoints;</span>
     }
-    
+
     /**
-     * Sets list of points to be used to estimate a metric 3D 
+     * Sets list of points to be used to estimate a metric 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than #getMinimumPoints.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 3D transformation.
+     *                     euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than #getMinimumPoints.
-     * @throws LockedException if estimator is locked because a computation is 
-     * already in progress.
+     *                                  the same size or their size is smaller than #getMinimumPoints.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
      */
-    public void setPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws LockedException {
-<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L216">            throw new LockedException();</span>
+    public void setPoints(final List&lt;Point3D&gt; inputPoints,
+                          final List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L236">            throw new LockedException();</span>
         }
-<span class="fc" id="L218">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L219">    }</span>
-    
+<span class="fc" id="L238">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L239">    }</span>
+
     /**
      * Returns reference to listener to be notified of events such as when
      * estimation starts or ends.
+     *
      * @return listener to be notified of events.
      */
     public MetricTransformation3DEstimatorListener getListener() {
-<span class="fc" id="L227">        return mListener;</span>
+<span class="fc" id="L248">        return mListener;</span>
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts or
      * ends.
+     *
      * @param listener listener to be notified of events.
      * @throws LockedException if estimator is locked.
      */
-    public void setListener(MetricTransformation3DEstimatorListener listener)
+    public void setListener(final MetricTransformation3DEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L239">            throw new LockedException();</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L261">            throw new LockedException();</span>
         }
-<span class="fc" id="L241">        mListener = listener;</span>
-<span class="fc" id="L242">    }</span>
-    
+<span class="fc" id="L263">        mListener = listener;</span>
+<span class="fc" id="L264">    }</span>
+
     /**
      * Indicates whether estimation can start with only 3 points or not.
+     *
      * @return true allows 3 points, false requires 4.
      */
     public boolean isWeakMinimumSizeAllowed() {
-<span class="fc" id="L249">        return mWeakMinimumSizeAllowed;</span>
+<span class="fc" id="L272">        return mWeakMinimumSizeAllowed;</span>
     }
-    
+
     /**
      * Specifies whether estimation can start with only 3 points or not.
+     *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws LockedException if estimator is locked.
      */
-    public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed)
             throws LockedException {
-<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L260">            throw new LockedException();</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L284">            throw new LockedException();</span>
         }
-<span class="fc" id="L262">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L263">    }</span>
-    
+<span class="fc" id="L286">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L287">    }</span>
+
     /**
      * Required minimum number of point correspondences to start the estimation.
      * Can be either 3 or 4.
+     *
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-<span class="fc bfc" id="L271" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
     }
-        
+
     /**
-     * Indicates whether listener has been provided and is available for 
+     * Indicates whether listener has been provided and is available for
      * retrieval.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        return mListener != null;</span>
     }
-    
+
     /**
-     * Indicates if this instance is locked because estimation is being 
+     * Indicates if this instance is locked because estimation is being
      * computed.
+     *
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L289">        return mLocked;</span>
+<span class="fc" id="L316">        return mLocked;</span>
     }
-    
+
     /**
      * Indicates if estimator is ready to start the metric 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points) are provided
      * and a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L300" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
-<span class="pc bpc" id="L301" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+<span class="pc bpc" id="L328" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
     }
-    
+
     /**
      * Estimates a metric 3D transformation using the list of matched input
      * and output 3D points.
-     * A minimum of 4 matched non-coincident points is required. If more points 
+     * A minimum of 4 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
      * @return estimated metric 3D transformation.
-     * @throws LockedException if estimator is locked.
-     * @throws NotReadyException if not enough data has been provided.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
      * @throws CoincidentPointsException raised if transformation cannot be
-     * estimated for some reason (point configuration degeneracy, duplicate 
-     * points or numerical instabilities).
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
      */
     public MetricTransformation3D estimate() throws LockedException,
             NotReadyException, CoincidentPointsException {
-<span class="fc" id="L319">        MetricTransformation3D result = new MetricTransformation3D();</span>
-<span class="fc" id="L320">        estimate(result);</span>
-<span class="fc" id="L321">        return result;</span>
+<span class="fc" id="L348">        final MetricTransformation3D result = new MetricTransformation3D();</span>
+<span class="fc" id="L349">        estimate(result);</span>
+<span class="fc" id="L350">        return result;</span>
     }
-    
+
     /**
      * Estimates a metric 3D transformation using the list of matched input
      * and output 3D points.
-     * A minimum of 4 matched non-coincident points is required. If more points 
+     * A minimum of 4 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
      * @param result instance where result will be stored.
-     * @throws LockedException if estimator is locked.
-     * @throws NotReadyException if not enough data has been provided.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
      * @throws CoincidentPointsException raised if transformation cannot be
-     * estimated for some reason (point configuration degeneracy, duplicate 
-     * points or numerical instabilities).
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
      */
-    public void estimate(MetricTransformation3D result) 
-            throws LockedException, NotReadyException, 
+    public void estimate(final MetricTransformation3D result)
+            throws LockedException, NotReadyException,
             CoincidentPointsException {
-<span class="fc bfc" id="L339" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L340">            throw new LockedException();</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L370">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L343">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L372" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L373">            throw new NotReadyException();</span>
         }
-        
+
         try {
-<span class="fc" id="L347">            mLocked = true;</span>
-            
-<span class="fc bfc" id="L349" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L350">                mListener.onEstimateStart(this);</span>
+<span class="fc" id="L377">            mLocked = true;</span>
+
+<span class="fc bfc" id="L379" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L380">                mListener.onEstimateStart(this);</span>
             }
-            
-<span class="fc" id="L353">            Matrix inCentroid = computeCentroid(mInputPoints);        </span>
-<span class="fc" id="L354">            Matrix outCentroid = computeCentroid(mOutputPoints);</span>
-        
-<span class="fc" id="L356">            Matrix m = new Matrix(</span>
+
+<span class="fc" id="L383">            final Matrix inCentroid = computeCentroid(mInputPoints);</span>
+<span class="fc" id="L384">            final Matrix outCentroid = computeCentroid(mOutputPoints);</span>
+
+<span class="fc" id="L386">            final Matrix m = new Matrix(</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-        
-<span class="fc" id="L360">            int n = mInputPoints.size();</span>
+
+<span class="fc" id="L390">            final int n = mInputPoints.size();</span>
             Point3D inputPoint;
             Point3D outputPoint;
-<span class="fc" id="L363">            Matrix col = new Matrix(</span>
+<span class="fc" id="L393">            final Matrix col = new Matrix(</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L365">            Matrix row = new Matrix(1, </span>
+<span class="fc" id="L395">            final Matrix row = new Matrix(1,</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-<span class="fc" id="L367">            Matrix tmp = new Matrix(</span>
+<span class="fc" id="L397">            final Matrix tmp = new Matrix(</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-<span class="fc" id="L370">            double inCov = 0.0;</span>
-<span class="fc bfc" id="L371" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L372">                inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L373">                outputPoint = mOutputPoints.get(i);</span>
-                
-<span class="fc" id="L375">                col.setElementAtIndex(0, inputPoint.getInhomX() - </span>
-<span class="fc" id="L376">                        inCentroid.getElementAtIndex(0));</span>
-<span class="fc" id="L377">                col.setElementAtIndex(1, inputPoint.getInhomY() - </span>
-<span class="fc" id="L378">                        inCentroid.getElementAtIndex(1));</span>
-<span class="fc" id="L379">                col.setElementAtIndex(2, inputPoint.getInhomZ() - </span>
-<span class="fc" id="L380">                        inCentroid.getElementAtIndex(2));</span>
-                
-<span class="fc" id="L382">                row.setElementAtIndex(0, outputPoint.getInhomX() - </span>
-<span class="fc" id="L383">                        outCentroid.getElementAtIndex(0));</span>
-<span class="fc" id="L384">                row.setElementAtIndex(1, outputPoint.getInhomY() - </span>
-<span class="fc" id="L385">                        outCentroid.getElementAtIndex(1));</span>
-<span class="fc" id="L386">                row.setElementAtIndex(2, outputPoint.getInhomZ() - </span>
-<span class="fc" id="L387">                        outCentroid.getElementAtIndex(2));</span>
-                
-                //compute covariances of input and output points
-<span class="fc" id="L390">                inCov += Math.pow(Utils.normF(col), 2.0);</span>
-                
-<span class="fc" id="L392">                col.multiply(row, tmp);</span>
-<span class="fc" id="L393">                m.add(tmp);</span>
+<span class="fc" id="L400">            double inCov = 0.0;</span>
+<span class="fc bfc" id="L401" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L402">                inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L403">                outputPoint = mOutputPoints.get(i);</span>
+
+<span class="fc" id="L405">                col.setElementAtIndex(0, inputPoint.getInhomX() -</span>
+<span class="fc" id="L406">                        inCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L407">                col.setElementAtIndex(1, inputPoint.getInhomY() -</span>
+<span class="fc" id="L408">                        inCentroid.getElementAtIndex(1));</span>
+<span class="fc" id="L409">                col.setElementAtIndex(2, inputPoint.getInhomZ() -</span>
+<span class="fc" id="L410">                        inCentroid.getElementAtIndex(2));</span>
+
+<span class="fc" id="L412">                row.setElementAtIndex(0, outputPoint.getInhomX() -</span>
+<span class="fc" id="L413">                        outCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L414">                row.setElementAtIndex(1, outputPoint.getInhomY() -</span>
+<span class="fc" id="L415">                        outCentroid.getElementAtIndex(1));</span>
+<span class="fc" id="L416">                row.setElementAtIndex(2, outputPoint.getInhomZ() -</span>
+<span class="fc" id="L417">                        outCentroid.getElementAtIndex(2));</span>
+
+                // compute covariances of input and output points
+<span class="fc" id="L420">                inCov += Math.pow(Utils.normF(col), 2.0);</span>
+
+<span class="fc" id="L422">                col.multiply(row, tmp);</span>
+<span class="fc" id="L423">                m.add(tmp);</span>
             }
 
-<span class="pc bpc" id="L396" title="1 of 2 branches missed.">            if (inCov == 0.0) {</span>
-<span class="nc" id="L397">                throw new CoincidentPointsException();</span>
+<span class="pc bpc" id="L426" title="1 of 2 branches missed.">            if (inCov == 0.0) {</span>
+<span class="nc" id="L427">                throw new CoincidentPointsException();</span>
             }
 
-<span class="fc" id="L400">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L401">            decomposer.decompose();</span>
-            
-<span class="pc bpc" id="L403" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
-<span class="nc" id="L404">                throw new CoincidentPointsException();</span>
+<span class="fc" id="L430">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L431">            decomposer.decompose();</span>
+
+<span class="pc bpc" id="L433" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L434">                throw new CoincidentPointsException();</span>
             }
-            
-<span class="fc" id="L407">            Matrix u = decomposer.getU();</span>
-<span class="fc" id="L408">            Matrix v = decomposer.getV();</span>
-            
-<span class="fc" id="L410">            double[] s = decomposer.getSingularValues();</span>
-            
-                        
-            //rotation R = V*U^T  
-<span class="fc" id="L414">            Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());</span>
-            
-<span class="fc" id="L416">            double[] e = new double[]{1.0, 1.0, 1.0};</span>
-            
-<span class="fc bfc" id="L418" title="All 2 branches covered.">            if (Utils.det(r) &lt; 0.0) {</span>
-                //ideally rotation has 3 unitary singular values.
-                //Because of reflection, we must change sign of last singular
-                //value and reconstruct rotation matrix
-                                
-<span class="fc" id="L423">                e[2] = -1.0;                                </span>
-                
-                //because rotation matrix can be seen as V*e*U^T, we can
-                //simply multiply 3rd column of R by -1
-<span class="fc" id="L427">                r.setElementAt(0, 2, -r.getElementAt(0, 2));</span>
-<span class="fc" id="L428">                r.setElementAt(1, 2, -r.getElementAt(1, 2));</span>
-<span class="fc" id="L429">                r.setElementAt(2, 2, -r.getElementAt(2, 2));</span>
+
+<span class="fc" id="L437">            final Matrix u = decomposer.getU();</span>
+<span class="fc" id="L438">            final Matrix v = decomposer.getV();</span>
+
+<span class="fc" id="L440">            final double[] s = decomposer.getSingularValues();</span>
+
+
+            // rotation R = V*U^T
+<span class="fc" id="L444">            final Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());</span>
+
+<span class="fc" id="L446">            final double[] e = new double[]{1.0, 1.0, 1.0};</span>
+
+<span class="fc bfc" id="L448" title="All 2 branches covered.">            if (Utils.det(r) &lt; 0.0) {</span>
+                // ideally rotation has 3 unitary singular values.
+                // Because of reflection, we must change sign of last singular
+                // value and reconstruct rotation matrix
+
+<span class="fc" id="L453">                e[2] = -1.0;</span>
+
+                // because rotation matrix can be seen as V*e*U^T, we can
+                // simply multiply 3rd column of R by -1
+<span class="fc" id="L457">                r.setElementAt(0, 2, -r.getElementAt(0, 2));</span>
+<span class="fc" id="L458">                r.setElementAt(1, 2, -r.getElementAt(1, 2));</span>
+<span class="fc" id="L459">                r.setElementAt(2, 2, -r.getElementAt(2, 2));</span>
             }
-            
-<span class="fc" id="L432">            MatrixRotation3D rotation = new MatrixRotation3D(r);</span>
-            
-            //scale
-<span class="fc" id="L435">            double dot = ArrayUtils.dotProduct(s, e);</span>
-<span class="fc" id="L436">            double invScale = dot / inCov;</span>
-            
-            //translation
-<span class="fc" id="L439">            Matrix t = r.multiplyAndReturnNew(inCentroid);</span>
-<span class="fc" id="L440">            t.multiplyByScalar(-invScale);</span>
-<span class="fc" id="L441">            t.add(outCentroid);</span>
-            
-<span class="fc" id="L443">            result.setRotation(rotation);</span>
-<span class="fc" id="L444">            result.setTranslation(t.getBuffer());</span>
-<span class="fc" id="L445">            result.setScale(invScale);</span>
-            
-<span class="fc bfc" id="L447" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L448">                mListener.onEstimateEnd(this);</span>
+
+<span class="fc" id="L462">            final MatrixRotation3D rotation = new MatrixRotation3D(r);</span>
+
+            // scale
+<span class="fc" id="L465">            final double dot = ArrayUtils.dotProduct(s, e);</span>
+<span class="fc" id="L466">            final double invScale = dot / inCov;</span>
+
+            // translation
+<span class="fc" id="L469">            final Matrix t = r.multiplyAndReturnNew(inCentroid);</span>
+<span class="fc" id="L470">            t.multiplyByScalar(-invScale);</span>
+<span class="fc" id="L471">            t.add(outCentroid);</span>
+
+<span class="fc" id="L473">            result.setRotation(rotation);</span>
+<span class="fc" id="L474">            result.setTranslation(t.getBuffer());</span>
+<span class="fc" id="L475">            result.setScale(invScale);</span>
+
+<span class="fc bfc" id="L477" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L478">                mListener.onEstimateEnd(this);</span>
             }
-            
-<span class="nc" id="L451">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
-<span class="nc" id="L452">            throw new CoincidentPointsException(e);</span>
+
+<span class="nc" id="L481">        } catch (final AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L482">            throw new CoincidentPointsException(e);</span>
         } finally {
-<span class="fc" id="L454">            mLocked = false;</span>
+<span class="fc" id="L484">            mLocked = false;</span>
         }
-<span class="fc" id="L456">    }</span>
-    
+<span class="fc" id="L486">    }</span>
+
     /**
      * Computes centroid of provided list of points using inhomogeneous
      * coordinates.
+     *
      * @param points list of points to compute centroid.
      * @return centroid.
      * @throws AlgebraException never thrown.
      */
-    private static Matrix computeCentroid(List&lt;Point3D&gt; points) 
-            throws AlgebraException {        
-<span class="fc" id="L467">        double x = 0.0;</span>
-<span class="fc" id="L468">        double y = 0.0;</span>
-<span class="fc" id="L469">        double z = 0.0;</span>
-<span class="fc" id="L470">        double n = points.size();</span>
-<span class="fc bfc" id="L471" title="All 2 branches covered.">        for (Point3D p : points) {</span>
-<span class="fc" id="L472">            x += p.getInhomX() / n;</span>
-<span class="fc" id="L473">            y += p.getInhomY() / n;</span>
-<span class="fc" id="L474">            z += p.getInhomZ() / n;</span>
-<span class="fc" id="L475">        }</span>
-        
-<span class="fc" id="L477">        Matrix result = new Matrix(</span>
+    private static Matrix computeCentroid(final List&lt;Point3D&gt; points)
+            throws AlgebraException {
+<span class="fc" id="L498">        double x = 0.0;</span>
+<span class="fc" id="L499">        double y = 0.0;</span>
+<span class="fc" id="L500">        double z = 0.0;</span>
+<span class="fc" id="L501">        final double n = points.size();</span>
+<span class="fc bfc" id="L502" title="All 2 branches covered.">        for (final Point3D p : points) {</span>
+<span class="fc" id="L503">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L504">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L505">            z += p.getInhomZ() / n;</span>
+<span class="fc" id="L506">        }</span>
+
+<span class="fc" id="L508">        final Matrix result = new Matrix(</span>
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L479">        result.setElementAtIndex(0, x);</span>
-<span class="fc" id="L480">        result.setElementAtIndex(1, y);</span>
-<span class="fc" id="L481">        result.setElementAtIndex(2, z);</span>
-<span class="fc" id="L482">        return result;</span>
+<span class="fc" id="L510">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L511">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L512">        result.setElementAtIndex(2, z);</span>
+<span class="fc" id="L513">        return result;</span>
     }
-    
+
     /**
-     * Internal method to set lists of points to be used to estimate a 
+     * Internal method to set lists of points to be used to estimate a
      * metric 3D transformation.
      * This method does not check whether estimator is locked or not.
-     * @param inputPoints list of input points to be used to estimate a 
-     * metric 3D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 3D transformation.
      * @param outputPoints list of output points to be used to estimate a
-     * metric 3D transformation.
+     *                     metric 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than #getMinimumPoints.
+     *                                  the same size or their size is smaller than #getMinimumPoints.
      */
-    private void internalSetPoints(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) {
-<span class="fc bfc" id="L498" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L499">            throw new IllegalArgumentException();</span>
+    private void internalSetPoints(final List&lt;Point3D&gt; inputPoints,
+                                   final List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L530" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L531">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L501" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L502">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L533" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L534">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L504">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L505">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L506">    }    </span>
+<span class="fc" id="L536">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L537">        mOutputPoints = outputPoints;</span>
+<span class="fc" id="L538">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

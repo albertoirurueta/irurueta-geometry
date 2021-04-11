@@ -19,7 +19,11 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.Circle;
 import com.irurueta.geometry.ColinearPointsException;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.List;
 
@@ -27,363 +31,379 @@ import java.util.List;
  * Finds the best circle for provided collection of 2D points using PROSAC
  * algorithm.
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
     /**
-     * Constant defining default threshold to determine whether points are 
+     * Constant defining default threshold to determine whether points are
      * inliers or not.
-     * Because typical resolution for points is 1 pixel, then default threshold 
+     * Because typical resolution for points is 1 pixel, then default threshold
      * is defined as 1.
      */
     public static final double DEFAULT_THRESHOLD = 1.0;
-        
+
     /**
      * Minimum value that can be set as threshold.
      * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
-    
+
     /**
      * Threshold to determine whether points are inliers or not when testing
      * possible estimation solutions.
-     * The threshold refers to the amount of error (i.e. distance) a possible 
+     * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold; 
-    
+    private double mThreshold;
+
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;    
-    
+    private double[] mQualityScores;
+
     /**
      * Constructor.
      */
     public PROSACCircleRobustEstimator() {
-<span class="fc" id="L63">        super();</span>
-<span class="fc" id="L64">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L68">        super();</span>
+<span class="fc" id="L69">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L70">    }</span>
 
     /**
      * Constructor with points.
+     *
      * @param points 2D points to estimate a circle.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACCircleRobustEstimator(List&lt;Point2D&gt; points) {
-<span class="fc" id="L74">        super(points);</span>
-<span class="fc" id="L75">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L76">    }</span>
-    
+    public PROSACCircleRobustEstimator(final List&lt;Point2D&gt; points) {
+<span class="fc" id="L80">        super(points);</span>
+<span class="fc" id="L81">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L82">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
-    public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener) {
-<span class="fc" id="L84">        super(listener);</span>
-<span class="fc" id="L85">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L86">    }</span>
-    
-    
+    public PROSACCircleRobustEstimator(final CircleRobustEstimatorListener listener) {
+<span class="fc" id="L91">        super(listener);</span>
+<span class="fc" id="L92">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L93">    }</span>
+
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 2D points to estimate a circle.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a circle.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            List&lt;Point2D&gt; points) {
-<span class="fc" id="L99">        super(listener, points);</span>
-<span class="fc" id="L100">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L101">    }</span>
-    
+    public PROSACCircleRobustEstimator(final CircleRobustEstimatorListener listener,
+                                       final List&lt;Point2D&gt; points) {
+<span class="fc" id="L107">        super(listener, points);</span>
+<span class="fc" id="L108">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L109">    }</span>
+
     /**
      * Constructor.
+     *
      * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROSACCircleRobustEstimator(double[] qualityScores) {
-<span class="fc" id="L110">        super();</span>
-<span class="fc" id="L111">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L112">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L113">    }</span>
+    public PROSACCircleRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L119">        super();</span>
+<span class="fc" id="L120">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L121">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L122">    }</span>
 
     /**
      * Constructor with points.
-     * @param points 2D points to estimate a circle.
+     *
+     * @param points        2D points to estimate a circle.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROSACCircleRobustEstimator(List&lt;Point2D&gt; points,
-            double[] qualityScores) {
-<span class="fc" id="L125">        super(points);</span>
-        
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L128">            throw new IllegalArgumentException();</span>
+    public PROSACCircleRobustEstimator(final List&lt;Point2D&gt; points,
+                                       final double[] qualityScores) {
+<span class="fc" id="L135">        super(points);</span>
+
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L138">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L131">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L132">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L133">    }</span>
-    
+
+<span class="fc" id="L141">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L142">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L143">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            double[] qualityScores) {
-<span class="fc" id="L145">        super(listener);</span>
-<span class="fc" id="L146">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L147">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L148">    }</span>
-    
-    
+    public PROSACCircleRobustEstimator(final CircleRobustEstimatorListener listener,
+                                       final double[] qualityScores) {
+<span class="fc" id="L156">        super(listener);</span>
+<span class="fc" id="L157">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L158">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L159">    }</span>
+
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 2D points to estimate a circle.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        2D points to estimate a circle.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            List&lt;Point2D&gt; points, double[] qualityScores) {
-<span class="fc" id="L163">        super(listener, points);</span>
-        
-<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L166">            throw new IllegalArgumentException();</span>
+    public PROSACCircleRobustEstimator(final CircleRobustEstimatorListener listener,
+                                       final List&lt;Point2D&gt; points, final double[] qualityScores) {
+<span class="fc" id="L175">        super(listener, points);</span>
+
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L169">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L170">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L171">    }</span>
-    
+
+<span class="fc" id="L181">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L182">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L183">    }</span>
+
     /**
-     * Returns threshold to determine whether points are inliers or not when 
+     * Returns threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * The threshold refers to the amount of error a possible solution has on a 
+     * The threshold refers to the amount of error a possible solution has on a
      * given point.
-     * @return threshold to determine whether points are inliers or not when 
+     *
+     * @return threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L182">        return mThreshold;</span>
+<span class="fc" id="L195">        return mThreshold;</span>
     }
-    
+
     /**
-     * Sets threshold to determine whether points are inliers or not when 
+     * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on
      * a given point.
+     *
      * @param threshold threshold to be set.
-     * @throws IllegalArgumentException if provided value is equal or less than 
-     * zero.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws LockedException {
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L198">            throw new LockedException();</span>
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L212">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L201">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L215">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L203">        mThreshold = threshold;</span>
-<span class="fc" id="L204">    }</span>
-    
+<span class="fc" id="L217">        mThreshold = threshold;</span>
+<span class="fc" id="L218">    }</span>
+
     /**
      * Returns quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sampled point.
+     *
      * @return quality scores corresponding to each point.
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L213">        return mQualityScores;</span>
+<span class="fc" id="L228">        return mQualityScores;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sampled point.
+     *
      * @param qualityScores quality scores corresponding to each point.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException {
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L228">            throw new LockedException();</span>
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L244">            throw new LockedException();</span>
         }
-<span class="fc" id="L230">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L231">    }</span>
-    
+<span class="fc" id="L246">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L247">    }</span>
+
     /**
      * Indicates if eatimator is ready to start the conic estimation.
-     * This is true when input data (i.e. 2D points and quality scores) are 
+     * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L241" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
-    }     
-            
+<span class="fc bfc" id="L258" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
+    }
+
     /**
-     * Estimates a circle using a robust estimator and the best set of 2D points 
-     * that fit into the locus of the estimated circle found using the robust 
+     * Estimates a circle using a robust estimator and the best set of 2D points
+     * that fit into the locus of the estimated circle found using the robust
      * estimator.
+     *
      * @return a circle.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
-     */    
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
     @Override
-    public Circle estimate() throws LockedException, NotReadyException, 
+    public Circle estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L261">            throw new LockedException();</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L279">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L264">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L282">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L267">        PROSACRobustEstimator&lt;Circle&gt; innerEstimator =</span>
+
+<span class="fc" id="L285">        final PROSACRobustEstimator&lt;Circle&gt; innerEstimator =</span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L269">                        new PROSACRobustEstimatorListener&lt;Circle&gt;() {</span>
+<span class="fc" id="L287">                        new PROSACRobustEstimatorListener&lt;Circle&gt;() {</span>
 
-            @Override
-            public double getThreshold() {
-<span class="fc" id="L273">                return mThreshold;</span>
-            }
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L291">                                return mThreshold;</span>
+                            }
 
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L278">                return mPoints.size();</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L296">                                return mPoints.size();</span>
+                            }
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L283">                return CircleRobustEstimator.MINIMUM_SIZE;</span>
-            }
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L301">                                return CircleRobustEstimator.MINIMUM_SIZE;</span>
+                            }
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;Circle&gt; solutions) {
-<span class="fc" id="L289">                Point2D point1 = mPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L290">                Point2D point2 = mPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L291">                Point2D point3 = mPoints.get(samplesIndices[2]);</span>
-                
-                try {
-<span class="fc" id="L294">                    Circle circle = new Circle(point1, point2, point3);</span>
-<span class="fc" id="L295">                    solutions.add(circle);</span>
-<span class="nc" id="L296">                } catch (ColinearPointsException e) {</span>
-                    //if points are coincident, no solution is added
-<span class="fc" id="L298">                }</span>
-<span class="fc" id="L299">            }</span>
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;Circle&gt; solutions) {
+<span class="fc" id="L307">                                final Point2D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L308">                                final Point2D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L309">                                final Point2D point3 = mPoints.get(samplesIndices[2]);</span>
 
-            @Override
-            public double computeResidual(Circle currentEstimation, int i) {
-<span class="fc" id="L303">                return residual(currentEstimation, mPoints.get(i));</span>
-            }
+                                try {
+<span class="fc" id="L312">                                    final Circle circle = new Circle(point1, point2, point3);</span>
+<span class="fc" id="L313">                                    solutions.add(circle);</span>
+<span class="nc" id="L314">                                } catch (final ColinearPointsException e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L316">                                }</span>
+<span class="fc" id="L317">                            }</span>
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L308">                return PROSACCircleRobustEstimator.this.isReady();</span>
-            }
+                            @Override
+                            public double computeResidual(final Circle currentEstimation, final int i) {
+<span class="fc" id="L321">                                return residual(currentEstimation, mPoints.get(i));</span>
+                            }
 
-            @Override
-            public void onEstimateStart(RobustEstimator&lt;Circle&gt; estimator) {
-<span class="pc bpc" id="L313" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L314">                    mListener.onEstimateStart(PROSACCircleRobustEstimator.this);</span>
-                }
-<span class="fc" id="L316">            }</span>
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L326">                                return PROSACCircleRobustEstimator.this.isReady();</span>
+                            }
 
-            @Override
-            public void onEstimateEnd(RobustEstimator&lt;Circle&gt; estimator) {
-<span class="pc bpc" id="L320" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L321">                    mListener.onEstimateEnd(PROSACCircleRobustEstimator.this);</span>
-                }
-<span class="fc" id="L323">            }</span>
+                            @Override
+                            public void onEstimateStart(final RobustEstimator&lt;Circle&gt; estimator) {
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L332">                                    mListener.onEstimateStart(PROSACCircleRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L334">                            }</span>
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;Circle&gt; estimator, int iteration) {
-<span class="pc bpc" id="L328" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L329">                    mListener.onEstimateNextIteration(</span>
-                            PROSACCircleRobustEstimator.this, iteration);
-                }
-<span class="fc" id="L332">            }</span>
+                            @Override
+                            public void onEstimateEnd(final RobustEstimator&lt;Circle&gt; estimator) {
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L339">                                    mListener.onEstimateEnd(PROSACCircleRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L341">                            }</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;Circle&gt; estimator, float progress) {
-<span class="nc bnc" id="L337" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L338">                    mListener.onEstimateProgressChange(</span>
-                            PROSACCircleRobustEstimator.this, progress);
-                }
-<span class="nc" id="L341">            }</span>
-            
-            @Override
-            public double[] getQualityScores() {
-<span class="fc" id="L345">                return mQualityScores;</span>
-            }                 
-        });
-        
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;Circle&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L346" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L347">                                    mListener.onEstimateNextIteration(</span>
+                                            PROSACCircleRobustEstimator.this, iteration);
+                                }
+<span class="fc" id="L350">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;Circle&gt; estimator, final float progress) {
+<span class="nc bnc" id="L355" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L356">                                    mListener.onEstimateProgressChange(</span>
+                                            PROSACCircleRobustEstimator.this, progress);
+                                }
+<span class="nc" id="L359">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L363">                                return mQualityScores;</span>
+                            }
+                        });
+
         try {
-<span class="fc" id="L350">            mLocked = true;</span>
-<span class="fc" id="L351">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L352">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L353">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L354">            return innerEstimator.estimate();</span>
-<span class="nc" id="L355">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L356">            throw new LockedException(e);</span>
-<span class="nc" id="L357">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L358">            throw new NotReadyException(e);</span>
+<span class="fc" id="L368">            mLocked = true;</span>
+<span class="fc" id="L369">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L370">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L371">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L372">            return innerEstimator.estimate();</span>
+<span class="nc" id="L373">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L374">            throw new LockedException(e);</span>
+<span class="nc" id="L375">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L376">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L360">            mLocked = false;</span>
+<span class="fc" id="L378">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */    
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L370">        return RobustEstimatorMethod.PROSAC;</span>
-    }  
-    
+<span class="fc" id="L389">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
     /**
      * Sets quality scores corresponding to each provided point.
      * This method is used internally and does not check whether instance is
      * locked or not.
+     *
      * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE.
+     *                                  smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) {
-<span class="fc bfc" id="L382" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L383">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L403">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L386">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L387">    }     </span>
+
+<span class="fc" id="L406">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L407">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

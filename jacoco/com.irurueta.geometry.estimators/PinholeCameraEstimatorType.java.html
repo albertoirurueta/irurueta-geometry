@@ -16,7 +16,7 @@
 package com.irurueta.geometry.estimators;
 
 /**
- * Defines types of pinhole camera estimators depending on their algorithm 
+ * Defines types of pinhole camera estimators depending on their algorithm
  * implementation.
  */
 <span class="fc" id="L22">public enum PinholeCameraEstimatorType {</span>
@@ -24,30 +24,30 @@ package com.irurueta.geometry.estimators;
      * DLT (Direct Linear Transform) method using point correspondences.
      */
 <span class="fc" id="L26">    DLT_POINT_PINHOLE_CAMERA_ESTIMATOR,</span>
-    
+
     /**
      * Weighted method using point correspondences.
      */
 <span class="fc" id="L31">    WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,</span>
-    
+
     /**
      * DLT (Direct Linear Transform) method using line/plane correspondences.
      */
 <span class="fc" id="L36">    DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR,</span>
-    
+
     /**
      * Weighted method using line/place correspondences.
      */
 <span class="fc" id="L41">    WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR,</span>
-    
+
     /**
-     * EPnP (Efficient Perspective-n-Point) method to estimate camera pose using 
+     * EPnP (Efficient Perspective-n-Point) method to estimate camera pose using
      * point correspondences and given intrinsic parameters.
      */
-<span class="fc" id="L47">    EPnP_PINHOLE_CAMERA_ESTIMATOR,    </span>
-    
+<span class="fc" id="L47">    EPnP_PINHOLE_CAMERA_ESTIMATOR,</span>
+
     /**
-     * UPnP (Uncalibrated Perspective-n-Point) method to estimate camera pose 
+     * UPnP (Uncalibrated Perspective-n-Point) method to estimate camera pose
      * and focal length using point correspondences.
      */
 <span class="fc" id="L53">    UPnP_PINHOLE_CAMERA_ESTIMATOR,</span>

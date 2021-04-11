@@ -26,489 +26,526 @@ import java.util.List;
  * Transformations can be applied to any 3D geometric figure.
  */
 public abstract class Transformation3D {
-    
+
     /**
      * Empty constructor.
      */
-<span class="fc" id="L33">    public Transformation3D() { }</span>
-    
+<span class="fc" id="L33">    protected Transformation3D() {</span>
+<span class="fc" id="L34">    }</span>
+
     /**
-     * Transforms provided point using this transformation and returns a new 
+     * Transforms provided point using this transformation and returns a new
      * one.
+     *
      * @param inputPoint point to be transformed.
      * @return a new transformed point.
      */
-    public Point3D transformAndReturnNew(Point3D inputPoint) {
-<span class="fc" id="L42">        Point3D outputPoint = Point3D.create();</span>
-<span class="fc" id="L43">        transform(inputPoint, outputPoint);</span>
-<span class="fc" id="L44">        return outputPoint;</span>
+    public Point3D transformAndReturnNew(final Point3D inputPoint) {
+<span class="fc" id="L44">        final Point3D outputPoint = Point3D.create();</span>
+<span class="fc" id="L45">        transform(inputPoint, outputPoint);</span>
+<span class="fc" id="L46">        return outputPoint;</span>
     }
-    
+
     /**
      * Transforms and updates provided point.
+     *
      * @param point point to be transformed and updated.
      */
-    public void transform(Point3D point) {
-<span class="fc" id="L52">        transform(point, point);</span>
-<span class="fc" id="L53">    }</span>
-    
+    public void transform(final Point3D point) {
+<span class="fc" id="L55">        transform(point, point);</span>
+<span class="fc" id="L56">    }</span>
+
     /**
      * Transforms input point using this transformation and stores the result in
      * provided output points.
-     * @param inputPoint point to be transformed.
+     *
+     * @param inputPoint  point to be transformed.
      * @param outputPoint instance where transformed point data will be stored.
      */
-    public abstract void transform(Point3D inputPoint, Point3D outputPoint);
-    
+    public abstract void transform(final Point3D inputPoint, final Point3D outputPoint);
+
     /**
      * Transforms provided list of points using this transformation.
+     *
      * @param inputPoints points to be transformed.
      * @return new transformed points.
      */
     public List&lt;Point3D&gt; transformPointsAndReturnNew(
-            List&lt;Point3D&gt; inputPoints) {
-<span class="fc" id="L70">        List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;(inputPoints.size());</span>
-<span class="fc" id="L71">        transformPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L72">        return outputPoints;</span>
+            final List&lt;Point3D&gt; inputPoints) {
+<span class="fc" id="L75">        final List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;(inputPoints.size());</span>
+<span class="fc" id="L76">        transformPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L77">        return outputPoints;</span>
     }
-    
+
     /**
      * Transforms provided list of points using this transformation and stores
      * the result in provided output list of points.
      * Notice that any previous content in output list will be removed when
      * calling this method.
-     * @param inputPoints points to be transformed.
+     *
+     * @param inputPoints  points to be transformed.
      * @param outputPoints transformed points.
      */
-    public void transformPoints(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) {
-        
-<span class="fc" id="L86">        outputPoints.clear();</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        for (Point3D point : inputPoints) {</span>
-<span class="fc" id="L88">            outputPoints.add(transformAndReturnNew(point));</span>
-<span class="fc" id="L89">        }</span>
-<span class="fc" id="L90">    }</span>
-    
+    public void transformPoints(final List&lt;Point3D&gt; inputPoints,
+                                final List&lt;Point3D&gt; outputPoints) {
+
+<span class="fc" id="L92">        outputPoints.clear();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (final Point3D point : inputPoints) {</span>
+<span class="fc" id="L94">            outputPoints.add(transformAndReturnNew(point));</span>
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">    }</span>
+
     /**
      * Transforms provided list of points using this transformation and
      * overwriting their previous values.
+     *
      * @param points points to be transformed and overwritten.
      */
-    public void transformAndOverwritePoints(List&lt;Point3D&gt; points) {
-        
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        for (Point3D point: points) {</span>
-<span class="fc" id="L100">            transform(point, point);</span>
-<span class="fc" id="L101">        }</span>
-<span class="fc" id="L102">    }</span>
-    
+    public void transformAndOverwritePoints(final List&lt;Point3D&gt; points) {
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (final Point3D point : points) {</span>
+<span class="fc" id="L107">            transform(point, point);</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">    }</span>
+
     /**
      * Transforms a quadric using this transformation and returns a new one.
+     *
      * @param inputQuadric quadric to be transformed.
      * @return a new transformed quadric.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting output quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transform cannot be computed becauseof
-     * numerical instabilities.
+     *                                     the resulting output quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed becauseof
+     *                                     numerical instabilities.
      */
-    public Quadric transformAndReturnNew(Quadric inputQuadric) 
+    public Quadric transformAndReturnNew(final Quadric inputQuadric)
             throws NonSymmetricMatrixException, AlgebraException {
-<span class="fc" id="L115">        Quadric outputQuadric = new Quadric();</span>
-<span class="fc" id="L116">        transform(inputQuadric, outputQuadric);</span>
-<span class="fc" id="L117">        return outputQuadric;</span>
+<span class="fc" id="L123">        final Quadric outputQuadric = new Quadric();</span>
+<span class="fc" id="L124">        transform(inputQuadric, outputQuadric);</span>
+<span class="fc" id="L125">        return outputQuadric;</span>
     }
-    
+
     /**
      * Transforms and updates provided quadric.
+     *
      * @param quadric quadric to be transformed.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transform cannot be computed because of
-     * numerical instabilities.
+     *                                     the resulting quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed because of
+     *                                     numerical instabilities.
      */
-    public void transform(Quadric quadric) throws NonSymmetricMatrixException,
+    public void transform(final Quadric quadric) throws NonSymmetricMatrixException,
             AlgebraException {
-<span class="fc" id="L130">        transform(quadric, quadric);</span>
-<span class="fc" id="L131">    }</span>
-    
+<span class="fc" id="L139">        transform(quadric, quadric);</span>
+<span class="fc" id="L140">    }</span>
+
     /**
      * Transforms a quadric using this transformation and stores the result into
      * provided output quadric.
-     * @param inputQuadric quadric to be transformed.
+     *
+     * @param inputQuadric  quadric to be transformed.
      * @param outputQuadric instance where data of transformed quadric will be
-     * stored.
+     *                      stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting output quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transform cannot be computed because of
-     * numerical instabilities.
+     *                                     the resulting output quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed because of
+     *                                     numerical instabilities.
      */
-    public abstract void transform(Quadric inputQuadric, Quadric outputQuadric)
+    public abstract void transform(final Quadric inputQuadric, final Quadric outputQuadric)
             throws NonSymmetricMatrixException, AlgebraException;
-    
+
     /**
-     * Transforms a dual quadric using this transformation and returns a new 
+     * Transforms a dual quadric using this transformation and returns a new
      * one.
+     *
      * @param inputDualQuadric dual quadric to be transformed.
      * @return a new transformed dual quadric.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting output dual quadric matrix is not considered to be 
-     * symmetric.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                     the resulting output dual quadric matrix is not considered to be
+     *                                     symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed because
+     *                                     of numerical instabilities.
      */
-    public DualQuadric transformAndReturnNew(DualQuadric inputDualQuadric)
+    public DualQuadric transformAndReturnNew(final DualQuadric inputDualQuadric)
             throws NonSymmetricMatrixException, AlgebraException {
-<span class="fc" id="L160">        DualQuadric outputDualQuadric = new DualQuadric();</span>
-<span class="fc" id="L161">        transform(inputDualQuadric, outputDualQuadric);</span>
-<span class="fc" id="L162">        return outputDualQuadric;</span>
+<span class="fc" id="L171">        final DualQuadric outputDualQuadric = new DualQuadric();</span>
+<span class="fc" id="L172">        transform(inputDualQuadric, outputDualQuadric);</span>
+<span class="fc" id="L173">        return outputDualQuadric;</span>
     }
-    
+
     /**
      * Transforms and updates a dual quadric using this transformation.
+     *
      * @param dualQuadric dual quadric to be transformed.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting output dual quadric matrix is not considered to be 
-     * symmetric.
-     * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities.
+     *                                     the resulting output dual quadric matrix is not considered to be
+     *                                     symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed because
+     *                                     of numerical instabilities.
      */
-    public void transform(DualQuadric dualQuadric) 
+    public void transform(final DualQuadric dualQuadric)
             throws NonSymmetricMatrixException, AlgebraException {
-<span class="fc" id="L176">        transform(dualQuadric, dualQuadric);</span>
-<span class="fc" id="L177">    }</span>
-    
+<span class="fc" id="L188">        transform(dualQuadric, dualQuadric);</span>
+<span class="fc" id="L189">    }</span>
+
     /**
      * Transforms a dual quadric using this transformation and stores the result
      * into provided output dual quadric.
-     * @param inputDualQuadric dual quadric to be transformed.
+     *
+     * @param inputDualQuadric  dual quadric to be transformed.
      * @param outputDualQuadric instance where data of transformed dual quadric
-     * will be stored.
+     *                          will be stored.
      * @throws NonSymmetricMatrixException Raised if due to numerical precision
-     * the resulting output dual quadric matrix is not considered to be 
-     * symmetric.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                     the resulting output dual quadric matrix is not considered to be
+     *                                     symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed because
+     *                                     of numerical instabilities.
      */
-    public abstract void transform(DualQuadric inputDualQuadric, 
-            DualQuadric outputDualQuadric) throws NonSymmetricMatrixException,
+    public abstract void transform(final DualQuadric inputDualQuadric,
+                                   final DualQuadric outputDualQuadric) throws NonSymmetricMatrixException,
             AlgebraException;
-    
+
     /**
-     * Transforms provided plane using this transformation and returns a new 
+     * Transforms provided plane using this transformation and returns a new
      * one.
+     *
      * @param inputPlane plane to be transformed.
      * @return a new transformed plane.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     * @throws AlgebraException raised if transform cannot be computed because
+     *                          of numerical instabilities.
      */
-    public Plane transformAndReturnNew(Plane inputPlane) 
+    public Plane transformAndReturnNew(final Plane inputPlane)
             throws AlgebraException {
-<span class="fc" id="L205">        Plane outputPlane = new Plane();</span>
-<span class="fc" id="L206">        transform(inputPlane, outputPlane);</span>
-<span class="fc" id="L207">        return outputPlane;</span>
+<span class="fc" id="L219">        final Plane outputPlane = new Plane();</span>
+<span class="fc" id="L220">        transform(inputPlane, outputPlane);</span>
+<span class="fc" id="L221">        return outputPlane;</span>
     }
-    
+
     /**
      * Transforms and updates provided plane using this transformation.
+     *
      * @param plane plane to be transformed.
      * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities.
+     *                          of numerical instabilities.
      */
-    public void transform(Plane plane) throws AlgebraException {
-<span class="fc" id="L217">        transform(plane, plane);</span>
-<span class="fc" id="L218">    }</span>
-    
+    public void transform(final Plane plane) throws AlgebraException {
+<span class="fc" id="L232">        transform(plane, plane);</span>
+<span class="fc" id="L233">    }</span>
+
     /**
      * Transforms provided input plane using this transformation and stores the
      * result into provided output plane instance.
-     * @param inputPlane plane to be transformed.
-     * @param outputPlane instance where data of transformed plane will be 
-     * stored.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *
+     * @param inputPlane  plane to be transformed.
+     * @param outputPlane instance where data of transformed plane will be
+     *                    stored.
+     * @throws AlgebraException raised if transform cannot be computed because
+     *                          of numerical instabilities.
      */
-    public abstract void transform(Plane inputPlane, Plane outputPlane) 
+    public abstract void transform(final Plane inputPlane, final Plane outputPlane)
             throws AlgebraException;
-    
+
     /**
      * Transforms provided list of planes using this transformation.
+     *
      * @param inputPlanes planes to be transformed.
      * @return transformed planes.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     * @throws AlgebraException raised if transform cannot be computed because
+     *                          of numerical instabilities.
      */
-    public List&lt;Plane&gt; transformPlanesAndReturnNew(List&lt;Plane&gt; inputPlanes) 
+    public List&lt;Plane&gt; transformPlanesAndReturnNew(final List&lt;Plane&gt; inputPlanes)
             throws AlgebraException {
-<span class="fc" id="L241">        List&lt;Plane&gt; outputPlanes = new ArrayList&lt;&gt;(inputPlanes.size());</span>
-<span class="fc" id="L242">        transformPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L243">        return outputPlanes;</span>
+<span class="fc" id="L258">        final List&lt;Plane&gt; outputPlanes = new ArrayList&lt;&gt;(inputPlanes.size());</span>
+<span class="fc" id="L259">        transformPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L260">        return outputPlanes;</span>
     }
-    
+
     /**
      * Transforms provided list of planes using this transformation and stores
      * the result in provided output list of planes.
      * Notice that any previous content in output list will be removed when
      * calling this method.
-     * @param inputPlanes planes to be transformed.
+     *
+     * @param inputPlanes  planes to be transformed.
      * @param outputPlanes transformed planes.
      * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities.
+     *                          of numerical instabilities.
      */
-    public void transformPlanes(List&lt;Plane&gt; inputPlanes,
-            List&lt;Plane&gt; outputPlanes) throws AlgebraException {
-        
-<span class="fc" id="L259">        outputPlanes.clear();</span>
-<span class="fc bfc" id="L260" title="All 2 branches covered.">        for (Plane plane : inputPlanes) {</span>
-<span class="fc" id="L261">            outputPlanes.add(transformAndReturnNew(plane));</span>
-<span class="fc" id="L262">        }</span>
-<span class="fc" id="L263">    }</span>
-    
+    public void transformPlanes(final List&lt;Plane&gt; inputPlanes,
+                                final List&lt;Plane&gt; outputPlanes) throws AlgebraException {
+
+<span class="fc" id="L277">        outputPlanes.clear();</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        for (final Plane plane : inputPlanes) {</span>
+<span class="fc" id="L279">            outputPlanes.add(transformAndReturnNew(plane));</span>
+<span class="fc" id="L280">        }</span>
+<span class="fc" id="L281">    }</span>
+
     /**
      * Transforms provided list of planes using this transformation and
      * overwriting their previous values.
+     *
      * @param planes planes to be transformed and overwritten.
      * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities.
+     *                          of numerical instabilities.
      */
-    public void transformAndOverwritePlanes(List&lt;Plane&gt; planes) 
+    public void transformAndOverwritePlanes(final List&lt;Plane&gt; planes)
             throws AlgebraException {
-        
-<span class="fc bfc" id="L275" title="All 2 branches covered.">        for (Plane plane : planes) {</span>
-<span class="fc" id="L276">            transform(plane, plane);</span>
-<span class="fc" id="L277">        }</span>
-<span class="fc" id="L278">    }</span>
-    
+
+<span class="fc bfc" id="L294" title="All 2 branches covered.">        for (final Plane plane : planes) {</span>
+<span class="fc" id="L295">            transform(plane, plane);</span>
+<span class="fc" id="L296">        }</span>
+<span class="fc" id="L297">    }</span>
+
     /**
      * Transforms provided line using this transformation and returns a new one.
+     *
      * @param inputLine line to be transformed.
      * @return transformed line.
      * @throws CoincidentPlanesException raised if transformation is degenerate
-     * and results in planes forming a line being coincident.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                   and results in planes forming a line being coincident.
+     * @throws AlgebraException          raised if transform cannot be computed because
+     *                                   of numerical instabilities.
      */
-    public Line3D transformAndReturnNew(Line3D inputLine) 
+    public Line3D transformAndReturnNew(final Line3D inputLine)
             throws CoincidentPlanesException, AlgebraException {
-<span class="fc" id="L291">        Plane plane1 = transformAndReturnNew(inputLine.getPlane1());</span>
-<span class="fc" id="L292">        Plane plane2 = transformAndReturnNew(inputLine.getPlane2());</span>
-        
-<span class="fc" id="L294">        return new Line3D(plane1, plane2);</span>
+<span class="fc" id="L311">        final Plane plane1 = transformAndReturnNew(inputLine.getPlane1());</span>
+<span class="fc" id="L312">        final Plane plane2 = transformAndReturnNew(inputLine.getPlane2());</span>
+
+<span class="fc" id="L314">        return new Line3D(plane1, plane2);</span>
     }
-    
+
     /**
      * Transforms and updates provided line using this transformation.
+     *
      * @param line line to be transformed.
      * @throws CoincidentPlanesException raised if transformation is degenerate
-     * and results in planes forming a line being coincident.
-     * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities.
+     *                                   and results in planes forming a line being coincident.
+     * @throws AlgebraException          raised if transform cannot be computed because
+     *                                   of numerical instabilities.
      */
-    public void transform(Line3D line) throws CoincidentPlanesException,
+    public void transform(final Line3D line) throws CoincidentPlanesException,
             AlgebraException {
-<span class="fc" id="L307">        transform(line, line);</span>
-<span class="fc" id="L308">    }</span>
-    
+<span class="fc" id="L328">        transform(line, line);</span>
+<span class="fc" id="L329">    }</span>
+
     /**
      * Transforms provided input line using this transformation and stores the
      * result into provided output line instance.
-     * @param inputLine line to be transformed.
+     *
+     * @param inputLine  line to be transformed.
      * @param outputLine instance where data of transformed line will be stored.
      * @throws CoincidentPlanesException Raised if transformation is degenerate
-     * and results in planes forming a line being coincident.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                   and results in planes forming a line being coincident.
+     * @throws AlgebraException          raised if transform cannot be computed because
+     *                                   of numerical instabilities.
      */
-    public void transform(Line3D inputLine, Line3D outputLine) 
+    public void transform(final Line3D inputLine, final Line3D outputLine)
             throws CoincidentPlanesException, AlgebraException {
 
-<span class="fc" id="L323">        Plane plane1 = transformAndReturnNew(inputLine.getPlane1());</span>
-<span class="fc" id="L324">        Plane plane2 = transformAndReturnNew(inputLine.getPlane2());</span>
+<span class="fc" id="L345">        final Plane plane1 = transformAndReturnNew(inputLine.getPlane1());</span>
+<span class="fc" id="L346">        final Plane plane2 = transformAndReturnNew(inputLine.getPlane2());</span>
 
-<span class="fc" id="L326">        outputLine.setPlanes(plane1, plane2);</span>
-<span class="fc" id="L327">    }</span>
-    
+<span class="fc" id="L348">        outputLine.setPlanes(plane1, plane2);</span>
+<span class="fc" id="L349">    }</span>
+
     /**
      * Transforms provided list of lines using this transformation.
+     *
      * @param inputLines lines to be transformed.
      * @return transformed lines.
      * @throws CoincidentPlanesException taised if transformation is degenerate
-     * and results in planes forming a line being coincident.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                   and results in planes forming a line being coincident.
+     * @throws AlgebraException          raised if transform cannot be computed because
+     *                                   of numerical instabilities.
      */
-    public List&lt;Line3D&gt; transformLines(List&lt;Line3D&gt; inputLines) 
+    public List&lt;Line3D&gt; transformLines(final List&lt;Line3D&gt; inputLines)
             throws CoincidentPlanesException, AlgebraException {
-<span class="fc" id="L340">        List&lt;Line3D&gt; outputLines = new ArrayList&lt;&gt;(inputLines.size());</span>
-<span class="fc" id="L341">        transformLines(inputLines, outputLines);</span>
-<span class="fc" id="L342">        return outputLines;</span>
+<span class="fc" id="L363">        final List&lt;Line3D&gt; outputLines = new ArrayList&lt;&gt;(inputLines.size());</span>
+<span class="fc" id="L364">        transformLines(inputLines, outputLines);</span>
+<span class="fc" id="L365">        return outputLines;</span>
     }
-    
+
     /**
      * Transforms provided list of lines using this transformation and stores
      * the result in provided output list of lines.
      * Notice that any previous content in output list will be removed when
      * calling this method.
-     * @param inputLines lines to be transformed.
+     *
+     * @param inputLines  lines to be transformed.
      * @param outputLines transformed lines.
      * @throws CoincidentPlanesException raised if transformation is degenerate
-     * and results in planes forming a line being coincident.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                   and results in planes forming a line being coincident.
+     * @throws AlgebraException          raised if transform cannot be computed because
+     *                                   of numerical instabilities.
      */
-    public void transformLines(List&lt;Line3D&gt; inputLines, 
-            List&lt;Line3D&gt; outputLines) throws CoincidentPlanesException, 
-            AlgebraException {
-        
-<span class="fc" id="L361">        outputLines.clear();</span>
-<span class="fc bfc" id="L362" title="All 2 branches covered.">        for (Line3D line : inputLines) {</span>
-<span class="fc" id="L363">            outputLines.add(transformAndReturnNew(line));</span>
-<span class="fc" id="L364">        }</span>
-<span class="fc" id="L365">    }</span>
-    
+    public void transformLines(
+            final List&lt;Line3D&gt; inputLines, final List&lt;Line3D&gt; outputLines)
+            throws CoincidentPlanesException, AlgebraException {
+
+<span class="fc" id="L385">        outputLines.clear();</span>
+<span class="fc bfc" id="L386" title="All 2 branches covered.">        for (final Line3D line : inputLines) {</span>
+<span class="fc" id="L387">            outputLines.add(transformAndReturnNew(line));</span>
+<span class="fc" id="L388">        }</span>
+<span class="fc" id="L389">    }</span>
+
     /**
      * Transforms provided list of lines using this transformation and
      * overwriting their previous values.
+     *
      * @param lines lines to be transformed and overwritten.
      * @throws CoincidentPlanesException raised if transformation is degenerate
-     * and results in planes forming a line being coincident.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *                                   and results in planes forming a line being coincident.
+     * @throws AlgebraException          raised if transform cannot be computed because
+     *                                   of numerical instabilities.
      */
-    public void transformAndOverwriteLines(List&lt;Line3D&gt; lines) 
+    public void transformAndOverwriteLines(final List&lt;Line3D&gt; lines)
             throws CoincidentPlanesException, AlgebraException {
-        
-<span class="fc bfc" id="L379" title="All 2 branches covered.">        for (Line3D line : lines) {</span>
-<span class="fc" id="L380">            transform(line, line);</span>
-<span class="fc" id="L381">        }</span>
-<span class="fc" id="L382">    }</span>
-    
+
+<span class="fc bfc" id="L404" title="All 2 branches covered.">        for (final Line3D line : lines) {</span>
+<span class="fc" id="L405">            transform(line, line);</span>
+<span class="fc" id="L406">        }</span>
+<span class="fc" id="L407">    }</span>
+
     /**
-     * Transforms provided polygon using this transformation and returns a new 
+     * Transforms provided polygon using this transformation and returns a new
      * one.
+     *
      * @param inputPolygon polygon to be transformed.
      * @return a new transformed polygon.
      */
-    public Polygon3D transformAndReturnNew(Polygon3D inputPolygon){
-<span class="fc" id="L391">        List&lt;Point3D&gt; outVertices = transformPointsAndReturnNew(</span>
-<span class="fc" id="L392">                inputPolygon.getVertices());</span>
+    public Polygon3D transformAndReturnNew(final Polygon3D inputPolygon) {
+<span class="fc" id="L417">        final List&lt;Point3D&gt; outVertices = transformPointsAndReturnNew(</span>
+<span class="fc" id="L418">                inputPolygon.getVertices());</span>
         try {
-<span class="fc" id="L394">            return new Polygon3D(outVertices);</span>
-<span class="nc" id="L395">        } catch (NotEnoughVerticesException ignore) {</span>
-            //this will never happen because all existing polygons have enough
-            //vertices
-<span class="nc" id="L398">            return null;</span>
+<span class="fc" id="L420">            return new Polygon3D(outVertices);</span>
+<span class="nc" id="L421">        } catch (final NotEnoughVerticesException ignore) {</span>
+            // this will never happen because all existing polygons have enough
+            // vertices
+<span class="nc" id="L424">            return null;</span>
         }
     }
-    
+
     /**
      * Transforms and updates provided polygon using this transformation.
+     *
      * @param polygon polygon to be transformed.
      */
-    public void transform(Polygon3D polygon) {
-<span class="fc" id="L407">        transformAndOverwritePoints(polygon.getVertices());</span>
-<span class="fc" id="L408">    }</span>
-    
+    public void transform(final Polygon3D polygon) {
+<span class="fc" id="L434">        transformAndOverwritePoints(polygon.getVertices());</span>
+<span class="fc" id="L435">    }</span>
+
     /**
      * Transforms provided input polygon using this transformation and stores
      * the result into provided output polygon instance.
-     * @param inputPolygon polygon to be transformed.
+     *
+     * @param inputPolygon  polygon to be transformed.
      * @param outputPolygon Instance where transformed polygon data will be
-     * stored.
+     *                      stored.
      */
-    public void transform(Polygon3D inputPolygon, Polygon3D outputPolygon){
+    public void transform(final Polygon3D inputPolygon, final Polygon3D outputPolygon) {
         try {
-<span class="fc" id="L419">            outputPolygon.setVertices(transformPointsAndReturnNew(</span>
-<span class="fc" id="L420">                    inputPolygon.getVertices()));</span>
-<span class="nc" id="L421">        } catch (NotEnoughVerticesException ignore) {</span>
-            //this will never happen because all existing polygons have enough
-            //vertices
-<span class="fc" id="L424">        }</span>
-<span class="fc" id="L425">    }</span>
-    
+<span class="fc" id="L447">            outputPolygon.setVertices(transformPointsAndReturnNew(</span>
+<span class="fc" id="L448">                    inputPolygon.getVertices()));</span>
+<span class="nc" id="L449">        } catch (final NotEnoughVerticesException ignore) {</span>
+            // this will never happen because all existing polygons have enough
+            // vertices
+<span class="fc" id="L452">        }</span>
+<span class="fc" id="L453">    }</span>
+
     /**
-     * Transforms provided triangle using this transformation and returns a new 
+     * Transforms provided triangle using this transformation and returns a new
      * one.
+     *
      * @param inputTriangle triangle to be transformed.
      * @return a new transformed triangle.
      */
-    public Triangle3D transformAndReturnNew(Triangle3D inputTriangle) {
-<span class="fc" id="L434">        Point3D vertex1 = transformAndReturnNew(inputTriangle.getVertex1());</span>
-<span class="fc" id="L435">        Point3D vertex2 = transformAndReturnNew(inputTriangle.getVertex2());</span>
-<span class="fc" id="L436">        Point3D vertex3 = transformAndReturnNew(inputTriangle.getVertex3());</span>
-<span class="fc" id="L437">        return new Triangle3D(vertex1, vertex2, vertex3);</span>
+    public Triangle3D transformAndReturnNew(final Triangle3D inputTriangle) {
+<span class="fc" id="L463">        final Point3D vertex1 = transformAndReturnNew(inputTriangle.getVertex1());</span>
+<span class="fc" id="L464">        final Point3D vertex2 = transformAndReturnNew(inputTriangle.getVertex2());</span>
+<span class="fc" id="L465">        final Point3D vertex3 = transformAndReturnNew(inputTriangle.getVertex3());</span>
+<span class="fc" id="L466">        return new Triangle3D(vertex1, vertex2, vertex3);</span>
     }
-    
+
     /**
      * Transforms and updates provided input triangle using this transformation.
+     *
      * @param triangle triangle to be transformed.
      */
-    public void transform(Triangle3D triangle) {
-<span class="fc" id="L445">        transform(triangle, triangle);</span>
-<span class="fc" id="L446">    }</span>
-    
+    public void transform(final Triangle3D triangle) {
+<span class="fc" id="L475">        transform(triangle, triangle);</span>
+<span class="fc" id="L476">    }</span>
+
     /**
      * Transforms provided input triangle using this transformation and stores
      * the result into provided output triangle instance.
-     * @param inputTriangle triangle to be transformed.
+     *
+     * @param inputTriangle  triangle to be transformed.
      * @param outputTriangle instance where transformed triangle data will be
-     * stored.
+     *                       stored.
      */
-    public void transform(Triangle3D inputTriangle, Triangle3D outputTriangle) {
-<span class="fc" id="L456">        transform(inputTriangle.getVertex1(), outputTriangle.getVertex1());</span>
-<span class="fc" id="L457">        transform(inputTriangle.getVertex2(), outputTriangle.getVertex2());</span>
-<span class="fc" id="L458">        transform(inputTriangle.getVertex3(), outputTriangle.getVertex3());</span>
-<span class="fc" id="L459">    }</span>
-    
+    public void transform(final Triangle3D inputTriangle, final Triangle3D outputTriangle) {
+<span class="fc" id="L487">        transform(inputTriangle.getVertex1(), outputTriangle.getVertex1());</span>
+<span class="fc" id="L488">        transform(inputTriangle.getVertex2(), outputTriangle.getVertex2());</span>
+<span class="fc" id="L489">        transform(inputTriangle.getVertex3(), outputTriangle.getVertex3());</span>
+<span class="fc" id="L490">    }</span>
+
     /**
      * Represents this transformation as a 4x4 matrix.
      * A point can be transformed as T * p, where T is the transformation matrix
      * and p is a point expressed as an homogeneous vector.
+     *
      * @return this transformation in matrix form.
      */
     public abstract Matrix asMatrix();
-    
+
     /**
      * Represents this transformation as a 4x4 matrix and stores the result in
      * provided instance.
+     *
      * @param m instance where transformation matrix will be stored.
      * @throws IllegalArgumentException raised if provided instance is not a 3x3
-     * matrix.
+     *                                  matrix.
      */
-    public abstract void asMatrix(Matrix m);
-        
+    public abstract void asMatrix(final Matrix m);
+
     /**
      * Transforms a camera using this transformation.
+     *
      * @param camera camera to be transformed.
      * @return transformed quadric.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     * @throws AlgebraException raised if transform cannot be computed because
+     *                          of numerical instabilities.
      */
-    public PinholeCamera transformAndReturnNew(PinholeCamera camera) 
+    public PinholeCamera transformAndReturnNew(final PinholeCamera camera)
             throws AlgebraException {
-<span class="fc" id="L487">        PinholeCamera outputCamera = new PinholeCamera();</span>
-<span class="fc" id="L488">        transform(camera, outputCamera);</span>
-<span class="fc" id="L489">        return outputCamera;</span>
+<span class="fc" id="L521">        final PinholeCamera outputCamera = new PinholeCamera();</span>
+<span class="fc" id="L522">        transform(camera, outputCamera);</span>
+<span class="fc" id="L523">        return outputCamera;</span>
     }
-    
+
     /**
      * Transforms and updates provided camera using this transformation.
+     *
      * @param camera camera to be transformed.
      * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities.
+     *                          of numerical instabilities.
      */
-    public void transform(PinholeCamera camera) throws AlgebraException {
-<span class="fc" id="L499">        transform(camera, camera);</span>
-<span class="fc" id="L500">    }</span>
-    
+    public void transform(final PinholeCamera camera) throws AlgebraException {
+<span class="fc" id="L534">        transform(camera, camera);</span>
+<span class="fc" id="L535">    }</span>
+
     /**
      * Transforms a camera using this transformation and stores the result into
      * provided output camera.
-     * @param inputCamera camera to be transformed.
-     * @param outputCamera instance where data of transformed camera will be 
-     * stored.
-     * @throws AlgebraException raised if transform cannot be computed because 
-     * of numerical instabilities.
+     *
+     * @param inputCamera  camera to be transformed.
+     * @param outputCamera instance where data of transformed camera will be
+     *                     stored.
+     * @throws AlgebraException raised if transform cannot be computed because
+     *                          of numerical instabilities.
      */
-    public abstract void transform(PinholeCamera inputCamera, 
-            PinholeCamera outputCamera) throws AlgebraException;
+    public abstract void transform(
+            final PinholeCamera inputCamera, final PinholeCamera outputCamera)
+            throws AlgebraException;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

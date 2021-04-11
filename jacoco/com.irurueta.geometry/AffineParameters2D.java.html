@@ -24,7 +24,6 @@ import java.io.Serializable;
  * This class defines additional parameters that can be defined on affine
  * 2D transformations.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class AffineParameters2D implements Serializable {
 
     /**
@@ -46,18 +45,18 @@ public class AffineParameters2D implements Serializable {
      * Default threshold to determine whether a matrix is a valid 2x2 upper
      * triangular one.
      */
-    public static final double DEFAULT_VALID_THRESHOLD = 1e-8;
+    private static final double DEFAULT_VALID_THRESHOLD = 1e-8;
 
     /**
      * Horizontal scale.
      */
     private double scaleX;
-    
+
     /**
      * Vertical scale.
      */
     private double scaleY;
-    
+
     /**
      * Skewness factor. If 0.0, horizontal and vertical axes remain orthogonal,
      * otherwise they get slanted.
@@ -68,255 +67,274 @@ public class AffineParameters2D implements Serializable {
      * Constructor.
      * Sets default scale and skewness
      */
-<span class="fc" id="L71">    public AffineParameters2D() {</span>
-<span class="fc" id="L72">        scaleX = scaleY = DEFAULT_SCALE;</span>
-<span class="fc" id="L73">        skewness = DEFAULT_SKEWNESS;</span>
-<span class="fc" id="L74">    }</span>
-    
+<span class="fc" id="L70">    public AffineParameters2D() {</span>
+<span class="fc" id="L71">        scaleX = scaleY = DEFAULT_SCALE;</span>
+<span class="fc" id="L72">        skewness = DEFAULT_SKEWNESS;</span>
+<span class="fc" id="L73">    }</span>
+
     /**
      * Constructor with scale.
      * Sets default skewness and provided scale.
-     * @param scale Scale to be set (both, horizontal and vertical). A value 
-     * between 0.0 and 1.0 will reduce objects size, a value larger than 1.0 
-     * will enlarge objects size, and negative values will reverse objects.
+     *
+     * @param scale Scale to be set (both, horizontal and vertical). A value
+     *              between 0.0 and 1.0 will reduce objects size, a value larger than 1.0
+     *              will enlarge objects size, and negative values will reverse objects.
      */
-<span class="fc" id="L83">    public AffineParameters2D(double scale) {</span>
+<span class="fc" id="L83">    public AffineParameters2D(final double scale) {</span>
 <span class="fc" id="L84">        scaleX = scaleY = scale;</span>
 <span class="fc" id="L85">        skewness = DEFAULT_SKEWNESS;</span>
 <span class="fc" id="L86">    }</span>
-    
+
     /**
      * Constructor with scale and skewness.
-     * @param scale Scale to be set (both, horizontal and vertical). A value
-     * between 0.0 and 1.0 will reduce objects size, a value larger than 1.0
-     * will enlarge objects size, and negative values will reverse objects.
+     *
+     * @param scale    Scale to be set (both, horizontal and vertical). A value
+     *                 between 0.0 and 1.0 will reduce objects size, a value larger than 1.0
+     *                 will enlarge objects size, and negative values will reverse objects.
      * @param skewness Skewness to be set.
      */
-<span class="fc" id="L95">    public AffineParameters2D(double scale, double skewness) {</span>
-<span class="fc" id="L96">        scaleX = scaleY = scale;</span>
-<span class="fc" id="L97">        this.skewness = skewness;</span>
-<span class="fc" id="L98">    }</span>
-    
+<span class="fc" id="L96">    public AffineParameters2D(final double scale, final double skewness) {</span>
+<span class="fc" id="L97">        scaleX = scaleY = scale;</span>
+<span class="fc" id="L98">        this.skewness = skewness;</span>
+<span class="fc" id="L99">    }</span>
+
     /**
      * Constructor with horizontal scale, vertical scale and skewness.
-     * @param scaleX Horizontal scale to be set. A value between 0.0 and 1.0 
-     * will reduce objects size, a value larger than 1.0 will enlarge objects
-     * size, and negative values will reverse objects.
-     * @param scaleY Vertical scale to be set. A value between 0.0 and 1.0 will
-     * reduce objects size, a value larger than 1.0 will enlarge objects
-     * size, and negative values will reverse objects.
+     *
+     * @param scaleX   Horizontal scale to be set. A value between 0.0 and 1.0
+     *                 will reduce objects size, a value larger than 1.0 will enlarge objects
+     *                 size, and negative values will reverse objects.
+     * @param scaleY   Vertical scale to be set. A value between 0.0 and 1.0 will
+     *                 reduce objects size, a value larger than 1.0 will enlarge objects
+     *                 size, and negative values will reverse objects.
      * @param skewness Skewness to be set.
      */
-<span class="fc" id="L110">    public AffineParameters2D(double scaleX, double scaleY, double skewness) {</span>
-<span class="fc" id="L111">        this.scaleX = scaleX;</span>
-<span class="fc" id="L112">        this.scaleY = scaleY;</span>
-<span class="fc" id="L113">        this.skewness = skewness;</span>
-<span class="fc" id="L114">    }</span>
-    
+<span class="fc" id="L112">    public AffineParameters2D(final double scaleX, final double scaleY, final double skewness) {</span>
+<span class="fc" id="L113">        this.scaleX = scaleX;</span>
+<span class="fc" id="L114">        this.scaleY = scaleY;</span>
+<span class="fc" id="L115">        this.skewness = skewness;</span>
+<span class="fc" id="L116">    }</span>
+
     /**
      * Constructor with matrix and threshold.
-     * @param m Upper triangular matrix to extract affine parameters from.
+     *
+     * @param m         Upper triangular matrix to extract affine parameters from.
      * @param threshold Threshold to determine whether provided matrix is a
-     * valid upper triangular one.
+     *                  valid upper triangular one.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
-     * if it is not upper triangular, or if threshold is negative.
+     *                                  if it is not upper triangular, or if threshold is negative.
      */
-<span class="fc" id="L124">    public AffineParameters2D(Matrix m, double threshold) {</span>
-<span class="fc" id="L125">        fromMatrix(m, threshold);</span>
-<span class="fc" id="L126">    }</span>
-    
+<span class="fc" id="L127">    public AffineParameters2D(final Matrix m, final double threshold) {</span>
+<span class="fc" id="L128">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L129">    }</span>
+
     /**
      * Constructor with matrix.
+     *
      * @param m Upper triangular matrix to extract affine parameters from.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
-     * if it is not upper triangular.
+     *                                  if it is not upper triangular.
      */
-<span class="fc" id="L134">    public AffineParameters2D(Matrix m) {</span>
-<span class="fc" id="L135">        fromMatrix(m);</span>
-<span class="fc" id="L136">    }</span>
-    
+<span class="fc" id="L138">    public AffineParameters2D(final Matrix m) {</span>
+<span class="fc" id="L139">        fromMatrix(m);</span>
+<span class="fc" id="L140">    }</span>
+
     /**
      * Returns horizontal scale.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
+     *
      * @return Horizontal scale.
      */
     public double getScaleX() {
-<span class="fc" id="L145">        return scaleX;</span>
+<span class="fc" id="L150">        return scaleX;</span>
     }
-    
+
     /**
      * Sets horizontal scale.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
+     *
      * @param scaleX Horizontal scale to be set.
      */
-    public void setScaleX(double scaleX) {
-<span class="fc" id="L155">        this.scaleX = scaleX;</span>
-<span class="fc" id="L156">    }</span>
-    
+    public void setScaleX(final double scaleX) {
+<span class="fc" id="L161">        this.scaleX = scaleX;</span>
+<span class="fc" id="L162">    }</span>
+
     /**
      * Returns vertical scale.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
+     *
      * @return Vertical scale.
      */
     public double getScaleY() {
-<span class="fc" id="L165">        return scaleY;</span>
+<span class="fc" id="L172">        return scaleY;</span>
     }
-    
+
     /**
      * Sets vertical scale.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
+     *
      * @param scaleY Vertical scale to be set.
      */
-    public void setScaleY(double scaleY) {
-<span class="fc" id="L175">        this.scaleY = scaleY;</span>
-<span class="fc" id="L176">    }</span>
-    
+    public void setScaleY(final double scaleY) {
+<span class="fc" id="L183">        this.scaleY = scaleY;</span>
+<span class="fc" id="L184">    }</span>
+
     /**
      * Sets overall scale (both, horizontal and vertical).
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
+     *
      * @param scale Horizontal and vertical scale to be set.
      */
-    public void setScale(double scale) {
-<span class="fc" id="L185">        scaleX = scaleY = scale;</span>
-<span class="fc" id="L186">    }</span>
-    
+    public void setScale(final double scale) {
+<span class="fc" id="L194">        scaleX = scaleY = scale;</span>
+<span class="fc" id="L195">    }</span>
+
     /**
      * Returns skewness value.
-     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * A value of 0.0 indicates that horizontal and vertical axis are
      * orthogonal, otherwise they are slanted to each other.
+     *
      * @return Skewness value.
      */
     public double getSkewness() {
-<span class="fc" id="L195">        return skewness;</span>
+<span class="fc" id="L205">        return skewness;</span>
     }
-    
+
     /**
      * Sets skewness value.
-     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * A value of 0.0 indicates that horizontal and vertical axis are
      * orthogonal, otherwise they are slanted to each other.
+     *
      * @param skewness Skewness to be set.
      */
-    public void setSkewness(double skewness) {
-<span class="fc" id="L205">        this.skewness = skewness;</span>
-<span class="fc" id="L206">    }</span>
-    
+    public void setSkewness(final double skewness) {
+<span class="fc" id="L216">        this.skewness = skewness;</span>
+<span class="fc" id="L217">    }</span>
+
     /**
      * Converts this affine parameters instance into matrix representation.
+     *
      * @return A matrix representation of this instance.
      */
     public Matrix asMatrix() {
-<span class="fc" id="L213">        Matrix m = null;</span>
+<span class="fc" id="L225">        Matrix m = null;</span>
         try {
-<span class="fc" id="L215">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
-<span class="fc" id="L216">            asMatrix(m);</span>
-<span class="nc" id="L217">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L219">        }</span>
-<span class="fc" id="L220">        return m;</span>
+<span class="fc" id="L227">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="fc" id="L228">            asMatrix(m);</span>
+<span class="nc" id="L229">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L231">        }</span>
+<span class="fc" id="L232">        return m;</span>
     }
-    
+
     /**
      * Converts this affine parameters instance into matrix representation and
      * stores the result into provided matrix.
+     *
      * @param m Matrix where representation of this instance will be stored.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2.
      */
-    public void asMatrix(Matrix m) {
-<span class="pc bpc" id="L230" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
-<span class="nc" id="L231">            throw new IllegalArgumentException();</span>
+    public void asMatrix(final Matrix m) {
+<span class="pc bpc" id="L243" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="nc" id="L244">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L234">        m.setElementAt(0, 0, scaleX);</span>
-<span class="fc" id="L235">        m.setElementAt(1, 0, 0.0);</span>
-<span class="fc" id="L236">        m.setElementAt(0, 1, skewness);</span>
-<span class="fc" id="L237">        m.setElementAt(1, 1, scaleY);</span>
-<span class="fc" id="L238">    }</span>
-    
+
+<span class="fc" id="L247">        m.setElementAt(0, 0, scaleX);</span>
+<span class="fc" id="L248">        m.setElementAt(1, 0, 0.0);</span>
+<span class="fc" id="L249">        m.setElementAt(0, 1, skewness);</span>
+<span class="fc" id="L250">        m.setElementAt(1, 1, scaleY);</span>
+<span class="fc" id="L251">    }</span>
+
     /**
      * Sets parameters of this instance from provided matrix.
+     *
      * @param m Matrix to set parameters from. Provided matrix must be 2x2 and
-     * upper triangular.
+     *          upper triangular.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
-     * if it is not upper triangular.
+     *                                  if it is not upper triangular.
      */
-    public final void fromMatrix(Matrix m) {
-<span class="fc" id="L248">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
-<span class="fc" id="L249">    }</span>
-    
+    public final void fromMatrix(final Matrix m) {
+<span class="fc" id="L262">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L263">    }</span>
+
     /**
      * Sets parameters of this instance from provided matrix.
-     * @param m Matrix to set parameters from. Provided matrix must be 2x2 and
-     * upper triangular up to provided threshold.
+     *
+     * @param m         Matrix to set parameters from. Provided matrix must be 2x2 and
+     *                  upper triangular up to provided threshold.
      * @param threshold Threshold to determine whether provided matrix is upper
-     * triangular. Matrix will be considered upper triangular if its lower 
-     * triangular elements are smaller or equal than provided threshold.
+     *                  triangular. Matrix will be considered upper triangular if its lower
+     *                  triangular elements are smaller or equal than provided threshold.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
-     * it it is not upper triangular or if threshold is negative.
+     *                                  it it is not upper triangular or if threshold is negative.
      */
-    public final void fromMatrix(Matrix m, double threshold) {
-<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (!isValidMatrix(m, threshold)) {</span>
-<span class="fc" id="L263">            throw new IllegalArgumentException();</span>
+    public final void fromMatrix(final Matrix m, final double threshold) {
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (!isValidMatrix(m, threshold)) {</span>
+<span class="fc" id="L278">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L266">        scaleX = m.getElementAt(0, 0);</span>
-<span class="fc" id="L267">        skewness = m.getElementAt(0, 1);</span>
-<span class="fc" id="L268">        scaleY = m.getElementAt(1, 1);</span>
-<span class="fc" id="L269">    }</span>
-    
+
+<span class="fc" id="L281">        scaleX = m.getElementAt(0, 0);</span>
+<span class="fc" id="L282">        skewness = m.getElementAt(0, 1);</span>
+<span class="fc" id="L283">        scaleY = m.getElementAt(1, 1);</span>
+<span class="fc" id="L284">    }</span>
+
     /**
      * Returns boolean indicating whether provided matrix is a valid matrix
      * to set affine parameters from.
      * Valid matrices need to be 2x2 and upper triangular.
-     * @param m A matrix to determine whether it is valid to set affine 
-     * parameters from.
+     *
+     * @param m A matrix to determine whether it is valid to set affine
+     *          parameters from.
      * @return True if matrix is valid, false otherwise.
      */
-    public static boolean isValidMatrix(Matrix m) {
-<span class="fc" id="L280">        return isValidMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+    public static boolean isValidMatrix(final Matrix m) {
+<span class="fc" id="L296">        return isValidMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
     }
-    
+
     /**
      * Returns boolean indicating whether provided matrix is a valid matrix to
      * set affine parameters form.
-     * Valid matrices need to be 2x2 and upper triangular up to provided 
+     * Valid matrices need to be 2x2 and upper triangular up to provided
      * threshold. In Layman terms, a valid matrix lower triangular elements need
      * to be smaller or equal than provided threshold.
-     * @param m A matrix to determine whether it is valid to set affine 
-     * parameters from.
-     * @param threshold A threshold to determine whether provided matrix is 
-     * upper triangular. Matrix will be considered upper triangular if its lower
-     * triangular elements are smaller or equal than provided threshold (without
-     * taking into account the sign of the elements).
+     *
+     * @param m         A matrix to determine whether it is valid to set affine
+     *                  parameters from.
+     * @param threshold A threshold to determine whether provided matrix is
+     *                  upper triangular. Matrix will be considered upper triangular if its lower
+     *                  triangular elements are smaller or equal than provided threshold (without
+     *                  taking into account the sign of the elements).
      * @return True if matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidMatrix(Matrix m, double threshold) {
-<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
-<span class="fc" id="L300">            throw new IllegalArgumentException();</span>
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    public static boolean isValidMatrix(final Matrix m, final double threshold) {
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
+<span class="fc" id="L318">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="pc bpc" id="L303" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
-<span class="fc" id="L304">            return false;</span>
+
+<span class="pc bpc" id="L321" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L322">            return false;</span>
         }
-        
-        //check is upper triangular
-<span class="fc" id="L308">        int rows = m.getRows();</span>
-<span class="fc" id="L309">        int cols = m.getColumns();</span>
-        
-<span class="fc bfc" id="L311" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
-<span class="fc bfc" id="L312" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
-<span class="fc bfc" id="L313" title="All 4 branches covered.">                if (u &gt; v &amp;&amp; Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
-<span class="fc" id="L314">                    return false;</span>
+
+        // check is upper triangular
+<span class="fc" id="L326">        final int rows = m.getRows();</span>
+<span class="fc" id="L327">        final int cols = m.getColumns();</span>
+
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
+<span class="fc bfc" id="L330" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
+<span class="fc bfc" id="L331" title="All 4 branches covered.">                if (u &gt; v &amp;&amp; Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
+<span class="fc" id="L332">                    return false;</span>
                 }
             }
         }
-        
-<span class="fc" id="L319">        return true;</span>
+
+<span class="fc" id="L337">        return true;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

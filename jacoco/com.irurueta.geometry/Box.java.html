@@ -20,9 +20,10 @@ import java.io.Serializable;
 
 /**
  * Abstract representation of a box for a point in an n-dimensional representation.
+ *
  * @param &lt;P&gt; a point implementation.
  */
-public abstract class Box&lt;P extends Point&gt; implements Serializable {
+public abstract class Box&lt;P extends Point&lt;P&gt;&gt; implements Serializable {
 
     /**
      * Low coordinate values.
@@ -37,113 +38,124 @@ public abstract class Box&lt;P extends Point&gt; implements Serializable {
     /**
      * Empty constructor.
      */
-<span class="fc" id="L40">    protected Box() { }</span>
+<span class="fc" id="L41">    protected Box() {</span>
+<span class="fc" id="L42">    }</span>
 
     /**
      * Constructor.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-<span class="fc" id="L47">    public Box(P lo, P hi) {</span>
-<span class="fc" id="L48">        internalSetBounds(lo, hi);</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L50">    protected Box(final P lo, final P hi) {</span>
+<span class="fc" id="L51">        internalSetBounds(lo, hi);</span>
+<span class="fc" id="L52">    }</span>
 
     /**
      * Gets low coordinate values.
+     *
      * @return low coordinate values.
      */
     public P getLo() {
-<span class="fc" id="L56">        return mLo;</span>
+<span class="fc" id="L60">        return mLo;</span>
     }
 
     /**
      * Sets low coordinate values.
+     *
      * @param lo low coordinate values.
      */
-    public void setLo(P lo) {
-<span class="fc" id="L64">        mLo = lo;</span>
-<span class="fc" id="L65">    }</span>
+    public void setLo(final P lo) {
+<span class="fc" id="L69">        mLo = lo;</span>
+<span class="fc" id="L70">    }</span>
 
     /**
      * Gets high coordinate values.
+     *
      * @return high coordinate values.
      */
     public P getHi() {
-<span class="fc" id="L72">        return mHi;</span>
+<span class="fc" id="L78">        return mHi;</span>
     }
 
     /**
      * Sets high coordinate values.
+     *
      * @param hi high coordinate values.
      */
-    public void setHi(P hi) {
-<span class="fc" id="L80">        mHi = hi;</span>
-<span class="fc" id="L81">    }</span>
+    public void setHi(final P hi) {
+<span class="fc" id="L87">        mHi = hi;</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * Sets boundaries.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public void setBounds(P lo, P hi) {
-<span class="fc" id="L89">        internalSetBounds(lo, hi);</span>
-<span class="fc" id="L90">    }</span>
+    public void setBounds(final P lo, final P hi) {
+<span class="fc" id="L97">        internalSetBounds(lo, hi);</span>
+<span class="fc" id="L98">    }</span>
 
     /**
      * Gets square distance of provided point to the boundaries of this box or zero if the point is
      * inside this box.
+     *
      * @param point point to be checked.
      * @return distance of provided point.
      */
-    public double getSqrDistance(P point) {
-<span class="fc" id="L99">        int dim = point.getDimensions();</span>
+    public double getSqrDistance(final P point) {
+<span class="fc" id="L108">        final int dim = point.getDimensions();</span>
 
-<span class="fc" id="L101">        double dd = 0.0;</span>
+<span class="fc" id="L110">        double dd = 0.0;</span>
         double pointValue;
         double loValue;
         double hiValue;
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
-<span class="fc" id="L106">            pointValue = point.getInhomogeneousCoordinate(i);</span>
-<span class="fc" id="L107">            loValue = mLo.getInhomogeneousCoordinate(i);</span>
-<span class="fc" id="L108">            hiValue = mHi.getInhomogeneousCoordinate(i);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L115">            pointValue = point.getInhomogeneousCoordinate(i);</span>
+<span class="fc" id="L116">            loValue = mLo.getInhomogeneousCoordinate(i);</span>
+<span class="fc" id="L117">            hiValue = mHi.getInhomogeneousCoordinate(i);</span>
 
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (pointValue &lt; loValue) {</span>
-<span class="fc" id="L111">                dd += sqr(pointValue - loValue);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            if (pointValue &lt; loValue) {</span>
+<span class="fc" id="L120">                dd += sqr(pointValue - loValue);</span>
             }
-<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (pointValue &gt; hiValue) {</span>
-<span class="fc" id="L114">                dd += sqr(pointValue - hiValue);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            if (pointValue &gt; hiValue) {</span>
+<span class="fc" id="L123">                dd += sqr(pointValue - hiValue);</span>
             }
         }
-<span class="fc" id="L117">        return dd;</span>
+<span class="fc" id="L126">        return dd;</span>
     }
 
     /**
      * Gets distance of provided point to the boundaries of this box or zero if the point is
      * inside this box.
+     *
      * @param point point to be checked.
      * @return distance of provided point.
      */
-    public double getDistance(P point) {
-<span class="fc" id="L127">        return Math.sqrt(getSqrDistance(point));</span>
+    public double getDistance(final P point) {
+<span class="fc" id="L137">        return Math.sqrt(getSqrDistance(point));</span>
     }
 
     /**
      * Returns the squared value.
+     *
      * @param value value to be squared.
      * @return squared value.
      */
-    private double sqr(double value) {
-<span class="fc" id="L136">        return value * value;</span>
+    private double sqr(final double value) {
+<span class="fc" id="L147">        return value * value;</span>
     }
 
     /**
      * Internally sets boundaries.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    private void internalSetBounds(P lo, P hi) {
-<span class="fc" id="L145">        mLo = lo;</span>
-<span class="fc" id="L146">        mHi = hi;</span>
-<span class="fc" id="L147">    }</span>
+    private void internalSetBounds(final P lo, final P hi) {
+<span class="fc" id="L157">        mLo = lo;</span>
+<span class="fc" id="L158">        mHi = hi;</span>
+<span class="fc" id="L159">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

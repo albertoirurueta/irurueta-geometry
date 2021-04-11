@@ -28,81 +28,87 @@ import java.util.List;
  * samples and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
+ *
  * @param &lt;T&gt; an implementation of a 2D point.
  */
-public abstract class Point2DRefiner&lt;T extends Point2D&gt; extends 
+public abstract class Point2DRefiner&lt;T extends Point2D&gt; extends
         SamplesAndInliersDataRefiner&lt;T, Line2D&gt; {
-    
+
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
     protected double mRefinementStandardDeviation;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L52">    public Point2DRefiner() { }</span>
-    
+<span class="fc" id="L53">    protected Point2DRefiner() {</span>
+<span class="fc" id="L54">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples collection of samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples                     collection of samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public Point2DRefiner(T initialEstimation,
-            boolean keepCovariance, BitSet inliers, double[] residuals,
-            int numInliers, List&lt;Line2D&gt; samples,
-            double refinementStandardDeviation) {
-<span class="fc" id="L70">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+    protected Point2DRefiner(
+            final T initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List&lt;Line2D&gt; samples,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L73">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples);
-<span class="fc" id="L72">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L73">    }</span>
-    
+<span class="fc" id="L75">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L76">    }</span>
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust estimator.
-     * @param samples collection of samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust estimator.
+     * @param samples                     collection of samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public Point2DRefiner(T initialEstimation, boolean keepCovariance,
-            InliersData inliersData, List&lt;Line2D&gt; samples,
-            double refinementStandardDeviation) {
-<span class="fc" id="L88">        super(initialEstimation, keepCovariance, inliersData, samples);</span>
-<span class="fc" id="L89">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L90">    }</span>
-    
+    protected Point2DRefiner(
+            final T initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Line2D&gt; samples,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L93">        super(initialEstimation, keepCovariance, inliersData, samples);</span>
+<span class="fc" id="L94">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L95">    }</span>
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-<span class="fc" id="L103">        return mRefinementStandardDeviation;</span>
+<span class="fc" id="L109">        return mRefinementStandardDeviation;</span>
     }
-    
+
     /**
      * Sets standard deviation used for Levenberg-Marquardt fittin during
      * refinement.
@@ -111,49 +117,52 @@ public abstract class Point2DRefiner&lt;T extends Point2D&gt; extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
+     *
      * @param refinementStandardDeviation standard deviation used for
-     * refinement.
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L121">            throw new LockedException();</span>
+            final double refinementStandardDeviation) throws LockedException {
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L128">            throw new LockedException();</span>
         }
-<span class="fc" id="L123">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L124">    }</span>
-    
+<span class="fc" id="L130">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L131">    }</span>
+
     /**
      * Computes the residual between a point and a line as their distance.
+     *
      * @param point a point
-     * @param line a line.
+     * @param line  a line.
      * @return residual (distance between provided point and line).
      */
-    protected double residual(Point2D point, Line2D line) {
-<span class="fc" id="L133">        point.normalize();</span>
-<span class="fc" id="L134">        line.normalize();</span>
-<span class="fc" id="L135">        return Math.abs(line.signedDistance(point));</span>
+    protected double residual(final Point2D point, final Line2D line) {
+<span class="fc" id="L141">        point.normalize();</span>
+<span class="fc" id="L142">        line.normalize();</span>
+<span class="fc" id="L143">        return Math.abs(line.signedDistance(point));</span>
     }
-    
+
     /**
      * Computes total residual among all provided inlier samples.
+     *
      * @param point a point.
      * @return total residual.
      */
-    protected double totalResidual(Point2D point) {
-<span class="fc" id="L144">        double result = 0.0;</span>
-        
-<span class="fc" id="L146">        int nSamples = mInliers.length();</span>
+    protected double totalResidual(final Point2D point) {
+<span class="fc" id="L153">        double result = 0.0;</span>
+
+<span class="fc" id="L155">        final int nSamples = mInliers.length();</span>
         Line2D line;
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
-                //sample is inlier
-<span class="fc" id="L151">                line = mSamples.get(i);</span>
-<span class="fc" id="L152">                result += residual(point, line);</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L160">                line = mSamples.get(i);</span>
+<span class="fc" id="L161">                result += residual(point, line);</span>
             }
         }
-        
-<span class="fc" id="L156">        return result;</span>
+
+<span class="fc" id="L165">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

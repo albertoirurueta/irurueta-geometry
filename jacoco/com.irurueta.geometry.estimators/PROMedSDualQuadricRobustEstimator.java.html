@@ -18,7 +18,11 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.CoincidentPlanesException;
 import com.irurueta.geometry.DualQuadric;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.List;
 
@@ -26,18 +30,19 @@ import java.util.List;
  * Finds the best quadric for provided collection of 3D planes using PROMedS
  * algorithm.
  */
-public class PROMedSDualQuadricRobustEstimator extends 
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROMedSDualQuadricRobustEstimator extends
         DualQuadricRobustEstimator {
     /**
-     * Default value to be used for stop threshold. Stop threshold can be used 
-     * to keep the algorithm iterating in case that best estimated threshold 
-     * using median of residuals is not small enough. Once a solution is found 
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
      * that generates a threshold below this value, the algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
@@ -45,401 +50,417 @@ public class PROMedSDualQuadricRobustEstimator extends
      * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-9;
-        
+
     /**
      * Minimum allowed stop threshold value.
      */
-    public static final double MIN_STOP_THRESHOLD = 0.0;    
+    public static final double MIN_STOP_THRESHOLD = 0.0;
 
     /**
-     * Threshold to be used to keep the algorithm iterating in case that best 
-     * estimated threshold using median of residuals is not small enough. Once 
-     * a solution is found that generates a threshold below this value, the 
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;    
-    
+    private double mStopThreshold;
+
     /**
      * Quality scores corresponding to each 2D line.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;       
-    
+    private double[] mQualityScores;
+
     /**
      * Constructor.
      */
     public PROMedSDualQuadricRobustEstimator() {
-<span class="fc" id="L82">        super();</span>
-<span class="fc" id="L83">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L87">        super();</span>
+<span class="fc" id="L88">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * Constructor with planes.
+     *
      * @param planes 3D planes to estimate a dual quadric.
-     * @throws IllegalArgumentException if provided list of planes don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSDualQuadricRobustEstimator(List&lt;Plane&gt; planes) {
-<span class="fc" id="L93">        super(planes);</span>
-<span class="fc" id="L94">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L95">    }</span>
-    
+    public PROMedSDualQuadricRobustEstimator(final List&lt;Plane&gt; planes) {
+<span class="fc" id="L99">        super(planes);</span>
+<span class="fc" id="L100">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L101">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
     public PROMedSDualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener) {
-<span class="fc" id="L104">        super(listener);</span>
-<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L106">    }</span>
-    
-    
+            final DualQuadricRobustEstimatorListener listener) {
+<span class="fc" id="L111">        super(listener);</span>
+<span class="fc" id="L112">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L113">    }</span>
+
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes 3D planes to estimate a dual quadric.
-     * @throws IllegalArgumentException if provided list of planes don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   3D planes to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSDualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes) {
-<span class="fc" id="L120">        super(listener, planes);</span>
-<span class="fc" id="L121">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L122">    }</span>
-    
+            final DualQuadricRobustEstimatorListener listener,
+            final List&lt;Plane&gt; planes) {
+<span class="fc" id="L128">        super(listener, planes);</span>
+<span class="fc" id="L129">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L130">    }</span>
+
     /**
      * Constructor.
+     *
      * @param qualityScores quality scores corresponding to each provided plane.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 9 planes).
+     *                                  smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
-    public PROMedSDualQuadricRobustEstimator(double[] qualityScores) {
-<span class="fc" id="L131">        super();</span>
-<span class="fc" id="L132">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L133">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L134">    }</span>
+    public PROMedSDualQuadricRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L140">        super();</span>
+<span class="fc" id="L141">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L142">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L143">    }</span>
 
     /**
      * Constructor with planes.
-     * @param planes 3D planes to estimate a dual quadric.
+     *
+     * @param planes        3D planes to estimate a dual quadric.
      * @param qualityScores quality scores corresponding to each provided plane.
-     * @throws IllegalArgumentException if provided list of planes don't have 
-     * the same size as the list of provided quality scores, or if their size
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSDualQuadricRobustEstimator(List&lt;Plane&gt; planes, 
-            double[] qualityScores) {
-<span class="fc" id="L146">        super(planes);</span>
-        
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
+    public PROMedSDualQuadricRobustEstimator(final List&lt;Plane&gt; planes,
+                                             final double[] qualityScores) {
+<span class="fc" id="L156">        super(planes);</span>
+
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
+<span class="fc" id="L159">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L154">    }</span>
-    
+
+<span class="fc" id="L162">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L163">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L164">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided plane.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 9 planes).
+     *                                  smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
     public PROMedSDualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener, double[] qualityScores) {
-<span class="fc" id="L166">        super(listener);</span>
-<span class="fc" id="L167">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L168">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L169">    }</span>
-    
-    
+            final DualQuadricRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="fc" id="L178">        super(listener);</span>
+<span class="fc" id="L179">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L180">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L181">    }</span>
+
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes 3D planes to estimate a dual quadric.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        3D planes to estimate a dual quadric.
      * @param qualityScores quality scores corresponding to each provided plane.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSDualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes, double[] qualityScores) {
-<span class="fc" id="L185">        super(listener, planes);</span>
-        
-<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
-<span class="fc" id="L188">            throw new IllegalArgumentException();</span>
+            final DualQuadricRobustEstimatorListener listener,
+            final List&lt;Plane&gt; planes, final double[] qualityScores) {
+<span class="fc" id="L198">        super(listener, planes);</span>
+
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
+<span class="fc" id="L201">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L191">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L192">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L193">    }</span>
-    
+
+<span class="fc" id="L204">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L205">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L206">    }</span>
+
     /**
-     * Returns threshold to be used to keep the algorithm iterating in case that 
-     * best estimated threshold using median of residuals is not small enough. 
-     * Once a solution is found that generates a threshold below this value, the 
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
      * algorithm will stop.
-     * As in LMedS, the stop threshold can be used to prevent the PROMedS 
-     * algorithm iterating too many times in cases where samples have a very 
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
      * similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
+     *
      * @return stop threshold to stop the algorithm prematurely when a certain
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L215">        return mStopThreshold;</span>
+<span class="fc" id="L229">        return mStopThreshold;</span>
     }
-    
+
     /**
      * Sets threshold to be used to keep the algorithm iterating in case that
-     * best estimated threshold using median of residuals is not small enough. 
-     * Once a solution is found that generates a threshold below this value, the 
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
      * algorithm will stop.
-     * As in LMedS, the stop threshold can be used to prevent the PROMedS 
-     * algorithm iterating too many times in cases where samples have a very 
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
      * similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
-     * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
      * @throws IllegalArgumentException if provided value is zero or negative.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) throws LockedException {
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L242">            throw new LockedException();</span>
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L256" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L257">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L245">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L260">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L248">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L249">    }</span>
-    
+
+<span class="fc" id="L263">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L264">    }</span>
+
     /**
      * Returns quality scores corresponding to each provided plane.
      * The larger the score value the betther the quality of the sampled plane.
+     *
      * @return quality scores corresponding to each point.
      */
     @Override
-    public double[] getQualityScores(){
-<span class="fc" id="L258">        return mQualityScores;</span>
+    public double[] getQualityScores() {
+<span class="fc" id="L274">        return mQualityScores;</span>
     }
-    
+
     /**
      * Sets quality scores corresponding to each provided plane.
      * The larger the score value the better the quality of the sampled plane.
+     *
      * @param qualityScores quality scores corresponding to each plane.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 9 samples).
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException {
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L273">            throw new LockedException();</span>
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L290">            throw new LockedException();</span>
         }
-<span class="fc" id="L275">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L276">    }  </span>
-    
+<span class="fc" id="L292">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L293">    }</span>
+
     /**
      * Indicates if estimator is ready to start the quadric estimation.
-     * This is true when input data (i.e. 3D planes and quality scores) are 
+     * This is true when input data (i.e. 3D planes and quality scores) are
      * provided and a minimum of MINIMUM_SIZE planes are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L286" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L287" title="1 of 2 branches missed.">                mQualityScores.length == mPlanes.size();</span>
-    }       
-            
+<span class="fc bfc" id="L304" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">                mQualityScores.length == mPlanes.size();</span>
+    }
+
     /**
-     * Estimates a dual quadric using a robust estimator and the best set of 3D 
-     * planes that fit into the locus of the estimated dual quadric found using 
+     * Estimates a dual quadric using a robust estimator and the best set of 3D
+     * planes that fit into the locus of the estimated dual quadric found using
      * the robust estimator.
+     *
      * @return a dual quadric.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
-     */    
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
     @Override
-    public DualQuadric estimate() throws LockedException, NotReadyException, 
+    public DualQuadric estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L305" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L306">            throw new LockedException();</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L325">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L308" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L309">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L328">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L312">        PROMedSRobustEstimator&lt;DualQuadric&gt; innerEstimator =</span>
+
+<span class="fc" id="L331">        final PROMedSRobustEstimator&lt;DualQuadric&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L314">                        new PROMedSRobustEstimatorListener&lt;DualQuadric&gt;() {</span>
+<span class="fc" id="L333">                        new PROMedSRobustEstimatorListener&lt;DualQuadric&gt;() {</span>
 
-            @Override
-            public double getThreshold() {
-<span class="fc" id="L318">                return mStopThreshold;</span>
-            }
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L337">                                return mStopThreshold;</span>
+                            }
 
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L323">                return mPlanes.size();</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L342">                                return mPlanes.size();</span>
+                            }
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L328">                return DualQuadricRobustEstimator.MINIMUM_SIZE;</span>
-            }
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L347">                                return DualQuadricRobustEstimator.MINIMUM_SIZE;</span>
+                            }
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;DualQuadric&gt; solutions) {
-<span class="fc" id="L334">                Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L335">                Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L336">                Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L337">                Plane plane4 = mPlanes.get(samplesIndices[3]);</span>
-<span class="fc" id="L338">                Plane plane5 = mPlanes.get(samplesIndices[4]);</span>
-<span class="fc" id="L339">                Plane plane6 = mPlanes.get(samplesIndices[5]);</span>
-<span class="fc" id="L340">                Plane plane7 = mPlanes.get(samplesIndices[6]);</span>
-<span class="fc" id="L341">                Plane plane8 = mPlanes.get(samplesIndices[7]);</span>
-<span class="fc" id="L342">                Plane plane9 = mPlanes.get(samplesIndices[8]);</span>
-                
-                try {
-<span class="fc" id="L345">                    DualQuadric dualQuadric = new DualQuadric(plane1, plane2, </span>
-                            plane3, plane4, plane5, plane6, plane7, plane8, 
-                            plane9);
-<span class="fc" id="L348">                    solutions.add(dualQuadric);</span>
-<span class="fc" id="L349">                } catch (CoincidentPlanesException e) {</span>
-                    //if points are coincident, no solution is added
-<span class="fc" id="L351">                }</span>
-<span class="fc" id="L352">            }</span>
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;DualQuadric&gt; solutions) {
+<span class="fc" id="L353">                                final Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L354">                                final Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L355">                                final Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L356">                                final Plane plane4 = mPlanes.get(samplesIndices[3]);</span>
+<span class="fc" id="L357">                                final Plane plane5 = mPlanes.get(samplesIndices[4]);</span>
+<span class="fc" id="L358">                                final Plane plane6 = mPlanes.get(samplesIndices[5]);</span>
+<span class="fc" id="L359">                                final Plane plane7 = mPlanes.get(samplesIndices[6]);</span>
+<span class="fc" id="L360">                                final Plane plane8 = mPlanes.get(samplesIndices[7]);</span>
+<span class="fc" id="L361">                                final Plane plane9 = mPlanes.get(samplesIndices[8]);</span>
 
-            @Override
-            public double computeResidual(DualQuadric currentEstimation, 
-                    int i) {
-<span class="fc" id="L357">                return residual(currentEstimation, mPlanes.get(i));</span>
-            }
+                                try {
+<span class="fc" id="L364">                                    final DualQuadric dualQuadric = new DualQuadric(plane1, plane2,</span>
+                                            plane3, plane4, plane5, plane6, plane7, plane8,
+                                            plane9);
+<span class="fc" id="L367">                                    solutions.add(dualQuadric);</span>
+<span class="fc" id="L368">                                } catch (final CoincidentPlanesException e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L370">                                }</span>
+<span class="fc" id="L371">                            }</span>
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L362">                return PROMedSDualQuadricRobustEstimator.this.isReady();</span>
-            }
+                            @Override
+                            public double computeResidual(final DualQuadric currentEstimation,
+                                                          final int i) {
+<span class="fc" id="L376">                                return residual(currentEstimation, mPlanes.get(i));</span>
+                            }
 
-            @Override
-            public void onEstimateStart(RobustEstimator&lt;DualQuadric&gt; estimator) {
-<span class="pc bpc" id="L367" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L368">                    mListener.onEstimateStart(</span>
-                            PROMedSDualQuadricRobustEstimator.this);
-                }
-<span class="fc" id="L371">            }</span>
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L381">                                return PROMedSDualQuadricRobustEstimator.this.isReady();</span>
+                            }
 
-            @Override
-            public void onEstimateEnd(RobustEstimator&lt;DualQuadric&gt; estimator) {
-<span class="pc bpc" id="L375" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L376">                    mListener.onEstimateEnd(</span>
-                            PROMedSDualQuadricRobustEstimator.this);
-                }
-<span class="fc" id="L379">            }</span>
+                            @Override
+                            public void onEstimateStart(final RobustEstimator&lt;DualQuadric&gt; estimator) {
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L387">                                    mListener.onEstimateStart(</span>
+                                            PROMedSDualQuadricRobustEstimator.this);
+                                }
+<span class="fc" id="L390">                            }</span>
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;DualQuadric&gt; estimator, int iteration) {
-<span class="pc bpc" id="L384" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L385">                    mListener.onEstimateNextIteration(</span>
-                            PROMedSDualQuadricRobustEstimator.this, iteration);
-                }
-<span class="fc" id="L388">            }</span>
+                            @Override
+                            public void onEstimateEnd(final RobustEstimator&lt;DualQuadric&gt; estimator) {
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L395">                                    mListener.onEstimateEnd(</span>
+                                            PROMedSDualQuadricRobustEstimator.this);
+                                }
+<span class="fc" id="L398">                            }</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;DualQuadric&gt; estimator, float progress) {
-<span class="pc bpc" id="L393" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L394">                    mListener.onEstimateProgressChange(</span>
-                            PROMedSDualQuadricRobustEstimator.this, progress);
-                }
-<span class="fc" id="L397">            }</span>
-            
-            @Override
-            public double[] getQualityScores() {
-<span class="fc" id="L401">                return mQualityScores;</span>
-            }             
-        });
-        
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;DualQuadric&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L404">                                    mListener.onEstimateNextIteration(</span>
+                                            PROMedSDualQuadricRobustEstimator.this, iteration);
+                                }
+<span class="fc" id="L407">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;DualQuadric&gt; estimator, final float progress) {
+<span class="pc bpc" id="L412" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L413">                                    mListener.onEstimateProgressChange(</span>
+                                            PROMedSDualQuadricRobustEstimator.this, progress);
+                                }
+<span class="fc" id="L416">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L420">                                return mQualityScores;</span>
+                            }
+                        });
+
         try {
-<span class="fc" id="L406">            mLocked = true;</span>
-<span class="fc" id="L407">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L408">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L409">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L410">            return innerEstimator.estimate();</span>
-<span class="nc" id="L411">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L412">            throw new LockedException(e);</span>
-<span class="nc" id="L413">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L414">            throw new NotReadyException(e);</span>
+<span class="fc" id="L425">            mLocked = true;</span>
+<span class="fc" id="L426">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L427">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L428">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L429">            return innerEstimator.estimate();</span>
+<span class="nc" id="L430">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L431">            throw new LockedException(e);</span>
+<span class="nc" id="L432">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L433">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L416">            mLocked = false;</span>
+<span class="fc" id="L435">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */    
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L426">        return RobustEstimatorMethod.PROMedS;</span>
-    }    
-    
+<span class="fc" id="L446">        return RobustEstimatorMethod.PROMedS;</span>
+    }
+
     /**
      * Sets quality scores corresponding to each provided plane.
      * This method is used internally and does not check whether instance is
      * locked or not.
+     *
      * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE.
+     *                                  smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) {
-<span class="fc bfc" id="L438" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L439">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L459" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L460">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L442">        mQualityScores = qualityScores;            </span>
-<span class="fc" id="L443">    }</span>
+
+<span class="fc" id="L463">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L464">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

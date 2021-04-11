@@ -31,7 +31,7 @@ public class NotEnoughVerticesException extends GeometryException {
      * Constructor with String containing message.
      * @param message Message indicating the cause of the exception.
      */
-    public NotEnoughVerticesException(String message) {
+    public NotEnoughVerticesException(final String message) {
 <span class="fc" id="L35">        super(message);</span>
 <span class="fc" id="L36">    }</span>
     
@@ -40,7 +40,7 @@ public class NotEnoughVerticesException extends GeometryException {
      * @param message Message describing the cause of the exception.
      * @param cause Instance containing the cause of the exception.
      */
-    public NotEnoughVerticesException(String message, Throwable cause) {
+    public NotEnoughVerticesException(final String message, final Throwable cause) {
 <span class="fc" id="L44">        super(message, cause);</span>
 <span class="fc" id="L45">    }</span>
     
@@ -48,7 +48,7 @@ public class NotEnoughVerticesException extends GeometryException {
      * Constructor with cause.
      * @param cause Instance containing the cause of the exception.
      */
-    public NotEnoughVerticesException(Throwable cause) {
+    public NotEnoughVerticesException(final Throwable cause) {
 <span class="fc" id="L52">        super(cause);</span>
 <span class="fc" id="L53">    }    </span>
 }

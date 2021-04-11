@@ -28,15 +28,15 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
-public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator 
+public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
         extends AffineTransformation3DRobustEstimator {
-    
+
     /**
      * Default robust estimator method when none is provided.
      */
 <span class="fc" id="L37">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
             RobustEstimatorMethod.PROMedS;
-    
+
     /**
      * List of planes to be used to estimate an affine 3D transformation.
      * Each line in the list of input lines must be matched with the
@@ -45,7 +45,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List&lt;Plane&gt; mInputPlanes;
-    
+
     /**
      * List of planes to be used to estimate an affine 3D transformation.
      * Each point in the list of output lines must be matched with the
@@ -54,65 +54,68 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List&lt;Plane&gt; mOutputPlanes;
-    
+
     /**
      * Constructor.
      */
-    public PlaneCorrespondenceAffineTransformation3DRobustEstimator() {
+    protected PlaneCorrespondenceAffineTransformation3DRobustEstimator() {
 <span class="fc" id="L62">        super();</span>
 <span class="fc" id="L63">    }</span>
-    
+
     /**
      * Constructor with lists of planes to be used to estimate an affine 3D
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPlanes list of input planes to be used to estimate an affine 
-     * 3D transformation.
-     * @param outputPlanes list of output planes ot be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes ot be used to estimate an
+     *                     affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public PlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L80">        super();</span>
-<span class="fc" id="L81">        internalSetPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L82">    }</span>
-    
+    protected PlaneCorrespondenceAffineTransformation3DRobustEstimator(
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L81">        super();</span>
+<span class="fc" id="L82">        internalSetPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L83">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes.
+     *                 stars, ends or its progress significantly changes.
      */
-    public PlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L91">        super(listener);</span>
-<span class="fc" id="L92">    }</span>
-    
+    protected PlaneCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L93">        super(listener);</span>
+<span class="fc" id="L94">    }</span>
+
     /**
      * Constructor with listener and lists of planes to be used to estimate
      * affine 3D tranformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param listener listener to be notified of events such as when estimation 
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public PlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L112">        super(listener);</span>
-<span class="fc" id="L113">        internalSetPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L114">    }</span>
-    
+    protected PlaneCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L115">        super(listener);</span>
+<span class="fc" id="L116">        internalSetPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L117">    }</span>
+
     /**
      * Returns list of input planes to be used to estimate an affine 3D
      * transformation.
@@ -120,13 +123,14 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * corresponding planes in the list of output planes located at the same
      * position. Hence, both input planes and output planes must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
      * @return list of input planes to be used to estimate an affine 3D
      * transformation.
      */
     public List&lt;Plane&gt; getInputPlanes() {
-<span class="fc" id="L127">        return mInputPlanes;</span>
+<span class="fc" id="L131">        return mInputPlanes;</span>
     }
-    
+
     /**
      * Returns list of output planes to be used to estimate an affine 3D
      * transformation.
@@ -134,558 +138,583 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * corresponding plane in the list of input planes located at the same
      * position. Hence, both input planes and output planes must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
      * @return list of output planes to be used to estimate an affine 3D
      * transformation.
      */
     public List&lt;Plane&gt; getOutputPlanes() {
-<span class="fc" id="L141">        return mOutputPlanes;</span>
+<span class="fc" id="L146">        return mOutputPlanes;</span>
     }
-    
+
     /**
      * Sets lists of planes to be used to estimate an affine 3D transformation.
-     * Planes in the list located at the same position are considered to be 
+     * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     * @throws LockedException if estimator is locked because a computation is
-     * already in progress.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
      */
-    public final void setPlanes(List&lt;Plane&gt; inputPlanes, 
-            List&lt;Plane&gt; outputPlanes) throws LockedException {
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L161">            throw new LockedException();</span>
+    public final void setPlanes(final List&lt;Plane&gt; inputPlanes,
+                                final List&lt;Plane&gt; outputPlanes) throws LockedException {
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L167">            throw new LockedException();</span>
         }
-<span class="fc" id="L163">        internalSetPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L164">    }</span>
-    
+<span class="fc" id="L169">        internalSetPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L170">    }</span>
+
     /**
      * Indicates if estimator is ready to start the affine 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched planes) are provided
      * and a minimum of MINIMUM_SIZE lines are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L174" title="1 of 4 branches missed.">        return mInputPlanes != null &amp;&amp; mOutputPlanes != null &amp;&amp;</span>
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">                mInputPlanes.size() == mOutputPlanes.size() &amp;&amp;</span>
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                mInputPlanes.size() &gt;= MINIMUM_SIZE;</span>
+<span class="pc bpc" id="L181" title="1 of 4 branches missed.">        return mInputPlanes != null &amp;&amp; mOutputPlanes != null &amp;&amp;</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                mInputPlanes.size() == mOutputPlanes.size() &amp;&amp;</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">                mInputPlanes.size() &gt;= MINIMUM_SIZE;</span>
     }
-    
+
     /**
      * Returns quality scores corresponding to each pair of matched planes.
      * The larger the score value the betther the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="nc" id="L187">        return null;</span>
-    }    
-    
+<span class="nc" id="L195">        return null;</span>
+    }
+
     /**
      * Sets quality scores corresponding to each pair of matched planes.
      * The larger the score value the better the quality of the matching.
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-<span class="nc" id="L202">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
-    
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="nc" id="L212">    }</span>
+
     /**
      * Creates an affine 3D transformation estimator based on 3D plane
      * correspondences an using provided robust estimator method.
+     *
      * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
+     *               best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L213" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L224" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L215">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L226">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L217">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L228">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L219">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L230">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L221">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L232">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L224">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L235">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on 3D plane
      * correspondences and using provided robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an
-     * affine 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an
+     *                     affine 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an
-     * affine 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
+     *                     affine 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L244" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L256" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L246">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L258">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L249">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L261">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L252">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L264">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case PROMedS:
-<span class="fc" id="L255">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L267">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case RANSAC:
             default:
-<span class="fc" id="L259">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L271">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on 3D plane
      * correspondences and using provided robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L276" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L289" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L278">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L291">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L281">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L294">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L284">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L297">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L287">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L300">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L291">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L304">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on 3D line
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input lines to be used to estimate an affine
-     * 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input lines to be used to estimate an affine
+     *                     3D transformation.
      * @param outputPlanes list of output lines to be used to estimate an affine
-     * 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                     3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate best
+     *                     affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            RobustEstimatorMethod method) {
-<span class="fc bfc" id="L315" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L329" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L317">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L331">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L320">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L334">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L323">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L337">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case PROMedS:
-<span class="fc" id="L326">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L340">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case RANSAC:
             default:
-<span class="fc" id="L330">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L344">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on 3D plane
      * correspondences and using provided robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L346" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L361" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L348">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L363">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L350">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L365">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L352">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L367">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L355">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L370">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L359">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L374">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();</span>
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an
-     * affine 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an
-     * affine 3D transformation.
+     *
+     * @param inputPlanes   list of input planes to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an
+     *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                      planes.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L381" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L397" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L383">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L399">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L386">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L402">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L389">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L405">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes, qualityScores);
             case PROMedS:
-<span class="fc" id="L392">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L408">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L396">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L412">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L415" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L432" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L417">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L434">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L420">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L437">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L423">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L440">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L426">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L443">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L430">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L447">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an affine
-     * 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPlanes   list of input planes to be used to estimate an affine
+     *                      3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an affine
+     *                      3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                      planes.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L456" title="All 5 branches covered.">        switch (method) {</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L474" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L458">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L476">                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L461">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L479">                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L464">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L482">                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes, qualityScores);
             case PROMedS:
-<span class="fc" id="L467">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L485">                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L471">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L489">                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
         }
     }
-    
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
+     *
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create() {
-<span class="fc" id="L483">        return create(DEFAULT_ROBUST_METHOD);</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create() {
+<span class="fc" id="L501">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an
-     * affine 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an
+     *                     affine 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an
-     * affine 3D transformation.
+     *                     affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L499">        return create(inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L518">        return create(inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);</span>
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L511">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L531">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L530">        return create(listener, inputPlanes, outputPlanes, </span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L551">        return create(listener, inputPlanes, outputPlanes,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes.
+     *                      planes.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(double[] qualityScores) {
-<span class="fc" id="L543">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final double[] qualityScores) {
+<span class="fc" id="L565">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on 3D line
      * correspondences and using default robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an affine
-     * 3D transformation.
+     *
+     * @param inputPlanes   list of input planes to be used to estimate an affine
+     *                      3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an affine
+     *                      3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes.
+     *                      planes.
      * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) {
-<span class="fc" id="L562">        return create(inputPlanes, outputPlanes, qualityScores, </span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores) {
+<span class="fc" id="L585">        return create(inputPlanes, outputPlanes, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on 3D line
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *                      points.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) {
-<span class="fc" id="L578">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="fc" id="L602">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPlanes   list of input planes to be used to estimate an affine
+     *                      3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an
+     *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
+     *                      lines.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) {
-<span class="fc" id="L600">        return create(listener, inputPlanes, outputPlanes, qualityScores,</span>
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores) {
+<span class="fc" id="L625">        return create(listener, inputPlanes, outputPlanes, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
-            
+
     /**
      * Internal method to set lists of planes to be used to estimate an affine
      * 3D transformation.
      * This method does not check whether estimator is locked or not.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
-     * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetPlanes(List&lt;Plane&gt; inputPlanes, 
-            List&lt;Plane&gt; outputPlanes) {
-<span class="fc bfc" id="L617" title="All 2 branches covered.">        if (inputPlanes.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L618">            throw new IllegalArgumentException();</span>
+    private void internalSetPlanes(final List&lt;Plane&gt; inputPlanes,
+                                   final List&lt;Plane&gt; outputPlanes) {
+<span class="fc bfc" id="L643" title="All 2 branches covered.">        if (inputPlanes.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L644">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L620" title="All 2 branches covered.">        if (inputPlanes.size() != outputPlanes.size()) {</span>
-<span class="fc" id="L621">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L646" title="All 2 branches covered.">        if (inputPlanes.size() != outputPlanes.size()) {</span>
+<span class="fc" id="L647">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L623">        mInputPlanes = inputPlanes;</span>
-<span class="fc" id="L624">        mOutputPlanes = outputPlanes;</span>
-<span class="fc" id="L625">    }</span>
-    
+<span class="fc" id="L649">        mInputPlanes = inputPlanes;</span>
+<span class="fc" id="L650">        mOutputPlanes = outputPlanes;</span>
+<span class="fc" id="L651">    }</span>
+
     /**
      * Computes residual by comparing two lines algebraically by doing the
      * dot product of their parameters.
-     * A residual of 0 indicates that dot product was 1 or -1 and lines were 
+     * A residual of 0 indicates that dot product was 1 or -1 and lines were
      * equal.
-     * A residual of 1 indicates that dot product was 0 and lines were 
+     * A residual of 1 indicates that dot product was 0 and lines were
      * orthogonal.
      * If dot product was -1, then although their director vectors are opposed,
      * lines are considered equal, since sign changes are not taken into account.
-     * @param plane originally sampled output plane.
-     * @param transformedPlane estimated output plane obtained after using 
-     * estimated transformation.
+     *
+     * @param plane            originally sampled output plane.
+     * @param transformedPlane estimated output plane obtained after using
+     *                         estimated transformation.
      * @return computed residual.
      */
-    protected static double getResidual(Plane plane, Plane transformedPlane) {
-<span class="fc" id="L642">        plane.normalize();</span>
-<span class="fc" id="L643">        transformedPlane.normalize();</span>
-        
-<span class="fc" id="L645">        double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +</span>
-<span class="fc" id="L646">                plane.getB() * transformedPlane.getB() +</span>
-<span class="fc" id="L647">                plane.getC() * transformedPlane.getC() +</span>
-<span class="fc" id="L648">                plane.getD() * transformedPlane.getD());</span>
-<span class="fc" id="L649">        return 1.0 - dotProduct;</span>
-    }  
-    
+    protected static double getResidual(final Plane plane, final Plane transformedPlane) {
+<span class="fc" id="L669">        plane.normalize();</span>
+<span class="fc" id="L670">        transformedPlane.normalize();</span>
+
+<span class="fc" id="L672">        final double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +</span>
+<span class="fc" id="L673">                plane.getB() * transformedPlane.getB() +</span>
+<span class="fc" id="L674">                plane.getC() * transformedPlane.getC() +</span>
+<span class="fc" id="L675">                plane.getD() * transformedPlane.getD());</span>
+<span class="fc" id="L676">        return 1.0 - dotProduct;</span>
+    }
+
     /**
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
      * If refinement is enabled and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
+     *
      * @param transformation transformation estimated by a robust estimator
-     * without refinement.
+     *                       without refinement.
      * @return solution after refinement (if requested) or the provided
      * non-refined solution if not requested or refinement failed.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     protected AffineTransformation3D attemptRefine(
-            AffineTransformation3D transformation) {
-<span class="fc bfc" id="L665" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L666">            PlaneCorrespondenceAffineTransformation3DRefiner refiner =</span>
+            final AffineTransformation3D transformation) {
+<span class="fc bfc" id="L694" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L695">            final PlaneCorrespondenceAffineTransformation3DRefiner refiner =</span>
                     new PlaneCorrespondenceAffineTransformation3DRefiner(
-<span class="fc" id="L668">                    transformation, mKeepCovariance, getInliersData(),</span>
-                    mInputPlanes, mOutputPlanes, 
-<span class="fc" id="L670">                    getRefinementStandardDeviation());</span>
-            
+<span class="fc" id="L697">                            transformation, mKeepCovariance, getInliersData(),</span>
+                            mInputPlanes, mOutputPlanes,
+<span class="fc" id="L699">                            getRefinementStandardDeviation());</span>
+
             try {
-<span class="fc" id="L673">                AffineTransformation3D result = new AffineTransformation3D();</span>
-<span class="fc" id="L674">                boolean improved = refiner.refine(result);</span>
-                
-<span class="pc bpc" id="L676" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
-                    //keep covariance
-<span class="fc" id="L678">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L702">                final AffineTransformation3D result = new AffineTransformation3D();</span>
+<span class="fc" id="L703">                final boolean improved = refiner.refine(result);</span>
+
+<span class="pc bpc" id="L705" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+                    // keep covariance
+<span class="fc" id="L707">                    mCovariance = refiner.getCovariance();</span>
                 }
-                
-<span class="fc bfc" id="L681" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="nc" id="L682">            } catch (Exception e) {</span>
-                //refinement failed, so we return input value
-<span class="nc" id="L684">                return transformation;</span>
+
+<span class="pc bpc" id="L710" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
+<span class="nc" id="L711">            } catch (final Exception e) {</span>
+                //final refinement failed, so we return input value
+<span class="nc" id="L713">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L687">            return transformation;</span>
-        }        
+<span class="fc" id="L716">            return transformation;</span>
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

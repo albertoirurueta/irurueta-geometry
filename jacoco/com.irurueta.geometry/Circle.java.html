@@ -21,550 +21,585 @@ import com.irurueta.algebra.Matrix;
 import java.io.Serializable;
 
 /**
- *  This class defines a circle.
+ * This class defines a circle.
  */
-@SuppressWarnings(&quot;WeakerAccess&quot;)
 public class Circle implements Serializable {
-    
+
     /**
      * Constant defining minimum allowed radius.
      */
     public static final double MIN_RADIUS = 0.0;
-    
+
     /**
      * Constant defining default threshold value used when none is provided.
      */
     public static final double DEFAULT_THRESHOLD = 1e-9;
-    
+
     /**
      * Constant defining minimum allowed threshold.
      */
     public static final double MIN_THRESHOLD = 0.0;
-    
+
     /**
      * Constant defining machine precision.
      */
-    public static final double EPS = 1e-12;    
-    
+    public static final double EPS = 1e-12;
+
     /**
      * Center of circle.
      */
     private Point2D mCenter;
-    
+
     /**
      * Radius of circle.
      */
     private double mRadius;
-                
+
     /**
      * Empty constructor.
      * Creates circle located at space origin (0,0) with radius 1.0.
      */
-<span class="fc" id="L63">    public Circle(){</span>
-<span class="fc" id="L64">        mCenter = Point2D.create();</span>
-<span class="fc" id="L65">        mRadius = 1.0;</span>
-<span class="fc" id="L66">    }</span>
-    
+<span class="fc" id="L62">    public Circle() {</span>
+<span class="fc" id="L63">        mCenter = Point2D.create();</span>
+<span class="fc" id="L64">        mRadius = 1.0;</span>
+<span class="fc" id="L65">    }</span>
+
     /**
      * Constructor.
      * Sets center and radius of circle.
+     *
      * @param center Center of circle.
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-<span class="fc" id="L75">    public Circle(Point2D center, double radius) {</span>
+<span class="fc" id="L75">    public Circle(final Point2D center, final double radius) {</span>
 <span class="fc" id="L76">        setCenterAndRadius(center, radius);</span>
 <span class="fc" id="L77">    }</span>
-    
+
     /**
      * Constructor.
      * Computes a circle by using three points that must belong to its locus.
+     *
      * @param point1 point 1.
      * @param point2 point 2.
      * @param point3 point 3.
      * @throws ColinearPointsException if provided set of points are coincident
-     * or colinear (form a single line). In such cases a singularity occurs 
-     * since a circle having an infinite radius would be required to contain all
-     * three points in its locus.
+     *                                 or colinear (form a single line). In such cases a singularity occurs
+     *                                 since a circle having an infinite radius would be required to contain all
+     *                                 three points in its locus.
      */
-    public Circle(Point2D point1, Point2D point2, Point2D point3) 
-<span class="fc" id="L91">            throws ColinearPointsException {</span>
-<span class="fc" id="L92">        setParametersFromPoints(point1, point2, point3);</span>
-<span class="fc" id="L93">    }</span>
-    
+    public Circle(final Point2D point1, final Point2D point2, final Point2D point3)
+<span class="fc" id="L92">            throws ColinearPointsException {</span>
+<span class="fc" id="L93">        setParametersFromPoints(point1, point2, point3);</span>
+<span class="fc" id="L94">    }</span>
+
     /**
      * Constructor.
      * Computes a circle from a valid conic corresponding to a circle.
+     *
      * @param conic a conic to create a circle from.
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
-<span class="fc" id="L101">    public Circle(Conic conic) {</span>
-<span class="fc" id="L102">        setFromConic(conic);</span>
-<span class="fc" id="L103">    }</span>
-    
+<span class="fc" id="L103">    public Circle(final Conic conic) {</span>
+<span class="fc" id="L104">        setFromConic(conic);</span>
+<span class="fc" id="L105">    }</span>
+
     /**
      * Returns center of circle.
+     *
      * @return Center of circle.
      */
     public Point2D getCenter() {
-<span class="fc" id="L110">        return mCenter;</span>
+<span class="fc" id="L113">        return mCenter;</span>
     }
-    
+
     /**
      * Sets center of circle.
+     *
      * @param center Center of circle.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point2D center) {
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        if(center == null) throw new NullPointerException();</span>
-<span class="fc" id="L120">        mCenter = center;</span>
-<span class="fc" id="L121">    }</span>
-    
+    public void setCenter(final Point2D center) {
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        if (center == null) {</span>
+<span class="fc" id="L124">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L126">        mCenter = center;</span>
+<span class="fc" id="L127">    }</span>
+
     /**
      * Returns radius of circle.
+     *
      * @return Radius of circle.
      */
     public double getRadius() {
-<span class="fc" id="L128">        return mRadius;</span>
+<span class="fc" id="L135">        return mRadius;</span>
     }
-    
+
     /**
      * Sets radius of circle.
+     *
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) {
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="fc" id="L138">            throw new IllegalArgumentException();</span>
+    public void setRadius(final double radius) {
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="fc" id="L146">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L141">        mRadius = radius;</span>
-<span class="fc" id="L142">    }</span>
-    
+
+<span class="fc" id="L149">        mRadius = radius;</span>
+<span class="fc" id="L150">    }</span>
+
     /**
      * Sets center and radius of this circle.
+     *
      * @param center Center to be set.
      * @param radius Radius to be set.
      * @throws IllegalArgumentException Raised if provided radius is negative.
-     * @throws NullPointerException Raised if provided center is null.
+     * @throws NullPointerException     Raised if provided center is null.
      */
-    public final void setCenterAndRadius(Point2D center, double radius) {
-<span class="fc" id="L152">        setRadius(radius);        </span>
-<span class="fc" id="L153">        setCenter(center);</span>
-<span class="fc" id="L154">    }</span>
-    
+    public final void setCenterAndRadius(final Point2D center, final double radius) {
+<span class="fc" id="L161">        setRadius(radius);</span>
+<span class="fc" id="L162">        setCenter(center);</span>
+<span class="fc" id="L163">    }</span>
+
     /**
      * Sets parameters of a circle by using three points that must belong to its
      * locus.
+     *
      * @param point1 point 1.
      * @param point2 point 2.
      * @param point3 point 3.
      * @throws ColinearPointsException if provided set of points are coincident
-     * or colinear (form a single line). In such cases a singularity occurs 
-     * since a circle having an infinite radius would be required to contain all
-     * three points in its locus.
+     *                                 or colinear (form a single line). In such cases a singularity occurs
+     *                                 since a circle having an infinite radius would be required to contain all
+     *                                 three points in its locus.
      */
-    public final void setParametersFromPoints(Point2D point1, Point2D point2, 
-            Point2D point3) throws ColinearPointsException {
-        
-        //normalize points to increase accuracy
-<span class="fc" id="L171">        point1.normalize();</span>
-<span class="fc" id="L172">        point2.normalize();</span>
-<span class="fc" id="L173">        point3.normalize();</span>
-        
+    public final void setParametersFromPoints(
+            final Point2D point1, final Point2D point2,
+            final Point2D point3) throws ColinearPointsException {
+
+        // normalize points to increase accuracy
+<span class="fc" id="L182">        point1.normalize();</span>
+<span class="fc" id="L183">        point2.normalize();</span>
+<span class="fc" id="L184">        point3.normalize();</span>
+
         try {
-<span class="fc" id="L176">            Matrix m = new Matrix(3, 3);</span>
-<span class="fc" id="L177">            double[] b = new double[3];</span>
-            
-            //1st point
-<span class="fc" id="L180">            double x = point1.getHomX();</span>
-<span class="fc" id="L181">            double y = point1.getHomY();</span>
-<span class="fc" id="L182">            double w = point1.getHomW();</span>
-<span class="fc" id="L183">            m.setElementAt(0, 0, 2.0 * x * w);</span>
-<span class="fc" id="L184">            m.setElementAt(0, 1, 2.0 * y * w);</span>
-<span class="fc" id="L185">            m.setElementAt(0, 2, w * w);            </span>
-<span class="fc" id="L186">            b[0] = -x * x - y * y;</span>
-            
-            //2nd point
-<span class="fc" id="L189">            x = point2.getHomX();</span>
-<span class="fc" id="L190">            y = point2.getHomY();</span>
-<span class="fc" id="L191">            w = point2.getHomW();</span>
-<span class="fc" id="L192">            m.setElementAt(1, 0, 2.0 * x * w);</span>
-<span class="fc" id="L193">            m.setElementAt(1, 1, 2.0 * y * w);</span>
-<span class="fc" id="L194">            m.setElementAt(1, 2, w * w);</span>
-<span class="fc" id="L195">            b[1] = -x * x - y * y;</span>
-            
-            //3rd point
-<span class="fc" id="L198">            x = point3.getHomX();</span>
-<span class="fc" id="L199">            y = point3.getHomY();</span>
-<span class="fc" id="L200">            w = point3.getHomW();</span>
-<span class="fc" id="L201">            m.setElementAt(2, 0, 2.0 * x * w);</span>
-<span class="fc" id="L202">            m.setElementAt(2, 1, 2.0 * y * w);</span>
-<span class="fc" id="L203">            m.setElementAt(2, 2, w * w);</span>
-<span class="fc" id="L204">            b[2] = -x * x - y * y;</span>
-            
-            //normalize each row to increase accuracy
-<span class="fc" id="L207">            double[] row = new double[3];</span>
+<span class="fc" id="L187">            final Matrix m = new Matrix(3, 3);</span>
+<span class="fc" id="L188">            final double[] b = new double[3];</span>
+
+            // 1st point
+<span class="fc" id="L191">            double x = point1.getHomX();</span>
+<span class="fc" id="L192">            double y = point1.getHomY();</span>
+<span class="fc" id="L193">            double w = point1.getHomW();</span>
+<span class="fc" id="L194">            m.setElementAt(0, 0, 2.0 * x * w);</span>
+<span class="fc" id="L195">            m.setElementAt(0, 1, 2.0 * y * w);</span>
+<span class="fc" id="L196">            m.setElementAt(0, 2, w * w);</span>
+<span class="fc" id="L197">            b[0] = -x * x - y * y;</span>
+
+            // 2nd point
+<span class="fc" id="L200">            x = point2.getHomX();</span>
+<span class="fc" id="L201">            y = point2.getHomY();</span>
+<span class="fc" id="L202">            w = point2.getHomW();</span>
+<span class="fc" id="L203">            m.setElementAt(1, 0, 2.0 * x * w);</span>
+<span class="fc" id="L204">            m.setElementAt(1, 1, 2.0 * y * w);</span>
+<span class="fc" id="L205">            m.setElementAt(1, 2, w * w);</span>
+<span class="fc" id="L206">            b[1] = -x * x - y * y;</span>
+
+            // 3rd point
+<span class="fc" id="L209">            x = point3.getHomX();</span>
+<span class="fc" id="L210">            y = point3.getHomY();</span>
+<span class="fc" id="L211">            w = point3.getHomW();</span>
+<span class="fc" id="L212">            m.setElementAt(2, 0, 2.0 * x * w);</span>
+<span class="fc" id="L213">            m.setElementAt(2, 1, 2.0 * y * w);</span>
+<span class="fc" id="L214">            m.setElementAt(2, 2, w * w);</span>
+<span class="fc" id="L215">            b[2] = -x * x - y * y;</span>
+
+            // normalize each row to increase accuracy
+<span class="fc" id="L218">            final double[] row = new double[3];</span>
             double rowNorm;
-            
-<span class="fc bfc" id="L210" title="All 2 branches covered.">            for (int j = 0; j &lt; 3; j++) {</span>
-<span class="fc" id="L211">                m.getSubmatrixAsArray(j, 0, j, 2, row);</span>
-<span class="fc" id="L212">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L213" title="All 2 branches covered.">                for (int i = 0; i &lt; 3; i++) {</span>
-<span class="fc" id="L214">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            for (int j = 0; j &lt; 3; j++) {</span>
+<span class="fc" id="L222">                m.getSubmatrixAsArray(j, 0, j, 2, row);</span>
+<span class="fc" id="L223">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">                for (int i = 0; i &lt; 3; i++) {</span>
+<span class="fc" id="L225">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
                 }
-<span class="fc" id="L216">                b[j] /= rowNorm;</span>
+<span class="fc" id="L227">                b[j] /= rowNorm;</span>
             }
-            
-<span class="fc" id="L219">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
-            
-<span class="fc" id="L221">            double d = params[0]; //d = -cx</span>
-<span class="fc" id="L222">            double e = params[1]; //e = -cy</span>
-<span class="fc" id="L223">            double f = params[2]; //f = cx^2 + cy^2 - R^2</span>
-            
-            //compute center
-<span class="fc" id="L226">            double inhomCx = -d;</span>
-<span class="fc" id="L227">            double inhomCy = -e;</span>
-<span class="fc" id="L228">            Point2D center = new InhomogeneousPoint2D(inhomCx, inhomCy);</span>
-            
-            //compute radius
-<span class="fc" id="L231">            double radius = Math.sqrt(inhomCx * inhomCx + </span>
+
+<span class="fc" id="L230">            final double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
+
+            // d = -cx
+<span class="fc" id="L233">            final double d = params[0];</span>
+            // e = -cy
+<span class="fc" id="L235">            final double e = params[1];</span>
+            // f = cx^2 + cy^2 - R^2
+<span class="fc" id="L237">            final double f = params[2];</span>
+
+            // compute center
+<span class="fc" id="L240">            final double inhomCx = -d;</span>
+<span class="fc" id="L241">            final double inhomCy = -e;</span>
+<span class="fc" id="L242">            final Point2D center = new InhomogeneousPoint2D(inhomCx, inhomCy);</span>
+
+            // compute radius
+<span class="fc" id="L245">            final double radius = Math.sqrt(inhomCx * inhomCx +</span>
                     inhomCy * inhomCy - f);
-            
-<span class="fc" id="L234">            setCenterAndRadius(center, radius);</span>
-<span class="fc" id="L235">        } catch (AlgebraException e) {</span>
-<span class="fc" id="L236">            throw new ColinearPointsException(e);</span>
-<span class="fc" id="L237">        }</span>
-<span class="fc" id="L238">    }</span>
-    
+
+<span class="fc" id="L248">            setCenterAndRadius(center, radius);</span>
+<span class="fc" id="L249">        } catch (final AlgebraException e) {</span>
+<span class="fc" id="L250">            throw new ColinearPointsException(e);</span>
+<span class="fc" id="L251">        }</span>
+<span class="fc" id="L252">    }</span>
+
     /**
      * Returns area of a circle having provided radius.
+     *
      * @param radius Radius of a circle.
      * @return Area of a circle having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double area(double radius) {
-<span class="pc bpc" id="L247" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="nc" id="L248">            throw new IllegalArgumentException();</span>
+    public static double area(final double radius) {
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="nc" id="L263">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L250">        return Math.PI * radius * radius;</span>
+<span class="fc" id="L265">        return Math.PI * radius * radius;</span>
     }
-    
+
     /**
      * Returns area of this circle.
+     *
      * @return Area of this circle.
      */
     public double getArea() {
-<span class="fc" id="L258">        return area(mRadius);</span>
+<span class="fc" id="L274">        return area(mRadius);</span>
     }
-    
+
     /**
      * Returns perimeter of a circle having provided radius.
+     *
      * @param radius Radius of a circle.
      * @return Perimeter of a circle having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double perimeter(double radius) {
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="nc" id="L269">            throw new IllegalArgumentException();</span>
+    public static double perimeter(final double radius) {
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="nc" id="L286">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L271">        return 2.0 * Math.PI * radius;</span>
+<span class="fc" id="L288">        return 2.0 * Math.PI * radius;</span>
     }
-    
+
     /**
      * Returns perimeter of this circle.
+     *
      * @return Perimeter of this circle.
      */
     public double getPerimeter() {
-<span class="fc" id="L279">        return perimeter(mRadius);</span>
+<span class="fc" id="L297">        return perimeter(mRadius);</span>
     }
-    
+
     /**
      * Gets curvature for provided radius.
      * Curvature of a circle is always the reciprocal of its radius.
+     *
      * @param radius radius of a circle.
      * @return curvature of a circle.
      */
-    public static double curvature(double radius) {
-<span class="fc" id="L289">        return 1.0 / radius;</span>
+    public static double curvature(final double radius) {
+<span class="fc" id="L308">        return 1.0 / radius;</span>
     }
-    
+
     /**
      * Gets curvature of radius at provided point.
      * Curvature of a circle is always the reciprocal of its radius.
+     *
      * @return curvature of circle.
      */
     public double getCurvature() {
-<span class="fc" id="L298">        return curvature(mRadius);</span>
+<span class="fc" id="L318">        return curvature(mRadius);</span>
     }
-    
+
     /**
      * Determines if provided point is inside this circle or not up to a certain
      * threshold.
-     * If provided threshold is positive, the circle behaves as if it was a 
+     * If provided threshold is positive, the circle behaves as if it was a
      * larger circle increased by threshold amount, if provided threshold is
      * negative, the circle behaves as if it was a smaller circle decreased by
      * threshold amount in radius.
-     * @param point Point to be checked.
+     *
+     * @param point     Point to be checked.
      * @param threshold Threshold to determine if point is inside or not.
      * @return True if point is considered to be inside this circle, false
      * otherwise.
      */
-    public boolean isInside(Point2D point, double threshold) {
-<span class="fc bfc" id="L314" title="All 2 branches covered.">        return point.distanceTo(mCenter) - threshold &lt;= mRadius;</span>
+    public boolean isInside(final Point2D point, final double threshold) {
+<span class="fc bfc" id="L335" title="All 2 branches covered.">        return point.distanceTo(mCenter) - threshold &lt;= mRadius;</span>
     }
 
     /**
      * Determines if provided point is inside this circle or not.
+     *
      * @param point Point to be checked.
      * @return True if point is considered to be inside this circle, false
      * otherwise.
      */
-    public boolean isInside(Point2D point) {
-<span class="fc" id="L324">        return isInside(point, 0.0);</span>
+    public boolean isInside(final Point2D point) {
+<span class="fc" id="L346">        return isInside(point, 0.0);</span>
     }
-            
+
     /**
      * Returns distance from provided point to the closest point located in the
      * circle boundary.
      * Returned distance will be negative when point is inside of circle, and
      * positive otherwise.
+     *
      * @param point Point to be checked.
      * @return Distance from point to circle boundary.
      */
-    public double getSignedDistance(Point2D point) {
-<span class="fc" id="L336">        return signedDistance(this, point);</span>
+    public double getSignedDistance(final Point2D point) {
+<span class="fc" id="L359">        return signedDistance(this, point);</span>
     }
-    
+
     /**
      * Returns distance from provided point to the closest point located in
      * provided circle boundary.
      * Returned distance will be negative when point is inside of circle, and
      * positive otherwise.
+     *
      * @param circle A circle.
-     * @param point Point to be checked.
+     * @param point  Point to be checked.
      * @return Distance from point to provided circle boundary.
      */
-    public static double signedDistance(Circle circle, Point2D point) {
-<span class="fc" id="L349">        return point.distanceTo(circle.getCenter()) - circle.getRadius();</span>
-    }    
-    
+    public static double signedDistance(final Circle circle, final Point2D point) {
+<span class="fc" id="L373">        return point.distanceTo(circle.getCenter()) - circle.getRadius();</span>
+    }
+
     /**
      * Returns distance from provided point to the closest point located in the
      * circle boundary.
+     *
      * @param point Point to be checked.
      * @return Distance from point to circle boundary.
      */
-    public double getDistance(Point2D point) {
-<span class="fc" id="L359">        return Math.abs(getSignedDistance(point));</span>
+    public double getDistance(final Point2D point) {
+<span class="fc" id="L384">        return Math.abs(getSignedDistance(point));</span>
     }
-    
+
     /**
      * Returns distance from provided point to the closest point located in
      * provided circle boundary.
+     *
      * @param circle A circle.
-     * @param point Point to be checked.
+     * @param point  Point to be checked.
      * @return Distance from point to provided circle boundary.
      */
-    public static double distance(Circle circle, Point2D point) {
-<span class="fc" id="L370">        return Math.abs(signedDistance(circle, point));</span>
+    public static double distance(final Circle circle, final Point2D point) {
+<span class="fc" id="L396">        return Math.abs(signedDistance(circle, point));</span>
     }
-    
+
     /**
      * Returns closest point to provided point that is located in this circle
      * boundary.
+     *
      * @param point A point to be checked.
      * @return Closest point laying in circle boundary.
-     * @throws UndefinedPointException Raised if provided point is at circle 
-     * center or very close to it.
+     * @throws UndefinedPointException Raised if provided point is at circle
+     *                                 center or very close to it.
      */
-    public Point2D getClosestPoint(Point2D point) 
+    public Point2D getClosestPoint(final Point2D point)
             throws UndefinedPointException {
-<span class="fc" id="L383">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L384">        closestPoint(point, result);</span>
-<span class="fc" id="L385">        return result;</span>
+<span class="fc" id="L410">        final Point2D result = Point2D.create();</span>
+<span class="fc" id="L411">        closestPoint(point, result);</span>
+<span class="fc" id="L412">        return result;</span>
     }
-    
+
     /**
      * Computes closest point to provided point that is located in this circle
      * boundary and stores the result in provided result instance.
-     * @param point A point to be checked.
+     *
+     * @param point  A point to be checked.
      * @param result Instance where result will be stored.
      * @throws UndefinedPointException Raised if provided point is at circle
-     * center or very close to ti.
+     *                                 center or very close to ti.
      */
-    public void closestPoint(Point2D point, Point2D result) 
+    public void closestPoint(final Point2D point, final Point2D result)
             throws UndefinedPointException {
-        
-<span class="fc" id="L399">        double directionX = point.getInhomX() - mCenter.getInhomX();</span>
-<span class="fc" id="L400">        double directionY = point.getInhomY() - mCenter.getInhomY();</span>
-        //normalize direction and multiply by radius to set result as locus of
-        //circle
-<span class="fc" id="L403">        double norm = Math.sqrt(directionX * directionX + </span>
+
+<span class="fc" id="L427">        double directionX = point.getInhomX() - mCenter.getInhomX();</span>
+<span class="fc" id="L428">        double directionY = point.getInhomY() - mCenter.getInhomY();</span>
+        // normalize direction and multiply by radius to set result as locus of
+        // circle
+<span class="fc" id="L431">        final double norm = Math.sqrt(directionX * directionX +</span>
                 directionY * directionY);
-        
-        //check if point is at center or very close to center, in that case the
-        //closest point cannot be found (would be all points of a circle)
-<span class="fc bfc" id="L408" title="All 2 branches covered.">        if (norm &lt; EPS) {</span>
-<span class="fc" id="L409">            throw new UndefinedPointException();</span>
+
+        // check if point is at center or very close to center, in that case the
+        // closest point cannot be found (would be all points of a circle)
+<span class="fc bfc" id="L436" title="All 2 branches covered.">        if (norm &lt; EPS) {</span>
+<span class="fc" id="L437">            throw new UndefinedPointException();</span>
         }
-        
-<span class="fc" id="L412">        directionX *= mRadius / norm;</span>
-<span class="fc" id="L413">        directionY *= mRadius / norm;</span>
-        
-<span class="fc" id="L415">        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX, </span>
-<span class="fc" id="L416">                mCenter.getInhomY() + directionY);        </span>
-<span class="fc" id="L417">    }</span>
-    
+
+<span class="fc" id="L440">        directionX *= mRadius / norm;</span>
+<span class="fc" id="L441">        directionY *= mRadius / norm;</span>
+
+<span class="fc" id="L443">        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX,</span>
+<span class="fc" id="L444">                mCenter.getInhomY() + directionY);</span>
+<span class="fc" id="L445">    }</span>
+
     /**
      * Determines whether provided point lies at circle boundary or not up to
      * a certain threshold.
-     * @param point Point to be checked.
+     *
+     * @param point     Point to be checked.
      * @param threshold A small threshold to determine whether point lies at
-     * circle boundary.
+     *                  circle boundary.
      * @return True if point lies at circle boundary, false otherwise.
-     * @throws IllegalArgumentException Raised if provided threshold is 
-     * negative.
+     * @throws IllegalArgumentException Raised if provided threshold is
+     *                                  negative.
      */
-    public boolean isLocus(Point2D point, double threshold) {
-<span class="fc bfc" id="L430" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L431">            throw new IllegalArgumentException();</span>
+    public boolean isLocus(final Point2D point, final double threshold) {
+<span class="fc bfc" id="L459" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L460">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc bfc" id="L434" title="All 2 branches covered.">        return Math.abs(point.distanceTo(mCenter) - mRadius) &lt;= threshold;        </span>
-    }    
-    
+
+<span class="fc bfc" id="L463" title="All 2 branches covered.">        return Math.abs(point.distanceTo(mCenter) - mRadius) &lt;= threshold;</span>
+    }
+
     /**
      * Determines whether provided point lies at circle boundary or not.
+     *
      * @param point Point to be checked.
      * @return True if point lies at circle boundary, false otherwise.
      */
-    public boolean isLocus(Point2D point) {
-<span class="fc" id="L443">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+    public boolean isLocus(final Point2D point) {
+<span class="fc" id="L473">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }
-    
+
     /**
      * Returns a line tangent to this circle at provided point. Provided point
-     * must be locus of this circle, otherwise a NotLocusException will be 
+     * must be locus of this circle, otherwise a NotLocusException will be
      * thrown.
+     *
      * @param point a locus point of this circle.
      * @return a 2D line tangent to this circle at provided point.
-     * @throws NotLocusException if provided point is not locus of this circle 
-     * up to DEFAULT_THRESHOLD.
+     * @throws NotLocusException if provided point is not locus of this circle
+     *                           up to DEFAULT_THRESHOLD.
      */
-    public Line2D getTangentLineAt(Point2D point) throws NotLocusException {
-<span class="fc" id="L456">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
+    public Line2D getTangentLineAt(final Point2D point) throws NotLocusException {
+<span class="fc" id="L487">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
     }
-    
+
     /**
      * Returns a line tangent to this circle at provided point. Provided point
-     * must be locus of this circle, otherwise a NotLocusException will be 
+     * must be locus of this circle, otherwise a NotLocusException will be
      * thrown.
-     * @param point a locus point of this circle.
+     *
+     * @param point     a locus point of this circle.
      * @param threshold threshold to determine if provided point is locus.
      * @return a 2D line tangent to this circle at provided point.
-     * @throws NotLocusException if provided point is not locus of this circle 
-     * up to provided threshold.
+     * @throws NotLocusException        if provided point is not locus of this circle
+     *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public Line2D getTangentLineAt(Point2D point, double threshold)
+    public Line2D getTangentLineAt(final Point2D point, final double threshold)
             throws NotLocusException {
-        
-<span class="fc" id="L473">        Line2D line = new Line2D();</span>
-<span class="fc" id="L474">        tangentLineAt(point, line, threshold);</span>
-<span class="fc" id="L475">        return line;</span>
+
+<span class="fc" id="L505">        final Line2D line = new Line2D();</span>
+<span class="fc" id="L506">        tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L507">        return line;</span>
     }
-    
+
     /**
      * Computes a line tangent to this circle at provided point. Provided point
-     * must be locus of this circle, otherwise a NotLocusException will be 
+     * must be locus of this circle, otherwise a NotLocusException will be
      * thrown.
-     * @param point a locus point of this circle.
-     * @param line instance of a 2D line where result will be stored.
+     *
+     * @param point     a locus point of this circle.
+     * @param line      instance of a 2D line where result will be stored.
      * @param threshold threshold to determine if provided point is locus.
-     * @throws NotLocusException if provided point is not locus of this circle
-     * up to provided threshold.
+     * @throws NotLocusException        if provided point is not locus of this circle
+     *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public void tangentLineAt(Point2D point, Line2D line, double threshold)
-            throws NotLocusException {
-        
-<span class="pc bpc" id="L492" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
-<span class="nc" id="L493">            throw new NotLocusException();</span>
+    public void tangentLineAt(final Point2D point, final Line2D line,
+                              final double threshold) throws NotLocusException {
+
+<span class="pc bpc" id="L525" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
+<span class="nc" id="L526">            throw new NotLocusException();</span>
         }
-        
-<span class="fc" id="L496">        point.normalize();</span>
-<span class="fc" id="L497">        mCenter.normalize();</span>
-        
-        //C =   [1  0   d]
-        //      [0  1   e]
-        //      [d  e   f]
-        
-        //Hence line is l = C * p, where C is the circle conic and p is a 
-        //point in the locus of the circle
-        
-<span class="fc" id="L506">        double homX = point.getHomX();</span>
-<span class="fc" id="L507">        double homY = point.getHomY();</span>
-<span class="fc" id="L508">        double homW = point.getHomW();</span>
-<span class="fc" id="L509">        double cx = mCenter.getInhomX();</span>
-<span class="fc" id="L510">        double cy = mCenter.getInhomY();</span>
-<span class="fc" id="L511">        double conicD = -cx;</span>
-<span class="fc" id="L512">        double conicE = -cy;</span>
-<span class="fc" id="L513">        double conicF = cx * cx + cy * cy - mRadius * mRadius;</span>
-        
-<span class="fc" id="L515">        double lineA = homX + conicD * homW;</span>
-<span class="fc" id="L516">        double lineB = homY + conicE * homW;</span>
-<span class="fc" id="L517">        double lineC = conicD * homX + conicE * homY + conicF * homW;</span>
-<span class="fc" id="L518">        line.setParameters(lineA, lineB, lineC);</span>
-<span class="fc" id="L519">    }</span>
-    
+
+<span class="fc" id="L529">        point.normalize();</span>
+<span class="fc" id="L530">        mCenter.normalize();</span>
+
+        // C =   [1  0   d]
+        //       [0  1   e]
+        //       [d  e   f]
+
+        // Hence line is l = C * p, where C is the circle conic and p is a
+        // point in the locus of the circle
+
+<span class="fc" id="L539">        final double homX = point.getHomX();</span>
+<span class="fc" id="L540">        final double homY = point.getHomY();</span>
+<span class="fc" id="L541">        final double homW = point.getHomW();</span>
+<span class="fc" id="L542">        final double cx = mCenter.getInhomX();</span>
+<span class="fc" id="L543">        final double cy = mCenter.getInhomY();</span>
+<span class="fc" id="L544">        final double conicD = -cx;</span>
+<span class="fc" id="L545">        final double conicE = -cy;</span>
+<span class="fc" id="L546">        final double conicF = cx * cx + cy * cy - mRadius * mRadius;</span>
+
+<span class="fc" id="L548">        final double lineA = homX + conicD * homW;</span>
+<span class="fc" id="L549">        final double lineB = homY + conicE * homW;</span>
+<span class="fc" id="L550">        final double lineC = conicD * homX + conicE * homY + conicF * homW;</span>
+<span class="fc" id="L551">        line.setParameters(lineA, lineB, lineC);</span>
+<span class="fc" id="L552">    }</span>
+
     /**
      * Converts this circle into a conic.
      * Conics are a more general representation of circles.
+     *
      * @return A conic representing this circle.
      */
     public Conic toConic() {
-<span class="fc" id="L527">        mCenter.normalize();</span>
-        //use inhomogeneous center coordinates
-<span class="fc" id="L529">        double cx = mCenter.getInhomX();</span>
-<span class="fc" id="L530">        double cy = mCenter.getInhomY();</span>
-        
-<span class="fc" id="L532">        double a = 1.0;</span>
-<span class="fc" id="L533">        double b = 0.0;</span>
-<span class="fc" id="L534">        double c = 1.0;</span>
-<span class="fc" id="L535">        double d = -cx;</span>
-<span class="fc" id="L536">        double e = -cy;</span>
-<span class="fc" id="L537">        double f = cx * cx + cy * cy - mRadius * mRadius;</span>
-        
-<span class="fc" id="L539">        return new Conic(a, b, c, d, e, f);</span>
+<span class="fc" id="L561">        mCenter.normalize();</span>
+        // use inhomogeneous center coordinates
+<span class="fc" id="L563">        final double cx = mCenter.getInhomX();</span>
+<span class="fc" id="L564">        final double cy = mCenter.getInhomY();</span>
+
+<span class="fc" id="L566">        final double a = 1.0;</span>
+<span class="fc" id="L567">        final double b = 0.0;</span>
+<span class="fc" id="L568">        final double c = 1.0;</span>
+<span class="fc" id="L569">        final double d = -cx;</span>
+<span class="fc" id="L570">        final double e = -cy;</span>
+<span class="fc" id="L571">        final double f = cx * cx + cy * cy - mRadius * mRadius;</span>
+
+<span class="fc" id="L573">        return new Conic(a, b, c, d, e, f);</span>
     }
-    
+
     /**
      * Set parameters of this circle from a valid conic corresponding to a
      * circle.
+     *
      * @param conic conic to set parameters from.
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
-    public final void setFromConic(Conic conic) {
-<span class="fc bfc" id="L549" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
-<span class="fc" id="L550">            throw new IllegalArgumentException();</span>
+    public final void setFromConic(final Conic conic) {
+<span class="fc bfc" id="L584" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
+<span class="fc" id="L585">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L553">        conic.normalize();</span>
-        
-<span class="fc" id="L555">        double a = conic.getA();</span>
-        //normalize parameters so that a = 1.0, d = -cx, e = -cy and 
-        //f = cx^ + cy^2 - r^
-<span class="fc" id="L558">        double normD = conic.getD() / a;</span>
-<span class="fc" id="L559">        double normE = conic.getE() / a;</span>
-<span class="fc" id="L560">        double normF = conic.getF() / a;</span>
-        
-<span class="fc" id="L562">        double cx = -normD;</span>
-<span class="fc" id="L563">        double cy = -normE;</span>
-<span class="fc" id="L564">        double radius = Math.sqrt(cx * cx + cy * cy - normF);</span>
-        
-<span class="fc" id="L566">        mCenter = new InhomogeneousPoint2D(cx, cy);</span>
-<span class="fc" id="L567">        mRadius = radius;</span>
-<span class="fc" id="L568">    }</span>
+
+<span class="fc" id="L588">        conic.normalize();</span>
+
+<span class="fc" id="L590">        final double a = conic.getA();</span>
+        // normalize parameters so that a = 1.0, d = -cx, e = -cy and
+        // f = cx^ + cy^2 - r^
+<span class="fc" id="L593">        final double normD = conic.getD() / a;</span>
+<span class="fc" id="L594">        final double normE = conic.getE() / a;</span>
+<span class="fc" id="L595">        final double normF = conic.getF() / a;</span>
+
+<span class="fc" id="L597">        final double cx = -normD;</span>
+<span class="fc" id="L598">        final double cy = -normE;</span>
+<span class="fc" id="L599">        final double radius = Math.sqrt(cx * cx + cy * cy - normF);</span>
+
+<span class="fc" id="L601">        mCenter = new InhomogeneousPoint2D(cx, cy);</span>
+<span class="fc" id="L602">        mRadius = radius;</span>
+<span class="fc" id="L603">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

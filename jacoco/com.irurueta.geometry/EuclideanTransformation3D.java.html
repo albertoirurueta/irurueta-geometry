@@ -33,719 +33,770 @@ import java.util.List;
  * translations.
  * Scale cannot be modified on euclidean transformation.
  */
-public class EuclideanTransformation3D extends Transformation3D 
-    implements Serializable {
-    
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class EuclideanTransformation3D extends Transformation3D
+        implements Serializable {
+
     /**
      * Constant indicating number of coordinates required in translation arrays.
      */
     public static final int NUM_TRANSLATION_COORDS = 3;
-    
+
     /**
      * Constant defining number of homogeneous coordinates in 3D space.
      */
     public static final int HOM_COORDS = 4;
-    
+
     /**
      * 3D rotation to be performed on geometric objects.
      */
     private Rotation3D rotation;
-    
+
     /**
      * 3D translation to be performed on geometric objects.
      * Translation is specified using inhomogeneous coordinates.
      */
     private double[] translation;
-        
+
     /**
      * Empty constructor.
      * Creates transformation that has no effect.
      */
-<span class="fc" id="L64">    public EuclideanTransformation3D() {</span>
-<span class="fc" id="L65">        rotation = Rotation3D.create();</span>
-<span class="fc" id="L66">        translation = new double[NUM_TRANSLATION_COORDS];</span>
-<span class="fc" id="L67">    }</span>
-    
+<span class="fc" id="L65">    public EuclideanTransformation3D() {</span>
+<span class="fc" id="L66">        rotation = Rotation3D.create();</span>
+<span class="fc" id="L67">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L68">    }</span>
+
     /**
      * Creates transformation with provided rotation.
+     *
      * @param rotation A 2D rotation.
      * @throws NullPointerException Raised if provided rotation is null.
      */
-<span class="fc" id="L74">    public EuclideanTransformation3D(Rotation3D rotation) {</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (rotation == null) {</span>
-<span class="fc" id="L76">            throw new NullPointerException();</span>
+<span class="fc" id="L76">    public EuclideanTransformation3D(final Rotation3D rotation) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (rotation == null) {</span>
+<span class="fc" id="L78">            throw new NullPointerException();</span>
         }
-        
-<span class="fc" id="L79">        this.rotation = rotation;</span>
-<span class="fc" id="L80">        translation = new double[NUM_TRANSLATION_COORDS];</span>
-<span class="fc" id="L81">    }</span>
-    
+
+<span class="fc" id="L81">        this.rotation = rotation;</span>
+<span class="fc" id="L82">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L83">    }</span>
+
     /**
      * Creates transformation with provided 3D translation.
+     *
      * @param translation Array indicating 3D translation using inhomogenous
-     * coordinates.
-     * @throws NullPointerException Raised if provided array is null.
+     *                    coordinates.
+     * @throws NullPointerException     Raised if provided array is null.
      * @throws IllegalArgumentException Raised if length of array is not equal
-     * to NUM_TRANSLATION_COORDS.
+     *                                  to NUM_TRANSLATION_COORDS.
      */
-<span class="fc" id="L91">    public EuclideanTransformation3D(double[] translation) {</span>
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
-<span class="fc" id="L93">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L94">    public EuclideanTransformation3D(final double[] translation) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L96">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L96">        rotation = Rotation3D.create();</span>
-<span class="fc" id="L97">        this.translation = translation;</span>
-<span class="fc" id="L98">    }</span>
-    
+
+<span class="fc" id="L99">        rotation = Rotation3D.create();</span>
+<span class="fc" id="L100">        this.translation = translation;</span>
+<span class="fc" id="L101">    }</span>
+
     /**
      * Creates transformation with provided 3D rotation and translation.
-     * @param rotation A 3D rotation.
+     *
+     * @param rotation    A 3D rotation.
      * @param translation Array indicating 3D translation using inhomogeneous
-     * coordinates.
-     * @throws NullPointerException Raised if provided array is null.
+     *                    coordinates.
+     * @throws NullPointerException     Raised if provided array is null.
      * @throws IllegalArgumentException Raised if length of array is not equal
-     * to NUM_TRANSLATION_COORDS.
+     *                                  to NUM_TRANSLATION_COORDS.
      */
-<span class="fc" id="L109">    public EuclideanTransformation3D(Rotation3D rotation, double[] translation) {</span>
-        
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (rotation == null) {</span>
-<span class="fc" id="L112">            throw new NullPointerException();</span>
+<span class="fc" id="L113">    public EuclideanTransformation3D(final Rotation3D rotation, final double[] translation) {</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (rotation == null) {</span>
+<span class="fc" id="L116">            throw new NullPointerException();</span>
         }
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
-<span class="fc" id="L115">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L119">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L118">        this.rotation = rotation;</span>
-<span class="fc" id="L119">        this.translation = translation;</span>
-<span class="fc" id="L120">    }</span>
-    
+
+<span class="fc" id="L122">        this.rotation = rotation;</span>
+<span class="fc" id="L123">        this.translation = translation;</span>
+<span class="fc" id="L124">    }</span>
+
     /**
      * Creates transformation by estimating its internal values using provided 4
      * corresponding original and transformed points.
-     * @param inputPoint1 1st input point.
-     * @param inputPoint2 2nd input point.
-     * @param inputPoint3 3rd input point.
-     * @param inputPoint4 4th input point.
-     * @param outputPoint1 1st transformed point corresponding to 1st input 
-     * point.
-     * @param outputPoint2 2nd transformed point corresponding to 2nd input 
-     * point.
-     * @param outputPoint3 3rd transformed point corresponding to 3rd input 
-     * point.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
      * @param outputPoint4 4th transformed point corresponding to 4th input
-     * point.
+     *                     point.
      * @throws CoincidentPointsException raised if transformation cannot be
-     * estimated for some reason (point configuration degeneracy, duplicate
-     * points or numerical instabilities).
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
      */
-    public EuclideanTransformation3D(Point3D inputPoint1, Point3D inputPoint2, 
-            Point3D inputPoint3, Point3D inputPoint4, Point3D outputPoint1,
-            Point3D outputPoint2, Point3D outputPoint3, Point3D outputPoint4)
-<span class="fc" id="L144">            throws CoincidentPointsException {</span>
-<span class="fc" id="L145">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
-                inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
+    public EuclideanTransformation3D(
+            final Point3D inputPoint1, final Point3D inputPoint2,
+            final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2,
+            final Point3D outputPoint3, final Point3D outputPoint4)
+<span class="fc" id="L151">            throws CoincidentPointsException {</span>
+<span class="fc" id="L152">        internalSetTransformationFromPoints(inputPoint1, inputPoint2,</span>
+                inputPoint3, inputPoint4, outputPoint1, outputPoint2,
                 outputPoint3, outputPoint4);
-<span class="fc" id="L148">    }</span>
-    
+<span class="fc" id="L155">    }</span>
+
     /**
      * Returns 3D rotation assigned to this transformation.
+     *
      * @return 3D rotation.
      */
     public Rotation3D getRotation() {
-<span class="fc" id="L155">        return rotation;</span>
+<span class="fc" id="L163">        return rotation;</span>
     }
-    
+
     /**
      * Sets 3D rotation for this transformation.
+     *
      * @param rotation A 3D rotation.
      * @throws NullPointerException Raised if provided rotation is null.
      */
-    public void setRotation(Rotation3D rotation) {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (rotation == null) {</span>
-<span class="fc" id="L165">            throw new NullPointerException();</span>
+    public void setRotation(final Rotation3D rotation) {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (rotation == null) {</span>
+<span class="fc" id="L174">            throw new NullPointerException();</span>
         }
-<span class="fc" id="L167">        this.rotation = rotation;</span>
-<span class="fc" id="L168">    }</span>
-    
+<span class="fc" id="L176">        this.rotation = rotation;</span>
+<span class="fc" id="L177">    }</span>
+
     /**
-     * Adds provided rotation to current rotation assigned to this 
+     * Adds provided rotation to current rotation assigned to this
      * transformation.
+     *
      * @param rotation 3D rotation to be added.
      */
-    public void addRotation(Rotation3D rotation) {
-<span class="fc" id="L176">        this.rotation.combine(rotation);</span>
-<span class="fc" id="L177">    }</span>
-        
+    public void addRotation(final Rotation3D rotation) {
+<span class="fc" id="L186">        this.rotation.combine(rotation);</span>
+<span class="fc" id="L187">    }</span>
+
     /**
      * Returns 3D translation assigned to this transformation as an array
      * expressed in inhomogeneous coordinates.
+     *
      * @return 3D translation array.
      */
     public double[] getTranslation() {
-<span class="fc" id="L185">        return translation;</span>
+<span class="fc" id="L196">        return translation;</span>
     }
-    
+
     /**
      * Sets 3D translation assigned to this transformation as an array expressed
      * in inhomogeneous coordinates.
+     *
      * @param translation 3D translation array.
      * @throws IllegalArgumentException raised if provided array does not have
-     * length equal to NUM_TRANSLATION_COORDS.
+     *                                  length equal to NUM_TRANSLATION_COORDS.
      */
-    public void setTranslation(double[] translation) {
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
-<span class="fc" id="L197">            throw new IllegalArgumentException();</span>
+    public void setTranslation(final double[] translation) {
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L209">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L200">        this.translation = translation;</span>
-<span class="fc" id="L201">    }</span>
-    
+
+<span class="fc" id="L212">        this.translation = translation;</span>
+<span class="fc" id="L213">    }</span>
+
     /**
      * Adds provided translation to current translation on this transformation.
      * Provided translation must be expressed as an array of inhomogeneous
      * coordinates.
+     *
      * @param translation 3D translation array.
      * @throws IllegalArgumentException raised if provided array does not have
-     * length equal to NUM_TRANSLATION_COORDS.
+     *                                  length equal to NUM_TRANSLATION_COORDS.
      */
-    public void addTranslation(double[] translation) {
-<span class="fc" id="L212">        ArrayUtils.sum(this.translation, translation, this.translation);</span>
-<span class="fc" id="L213">    }</span>
-    
+    public void addTranslation(final double[] translation) {
+<span class="fc" id="L225">        ArrayUtils.sum(this.translation, translation, this.translation);</span>
+<span class="fc" id="L226">    }</span>
+
     /**
      * Returns current x coordinate translation assigned to this transformation.
+     *
      * @return X coordinate translation.
      */
     public double getTranslationX() {
-<span class="fc" id="L220">        return translation[0];</span>
+<span class="fc" id="L234">        return translation[0];</span>
     }
-    
+
     /**
      * Sets x coordinate translation to be made by this transformation.
+     *
      * @param translationX X coordinate translation to be set.
      */
-    public void setTranslationX(double translationX) {
-<span class="fc" id="L228">        translation[0] = translationX;</span>
-<span class="fc" id="L229">    }</span>
-    
+    public void setTranslationX(final double translationX) {
+<span class="fc" id="L243">        translation[0] = translationX;</span>
+<span class="fc" id="L244">    }</span>
+
     /**
      * Returns current y coordinate translation assigned to this transformation.
+     *
      * @return Y coordinate translation.
      */
     public double getTranslationY() {
-<span class="fc" id="L236">        return translation[1];</span>
+<span class="fc" id="L252">        return translation[1];</span>
     }
-    
+
     /**
      * Sets y coordinate translation to be made by this transformation.
+     *
      * @param translationY Y coordinate translation to be set.
      */
-    public void setTranslationY(double translationY) {
-<span class="fc" id="L244">        translation[1] = translationY;</span>
-<span class="fc" id="L245">    }</span>
-    
+    public void setTranslationY(final double translationY) {
+<span class="fc" id="L261">        translation[1] = translationY;</span>
+<span class="fc" id="L262">    }</span>
+
     /**
      * Returns current z coordinate translation assigned to this transformation.
+     *
      * @return Z coordinate translation.
      */
     public double getTranslationZ() {
-<span class="fc" id="L252">        return translation[2];</span>
+<span class="fc" id="L270">        return translation[2];</span>
     }
-    
+
     /**
      * Sets z coordinate translation to be made by this transformation.
+     *
      * @param translationZ Z coordinate translation to be set.
      */
-    public void setTranslationZ(double translationZ) {
-<span class="fc" id="L260">        translation[2] = translationZ;</span>
-<span class="fc" id="L261">    }</span>
-    
+    public void setTranslationZ(final double translationZ) {
+<span class="fc" id="L279">        translation[2] = translationZ;</span>
+<span class="fc" id="L280">    }</span>
+
     /**
-     * Sets x, y, z coordinates of translation to be made by this 
+     * Sets x, y, z coordinates of translation to be made by this
      * transformation.
+     *
      * @param translationX translation x coordinate to be set.
      * @param translationY translation y coordinate to be set.
      * @param translationZ translation z coordinate to be set.
      */
-    public void setTranslation(double translationX, double translationY,
-            double translationZ) {
-<span class="fc" id="L272">        translation[0] = translationX;</span>
-<span class="fc" id="L273">        translation[1] = translationY;</span>
-<span class="fc" id="L274">        translation[2] = translationZ;</span>
-<span class="fc" id="L275">    }</span>
-    
+    public void setTranslation(
+            final double translationX, final double translationY,
+            final double translationZ) {
+<span class="fc" id="L293">        translation[0] = translationX;</span>
+<span class="fc" id="L294">        translation[1] = translationY;</span>
+<span class="fc" id="L295">        translation[2] = translationZ;</span>
+<span class="fc" id="L296">    }</span>
+
     /**
      * Sets x, y, z coordinates of translation to be made by this
      * transformation.
+     *
      * @param translation translation to be set.
      */
-    public void setTranslation(Point3D translation) {
-<span class="fc" id="L283">        setTranslation(translation.getInhomX(), translation.getInhomY(),</span>
-<span class="fc" id="L284">                translation.getInhomZ());</span>
-<span class="fc" id="L285">    }</span>
-    
+    public void setTranslation(final Point3D translation) {
+<span class="fc" id="L305">        setTranslation(translation.getInhomX(), translation.getInhomY(),</span>
+<span class="fc" id="L306">                translation.getInhomZ());</span>
+<span class="fc" id="L307">    }</span>
+
     /**
      * Gets x, y, z coordinates of translation to be made by this transformation
      * as a new point.
+     *
      * @return a new point containing translation coordinates.
      */
     public Point3D getTranslationPoint() {
-<span class="fc" id="L293">        Point3D out = Point3D.create();</span>
-<span class="fc" id="L294">        getTranslationPoint(out);</span>
-<span class="fc" id="L295">        return out;</span>
+<span class="fc" id="L316">        final Point3D out = Point3D.create();</span>
+<span class="fc" id="L317">        getTranslationPoint(out);</span>
+<span class="fc" id="L318">        return out;</span>
     }
-    
+
     /**
      * Gets x, y, z coordinates of translation to be made by this transformation
      * and stores them into provided point.
+     *
      * @param out point where translation coordinates will be stored.
      */
-    public void getTranslationPoint(Point3D out) {
-<span class="fc" id="L304">        out.setInhomogeneousCoordinates(translation[0], translation[1], </span>
+    public void getTranslationPoint(final Point3D out) {
+<span class="fc" id="L328">        out.setInhomogeneousCoordinates(translation[0], translation[1],</span>
                 translation[2]);
-<span class="fc" id="L306">    }</span>
-    
+<span class="fc" id="L330">    }</span>
+
     /**
      * Adds provided x coordinate to current translation assigned to this
      * transformation.
+     *
      * @param translationX X coordinate to be added to current translation.
      */
-    public void addTranslationX(double translationX) {
-<span class="fc" id="L314">        translation[0] += translationX;</span>
-<span class="fc" id="L315">    }</span>
-    
+    public void addTranslationX(final double translationX) {
+<span class="fc" id="L339">        translation[0] += translationX;</span>
+<span class="fc" id="L340">    }</span>
+
     /**
      * Adds provided y coordinate to current translation assigned to this
      * transformation.
+     *
      * @param translationY Y coordinate to be added to current translation.
      */
-    public void addTranslationY(double translationY) {
-<span class="fc" id="L323">        translation[1] += translationY;</span>
-<span class="fc" id="L324">    }</span>
-    
+    public void addTranslationY(final double translationY) {
+<span class="fc" id="L349">        translation[1] += translationY;</span>
+<span class="fc" id="L350">    }</span>
+
     /**
      * Adds provided z coordinate to current translation assigned to this
      * transformation.
+     *
      * @param translationZ Z coordinate to be added to current translation.
      */
-    public void addTranslationZ(double translationZ) {
-<span class="fc" id="L332">        translation[2] += translationZ;</span>
-<span class="fc" id="L333">    }</span>
-    
+    public void addTranslationZ(final double translationZ) {
+<span class="fc" id="L359">        translation[2] += translationZ;</span>
+<span class="fc" id="L360">    }</span>
+
     /**
-     * Adds provided coordinates to current translation assigned to this 
+     * Adds provided coordinates to current translation assigned to this
      * transformation.
+     *
      * @param translationX x coordinate to be added to current translation.
      * @param translationY y coordinate to be added to current translation.
      * @param translationZ z coordinate to be added to current translation.
      */
-    public void addTranslation(double translationX, double translationY,
-            double translationZ) {
-<span class="fc" id="L344">        translation[0] += translationX;</span>
-<span class="fc" id="L345">        translation[1] += translationY;</span>
-<span class="fc" id="L346">        translation[2] += translationZ;</span>
-<span class="fc" id="L347">    }</span>
-    
+    public void addTranslation(
+            final double translationX, final double translationY,
+            final double translationZ) {
+<span class="fc" id="L373">        translation[0] += translationX;</span>
+<span class="fc" id="L374">        translation[1] += translationY;</span>
+<span class="fc" id="L375">        translation[2] += translationZ;</span>
+<span class="fc" id="L376">    }</span>
+
     /**
      * Adds provided coordinates to current translation assigned to this
      * transformation.
-     * @param translation x, y, z coordinates to be added to current 
-     * translation.
+     *
+     * @param translation x, y, z coordinates to be added to current
+     *                    translation.
      */
-    public void addTranslation(Point3D translation) {
-<span class="fc" id="L356">        addTranslation(translation.getInhomX(), translation.getInhomY(),</span>
-<span class="fc" id="L357">                translation.getInhomZ());</span>
-<span class="fc" id="L358">    }</span>
-    
+    public void addTranslation(final Point3D translation) {
+<span class="fc" id="L386">        addTranslation(translation.getInhomX(), translation.getInhomY(),</span>
+<span class="fc" id="L387">                translation.getInhomZ());</span>
+<span class="fc" id="L388">    }</span>
+
     /**
      * Represents this transformation as a 4x4 matrix.
      * A point can be transformed as T * p, where T is the transformation matrix
      * and p is a point expressed as an homogeneous vector.
+     *
      * @return This transformation in matrix form.
      */
     @Override
     public Matrix asMatrix() {
-<span class="fc" id="L368">        Matrix m = null;</span>
+<span class="fc" id="L399">        Matrix m = null;</span>
         try {
-<span class="fc" id="L370">            m = new Matrix(HOM_COORDS, HOM_COORDS);</span>
-<span class="fc" id="L371">            asMatrix(m);</span>
-<span class="nc" id="L372">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L374">        }</span>
-<span class="fc" id="L375">        return m;</span>
+<span class="fc" id="L401">            m = new Matrix(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L402">            asMatrix(m);</span>
+<span class="nc" id="L403">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L405">        }</span>
+<span class="fc" id="L406">        return m;</span>
     }
-    
+
     /**
      * Represents this transformation as a 4x4 matrix and stores the result in
      * provided instance.
+     *
      * @param m instance where transformation matrix will be stored.
      * @throws IllegalArgumentException raised if provided instance is not a 4x4
-     * matrix.
+     *                                  matrix.
      */
     @Override
-    public void asMatrix(Matrix m) {
-<span class="pc bpc" id="L387" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
-<span class="fc" id="L388">            throw new IllegalArgumentException();</span>
+    public void asMatrix(final Matrix m) {
+<span class="pc bpc" id="L419" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L420">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L391">        m.initialize(0.0);</span>
-        
-        //set rotation        
-<span class="fc" id="L394">        m.setSubmatrix(0, 0, </span>
+<span class="fc" id="L423">        m.initialize(0.0);</span>
+
+        // set rotation
+<span class="fc" id="L426">        m.setSubmatrix(0, 0,</span>
                 Rotation3D.INHOM_COORDS - 1,
                 Rotation3D.INHOM_COORDS - 1,
-<span class="fc" id="L397">                rotation.asInhomogeneousMatrix());</span>
-        
-        //set translation
-<span class="fc" id="L400">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+<span class="fc" id="L429">                rotation.asInhomogeneousMatrix());</span>
+
+        // set translation
+<span class="fc" id="L432">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,</span>
                 HOM_COORDS - 1, translation);
-        
-        //set last element
-<span class="fc" id="L404">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        </span>
-<span class="fc" id="L405">    }</span>
+
+        // set last element
+<span class="fc" id="L436">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);</span>
+<span class="fc" id="L437">    }</span>
 
     /**
      * Transforms input point using this transformation and stores the result
      * in provided output points.
-     * @param inputPoint point to be transformed.
+     *
+     * @param inputPoint  point to be transformed.
      * @param outputPoint instance where transformed point data will be stored.
      */
     @Override
-    public void transform(Point3D inputPoint, Point3D outputPoint) {
-<span class="fc" id="L415">        inputPoint.normalize();</span>
-<span class="fc" id="L416">        rotation.rotate(inputPoint, outputPoint);</span>
-<span class="fc" id="L417">        outputPoint.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L418">                outputPoint.getInhomX() + translation[0], </span>
-<span class="fc" id="L419">                outputPoint.getInhomY() + translation[1], </span>
-<span class="fc" id="L420">                outputPoint.getInhomZ() + translation[2]);</span>
-<span class="fc" id="L421">    }</span>
+    public void transform(final Point3D inputPoint, final Point3D outputPoint) {
+<span class="fc" id="L448">        inputPoint.normalize();</span>
+<span class="fc" id="L449">        rotation.rotate(inputPoint, outputPoint);</span>
+<span class="fc" id="L450">        outputPoint.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L451">                outputPoint.getInhomX() + translation[0],</span>
+<span class="fc" id="L452">                outputPoint.getInhomY() + translation[1],</span>
+<span class="fc" id="L453">                outputPoint.getInhomZ() + translation[2]);</span>
+<span class="fc" id="L454">    }</span>
 
     /**
      * Transforms a quadric using this transformation and stores the result into
      * provided output quadric.
-     * @param inputQuadric Quadric to be transformed.
-     * @param outputQuadric instance where data of transformed quadric will be 
-     * stored.
+     *
+     * @param inputQuadric  Quadric to be transformed.
+     * @param outputQuadric instance where data of transformed quadric will be
+     *                      stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting output quadric matrix is not considered to be symmetric.
-     */        
+     *                                     the resulting output quadric matrix is not considered to be symmetric.
+     */
     @Override
-    public void transform(Quadric inputQuadric, Quadric outputQuadric) 
+    public void transform(final Quadric inputQuadric, final Quadric outputQuadric)
             throws NonSymmetricMatrixException {
-        //point' * quadric * point = 0
-        //point' * T' * transformedQuadric * T * point = 0
-        //where:
+        // point' * quadric * point = 0
+        // point' * T' * transformedQuadric * T * point = 0
+        // where:
         // - transformedPoint = T * point
 
-        //Hence:
+        // Hence:
         // transformedQuadric = T^-1' * quadric * T^-1
 
-<span class="fc" id="L443">        inputQuadric.normalize();</span>
-        
-<span class="fc" id="L445">        Matrix q = inputQuadric.asMatrix();</span>
-<span class="fc" id="L446">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
-        //normalize transformation matrix invT to increase accuracy
-<span class="fc" id="L448">        double norm = Utils.normF(invT);</span>
-<span class="fc" id="L449">        invT.multiplyByScalar(1.0 / norm);</span>
-        
-<span class="fc" id="L451">        Matrix m = invT.transposeAndReturnNew();</span>
+<span class="fc" id="L477">        inputQuadric.normalize();</span>
+
+<span class="fc" id="L479">        final Matrix q = inputQuadric.asMatrix();</span>
+<span class="fc" id="L480">        final Matrix invT = inverseAndReturnNew().asMatrix();</span>
+        // normalize transformation matrix invT to increase accuracy
+<span class="fc" id="L482">        double norm = Utils.normF(invT);</span>
+<span class="fc" id="L483">        invT.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L485">        final Matrix m = invT.transposeAndReturnNew();</span>
         try {
-<span class="fc" id="L453">            m.multiply(q);</span>
-<span class="fc" id="L454">            m.multiply(invT);</span>
-<span class="nc" id="L455">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L457">        }</span>
-        
-        //normalize resulting m matrix to increase accuracy so that it can be
-        //considered symmetric
-<span class="fc" id="L461">        norm = Utils.normF(m);</span>
-<span class="fc" id="L462">        m.multiplyByScalar(1.0 / norm);</span>
-        
-<span class="fc" id="L464">        outputQuadric.setParameters(m);</span>
-<span class="fc" id="L465">    }</span>
+<span class="fc" id="L487">            m.multiply(q);</span>
+<span class="fc" id="L488">            m.multiply(invT);</span>
+<span class="nc" id="L489">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L491">        }</span>
+
+        // normalize resulting m matrix to increase accuracy so that it can be
+        // considered symmetric
+<span class="fc" id="L495">        norm = Utils.normF(m);</span>
+<span class="fc" id="L496">        m.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L498">        outputQuadric.setParameters(m);</span>
+<span class="fc" id="L499">    }</span>
 
     /**
      * Transforms a dual quadric using this transformation and stores the result
      * into provided output dual quadric.
-     * @param inputDualQuadric dual quadric to be transformed.
-     * @param outputDualQuadric instance where data of transformed dual quadric 
-     * will be stored.
+     *
+     * @param inputDualQuadric  dual quadric to be transformed.
+     * @param outputDualQuadric instance where data of transformed dual quadric
+     *                          will be stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision.
-     * the resulting output dual quadric matrix is not considered to be 
-     * symmetric.
-     */        
+     *                                     the resulting output dual quadric matrix is not considered to be
+     *                                     symmetric.
+     */
     @Override
-    public void transform(DualQuadric inputDualQuadric, 
-            DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
-        //plane' * dualQuadric * plane = 0
-        //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
+    public void transform(final DualQuadric inputDualQuadric,
+                          final DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
+        // plane' * dualQuadric * plane = 0
+        // plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
 
-        //Hence:
-        //transformed plane: T^-1'*plane
-        //transformed dual quadric: T * dualQuadric * T'
+        // Hence:
+        // transformed plane: T^-1'*plane
+        // transformed dual quadric: T * dualQuadric * T'
 
-<span class="fc" id="L487">        inputDualQuadric.normalize();</span>
-        
-<span class="fc" id="L489">        Matrix dualQ = inputDualQuadric.asMatrix();</span>
-<span class="fc" id="L490">        Matrix t = asMatrix();</span>
-        //normalize transformation matrix T to increase accuracy
-<span class="fc" id="L492">        double norm = Utils.normF(t);</span>
-<span class="fc" id="L493">        t.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L522">        inputDualQuadric.normalize();</span>
 
-<span class="fc" id="L495">        Matrix transT = t.transposeAndReturnNew();</span>
+<span class="fc" id="L524">        final Matrix dualQ = inputDualQuadric.asMatrix();</span>
+<span class="fc" id="L525">        final Matrix t = asMatrix();</span>
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L527">        double norm = Utils.normF(t);</span>
+<span class="fc" id="L528">        t.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L530">        final Matrix transT = t.transposeAndReturnNew();</span>
         try {
-<span class="fc" id="L497">            t.multiply(dualQ);</span>
-<span class="fc" id="L498">            t.multiply(transT);</span>
-<span class="nc" id="L499">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L501">        }</span>
-        
-        //normalize resulting m matrix to increase accuracy so that it can be
-        //considered symmetric
-<span class="fc" id="L505">        norm = Utils.normF(t);</span>
-<span class="fc" id="L506">        t.multiplyByScalar(1.0 / norm);</span>
-        
-<span class="fc" id="L508">        outputDualQuadric.setParameters(t);</span>
-<span class="fc" id="L509">    }</span>
+<span class="fc" id="L532">            t.multiply(dualQ);</span>
+<span class="fc" id="L533">            t.multiply(transT);</span>
+<span class="nc" id="L534">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L536">        }</span>
+
+        // normalize resulting m matrix to increase accuracy so that it can be
+        // considered symmetric
+<span class="fc" id="L540">        norm = Utils.normF(t);</span>
+<span class="fc" id="L541">        t.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L543">        outputDualQuadric.setParameters(t);</span>
+<span class="fc" id="L544">    }</span>
 
     /**
      * Transforms provided input plane using this transformation and stores the
      * result into provided output plane instance.
-     * @param inputPlane plane to be transformed.
-     * @param outputPlane instance where data of transformed plane will be 
-     * stored.
-     */        
+     *
+     * @param inputPlane  plane to be transformed.
+     * @param outputPlane instance where data of transformed plane will be
+     *                    stored.
+     */
     @Override
-    public void transform(Plane inputPlane, Plane outputPlane) {
-        //plane' * point = 0 --&gt; plane' * T^-1 * T * point
-        //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
-        //where:
-        //- transformedPlane = T^-1'*plane
-        //- transformedpoint = T*point
-        
-<span class="fc" id="L526">        inputPlane.normalize();</span>
-        
-<span class="fc" id="L528">        Matrix invT = inverseAndReturnNew().asMatrix();        </span>
-<span class="fc" id="L529">        Matrix plane = Matrix.newFromArray(inputPlane.asArray());</span>
+    public void transform(final Plane inputPlane, final Plane outputPlane) {
+        // plane' * point = 0 --&gt; plane' * T^-1 * T * point
+        // (plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
+        // where:
+        // - transformedPlane = T^-1'*plane
+        // - transformedpoint = T*point
 
-        //normalize transformation matrix T to increase accuracy
-<span class="fc" id="L532">        double norm = Utils.normF(invT);</span>
-<span class="fc" id="L533">        invT.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L562">        inputPlane.normalize();</span>
 
-<span class="fc" id="L535">        invT.transpose();</span>
+<span class="fc" id="L564">        final Matrix invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L565">        final Matrix plane = Matrix.newFromArray(inputPlane.asArray());</span>
+
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L568">        final double norm = Utils.normF(invT);</span>
+<span class="fc" id="L569">        invT.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L571">        invT.transpose();</span>
         try {
-<span class="fc" id="L537">            invT.multiply(plane);</span>
-<span class="nc" id="L538">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L540">        }</span>
-        
-<span class="fc" id="L542">        outputPlane.setParameters(invT.getBuffer());</span>
-<span class="fc" id="L543">    }</span>
-    
+<span class="fc" id="L573">            invT.multiply(plane);</span>
+<span class="nc" id="L574">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L576">        }</span>
+
+<span class="fc" id="L578">        outputPlane.setParameters(invT.getBuffer());</span>
+<span class="fc" id="L579">    }</span>
+
     /**
      * Transforms a camera using this transformation and stores the result into
      * provided output camera.
-     * @param inputCamera camera to be transformed.
-     * @param outputCamera instance where data of transformed camera will be 
-     * stored.
+     *
+     * @param inputCamera  camera to be transformed.
+     * @param outputCamera instance where data of transformed camera will be
+     *                     stored.
      */
     @Override
-    public void transform(PinholeCamera inputCamera,
-            PinholeCamera outputCamera) {
-        
-<span class="fc" id="L556">        inputCamera.normalize();</span>
-        
-<span class="fc" id="L558">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
-<span class="fc" id="L559">        Matrix c = inputCamera.getInternalMatrix();</span>
+    public void transform(final PinholeCamera inputCamera,
+                          final PinholeCamera outputCamera) {
+
+<span class="fc" id="L593">        inputCamera.normalize();</span>
+
+<span class="fc" id="L595">        final Matrix invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L596">        final Matrix c = inputCamera.getInternalMatrix();</span>
         try {
-<span class="fc" id="L561">            c.multiply(invT);</span>
-<span class="fc" id="L562">            outputCamera.setInternalMatrix(c);</span>
-<span class="pc" id="L563">        } catch (WrongSizeException ignore) { /* never thrown */ }        </span>
-<span class="fc" id="L564">    }</span>
+<span class="fc" id="L598">            c.multiply(invT);</span>
+<span class="fc" id="L599">            outputCamera.setInternalMatrix(c);</span>
+<span class="nc" id="L600">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L602">        }</span>
+<span class="fc" id="L603">    }</span>
 
     /**
      * Converts this transformation into a metric transformation.
+     *
      * @return this transformation converted into a metric transformation.
-     */    
+     */
     public MetricTransformation3D toMetric() {
-<span class="fc" id="L571">        return new MetricTransformation3D(rotation, translation, </span>
+<span class="fc" id="L611">        return new MetricTransformation3D(rotation, translation,</span>
                 MetricTransformation3D.DEFAULT_SCALE);
     }
-    
+
     /**
      * Inverses this transformation.
      */
     public void inverse() {
-<span class="fc" id="L579">        inverse(this);</span>
-<span class="fc" id="L580">    }</span>
-    
+<span class="fc" id="L619">        inverse(this);</span>
+<span class="fc" id="L620">    }</span>
+
     /**
      * Computes the inverse of this transformation and returns the result as a
      * new transformation instance.
+     *
      * @return inverse transformation.
      */
     public Transformation3D inverseAndReturnNew() {
-<span class="fc" id="L588">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
-<span class="fc" id="L589">        inverse(result);</span>
-<span class="fc" id="L590">        return result;</span>
+<span class="fc" id="L629">        final EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
+<span class="fc" id="L630">        inverse(result);</span>
+<span class="fc" id="L631">        return result;</span>
     }
 
     /**
      * Combines this transformation with provided transformation.
-     * The combination is equivalent to multiplying the matrix of this 
+     * The combination is equivalent to multiplying the matrix of this
      * transformation with the matrix of provided transformation.
+     *
      * @param transformation Transformation to be combined with.
      */
-    public void combine(EuclideanTransformation3D transformation) {
-<span class="fc" id="L600">        combine(transformation, this);</span>
-<span class="fc" id="L601">    }</span>
-    
+    public void combine(final EuclideanTransformation3D transformation) {
+<span class="fc" id="L642">        combine(transformation, this);</span>
+<span class="fc" id="L643">    }</span>
+
     /**
      * Combines this transformation with provided transformation and returns
      * the result as a new transformation instance.
      * The combination is equivalent to multiplying the matrix of this
      * transformation with the matrix pf provided transformation.
+     *
      * @param transformation Transformation to be combined with.
      * @return A new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
     public EuclideanTransformation3D combineAndReturnNew(
-            EuclideanTransformation3D transformation) {
-        
-<span class="fc" id="L615">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
-<span class="fc" id="L616">        combine(transformation, result);</span>
-<span class="fc" id="L617">        return result;</span>
+            final EuclideanTransformation3D transformation) {
+
+<span class="fc" id="L658">        final EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
+<span class="fc" id="L659">        combine(transformation, result);</span>
+<span class="fc" id="L660">        return result;</span>
     }
-    
+
     /**
-     * Estimates this transformation internal parameters by using 4 
+     * Estimates this transformation internal parameters by using 4
      * corresponding original and transformed points.
-     * @param inputPoint1 1st input point.
-     * @param inputPoint2 2nd input point.
-     * @param inputPoint3 3rd input point.
-     * @param inputPoint4 4th input point.
-     * @param outputPoint1 1st transformed point corresponding to 1st input 
-     * point.
-     * @param outputPoint2 2nd transformed point corresponding to 2nd input 
-     * point.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
      * @param outputPoint3 3rd transformed point corresponding to 3rd input
-     * point.
+     *                     point.
      * @param outputPoint4 4th transformed point corresponding to 4th input
-     * point.
+     *                     point.
      * @throws CoincidentPointsException raised if transformation cannot be
-     * estimated for some reason (point configuration degeneracy, duplicate
-     * points or numerical instabilities).
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
      */
-    public void setTransformationFromPoints(Point3D inputPoint1, 
-            Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
-            Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
-            Point3D outputPoint4) throws CoincidentPointsException {
-<span class="fc" id="L643">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
-                inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
+    public void setTransformationFromPoints(
+            final Point3D inputPoint1, final Point3D inputPoint2,
+            final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2,
+            final Point3D outputPoint3, final Point3D outputPoint4)
+            throws CoincidentPointsException {
+<span class="fc" id="L689">        internalSetTransformationFromPoints(inputPoint1, inputPoint2,</span>
+                inputPoint3, inputPoint4, outputPoint1, outputPoint2,
                 outputPoint3, outputPoint4);
-<span class="fc" id="L646">    }</span>
+<span class="fc" id="L692">    }</span>
 
     /**
      * Computes the inverse of this transformation and stores the result in
      * provided instance.
+     *
      * @param result instance where inverse transformation will be stored.
      */
-    protected void inverse(EuclideanTransformation3D result) {
-        //Transformation is as follows: x' = R* x + t
-        //Then inverse transformation is: R'* x' = R' * R * x + R'*t = x + R'*t
-        //--&gt; x = R'*x' - R'*t
+    protected void inverse(final EuclideanTransformation3D result) {
+        // Transformation is as follows: x' = R* x + t
+        // Then inverse transformation is: R'* x' = R' * R * x + R'*t = x + R'*t
+        // --&gt; x = R'*x' - R'*t
 
-        //reverse rotation
-<span class="fc" id="L659">        result.rotation = rotation.inverseRotationAndReturnNew();</span>
+        // reverse rotation
+<span class="fc" id="L706">        result.rotation = rotation.inverseRotationAndReturnNew();</span>
 
-        //reverse translation
-<span class="fc" id="L662">        Matrix t = Matrix.newFromArray(translation, true);</span>
-<span class="fc" id="L663">        t.multiplyByScalar(-1.0);</span>
-<span class="fc" id="L664">        Matrix invRot = result.rotation.asInhomogeneousMatrix();</span>
+        // reverse translation
+<span class="fc" id="L709">        final Matrix t = Matrix.newFromArray(translation, true);</span>
+<span class="fc" id="L710">        t.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L711">        final Matrix invRot = result.rotation.asInhomogeneousMatrix();</span>
         try {
-<span class="fc" id="L666">            invRot.multiply(t);</span>
-<span class="nc" id="L667">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L669">        }</span>
+<span class="fc" id="L713">            invRot.multiply(t);</span>
+<span class="nc" id="L714">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L716">        }</span>
 
-<span class="fc" id="L671">        result.translation = invRot.toArray();</span>
-<span class="fc" id="L672">    }</span>
+<span class="fc" id="L718">        result.translation = invRot.toArray();</span>
+<span class="fc" id="L719">    }</span>
 
     /**
-     * Combines this transformation with provided input transformation and 
+     * Combines this transformation with provided input transformation and
      * stores the result into provided output transformation.
-     * The combination is equivalent to multiplying the matrix of this 
+     * The combination is equivalent to multiplying the matrix of this
      * transformation with the matrix of provided input transformation.
-     * @param inputTransformation transformation to be combined with.
+     *
+     * @param inputTransformation  transformation to be combined with.
      * @param outputTransformation transformation where result will be stored.
-     */    
-    private void combine(EuclideanTransformation3D inputTransformation, 
-            EuclideanTransformation3D outputTransformation) {
-        //combination in matrix representation is:
-        //[R1 t1] * [R2 t2] = [R1*R2 + t1*0T  R1*t2 + t1*1] = [R1*R2 R1*t2 + t1]
-        //[0T 1 ]   [0T 1 ]   [0T*R2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]
-        
-        try {
-            //we do translation first, because this.rotation might change later
-<span class="fc" id="L690">            Matrix r1 = this.rotation.asInhomogeneousMatrix();</span>
-<span class="fc" id="L691">            Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);</span>
-<span class="fc" id="L692">            r1.multiply(t2); //this is R1 * t2</span>
-                  
-<span class="fc" id="L694">            ArrayUtils.sum(r1.toArray(), this.translation,</span>
-                    outputTransformation.translation);
-            
-<span class="fc" id="L697">            outputTransformation.rotation = this.rotation.combineAndReturnNew(</span>
-                    inputTransformation.rotation);
-        
-<span class="nc" id="L700">        } catch (WrongSizeException ignore) {</span>
-            //never happens
-<span class="fc" id="L702">        }</span>
-<span class="fc" id="L703">    }  </span>
-    
-    /**
-     * Estimates this transformation internal parameters by using 4 
-     * corresponding original and transformed points.
-     * @param inputPoint1 1st input point.
-     * @param inputPoint2 2nd input point.
-     * @param inputPoint3 3rd input point.
-     * @param inputPoint4 4th input point.
-     * @param outputPoint1 1st transformed point corresponding to 1st input 
-     * point.
-     * @param outputPoint2 2nd transformed point corresponding to 2nd input 
-     * point.
-     * @param outputPoint3 3rd transformed point corresponding to 3rd input
-     * point.
-     * @param outputPoint4 4th transformed point corresponding to 4th input
-     * point.
-     * @throws CoincidentPointsException raised if transformation cannot be
-     * estimated for some reason (point configuration degeneracy, duplicate
-     * points or numerical instabilities).
      */
-    private void internalSetTransformationFromPoints(Point3D inputPoint1, 
-            Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
-            Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
-            Point3D outputPoint4) throws CoincidentPointsException {
-<span class="fc" id="L728">        List&lt;Point3D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L729">        inputPoints.add(inputPoint1);</span>
-<span class="fc" id="L730">        inputPoints.add(inputPoint2);</span>
-<span class="fc" id="L731">        inputPoints.add(inputPoint3);</span>
-<span class="fc" id="L732">        inputPoints.add(inputPoint4);</span>
-        
-<span class="fc" id="L734">        List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L735">        outputPoints.add(outputPoint1);</span>
-<span class="fc" id="L736">        outputPoints.add(outputPoint2);</span>
-<span class="fc" id="L737">        outputPoints.add(outputPoint3);</span>
-<span class="fc" id="L738">        outputPoints.add(outputPoint4);</span>
-        
-<span class="fc" id="L740">        EuclideanTransformation3DEstimator estimator =</span>
-                new EuclideanTransformation3DEstimator(inputPoints,
-                outputPoints);
-        
+    private void combine(final EuclideanTransformation3D inputTransformation,
+                         final EuclideanTransformation3D outputTransformation) {
+        // combination in matrix representation is:
+        // [R1 t1] * [R2 t2] = [R1*R2 + t1*0T  R1*t2 + t1*1] = [R1*R2 R1*t2 + t1]
+        // [0T 1 ]   [0T 1 ]   [0T*R2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]
+
         try {
-<span class="fc" id="L745">            estimator.estimate(this);</span>
-<span class="nc" id="L746">        } catch (LockedException | NotReadyException ignore) {</span>
-            //never thrown
-<span class="fc" id="L748">        }        </span>
-<span class="fc" id="L749">    }</span>
+            // we do translation first, because this.rotation might change later
+<span class="fc" id="L738">            final Matrix r1 = this.rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L739">            final Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);</span>
+            // this is R1 * t2
+<span class="fc" id="L741">            r1.multiply(t2);</span>
+
+<span class="fc" id="L743">            ArrayUtils.sum(r1.toArray(), this.translation,</span>
+                    outputTransformation.translation);
+
+<span class="fc" id="L746">            outputTransformation.rotation = this.rotation.combineAndReturnNew(</span>
+                    inputTransformation.rotation);
+
+<span class="nc" id="L749">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L751">        }</span>
+<span class="fc" id="L752">    }</span>
+
+    /**
+     * Estimates this transformation internal parameters by using 4
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    private void internalSetTransformationFromPoints(
+            final Point3D inputPoint1, final Point3D inputPoint2,
+            final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2,
+            final Point3D outputPoint3, final Point3D outputPoint4) throws CoincidentPointsException {
+<span class="fc" id="L779">        final List&lt;Point3D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L780">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L781">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L782">        inputPoints.add(inputPoint3);</span>
+<span class="fc" id="L783">        inputPoints.add(inputPoint4);</span>
+
+<span class="fc" id="L785">        final List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L786">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L787">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L788">        outputPoints.add(outputPoint3);</span>
+<span class="fc" id="L789">        outputPoints.add(outputPoint4);</span>
+
+<span class="fc" id="L791">        final EuclideanTransformation3DEstimator estimator =</span>
+                new EuclideanTransformation3DEstimator(inputPoints,
+                        outputPoints);
+
+        try {
+<span class="fc" id="L796">            estimator.estimate(this);</span>
+<span class="nc" id="L797">        } catch (final LockedException | NotReadyException ignore) {</span>
+            // never thrown
+<span class="fc" id="L799">        }</span>
+<span class="fc" id="L800">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -18,28 +18,32 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.EuclideanTransformation2D;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Finds the best euclidean 2D transformation for provided collections of 
+ * Finds the best euclidean 2D transformation for provided collections of
  * matched 2D points using LMedS algorithm.
  */
-public class LMedSEuclideanTransformation2DRobustEstimator extends 
+public class LMedSEuclideanTransformation2DRobustEstimator extends
         EuclideanTransformation2DRobustEstimator {
 
     /**
      * Default value ot be used for stop threshold. Stop threshold can be used
-     * to keep the algorithm iterating in case that best estimated threshold 
+     * to keep the algorithm iterating in case that best estimated threshold
      * using median of residuals is not small enough. Once a solution is found
      * that generates a threshold below this value, the algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
      * For instance, in cases where proportion of outliers is very small (close
      * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
-     * iterate for a long time trying to find the best solution when indeed 
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
@@ -47,16 +51,16 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1.0;
-    
+
     /**
      * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
-    
+
     /**
      * Threshold to be used to keep the algorithm iterating in case that best
      * estimated threshold using median of residuals is not small enough. Once
-     * a solution is found that generates a threshold below this value, the 
+     * a solution is found that generates a threshold below this value, the
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
@@ -70,135 +74,142 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;
-    
+
     /**
      * Constructor.
      */
     public LMedSEuclideanTransformation2DRobustEstimator() {
-<span class="fc" id="L78">        super();</span>
-<span class="fc" id="L79">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L80">    }</span>
-    
+<span class="fc" id="L82">        super();</span>
+<span class="fc" id="L83">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L84">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate an euclidean 2D
      * transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 2D transformation.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 2D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 2D transformation.
+     *                     euclidean 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
-<span class="fc" id="L97">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L98">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L99">    }</span>
-    
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L102">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L103">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L104">    }</span>
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            EuclideanTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L108">        super(listener);</span>
-<span class="fc" id="L109">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L110">    }</span>
-    
+            final EuclideanTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L114">        super(listener);</span>
+<span class="fc" id="L115">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L116">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used to estimate an
      * euclidean 2D transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 2D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     euclidean 2D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     * euclidean 2D transformation.
+     *                     euclidean 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            EuclideanTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
-<span class="fc" id="L130">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L131">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L132">    }</span>
-    
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L137">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L138">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L139">    }</span>
+
     /**
      * Constructor.
+     *
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L140">        super(weakMinimumSizeAllowed);</span>
-<span class="fc" id="L141">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L142">    }</span>
-    
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L148">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L149">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L150">    }</span>
+
     /**
      * Constructor with lists of points to be used to estimate an euclidean 2D
      * transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 2D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 2D transformation.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L161">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L162">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L163">    }</span>
-    
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L170">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L171">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L172">    }</span>
+
     /**
      * Constructor.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            EuclideanTransformation2DRobustEstimatorListener listener,
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L174">        super(listener, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L175">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L176">    }</span>
-    
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L184">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L185">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L186">    }</span>
+
     /**
      * Constructor with listener and lists of points to be used to estimate an
      * euclidean 2D transformation.
-     * Points in the list located at the same position are considered to be 
+     * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * euclidean 2D transformation.
-     * @param outputPoints list of output points to be used to estimate an
-     * euclidean 2D transformation.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               euclidean 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            EuclideanTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L198">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L199">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L200">    }    </span>
-    
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L209">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L210">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L211">    }</span>
+
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that
      * best estimated threshold using median of residuals is not small enough.
@@ -209,18 +220,19 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * For instance, in cases where proportion of outliers is very small (close
      * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
      * iterate for a long time trying to find the best solution when indeed
-     * there is no need to do that if a reasonable threshold has already been 
+     * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
+     *
      * @return stop threshold to stop the algorithm prematurely when a certain
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L221">        return mStopThreshold;</span>
+<span class="fc" id="L233">        return mStopThreshold;</span>
     }
-    
+
     /**
      * Sets threshold to be used to keep the algorithm iterating in case that
      * best estimated threshold using median of residuals is not small enough.
@@ -228,188 +240,191 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * algorithm will stop.
      * The stop threshold can be used to prevent the LMedS algorithm iterating
      * too many times in cases where samples have a very similar accuracy.
-     * For instance, in cases where proportion of outliers is very small (close 
-     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
-     * iterate for a long time trying to find the best solution when indeed 
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
      * there is no need to do that if a reasonable threshold has already been
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results
-     * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached
      * @throws IllegalArgumentException if provided value is zero or negative
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress
      */
-    public void setStopThreshold(double stopThreshold) throws LockedException {
-<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L247">            throw new LockedException();</span>
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L260">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L263">            throw new IllegalArgumentException();</span>
         }
-        
-<span class="fc" id="L253">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L254">    }</span>
-    
+
+<span class="fc" id="L266">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L267">    }</span>
+
     /**
      * Estimates an euclidean 2D transformaiton using a robust estimator and
      * the best set of matched 2d point correspondences found using the robust
      * estimator.
+     *
      * @return an euclidean 2D transformation.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public EuclideanTransformation2D estimate() throws LockedException, 
+    public EuclideanTransformation2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L271" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L272">            throw new LockedException();</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L286">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L275">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L289">            throw new NotReadyException();</span>
         }
-        
-<span class="fc" id="L278">        LMedSRobustEstimator&lt;EuclideanTransformation2D&gt; innerEstimator =</span>
+
+<span class="fc" id="L292">        final LMedSRobustEstimator&lt;EuclideanTransformation2D&gt; innerEstimator =</span>
                 new LMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L280">                new LMedSRobustEstimatorListener&lt;EuclideanTransformation2D&gt;(){</span>
-                            
-            //point to be reused when computing residuals
-<span class="fc" id="L283">            private Point2D mTestPoint = Point2D.create(</span>
-                    CoordinatesType.HOMOGENEOUS_COORDINATES);
-            
-<span class="fc" id="L286">            private EuclideanTransformation2DEstimator mNonRobustEstimator = </span>
-                    new EuclideanTransformation2DEstimator(
-<span class="fc" id="L288">                            isWeakMinimumSizeAllowed());</span>
-            
-<span class="fc" id="L290">            private List&lt;Point2D&gt; mSubsetInputPoints = </span>
-                    new ArrayList&lt;&gt;();
-<span class="fc" id="L292">            private List&lt;Point2D&gt; mSubsetOutputPoints = </span>
-                    new ArrayList&lt;&gt;();
-                            
-            @Override
-            public int getTotalSamples() {
-<span class="fc" id="L297">                return mInputPoints.size();</span>
-            }
+<span class="fc" id="L294">                        new LMedSRobustEstimatorListener&lt;EuclideanTransformation2D&gt;() {</span>
 
-            @Override
-            public int getSubsetSize() {
-<span class="fc" id="L302">                return mNonRobustEstimator.getMinimumPoints();</span>
-            }
+                            // point to be reused when computing residuals
+<span class="fc" id="L297">                            private final Point2D mTestPoint = Point2D.create(</span>
+                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List&lt;EuclideanTransformation2D&gt; solutions) {
-<span class="fc" id="L308">                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L309">                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L310" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L311">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L312">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
-                            samplesIndex));
-                }
-                
-                try {
-<span class="fc" id="L317">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
-                            mSubsetOutputPoints);
-<span class="fc" id="L319">                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L320">                } catch (Exception e) {</span>
-                    //if points are coincident, no solution is added
-<span class="fc" id="L322">                }</span>
-<span class="fc" id="L323">            }</span>
+<span class="fc" id="L300">                            private final EuclideanTransformation2DEstimator mNonRobustEstimator =</span>
+                                    new EuclideanTransformation2DEstimator(
+<span class="fc" id="L302">                                            isWeakMinimumSizeAllowed());</span>
 
-            @Override
-            public double computeResidual(
-                    EuclideanTransformation2D currentEstimation, int i) {
-<span class="fc" id="L328">                Point2D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L329">                Point2D outputPoint = mOutputPoints.get(i);</span>
-                
-                //transform input point and store result in mTestPoint
-<span class="fc" id="L332">                currentEstimation.transform(inputPoint, mTestPoint);</span>
-                
-<span class="fc" id="L334">                return outputPoint.distanceTo(mTestPoint);</span>
-            }
+<span class="fc" id="L304">                            private final List&lt;Point2D&gt; mSubsetInputPoints =</span>
+                                    new ArrayList&lt;&gt;();
+<span class="fc" id="L306">                            private final List&lt;Point2D&gt; mSubsetOutputPoints =</span>
+                                    new ArrayList&lt;&gt;();
 
-            @Override
-            public boolean isReady() {
-<span class="fc" id="L339">                return LMedSEuclideanTransformation2DRobustEstimator.this.</span>
-<span class="fc" id="L340">                        isReady();</span>
-            }
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L311">                                return mInputPoints.size();</span>
+                            }
 
-            @Override
-            public void onEstimateStart(
-                    RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L346" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L347">                    mListener.onEstimateStart(</span>
-                            LMedSEuclideanTransformation2DRobustEstimator.this);
-                }
-<span class="fc" id="L350">            }</span>
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L316">                                return mNonRobustEstimator.getMinimumPoints();</span>
+                            }
 
-            @Override
-            public void onEstimateEnd(
-                    RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L356">                    mListener.onEstimateEnd(</span>
-                            LMedSEuclideanTransformation2DRobustEstimator.this);
-                }
-<span class="fc" id="L359">            }</span>
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;EuclideanTransformation2D&gt; solutions) {
+<span class="fc" id="L322">                                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L323">                                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L325">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L326">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+                                            samplesIndex));
+                                }
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator&lt;EuclideanTransformation2D&gt; estimator, 
-                    int iteration) {
-<span class="pc bpc" id="L365" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L366">                    mListener.onEstimateNextIteration(</span>
-                            LMedSEuclideanTransformation2DRobustEstimator.this, 
-                            iteration);
-                }
-<span class="fc" id="L370">            }</span>
+                                try {
+<span class="fc" id="L331">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
+                                            mSubsetOutputPoints);
+<span class="fc" id="L333">                                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L334">                                } catch (final Exception e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L336">                                }</span>
+<span class="fc" id="L337">                            }</span>
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator&lt;EuclideanTransformation2D&gt; estimator, 
-                    float progress) {
-<span class="pc bpc" id="L376" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L377">                    mListener.onEstimateProgressChange(</span>
-                            LMedSEuclideanTransformation2DRobustEstimator.this, 
-                            progress);
-                }
-<span class="fc" id="L381">            }</span>
-        });
-        
+                            @Override
+                            public double computeResidual(
+                                    final EuclideanTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L342">                                final Point2D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L343">                                final Point2D outputPoint = mOutputPoints.get(i);</span>
+
+                                // transform input point and store result in mTestPoint
+<span class="fc" id="L346">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
+
+<span class="fc" id="L348">                                return outputPoint.distanceTo(mTestPoint);</span>
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L353">                                return LMedSEuclideanTransformation2DRobustEstimator.this.</span>
+<span class="fc" id="L354">                                        isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(
+                                    final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L361">                                    mListener.onEstimateStart(</span>
+                                            LMedSEuclideanTransformation2DRobustEstimator.this);
+                                }
+<span class="fc" id="L364">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(
+                                    final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L369" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L370">                                    mListener.onEstimateEnd(</span>
+                                            LMedSEuclideanTransformation2DRobustEstimator.this);
+                                }
+<span class="fc" id="L373">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator,
+                                    final int iteration) {
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L380">                                    mListener.onEstimateNextIteration(</span>
+                                            LMedSEuclideanTransformation2DRobustEstimator.this,
+                                            iteration);
+                                }
+<span class="fc" id="L384">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator,
+                                    final float progress) {
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L391">                                    mListener.onEstimateProgressChange(</span>
+                                            LMedSEuclideanTransformation2DRobustEstimator.this,
+                                            progress);
+                                }
+<span class="fc" id="L395">                            }</span>
+                        });
+
         try {
-<span class="fc" id="L385">            mLocked = true;</span>
-<span class="fc" id="L386">            mInliersData = null;</span>
-<span class="fc" id="L387">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L388">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L389">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L390">            innerEstimator.setStopThreshold(mStopThreshold);</span>
-<span class="fc" id="L391">            EuclideanTransformation2D transformation = </span>
-<span class="fc" id="L392">                    innerEstimator.estimate();</span>
-<span class="fc" id="L393">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L394">            return attemptRefine(transformation);</span>
-<span class="nc" id="L395">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L396">            throw new LockedException(e);</span>
-<span class="nc" id="L397">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L398">            throw new NotReadyException(e);</span>
+<span class="fc" id="L399">            mLocked = true;</span>
+<span class="fc" id="L400">            mInliersData = null;</span>
+<span class="fc" id="L401">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L402">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L403">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L404">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L405">            final EuclideanTransformation2D transformation =</span>
+<span class="fc" id="L406">                    innerEstimator.estimate();</span>
+<span class="fc" id="L407">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L408">            return attemptRefine(transformation);</span>
+<span class="nc" id="L409">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L410">            throw new LockedException(e);</span>
+<span class="nc" id="L411">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L412">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L400">            mLocked = false;</span>
+<span class="fc" id="L414">            mLocked = false;</span>
         }
     }
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */            
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L410">        return RobustEstimatorMethod.LMedS;</span>
-    }   
-    
+<span class="fc" id="L425">        return RobustEstimatorMethod.LMedS;</span>
+    }
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -418,13 +433,14 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L425">        LMedSRobustEstimator.LMedSInliersData inliersData =</span>
-<span class="fc" id="L426">                (LMedSRobustEstimator.LMedSInliersData)getInliersData();</span>
-<span class="fc" id="L427">        return inliersData.getEstimatedThreshold();</span>
-    }    
+<span class="fc" id="L441">        final LMedSRobustEstimator.LMedSInliersData inliersData =</span>
+<span class="fc" id="L442">                (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+<span class="fc" id="L443">        return inliersData.getEstimatedThreshold();</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -21,45 +21,49 @@ import java.util.Collection;
 /**
  * Implementation of a k-D tree in 2D.
  * Once a K-D tree is built for a collection of points, it can later be used to efficiently do certain operations
- * such as point locaiton, nearest points searches, etc.
+ * such as point location, nearest points searches, etc.
  */
 public class KDTree2D extends KDTree&lt;Point2D&gt; {
 
     /**
      * Constructor.
+     *
      * @param pts collection of points to store in the tree.
      */
-    public KDTree2D(Collection&lt;Point2D&gt; pts) {
-<span class="fc" id="L33">        super(pts, Point2D.class);</span>
-<span class="fc" id="L34">    }</span>
+    public KDTree2D(final Collection&lt;Point2D&gt; pts) {
+<span class="fc" id="L34">        super(pts, Point2D.class);</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Gets number of dimensions supported by this k-D tree implementation on provided list of points.
+     *
      * @return number of dimensions.
      */
     @Override
     public int getDimensions() {
-<span class="fc" id="L42">        return Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L44">        return Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
     }
 
     /**
      * Creates a point.
+     *
      * @param value value to be set on point coordinates.
      * @return created point.
      */
     @Override
-    protected Point2D createPoint(double value) {
-<span class="fc" id="L52">        return new InhomogeneousPoint2D(value, value);</span>
+    protected Point2D createPoint(final double value) {
+<span class="fc" id="L55">        return new InhomogeneousPoint2D(value, value);</span>
     }
 
     /**
      * Copies a point.
+     *
      * @param point point to be copied.
      * @return copied point.
      */
     @Override
-    protected Point2D copyPoint(Point2D point) {
-<span class="fc" id="L62">        return new InhomogeneousPoint2D(point);</span>
+    protected Point2D copyPoint(final Point2D point) {
+<span class="fc" id="L66">        return new InhomogeneousPoint2D(point);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

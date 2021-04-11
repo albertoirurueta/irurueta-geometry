@@ -32,85 +32,85 @@ import java.util.List;
  * in order to find the best solution.
  */
 public abstract class AffineTransformation3DRobustEstimator {
-    
+
     /**
-     * Minimum number of matched points or matched planes required to estimate 
+     * Minimum number of matched points or matched planes required to estimate
      * an affine 3D transformation.
      */
     public static final int MINIMUM_SIZE = 4;
-    
+
     /**
-     * Default amount of progress variation before notifying a change in 
+     * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta.
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
      * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Constant defining default confidence of the estimated result, which is
-     * 99%. This means that with a probability of 99% estimation will be 
+     * 99%. This means that with a probability of 99% estimation will be
      * accurate because chosen subsamples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
-    
+
     /**
      * Default maximum allowed number of iterations.
      */
     public static final int DEFAULT_MAX_ITERATIONS = 5000;
-    
+
     /**
      * Minimum allowed confidence value.
      */
     public static final double MIN_CONFIDENCE = 0.0;
-    
+
     /**
      * Maximum allowed confidence value.
      */
     public static final double MAX_CONFIDENCE = 1.0;
-    
+
     /**
      * Minimum allowed number of iterations.
      */
-    public static final int MIN_ITERATIONS = 1;    
+    public static final int MIN_ITERATIONS = 1;
 
     /**
-     * Indicates that result is refined by default using Levenberg-Marquardt 
+     * Indicates that result is refined by default using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      */
     public static final boolean DEFAULT_REFINE_RESULT = true;
-    
+
     /**
      * Indicates that covariance is not kept by default after refining result.
      */
     public static final boolean DEFAULT_KEEP_COVARIANCE = false;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
     protected AffineTransformation3DRobustEstimatorListener mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
     protected volatile boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
      * equivalent to 100%). The amount of confidence indicates the probability
@@ -118,19 +118,19 @@ public abstract class AffineTransformation3DRobustEstimator {
      * to 1.0, but not exactly 1.0.
      */
     protected double mConfidence;
-    
+
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;    
-    
+    protected int mMaxIterations;
+
     /**
      * Data related to inliers found after estimation.
      */
     protected InliersData mInliersData;
-    
+
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
@@ -138,613 +138,648 @@ public abstract class AffineTransformation3DRobustEstimator {
      * regardless of the settings.
      */
     protected boolean mRefineResult;
-    
+
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
     protected boolean mKeepCovariance;
-    
+
     /**
      * Estimated covariance of estimated 2D affine transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
     protected Matrix mCovariance;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L158">    public AffineTransformation3DRobustEstimator() {</span>
+<span class="fc" id="L158">    protected AffineTransformation3DRobustEstimator() {</span>
 <span class="fc" id="L159">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
 <span class="fc" id="L160">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L161">        mMaxIterations = DEFAULT_MAX_ITERATIONS;        </span>
+<span class="fc" id="L161">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
 <span class="fc" id="L162">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
-<span class="fc" id="L163">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
+<span class="fc" id="L163">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
 <span class="fc" id="L164">    }</span>
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes.
+     *                 stars, ends or its progress significantly changes.
      */
-    public AffineTransformation3DRobustEstimator(
-<span class="fc" id="L172">            AffineTransformation3DRobustEstimatorListener listener) {</span>
-<span class="fc" id="L173">        mListener = listener;</span>
-<span class="fc" id="L174">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L175">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L176">        mMaxIterations = DEFAULT_MAX_ITERATIONS;        </span>
-<span class="fc" id="L177">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
-<span class="fc" id="L178">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
-<span class="fc" id="L179">    }</span>
-        
+    protected AffineTransformation3DRobustEstimator(
+<span class="fc" id="L173">            final AffineTransformation3DRobustEstimatorListener listener) {</span>
+<span class="fc" id="L174">        mListener = listener;</span>
+<span class="fc" id="L175">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L176">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L177">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L178">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L179">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L180">    }</span>
+
     /**
-     * Returns reference to listener to be notified of events such as when 
+     * Returns reference to listener to be notified of events such as when
      * estimation starts, ends or its progress significantly changes
+     *
      * @return listener to be notified of events.
      */
     public AffineTransformation3DRobustEstimatorListener getListener() {
-<span class="fc" id="L187">        return mListener;</span>
+<span class="fc" id="L189">        return mListener;</span>
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts,
      * ends or its progress significantly changes.
+     *
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
     public void setListener(
-            AffineTransformation3DRobustEstimatorListener listener) 
+            final AffineTransformation3DRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L200">            throw new LockedException();</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L203">            throw new LockedException();</span>
         }
-<span class="fc" id="L202">        mListener = listener;</span>
-<span class="fc" id="L203">    }</span>
-    
+<span class="fc" id="L205">        mListener = listener;</span>
+<span class="fc" id="L206">    }</span>
+
     /**
-     * Indicates whether listener has been provided and is available for 
+     * Indicates whether listener has been provided and is available for
      * retrieval.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L211" title="All 2 branches covered.">        return mListener != null;</span>
-    }
-    
-    /**
-     * Indicates if this instance is locked because estimation is being 
-     * computed.
-     * @return true if locked, false otherwise.
-     */
-    public boolean isLocked() {
-<span class="fc" id="L220">        return mLocked;</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        return mListener != null;</span>
     }
 
     /**
-     * Returns amount of progress variation before notifying a progress change 
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L225">        return mLocked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @return amount of progress variation before notifying a progress change
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L230">        return mProgressDelta;</span>
+<span class="fc" id="L236">        return mProgressDelta;</span>
     }
-    
+
     /**
-     * Sets amount of progress variation before notifying a progress change 
+     * Sets amount of progress variation before notifying a progress change
      * during estimation.
-     * @param progressDelta amount of progress variation before notifying a 
-     * progress change during estimatoin.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimatoin.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
+    public void setProgressDelta(final float progressDelta)
             throws LockedException {
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L246">            throw new LockedException();</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L253">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L248" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || </span>
+<span class="fc bfc" id="L255" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L257">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L252">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L253">    }</span>
-    
+<span class="fc" id="L259">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L260">    }</span>
+
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
      * (which is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L263">        return mConfidence;</span>
+<span class="fc" id="L271">        return mConfidence;</span>
     }
-    
+
     /**
      * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
-     * is equivalent to 100%). The amount of confidence indicates the 
+     * is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @param confidence confidence to be set as a value between 0.0 and 1.0
-     * @throws IllegalArgumentException if provided value is not between 0.0 and 
-     * 1.0.
-     * @throws LockedException if this estimator is locked because an estimator 
-     * is being computed.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
      */
-    public void setConfidence(double confidence)
+    public void setConfidence(final double confidence)
             throws LockedException {
-<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L280">            throw new LockedException();</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L289">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L282" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L283">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L291" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L292">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L285">        mConfidence = confidence;</span>
-<span class="fc" id="L286">    }</span>
-    
+<span class="fc" id="L294">        mConfidence = confidence;</span>
+<span class="fc" id="L295">    }</span>
+
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
-     * of iterations is achieved without converging to a result when calling 
+     * of iterations is achieved without converging to a result when calling
      * estimate(), a RobustEstimatorException will be raised.
+     *
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L295">        return mMaxIterations;</span>
+<span class="fc" id="L305">        return mMaxIterations;</span>
     }
-    
+
     /**
      * Sets maximum allowed number of iterations. When the maximum number of
-     * iterations is exceeded, result will not be available, however an 
+     * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
+     *
      * @param maxIterations maximum allowed number of iterations to be set.
      * @throws IllegalArgumentException if provided value is less than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
+    public void setMaxIterations(final int maxIterations)
             throws LockedException {
-<span class="fc bfc" id="L309" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L310">            throw new LockedException();</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L321">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L312" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L313">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L323" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L324">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L315">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L316">    }    </span>
-    
+<span class="fc" id="L326">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L327">    }</span>
+
     /**
      * Gets data related to inliers found after estimation.
+     *
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L323">        return mInliersData;</span>
+<span class="fc" id="L335">        return mInliersData;</span>
     }
-    
+
     /**
-     * Indicates whether result must be refined using Levenberg-Marquardt 
+     * Indicates whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      * If ture, inliers will be computed and kept in any implementation
      * regardless of the settings.
+     *
      * @return true to refine result, false to simply use result found by
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L335">        return mRefineResult;</span>
+<span class="fc" id="L348">        return mRefineResult;</span>
     }
-    
+
     /**
-     * Specifies whether result must be refined using LEvenberg-Marquardt 
+     * Specifies whether result must be refined using LEvenberg-Marquardt
      * fitting algorithm over found inliers.
+     *
      * @param refineResult true to refine result, false to simply use result
-     * found by robust estimator without further refining.
+     *                     found by robust estimator without further refining.
      * @throws LockedException if estimator is locked.
      */
-    public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L346" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L347">            throw new LockedException();</span>
+    public void setResultRefined(final boolean refineResult) throws LockedException {
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L361">            throw new LockedException();</span>
         }
-<span class="fc" id="L349">        mRefineResult = refineResult;</span>
-<span class="fc" id="L350">    }</span>
-    
+<span class="fc" id="L363">        mRefineResult = refineResult;</span>
+<span class="fc" id="L364">    }</span>
+
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
+     *
      * @return true if covariance must be kept after refining result, false
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L359">        return mKeepCovariance;</span>
+<span class="fc" id="L374">        return mKeepCovariance;</span>
     }
-    
+
     /**
      * Specifies whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
+     *
      * @param keepCovariance true if covariance must be kept after refining
-     * result, false otherwise.
+     *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(boolean keepCovariance)
+    public void setCovarianceKept(final boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L371" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L372">            throw new LockedException();</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L388">            throw new LockedException();</span>
         }
-<span class="fc" id="L374">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L375">    }</span>
-    
+<span class="fc" id="L390">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L391">    }</span>
+
     /**
      * Gets estimated covariance of estimated 3D point if available.
-     * This is only available when result has been refined and covariance is 
+     * This is only available when result has been refined and covariance is
      * kept.
+     *
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L384">        return mCovariance;</span>
+<span class="fc" id="L401">        return mCovariance;</span>
     }
-    
+
     /**
      * Estimates an affine 3D transformation using a robust estimator and
      * the best set of matched 3D point correspondences found using the robust
      * estimator.
+     *
      * @return an affine 3D transformation.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract AffineTransformation3D estimate() throws LockedException, 
+    public abstract AffineTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException;
-        
-    /**
-     * Returns method being used for robust estimation.
-     * @return method being used for robust estimation.
-     */
-    public abstract RobustEstimatorMethod getMethod();    
-    
-    /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) {
-<span class="fc" id="L424">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
-                inputPoints, outputPoints, method);
-    }            
-                        
-    /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            AffineTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) {
-<span class="fc" id="L447">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
-                listener, inputPoints, outputPoints, method);
-    }            
-            
-    /**
-     * Creates an affine 3D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L469">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
-                inputPoints, outputPoints, qualityScores, method);
-    }            
-                        
-    /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            AffineTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L494">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
-                listener, inputPoints, outputPoints, qualityScores, method);
-    }            
-            
-    /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
-<span class="fc" id="L511">        return PointCorrespondenceAffineTransformation3DRobustEstimator.</span>
-<span class="fc" id="L512">                create(inputPoints, outputPoints);</span>
-    }            
-            
-    /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            AffineTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
-<span class="fc" id="L531">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
-                listener, inputPoints, outputPoints);
-    }            
 
     /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points..
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
      */
-    public static AffineTransformation3DRobustEstimator createFromPoints(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) {
-<span class="fc" id="L551">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
-                inputPoints, outputPoints, qualityScores);
-    }            
-            
+    public abstract RobustEstimatorMethod getMethod();
+
     /**
-     * Creates an affine 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation.
-     * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            AffineTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) {
-<span class="fc" id="L574">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L444">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+                inputPoints, outputPoints, method);
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best affine 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L468">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+                listener, inputPoints, outputPoints, method);
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate
+     *                      best affine 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L491">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+                inputPoints, outputPoints, qualityScores, method);
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate
+     *                      best affine 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L517">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+                listener, inputPoints, outputPoints, qualityScores, method);
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L535">        return PointCorrespondenceAffineTransformation3DRobustEstimator.</span>
+<span class="fc" id="L536">                create(inputPoints, outputPoints);</span>
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L556">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+                listener, inputPoints, outputPoints);
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points..
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L577">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+                inputPoints, outputPoints, qualityScores);
+    }
+
+    /**
+     * Creates an affine 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static AffineTransformation3DRobustEstimator createFromPoints(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L601">        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 listener, inputPoints, outputPoints, qualityScores);
-    }     
-            
+    }
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an
-     * affine 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an
+     *                     affine 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an
-     * affine 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
+     *                     affine 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            RobustEstimatorMethod method) {
-<span class="fc" id="L594">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L622">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 inputPlanes, outputPlanes, method);
     }
-                        
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate best
+     *                     affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            RobustEstimatorMethod method) {
-<span class="fc" id="L617">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L646">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 listener, inputPlanes, outputPlanes, method);
     }
-                        
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an
-     * affine 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an
-     * affine 3D transformation.
+     *
+     * @param inputPlanes   list of input planes to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an
+     *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L639">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L669">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 inputPlanes, outputPlanes, qualityScores, method);
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPlanes   list of input planes to be used to estimate an affine
+     *                      3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an
+     *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * affine 3D transformation.
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L664">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L695">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 listener, inputPlanes, outputPlanes, qualityScores, method);
     }
-                
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an
-     * affine 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an
+     *                     affine 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an
-     * affine 3D transformation.
+     *                     affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L681">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L713">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 inputPlanes, outputPlanes);
     }
-            
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an
+     *                     affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L701">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L734">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 listener, inputPlanes, outputPlanes);
     }
-                        
+
     /**
      * Creates an affine 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param inputPlanes   list of input planes to be used to estimate an affine
+     *                      3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an
+     *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *                      points.
      * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of planes don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided lists of planes don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) {
-<span class="fc" id="L721">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores) {
+<span class="fc" id="L755">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 inputPlanes, outputPlanes, qualityScores);
     }
-                        
+
     /**
      * Creates an affine 3D transformation estimator based on 3D line
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPlanes   list of input planes to be used to estimate an affine
+     *                      3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate an
+     *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
+     *                      lines.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) {
-<span class="fc" id="L744">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes,
+            final double[] qualityScores) {
+<span class="fc" id="L779">        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(</span>
                 listener, inputPlanes, outputPlanes, qualityScores);
-    }                
-    
+    }
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -753,8 +788,9 @@ public abstract class AffineTransformation3DRobustEstimator {
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
-    protected abstract double getRefinementStandardDeviation();    
+    protected abstract double getRefinementStandardDeviation();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

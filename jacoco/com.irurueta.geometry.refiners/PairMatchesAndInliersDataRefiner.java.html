@@ -26,118 +26,129 @@ import java.util.List;
  * inlier matches, their residuals and pairs of matches samples.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
- * @param &lt;T&gt; type of instance to be refined.
+ *
+ * @param &lt;T&gt;  type of instance to be refined.
  * @param &lt;S1&gt; type of matched samples in 1st set.
  * @param &lt;S2&gt; type of matched samples in 2nd set.
  */
-public abstract class PairMatchesAndInliersDataRefiner&lt;T, S1, S2&gt; extends 
+public abstract class PairMatchesAndInliersDataRefiner&lt;T, S1, S2&gt; extends
         InliersDataRefiner&lt;T&gt; {
-    
+
     /**
      * 1st set of paired samples.
      */
     protected List&lt;S1&gt; mSamples1;
-    
+
     /**
      * 2nd set of paired samples.
      */
     protected List&lt;S2&gt; mSamples2;
-    
+
     /**
      * Constructor.
      */
-<span class="fc" id="L51">    public PairMatchesAndInliersDataRefiner() { }</span>
-        
+<span class="fc" id="L52">    protected PairMatchesAndInliersDataRefiner() {</span>
+<span class="fc" id="L53">    }</span>
+
     /**
      * Constructor.
+     *
      * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
+     * @param keepCovariance    true if covariance of estimation must be kept after
+     *                          refinement, false otherwise.
+     * @param inliers           set indicating which of the provided matches are inliers.
+     * @param residuals         residuals for matched samples.
+     * @param numInliers        number of inliers on initial estimation.
+     * @param samples1          1st set of paired samples.
+     * @param samples2          2nd set of paired samples.
      */
-    public PairMatchesAndInliersDataRefiner(T initialEstimation, 
-            boolean keepCovariance, BitSet inliers, double[] residuals, 
-            int numInliers, List&lt;S1&gt; samples1, List&lt;S2&gt; samples2) {
-<span class="fc" id="L67">        super(initialEstimation, keepCovariance, inliers, residuals, </span>
+    protected PairMatchesAndInliersDataRefiner(
+            final T initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List&lt;S1&gt; samples1,
+            final List&lt;S2&gt; samples2) {
+<span class="fc" id="L71">        super(initialEstimation, keepCovariance, inliers, residuals,</span>
                 numInliers);
-<span class="fc" id="L69">        mSamples1 = samples1;</span>
-<span class="fc" id="L70">        mSamples2 = samples2;</span>
-<span class="fc" id="L71">    }</span>
-    
+<span class="fc" id="L73">        mSamples1 = samples1;</span>
+<span class="fc" id="L74">        mSamples2 = samples2;</span>
+<span class="fc" id="L75">    }</span>
+
     /**
      * Constructor.
+     *
      * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
+     * @param keepCovariance    true if covariance of estimation must be kept after
+     *                          refinement, false otherwise.
+     * @param inliersData       inlier data, typically obtained from a robust
+     *                          estimator.
+     * @param samples1          1st set of paired samples.
+     * @param samples2          2nd set of paired samples.
      */
-    public PairMatchesAndInliersDataRefiner(T initialEstimation, 
-            boolean keepCovariance, InliersData inliersData, List&lt;S1&gt; samples1,
-            List&lt;S2&gt; samples2) {
-<span class="fc" id="L86">        super(initialEstimation, keepCovariance, inliersData);</span>
-<span class="fc" id="L87">        mSamples1 = samples1;</span>
-<span class="fc" id="L88">        mSamples2 = samples2;</span>
-<span class="fc" id="L89">    }</span>
-        
+    protected PairMatchesAndInliersDataRefiner(
+            final T initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;S1&gt; samples1,
+            final List&lt;S2&gt; samples2) {
+<span class="fc" id="L92">        super(initialEstimation, keepCovariance, inliersData);</span>
+<span class="fc" id="L93">        mSamples1 = samples1;</span>
+<span class="fc" id="L94">        mSamples2 = samples2;</span>
+<span class="fc" id="L95">    }</span>
+
     /**
      * Gets 1st set of paired samples.
+     *
      * @return 1st set of paired samples.
      */
     public List&lt;S1&gt; getSamples1() {
-<span class="fc" id="L96">        return mSamples1;</span>
+<span class="fc" id="L103">        return mSamples1;</span>
     }
-    
+
     /**
      * Sets 1st set of paired samples.
+     *
      * @param samples1 1st set of paired samples.
      * @throws LockedException if estimator is locked.
      */
-    public void setSamples1(List&lt;S1&gt; samples1) throws LockedException {
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L106">            throw new LockedException();</span>
+    public void setSamples1(final List&lt;S1&gt; samples1) throws LockedException {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L114">            throw new LockedException();</span>
         }
-<span class="fc" id="L108">        mSamples1 = samples1;</span>
-<span class="fc" id="L109">    }</span>
-    
+<span class="fc" id="L116">        mSamples1 = samples1;</span>
+<span class="fc" id="L117">    }</span>
+
     /**
      * Gets 2nd set of paired samples.
+     *
      * @return 2nd set of paired samples.
      */
     public List&lt;S2&gt; getSamples2() {
-<span class="fc" id="L116">        return mSamples2;</span>
+<span class="fc" id="L125">        return mSamples2;</span>
     }
-    
+
     /**
      * Sets 2nd set of paired samples.
+     *
      * @param samples2 2nd set of paired samples.
      * @throws LockedException if estimator is locked.
      */
-    public void setSamples2(List&lt;S2&gt; samples2) throws LockedException {
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L126">            throw new LockedException();</span>
+    public void setSamples2(final List&lt;S2&gt; samples2) throws LockedException {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L136">            throw new LockedException();</span>
         }
-<span class="fc" id="L128">        mSamples2 = samples2;</span>
-<span class="fc" id="L129">    }    </span>
-    
+<span class="fc" id="L138">        mSamples2 = samples2;</span>
+<span class="fc" id="L139">    }</span>
+
     /**
      * Indicates whether this refiner is ready to start refinement computation.
+     *
      * @return true if refiner is ready, false otherwise.
      */
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L137" title="4 of 10 branches missed.">        return mInitialEstimation != null &amp;&amp; mInliers != null &amp;&amp; </span>
-                mResiduals != null &amp;&amp; mSamples1 != null &amp;&amp; 
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">                mSamples2 != null &amp;&amp; mResiduals.length == mSamples1.size() &amp;&amp; </span>
-<span class="pc bpc" id="L140" title="1 of 4 branches missed.">                mSamples1.size() == mSamples2.size() &amp;&amp; mNumInliers &gt; 0;</span>
+<span class="pc bpc" id="L148" title="4 of 10 branches missed.">        return mInitialEstimation != null &amp;&amp; mInliers != null &amp;&amp;</span>
+                mResiduals != null &amp;&amp; mSamples1 != null &amp;&amp;
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">                mSamples2 != null &amp;&amp; mResiduals.length == mSamples1.size() &amp;&amp;</span>
+<span class="pc bpc" id="L151" title="1 of 4 branches missed.">                mSamples1.size() == mSamples2.size() &amp;&amp; mNumInliers &gt; 0;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
