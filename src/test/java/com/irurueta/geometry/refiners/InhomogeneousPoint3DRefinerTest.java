@@ -23,7 +23,7 @@ import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -32,62 +32,48 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class InhomogeneousPoint3DRefinerTest implements 
+public class InhomogeneousPoint3DRefinerTest implements
         RefinerListener<InhomogeneousPoint3D> {
-    
+
     public static final double MIN_RANDOM_VALUE = -100.0;
     public static final double MAX_RANDOM_VALUE = 100.0;
-    
+
     public static final double ABSOLUTE_ERROR = 5e-6;
-    
+
     public static final int MIN_LINES = 500;
     public static final int MAX_LINES = 1000;
-    
+
     public static final double THRESHOLD = 1e-6;
-    
+
     public static final double STD_ERROR = 100.0;
-    
+
     public static final int PERCENTAGE_OUTLIER = 20;
-    
-    public static final int TIMES = 100;    
-    
+
+    public static final int TIMES = 100;
+
     private int mRefineStart;
-    private int mRefineEnd;    
-    
-    public InhomogeneousPoint3DRefinerTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
+    private int mRefineEnd;
 
     @Test
-    public void testConstructor() throws LockedException, NotReadyException, 
+    public void testConstructor() throws LockedException, NotReadyException,
             ColinearPointsException, RobustEstimatorException {
-        RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-        InhomogeneousPoint3D point = new InhomogeneousPoint3D(
+        final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+        final InhomogeneousPoint3D point = new InhomogeneousPoint3D(
                 estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        BitSet inliers = inliersData.getInliers();
-        double[] residuals = inliersData.getResiduals();
-        int numInliers = inliersData.getNumInliers();
-        double refinementStandardDeviation = estimator.getThreshold();
-        List<Plane> samples = estimator.getPlanes();
-        
+        final InliersData inliersData = estimator.getInliersData();
+        final BitSet inliers = inliersData.getInliers();
+        final double[] residuals = inliersData.getResiduals();
+        final int numInliers = inliersData.getNumInliers();
+        final double refinementStandardDeviation = estimator.getThreshold();
+        final List<Plane> samples = estimator.getPlanes();
+
         assertNotNull(point);
         assertNotNull(inliersData);
-        
-        //test empty constructor
+
+        // test empty constructor
         InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default values
+
+        // check default values
         assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
         assertNull(refiner.getSamples());
         assertFalse(refiner.isReady());
@@ -100,13 +86,13 @@ public class InhomogeneousPoint3DRefinerTest implements
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
-        
-        //test non-empty constructor
-        refiner = new InhomogeneousPoint3DRefiner(point, true, inliers, 
+
+        // test non-empty constructor
+        refiner = new InhomogeneousPoint3DRefiner(point, true, inliers,
                 residuals, numInliers, samples, refinementStandardDeviation);
-        
-        //check default values
-        assertEquals(refiner.getRefinementStandardDeviation(), 
+
+        // check default values
+        assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
         assertSame(refiner.getSamples(), samples);
         assertTrue(refiner.isReady());
@@ -119,13 +105,13 @@ public class InhomogeneousPoint3DRefinerTest implements
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
-        
-        //test non-empty constructor with InliersData
-        refiner = new InhomogeneousPoint3DRefiner(point, true, inliersData, 
+
+        // test non-empty constructor with InliersData
+        refiner = new InhomogeneousPoint3DRefiner(point, true, inliersData,
                 samples, refinementStandardDeviation);
-        
-        //check default values
-        assertEquals(refiner.getRefinementStandardDeviation(), 
+
+        // check default values
+        assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
         assertSame(refiner.getSamples(), samples);
         assertTrue(refiner.isReady());
@@ -139,364 +125,373 @@ public class InhomogeneousPoint3DRefinerTest implements
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
     }
-    
+
     @Test
     public void testGetSetListener() {
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertNull(refiner.getListener());
-        
-        //set new value
+
+        // set new value
         refiner.setListener(this);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getListener(), this);
     }
-    
+
     @Test
     public void testGetSetRefinementStandardDeviation() throws LockedException {
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double refinementStandardDeviation = randomizer.nextDouble(
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double refinementStandardDeviation = randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
     }
-    
+
     @Test
-    public void testGetSetSamples() throws LockedException, 
+    public void testGetSetSamples() throws LockedException,
             ColinearPointsException {
-        RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-        List<Plane> samples = estimator.getPlanes();
-        
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+        final List<Plane> samples = estimator.getPlanes();
+
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertNull(refiner.getSamples());
-        
-        //set new value
+
+        // set new value
         refiner.setSamples(samples);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getSamples(), samples);
     }
-    
+
     @Test
     public void testGetSetInliers() throws LockedException, NotReadyException,
             RobustEstimatorException, ColinearPointsException {
-        RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-        
+        final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        BitSet inliers = inliersData.getInliers();
-        
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InliersData inliersData = estimator.getInliersData();
+        final BitSet inliers = inliersData.getInliers();
+
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertNull(refiner.getInliers());
-        
-        //set new value
+
+        // set new value
         refiner.setInliers(inliers);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getInliers(), inliers);
     }
-    
+
     @Test
     public void testGetSetResiduals() throws LockedException, NotReadyException,
             RobustEstimatorException, ColinearPointsException {
-        RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-        
+        final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        double[] residuals = inliersData.getResiduals();
-        
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InliersData inliersData = estimator.getInliersData();
+        final double[] residuals = inliersData.getResiduals();
+
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertNull(refiner.getResiduals());
-        
-        //set new value
+
+        // set new value
         refiner.setResiduals(residuals);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getResiduals(), residuals);
     }
-    
+
     @Test
     public void testGetSetNumInliers() throws LockedException, NotReadyException,
             RobustEstimatorException, ColinearPointsException {
-        RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-        
+        final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        int numInliers = inliersData.getNumInliers();
-        
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InliersData inliersData = estimator.getInliersData();
+        final int numInliers = inliersData.getNumInliers();
+
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertEquals(refiner.getNumInliers(), 0);
-        
-        //set new value
+
+        // set new value
         refiner.setNumInliers(numInliers);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(refiner.getNumInliers(), numInliers);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             refiner.setNumInliers(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testSetInliersData() throws LockedException, NotReadyException,
             RobustEstimatorException, ColinearPointsException {
-        RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-        
+        final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default values
+        final InliersData inliersData = estimator.getInliersData();
+
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default values
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
         assertEquals(refiner.getNumInliers(), 0);
-        
-        //set new value
+
+        // set new value
         refiner.setInliersData(inliersData);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getInliers(), inliersData.getInliers());
         assertSame(refiner.getResiduals(), inliersData.getResiduals());
         assertEquals(refiner.getNumInliers(), inliersData.getNumInliers());
     }
-    
+
     @Test
     public void testGetSetInitialEstimation() throws LockedException {
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertNull(refiner.getInitialEstimation());
-        
-        //set new value
-        InhomogeneousPoint3D point = new InhomogeneousPoint3D();
+
+        // set new value
+        final InhomogeneousPoint3D point = new InhomogeneousPoint3D();
         refiner.setInitialEstimation(point);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getInitialEstimation(), point);
     }
-    
+
     @Test
     public void testIsSetCovarianceKept() throws LockedException {
-        InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
-        
-        //check default value
+        final InhomogeneousPoint3DRefiner refiner = new InhomogeneousPoint3DRefiner();
+
+        // check default value
         assertFalse(refiner.isCovarianceKept());
-        
-        //set new value
+
+        // set new value
         refiner.setCovarianceKept(true);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(refiner.isCovarianceKept());
     }
-    
-    @Test    
-    public void testRefine() throws ColinearPointsException, LockedException, 
+
+    @Test
+    public void testRefine() throws ColinearPointsException, LockedException,
             NotReadyException, RobustEstimatorException, RefinerException {
         int numValid = 0;
         for (int t = 0; t < 2 * TIMES; t++) {
-            RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
-            
-            InhomogeneousPoint3D point = new InhomogeneousPoint3D(
+            final RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
+
+            final InhomogeneousPoint3D point = new InhomogeneousPoint3D(
                     estimator.estimate());
-            InliersData inliersData = estimator.getInliersData();
-            double refineStandardDeviation = estimator.getThreshold();
-            List<Plane> samples = estimator.getPlanes();
-            
-            InhomogeneousPoint3DRefiner refiner = 
+            final InliersData inliersData = estimator.getInliersData();
+            final double refineStandardDeviation = estimator.getThreshold();
+            final List<Plane> samples = estimator.getPlanes();
+
+            final InhomogeneousPoint3DRefiner refiner =
                     new InhomogeneousPoint3DRefiner(point, true, inliersData,
-                    samples, refineStandardDeviation);
+                            samples, refineStandardDeviation);
             refiner.setListener(this);
-            
-            InhomogeneousPoint3D result1 = new InhomogeneousPoint3D();
-            
+
+            final InhomogeneousPoint3D result1 = new InhomogeneousPoint3D();
+
             reset();
             assertEquals(mRefineStart, 0);
             assertEquals(mRefineEnd, 0);
-            
+
             if (!refiner.refine(result1)) {
                 continue;
             }
-            
-            InhomogeneousPoint3D result2 = refiner.refine();
-            
+
+            final InhomogeneousPoint3D result2 = refiner.refine();
+
             assertEquals(mRefineStart, 2);
             assertEquals(mRefineEnd, 2);
-            
+
             assertEquals(result1, result2);
-            
+
             numValid++;
-            
-            if (numValid > 0) {
-                break;
-            }
+            break;
         }
-        
+
         assertTrue(numValid > 0);
     }
-    
-    private RANSACPoint3DRobustEstimator createRobustEstimator() 
+
+    private RANSACPoint3DRobustEstimator createRobustEstimator()
             throws ColinearPointsException, LockedException {
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        Point3D point = new HomogeneousPoint3D(
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final Point3D point = new HomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 1.0);
-            
-        //compute random planes passing through the point
-        int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-        GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+
+        // compute random planes passing through the point
+        final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, STD_ERROR);
-        List<Plane> planesWithError = new ArrayList<>();
-        Plane plane, planeWithError;
+        final List<Plane> planesWithError = new ArrayList<>();
+        Plane plane;
+        Plane planeWithError;
         for (int i = 0; i < nPlanes; i++) {
-            //get two more points(far enough to compute a plane)
-            Point3D point2, point3;
+            // get two more points(far enough to compute a plane)
+            Point3D point2;
+            Point3D point3;
             do {
                 point2 = new HomogeneousPoint3D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE),                            
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE), 1.0);
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
+                                MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
+                                MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
+                                MAX_RANDOM_VALUE), 1.0);
             } while (point2.distanceTo(point) < STD_ERROR);
             do {
                 point3 = new HomogeneousPoint3D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE),                            
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE), 1.0);
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
+                                MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
+                                MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
+                                MAX_RANDOM_VALUE), 1.0);
             } while (point3.distanceTo(point) < STD_ERROR ||
                     point3.distanceTo(point2) < STD_ERROR);
-                
+
             plane = new Plane(point, point2, point3);
-                
+
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                //line is outlier
-                double errorA = errorRandomizer.nextDouble();
-                double errorB = errorRandomizer.nextDouble();
-                double errorC = errorRandomizer.nextDouble();
-                double errorD = errorRandomizer.nextDouble();
+                // line is outlier
+                final double errorA = errorRandomizer.nextDouble();
+                final double errorB = errorRandomizer.nextDouble();
+                final double errorC = errorRandomizer.nextDouble();
+                final double errorD = errorRandomizer.nextDouble();
                 planeWithError = new Plane(plane.getA() + errorA,
                         plane.getB() + errorB, plane.getC() + errorC,
                         plane.getD() + errorD);
             } else {
-                //inlier plane
+                // inlier plane
                 planeWithError = plane;
             }
-                
+
             planesWithError.add(planeWithError);
-                
-            //check that point is locus of plane without error
+
+            // check that point is locus of plane without error
             assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
         }
-            
-        RANSACPoint3DRobustEstimator estimator = 
+
+        final RANSACPoint3DRobustEstimator estimator =
                 new RANSACPoint3DRobustEstimator(planesWithError);
-            
+
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
         estimator.setComputeAndKeepResidualsEnabled(true);
         estimator.setResultRefined(false);
-        estimator.setCovarianceKept(false);            
-        
+        estimator.setCovarianceKept(false);
+
         return estimator;
     }
 
     private void reset() {
         mRefineStart = mRefineEnd = 0;
     }
-    
+
     @Override
-    public void onRefineStart(Refiner<InhomogeneousPoint3D> refiner, 
-            InhomogeneousPoint3D initialEstimation) {
+    public void onRefineStart(final Refiner<InhomogeneousPoint3D> refiner,
+                              final InhomogeneousPoint3D initialEstimation) {
         mRefineStart++;
-        checkLocked((InhomogeneousPoint3DRefiner)refiner);
+        checkLocked((InhomogeneousPoint3DRefiner) refiner);
     }
 
     @Override
-    public void onRefineEnd(Refiner<InhomogeneousPoint3D> refiner, 
-            InhomogeneousPoint3D initialEstimation, InhomogeneousPoint3D result,
-            boolean errorDecreased) {
+    public void onRefineEnd(final Refiner<InhomogeneousPoint3D> refiner,
+                            final InhomogeneousPoint3D initialEstimation,
+                            final InhomogeneousPoint3D result,
+                            final boolean errorDecreased) {
         mRefineEnd++;
-        checkLocked((InhomogeneousPoint3DRefiner)refiner);
+        checkLocked((InhomogeneousPoint3DRefiner) refiner);
     }
-    
-    private void checkLocked(InhomogeneousPoint3DRefiner refiner) {
+
+    private void checkLocked(final InhomogeneousPoint3DRefiner refiner) {
         assertTrue(refiner.isLocked());
         try {
             refiner.setInitialEstimation(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.refine(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) {
-        } catch (Exception e) {
+        } catch (final LockedException ignore) {
+        } catch (final Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.refine();
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) {
-        } catch (Exception e) {
+        } catch (final LockedException ignore) {
+        } catch (final Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.setInliers(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setResiduals(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setNumInliers(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setInliersData(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setSamples(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setRefinementStandardDeviation(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
     }
 }

@@ -17,7 +17,7 @@ package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +25,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
-    
-    public PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testCreate() {
-        PlaneCorrespondenceAffineTransformation3DRobustEstimator estimator;
-        
-        //create with robust estimator method
-        estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(RobustEstimatorMethod.RANSAC);
+        // create with robust estimator method
+        PlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
+                PlaneCorrespondenceAffineTransformation3DRobustEstimator.
+                        create(RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
@@ -58,11 +43,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
@@ -73,8 +58,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -88,8 +73,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -103,34 +88,34 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
-        assertFalse(estimator.isReady());  
+        assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //create with planes and method
-        List<Plane> inputPlanes = new ArrayList<>();
-        List<Plane> outputPlanes = new ArrayList<>();
+        assertNull(estimator.getCovariance());
+
+        // create with planes and method
+        final List<Plane> inputPlanes = new ArrayList<>();
+        final List<Plane> outputPlanes = new ArrayList<>();
         for (int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
-        
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
@@ -141,11 +126,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
@@ -156,11 +141,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
@@ -171,11 +156,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
@@ -186,11 +171,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
@@ -201,47 +186,55 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
-        List<Plane> emptyPlanes = new ArrayList<>();
-        
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
+        final List<Plane> emptyPlanes = new ArrayList<>();
+
         estimator = null;
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                    create(emptyPlanes, outputPlanes, 
-                    RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+                    create(emptyPlanes, outputPlanes,
+                            RobustEstimatorMethod.LMedS);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                    create(inputPlanes, emptyPlanes, 
-                    RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+                    create(inputPlanes, emptyPlanes,
+                            RobustEstimatorMethod.LMedS);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //create with listener and method
-        AffineTransformation3DRobustEstimatorListener listener = 
+
+        // create with listener and method
+        final AffineTransformation3DRobustEstimatorListener listener =
                 new AffineTransformation3DRobustEstimatorListener() {
 
-            @Override
-            public void onEstimateStart(AffineTransformation3DRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateStart(final AffineTransformation3DRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateEnd(AffineTransformation3DRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateEnd(final AffineTransformation3DRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateNextIteration(AffineTransformation3DRobustEstimator estimator, int iteration) { }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final AffineTransformation3DRobustEstimator estimator, final int iteration) {
+                    }
 
-            @Override
-            public void onEstimateProgressChange(AffineTransformation3DRobustEstimator estimator, float progress) { }
-        };
-        
-        
+                    @Override
+                    public void onEstimateProgressChange(
+                            final AffineTransformation3DRobustEstimator estimator, final float progress) {
+                    }
+                };
+
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
@@ -252,11 +245,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
@@ -267,11 +260,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
@@ -282,11 +275,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
@@ -297,11 +290,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
@@ -312,12 +305,12 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and points
+        assertNull(estimator.getCovariance());
+
+        // test with listener and points
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, 
-                RobustEstimatorMethod.RANSAC);
+                create(listener, inputPlanes, outputPlanes,
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -329,11 +322,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, 
-                RobustEstimatorMethod.LMedS);
+                create(listener, inputPlanes, outputPlanes,
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -345,11 +338,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, 
-                RobustEstimatorMethod.MSAC);
+                create(listener, inputPlanes, outputPlanes,
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -361,11 +354,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, 
-                RobustEstimatorMethod.PROSAC);
+                create(listener, inputPlanes, outputPlanes,
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -377,11 +370,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, 
-                RobustEstimatorMethod.PROMedS);
+                create(listener, inputPlanes, outputPlanes,
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -393,13 +386,13 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with quality scores and method
-        double[] qualityScores = new double[
+        assertNull(estimator.getCovariance());
+
+        // test with quality scores and method
+        final double[] qualityScores = new double[
                 PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE];
-        double[] wrongQualityScores = new double[1];
-        
+        final double[] wrongQualityScores = new double[1];
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -413,8 +406,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -428,7 +421,7 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.MSAC);
@@ -443,8 +436,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -458,8 +451,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -473,12 +466,12 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points, quality scores and method
+        assertNull(estimator.getCovariance());
+
+        // test with points, quality scores and method
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, outputPlanes, qualityScores, 
-                RobustEstimatorMethod.RANSAC);
+                create(inputPlanes, outputPlanes, qualityScores,
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -490,11 +483,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, outputPlanes, qualityScores, 
-                RobustEstimatorMethod.LMedS);
+                create(inputPlanes, outputPlanes, qualityScores,
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -506,11 +499,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, outputPlanes, qualityScores, 
-                RobustEstimatorMethod.MSAC);
+                create(inputPlanes, outputPlanes, qualityScores,
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -522,11 +515,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, outputPlanes, qualityScores, 
-                RobustEstimatorMethod.PROSAC);
+                create(inputPlanes, outputPlanes, qualityScores,
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -538,11 +531,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, outputPlanes, qualityScores, 
-                RobustEstimatorMethod.PROMedS);
+                create(inputPlanes, outputPlanes, qualityScores,
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -554,31 +547,34 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(emptyPlanes, outputPlanes, qualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(emptyPlanes, outputPlanes, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, emptyPlanes, qualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(inputPlanes, emptyPlanes, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, outputPlanes, wrongQualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(inputPlanes, outputPlanes, wrongQualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener, quality scores and method
+
+        // test with listener, quality scores and method
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -592,8 +588,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -607,8 +603,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -622,8 +618,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -637,8 +633,8 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -652,12 +648,12 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener, points, quality scores and method
+        assertNull(estimator.getCovariance());
+
+        // test with listener, points, quality scores and method
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.RANSAC);
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -669,11 +665,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -685,11 +681,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.MSAC);
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -701,11 +697,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.PROSAC);
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -717,11 +713,11 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
@@ -733,31 +729,34 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, emptyPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, emptyPlanes, outputPlanes, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, emptyPlanes, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, inputPlanes, emptyPlanes, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, wrongQualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, inputPlanes, outputPlanes, wrongQualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test no arguments
+
+        // test no arguments
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create();
         assertTrue(estimator instanceof
@@ -771,13 +770,13 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points
+        assertNull(estimator.getCovariance());
+
+        // test with points
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
         assertFalse(estimator.isReady());
@@ -787,27 +786,29 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(emptyPlanes, outputPlanes);
+                    create(emptyPlanes, outputPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPlanes, emptyPlanes);
+                    create(inputPlanes, emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener
+
+        // test with listener
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
@@ -817,13 +818,13 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and points
+        assertNull(estimator.getCovariance());
+
+        // test with listener and points
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
         assertFalse(estimator.isReady());
@@ -833,27 +834,29 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, emptyPlanes, outputPlanes);
+                    create(listener, emptyPlanes, outputPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                create(listener, inputPlanes, emptyPlanes);
+                    create(listener, inputPlanes, emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with quality scores
+
+        // test with quality scores
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
@@ -863,13 +866,13 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with planes and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with planes and quality scores
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
         assertTrue(estimator.isReady());
@@ -879,13 +882,13 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with listener and quality scores
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
@@ -895,13 +898,13 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener, points and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with listener, points and quality scores
         estimator = PlaneCorrespondenceAffineTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);        
+                PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator);
         assertSame(estimator.getInputPlanes(), inputPlanes);
         assertSame(estimator.getOutputPlanes(), outputPlanes);
         assertTrue(estimator.isReady());
@@ -911,6 +914,6 @@ public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-    }    
+        assertNull(estimator.getCovariance());
+    }
 }

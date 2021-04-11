@@ -32,7 +32,7 @@ class NotLocusException extends GeometryException {
      * Constructor with String containing message.
      * @param message Message indicating the cause of the exception.
      */
-    public NotLocusException(String message) {
+    public NotLocusException(final String message) {
         super(message);
     }
     
@@ -41,7 +41,7 @@ class NotLocusException extends GeometryException {
      * @param message Message describing the cause of the exception.
      * @param cause Instance containing the cause of the exception.
      */
-    public NotLocusException(String message, Throwable cause) {
+    public NotLocusException(final String message, final Throwable cause) {
         super(message, cause);
     }
     
@@ -49,7 +49,7 @@ class NotLocusException extends GeometryException {
      * Constructor with cause.
      * @param cause Instance containing the cause of the exception.
      */
-    public NotLocusException(Throwable cause) {
+    public NotLocusException(final Throwable cause) {
         super(cause);
     }    
 }

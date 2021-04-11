@@ -17,7 +17,7 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
@@ -30,231 +30,215 @@ public class Box3DTest {
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
 
-    public Box3DTest() { }
-
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-
-    @Before
-    public void setUp() { }
-
-    @After
-    public void tearDown() { }
-
     @Test
     public void testConstructor() {
-        //test empty constructor
+        // test empty constructor
         Box3D box = new Box3D();
 
-        //check default values
+        // check default values
         assertEquals(box.getLo(), new InhomogeneousPoint3D(-0.5, -0.5, -0.5));
         assertEquals(box.getHi(), new InhomogeneousPoint3D(0.5, 0.5, 0.5));
 
-        //test constructor with lo and hi
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
-        double hiZ = randomizer.nextDouble(loZ, MAX_RANDOM_VALUE);
+        // test constructor with lo and hi
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        final double hiZ = randomizer.nextDouble(loZ, MAX_RANDOM_VALUE);
 
-        InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
-        InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
+        final InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
+        final InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
         box = new Box3D(lo, hi);
 
-        //check
+        // check
         assertSame(box.getLo(), lo);
         assertSame(box.getHi(), hi);
     }
 
     @Test
     public void testGetSetLo() {
-        Box3D box = new Box3D();
+        final Box3D box = new Box3D();
 
-        //check default value
+        // check default value
         assertEquals(box.getLo(), new InhomogeneousPoint3D(-0.5, -0.5, -0.5));
 
-        //set new value
-        InhomogeneousPoint3D lo = new InhomogeneousPoint3D();
+        // set new value
+        final InhomogeneousPoint3D lo = new InhomogeneousPoint3D();
         box.setLo(lo);
 
-        //check
+        // check
         assertSame(box.getLo(), lo);
     }
 
     @Test
     public void testGetSetHi() {
-        Box3D box = new Box3D();
+        final Box3D box = new Box3D();
 
-        //check default value
+        // check default value
         assertEquals(box.getHi(), new InhomogeneousPoint3D(0.5, 0.5, 0.5));
 
-        //set new value
-        InhomogeneousPoint3D hi = new InhomogeneousPoint3D();
+        // set new value
+        final InhomogeneousPoint3D hi = new InhomogeneousPoint3D();
         box.setHi(hi);
 
-        //check
+        // check
         assertSame(box.getHi(), hi);
     }
 
     @Test
     public void testSetBounds() {
-        Box3D box = new Box3D();
+        final Box3D box = new Box3D();
 
-        //check default values
+        // check default values
         assertEquals(box.getLo(), new InhomogeneousPoint3D(-0.5, -0.5, -0.5));
         assertEquals(box.getHi(), new InhomogeneousPoint3D(0.5, 0.5, 0.5));
 
-        //set bounds
+        // set bounds
         InhomogeneousPoint3D lo = new InhomogeneousPoint3D();
         InhomogeneousPoint3D hi = new InhomogeneousPoint3D();
         box.setBounds(lo, hi);
 
-
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
-        double hiZ = randomizer.nextDouble(loZ, MAX_RANDOM_VALUE);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        final double hiZ = randomizer.nextDouble(loZ, MAX_RANDOM_VALUE);
 
         lo = new InhomogeneousPoint3D(loX, loY, loZ);
         hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
         box.setBounds(loX, loY, loZ, hiX, hiY, hiZ);
 
-        //check
+        // check
         assertEquals(box.getLo(), lo);
         assertEquals(box.getHi(), hi);
     }
 
     @Test
     public void testGetDistance() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double centerZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final double centerZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double sizeX = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        double sizeY = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        double sizeZ = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double sizeX = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double sizeY = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double sizeZ = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
 
-        double loX = centerX - 0.5 * sizeX;
-        double loY = centerY - 0.5 * sizeY;
-        double loZ = centerZ - 0.5 * sizeZ;
+        final double loX = centerX - 0.5 * sizeX;
+        final double loY = centerY - 0.5 * sizeY;
+        final double loZ = centerZ - 0.5 * sizeZ;
 
-        double hiX = centerX + 0.5 * sizeX;
-        double hiY = centerY + 0.5 * sizeY;
-        double hiZ = centerZ + 0.5 * sizeZ;
+        final double hiX = centerX + 0.5 * sizeX;
+        final double hiY = centerY + 0.5 * sizeY;
+        final double hiZ = centerZ + 0.5 * sizeZ;
 
-        InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
-        InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
+        final InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
+        final InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
 
-        Point3D pointXLoSide = new InhomogeneousPoint3D(centerX -
+        final Point3D pointXLoSide = new InhomogeneousPoint3D(centerX -
                 sizeX * randomizer.nextDouble(1.5, 2.5), centerY, centerZ);
-        Point3D pointYLoSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYLoSide = new InhomogeneousPoint3D(centerX,
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5), centerZ);
-        Point3D pointZLoSide = new InhomogeneousPoint3D(centerX, centerY,
+        final Point3D pointZLoSide = new InhomogeneousPoint3D(centerX, centerY,
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXHiSide = new InhomogeneousPoint3D(centerX +
+        final Point3D pointXHiSide = new InhomogeneousPoint3D(centerX +
                 sizeX * randomizer.nextDouble(1.5, 2.5), centerY, centerZ);
-        Point3D pointYHiSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYHiSide = new InhomogeneousPoint3D(centerX,
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5), centerZ);
-        Point3D pointZHiSide = new InhomogeneousPoint3D(centerX, centerY,
+        final Point3D pointZHiSide = new InhomogeneousPoint3D(centerX, centerY,
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYLoSide = new InhomogeneousPoint3D(
+        final Point3D pointXYLoSide = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointYZLoSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZLoSide = new InhomogeneousPoint3D(centerX,
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZLoSide = new InhomogeneousPoint3D(
+        final Point3D pointXZLoSide = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYHiSide = new InhomogeneousPoint3D(
+        final Point3D pointXYHiSide = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointYZHiSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZHiSide = new InhomogeneousPoint3D(centerX,
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZHiSide = new InhomogeneousPoint3D(
+        final Point3D pointXZHiSide = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYZLoSide = new InhomogeneousPoint3D(
+        final Point3D pointXYZLoSide = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZHiSide = new InhomogeneousPoint3D(
+        final Point3D pointXYZHiSide = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYMixedSide1 = new InhomogeneousPoint3D(
+        final Point3D pointXYMixedSide1 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointXYMixedSide2 = new InhomogeneousPoint3D(
+        final Point3D pointXYMixedSide2 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointYZMixedSide1 = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZMixedSide1 = new InhomogeneousPoint3D(centerX,
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointYZMixedSide2 = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZMixedSide2 = new InhomogeneousPoint3D(centerX,
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZMixedSide1 = new InhomogeneousPoint3D(
+        final Point3D pointXZMixedSide1 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZMixedSide2 = new InhomogeneousPoint3D(
+        final Point3D pointXZMixedSide2 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYZMixedSide1 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide1 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide2 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide2 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide3 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide3 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide4 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide4 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide5 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide5 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide6 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide6 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
+        final Point3D center = new InhomogeneousPoint3D(centerX, centerY, centerZ);
 
-        Point3D center = new InhomogeneousPoint3D(centerX, centerY, centerZ);
-
-        Box3D box = new Box3D(lo, hi);
+        final Box3D box = new Box3D(lo, hi);
         assertEquals(box.getDistance(pointXLoSide),
                 pointXLoSide.distanceTo(new InhomogeneousPoint3D(loX, centerY, centerZ)),
                 ABSOLUTE_ERROR);
@@ -345,127 +329,126 @@ public class Box3DTest {
 
     @Test
     public void testGetSqrDistance() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double centerZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final double centerZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double sizeX = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        double sizeY = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        double sizeZ = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double sizeX = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double sizeY = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double sizeZ = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
 
-        double loX = centerX - 0.5 * sizeX;
-        double loY = centerY - 0.5 * sizeY;
-        double loZ = centerZ - 0.5 * sizeZ;
+        final double loX = centerX - 0.5 * sizeX;
+        final double loY = centerY - 0.5 * sizeY;
+        final double loZ = centerZ - 0.5 * sizeZ;
 
-        double hiX = centerX + 0.5 * sizeX;
-        double hiY = centerY + 0.5 * sizeY;
-        double hiZ = centerZ + 0.5 * sizeZ;
+        final double hiX = centerX + 0.5 * sizeX;
+        final double hiY = centerY + 0.5 * sizeY;
+        final double hiZ = centerZ + 0.5 * sizeZ;
 
-        InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
-        InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
+        final InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
+        final InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
 
-        Point3D pointXLoSide = new InhomogeneousPoint3D(centerX -
+        final Point3D pointXLoSide = new InhomogeneousPoint3D(centerX -
                 sizeX * randomizer.nextDouble(1.5, 2.5), centerY, centerZ);
-        Point3D pointYLoSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYLoSide = new InhomogeneousPoint3D(centerX,
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5), centerZ);
-        Point3D pointZLoSide = new InhomogeneousPoint3D(centerX, centerY,
+        final Point3D pointZLoSide = new InhomogeneousPoint3D(centerX, centerY,
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXHiSide = new InhomogeneousPoint3D(centerX +
+        final Point3D pointXHiSide = new InhomogeneousPoint3D(centerX +
                 sizeX * randomizer.nextDouble(1.5, 2.5), centerY, centerZ);
-        Point3D pointYHiSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYHiSide = new InhomogeneousPoint3D(centerX,
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5), centerZ);
-        Point3D pointZHiSide = new InhomogeneousPoint3D(centerX, centerY,
+        final Point3D pointZHiSide = new InhomogeneousPoint3D(centerX, centerY,
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYLoSide = new InhomogeneousPoint3D(
+        final Point3D pointXYLoSide = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointYZLoSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZLoSide = new InhomogeneousPoint3D(centerX,
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZLoSide = new InhomogeneousPoint3D(
+        final Point3D pointXZLoSide = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYHiSide = new InhomogeneousPoint3D(
+        final Point3D pointXYHiSide = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointYZHiSide = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZHiSide = new InhomogeneousPoint3D(centerX,
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZHiSide = new InhomogeneousPoint3D(
+        final Point3D pointXZHiSide = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYZLoSide = new InhomogeneousPoint3D(
+        final Point3D pointXYZLoSide = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZHiSide = new InhomogeneousPoint3D(
+        final Point3D pointXYZHiSide = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYMixedSide1 = new InhomogeneousPoint3D(
+        final Point3D pointXYMixedSide1 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointXYMixedSide2 = new InhomogeneousPoint3D(
+        final Point3D pointXYMixedSide2 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ);
-        Point3D pointYZMixedSide1 = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZMixedSide1 = new InhomogeneousPoint3D(centerX,
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointYZMixedSide2 = new InhomogeneousPoint3D(centerX,
+        final Point3D pointYZMixedSide2 = new InhomogeneousPoint3D(centerX,
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZMixedSide1 = new InhomogeneousPoint3D(
+        final Point3D pointXZMixedSide1 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXZMixedSide2 = new InhomogeneousPoint3D(
+        final Point3D pointXZMixedSide2 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY,
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
-        Point3D pointXYZMixedSide1 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide1 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide2 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide2 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide3 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide3 = new InhomogeneousPoint3D(
                 centerX - sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide4 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide4 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide5 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide5 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY - sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ + sizeZ * randomizer.nextDouble(1.5, 2.5));
-        Point3D pointXYZMixedSide6 = new InhomogeneousPoint3D(
+        final Point3D pointXYZMixedSide6 = new InhomogeneousPoint3D(
                 centerX + sizeX * randomizer.nextDouble(1.5, 2.5),
                 centerY + sizeY * randomizer.nextDouble(1.5, 2.5),
                 centerZ - sizeZ * randomizer.nextDouble(1.5, 2.5));
 
+        final Point3D center = new InhomogeneousPoint3D(centerX, centerY, centerZ);
 
-        Point3D center = new InhomogeneousPoint3D(centerX, centerY, centerZ);
-
-        Box3D box = new Box3D(lo, hi);
+        final Box3D box = new Box3D(lo, hi);
         assertEquals(box.getSqrDistance(pointXLoSide),
                 pointXLoSide.sqrDistanceTo(new InhomogeneousPoint3D(loX, centerY, centerZ)),
                 ABSOLUTE_ERROR);
@@ -553,5 +536,4 @@ public class Box3DTest {
 
         assertEquals(box.getSqrDistance(center), 0.0, 0.0);
     }
-
 }

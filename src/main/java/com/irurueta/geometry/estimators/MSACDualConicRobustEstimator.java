@@ -18,7 +18,11 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.CoincidentLinesException;
 import com.irurueta.geometry.DualConic;
 import com.irurueta.geometry.Line2D;
-import com.irurueta.numerical.robust.*;
+import com.irurueta.numerical.robust.MSACRobustEstimator;
+import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
 import java.util.List;
 
@@ -26,10 +30,11 @@ import java.util.List;
  * Finds the best dual conic for provided collection of 2D lines using MSAC
  * algorithm.
  */
-public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
-    
+@SuppressWarnings("DuplicatedCode")
+public class MSACDualConicRobustEstimator extends DualConicRobustEstimator {
+
     /**
-     * Constant defining default threshold to determine whether lines are 
+     * Constant defining default threshold to determine whether lines are
      * inliers or not.
      * Threshold is defined by the equation abs(trans(l) * dc * l) &lt; t, where
      * trans is the transposition, l is a line, dc is a dual conic and t is a
@@ -38,21 +43,21 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      * conic dC up to a certain threshold.
      */
     public static final double DEFAULT_THRESHOLD = 1e-7;
-    
+
     /**
      * Minimum value that can be set as threshold.
      * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
-    
+
     /**
      * Threshold to determine whether lines are inliers or not when testing
      * possible estimation solutions.
-     * The threshold refers to the amount of algebraic error a possible 
+     * The threshold refers to the amount of algebraic error a possible
      * solution has on a given line.
      */
-    private double mThreshold;   
-    
+    private double mThreshold;
+
     /**
      * Constructor.
      */
@@ -63,66 +68,71 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
 
     /**
      * Constructor with points.
+     *
      * @param lines 2D lines to estimate a dual conic.
-     * @throws IllegalArgumentException if provided list of lines don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of lines don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACDualConicRobustEstimator(List<Line2D> lines) {
+    public MSACDualConicRobustEstimator(final List<Line2D> lines) {
         super(lines);
         mThreshold = DEFAULT_THRESHOLD;
     }
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
     public MSACDualConicRobustEstimator(
-            DualConicRobustEstimatorListener listener) {
+            final DualConicRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
-    
-    
+
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param lines 2D lines to estimate a dual conic.
-     * @throws IllegalArgumentException if provided list of lines don't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     *                 starts, ends or its progress significantly changes.
+     * @param lines    2D lines to estimate a dual conic.
+     * @throws IllegalArgumentException if provided list of lines don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public MSACDualConicRobustEstimator(
-            DualConicRobustEstimatorListener listener,
-            List<Line2D> lines) {
+            final DualConicRobustEstimatorListener listener,
+            final List<Line2D> lines) {
         super(listener, lines);
         mThreshold = DEFAULT_THRESHOLD;
     }
-    
+
     /**
-     * Returns threshold to determine whether lines are inliers or not when 
+     * Returns threshold to determine whether lines are inliers or not when
      * testing possible estimation solutions.
-     * The threshold refers to the amount of error a possible solution has on a 
+     * The threshold refers to the amount of error a possible solution has on a
      * given line.
-     * @return threshold to determine whether lines are inliers or not when 
+     *
+     * @return threshold to determine whether lines are inliers or not when
      * testing possible estimation solutions.
      */
     public double getThreshold() {
         return mThreshold;
     }
-    
+
     /**
-     * Sets threshold to determine whether lines are inliers or not when 
+     * Sets threshold to determine whether lines are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of algebrauc error a possible 
+     * Thre threshold refers to the amount of algebrauc error a possible
      * solution has on a given line.
+     *
      * @param threshold threshold to be set.
-     * @throws IllegalArgumentException if provided value is equal or less than 
-     * zero.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws LockedException {
+    public void setThreshold(final double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -131,22 +141,23 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
         }
         mThreshold = threshold;
     }
-    
-            
+
+
     /**
-     * Estimates a dual conic using a robust estimator and the best set of 2D 
+     * Estimates a dual conic using a robust estimator and the best set of 2D
      * lines that fit into the locus of the estimated dual conic found using the
      * robust estimator.
+     *
      * @return a dual conic.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
-     */    
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
     @Override
-    public DualConic estimate() throws LockedException, NotReadyException, 
+    public DualConic estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
@@ -154,98 +165,98 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
-        MSACRobustEstimator<DualConic> innerEstimator =
+
+        final MSACRobustEstimator<DualConic> innerEstimator =
                 new MSACRobustEstimator<>(
                         new MSACRobustEstimatorListener<DualConic>() {
 
-            @Override
-            public double getThreshold() {
-                return mThreshold;
-            }
+                            @Override
+                            public double getThreshold() {
+                                return mThreshold;
+                            }
 
-            @Override
-            public int getTotalSamples() {
-                return mLines.size();
-            }
+                            @Override
+                            public int getTotalSamples() {
+                                return mLines.size();
+                            }
 
-            @Override
-            public int getSubsetSize() {
-                return DualConicRobustEstimator.MINIMUM_SIZE;
-            }
+                            @Override
+                            public int getSubsetSize() {
+                                return DualConicRobustEstimator.MINIMUM_SIZE;
+                            }
 
-            @Override
-            public void estimatePreliminarSolutions(int[] samplesIndices, 
-                    List<DualConic> solutions) {
-                Line2D line1 = mLines.get(samplesIndices[0]);
-                Line2D line2 = mLines.get(samplesIndices[1]);
-                Line2D line3 = mLines.get(samplesIndices[2]);
-                Line2D line4 = mLines.get(samplesIndices[3]);
-                Line2D line5 = mLines.get(samplesIndices[4]);
-                
-                try {
-                    DualConic dualConic = new DualConic(line1, line2, line3, 
-                            line4, line5);
-                    solutions.add(dualConic);
-                } catch (CoincidentLinesException e) {
-                    //if points are coincident, no solution is added
-                }
-            }
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List<DualConic> solutions) {
+                                final Line2D line1 = mLines.get(samplesIndices[0]);
+                                final Line2D line2 = mLines.get(samplesIndices[1]);
+                                final Line2D line3 = mLines.get(samplesIndices[2]);
+                                final Line2D line4 = mLines.get(samplesIndices[3]);
+                                final Line2D line5 = mLines.get(samplesIndices[4]);
 
-            @Override
-            public double computeResidual(DualConic currentEstimation, int i) {
-                return residual(currentEstimation, mLines.get(i));
-            }
+                                try {
+                                    final DualConic dualConic = new DualConic(line1, line2, line3,
+                                            line4, line5);
+                                    solutions.add(dualConic);
+                                } catch (final CoincidentLinesException e) {
+                                    // if points are coincident, no solution is added
+                                }
+                            }
 
-            @Override
-            public boolean isReady() {
-                return MSACDualConicRobustEstimator.this.isReady();
-            }
+                            @Override
+                            public double computeResidual(final DualConic currentEstimation, final int i) {
+                                return residual(currentEstimation, mLines.get(i));
+                            }
 
-            @Override
-            public void onEstimateStart(RobustEstimator<DualConic> estimator) {
-                if (mListener != null) {
-                    mListener.onEstimateStart(
-                            MSACDualConicRobustEstimator.this);
-                }
-            }
+                            @Override
+                            public boolean isReady() {
+                                return MSACDualConicRobustEstimator.this.isReady();
+                            }
 
-            @Override
-            public void onEstimateEnd(RobustEstimator<DualConic> estimator) {
-                if (mListener != null) {
-                    mListener.onEstimateEnd(
-                            MSACDualConicRobustEstimator.this);
-                }
-            }
+                            @Override
+                            public void onEstimateStart(final RobustEstimator<DualConic> estimator) {
+                                if (mListener != null) {
+                                    mListener.onEstimateStart(
+                                            MSACDualConicRobustEstimator.this);
+                                }
+                            }
 
-            @Override
-            public void onEstimateNextIteration(
-                    RobustEstimator<DualConic> estimator, int iteration) {
-                if (mListener != null) {
-                    mListener.onEstimateNextIteration(
-                            MSACDualConicRobustEstimator.this, iteration);
-                }
-            }
+                            @Override
+                            public void onEstimateEnd(final RobustEstimator<DualConic> estimator) {
+                                if (mListener != null) {
+                                    mListener.onEstimateEnd(
+                                            MSACDualConicRobustEstimator.this);
+                                }
+                            }
 
-            @Override
-            public void onEstimateProgressChange(
-                    RobustEstimator<DualConic> estimator, float progress) {
-                if (mListener != null) {
-                    mListener.onEstimateProgressChange(
-                            MSACDualConicRobustEstimator.this, progress);
-                }
-            }
-        });
-        
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator<DualConic> estimator, final int iteration) {
+                                if (mListener != null) {
+                                    mListener.onEstimateNextIteration(
+                                            MSACDualConicRobustEstimator.this, iteration);
+                                }
+                            }
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator<DualConic> estimator, final float progress) {
+                                if (mListener != null) {
+                                    mListener.onEstimateProgressChange(
+                                            MSACDualConicRobustEstimator.this, progress);
+                                }
+                            }
+                        });
+
         try {
             mLocked = true;
             innerEstimator.setConfidence(mConfidence);
             innerEstimator.setMaxIterations(mMaxIterations);
             innerEstimator.setProgressDelta(mProgressDelta);
             return innerEstimator.estimate();
-        } catch (com.irurueta.numerical.LockedException e) {
+        } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        } catch (com.irurueta.numerical.NotReadyException e) {
+        } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
             mLocked = false;
@@ -254,10 +265,11 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
 
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
-     */    
+     */
     @Override
     public RobustEstimatorMethod getMethod() {
         return RobustEstimatorMethod.MSAC;
-    }            
+    }
 }

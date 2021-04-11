@@ -25,29 +25,32 @@ public class ParallelVectorsException extends GeometryException {
     public ParallelVectorsException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public ParallelVectorsException(String message) {
+    public ParallelVectorsException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public ParallelVectorsException(String message, Throwable cause) {
+    public ParallelVectorsException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public ParallelVectorsException(Throwable cause) {
+    public ParallelVectorsException(final Throwable cause) {
         super(cause);
-    }        
+    }
 }

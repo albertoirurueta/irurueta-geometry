@@ -21,7 +21,7 @@ import com.irurueta.geometry.InhomogeneousPoint2D;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.ProjectiveTransformation2D;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,45 +32,31 @@ import static org.junit.Assert.*;
 public class Point2DNormalizerTest {
     private static final int MIN_POINTS = 2;
     private static final int MAX_POINTS = 10;
-    
+
     private static final double MIN_VALUE = -10.0;
     private static final double MAX_VALUE = 10.0;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-6;
-    
+
     private static final int TIMES = 100;
-    
-    public Point2DNormalizerTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point2D> points = new ArrayList<>();
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final List<Point2D> points = new ArrayList<>();
         InhomogeneousPoint2D point;
         for (int i = 0; i < nPoints; i++) {
-            double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             point = new InhomogeneousPoint2D(x, y);
             points.add(point);
         }
-        
+
         Point2DNormalizer normalizer = new Point2DNormalizer(points);
-        
-        //check default values
+
+        // check default values
         assertSame(normalizer.getPoints(), points);
         assertTrue(normalizer.isReady());
         assertFalse(normalizer.isLocked());
@@ -85,75 +71,84 @@ public class Point2DNormalizerTest {
         assertNull(normalizer.getTransformation());
         assertNull(normalizer.getInverseTransformation());
         assertFalse(normalizer.isResultAvailable());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         points.clear();
         assertFalse(normalizer.isReady());
-        
+
         normalizer = null;
         try {
             normalizer = new Point2DNormalizer(points);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(normalizer);
     }
-    
+
     @Test
     public void testGetSetPoints() throws LockedException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        int nPoints1 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point2D> points1 = new ArrayList<>();
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final int nPoints1 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final List<Point2D> points1 = new ArrayList<>();
         InhomogeneousPoint2D point;
         for (int i = 0; i < nPoints1; i++) {
-            double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             point = new InhomogeneousPoint2D(x, y);
             points1.add(point);
         }
-        
-        int nPoints2 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point2D> points2 = new ArrayList<>();
+
+        final int nPoints2 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final List<Point2D> points2 = new ArrayList<>();
         for (int i = 0; i < nPoints2; i++) {
-            double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             point = new InhomogeneousPoint2D(x, y);
             points2.add(point);
         }
-        
-        Point2DNormalizer normalizer = new Point2DNormalizer(points1);
-        
-        //check default value
+
+        final Point2DNormalizer normalizer = new Point2DNormalizer(points1);
+
+        // check default value
         assertSame(normalizer.getPoints(), points1);
-        
-        //set new value
+
+        // set new value
         normalizer.setPoints(points2);
-        
-        //check correctness
+
+        // check correctness
         assertSame(normalizer.getPoints(), points2);
     }
-    
+
     @Test
-    public void testCompute() throws NotReadyException, LockedException, 
+    public void testCompute() throws NotReadyException, LockedException,
             WrongSizeException, NormalizerException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        for (int t = 0; t < TIMES; t++) {
-            int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> points = new ArrayList<>();
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        for (int times = 0; times < TIMES; times++) {
+            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final List<Point2D> points = new ArrayList<>();
             InhomogeneousPoint2D point;
-            double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, 
+            double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE,
                     maxX = -Double.MAX_VALUE, maxY = -Double.MAX_VALUE;
             for (int i = 0; i < nPoints; i++) {
-                double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-                double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+                final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+                final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
                 point = new InhomogeneousPoint2D(x, y);
                 points.add(point);
 
-                if(x < minX) minX = x;
-                if(y < minY) minY = y;
-                if(x > maxX) maxX = x;
-                if(y > maxY) maxY = y;
+                if (x < minX) {
+                    minX = x;
+                }
+                if (y < minY) {
+                    minY = y;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                if (y > maxY) {
+                    maxY = y;
+                }
             }
 
             double width = maxX - minX;
@@ -163,7 +158,7 @@ public class Point2DNormalizerTest {
             double centroidX = (minX + maxX) / 2.0;
             double centroidY = (minY + maxY) / 2.0;
 
-            Point2DNormalizer normalizer = new Point2DNormalizer(points);
+            final Point2DNormalizer normalizer = new Point2DNormalizer(points);
 
             assertTrue(normalizer.isReady());
             assertFalse(normalizer.isLocked());
@@ -181,39 +176,48 @@ public class Point2DNormalizerTest {
             assertEquals(normalizer.getCentroidX(), centroidX, 0.0);
             assertEquals(normalizer.getCentroidY(), centroidY, 0.0);
 
-            ProjectiveTransformation2D transformation = 
+            final ProjectiveTransformation2D transformation =
                     normalizer.getTransformation();
 
-            ProjectiveTransformation2D invTransformation = 
+            final ProjectiveTransformation2D invTransformation =
                     normalizer.getInverseTransformation();
 
-            //test that invTransformation is indeed the inverse transformation
-            Matrix T = transformation.asMatrix();
-            Matrix invT = invTransformation.asMatrix();
+            // test that invTransformation is indeed the inverse transformation
+            final Matrix t = transformation.asMatrix();
+            final Matrix invT = invTransformation.asMatrix();
 
-            Matrix identity = invT.multiplyAndReturnNew(T);
-            double norm = identity.getElementAt(0, 0);
-            identity.multiplyByScalar(1.0 / norm); //normalize
+            final Matrix identity = invT.multiplyAndReturnNew(t);
+            final double norm = identity.getElementAt(0, 0);
+            // normalize
+            identity.multiplyByScalar(1.0 / norm);
 
             assertTrue(identity.equals(
-                    Matrix.identity(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH), 
+                    Matrix.identity(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
+                            Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH),
                     ABSOLUTE_ERROR));
 
-            //normalize points
-            List<Point2D> normPoints = transformation.transformPointsAndReturnNew(points);
+            // normalize points
+            final List<Point2D> normPoints = transformation.transformPointsAndReturnNew(points);
 
-            //compute centroid and scales
+            // compute centroid and scales
             minX = minY = Double.MAX_VALUE;
-            maxX = maxY = -Double.MAX_VALUE;        
-            for (Point2D normPoint : normPoints) {
-                double x = normPoint.getInhomX();
-                double y = normPoint.getInhomY();
+            maxX = maxY = -Double.MAX_VALUE;
+            for (final Point2D normPoint : normPoints) {
+                final double x = normPoint.getInhomX();
+                final double y = normPoint.getInhomY();
 
-                if(x < minX) minX = x;
-                if(y < minY) minY = y;
-                if(x > maxX) maxX = x;
-                if(y > maxY) maxY = y;
+                if (x < minX) {
+                    minX = x;
+                }
+                if (y < minY) {
+                    minY = y;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                if (y > maxY) {
+                    maxY = y;
+                }
             }
 
             width = maxX - minX;
@@ -223,8 +227,8 @@ public class Point2DNormalizerTest {
             centroidX = (minX + maxX) / 2.0;
             centroidY = (minY + maxY) / 2.0;
 
-            //check that points have been correctly normalized (scales = 1 and
-            //centroid = [0, 0])
+            // check that points have been correctly normalized (scales = 1 and
+            // centroid = [0, 0])
             assertEquals(width, 1.0, ABSOLUTE_ERROR);
             assertEquals(height, 1.0, ABSOLUTE_ERROR);
             assertEquals(scaleX, 1.0, ABSOLUTE_ERROR);
@@ -232,12 +236,12 @@ public class Point2DNormalizerTest {
             assertEquals(centroidX, 0.0, ABSOLUTE_ERROR);
             assertEquals(centroidY, 0.0, ABSOLUTE_ERROR);
 
-            //denormalize points and check that are equal to the original ones
-            List<Point2D> denomPoints = invTransformation.transformPointsAndReturnNew(
+            // denormalize points and check that are equal to the original ones
+            final List<Point2D> denomPoints = invTransformation.transformPointsAndReturnNew(
                     normPoints);
 
             for (int i = 0; i < nPoints; i++) {
-                assertEquals(points.get(i).distanceTo(denomPoints.get(i)), 0.0, 
+                assertEquals(points.get(i).distanceTo(denomPoints.get(i)), 0.0,
                         ABSOLUTE_ERROR);
             }
         }

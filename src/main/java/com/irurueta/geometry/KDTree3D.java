@@ -29,7 +29,7 @@ public class KDTree3D extends KDTree<Point3D> {
      * Constructor.
      * @param pts collection of points to store in the tree.
      */
-    public KDTree3D(Collection<Point3D> pts) {
+    public KDTree3D(final Collection<Point3D> pts) {
         super(pts, Point3D.class);
     }
 
@@ -48,7 +48,7 @@ public class KDTree3D extends KDTree<Point3D> {
      * @return created point.
      */
     @Override
-    protected Point3D createPoint(double value) {
+    protected Point3D createPoint(final double value) {
         return new InhomogeneousPoint3D(value, value, value);
     }
 
@@ -58,7 +58,7 @@ public class KDTree3D extends KDTree<Point3D> {
      * @return copied point.
      */
     @Override
-    protected Point3D copyPoint(Point3D point) {
+    protected Point3D copyPoint(final Point3D point) {
         return new InhomogeneousPoint3D(point);
     }
 }

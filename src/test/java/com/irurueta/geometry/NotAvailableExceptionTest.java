@@ -15,26 +15,12 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class NotAvailableExceptionTest {
-    
-    public NotAvailableExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         NotAvailableException ex = new NotAvailableException();
@@ -46,5 +32,5 @@ public class NotAvailableExceptionTest {
         ex = new NotAvailableException("message",
                 new Exception());
         assertNotNull(ex);
-    }    
+    }
 }

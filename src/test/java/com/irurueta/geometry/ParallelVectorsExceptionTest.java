@@ -15,26 +15,12 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class ParallelVectorsExceptionTest {
-    
-    public ParallelVectorsExceptionTest() { }
 
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
     @Test
     public void testConstructor() {
         ParallelVectorsException ex = new ParallelVectorsException();
@@ -49,5 +35,5 @@ public class ParallelVectorsExceptionTest {
         ex = new ParallelVectorsException("message",
                 new Exception());
         assertNotNull(ex);
-    }        
+    }
 }

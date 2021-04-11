@@ -25,23 +25,24 @@ import java.util.List;
 
 /**
  * Base class for ProjectiveTransformation2D refiner.
- * Implementations of this class refine a 2D affine transformation by taking 
+ * Implementations of this class refine a 2D affine transformation by taking
  * into account an initial estimation, inlier point or line matches and their
  * residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
  * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
+ *
  * @param <S1> type of matched samples in 1st set.
  * @param <S2> type of matched samples in 2nd set.
  */
 public abstract class ProjectiveTransformation2DRefiner<S1, S2> extends
         PairMatchesAndInliersDataRefiner<ProjectiveTransformation2D, S1, S2> {
-    
+
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
@@ -52,53 +53,56 @@ public abstract class ProjectiveTransformation2DRefiner<S1, S2> extends
     /**
      * Constructor.
      */
-    public ProjectiveTransformation2DRefiner() { }
-    
+    protected ProjectiveTransformation2DRefiner() {
+    }
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
-     */    
-    public ProjectiveTransformation2DRefiner(
-            ProjectiveTransformation2D initialEstimation, 
-            boolean keepCovariance, BitSet inliers, double[] residuals, 
-            int numInliers, List<S1> samples1, List<S2> samples2,
-            double refinementStandardDeviation) {
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected ProjectiveTransformation2DRefiner(
+            final ProjectiveTransformation2D initialEstimation,
+            final boolean keepCovariance, final BitSet inliers, final double[] residuals,
+            final int numInliers, final List<S1> samples1, final List<S2> samples2,
+            final double refinementStandardDeviation) {
         super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
                 samples1, samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;        
+        mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
-     */    
-    public ProjectiveTransformation2DRefiner(
-            ProjectiveTransformation2D initialEstimation, 
-            boolean keepCovariance, InliersData inliersData,
-            List<S1> samples1, List<S2> samples2, 
-            double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1, 
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected ProjectiveTransformation2DRefiner(
+            final ProjectiveTransformation2D initialEstimation,
+            final boolean keepCovariance, final InliersData inliersData,
+            final List<S1> samples1, final List<S2> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1,
                 samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;        
+        mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -107,47 +111,50 @@ public abstract class ProjectiveTransformation2DRefiner<S1, S2> extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
         return mRefinementStandardDeviation;
     }
-    
+
     /**
-     * Sets standard deviation used for Levenberg-Marquardt fitting during 
+     * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
-     * @param refinementStandardDeviation standard deviation used for 
-     * refinement.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
+            final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Refines provided initial estimation.
+     *
      * @return refines estimation.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is 
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
      */
     @Override
-    public ProjectiveTransformation2D refine() throws NotReadyException, 
+    public ProjectiveTransformation2D refine() throws NotReadyException,
             LockedException, RefinerException {
-        ProjectiveTransformation2D result = new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D result = new ProjectiveTransformation2D();
         refine(result);
         return result;
     }
-    
+
 }

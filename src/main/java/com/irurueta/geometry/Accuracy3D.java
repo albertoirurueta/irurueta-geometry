@@ -25,7 +25,6 @@ import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
  * Contains methods to convert covariance matrices into ellipsoids representing accuracy
  * with requested confidence.
  */
-@SuppressWarnings("WeakerAccess")
 public class Accuracy3D extends Accuracy {
 
     /**
@@ -37,44 +36,48 @@ public class Accuracy3D extends Accuracy {
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be 3x3 and positive
      *                         definite.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to an ellipsoid).
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to an ellipsoid).
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy3D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+    public Accuracy3D(final Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix);
     }
 
     /**
      * Constructor.
+     *
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy3D(double confidence) {
+    public Accuracy3D(final double confidence) {
         super(confidence);
     }
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be 3x3 and positive
      *                         definite.
-     * @param confidence confidence of provided accuracy of an estimated position.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to an ellipsoid, or if provided
-     * confidence value is not within 0 and 1.
+     * @param confidence       confidence of provided accuracy of an estimated position.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to an ellipsoid, or if provided
+     *                                                     confidence value is not within 0 and 1.
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy3D(Matrix covarianceMatrix, double confidence)
+    public Accuracy3D(final Matrix covarianceMatrix, final double confidence)
             throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix, confidence);
     }
 
     /**
      * Gets number of dimensions.
+     *
      * @return always returns 3.
      */
     @Override
@@ -85,9 +88,10 @@ public class Accuracy3D extends Accuracy {
     /**
      * Converts provided covariance matrix into a 3D ellipsoid taking into account current
      * confidence and standard deviation factor.
+     *
      * @return ellipsoid representing accuracy of covariance matrix with current confidence and
      * standard deviation factor.
-     * @throws NullPointerException if covariance matrix has not been provided yet.
+     * @throws NullPointerException           if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
     public Ellipsoid toEllipsoid() throws InvalidRotationMatrixException {
@@ -97,41 +101,43 @@ public class Accuracy3D extends Accuracy {
     /**
      * Flattens accuracy representation to 2D by taking into account only x and y coordinates and
      * ignoring variance related to z coordinates.
+     *
      * @return flattenned accuracy representation in 2D.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if intersection cannot be computed.
+     * @throws GeometryException    if intersection cannot be computed.
      */
     public Accuracy2D flattenTo2D() throws GeometryException {
-        //get intersected ellipse for unitary standard deviation
-        Ellipse ellipse = intersectWithPlane(1.0);
+        // get intersected ellipse for unitary standard deviation
+        final Ellipse ellipse = intersectWithPlane(1.0);
 
-        double semiMajorAxis = ellipse.getSemiMajorAxis();
-        double semiMinorAxis = ellipse.getSemiMinorAxis();
-        Rotation2D rotation = ellipse.getRotation();
+        final double semiMajorAxis = ellipse.getSemiMajorAxis();
+        final double semiMinorAxis = ellipse.getSemiMinorAxis();
+        final Rotation2D rotation = ellipse.getRotation();
 
-        Matrix u = rotation.asInhomogeneousMatrix();
-        Matrix s2 = Matrix.diagonal(new double[] {
+        final Matrix u = rotation.asInhomogeneousMatrix();
+        final Matrix s2 = Matrix.diagonal(new double[]{
                 semiMajorAxis * semiMajorAxis,
-                semiMinorAxis * semiMinorAxis}) ;
+                semiMinorAxis * semiMinorAxis});
 
         try {
-            //compute covariance as the squared matrix M = U*S*V'
-            //Hence: M*M' = U*S*V'*(U*S*V')' = U*S*V'*V'*S*U' = U*S^2*U'
+            // compute covariance as the squared matrix M = U*S*V'
+            // Hence: M*M' = U*S*V'*(U*S*V')' = U*S*V'*V'*S*U' = U*S^2*U'
 
             s2.multiply(u);
             u.multiply(s2);
 
             return new Accuracy2D(u, mConfidence);
-        } catch (AlgebraException e) {
+        } catch (final AlgebraException e) {
             throw new GeometryException(e);
         }
     }
 
     /**
      * Intersects ellipsoid representing this accuracy with horizontal xy plane.
+     *
      * @return intersected ellipse.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if intersection cannot be computed.
+     * @throws GeometryException    if intersection cannot be computed.
      */
     public Ellipse intersectWithPlane() throws GeometryException {
         return intersectWithPlane(mStandardDeviationFactor);
@@ -140,39 +146,41 @@ public class Accuracy3D extends Accuracy {
     /**
      * Converts provided covariance matrix into a 3D ellipsoid taking into account current
      * confidence and standard deviation factor.
+     *
      * @param standardDeviationFactor standard deviation factor.
      * @return ellipsoid representinc accuracy of covariance matrix with provided standard
      * deviation factor.
-     * @throws NullPointerException if covariance matrix has not been provided yet.
+     * @throws NullPointerException           if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    private Ellipsoid toEllipsoid(double standardDeviationFactor)
+    private Ellipsoid toEllipsoid(final double standardDeviationFactor)
             throws InvalidRotationMatrixException {
-        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
+        final double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
                 mSqrtSingularValues, standardDeviationFactor);
-        Rotation3D rotation = new MatrixRotation3D(mU);
+        final Rotation3D rotation = new MatrixRotation3D(mU);
         return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);
     }
 
     /**
      * Intersects ellipsoid representing this accuracy with provided standard
      * deviation factor and with horizontal xy plane.
+     *
      * @param standardDeviationFactor standard deviation factor.
      * @return intersected ellipse.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if intersection cannot be computed.
+     * @throws GeometryException    if intersection cannot be computed.
      */
-    private Ellipse intersectWithPlane(double standardDeviationFactor)
+    private Ellipse intersectWithPlane(final double standardDeviationFactor)
             throws GeometryException {
-        Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);
-        Quadric quadric = ellipsoid.toQuadric();
+        final Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);
+        final Quadric quadric = ellipsoid.toQuadric();
 
-        //create horizontal xy plane located at ellipsoid center
-        Point3D center = ellipsoid.getCenter();
-        double[] directorVector = new double[] { 0.0, 0.0, 1.0 };
-        Plane plane = new Plane(center, directorVector);
+        // create horizontal xy plane located at ellipsoid center
+        final Point3D center = ellipsoid.getCenter();
+        final double[] directorVector = new double[]{0.0, 0.0, 1.0};
+        final Plane plane = new Plane(center, directorVector);
 
-        Conic conic = quadric.intersectWith(plane);
+        final Conic conic = quadric.intersectWith(plane);
 
         return new Ellipse(conic);
     }

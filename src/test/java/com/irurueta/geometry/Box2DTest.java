@@ -17,7 +17,7 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Random;
 
@@ -30,148 +30,134 @@ public class Box2DTest {
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
 
-    public Box2DTest() { }
-
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-
-    @Before
-    public void setUp() { }
-
-    @After
-    public void tearDown() { }
-
     @Test
     public void testConstructor() {
-        //test empty constructor
+        // test empty constructor
         Box2D box = new Box2D();
 
-        //check default values
+        // check default values
         assertEquals(box.getLo(), new InhomogeneousPoint2D(-0.5, -0.5));
         assertEquals(box.getHi(), new InhomogeneousPoint2D(0.5, 0.5));
 
-        //test constructor with lo and hi
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        double hiY =  randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        // test constructor with lo and hi
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
-        InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
-        InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
+        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
+        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
         box = new Box2D(lo, hi);
 
-        //check
+        // check
         assertSame(box.getLo(), lo);
         assertSame(box.getHi(), hi);
 
-        //test constructor with rectangle
-        InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
-        InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(hiX, loY);
-        Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        // test constructor with rectangle
+        final InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
+        final InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(hiX, loY);
+        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
         box = new Box2D(rectangle);
 
-        //check
+        // check
         assertEquals(box.getLo(), lo);
         assertEquals(box.getHi(), hi);
     }
 
     @Test
     public void testGetSetLo() {
-        Box2D box = new Box2D();
+        final Box2D box = new Box2D();
 
-        //check default value
+        // check default value
         assertEquals(box.getLo(), new InhomogeneousPoint2D(-0.5, -0.5));
 
-        //set new value
-        InhomogeneousPoint2D lo = new InhomogeneousPoint2D();
+        // set new value
+        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D();
         box.setLo(lo);
 
-        //check
+        // check
         assertSame(box.getLo(), lo);
     }
 
     @Test
     public void testGetSetHi() {
-        Box2D box = new Box2D();
+        final Box2D box = new Box2D();
 
-        //check default value
+        // check default value
         assertEquals(box.getHi(), new InhomogeneousPoint2D(0.5, 0.5));
 
-        //set new value
-        InhomogeneousPoint2D hi = new InhomogeneousPoint2D();
+        // set new value
+        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D();
         box.setHi(hi);
 
-        //check
+        // check
         assertSame(box.getHi(), hi);
     }
 
     @Test
     public void testSetBounds() {
-        Box2D box = new Box2D();
+        final Box2D box = new Box2D();
 
-        //check default values
+        // check default values
         assertEquals(box.getLo(), new InhomogeneousPoint2D(-0.5, -0.5));
         assertEquals(box.getHi(), new InhomogeneousPoint2D(0.5, 0.5));
 
-        //set bounds
+        // set bounds
         InhomogeneousPoint2D lo = new InhomogeneousPoint2D();
         InhomogeneousPoint2D hi = new InhomogeneousPoint2D();
         box.setBounds(lo, hi);
 
-        //check
+        // check
         assertSame(box.getLo(), lo);
         assertSame(box.getHi(), hi);
 
-        //random values
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        double hiY =  randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        // random values
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
         lo = new InhomogeneousPoint2D(loX, loY);
         hi = new InhomogeneousPoint2D(hiX, hiY);
         box.setBounds(loX, loY, hiX, hiY);
 
-        //check
+        // check
         assertEquals(box.getLo(), lo);
         assertEquals(box.getHi(), hi);
     }
 
     @Test
     public void testFromToRectangle() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        double hiY =  randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
-        InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
-        InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
+        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
+        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
 
-        InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
-        InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(hiX, loY);
-        Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
+        final InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(hiX, loY);
+        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
 
-        Box2D box = new Box2D();
+        final Box2D box = new Box2D();
 
-        //from rectangle
+        // from rectangle
         box.fromRectangle(rectangle);
 
-        //check
+        // check
         assertEquals(box.getLo(), lo);
         assertEquals(box.getHi(), hi);
 
-        //to rectangle
-        Rectangle rectangle2 = box.toRectangle();
-        Rectangle rectangle3 = new Rectangle();
+        // to rectangle
+        final Rectangle rectangle2 = box.toRectangle();
+        final Rectangle rectangle3 = new Rectangle();
         box.toRectangle(rectangle3);
 
-        //check
+        // check
         assertEquals(rectangle2.getTopLeft(), topLeft);
         assertEquals(rectangle2.getBottomRight(), bottomRight);
         assertEquals(rectangle3.getTopLeft(), topLeft);
@@ -180,53 +166,53 @@ public class Box2DTest {
 
     @Test
     public void testGetDistance() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        double height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
 
-        double left = centerX - 0.5 * width;
-        double right = centerX + 0.5 * width;
-        double top = centerY + 0.5 * height;
-        double bottom = centerY - 0.5 * height;
+        final double left = centerX - 0.5 * width;
+        final double right = centerX + 0.5 * width;
+        final double top = centerY + 0.5 * height;
+        final double bottom = centerY - 0.5 * height;
 
-        Point2D topLeft = new InhomogeneousPoint2D(left, top);
-        Point2D bottomRight = new InhomogeneousPoint2D(right, bottom);
-        Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final Point2D topLeft = new InhomogeneousPoint2D(left, top);
+        final Point2D bottomRight = new InhomogeneousPoint2D(right, bottom);
+        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
 
-        Point2D pointAtLeftSide = new InhomogeneousPoint2D(
-                centerX - width*randomizer.nextDouble(1.5, 2.5),
+        final Point2D pointAtLeftSide = new InhomogeneousPoint2D(
+                centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        Point2D pointAtTopLeftCorner = new InhomogeneousPoint2D(
-                centerX - width*randomizer.nextDouble(1.5, 2.5),
-                centerY + height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtTopSide = new InhomogeneousPoint2D(
+        final Point2D pointAtTopLeftCorner = new InhomogeneousPoint2D(
+                centerX - width * randomizer.nextDouble(1.5, 2.5),
+                centerY + height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtTopSide = new InhomogeneousPoint2D(
                 centerX,
-                centerY + height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtTopRightCorner = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(1.5, 2.5),
-                centerY + height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtRightSide = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(1.5, 2.5),
+                centerY + height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtTopRightCorner = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(1.5, 2.5),
+                centerY + height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtRightSide = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        Point2D pointAtBottomRightCorner = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(1.5, 2.5),
-                centerY - height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtBottomSide = new InhomogeneousPoint2D(
+        final Point2D pointAtBottomRightCorner = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(1.5, 2.5),
+                centerY - height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtBottomSide = new InhomogeneousPoint2D(
                 centerX,
-                centerY - height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtBottomLeftCorner = new InhomogeneousPoint2D(
-                centerX - width*randomizer.nextDouble(1.5, 2.5),
-                centerY - height*randomizer.nextDouble(1.5, 2.5));
-        Point2D insidePoint = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(-0.5, 0.5),
-                centerY + height*randomizer.nextDouble(-0.5, 0.5));
+                centerY - height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtBottomLeftCorner = new InhomogeneousPoint2D(
+                centerX - width * randomizer.nextDouble(1.5, 2.5),
+                centerY - height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D insidePoint = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(-0.5, 0.5),
+                centerY + height * randomizer.nextDouble(-0.5, 0.5));
 
 
-        Box2D box = new Box2D(rectangle);
+        final Box2D box = new Box2D(rectangle);
         assertEquals(box.getDistance(pointAtLeftSide),
                 rectangle.getDistance(pointAtLeftSide), ABSOLUTE_ERROR);
         assertEquals(box.getDistance(pointAtTopLeftCorner),
@@ -248,53 +234,52 @@ public class Box2DTest {
 
     @Test
     public void testGetSqrDistance() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+        final double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        double width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        double height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final double height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
 
-        double left = centerX - 0.5 * width;
-        double right = centerX + 0.5 * width;
-        double top = centerY + 0.5 * height;
-        double bottom = centerY - 0.5 * height;
+        final double left = centerX - 0.5 * width;
+        final double right = centerX + 0.5 * width;
+        final double top = centerY + 0.5 * height;
+        final double bottom = centerY - 0.5 * height;
 
-        Point2D topLeft = new InhomogeneousPoint2D(left, top);
-        Point2D bottomRight = new InhomogeneousPoint2D(right, bottom);
-        Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final Point2D topLeft = new InhomogeneousPoint2D(left, top);
+        final Point2D bottomRight = new InhomogeneousPoint2D(right, bottom);
+        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
 
-        Point2D pointAtLeftSide = new InhomogeneousPoint2D(
-                centerX - width*randomizer.nextDouble(1.5, 2.5),
+        final Point2D pointAtLeftSide = new InhomogeneousPoint2D(
+                centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        Point2D pointAtTopLeftCorner = new InhomogeneousPoint2D(
-                centerX - width*randomizer.nextDouble(1.5, 2.5),
-                centerY + height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtTopSide = new InhomogeneousPoint2D(
+        final Point2D pointAtTopLeftCorner = new InhomogeneousPoint2D(
+                centerX - width * randomizer.nextDouble(1.5, 2.5),
+                centerY + height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtTopSide = new InhomogeneousPoint2D(
                 centerX,
-                centerY + height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtTopRightCorner = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(1.5, 2.5),
-                centerY + height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtRightSide = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(1.5, 2.5),
+                centerY + height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtTopRightCorner = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(1.5, 2.5),
+                centerY + height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtRightSide = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        Point2D pointAtBottomRightCorner = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(1.5, 2.5),
-                centerY - height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtBottomSide = new InhomogeneousPoint2D(
+        final Point2D pointAtBottomRightCorner = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(1.5, 2.5),
+                centerY - height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtBottomSide = new InhomogeneousPoint2D(
                 centerX,
-                centerY - height*randomizer.nextDouble(1.5, 2.5));
-        Point2D pointAtBottomLeftCorner = new InhomogeneousPoint2D(
-                centerX - width*randomizer.nextDouble(1.5, 2.5),
-                centerY - height*randomizer.nextDouble(1.5, 2.5));
-        Point2D insidePoint = new InhomogeneousPoint2D(
-                centerX + width*randomizer.nextDouble(-0.5, 0.5),
-                centerY + height*randomizer.nextDouble(-0.5, 0.5));
+                centerY - height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D pointAtBottomLeftCorner = new InhomogeneousPoint2D(
+                centerX - width * randomizer.nextDouble(1.5, 2.5),
+                centerY - height * randomizer.nextDouble(1.5, 2.5));
+        final Point2D insidePoint = new InhomogeneousPoint2D(
+                centerX + width * randomizer.nextDouble(-0.5, 0.5),
+                centerY + height * randomizer.nextDouble(-0.5, 0.5));
 
-
-        Box2D box = new Box2D(rectangle);
+        final Box2D box = new Box2D(rectangle);
         assertEquals(box.getSqrDistance(pointAtLeftSide),
                 Math.pow(rectangle.getDistance(pointAtLeftSide), 2.0), ABSOLUTE_ERROR);
         assertEquals(box.getSqrDistance(pointAtTopLeftCorner),

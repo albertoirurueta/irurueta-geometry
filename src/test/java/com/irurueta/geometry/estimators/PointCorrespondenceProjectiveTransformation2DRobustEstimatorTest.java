@@ -17,7 +17,7 @@ package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +25,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
-    
-    public PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testCreate() {
-        PointCorrespondenceProjectiveTransformation2DRobustEstimator estimator;
-        
-        //create with robust estimator method
-        estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(RobustEstimatorMethod.RANSAC);
+        // create with robust estimator method
+        PointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+                PointCorrespondenceProjectiveTransformation2DRobustEstimator.
+                        create(RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
@@ -58,11 +43,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -73,8 +58,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -88,8 +73,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -103,34 +88,34 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertFalse(estimator.isReady());  
+        assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //create with points and method
-        List<Point2D> inputPoints = new ArrayList<>();
-        List<Point2D> outputPoints = new ArrayList<>();
+        assertNull(estimator.getCovariance());
+
+        // create with points and method
+        final List<Point2D> inputPoints = new ArrayList<>();
+        final List<Point2D> outputPoints = new ArrayList<>();
         for (int i = 0; i < PointCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
-        
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
@@ -141,11 +126,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
@@ -156,11 +141,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
@@ -171,11 +156,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
@@ -186,11 +171,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
@@ -201,48 +186,55 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<>();
-        
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
+        final List<Point2D> emptyPoints = new ArrayList<>();
+
         estimator = null;
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                    create(emptyPoints, outputPoints, 
-                    RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+                    create(emptyPoints, outputPoints,
+                            RobustEstimatorMethod.LMedS);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                    create(inputPoints, emptyPoints, 
-                    RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+                    create(inputPoints, emptyPoints,
+                            RobustEstimatorMethod.LMedS);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //create with listener and method
-        ProjectiveTransformation2DRobustEstimatorListener listener = 
+
+        // create with listener and method
+        final ProjectiveTransformation2DRobustEstimatorListener listener =
                 new ProjectiveTransformation2DRobustEstimatorListener() {
 
-            @Override
-            public void onEstimateStart(ProjectiveTransformation2DRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateStart(final ProjectiveTransformation2DRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateEnd(ProjectiveTransformation2DRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateEnd(final ProjectiveTransformation2DRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateNextIteration(ProjectiveTransformation2DRobustEstimator estimator, int iteration) { }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final ProjectiveTransformation2DRobustEstimator estimator, final int iteration) {
+                    }
 
-            @Override
-            public void onEstimateProgressChange(ProjectiveTransformation2DRobustEstimator estimator,
-                                                 float progress) { }
-        };
-        
-        
+                    @Override
+                    public void onEstimateProgressChange(
+                            final ProjectiveTransformation2DRobustEstimator estimator, final float progress) {
+                    }
+                };
+
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -253,11 +245,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -268,11 +260,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -283,11 +275,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -298,11 +290,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -313,12 +305,12 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and points
+        assertNull(estimator.getCovariance());
+
+        // test with listener and points
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, 
-                RobustEstimatorMethod.RANSAC);
+                create(listener, inputPoints, outputPoints,
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -330,11 +322,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, 
-                RobustEstimatorMethod.LMedS);
+                create(listener, inputPoints, outputPoints,
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -346,11 +338,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, 
-                RobustEstimatorMethod.MSAC);
+                create(listener, inputPoints, outputPoints,
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -362,11 +354,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, 
-                RobustEstimatorMethod.PROSAC);
+                create(listener, inputPoints, outputPoints,
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -378,11 +370,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, 
-                RobustEstimatorMethod.PROMedS);
+                create(listener, inputPoints, outputPoints,
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -394,13 +386,13 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with quality scores and method
-        double[] qualityScores = new double[
+        assertNull(estimator.getCovariance());
+
+        // test with quality scores and method
+        final double[] qualityScores = new double[
                 PointCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE];
-        double[] wrongQualityScores = new double[1];
-        
+        final double[] wrongQualityScores = new double[1];
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -414,8 +406,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -429,7 +421,7 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.MSAC);
@@ -444,8 +436,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -459,8 +451,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -474,12 +466,12 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points, quality scores and method
+        assertNull(estimator.getCovariance());
+
+        // test with points, quality scores and method
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, 
-                RobustEstimatorMethod.RANSAC);
+                create(inputPoints, outputPoints, qualityScores,
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -491,11 +483,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, 
-                RobustEstimatorMethod.LMedS);
+                create(inputPoints, outputPoints, qualityScores,
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -507,11 +499,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, 
-                RobustEstimatorMethod.MSAC);
+                create(inputPoints, outputPoints, qualityScores,
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -523,11 +515,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, 
-                RobustEstimatorMethod.PROSAC);
+                create(inputPoints, outputPoints, qualityScores,
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -539,11 +531,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, 
-                RobustEstimatorMethod.PROMedS);
+                create(inputPoints, outputPoints, qualityScores,
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -555,31 +547,34 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(emptyPoints, outputPoints, qualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(emptyPoints, outputPoints, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, emptyPoints, qualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(inputPoints, emptyPoints, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, wrongQualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(inputPoints, outputPoints, wrongQualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener, quality scores and method
+
+        // test with listener, quality scores and method
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -593,8 +588,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -608,8 +603,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -623,8 +618,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -638,8 +633,8 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -653,12 +648,12 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener, points, quality scores and method
+        assertNull(estimator.getCovariance());
+
+        // test with listener, points, quality scores and method
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.RANSAC);
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -670,11 +665,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -686,11 +681,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.MSAC);
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -702,11 +697,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROSAC);
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -718,11 +713,11 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
@@ -734,31 +729,34 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, emptyPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, emptyPoints, outputPoints, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, emptyPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, inputPoints, emptyPoints, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, wrongQualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, inputPoints, outputPoints, wrongQualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test no arguments
+
+        // test no arguments
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create();
         assertTrue(estimator instanceof
@@ -772,13 +770,13 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points
+        assertNull(estimator.getCovariance());
+
+        // test with points
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
         assertFalse(estimator.isReady());
@@ -788,27 +786,29 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(emptyPoints, outputPoints);
+                    create(emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, emptyPoints);
+                    create(inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener
+
+        // test with listener
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
@@ -818,13 +818,13 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and points
+        assertNull(estimator.getCovariance());
+
+        // test with listener and points
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
         assertFalse(estimator.isReady());
@@ -834,27 +834,29 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, emptyPoints, outputPoints);
+                    create(listener, emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, emptyPoints);
+                    create(listener, inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with quality scores
+
+        // test with quality scores
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
@@ -864,13 +866,13 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with points and quality scores
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
         assertTrue(estimator.isReady());
@@ -880,13 +882,13 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with listener and quality scores
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
@@ -896,13 +898,13 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener, points and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with listener, points and quality scores
         estimator = PointCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
         assertTrue(estimator.isReady());
@@ -912,6 +914,6 @@ public class PointCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
     }
 }

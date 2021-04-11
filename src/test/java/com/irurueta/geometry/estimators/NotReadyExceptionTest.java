@@ -20,26 +20,12 @@ import org.junit.*;
 import static org.junit.Assert.assertNotNull;
 
 public class NotReadyExceptionTest {
-    
-    public NotReadyExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         NotReadyException ex = new NotReadyException();
         assertNotNull(ex);
-        
+
         ex = new NotReadyException("message");
         assertNotNull(ex);
 

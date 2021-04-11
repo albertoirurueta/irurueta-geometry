@@ -16,7 +16,11 @@
 package com.irurueta.geometry.refiners;
 
 import com.irurueta.algebra.Matrix;
-import com.irurueta.geometry.*;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.MetricTransformation3D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.Quaternion;
+import com.irurueta.geometry.Rotation3DType;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
@@ -34,84 +38,88 @@ import java.util.List;
  * estimation, inlier point matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
+@SuppressWarnings("DuplicatedCode")
 public class MetricTransformation3DRefiner extends
-        PairMatchesAndInliersDataRefiner<MetricTransformation3D, Point3D, 
-        Point3D> {
-    
+        PairMatchesAndInliersDataRefiner<MetricTransformation3D, Point3D,
+                Point3D> {
+
     /**
      * Point to be reused when computing residuals.
      */
-    private Point3D mResidualTestPoint = Point3D.create(
+    private final Point3D mResidualTestPoint = Point3D.create(
             CoordinatesType.HOMOGENEOUS_COORDINATES);
-    
+
     /**
      * Quaternion to be reused for refinement computations.
      */
     private Quaternion mQuaternion = new Quaternion();
-    
+
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
     protected double mRefinementStandardDeviation;
-    
+
     /**
      * Constructor.
      */
-    public MetricTransformation3DRefiner() { }
-    
+    public MetricTransformation3DRefiner() {
+    }
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
     public MetricTransformation3DRefiner(
-            MetricTransformation3D initialEstimation, boolean keepCovariance,
-            BitSet inliers, double[] residuals, int numInliers, 
-            List<Point3D> samples1, List<Point3D> samples2, 
-            double refinementStandardDeviation) {
+            final MetricTransformation3D initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List<Point3D> samples1, final List<Point3D> samples2,
+            final double refinementStandardDeviation) {
         super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
                 samples1, samples2);
         mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
     public MetricTransformation3DRefiner(
-            MetricTransformation3D initialEstimation, boolean keepCovariance,
-            InliersData inliersData, List<Point3D> samples1, 
-            List<Point3D> samples2, double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1, 
+            final MetricTransformation3D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List<Point3D> samples1,
+            final List<Point3D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1,
                 samples2);
         mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -120,45 +128,48 @@ public class MetricTransformation3DRefiner extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
         return mRefinementStandardDeviation;
     }
-    
+
     /**
-     * Sets standard deviation used for Levenberg-Marquardt fitting during 
+     * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
-     * Returned value gives an indication of how much variance each residual 
+     * Returned value gives an indication of how much variance each residual
      * has.
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
-     * @param refinementStandardDeviation standard deviation used for 
-     * refinement.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
+            final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Refines provided initial estimation.
+     *
      * @return refines estimation.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is 
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
-     */        
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
     @Override
-    public MetricTransformation3D refine() throws NotReadyException, 
+    public MetricTransformation3D refine() throws NotReadyException,
             LockedException, RefinerException {
-        MetricTransformation3D result = new MetricTransformation3D();
+        final MetricTransformation3D result = new MetricTransformation3D();
         refine(result);
         return result;
     }
@@ -167,17 +178,18 @@ public class MetricTransformation3DRefiner extends
      * Refines provided initial estimation.
      * This method always sets a value into provided result instance regardless
      * of the fact that error has actually improved in LMSE terms or not.
+     *
      * @param result instance where refined estimation will be stored.
-     * @return true if result improves (error decreases) in LMSE terms respect 
+     * @return true if result improves (error decreases) in LMSE terms respect
      * to initial estimation, false if no improvement has been achieved.
      * @throws NotReadyException if not enough input data has been provided.
-     * @throws LockedException if estimator is locked because refinement is 
-     * already in progress.
-     * @throws RefinerException if refinement fails for some reason (e.g. unable
-     * to converge to a result).
-     */        
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
     @Override
-    public boolean refine(MetricTransformation3D result) 
+    public boolean refine(final MetricTransformation3D result)
             throws NotReadyException, LockedException, RefinerException {
         if (isLocked()) {
             throw new LockedException();
@@ -185,52 +197,52 @@ public class MetricTransformation3DRefiner extends
         if (!isReady()) {
             throw new NotReadyException();
         }
-        
+
         mLocked = true;
-        
+
         if (mListener != null) {
             mListener.onRefineStart(this, mInitialEstimation);
         }
-        
-        double initialTotalResidual = totalResidual(mInitialEstimation);
+
+        final double initialTotalResidual = totalResidual(mInitialEstimation);
 
         try {
-            //parameters: rotation angle + scale + translation
-            final double[] initParams = new double[1 + Quaternion.N_PARAMS + 
+            // parameters: rotation angle + scale + translation
+            final double[] initParams = new double[1 + Quaternion.N_PARAMS +
                     MetricTransformation3D.NUM_TRANSLATION_COORDS];
-            //copy rotation values
-            if (mInitialEstimation.getRotation().getType() == 
+            // copy rotation values
+            if (mInitialEstimation.getRotation().getType() ==
                     Rotation3DType.QUATERNION) {
-                mQuaternion = (Quaternion)mInitialEstimation.getRotation();
+                mQuaternion = (Quaternion) mInitialEstimation.getRotation();
             } else {
                 mQuaternion = mInitialEstimation.getRotation().toQuaternion();
             }
             mQuaternion.normalize();
-            
-            //copy values
+
+            // copy values
             initParams[0] = mInitialEstimation.getScale();
             initParams[1] = mQuaternion.getA();
             initParams[2] = mQuaternion.getB();
             initParams[3] = mQuaternion.getC();
             initParams[4] = mQuaternion.getD();
-            
+
             System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,
-                    Quaternion.N_PARAMS + 1, 
+                    Quaternion.N_PARAMS + 1,
                     MetricTransformation3D.NUM_TRANSLATION_COORDS);
-            
-            //output values to be fitted/optimized will contain residuals
-            double[] y = new double[mNumInliers];
-            //input values will contain 2 sets of 2D points to compute residuals
-            final int nDims = 
+
+            // output values to be fitted/optimized will contain residuals
+            final double[] y = new double[mNumInliers];
+            // input values will contain 2 sets of 2D points to compute residuals
+            final int nDims =
                     2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-            Matrix x = new Matrix(mNumInliers, nDims);
-            int nSamples = mInliers.length();
+            final Matrix x = new Matrix(mNumInliers, nDims);
+            final int nSamples = mInliers.length();
             int pos = 0;
             Point3D inputPoint;
             Point3D outputPoint;
             for (int i = 0; i < nSamples; i++) {
                 if (mInliers.get(i)) {
-                    //sample is inlier
+                    // sample is inlier
                     inputPoint = mSamples1.get(i);
                     outputPoint = mSamples2.get(i);
                     inputPoint.normalize();
@@ -243,158 +255,160 @@ public class MetricTransformation3DRefiner extends
                     x.setElementAt(pos, 5, outputPoint.getHomY());
                     x.setElementAt(pos, 6, outputPoint.getHomZ());
                     x.setElementAt(pos, 7, outputPoint.getHomW());
-                    
+
                     y[pos] = mResiduals[i];
                     pos++;
                 }
             }
-            
-            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+
+            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
                     new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
-                        
-                private Point3D mInputPoint = Point3D.create(
-                        CoordinatesType.HOMOGENEOUS_COORDINATES);
-                
-                private Point3D mOutputPoint = Point3D.create(
-                        CoordinatesType.HOMOGENEOUS_COORDINATES);
-                
-                private MetricTransformation3D mTransformation = 
-                        new MetricTransformation3D();
-                
-                private GradientEstimator mGradientEstimator =
-                        new GradientEstimator(
-                                new MultiDimensionFunctionEvaluatorListener() {
-                    @Override
-                    public double evaluate(double[] params) {
-                        //copy values
-                        mTransformation.setScale(params[0]);
-                        mQuaternion.setA(params[1]);
-                        mQuaternion.setB(params[2]);
-                        mQuaternion.setC(params[3]);
-                        mQuaternion.setD(params[4]);
-                        mTransformation.setRotation(mQuaternion);
-                                               
-                        System.arraycopy(params, 1 + Quaternion.N_PARAMS, 
-                            mTransformation.getTranslation(), 0, 
-                            MetricTransformation3D.NUM_TRANSLATION_COORDS);
 
-                        return residual(mTransformation, mInputPoint, 
-                                mOutputPoint);
-                    }
-                });
-                
-                @Override
-                public int getNumberOfDimensions() {
-                    return nDims;
-                }
+                        private final Point3D mInputPoint = Point3D.create(
+                                CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                @Override
-                public double[] createInitialParametersArray() {
-                    return initParams;
-                }
+                        private final Point3D mOutputPoint = Point3D.create(
+                                CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                @Override
-                public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws EvaluationException {
-                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], 
-                            point[2], point[3]);
-                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], 
-                            point[6], point[7]);
-                    
-                    //copy values
-                    mTransformation.setScale(params[0]);
-                    mQuaternion.setA(params[1]);
-                    mQuaternion.setB(params[2]);
-                    mQuaternion.setC(params[3]);
-                    mQuaternion.setD(params[4]);
-                    mTransformation.setRotation(mQuaternion);
-                    
-                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, 
-                        mTransformation.getTranslation(), 0, 
-                        MetricTransformation3D.NUM_TRANSLATION_COORDS);
+                        private final MetricTransformation3D mTransformation =
+                                new MetricTransformation3D();
 
-                    double y = residual(mTransformation, mInputPoint, 
-                            mOutputPoint);
-                    mGradientEstimator.gradient(params, derivatives);
-                    
-                    return y;
-                }
-            };
-            
-            LevenbergMarquardtMultiDimensionFitter fitter =
+                        private final GradientEstimator mGradientEstimator =
+                                new GradientEstimator(
+                                        new MultiDimensionFunctionEvaluatorListener() {
+                                            @Override
+                                            public double evaluate(final double[] params) {
+                                                // copy values
+                                                mTransformation.setScale(params[0]);
+                                                mQuaternion.setA(params[1]);
+                                                mQuaternion.setB(params[2]);
+                                                mQuaternion.setC(params[3]);
+                                                mQuaternion.setD(params[4]);
+                                                mTransformation.setRotation(mQuaternion);
+
+                                                System.arraycopy(params, 1 + Quaternion.N_PARAMS,
+                                                        mTransformation.getTranslation(), 0,
+                                                        MetricTransformation3D.NUM_TRANSLATION_COORDS);
+
+                                                return residual(mTransformation, mInputPoint,
+                                                        mOutputPoint);
+                                            }
+                                        });
+
+                        @Override
+                        public int getNumberOfDimensions() {
+                            return nDims;
+                        }
+
+                        @Override
+                        public double[] createInitialParametersArray() {
+                            return initParams;
+                        }
+
+                        @Override
+                        public double evaluate(final int i, final double[] point, final double[] params,
+                                               final double[] derivatives) throws EvaluationException {
+                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],
+                                    point[2], point[3]);
+                            mOutputPoint.setHomogeneousCoordinates(point[4], point[5],
+                                    point[6], point[7]);
+
+                            // copy values
+                            mTransformation.setScale(params[0]);
+                            mQuaternion.setA(params[1]);
+                            mQuaternion.setB(params[2]);
+                            mQuaternion.setC(params[3]);
+                            mQuaternion.setD(params[4]);
+                            mTransformation.setRotation(mQuaternion);
+
+                            System.arraycopy(params, 1 + Quaternion.N_PARAMS,
+                                    mTransformation.getTranslation(), 0,
+                                    MetricTransformation3D.NUM_TRANSLATION_COORDS);
+
+                            final double y = residual(mTransformation, mInputPoint,
+                                    mOutputPoint);
+                            mGradientEstimator.gradient(params, derivatives);
+
+                            return y;
+                        }
+                    };
+
+            final LevenbergMarquardtMultiDimensionFitter fitter =
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                    getRefinementStandardDeviation());
-            
+                            getRefinementStandardDeviation());
+
             fitter.fit();
-            
-            //obtain estimated params
-            double[] params = fitter.getA();
-            
-            //update transformation
+
+            // obtain estimated params
+            final double[] params = fitter.getA();
+
+            // update transformation
             result.setScale(params[0]);
             mQuaternion.setA(params[1]);
             mQuaternion.setB(params[2]);
             mQuaternion.setC(params[3]);
             mQuaternion.setD(params[4]);
             result.setRotation(mQuaternion);
-            System.arraycopy(params, 1 + Quaternion.N_PARAMS, 
-                    result.getTranslation(), 0, 
+            System.arraycopy(params, 1 + Quaternion.N_PARAMS,
+                    result.getTranslation(), 0,
                     MetricTransformation3D.NUM_TRANSLATION_COORDS);
-            
+
             if (mKeepCovariance) {
-                //keep covariance
+                // keep covariance
                 mCovariance = fitter.getCovar();
             }
-            
-            double finalTotalResidual = totalResidual(result);
-            boolean errorDecreased = finalTotalResidual < initialTotalResidual;
-            
+
+            final double finalTotalResidual = totalResidual(result);
+            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+
             if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result, 
+                mListener.onRefineEnd(this, mInitialEstimation, result,
                         errorDecreased);
             }
-            
+
             return errorDecreased;
-            
-        } catch (Exception e) {
+
+        } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
             mLocked = false;
-        }        
-        
+        }
+
     }
 
     /**
      * Computes the residual between the euclidean transformation and a pair or
      * matched points.
+     *
      * @param transformation a transformation.
-     * @param inputPoint input 3D point.
-     * @param outputPoint output 3D point.
+     * @param inputPoint     input 3D point.
+     * @param outputPoint    output 3D point.
      * @return residual.
      */
-    private double residual (MetricTransformation3D transformation, 
-            Point3D inputPoint, Point3D outputPoint) {
+    private double residual(final MetricTransformation3D transformation,
+                            final Point3D inputPoint, final Point3D outputPoint) {
         inputPoint.normalize();
         outputPoint.normalize();
-        
+
         transformation.transform(inputPoint, mResidualTestPoint);
         return mResidualTestPoint.distanceTo(outputPoint);
     }
-    
+
     /**
      * Computes total residual among all provided inlier samples.
+     *
      * @param transformation a transformation.
      * @return total residual.
      */
-    private double totalResidual(MetricTransformation3D transformation) {
+    private double totalResidual(final MetricTransformation3D transformation) {
         double result = 0.0;
-        
-        int nSamples = mInliers.length();
+
+        final int nSamples = mInliers.length();
         Point3D inputPoint;
         Point3D outputPoint;
         for (int i = 0; i < nSamples; i++) {
             if (mInliers.get(i)) {
-                //sample is inlier
+                // sample is inlier
                 inputPoint = mSamples1.get(i);
                 outputPoint = mSamples2.get(i);
                 inputPoint.normalize();
@@ -402,7 +416,7 @@ public class MetricTransformation3DRefiner extends
                 result += residual(transformation, inputPoint, outputPoint);
             }
         }
-        
-        return result;        
-    }        
+
+        return result;
+    }
 }

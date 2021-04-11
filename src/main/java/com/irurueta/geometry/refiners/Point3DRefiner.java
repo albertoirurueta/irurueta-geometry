@@ -28,15 +28,16 @@ import java.util.List;
  * samples and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be 
+ * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
+ *
  * @param <T> an implementation of a 3D point.
  */
-public abstract class Point3DRefiner<T extends Point3D> extends 
+public abstract class Point3DRefiner<T extends Point3D> extends
         SamplesAndInliersDataRefiner<T, Plane> {
-    
+
     /**
-     * Standard deviation used for Levenberg-Marquardt fitting during 
+     * Standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
@@ -45,51 +46,55 @@ public abstract class Point3DRefiner<T extends Point3D> extends
      * such threshold.
      */
     protected double mRefinementStandardDeviation;
-    
+
     /**
      * Constructor.
      */
-    public Point3DRefiner() { }
-    
+    protected Point3DRefiner() {
+    }
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples collection of samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples                     collection of samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
-    public Point3DRefiner(T initialEstimation,
-            boolean keepCovariance, BitSet inliers, double[] residuals,
-            int numInliers, List<Plane> samples, 
-            double refinementStandardDeviation) {
+    protected Point3DRefiner(
+            final T initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, double[] residuals, final int numInliers,
+            final List<Plane> samples, final double refinementStandardDeviation) {
         super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
                 samples);
         mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples collection of samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples                     collection of samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public Point3DRefiner(T initialEstimation, boolean keepCovariance,
-            InliersData inliersData, List<Plane> samples,
-            double refinementStandardDeviation) {
+    protected Point3DRefiner(
+            final T initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List<Plane> samples,
+            final double refinementStandardDeviation) {
         super(initialEstimation, keepCovariance, inliersData, samples);
         mRefinementStandardDeviation = refinementStandardDeviation;
     }
-    
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -98,12 +103,13 @@ public abstract class Point3DRefiner<T extends Point3D> extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
+     *
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
         return mRefinementStandardDeviation;
     }
-    
+
     /**
      * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -112,48 +118,51 @@ public abstract class Point3DRefiner<T extends Point3D> extends
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
-     * @param refinementStandardDeviation standard deviation used for 
-     * refinement.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
     public void setRefinementStandardDeviation(
-            double refinementStandardDeviation) throws LockedException {
+            final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mRefinementStandardDeviation = refinementStandardDeviation;
-    }   
-    
+    }
+
     /**
      * Computes the residual between a point and a plane as their distance.
+     *
      * @param point a point.
      * @param plane a plane.
      * @return residual (distance between provided point and plane).
      */
-    protected double residual(Point3D point, Plane plane) {
+    protected double residual(final Point3D point, final Plane plane) {
         point.normalize();
         plane.normalize();
         return Math.abs(plane.signedDistance(point));
     }
-    
+
     /**
      * Computes total residual among all provided inlier samples.
+     *
      * @param point a point.
      * @return total residual.
      */
-    protected double totalResidual(Point3D point) {
+    protected double totalResidual(final Point3D point) {
         double result = 0.0;
-        
-        int nSamples = mInliers.length();
+
+        final int nSamples = mInliers.length();
         Plane plane;
         for (int i = 0; i < nSamples; i++) {
             if (mInliers.get(i)) {
-                //sample is inlier
+                // sample is inlier
                 plane = mSamples.get(i);
                 result += residual(point, plane);
             }
         }
-        
+
         return result;
-    }    
+    }
 }

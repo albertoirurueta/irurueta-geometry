@@ -15,14 +15,16 @@
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.ProjectiveTransformation2D;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,59 +32,45 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest 
+public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
         implements ProjectiveTransformation2DRobustEstimatorListener {
-    
+
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-6;
-    
+
     private static final int MIN_LINES = 500;
     private static final int MAX_LINES = 1000;
-    
+
     private static final double THRESHOLD = 1e-6;
-    
+
     private static final double STD_ERROR = 100.0;
 
     private static final int PERCENTAGE_OUTLIER = 20;
-    
+
     private static final int TIMES = 100;
 
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
-    
-    public MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() {
-        //test constructor without arguments
+        // test constructor without arguments
         MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-        
-        assertEquals(estimator.getThreshold(), 
+
+        assertEquals(estimator.getThreshold(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_THRESHOLD, 0.0);
+                        DEFAULT_THRESHOLD, 0.0);
         assertEquals(estimator.getConfidence(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_CONFIDENCE, 0.0);
+                        DEFAULT_CONFIDENCE, 0.0);
         assertEquals(estimator.getMaxIterations(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_MAX_ITERATIONS);
+                        DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -90,36 +78,36 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+        assertEquals(estimator.getProgressDelta(),
+                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
-        
-        //test constructor with lines
-        List<Line2D> inputLines = new ArrayList<>();
-        List<Line2D> outputLines = new ArrayList<>();
+
+        // test constructor with lines
+        final List<Line2D> inputLines = new ArrayList<>();
+        final List<Line2D> outputLines = new ArrayList<>();
         for (int i = 0; i < LineCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
         }
-        
+
         estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                 inputLines, outputLines);
-        
-        assertEquals(estimator.getThreshold(), 
+
+        assertEquals(estimator.getThreshold(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_THRESHOLD, 0.0);
+                        DEFAULT_THRESHOLD, 0.0);
         assertEquals(estimator.getConfidence(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_CONFIDENCE, 0.0);
+                        DEFAULT_CONFIDENCE, 0.0);
         assertEquals(estimator.getMaxIterations(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_MAX_ITERATIONS);
+                        DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -127,46 +115,48 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+        assertEquals(estimator.getProgressDelta(),
+                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
-        List<Line2D> linesEmpty = new ArrayList<>();
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
+        final List<Line2D> linesEmpty = new ArrayList<>();
         estimator = null;
         try {
-            //not enough lines
+            // not enough lines
             estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                     linesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                     inputLines, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
 
-        
-        //test constructor with listener
+
+        // test constructor with listener
         estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                 this);
-        
-        assertEquals(estimator.getThreshold(), 
+
+        assertEquals(estimator.getThreshold(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_THRESHOLD, 0.0);
+                        DEFAULT_THRESHOLD, 0.0);
         assertEquals(estimator.getConfidence(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_CONFIDENCE, 0.0);
+                        DEFAULT_CONFIDENCE, 0.0);
         assertEquals(estimator.getMaxIterations(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_MAX_ITERATIONS);
+                        DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -175,28 +165,28 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
-        
-        //test constructor with listener and lines
+
+        // test constructor with listener and lines
         estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                this, inputLines, outputLines);        
-        
-        assertEquals(estimator.getThreshold(), 
+                this, inputLines, outputLines);
+
+        assertEquals(estimator.getThreshold(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_THRESHOLD, 0.0);
+                        DEFAULT_THRESHOLD, 0.0);
         assertEquals(estimator.getConfidence(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_CONFIDENCE, 0.0);
+                        DEFAULT_CONFIDENCE, 0.0);
         assertEquals(estimator.getMaxIterations(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_MAX_ITERATIONS);
+                        DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -205,300 +195,310 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
-                0.0);    
+                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                0.0);
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //not enough points
+            // not enough points
             estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                     this, linesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                     this, inputLines, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);                
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
     }
-    
+
     @Test
     public void testGetSetThreshold() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-        
-        //check default value
-        assertEquals(estimator.getThreshold(), 
+
+        // check default value
+        assertEquals(estimator.getThreshold(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_THRESHOLD, 0.0);
-        
-        //set new value
+                        DEFAULT_THRESHOLD, 0.0);
+
+        // set new value
         estimator.setThreshold(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }  
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testGetSetConfidence() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertEquals(estimator.getConfidence(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_CONFIDENCE, 0.0);
-        
-        //set new value
+                        DEFAULT_CONFIDENCE, 0.0);
+
+        // set new value
         estimator.setConfidence(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
+        } catch (final IllegalArgumentException ignore) {
+        }
+
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
 
     @Test
     public void testGetSetMaxIterations() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertEquals(estimator.getMaxIterations(),
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                DEFAULT_MAX_ITERATIONS);
-        
-        //set new value
+                        DEFAULT_MAX_ITERATIONS);
+
+        // set new value
         estimator.setMaxIterations(10);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getMaxIterations(), 10);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testGetSetLinesAndIsReady() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-        
-        //check default values
+
+        // check default values
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
-        
-        //set new value
-        List<Line2D> inputLines = new ArrayList<>();
-        List<Line2D> outputLines = new ArrayList<>();
+
+        // set new value
+        final List<Line2D> inputLines = new ArrayList<>();
+        final List<Line2D> outputLines = new ArrayList<>();
         for (int i = 0; i < LineCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
         }
-        
+
         estimator.setLines(inputLines, outputLines);
-        
-        //check correctness
+
+        // check correctness
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
         assertTrue(estimator.isReady());
 
-        //Force IllegalArgumentException
-        List<Line2D> linesEmpty = new ArrayList<>();
+        // Force IllegalArgumentException
+        final List<Line2D> linesEmpty = new ArrayList<>();
         try {
-            //not enough lines
+            // not enough lines
             estimator.setLines(linesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator.setLines(linesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }    
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
-        
-        //set new value
+
+        // set new value
         estimator.setListener(this);
-        
-        //check correctness
+
+        // check correctness
         assertSame(estimator.getListener(), this);
         assertTrue(estimator.isListenerAvailable());
     }
-    
+
     @Test
     public void testGetSetProgressDelta() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
-        //check default value
-        assertEquals(estimator.getProgressDelta(), 
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+        // check default value
+        assertEquals(estimator.getProgressDelta(),
+                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
-        
-        //set new value
+
+        // set new value
         estimator.setProgressDelta(0.5f);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }    
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testIsSetResultRefined() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
-        
-        //set new value
+
+        // set new value
         estimator.setResultRefined(false);
-        
-        //check correctness
+
+        // check correctness
         assertFalse(estimator.isResultRefined());
     }
-    
+
     @Test
     public void testIsSetCovarianceKept() throws LockedException {
-        MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+        final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-        
+
         assertFalse(estimator.isCovarianceKept());
-        
-        //set new value
+
+        // set new value
         estimator.setCovarianceKept(true);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(estimator.isCovarianceKept());
     }
-    
+
     @Test
     public void testEstimateWithoutRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            //create an affine transformation
-            Matrix A;
+            // create an affine transformation
+            Matrix a;
             do {
-                //ensure A matrix is invertible
-                A = Matrix.createWithUniformRandomValues(
-                        ProjectiveTransformation2D.INHOM_COORDS, 
+                // ensure A matrix is invertible
+                a = Matrix.createWithUniformRandomValues(
+                        ProjectiveTransformation2D.INHOM_COORDS,
                         ProjectiveTransformation2D.INHOM_COORDS, -1.0, 1.0);
-                double norm = Utils.normF(A);
-                //normalize T to increase accuracy
-                A.multiplyByScalar(1.0 / norm);
-            } while (Utils.rank(A) < ProjectiveTransformation2D.INHOM_COORDS);
-            
-            double[] translation = new double[
+                final double norm = Utils.normF(a);
+                // normalize T to increase accuracy
+                a.multiplyByScalar(1.0 / norm);
+            } while (Utils.rank(a) < ProjectiveTransformation2D.INHOM_COORDS);
+
+            final double[] translation = new double[
                     ProjectiveTransformation2D.INHOM_COORDS];
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
             randomizer.fill(translation, -1.0, 1.0);
-            
-            ProjectiveTransformation2D transformation1 =
-                    new ProjectiveTransformation2D(A, translation);
-            
-            //generate random lines
-            int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            List<Line2D> inputLines = new ArrayList<>();
-            List<Line2D> outputLines = new ArrayList<>();
-            List<Line2D> outputLinesWithError = new ArrayList<>();
-            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+
+            final ProjectiveTransformation2D transformation1 =
+                    new ProjectiveTransformation2D(a, translation);
+
+            // generate random lines
+            final int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
+            final List<Line2D> inputLines = new ArrayList<>();
+            final List<Line2D> outputLines = new ArrayList<>();
+            final List<Line2D> outputLinesWithError = new ArrayList<>();
+            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
             for (int i = 0; i < nLines; i++) {
-                Line2D inputLine = new Line2D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
+                final Line2D inputLine = new Line2D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                Line2D outputLine = transformation1.transformAndReturnNew(inputLine);
-                Line2D outputLineWithError;
+                final Line2D outputLine = transformation1.transformAndReturnNew(inputLine);
+                final Line2D outputLineWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    //line is outlier
-                    double errorA = errorRandomizer.nextDouble();
-                    double errorB = errorRandomizer.nextDouble();
-                    double errorC = errorRandomizer.nextDouble();
+                    // line is outlier
+                    final double errorA = errorRandomizer.nextDouble();
+                    final double errorB = errorRandomizer.nextDouble();
+                    final double errorC = errorRandomizer.nextDouble();
                     outputLineWithError = new Line2D(outputLine.getA() + errorA,
                             outputLine.getB() + errorB,
                             outputLine.getC() + errorC);
                 } else {
-                    //inlier line (without error)
+                    // inlier line (without error)
                     outputLineWithError = outputLine;
                 }
-                
+
                 inputLines.add(inputLine);
                 outputLines.add(outputLine);
                 outputLinesWithError.add(outputLineWithError);
             }
-            
-            MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                this, inputLines, outputLinesWithError);
-            
+
+            final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+                    new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                            this, inputLines, outputLinesWithError);
+
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(false);
-            estimator.setCovarianceKept(false);            
-            
+            estimator.setCovarianceKept(false);
+
             assertEquals(estimateStart, 0);
             assertEquals(estimateEnd, 0);
             assertEquals(estimateNextIteration, 0);
             assertEquals(estimateProgressChange, 0);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
-            
-            ProjectiveTransformation2D transformation2 = estimator.estimate();
-            
+
+            final ProjectiveTransformation2D transformation2 = estimator.estimate();
+
             assertEquals(estimateStart, 1);
             assertEquals(estimateEnd, 1);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
-            
-            //check correctness of estimation by transforming input lines
-            //using estimated transformation (transformation2) and checking
-            //that output lines are equal to the original output lines without
-            //error
+
+            // check correctness of estimation by transforming input lines
+            // using estimated transformation (transformation2) and checking
+            // that output lines are equal to the original output lines without
+            // error
             Line2D l1, l2;
             boolean failed = false;
             for (int i = 0; i < nLines; i++) {
@@ -513,7 +513,7 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
                 }
                 assertEquals(
                         LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
+                                getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
                 assertTrue(l1.equals(l2, ABSOLUTE_ERROR));
             }
 
@@ -527,81 +527,81 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
 
         assertTrue(numValid > 0);
     }
-    
+
     @Test
     public void testEstimateWithRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            //create an affine transformation
-            Matrix A;
+            // create an affine transformation
+            Matrix a;
             do {
-                //ensure A matrix is invertible
-                A = Matrix.createWithUniformRandomValues(
-                        ProjectiveTransformation2D.INHOM_COORDS, 
+                // ensure A matrix is invertible
+                a = Matrix.createWithUniformRandomValues(
+                        ProjectiveTransformation2D.INHOM_COORDS,
                         ProjectiveTransformation2D.INHOM_COORDS, -1.0, 1.0);
-                double norm = Utils.normF(A);
-                //normalize T to increase accuracy
-                A.multiplyByScalar(1.0 / norm);
-            } while (Utils.rank(A) < ProjectiveTransformation2D.INHOM_COORDS);
-            
-            double[] translation = new double[
+                final double norm = Utils.normF(a);
+                // normalize T to increase accuracy
+                a.multiplyByScalar(1.0 / norm);
+            } while (Utils.rank(a) < ProjectiveTransformation2D.INHOM_COORDS);
+
+            final double[] translation = new double[
                     ProjectiveTransformation2D.INHOM_COORDS];
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
             randomizer.fill(translation, -1.0, 1.0);
-            
-            ProjectiveTransformation2D transformation1 =
-                    new ProjectiveTransformation2D(A, translation);
-            
-            //generate random lines
-            int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            List<Line2D> inputLines = new ArrayList<>();
-            List<Line2D> outputLines = new ArrayList<>();
-            List<Line2D> outputLinesWithError = new ArrayList<>();
-            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+
+            final ProjectiveTransformation2D transformation1 =
+                    new ProjectiveTransformation2D(a, translation);
+
+            // generate random lines
+            final int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
+            final List<Line2D> inputLines = new ArrayList<>();
+            final List<Line2D> outputLines = new ArrayList<>();
+            final List<Line2D> outputLinesWithError = new ArrayList<>();
+            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
             for (int i = 0; i < nLines; i++) {
-                Line2D inputLine = new Line2D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
+                final Line2D inputLine = new Line2D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                Line2D outputLine = transformation1.transformAndReturnNew(inputLine);
-                Line2D outputLineWithError;
+                final Line2D outputLine = transformation1.transformAndReturnNew(inputLine);
+                final Line2D outputLineWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    //line is outlier
-                    double errorA = errorRandomizer.nextDouble();
-                    double errorB = errorRandomizer.nextDouble();
-                    double errorC = errorRandomizer.nextDouble();
+                    // line is outlier
+                    final double errorA = errorRandomizer.nextDouble();
+                    final double errorB = errorRandomizer.nextDouble();
+                    final double errorC = errorRandomizer.nextDouble();
                     outputLineWithError = new Line2D(outputLine.getA() + errorA,
                             outputLine.getB() + errorB,
                             outputLine.getC() + errorC);
                 } else {
-                    //inlier line (without error)
+                    // inlier line (without error)
                     outputLineWithError = outputLine;
                 }
-                
+
                 inputLines.add(inputLine);
                 outputLines.add(outputLine);
                 outputLinesWithError.add(outputLineWithError);
             }
-            
-            MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                this, inputLines, outputLinesWithError);
-            
+
+            final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
+                    new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                            this, inputLines, outputLinesWithError);
+
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(true);
-            estimator.setCovarianceKept(true);            
-            
+            estimator.setCovarianceKept(true);
+
             assertEquals(estimateStart, 0);
             assertEquals(estimateEnd, 0);
             assertEquals(estimateNextIteration, 0);
             assertEquals(estimateProgressChange, 0);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
-            
-            ProjectiveTransformation2D transformation2 = estimator.estimate();
-            
+
+            final ProjectiveTransformation2D transformation2 = estimator.estimate();
+
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
@@ -609,22 +609,22 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
             if (estimator.getCovariance() != null) {
                 assertEquals(estimator.getCovariance().getRows(),
                         ProjectiveTransformation2D.HOM_COORDS *
-                        ProjectiveTransformation2D.HOM_COORDS);
+                                ProjectiveTransformation2D.HOM_COORDS);
                 assertEquals(estimator.getCovariance().getColumns(),
                         ProjectiveTransformation2D.HOM_COORDS *
-                        ProjectiveTransformation2D.HOM_COORDS);
+                                ProjectiveTransformation2D.HOM_COORDS);
             }
-            
+
             assertEquals(estimateStart, 1);
             assertEquals(estimateEnd, 1);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
-            
-            //check correctness of estimation by transforming input lines
-            //using estimated transformation (transformation2) and checking
-            //that output lines are equal to the original output lines without
-            //error
+
+            // check correctness of estimation by transforming input lines
+            // using estimated transformation (transformation2) and checking
+            // that output lines are equal to the original output lines without
+            // error
             Line2D l1, l2;
             boolean failed = false;
             for (int i = 0; i < nLines; i++) {
@@ -639,7 +639,7 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
                 }
                 assertEquals(
                         LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
+                                getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
                 assertTrue(l1.equals(l2, ABSOLUTE_ERROR));
             }
 
@@ -655,30 +655,30 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
     }
 
     @Override
-    public void onEstimateStart(ProjectiveTransformation2DRobustEstimator estimator) {
+    public void onEstimateStart(final ProjectiveTransformation2DRobustEstimator estimator) {
         estimateStart++;
-        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator)estimator);
+        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateEnd(
-            ProjectiveTransformation2DRobustEstimator estimator) {
+            final ProjectiveTransformation2DRobustEstimator estimator) {
         estimateEnd++;
-        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator)estimator);
+        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
-            ProjectiveTransformation2DRobustEstimator estimator, int iteration) {
+            final ProjectiveTransformation2DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
-        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator)estimator);
+        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
-            ProjectiveTransformation2DRobustEstimator estimator, float progress) {
+            final ProjectiveTransformation2DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
-        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator)estimator);
+        checkLocked((MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator) estimator);
     }
 
     private void reset() {
@@ -687,39 +687,45 @@ public class MSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
     }
 
     private void checkLocked(
-            MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator){
-        List<Line2D> lines = new ArrayList<>();
+            final MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator) {
+        final List<Line2D> lines = new ArrayList<>();
         try {
             estimator.setLines(lines, lines);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
-            estimator.setConfidence(0.5);            
+            estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) {
-        } catch (Exception e) {
+        } catch (final LockedException ignore) {
+        } catch (final Exception e) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());
-    }    
+    }
 }

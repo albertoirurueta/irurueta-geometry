@@ -20,25 +20,28 @@ package com.irurueta.geometry.estimators;
  * changes.
  */
 public interface PinholeCameraEstimatorListener {
-    
+
     /**
      * Called when an estimator starts the camera estimation process.
+     *
      * @param estimator Reference to pinhole camera estimator.
      */
-    void onEstimateStart(PinholeCameraEstimator estimator);
-    
+    void onEstimateStart(final PinholeCameraEstimator estimator);
+
     /**
      * Called when an estimator ends the camera estimation process.
+     *
      * @param estimator Reference to pinhole camera estimator.
      */
-    void onEstimateEnd(PinholeCameraEstimator estimator);
-    
+    void onEstimateEnd(final PinholeCameraEstimator estimator);
+
     /**
      * Called to notify changes in camera estimation progress.
+     *
      * @param estimator Reference to pinhole camera estimator.
-     * @param progress Current percentage of progress expressed as a value 
-     * between 0.0f and 1.0f.
+     * @param progress  Current percentage of progress expressed as a value
+     *                  between 0.0f and 1.0f.
      */
-    void onEstimationProgressChange(PinholeCameraEstimator estimator,
-            float progress);
+    void onEstimationProgressChange(final PinholeCameraEstimator estimator,
+                                    final float progress);
 }

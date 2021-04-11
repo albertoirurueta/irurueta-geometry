@@ -32,85 +32,85 @@ import java.util.List;
  * in order to find the best solution.
  */
 public abstract class ProjectiveTransformation3DRobustEstimator {
-    
+
     /**
-     * Minimum number of matched points or matched planes required to estimate 
+     * Minimum number of matched points or matched planes required to estimate
      * a projective 3D transformation.
      */
     public static final int MINIMUM_SIZE = 5;
-    
+
     /**
-     * Default amount of progress variation before notifying a change in 
+     * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta.
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
      * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Constant defining default confidence of the estimated result, which is
-     * 99%. This means that with a probability of 99% estimation will be 
+     * 99%. This means that with a probability of 99% estimation will be
      * accurate because chosen subsamples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
-    
+
     /**
      * Default maximum allowed number of iterations.
      */
     public static final int DEFAULT_MAX_ITERATIONS = 5000;
-    
+
     /**
      * Minimum allowed confidence value.
      */
     public static final double MIN_CONFIDENCE = 0.0;
-    
+
     /**
      * Maximum allowed confidence value.
      */
     public static final double MAX_CONFIDENCE = 1.0;
-    
+
     /**
      * Minimum allowed number of iterations.
      */
-    public static final int MIN_ITERATIONS = 1;    
+    public static final int MIN_ITERATIONS = 1;
 
     /**
-     * Indicates that result is refined by default using Levenberg-Marquardt 
+     * Indicates that result is refined by default using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      */
     public static final boolean DEFAULT_REFINE_RESULT = true;
-    
+
     /**
      * Indicates that covariance is not kept by default after refining result.
      */
     public static final boolean DEFAULT_KEEP_COVARIANCE = false;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
     protected ProjectiveTransformation3DRobustEstimatorListener mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
     protected volatile boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
      * equivalent to 100%). The amount of confidence indicates the probability
@@ -118,19 +118,19 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * to 1.0, but not exactly 1.0.
      */
     protected double mConfidence;
-    
+
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;    
-    
+    protected int mMaxIterations;
+
     /**
      * Data related to inliers found after estimation.
      */
     protected InliersData mInliersData;
-    
+
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
@@ -138,81 +138,86 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * regardless of the settings.
      */
     protected boolean mRefineResult;
-    
+
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
     protected boolean mKeepCovariance;
-    
+
     /**
      * Estimated covariance of estimated 2D affine transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
     protected Matrix mCovariance;
-    
+
     /**
      * Constructor.
      */
-    public ProjectiveTransformation3DRobustEstimator() {
+    protected ProjectiveTransformation3DRobustEstimator() {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;        
+        mMaxIterations = DEFAULT_MAX_ITERATIONS;
         mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        
+        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes.
+     *                 stars, ends or its progress significantly changes.
      */
-    public ProjectiveTransformation3DRobustEstimator(
-            ProjectiveTransformation3DRobustEstimatorListener listener) {
+    protected ProjectiveTransformation3DRobustEstimator(
+            final ProjectiveTransformation3DRobustEstimatorListener listener) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;  
+        mMaxIterations = DEFAULT_MAX_ITERATIONS;
         mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        
+        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
-        
+
     /**
-     * Returns reference to listener to be notified of events such as when 
+     * Returns reference to listener to be notified of events such as when
      * estimation starts, ends or its progress significantly changes.
+     *
      * @return listener to be notified of events.
      */
     public ProjectiveTransformation3DRobustEstimatorListener getListener() {
         return mListener;
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts,
      * ends or its progress significantly changes.
+     *
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
     public void setListener(
-            ProjectiveTransformation3DRobustEstimatorListener listener) 
+            final ProjectiveTransformation3DRobustEstimatorListener listener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mListener = listener;
     }
-    
+
     /**
-     * Indicates whether listener has been provided and is available for 
+     * Indicates whether listener has been provided and is available for
      * retrieval.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
         return mListener != null;
     }
-    
+
     /**
      * Indicates if this instance is locked because estimation is being computed.
+     *
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
@@ -220,26 +225,28 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     }
 
     /**
-     * Returns amount of progress variation before notifying a progress change 
+     * Returns amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @return amount of progress variation before notifying a progress change
      * during estimation.
      */
     public float getProgressDelta() {
         return mProgressDelta;
     }
-    
+
     /**
-     * Sets amount of progress variation before notifying a progress change 
+     * Sets amount of progress variation before notifying a progress change
      * during estimation.
-     * @param progressDelta amount of progress variation before notifying a 
-     * progress change during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setProgressDelta(float progressDelta) throws LockedException {
+    public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -249,30 +256,32 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
         }
         mProgressDelta = progressDelta;
     }
-    
+
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
      * (which is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
         return mConfidence;
     }
-    
+
     /**
      * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
-     * is equivalent to 100%). The amount of confidence indicates the 
+     * is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @param confidence confidence to be set as a value between 0.0 and 1.0.
-     * @throws IllegalArgumentException if provided value is not between 0.0 and 
-     * 1.0.
-     * @throws LockedException if this estimator is locked because an estimator 
-     * is being computed.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
      */
-    public void setConfidence(double confidence) throws LockedException {
+    public void setConfidence(final double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -281,27 +290,29 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
         }
         mConfidence = confidence;
     }
-    
+
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
-     * of iterations is achieved without converging to a result when calling 
+     * of iterations is achieved without converging to a result when calling
      * estimate(), a RobustEstimatorException will be raised.
+     *
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
         return mMaxIterations;
     }
-    
+
     /**
      * Sets maximum allowed number of iterations. When the maximum number of
-     * iterations is exceeded, result will not be available, however an 
+     * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
+     *
      * @param maxIterations maximum allowed number of iterations to be set.
      * @throws IllegalArgumentException if provided value is less than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setMaxIterations(int maxIterations) throws LockedException {
+    public void setMaxIterations(final int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -309,440 +320,464 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
             throw new IllegalArgumentException();
         }
         mMaxIterations = maxIterations;
-    }    
-    
+    }
+
     /**
      * Gets data related to inliers found after estimation.
+     *
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
         return mInliersData;
     }
-    
+
     /**
-     * Indicates whether result must be refined using Levenberg-Marquardt 
+     * Indicates whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
+     *
      * @return true to refine result, false to simply use result found by
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
         return mRefineResult;
     }
-    
+
     /**
-     * Specifies whether result must be refined using LEvenberg-Marquardt 
+     * Specifies whether result must be refined using LEvenberg-Marquardt
      * fitting algorithm over found inliers.
+     *
      * @param refineResult true to refine result, false to simply use result
-     * found by robust estimator without further refining.
+     *                     found by robust estimator without further refining.
      * @throws LockedException if estimator is locked.
      */
-    public void setResultRefined(boolean refineResult) throws LockedException {
+    public void setResultRefined(final boolean refineResult) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mRefineResult = refineResult;
     }
-    
+
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
+     *
      * @return true if covariance must be kept after refining result, false
      * otherwise.
      */
     public boolean isCovarianceKept() {
         return mKeepCovariance;
     }
-    
+
     /**
      * Specifies whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
+     *
      * @param keepCovariance true if covariance must be kept after refining
-     * result, false otherwise.
+     *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(boolean keepCovariance)
+    public void setCovarianceKept(final boolean keepCovariance)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mKeepCovariance = keepCovariance;
     }
-    
+
     /**
      * Gets estimated covariance of estimated 3D point if available.
-     * This is only available when result has been refined and covariance is 
+     * This is only available when result has been refined and covariance is
      * kept.
+     *
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
         return mCovariance;
     }
-    
+
     /**
      * Estimates an affine 3D transformation using a robust estimator and
      * the best set of matched 3D point correspondences found using the robust
      * estimator.
+     *
      * @return an affine 3D transformation.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract ProjectiveTransformation3D estimate() 
+    public abstract ProjectiveTransformation3D estimate()
             throws LockedException, NotReadyException, RobustEstimatorException;
-        
-    /**
-     * Returns method being used for robust estimation.
-     * @return method being used for robust estimation.
-     */
-    public abstract RobustEstimatorMethod getMethod();    
-    
-    /**
-     * Creates an projective 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best affine 3D transformation.
-     * @return an instance of projective 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(inputPoints, outputPoints, method);
-    }            
-                        
-    /**
-     * Creates a projective 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best projective 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            ProjectiveTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(listener, inputPoints, outputPoints, method);
-    }            
-            
-    /**
-     * Creates a projective 3D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @param method method of a robust estimator algorithm to estimate
-     * best projective 3D transformation.
-     * @return an instance of projective 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, method);
-    }            
-                        
-    /**
-     * Creates a projective 3D transformation estimator based on 3D point 
-     * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @param method method of a robust estimator algorithm to estimate
-     * best projective 3D transformation.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            ProjectiveTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores, 
-                method);
-    }            
-            
-    /**
-     * Creates a projective 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @return an instance of projective 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            List<Point3D> inputPoints, List<Point3D> outputPoints) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(inputPoints, outputPoints);
-    }            
-            
-    /**
-     * Creates a projective 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @return an instance of projective 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
-     */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            ProjectiveTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(listener, inputPoints, outputPoints);
-    }            
 
     /**
-     * Creates a projective 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
-     * @return an instance of affine 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
      */
-    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) {
-        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores);
-    }            
-            
+    public abstract RobustEstimatorMethod getMethod();
+
     /**
-     * Creates a projective 3D transformation estimator based on 3D point 
-     * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation.
-     * @param qualityScores quality scores corresponding to each pair of matched 
-     * points.
+     * Creates an projective 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best affine 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            ProjectiveTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) {
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
+            final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(inputPoints, outputPoints, method);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best projective 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
+            final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(listener, inputPoints, outputPoints, method);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate
+     *                      best projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(inputPoints, outputPoints, qualityScores, method);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate
+     *                      best projective 3D transformation.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(listener, inputPoints, outputPoints, qualityScores,
+                        method);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(inputPoints, outputPoints);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(listener, inputPoints, outputPoints);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of affine 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
+            final double[] qualityScores) {
+        return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
+                create(inputPoints, outputPoints, qualityScores);
+    }
+
+    /**
+     * Creates a projective 3D transformation estimator based on 3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      projective 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of projective 3D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static ProjectiveTransformation3DRobustEstimator createFromPoints(
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
+            final double[] qualityScores) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores);
-    }     
-            
+    }
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate a
-     * projective 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate a
+     *                     projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a
-     * projective 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate
-     * best projective 3D transformation.
+     *                     projective 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     best projective 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) {
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
+            final RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, method);
     }
-                        
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation.
-     * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate a
+     *                     projective 3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate a
+     *                     projective 3D transformation.
+     * @param method       method of a robust estimator algorithm to estimate best
+     *                     projective 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) {
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
+            final RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, method);
     }
-                        
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate a
-     * projective 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate a
-     * projective 3D transformation.
+     *
+     * @param inputPlanes   list of input planes to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate a
+     *                      projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation.
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      projective 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method) {
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, qualityScores, method);
     }
-            
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using provided robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPlanes   list of input planes to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate a
+     *                      projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation.
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      projective 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method) {
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                create(listener, inputPlanes, outputPlanes, qualityScores, 
-                method);
+                create(listener, inputPlanes, outputPlanes, qualityScores,
+                        method);
     }
-                
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate a
-     * projective 3D transformation.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate a
+     *                     projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a
-     * projective 3D transformation.
+     *                     projective 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            List<Plane> inputPlanes, List<Plane> outputPlanes) {
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes);
     }
-            
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate a
+     *                     projective 3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate a
+     *                     projective 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes) {
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes);
     }
-                        
+
     /**
      * Creates a projective 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
-     * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation.
+     *
+     * @param inputPlanes   list of input planes to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate a
+     *                      projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points.
+     *                      points.
      * @return an instance of projective 3D transformation estimator.
-     * @throws IllegalArgumentException if provided lists of planes don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided lists of planes don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) {
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
+            final double[] qualityScores) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, qualityScores);
     }
-                        
+
     /**
      * Creates a projective 3D transformation estimator based on 3D line
      * correspondences and using default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation.
-     * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPlanes   list of input planes to be used to estimate a
+     *                      projective 3D transformation.
+     * @param outputPlanes  list of output planes to be used to estimate a
+     *                      projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines.
+     *                      lines.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE.
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) {
+            final ProjectiveTransformation3DRobustEstimatorListener listener,
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
+            final double[] qualityScores) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores);
-    }     
-    
+    }
+
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
@@ -751,7 +786,8 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * Typically this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
+     *
      * @return standard deviation used for refinement.
      */
-    protected abstract double getRefinementStandardDeviation();    
+    protected abstract double getRefinementStandardDeviation();
 }

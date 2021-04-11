@@ -20,36 +20,39 @@ package com.irurueta.geometry;
  * dual quadric does not exist.
  */
 public class QuadricNotAvailableException extends GeometryException {
-   
+
     /**
      * Constructor.
      */
     public QuadricNotAvailableException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public QuadricNotAvailableException(String message) {
+    public QuadricNotAvailableException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public QuadricNotAvailableException(String message, Throwable cause) {
+    public QuadricNotAvailableException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public QuadricNotAvailableException(Throwable cause) {
+    public QuadricNotAvailableException(final Throwable cause) {
         super(cause);
     }
 }

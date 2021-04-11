@@ -17,25 +17,28 @@ package com.irurueta.geometry.refiners;
 
 /**
  * Listener for a refiner.
+ *
  * @param <T> type of instance to be refined.
  */
 public interface RefinerListener<T> {
-    
+
     /**
      * Called when refinement starts.
-     * @param refiner refiner that raised the event.
+     *
+     * @param refiner           refiner that raised the event.
      * @param initialEstimation initial estimation before refinement.
      */
-    void onRefineStart(Refiner<T> refiner, T initialEstimation);
-    
+    void onRefineStart(final Refiner<T> refiner, final T initialEstimation);
+
     /**
      * Called when refinement finishes successfully.
-     * @param refiner refiner that raised the event.
+     *
+     * @param refiner           refiner that raised the event.
      * @param initialEstimation initial estimation before refinement.
-     * @param result refined instance.
-     * @param errorDecreased true if error decreased after refinemnt, false
-     * otherwise.
+     * @param result            refined instance.
+     * @param errorDecreased    true if error decreased after refinemnt, false
+     *                          otherwise.
      */
-    void onRefineEnd(Refiner<T> refiner, T initialEstimation, T result, 
-            boolean errorDecreased);
+    void onRefineEnd(final Refiner<T> refiner, final T initialEstimation, final T result,
+                     final boolean errorDecreased);
 }

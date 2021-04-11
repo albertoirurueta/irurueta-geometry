@@ -15,32 +15,18 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CameraTest {
-    
-    public CameraTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testCreate() {
         Camera c = Camera.create();
         assertEquals(c.getType(), Camera.DEFAULT_CAMERA_TYPE);
-        
+
         c = Camera.create(CameraType.PINHOLE_CAMERA);
-        assertEquals(c.getType(), CameraType.PINHOLE_CAMERA);        
+        assertEquals(c.getType(), CameraType.PINHOLE_CAMERA);
     }
 }

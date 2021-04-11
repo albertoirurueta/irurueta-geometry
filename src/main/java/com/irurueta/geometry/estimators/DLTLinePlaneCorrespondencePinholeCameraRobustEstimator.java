@@ -27,16 +27,16 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
-public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator 
+public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
         extends LinePlaneCorrespondencePinholeCameraRobustEstimator {
-    
+
     /**
      * Constructor.
      */
-    public DLTLinePlaneCorrespondencePinholeCameraRobustEstimator() {
+    protected DLTLinePlaneCorrespondencePinholeCameraRobustEstimator() {
         super();
     }
-    
+
     /**
      * Constructor with lists of matched planes and 2D lines to estimate a
      * pinhole camera.
@@ -44,57 +44,61 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * to be matched. Hence, both lists must have the same size, and their size
      * must be greater or equal than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES
      * (4 matches).
+     *
      * @param planes list of planes used to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate
-     * a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
      * @throws IllegalArgumentException if provided lists don't have the same
-     * size or their size is smaller than required minimum size (4 matches).
+     *                                  size or their size is smaller than required minimum size (4 matches).
      */
-    public DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines) {
+    protected DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final List<Plane> planes, final List<Line2D> lines) {
         super(planes, lines);
     }
-    
+
     /**
      * Constructor with listener.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
-    public DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener) {
+    protected DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
     }
-    
+
     /**
-     * Constructor with listener and lists of matched planes and 2D lines to 
+     * Constructor with listener and lists of matched planes and 2D lines to
      * estimate a pinhole camera.
      * Points and lines in the lists located at the same position are considered
      * to be matched. Hence, both lists must have the same size, and their size
      * must be greater or equal than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES
      * (4 matches).
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes list of planes used to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate
-     * a pinhole camera.
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of planes used to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
      * @throws IllegalArgumentException if provided lists don't have the same
-     * size or their size is smaller than required minimum size (4 matches).
+     *                                  size or their size is smaller than required minimum size (4 matches).
      */
-    public DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines) {
+    protected DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List<Plane> planes, final List<Line2D> lines) {
         super(listener, planes, lines);
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided robust estimator method.
+     *
      * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            RobustEstimatorMethod method) {
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
@@ -109,24 +113,25 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                 return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
         }
     }
-            
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided planes and lines and provided robust
      * estimator method.
+     *
      * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate a
-     * pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate a
+     *               pinhole camera.
      * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *               pinhole camera.
      * @return an instance of a pinhole camera robust esitmator.
      * @throws IllegalArgumentException if provided lists of planes and lines
-     * don't have the same size or their size is smaller than required minimum
-     * size (4 correspondences).
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List<Plane> planes, List<Line2D> lines, 
-            RobustEstimatorMethod method) {
+            final List<Plane> planes, final List<Line2D> lines,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
@@ -146,19 +151,20 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                         planes, lines);
         }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener and robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener, 
-            RobustEstimatorMethod method) {
+            final PinholeCameraRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
@@ -178,26 +184,27 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                         listener);
         }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener, planes and lines, and robust
      * estimaotr method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate a
-     * pinhole camera.
-     * @param method method of a robust estimator algorithm to estimate best 
-     * pinhole camera.
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of 3D planes to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate a
+     *                 pinhole camera.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
-     * don't have the same size or their size is smaller than required minimum
-     * size (4 correspondences).
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener, List<Plane> planes,
-            List<Line2D> lines, RobustEstimatorMethod method) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
+            final List<Line2D> lines, final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
@@ -217,21 +224,22 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                         listener, planes, lines);
         }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided quality scores and robust estimator
      * method.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than required minimum size (4 samples).
+     *                                  smaller than required minimum size (4 samples).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method) {
+            final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
@@ -248,26 +256,27 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                 return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
         }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided planes and lines, quality scores and
      * provided robust estimator method.
-     * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate a
-     * pinhole camera.
+     *
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate a
+     *                      pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
-     * quality scores don't have the same size of their size is smaller than
-     * required minimum size ($ correspondences).
+     *                                  quality scores don't have the same size of their size is smaller than
+     *                                  required minimum size ($ correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores, 
-            RobustEstimatorMethod method) {
+            final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
@@ -285,26 +294,27 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             default:
                 return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines);
-        }                
+        }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/list 
+     * Creates a pinhole camera robust estimator based on plane/list
      * correspondences and using provided listener, quality scores and robust
      * estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
-     * the required minimum size (4 samples).
+     *                                  the required minimum size (4 samples).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method) {
+            final PinholeCameraRobustEstimatorListener listener,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
@@ -324,29 +334,30 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                         listener);
         }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener, planes and lines, and robust
      * estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate
-     * a pinhole camera.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
-     * @param method method of a robust estimator algorithm to estimate best
-     * pinhole camera.
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
-     * quality scores odn't have the same size or their size is smaller than
-     * required minimum size (4 correspondences).
+     *                                  quality scores odn't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener, List<Plane> planes,
-            List<Line2D> lines, double[] qualityScores, 
-            RobustEstimatorMethod method) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
+            final List<Line2D> lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
@@ -366,138 +377,145 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                         listener, planes, lines);
         }
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using default robust estimator method.
+     *
      * @return an instance of a pinhole camera robust estimator.
      */
-    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator 
-            create() {
+    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create() {
         return create(DEFAULT_ROBUST_METHOD);
     }
-            
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided planes and lines and default robust
      * estimator method.
+     *
      * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate
-     * a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
-     * don't have the same size or their size is smaller than required minimum
-     * size (4 correspondences).
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
      */
-    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
-            create(List<Plane> planes, List<Line2D> lines) {
+    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final List<Plane> planes, final List<Line2D> lines) {
         return create(planes, lines, DEFAULT_ROBUST_METHOD);
     }
-            
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener and default estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener) {
+            final PinholeCameraRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener, planes and lines, and
      * default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate a
-     * pinhole camera.
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of 3D planes to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate a
+     *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
-     * don't have the same size or their size is smaller than required minimum
-     * size (4 correspondences).
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines) {
+            final PinholeCameraRobustEstimatorListener listener,
+            final List<Plane> planes, final List<Line2D> lines) {
         return create(listener, planes, lines, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided quality scores and default robust
      * estimator method.
+     *
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
+     *                      planes/lines.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than required minimum size (4 samples).
+     *                                  smaller than required minimum size (4 samples).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores) {
+            final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided planes and lines, quality scores and
      * default robust estimator method.
-     * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate
-     * a pinhole camera.
+     *
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
+     *                      planes/lines.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
-     * quality scores don't have the same size or their size is smaller than
-     * required minimum size (4 correspondences).
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
+            final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores) {
         return create(planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener, qualitys cores and default
      * robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
+     *                      planes/lines.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
-     * the required minimum size (4 samples).
+     *                                  the required minimum size (4 samples).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener,
+            final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
-     * Creates a pinhole camera robust estimator based on plane/line 
+     * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener, planes and lines, and
      * default robust estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param planes list of 3D planes to estimate a pinhole camera.
-     * @param lines list of corresponding projected 2D lines used to estimate
-     * a pinhole camera.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * planes/lines.
+     *                      planes/lines.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
-     * quality scores don't have the same size or their size is smaller than
-     * required minimum size (4 correspondences).
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraRobustEstimatorListener listener, List<Plane> planes,
-            List<Line2D> lines, double[] qualityScores) {
-        return create(listener, planes, lines, qualityScores, 
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
+            final List<Line2D> lines, final double[] qualityScores) {
+        return create(listener, planes, lines, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
 }

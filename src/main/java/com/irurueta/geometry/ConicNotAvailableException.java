@@ -26,29 +26,32 @@ public class ConicNotAvailableException extends GeometryException {
     public ConicNotAvailableException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public ConicNotAvailableException(String message) {
+    public ConicNotAvailableException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public ConicNotAvailableException(String message, Throwable cause) {
+    public ConicNotAvailableException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public ConicNotAvailableException(Throwable cause) {
+    public ConicNotAvailableException(final Throwable cause) {
         super(cause);
     }
 }

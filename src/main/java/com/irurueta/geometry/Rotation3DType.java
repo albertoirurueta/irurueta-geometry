@@ -16,19 +16,19 @@
 package com.irurueta.geometry;
 
 /**
- *  Enumeration defining type of rotation 3D.
+ * Enumeration defining type of rotation 3D.
  */
 public enum Rotation3DType {
     /**
      * Rotation based on axis and angle of rotation.
      */
     AXIS_ROTATION3D,
-    
+
     /**
      * Rotation based on a 3x3 orthonormal matrix.
      */
     MATRIX_ROTATION3D,
-    
+
     /**
      * Rotation based on quaternions.
      */

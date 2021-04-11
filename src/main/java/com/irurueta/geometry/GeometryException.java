@@ -19,36 +19,39 @@ package com.irurueta.geometry;
  * Base exception for all exceptions in the com.irurueta.geometry package.
  */
 public class GeometryException extends Exception {
-    
+
     /**
      * Constructor.
      */
-    public GeometryException(){
+    public GeometryException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public GeometryException(String message) {
+    public GeometryException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public GeometryException(String message, Throwable cause) {
+    public GeometryException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public GeometryException(Throwable cause) {
+    public GeometryException(final Throwable cause) {
         super(cause);
     }
 }

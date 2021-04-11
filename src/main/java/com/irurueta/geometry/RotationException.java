@@ -25,29 +25,32 @@ public class RotationException extends GeometryException {
     public RotationException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public RotationException(String message) {
+    public RotationException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public RotationException(String message, Throwable cause) {
+    public RotationException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public RotationException(Throwable cause) {
+    public RotationException(final Throwable cause) {
         super(cause);
-    }    
+    }
 }

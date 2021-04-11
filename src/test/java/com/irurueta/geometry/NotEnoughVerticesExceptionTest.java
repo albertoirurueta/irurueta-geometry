@@ -15,26 +15,12 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class NotEnoughVerticesExceptionTest {
-    
-    public NotEnoughVerticesExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         NotEnoughVerticesException ex = new NotEnoughVerticesException();
@@ -49,5 +35,5 @@ public class NotEnoughVerticesExceptionTest {
         ex = new NotEnoughVerticesException("message",
                 new Exception());
         assertNotNull(ex);
-    }        
+    }
 }

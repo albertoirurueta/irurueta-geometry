@@ -22,31 +22,35 @@ package com.irurueta.geometry.estimators;
 public interface PinholeCameraRobustEstimatorListener {
     /**
      * Called when estimation starts.
+     *
      * @param estimator reference to robust estimator.
      */
     void onEstimateStart(
-            PinholeCameraRobustEstimator estimator);
-    
+            final PinholeCameraRobustEstimator estimator);
+
     /**
      * Called when estimation ends.
+     *
      * @param estimator reference to robust estimator.
      */
-    void onEstimateEnd(PinholeCameraRobustEstimator estimator);
-    
+    void onEstimateEnd(final PinholeCameraRobustEstimator estimator);
+
     /**
      * Called when estimator iterates to refine a possible solution.
+     *
      * @param estimator reference to robust estimator.
      * @param iteration current iteration.
      */
     void onEstimateNextIteration(
-            PinholeCameraRobustEstimator estimator, int iteration);
-    
+            final PinholeCameraRobustEstimator estimator, final int iteration);
+
     /**
      * Called when estimation progress changes significantly.
+     *
      * @param estimator reference to robust estimator.
-     * @param progress progress of estimation expressed as a value between 0.0
-     * and 1.0.
+     * @param progress  progress of estimation expressed as a value between 0.0
+     *                  and 1.0.
      */
     void onEstimateProgressChange(
-            PinholeCameraRobustEstimator estimator, float progress);        
+            final PinholeCameraRobustEstimator estimator, final float progress);
 }

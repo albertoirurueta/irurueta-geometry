@@ -15,50 +15,36 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class PinholeCameraEstimatorTest {
-    
-    public PinholeCameraEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testCreate() {
         PinholeCameraEstimator estimator = PinholeCameraEstimator.create();
-        
-        //check correctness
+
+        // check correctness
         assertNull(estimator.getListener());
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
+        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(), 
+        assertEquals(estimator.getSuggestedSkewnessValue(),
                 PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(), 
+        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
                 PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0, 
+        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
                 0.0);
         assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
                 PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0, 
+        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
                 0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(), 
+        assertEquals(estimator.isSuggestAspectRatioEnabled(),
                 PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
         assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 
+                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
                 0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(), 
+        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
                 PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
         assertNull(estimator.getSuggestedPrincipalPointValue());
         assertEquals(estimator.isSuggestRotationEnabled(),
@@ -75,7 +61,7 @@ public class PinholeCameraEstimatorTest {
                 PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getType(), 
+        assertEquals(estimator.getType(),
                 PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
     }
 }

@@ -23,25 +23,25 @@ public enum ConicType {
     /**
      * Conic parameters satisfying b^2 - ac &lt; 0.
      */
-   ELLIPSE_CONIC_TYPE,
-   
-   /**
-    * Conic parameters satisfying b^2 - ac &lt; 0 and a = c, b = 0.
-    */
-   CIRCLE_CONIC_TYPE,
-   
-   /**
-    * Conic parameters satisfying b^2 - ac = 0.
-    */
-   PARABOLA_CONIC_TYPE,
-   
-   /**
-    * Conic parameters satisfying b^2 - ac &lt; 0.
-    */
-   HYPERBOLA_CONIC_TYPE,
-   
-   /**
-    * Conic parameters satisfying b^2 - ac &lt; 0 and a + b = 0.
-    */
-   RECTANGULAR_HYPERBOLA_CONIC_TYPE
+    ELLIPSE_CONIC_TYPE,
+
+    /**
+     * Conic parameters satisfying b^2 - ac &lt; 0 and a = c, b = 0.
+     */
+    CIRCLE_CONIC_TYPE,
+
+    /**
+     * Conic parameters satisfying b^2 - ac = 0.
+     */
+    PARABOLA_CONIC_TYPE,
+
+    /**
+     * Conic parameters satisfying b^2 - ac &lt; 0.
+     */
+    HYPERBOLA_CONIC_TYPE,
+
+    /**
+     * Conic parameters satisfying b^2 - ac &lt; 0 and a + b = 0.
+     */
+    RECTANGULAR_HYPERBOLA_CONIC_TYPE
 }

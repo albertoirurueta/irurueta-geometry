@@ -28,59 +28,45 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class LMedSMetricTransformation2DRobustEstimatorTest implements 
+public class LMedSMetricTransformation2DRobustEstimatorTest implements
         MetricTransformation2DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
-    
+
     private static final double MIN_ANGLE_DEGREES = -90.0;
     private static final double MAX_ANGLE_DEGREES = 90.0;
-    
+
     private static final double MIN_TRANSLATION = -100.0;
     private static final double MAX_TRANSLATION = 100.0;
-    
+
     private static final double MIN_SCALE = 0.5;
     private static final double MAX_SCALE = 2.0;
-    
+
     private static final double STOP_THRESHOLD = 1e-3;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-6;
-    
+
     private static final double STD_ERROR = 100.0;
-    
+
     private static final int TIMES = 10;
-    
+
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
-    
+
     private static final int PERCENTAGE_OUTLIER = 20;
-    
+
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
-    
-    public LMedSMetricTransformation2DRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testConstructor() {
-        //test constructor without arguments
+        // test constructor without arguments
         LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -98,30 +84,30 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);        
+                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        
-        //test constructor with points
+
+
+        // test constructor with points
         List<Point2D> inputPoints = new ArrayList<>();
         List<Point2D> outputPoints = new ArrayList<>();
         for (int i = 0; i < MetricTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
-        
+
         estimator = new LMedSMetricTransformation2DRobustEstimator(
                 inputPoints, outputPoints);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -139,38 +125,40 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);        
+                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        //Force IllegalArgumentException
-        List<Point2D> pointsEmpty = new ArrayList<>();
+
+        // Force IllegalArgumentException
+        final List<Point2D> pointsEmpty = new ArrayList<>();
         estimator = null;
         try {
-            //not enough points
+            // not enough points
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     inputPoints, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
 
-        //test constructor with listener
+        // test constructor with listener
         estimator = new LMedSMetricTransformation2DRobustEstimator(this);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -188,23 +176,23 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);        
+                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        
-        //test constructor with listener and points
+
+
+        // test constructor with listener and points
         estimator = new LMedSMetricTransformation2DRobustEstimator(
                 this, inputPoints, outputPoints);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -222,38 +210,40 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);        
+                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //not enough points
+            // not enough points
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     this, pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     this, inputPoints, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);        
-        
-        
-        //test constructor without arguments and weak minimum points
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+
+        // test constructor without arguments and weak minimum points
         estimator = new LMedSMetricTransformation2DRobustEstimator(true);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -271,7 +261,7 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
@@ -283,18 +273,18 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        
-        //test constructor with points
+
+        // test constructor with points
         inputPoints = new ArrayList<>();
         outputPoints = new ArrayList<>();
         for (int i = 0; i < MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
-        
+
         estimator = new LMedSMetricTransformation2DRobustEstimator(
                 inputPoints, outputPoints, true);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -312,7 +302,7 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
@@ -323,27 +313,29 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //not enough points
+            // not enough points
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     pointsEmpty, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     inputPoints, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
 
-        
-        //test constructor with listener
+
+        // test constructor with listener
         estimator = new LMedSMetricTransformation2DRobustEstimator(this, true);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -361,7 +353,7 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
@@ -372,12 +364,12 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        
-        //test constructor with listener and points
+
+
+        // test constructor with listener and points
         estimator = new LMedSMetricTransformation2DRobustEstimator(
                 this, inputPoints, outputPoints, true);
-        
+
         assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
                         DEFAULT_STOP_THRESHOLD, 0.0);
@@ -395,7 +387,7 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
@@ -406,325 +398,335 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //not enough points
+            // not enough points
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     this, pointsEmpty, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = new LMedSMetricTransformation2DRobustEstimator(
                     this, inputPoints, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);        
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
     }
-    
+
     @Test
     public void testGetSetStopThreshold() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
-        
-        //check default value
-        assertEquals(estimator.getStopThreshold(), 
+
+        // check default value
+        assertEquals(estimator.getStopThreshold(),
                 LMedSMetricTransformation2DRobustEstimator.
-                DEFAULT_STOP_THRESHOLD, 0.0);
-        
-        //set new value
+                        DEFAULT_STOP_THRESHOLD, 0.0);
+
+        // set new value
         estimator.setStopThreshold(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setStopThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }   
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testGetSetConfidence() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertEquals(estimator.getConfidence(),
                 LMedSMetricTransformation2DRobustEstimator.
-                DEFAULT_CONFIDENCE, 0.0);
-        
-        //set new value
+                        DEFAULT_CONFIDENCE, 0.0);
+
+        // set new value
         estimator.setConfidence(0.5);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
+        } catch (final IllegalArgumentException ignore) {
+        }
+
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }   
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testGetSetMaxIterations() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertEquals(estimator.getMaxIterations(),
                 LMedSMetricTransformation2DRobustEstimator.
-                DEFAULT_MAX_ITERATIONS);
-        
-        //set new value
+                        DEFAULT_MAX_ITERATIONS);
+
+        // set new value
         estimator.setMaxIterations(10);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getMaxIterations(), 10);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
 
     @Test
     public void testGetSetPointsAndIsReady() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
-        
-        //check default values
+
+        // check default values
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
-        
-        //set new value
-        List<Point2D> inputPoints = new ArrayList<>();
-        List<Point2D> outputPoints = new ArrayList<>();
+
+        // set new value
+        final List<Point2D> inputPoints = new ArrayList<>();
+        final List<Point2D> outputPoints = new ArrayList<>();
         for (int i = 0; i < LMedSMetricTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
-        
+
         estimator.setPoints(inputPoints, outputPoints);
-        
-        //check correctness
+
+        // check correctness
         assertSame(estimator.getInputPoints(), inputPoints);
         assertSame(estimator.getOutputPoints(), outputPoints);
         assertTrue(estimator.isReady());
 
-        //Force IllegalArgumentException
-        List<Point2D> pointsEmpty = new ArrayList<>();
+        // Force IllegalArgumentException
+        final List<Point2D> pointsEmpty = new ArrayList<>();
         try {
-            //not enough points
+            // not enough points
             estimator.setPoints(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator.setPoints(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }     
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() 
+    public void testGetSetListenerAndIsListenerAvailable()
             throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
-        
-        //set new value
+
+        // set new value
         estimator.setListener(this);
-        
-        //check correctness
+
+        // check correctness
         assertSame(estimator.getListener(), this);
         assertTrue(estimator.isListenerAvailable());
     }
-    
+
     @Test
     public void testIsSetWeakMinimumPointsAllowed() throws LockedException {
-        LMedSEuclideanTransformation2DRobustEstimator estimator =
+        final LMedSEuclideanTransformation2DRobustEstimator estimator =
                 new LMedSEuclideanTransformation2DRobustEstimator();
 
-        //check default value
+        // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
                 MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
-        
-        //set new value
+
+        // set new value
         estimator.setWeakMinimumSizeAllowed(true);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertEquals(estimator.getMinimumPoints(),
                 MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
-    }    
-    
+    }
+
     @Test
     public void testGetSetProgressDelta() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
 
-        //check default value
-        assertEquals(estimator.getProgressDelta(), 
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 
+        // check default value
+        assertEquals(estimator.getProgressDelta(),
+                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 0.0);
-        
-        //set new value
+
+        // set new value
         estimator.setProgressDelta(0.5f);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-    }     
-    
+        } catch (final IllegalArgumentException ignore) {
+        }
+    }
+
     @Test
     public void testGetSetQualityScores() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
 
         assertNull(estimator.getQualityScores());
-        
-        double[] qualityScores = new double[
+
+        final double[] qualityScores = new double[
                 PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
-        
-        //check correctness
+
+        // check correctness
         assertNull(estimator.getQualityScores());
     }
-    
+
     @Test
     public void testIsSetResultRefined() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
-        
-        //set new value
+
+        // set new value
         estimator.setResultRefined(false);
-        
-        //check correctness
+
+        // check correctness
         assertFalse(estimator.isResultRefined());
     }
-    
+
     @Test
     public void testIsSetCovarianceKept() throws LockedException {
-        LMedSMetricTransformation2DRobustEstimator estimator =
+        final LMedSMetricTransformation2DRobustEstimator estimator =
                 new LMedSMetricTransformation2DRobustEstimator();
-        
+
         assertFalse(estimator.isCovarianceKept());
-        
-        //set new value
+
+        // set new value
         estimator.setCovarianceKept(true);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(estimator.isCovarianceKept());
-    }            
+    }
 
     @Test
-    public void testEstimateWithoutRefinement() throws LockedException, 
-            NotReadyException, RobustEstimatorException { 
+    public void testEstimateWithoutRefinement() throws LockedException,
+            NotReadyException, RobustEstimatorException {
         for (int t = 0; t < TIMES; t++) {
-            //create an euclidean transformation
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-            double theta = Utils.convertToRadians(randomizer.nextDouble(
+            // create an euclidean transformation
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+            final double theta = Utils.convertToRadians(randomizer.nextDouble(
                     MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-        
-            Rotation2D rotation = new Rotation2D(theta);
-        
-            double[] translation = new double[2];
+
+            final Rotation2D rotation = new Rotation2D(theta);
+
+            final double[] translation = new double[2];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
-        
-            double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
-            
-            MetricTransformation2D transformation1 = 
+
+            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+
+            final MetricTransformation2D transformation1 =
                     new MetricTransformation2D(rotation, translation, scale);
-            
-                        
-            //generate random points
-            int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> inputPoints = new ArrayList<>();
-            List<Point2D> outputPoints = new ArrayList<>();
-            List<Point2D> outputPointsWithError = new ArrayList<>();
-            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+
+
+            // generate random points
+            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final List<Point2D> inputPoints = new ArrayList<>();
+            final List<Point2D> outputPoints = new ArrayList<>();
+            final List<Point2D> outputPointsWithError = new ArrayList<>();
+            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
             for (int i = 0; i < nPoints; i++) {
-                Point2D inputPoint = new InhomogeneousPoint2D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                final Point2D inputPoint = new InhomogeneousPoint2D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
                                 MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
                                 MAX_RANDOM_VALUE));
-                Point2D outputPoint = transformation1.transformAndReturnNew(
+                final Point2D outputPoint = transformation1.transformAndReturnNew(
                         inputPoint);
-                Point2D outputPointWithError;
+                final Point2D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    //point is outlier
-                    double errorX = errorRandomizer.nextDouble();
-                    double errorY = errorRandomizer.nextDouble();
+                    // point is outlier
+                    final double errorX = errorRandomizer.nextDouble();
+                    final double errorY = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint2D(
-                            outputPoint.getInhomX() + errorX, 
+                            outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY);
                 } else {
-                    //inlier point (without error)
+                    // inlier point (without error)
                     outputPointWithError = outputPoint;
                 }
-                
+
                 inputPoints.add(inputPoint);
                 outputPoints.add(outputPoint);
                 outputPointsWithError.add(outputPointWithError);
             }
-            
-            LMedSMetricTransformation2DRobustEstimator estimator =
-                new LMedSMetricTransformation2DRobustEstimator(this, 
-                        inputPoints, outputPointsWithError);
-            
+
+            final LMedSMetricTransformation2DRobustEstimator estimator =
+                    new LMedSMetricTransformation2DRobustEstimator(this,
+                            inputPoints, outputPointsWithError);
+
             estimator.setStopThreshold(STOP_THRESHOLD);
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
-            
+
             assertEquals(estimateStart, 0);
             assertEquals(estimateEnd, 0);
             assertEquals(estimateNextIteration, 0);
             assertEquals(estimateProgressChange, 0);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
-            
-            MetricTransformation2D transformation2 = estimator.estimate();
-            
+
+            final MetricTransformation2D transformation2 = estimator.estimate();
+
             assertEquals(estimateStart, 1);
             assertEquals(estimateEnd, 1);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
-            
-            //check correctness of estimation by transforming input points
-            //using estimated transformation (transformation2) and checking
-            //that output points are equal to the original output points without
-            //error
+
+            // check correctness of estimation by transforming input points
+            // using estimated transformation (transformation2) and checking
+            // that output points are equal to the original output points without
+            // error
             Point2D p1, p2;
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
@@ -732,125 +734,126 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 assertEquals(p1.distanceTo(p2), 0.0,
                         ABSOLUTE_ERROR);
             }
-            
-            //check paramaters of estimated transformation
-            Rotation2D rotation2 = transformation2.getRotation();        
-            double[] translation2 = transformation2.getTranslation();
-            double scale2 = transformation2.getScale();
-        
-            assertEquals(rotation2.getTheta(), rotation.getTheta(), 
+
+            // check parameters of estimated transformation
+            final Rotation2D rotation2 = transformation2.getRotation();
+            final double[] translation2 = transformation2.getTranslation();
+            final double scale2 = transformation2.getScale();
+
+            assertEquals(rotation2.getTheta(), rotation.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
             assertEquals(scale, scale2, ABSOLUTE_ERROR);
         }
-    }    
-    
+    }
+
     @Test
-    public void testEstimateColinearWithoutRefinement() throws LockedException, 
-            NotReadyException, RobustEstimatorException { 
+    public void testEstimateColinearWithoutRefinement() throws LockedException,
+            NotReadyException, RobustEstimatorException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            //create an euclidean transformation
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-            double theta = Utils.convertToRadians(randomizer.nextDouble(
+            // create an euclidean transformation
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+            final double theta = Utils.convertToRadians(randomizer.nextDouble(
                     MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-        
-            Rotation2D rotation = new Rotation2D(theta);
-        
-            double[] translation = new double[2];
+
+            final Rotation2D rotation = new Rotation2D(theta);
+
+            final double[] translation = new double[2];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
-        
-            double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
-            
-            MetricTransformation2D transformation1 = 
+
+            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+
+            final MetricTransformation2D transformation1 =
                     new MetricTransformation2D(rotation, translation, scale);
-            
-                        
-            //generate random points
-            
-            //generate random line
-            double a = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+
+
+            // generate random points
+
+            // generate random line
+            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
-            double b = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
-            double c = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
-            Line2D line = new Line2D(a, b, c);
-            
-            int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> inputPoints = new ArrayList<>();
-            List<Point2D> outputPoints = new ArrayList<>();
-            List<Point2D> outputPointsWithError = new ArrayList<>();
-            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+            final Line2D line = new Line2D(a, b, c);
+
+            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final List<Point2D> inputPoints = new ArrayList<>();
+            final List<Point2D> outputPoints = new ArrayList<>();
+            final List<Point2D> outputPointsWithError = new ArrayList<>();
+            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
             HomogeneousPoint2D inputPoint;
             for (int i = 0; i < nPoints; i++) {
-                double homX, homY;
-                double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE);                
+                final double homX;
+                final double homY;
+                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homW) / a;
                 }
-                
+
                 inputPoint = new HomogeneousPoint2D(homX, homY, homW);
-                
+
                 assertTrue(line.isLocus(inputPoint));
 
-                Point2D outputPoint = transformation1.transformAndReturnNew(
+                final Point2D outputPoint = transformation1.transformAndReturnNew(
                         inputPoint);
-                Point2D outputPointWithError;
+                final Point2D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    //point is outlier
-                    double errorX = errorRandomizer.nextDouble();
-                    double errorY = errorRandomizer.nextDouble();
+                    // point is outlier
+                    final double errorX = errorRandomizer.nextDouble();
+                    final double errorY = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint2D(
-                            outputPoint.getInhomX() + errorX, 
+                            outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY);
                 } else {
-                    //inlier point (without error)
+                    // inlier point (without error)
                     outputPointWithError = outputPoint;
                 }
-                
+
                 inputPoints.add(inputPoint);
                 outputPoints.add(outputPoint);
                 outputPointsWithError.add(outputPointWithError);
             }
-            
-            LMedSMetricTransformation2DRobustEstimator estimator =
-                new LMedSMetricTransformation2DRobustEstimator(this, 
-                        inputPoints, outputPointsWithError, true);
-            
+
+            final LMedSMetricTransformation2DRobustEstimator estimator =
+                    new LMedSMetricTransformation2DRobustEstimator(this,
+                            inputPoints, outputPointsWithError, true);
+
             estimator.setStopThreshold(STOP_THRESHOLD);
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
-            
+
             assertEquals(estimateStart, 0);
             assertEquals(estimateEnd, 0);
             assertEquals(estimateNextIteration, 0);
             assertEquals(estimateProgressChange, 0);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
-            
-            MetricTransformation2D transformation2 = estimator.estimate();
-            
+
+            final MetricTransformation2D transformation2 = estimator.estimate();
+
             assertEquals(estimateStart, 1);
             assertEquals(estimateEnd, 1);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
-            
-            //check correctness of estimation by transforming input points
-            //using estimated transformation (transformation2) and checking
-            //that output points are equal to the original output points without
-            //error
-            Point2D p1, p2;            
+
+            // check correctness of estimation by transforming input points
+            // using estimated transformation (transformation2) and checking
+            // that output points are equal to the original output points without
+            // error
+            Point2D p1, p2;
             boolean isValid = true;
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
@@ -862,98 +865,98 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 assertEquals(p1.distanceTo(p2), 0.0,
                         ABSOLUTE_ERROR);
             }
-            
+
             if (!isValid) {
                 continue;
             }
-            
-            //check paramaters of estimated transformation
-            Rotation2D rotation2 = transformation2.getRotation();        
-            double[] translation2 = transformation2.getTranslation();
-            double scale2 = transformation2.getScale();
-        
-            assertEquals(rotation2.getTheta(), rotation.getTheta(), 
+
+            // check parameters of estimated transformation
+            final Rotation2D rotation2 = transformation2.getRotation();
+            final double[] translation2 = transformation2.getTranslation();
+            final double scale2 = transformation2.getScale();
+
+            assertEquals(rotation2.getTheta(), rotation.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
             assertEquals(scale, scale2, ABSOLUTE_ERROR);
-            
+
             numValid++;
         }
-        
+
         assertTrue(numValid > 0);
-    }    
+    }
 
     @Test
-    public void testEstimateWithRefinement() throws LockedException, 
-            NotReadyException, RobustEstimatorException { 
+    public void testEstimateWithRefinement() throws LockedException,
+            NotReadyException, RobustEstimatorException {
         for (int t = 0; t < TIMES; t++) {
-            //create an euclidean transformation
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-            double theta = Utils.convertToRadians(randomizer.nextDouble(
+            // create an euclidean transformation
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+            final double theta = Utils.convertToRadians(randomizer.nextDouble(
                     MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-        
-            Rotation2D rotation = new Rotation2D(theta);
-        
-            double[] translation = new double[2];
+
+            final Rotation2D rotation = new Rotation2D(theta);
+
+            final double[] translation = new double[2];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
-        
-            double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
-            
-            MetricTransformation2D transformation1 = 
+
+            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+
+            final MetricTransformation2D transformation1 =
                     new MetricTransformation2D(rotation, translation, scale);
-            
-                        
-            //generate random points
-            int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> inputPoints = new ArrayList<>();
-            List<Point2D> outputPoints = new ArrayList<>();
-            List<Point2D> outputPointsWithError = new ArrayList<>();
-            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+
+
+            // generate random points
+            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final List<Point2D> inputPoints = new ArrayList<>();
+            final List<Point2D> outputPoints = new ArrayList<>();
+            final List<Point2D> outputPointsWithError = new ArrayList<>();
+            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
             for (int i = 0; i < nPoints; i++) {
-                Point2D inputPoint = new InhomogeneousPoint2D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                final Point2D inputPoint = new InhomogeneousPoint2D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
                                 MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
                                 MAX_RANDOM_VALUE));
-                Point2D outputPoint = transformation1.transformAndReturnNew(
+                final Point2D outputPoint = transformation1.transformAndReturnNew(
                         inputPoint);
-                Point2D outputPointWithError;
+                final Point2D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    //point is outlier
-                    double errorX = errorRandomizer.nextDouble();
-                    double errorY = errorRandomizer.nextDouble();
+                    // point is outlier
+                    final double errorX = errorRandomizer.nextDouble();
+                    final double errorY = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint2D(
-                            outputPoint.getInhomX() + errorX, 
+                            outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY);
                 } else {
-                    //inlier point (without error)
+                    // inlier point (without error)
                     outputPointWithError = outputPoint;
                 }
-                
+
                 inputPoints.add(inputPoint);
                 outputPoints.add(outputPoint);
                 outputPointsWithError.add(outputPointWithError);
             }
-            
-            LMedSMetricTransformation2DRobustEstimator estimator =
-                new LMedSMetricTransformation2DRobustEstimator(this, 
-                        inputPoints, outputPointsWithError);
-            
+
+            final LMedSMetricTransformation2DRobustEstimator estimator =
+                    new LMedSMetricTransformation2DRobustEstimator(this,
+                            inputPoints, outputPointsWithError);
+
             estimator.setStopThreshold(STOP_THRESHOLD);
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
-            
+
             assertEquals(estimateStart, 0);
             assertEquals(estimateEnd, 0);
             assertEquals(estimateNextIteration, 0);
             assertEquals(estimateProgressChange, 0);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
-            
-            MetricTransformation2D transformation2 = estimator.estimate();
-            
+
+            final MetricTransformation2D transformation2 = estimator.estimate();
+
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
@@ -964,17 +967,17 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 assertEquals(estimator.getCovariance().getColumns(),
                         2 + MetricTransformation2D.NUM_TRANSLATION_COORDS);
             }
-            
+
             assertEquals(estimateStart, 1);
             assertEquals(estimateEnd, 1);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
-            
-            //check correctness of estimation by transforming input points
-            //using estimated transformation (transformation2) and checking
-            //that output points are equal to the original output points without
-            //error
+
+            // check correctness of estimation by transforming input points
+            // using estimated transformation (transformation2) and checking
+            // that output points are equal to the original output points without
+            // error
             Point2D p1, p2;
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
@@ -982,114 +985,115 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 assertEquals(p1.distanceTo(p2), 0.0,
                         ABSOLUTE_ERROR);
             }
-            
-            //check paramaters of estimated transformation
-            Rotation2D rotation2 = transformation2.getRotation();        
-            double[] translation2 = transformation2.getTranslation();
-            double scale2 = transformation2.getScale();
-        
-            assertEquals(rotation2.getTheta(), rotation.getTheta(), 
+
+            // check parameters of estimated transformation
+            final Rotation2D rotation2 = transformation2.getRotation();
+            final double[] translation2 = transformation2.getTranslation();
+            final double scale2 = transformation2.getScale();
+
+            assertEquals(rotation2.getTheta(), rotation.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
             assertEquals(scale, scale2, ABSOLUTE_ERROR);
         }
-    }    
-    
+    }
+
     @Test
-    public void testEstimateColinearWithRefinement() throws LockedException, 
-            NotReadyException, RobustEstimatorException { 
+    public void testEstimateColinearWithRefinement() throws LockedException,
+            NotReadyException, RobustEstimatorException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            //create an euclidean transformation
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-            double theta = Utils.convertToRadians(randomizer.nextDouble(
+            // create an euclidean transformation
+            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+            final double theta = Utils.convertToRadians(randomizer.nextDouble(
                     MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-        
-            Rotation2D rotation = new Rotation2D(theta);
-        
-            double[] translation = new double[2];
+
+            final Rotation2D rotation = new Rotation2D(theta);
+
+            final double[] translation = new double[2];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
-        
-            double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
-            
-            MetricTransformation2D transformation1 = 
+
+            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+
+            final MetricTransformation2D transformation1 =
                     new MetricTransformation2D(rotation, translation, scale);
-            
-                        
-            //generate random points
-            
-            //generate random line
-            double a = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+
+
+            // generate random points
+
+            // generate random line
+            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
-            double b = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
-            double c = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
-            Line2D line = new Line2D(a, b, c);
-            
-            int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> inputPoints = new ArrayList<>();
-            List<Point2D> outputPoints = new ArrayList<>();
-            List<Point2D> outputPointsWithError = new ArrayList<>();
-            GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+            final Line2D line = new Line2D(a, b, c);
+
+            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final List<Point2D> inputPoints = new ArrayList<>();
+            final List<Point2D> outputPoints = new ArrayList<>();
+            final List<Point2D> outputPointsWithError = new ArrayList<>();
+            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
             HomogeneousPoint2D inputPoint;
             for (int i = 0; i < nPoints; i++) {
-                double homX, homY;
-                double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        MAX_RANDOM_VALUE);                
+                final double homX;
+                final double homY;
+                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homW) / a;
                 }
-                
+
                 inputPoint = new HomogeneousPoint2D(homX, homY, homW);
-                
+
                 assertTrue(line.isLocus(inputPoint));
 
-                Point2D outputPoint = transformation1.transformAndReturnNew(
+                final Point2D outputPoint = transformation1.transformAndReturnNew(
                         inputPoint);
-                Point2D outputPointWithError;
+                final Point2D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    //point is outlier
-                    double errorX = errorRandomizer.nextDouble();
-                    double errorY = errorRandomizer.nextDouble();
+                    // point is outlier
+                    final double errorX = errorRandomizer.nextDouble();
+                    final double errorY = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint2D(
-                            outputPoint.getInhomX() + errorX, 
+                            outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY);
                 } else {
-                    //inlier point (without error)
+                    // inlier point (without error)
                     outputPointWithError = outputPoint;
                 }
-                
+
                 inputPoints.add(inputPoint);
                 outputPoints.add(outputPoint);
                 outputPointsWithError.add(outputPointWithError);
             }
-            
-            LMedSMetricTransformation2DRobustEstimator estimator =
-                new LMedSMetricTransformation2DRobustEstimator(this, 
-                        inputPoints, outputPointsWithError, true);
-            
+
+            final LMedSMetricTransformation2DRobustEstimator estimator =
+                    new LMedSMetricTransformation2DRobustEstimator(this,
+                            inputPoints, outputPointsWithError, true);
+
             estimator.setStopThreshold(STOP_THRESHOLD);
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
-            
+
             assertEquals(estimateStart, 0);
             assertEquals(estimateEnd, 0);
             assertEquals(estimateNextIteration, 0);
             assertEquals(estimateProgressChange, 0);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
-            
-            MetricTransformation2D transformation2 = estimator.estimate();
-            
+
+            final MetricTransformation2D transformation2 = estimator.estimate();
+
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
@@ -1100,18 +1104,18 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 assertEquals(estimator.getCovariance().getColumns(),
                         2 + MetricTransformation2D.NUM_TRANSLATION_COORDS);
             }
-            
+
             assertEquals(estimateStart, 1);
             assertEquals(estimateEnd, 1);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
-            
-            //check correctness of estimation by transforming input points
-            //using estimated transformation (transformation2) and checking
-            //that output points are equal to the original output points without
-            //error
-            Point2D p1, p2;            
+
+            // check correctness of estimation by transforming input points
+            // using estimated transformation (transformation2) and checking
+            // that output points are equal to the original output points without
+            // error
+            Point2D p1, p2;
             boolean isValid = true;
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
@@ -1123,51 +1127,51 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
                 assertEquals(p1.distanceTo(p2), 0.0,
                         ABSOLUTE_ERROR);
             }
-            
+
             if (!isValid) {
                 continue;
             }
-            
-            //check paramaters of estimated transformation
-            Rotation2D rotation2 = transformation2.getRotation();        
-            double[] translation2 = transformation2.getTranslation();
-            double scale2 = transformation2.getScale();
-        
-            assertEquals(rotation2.getTheta(), rotation.getTheta(), 
+
+            // check parameters of estimated transformation
+            final Rotation2D rotation2 = transformation2.getRotation();
+            final double[] translation2 = transformation2.getTranslation();
+            final double scale2 = transformation2.getScale();
+
+            assertEquals(rotation2.getTheta(), rotation.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
             assertEquals(scale, scale2, ABSOLUTE_ERROR);
-            
+
             numValid++;
         }
-        
-        assertTrue(numValid > 0);
-    }    
 
-    @Override
-    public void onEstimateStart(MetricTransformation2DRobustEstimator estimator) {
-        estimateStart++;
-        checkLocked((LMedSMetricTransformation2DRobustEstimator)estimator);
+        assertTrue(numValid > 0);
     }
 
     @Override
-    public void onEstimateEnd(MetricTransformation2DRobustEstimator estimator) {
+    public void onEstimateStart(final MetricTransformation2DRobustEstimator estimator) {
+        estimateStart++;
+        checkLocked((LMedSMetricTransformation2DRobustEstimator) estimator);
+    }
+
+    @Override
+    public void onEstimateEnd(final MetricTransformation2DRobustEstimator estimator) {
         estimateEnd++;
-        checkLocked((LMedSMetricTransformation2DRobustEstimator)estimator);
+        checkLocked((LMedSMetricTransformation2DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
-            MetricTransformation2DRobustEstimator estimator, int iteration) {
+            final MetricTransformation2DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
-        checkLocked((LMedSMetricTransformation2DRobustEstimator)estimator);
+        checkLocked((LMedSMetricTransformation2DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
-            MetricTransformation2DRobustEstimator estimator, float progress) {
+            final MetricTransformation2DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
-        checkLocked((LMedSMetricTransformation2DRobustEstimator)estimator);
+        checkLocked((LMedSMetricTransformation2DRobustEstimator) estimator);
     }
 
     private void reset() {
@@ -1176,43 +1180,50 @@ public class LMedSMetricTransformation2DRobustEstimatorTest implements
     }
 
     private void checkLocked(
-            LMedSMetricTransformation2DRobustEstimator estimator) {
-        List<Point2D> points = new ArrayList<>();
+            final LMedSMetricTransformation2DRobustEstimator estimator) {
+        final List<Point2D> points = new ArrayList<>();
         try {
             estimator.setPoints(points, points);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setStopThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
-            estimator.setConfidence(0.5);            
+            estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) {
-        } catch (Exception e) {
+        } catch (final LockedException ignore) {
+        } catch (final Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setWeakMinimumSizeAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         assertTrue(estimator.isLocked());
-    }     
+    }
 }

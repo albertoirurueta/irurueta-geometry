@@ -22,13 +22,11 @@ public class Utils {
     /**
      * Amount to add/subtract to an angle in degrees to make a half turn.
      */
-    @SuppressWarnings("WeakerAccess")
     public static final double HALF_TURN_DEGREES = 180.0;
     
     /**
      * Amount to add/subtract to an angle in radians to make a half turn.
      */
-    @SuppressWarnings("WeakerAccess")
     public static final double HALF_TURN_RADIANS = Math.PI;
 
     /**
@@ -42,7 +40,7 @@ public class Utils {
      * @param radians Angle in radians.
      * @return Converted angle in degrees.
      */
-    public static double convertToDegrees(double radians) {
+    public static double convertToDegrees(final double radians) {
         return radians / Math.PI * 180.0;
     }
     
@@ -51,7 +49,7 @@ public class Utils {
      * @param degrees Angle in degrees.
      * @return Converted angle in radians.
      */
-    public static double convertToRadians(double degrees) {
+    public static double convertToRadians(final double degrees) {
         return degrees / 180.0 * Math.PI;
     }   
         
@@ -61,7 +59,7 @@ public class Utils {
      * @param angle angle to be normalized expressed in degrees.
      * @return the same angle but normalized.
      */
-    public static double normalizeAngleDegrees(double angle) {
+    public static double normalizeAngleDegrees(final double angle) {
         return normalizeAngle(angle, HALF_TURN_DEGREES);
     }
     
@@ -71,7 +69,7 @@ public class Utils {
      * @param angle angle to be normalized expressed in degrees.
      * @return the same angle but normalized.
      */
-    public static double normalizeAngleRadians(double angle) {
+    public static double normalizeAngleRadians(final double angle) {
         return normalizeAngle(angle, HALF_TURN_RADIANS);
     }
     
@@ -85,9 +83,9 @@ public class Utils {
      * radians).
      * @return the same angle but normalized.
      */
-    private static double normalizeAngle(double angle, double halfTurn) {
+    private static double normalizeAngle(final double angle, final double halfTurn) {
         double result = angle;
-        double fullTurn = 2.0 * halfTurn;
+        final double fullTurn = 2.0 * halfTurn;
         
         if (result <= -halfTurn) {
             int nTurns = (int)Math.ceil(-result / fullTurn);

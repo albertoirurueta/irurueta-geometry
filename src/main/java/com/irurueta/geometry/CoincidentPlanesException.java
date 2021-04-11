@@ -16,7 +16,7 @@
 package com.irurueta.geometry;
 
 /**
- *  Raised when providing planes which are assumed to be equal.
+ * Raised when providing planes which are assumed to be equal.
  */
 public class CoincidentPlanesException extends GeometryException {
 
@@ -26,29 +26,32 @@ public class CoincidentPlanesException extends GeometryException {
     public CoincidentPlanesException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public CoincidentPlanesException(String message) {
+    public CoincidentPlanesException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public CoincidentPlanesException(String message, Throwable cause) {
+    public CoincidentPlanesException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public CoincidentPlanesException(Throwable cause) {
+    public CoincidentPlanesException(final Throwable cause) {
         super(cause);
-    }    
+    }
 }

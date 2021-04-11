@@ -36,15 +36,17 @@ public class Box3D extends Box<Point3D> {
 
     /**
      * Constructor.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public Box3D(Point3D lo, Point3D hi) {
+    public Box3D(final Point3D lo, final Point3D hi) {
         super(lo, hi);
     }
 
     /**
      * Sets boundaries.
+     *
      * @param loX x low coordinate.
      * @param loY y low coordinate
      * @param loZ z low coordinate.
@@ -52,8 +54,8 @@ public class Box3D extends Box<Point3D> {
      * @param hiY y high coordinate.
      * @param hiZ z high coordinate.
      */
-    public final void setBounds(double loX, double loY, double loZ,
-                                double hiX, double hiY, double hiZ) {
+    public final void setBounds(final double loX, final double loY, final double loZ,
+                                final double hiX, final double hiY, final double hiZ) {
         setBounds(new InhomogeneousPoint3D(loX, loY, loZ),
                 new InhomogeneousPoint3D(hiX, hiY, hiZ));
     }

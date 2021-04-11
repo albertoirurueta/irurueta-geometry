@@ -16,7 +16,7 @@
 package com.irurueta.geometry;
 
 /**
- *  Exception raised when providing parallel planes.
+ * Exception raised when providing parallel planes.
  */
 public class ParallelPlanesException extends GeometryException {
     /**
@@ -25,29 +25,32 @@ public class ParallelPlanesException extends GeometryException {
     public ParallelPlanesException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public ParallelPlanesException(String message) {
+    public ParallelPlanesException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public ParallelPlanesException(String message, Throwable cause) {
+    public ParallelPlanesException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public ParallelPlanesException(Throwable cause) {
+    public ParallelPlanesException(final Throwable cause) {
         super(cause);
-    }        
+    }
 }

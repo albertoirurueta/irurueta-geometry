@@ -24,13 +24,13 @@ public interface EuclideanTransformation3DRobustEstimatorListener {
      * Called when estimation starts.
      * @param estimator reference to robust estimator.
      */
-    void onEstimateStart(EuclideanTransformation3DRobustEstimator estimator);
+    void onEstimateStart(final EuclideanTransformation3DRobustEstimator estimator);
     
     /**
      * Called when estimation ends.
      * @param estimator reference to robust estimator.
      */
-    void onEstimateEnd(EuclideanTransformation3DRobustEstimator estimator);
+    void onEstimateEnd(final EuclideanTransformation3DRobustEstimator estimator);
     
     /**
      * Called when estimator iterates to refine a possible solution.
@@ -38,7 +38,7 @@ public interface EuclideanTransformation3DRobustEstimatorListener {
      * @param iteration current iteration.
      */
     void onEstimateNextIteration(
-            EuclideanTransformation3DRobustEstimator estimator, int iteration);
+            final EuclideanTransformation3DRobustEstimator estimator, final int iteration);
     
     /**
      * Called when estimation progress changes significantly.
@@ -47,5 +47,5 @@ public interface EuclideanTransformation3DRobustEstimatorListener {
      * and 1.0.
      */
     void onEstimateProgressChange(
-            EuclideanTransformation3DRobustEstimator estimator, float progress);    
+            final EuclideanTransformation3DRobustEstimator estimator, final float progress);
 }

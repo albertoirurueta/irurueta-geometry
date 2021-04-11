@@ -23,20 +23,22 @@ import com.irurueta.algebra.WrongSizeException;
 import java.io.Serializable;
 
 /**
- *  This class contains implementation of a dual quadric.
+ * This class contains implementation of a dual quadric.
  */
+@SuppressWarnings("DuplicatedCode")
 public class DualQuadric extends BaseQuadric implements Serializable {
-    
+
     /**
      * Constructor.
      */
     public DualQuadric() {
         super();
     }
-    
+
     /**
      * Constructor of this class. This constructor accepts every parameter
      * describing a dual quadric (parameters a, b, c, d, e, f, g, h, i, j).
+     *
      * @param a Parameter A of the quadric.
      * @param b Parameter B of the quadric.
      * @param c Parameter C of the quadric.
@@ -48,28 +50,33 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @param i Parameter I of the quadric.
      * @param j Parameter J of the quadric.
      */
-    public DualQuadric(double a, double b, double c, double d, double e, 
-            double f, double g, double h, double i, double j) {
-        super(a, b, c, d, e, f, g, h, i , j);
+    public DualQuadric(
+            final double a, final double b, final double c,
+            final double d, final double e, final double f,
+            final double g, final double h, final double i,
+            final double j) {
+        super(a, b, c, d, e, f, g, h, i, j);
     }
-    
+
     /**
      * This method sets the matrix used to describe a dual quadric.
      * This matrix must be 4x4 and symmetric.
-     * @param m  4x4 Matrix describing the quadric.
-     * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 4x4.
+     *
+     * @param m 4x4 Matrix describing the quadric.
+     * @throws IllegalArgumentException    Raised when the size of the matrix is
+     *                                     not 4x4.
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
-     * symmetric.
+     *                                     symmetric.
      */
-    public DualQuadric(Matrix m) throws NonSymmetricMatrixException {
+    public DualQuadric(final Matrix m) throws NonSymmetricMatrixException {
         super(m);
     }
-    
+
     /**
      * Creates a dual matrix where provided planes are its locus, or in other
      * words, provided planes are tangent to the quadric corresponding to the
      * created dual quadric.
+     *
      * @param plane1 1st plane.
      * @param plane2 2nd plane.
      * @param plane3 3rd plane.
@@ -79,234 +86,246 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @param plane7 7th plane.
      * @param plane8 8th plane.
      * @param plane9 9th plane.
-     * @throws CoincidentPlanesException if provided planes are in a 
-     * configuration where more than one plane is coincident, creating a 
-     * degeneracy.
+     * @throws CoincidentPlanesException if provided planes are in a
+     *                                   configuration where more than one plane is coincident, creating a
+     *                                   degeneracy.
      */
-    public DualQuadric(Plane plane1, Plane plane2, Plane plane3, Plane plane4,
-            Plane plane5, Plane plane6, Plane plane7, Plane plane8, 
-            Plane plane9) throws CoincidentPlanesException {
+    public DualQuadric(
+            final Plane plane1, final Plane plane2, final Plane plane3,
+            final Plane plane4, final Plane plane5, final Plane plane6,
+            final Plane plane7, final Plane plane8, final Plane plane9)
+            throws CoincidentPlanesException {
         setParametersFromPlanes(plane1, plane2, plane3, plane4, plane5, plane6,
                 plane7, plane8, plane9);
     }
-    
+
     /**
-     * Checks if provided plane is locus of this dual quadric, or in other 
+     * Checks if provided plane is locus of this dual quadric, or in other
      * words, checks whether provided plane lies within this quadric, or whether
-     * provided plane is tangent to the quadric corresponding to this dual 
+     * provided plane is tangent to the quadric corresponding to this dual
      * quadric.
-     * @param plane Plane to be tested.
+     *
+     * @param plane     Plane to be tested.
      * @param threshold Threshold of tolerance to determine whether this plane
-     * is locus or not. This is needed because of limited machine precision. If
-     * threshold is not provided, then DEFAULT_LOCUS_THRESHOLD is used instead.
+     *                  is locus or not. This is needed because of limited machine precision. If
+     *                  threshold is not provided, then DEFAULT_LOCUS_THRESHOLD is used instead.
      * @return True if provided plane is locus of this dual quadric, false
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Plane plane, double threshold) {
+    public boolean isLocus(final Plane plane, final double threshold) {
 
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        
+
         try {
             normalize();
-            Matrix dualQ = asMatrix();
-            Matrix homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            final Matrix dualQ = asMatrix();
+            final Matrix homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
             plane.normalize();
             homPlane.setElementAt(0, 0, plane.getA());
             homPlane.setElementAt(1, 0, plane.getB());
             homPlane.setElementAt(2, 0, plane.getC());
             homPlane.setElementAt(3, 0, plane.getD());
-            Matrix locusMatrix = homPlane.transposeAndReturnNew();
+            final Matrix locusMatrix = homPlane.transposeAndReturnNew();
             locusMatrix.multiply(dualQ);
             locusMatrix.multiply(homPlane);
-            
+
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
-        } catch(WrongSizeException ignore) {
+        } catch (final WrongSizeException ignore) {
             return false;
         }
     }
-    
+
     /**
-     * Checks if provided plane is locus of this dual quadric, or in other 
+     * Checks if provided plane is locus of this dual quadric, or in other
      * words, checks whether provided plane lies within this quadric, or whether
-     * provided plane is tangent to the quadric corresponding to this dual 
+     * provided plane is tangent to the quadric corresponding to this dual
      * quadric.
+     *
      * @param plane Plane to be tested.
      * @return True if provided plane is locus of this dual quadric, false
      * otherwise.
      * @see #isLocus(Plane, double)
      */
-    public boolean isLocus(Plane plane) {
+    public boolean isLocus(final Plane plane) {
         return isLocus(plane, DEFAULT_LOCUS_THRESHOLD);
     }
-    
+
     /**
      * Computes the angle between two planes in radians.
+     *
      * @param planeA First plane to be tested.
      * @param planeB Second plane to be tested.
      * @return Angle between the two provided planes in radians. This angle is
-     * equal to the angle of their corresponding director vectors in an 
+     * equal to the angle of their corresponding director vectors in an
      * euclidean geometry, but it might not be the case for the geometry defined
      * by this dual quadric.
      */
-    public double angleBetweenPlanes(Plane planeA, Plane planeB) {
+    public double angleBetweenPlanes(final Plane planeA, final Plane planeB) {
         try {
-            //retrieve quadric as matrix
+            // retrieve quadric as matrix
             normalize();
-            Matrix dualQ = asMatrix();
-            Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
+            final Matrix dualQ = asMatrix();
+            final Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
             planeA.normalize();
             transHomPlaneA.setElementAt(0, 0, planeA.getA());
             transHomPlaneA.setElementAt(0, 1, planeA.getB());
             transHomPlaneA.setElementAt(0, 2, planeA.getC());
             transHomPlaneA.setElementAt(0, 3, planeA.getD());
-            
-            Matrix tmp = transHomPlaneA.multiplyAndReturnNew(dualQ);
+
+            final Matrix tmp = transHomPlaneA.multiplyAndReturnNew(dualQ);
             tmp.multiply(transHomPlaneA.transposeAndReturnNew()); //This is
-                                            //homPlaneA' * dualQ * homPlaneA
-            
-            double normA = tmp.getElementAt(0, 0);
-            
-            Matrix homPlaneB = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            // homPlaneA' * dualQ * homPlaneA
+
+            final double normA = tmp.getElementAt(0, 0);
+
+            final Matrix homPlaneB = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
             planeB.normalize();
             homPlaneB.setElementAt(0, 0, planeB.getA());
             homPlaneB.setElementAt(1, 0, planeB.getB());
             homPlaneB.setElementAt(2, 0, planeB.getC());
             homPlaneB.setElementAt(3, 0, planeB.getD());
-            
+
             homPlaneB.transpose(tmp);
             tmp.multiply(dualQ);
             tmp.multiply(homPlaneB);
-            
-            double normB = tmp.getElementAt(0, 0);
-            
+
+            final double normB = tmp.getElementAt(0, 0);
+
             transHomPlaneA.multiply(dualQ);
             transHomPlaneA.multiply(homPlaneB);
-                //This is homPlaneA' * dualQ * homPlaneB
-            
-            double angleNumerator = transHomPlaneA.getElementAt(0, 0);
-            
-            double cosTheta = angleNumerator / Math.sqrt(normA * normB);
+            // This is homPlaneA' * dualQ * homPlaneB
+
+            final double angleNumerator = transHomPlaneA.getElementAt(0, 0);
+
+            final double cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
-        } catch (WrongSizeException ignore) {
-            return 0.0; //This will never happen
+        } catch (final WrongSizeException ignore) {
+            // This will never happen
+            return 0.0;
         }
     }
-    
+
     /**
      * Checks if two planes are perpendicular attending to the geometry defined
      * by this dual quadric, or in other words, if lA' * dualQ * lB is zero.
-     * @param planeA First plane to be checked.
-     * @param planeB Second plane to be checked.
+     *
+     * @param planeA    First plane to be checked.
+     * @param planeB    Second plane to be checked.
      * @param threshold Threshold of tolerance to determine whether the planes
-     * are perpendicular or not. This is needed because of limited machine
-     * precision. If threshold is not provided, then
-     * DEFAULT_PERPENDICULAR_THREHSOLD is used instead.
+     *                  are perpendicular or not. This is needed because of limited machine
+     *                  precision. If threshold is not provided, then
+     *                  DEFAULT_PERPENDICULAR_THREHSOLD is used instead.
      * @return True if provided planes are perpendicular, false otherwise.
-     * @throws IllegalArgumentException Raised if provided threshold is 
-     * negative.
+     * @throws IllegalArgumentException Raised if provided threshold is
+     *                                  negative.
      */
-    public boolean arePerpendicularPlanes(Plane planeA, Plane planeB, 
-            double threshold) {
+    public boolean arePerpendicularPlanes(
+            final Plane planeA, final Plane planeB, final double threshold) {
         try {
-            //retrieve quadric as matrix
-            Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
+            // retrieve quadric as matrix
+            final Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
             planeA.normalize();
             transHomPlaneA.setElementAt(0, 0, planeA.getA());
             transHomPlaneA.setElementAt(0, 1, planeA.getB());
             transHomPlaneA.setElementAt(0, 2, planeA.getC());
             transHomPlaneA.setElementAt(0, 3, planeA.getD());
-            
-            Matrix homPlaneB = 
-                    new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 
-                    1);
+
+            final Matrix homPlaneB =
+                    new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
+                            1);
             planeB.normalize();
             homPlaneB.setElementAt(0, 0, planeB.getA());
             homPlaneB.setElementAt(1, 0, planeB.getB());
             homPlaneB.setElementAt(2, 0, planeB.getC());
             homPlaneB.setElementAt(3, 0, planeB.getD());
-            
+
             normalize();
-            Matrix dualQ = asMatrix();
+            final Matrix dualQ = asMatrix();
             transHomPlaneA.multiply(dualQ);
             transHomPlaneA.multiply(homPlaneB);
-                //This is homPlaneA' * dualQ * homPlaneB
-            
-            double perpend = transHomPlaneA.getElementAt(0, 0);
-            
+            // This is homPlaneA' * dualQ * homPlaneB
+
+            final double perpend = transHomPlaneA.getElementAt(0, 0);
+
             return Math.abs(perpend) < threshold;
-        } catch (WrongSizeException ignore) {
-            return false; //This will never happen
+        } catch (final WrongSizeException ignore) {
+            // This will never happen
+            return false;
         }
     }
-    
+
     /**
      * Checks if two planes are perpendicular attending to the geometry defined
      * by this dual quadric, or in other words, if lA' * dualQ * lB is zero.
+     *
      * @param planeA First plane to be checked.
      * @param planeB Second plane to be checked.
      * @return True if provided planes are perpendicular, false otherwise.
-     */    
-    public boolean arePerpendicularPlanes(Plane planeA, Plane planeB) {
-        return arePerpendicularPlanes(planeA, planeB, 
+     */
+    public boolean arePerpendicularPlanes(final Plane planeA, final Plane planeB) {
+        return arePerpendicularPlanes(planeA, planeB,
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
-    
+
     /**
      * Computes the quadric corresponding to this dual quadric.
+     *
      * @return A new quadric instance of this dual quadric.
-     * @throws QuadricNotAvailableException Raised if the rank of the dual 
-     * quadric matrix is not complete due to wrong parameters or numerical 
-     * instability.
+     * @throws QuadricNotAvailableException Raised if the rank of the dual
+     *                                      quadric matrix is not complete due to wrong parameters or numerical
+     *                                      instability.
      */
     public Quadric getQuadric() throws QuadricNotAvailableException {
-        Quadric q = new Quadric();
+        final Quadric q = new Quadric();
         quadric(q);
         return q;
     }
-    
+
     /**
      * Computes the quadric correpsonding to this dual quadric and stores the
      * result in provided instance.
+     *
      * @param quadric Quadric where result is stored.
-     * @throws QuadricNotAvailableException Raised if the rank of the dual 
-     * quadric matrix is not complete due to wrong parameters or numerical
-     * instability.
+     * @throws QuadricNotAvailableException Raised if the rank of the dual
+     *                                      quadric matrix is not complete due to wrong parameters or numerical
+     *                                      instability.
      */
-    public void quadric(Quadric quadric) throws QuadricNotAvailableException {
-        
-        Matrix dualQuadricMatrix = asMatrix();
+    public void quadric(final Quadric quadric) throws QuadricNotAvailableException {
+
+        final Matrix dualQuadricMatrix = asMatrix();
         try {
-            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(
+            final Matrix invMatrix = com.irurueta.algebra.Utils.inverse(
                     dualQuadricMatrix);
-            
-            double a = invMatrix.getElementAt(0, 0);
-            double b = invMatrix.getElementAt(1, 1);
-            double c = invMatrix.getElementAt(2, 2);
-            double d = 0.5 * (invMatrix.getElementAt(0, 1) + 
+
+            final double a = invMatrix.getElementAt(0, 0);
+            final double b = invMatrix.getElementAt(1, 1);
+            final double c = invMatrix.getElementAt(2, 2);
+            final double d = 0.5 * (invMatrix.getElementAt(0, 1) +
                     invMatrix.getElementAt(1, 0));
-            double e = 0.5 * (invMatrix.getElementAt(2, 1) + 
+            final double e = 0.5 * (invMatrix.getElementAt(2, 1) +
                     invMatrix.getElementAt(1, 2));
-            double f = 0.5 * (invMatrix.getElementAt(2, 0) +
+            final double f = 0.5 * (invMatrix.getElementAt(2, 0) +
                     invMatrix.getElementAt(0, 2));
-            double g = 0.5 * (invMatrix.getElementAt(3, 0) + 
+            final double g = 0.5 * (invMatrix.getElementAt(3, 0) +
                     invMatrix.getElementAt(0, 3));
-            double h = 0.5 * (invMatrix.getElementAt(3, 1) +
+            final double h = 0.5 * (invMatrix.getElementAt(3, 1) +
                     invMatrix.getElementAt(1, 3));
-            double i = 0.5 * (invMatrix.getElementAt(3, 2) +
+            final double i = 0.5 * (invMatrix.getElementAt(3, 2) +
                     invMatrix.getElementAt(2, 3));
-            double j = invMatrix.getElementAt(3, 3);
+            final double j = invMatrix.getElementAt(3, 3);
             quadric.setParameters(a, b, c, d, e, f, g, h, i, j);
-        } catch(AlgebraException e) {
+        } catch (final AlgebraException e) {
             throw new QuadricNotAvailableException(e);
         }
     }
-    
+
     /**
      * Sets parameters of this dual quadric so that provided planes lie within
      * it (are locus).
+     *
      * @param plane1 1st plane.
      * @param plane2 2nd plane.
      * @param plane3 3rd plane.
@@ -317,15 +336,15 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @param plane8 8th plane.
      * @param plane9 9th plane.
      * @throws CoincidentPlanesException Raised if planes are coincident or
-     * produce a degenerated configuration.
+     *                                   produce a degenerated configuration.
      */
-    @SuppressWarnings("WeakerAccess")
-    public final void setParametersFromPlanes(Plane plane1, Plane plane2,
-            Plane plane3, Plane plane4, Plane plane5, Plane plane6, 
-            Plane plane7, Plane plane8, Plane plane9) 
+    public final void setParametersFromPlanes(
+            final Plane plane1, final Plane plane2, final Plane plane3,
+            final Plane plane4, final Plane plane5, final Plane plane6,
+            final Plane plane7, final Plane plane8, final Plane plane9)
             throws CoincidentPlanesException {
-        
-        //normalize planes to increase accuracy
+
+        // normalize planes to increase accuracy
         plane1.normalize();
         plane2.normalize();
         plane3.normalize();
@@ -335,14 +354,14 @@ public class DualQuadric extends BaseQuadric implements Serializable {
         plane7.normalize();
         plane8.normalize();
         plane9.normalize();
-        
+
         try {
-            //each plane belonging to a dual quadric follows equation:
-            //p' * Q * p = 0 ==>
-            //pA^2 + pB^2 + pC^2 + 2*pA*pB + 2*pA*pC + 2*pB*pC + 2*pA*pD + 
-            //2*pB*pD + 2*pC*pD + pD^2 = 0            
-            
-            Matrix m = new Matrix(9, 10);
+            // each plane belonging to a dual quadric follows equation:
+            // p' * Q * p = 0 ==>
+            // pA^2 + pB^2 + pC^2 + 2*pA*pB + 2*pA*pC + 2*pB*pC + 2*pA*pD +
+            // 2*pB*pD + 2*pC*pD + pD^2 = 0
+
+            final Matrix m = new Matrix(9, 10);
             double pA = plane1.getA();
             double pB = plane1.getB();
             double pC = plane1.getC();
@@ -469,57 +488,60 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             m.setElementAt(8, 7, 2.0 * pB * pD);
             m.setElementAt(8, 8, 2.0 * pC * pD);
             m.setElementAt(8, 9, pD * pD);
-            
-            //normalize each row to increase accuracy
-            double[] row = new double[10];
+
+            // normalize each row to increase accuracy
+            final double[] row = new double[10];
             double rowNorm;
-                        
+
             for (int j = 0; j < 9; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 9, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for(int i = 0; i < 10; i++) 
+                for (int i = 0; i < 10; i++)
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
-            }     
-            
-            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            }
+
+            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
-            
-            if(decomposer.getRank() < 9) throw new CoincidentPlanesException();
-            
-            //the right null-space of m contains the parameters a, b, c, d, e ,f
-            //of the conic
-            Matrix v = decomposer.getV();
-            
-            double a = v.getElementAt(0, 9);
-            double b = v.getElementAt(1, 9);
-            double c = v.getElementAt(2, 9);
-            double d = v.getElementAt(3, 9);
-            
-            double f = v.getElementAt(4, 9);
-            double e = v.getElementAt(5, 9);
-            
-            double g = v.getElementAt(6, 9);
-            double h = v.getElementAt(7, 9);
-            double i = v.getElementAt(8, 9);
-            double j = v.getElementAt(9, 9);
-            
-            setParameters(a, b, c, d, e, f, g, h, i, j);            
-        } catch (AlgebraException ex) {
+
+            if (decomposer.getRank() < 9) {
+                throw new CoincidentPlanesException();
+            }
+
+            // the right null-space of m contains the parameters a, b, c, d, e ,f
+            // of the conic
+            final Matrix v = decomposer.getV();
+
+            final double a = v.getElementAt(0, 9);
+            final double b = v.getElementAt(1, 9);
+            final double c = v.getElementAt(2, 9);
+            final double d = v.getElementAt(3, 9);
+
+            final double f = v.getElementAt(4, 9);
+            final double e = v.getElementAt(5, 9);
+
+            final double g = v.getElementAt(6, 9);
+            final double h = v.getElementAt(7, 9);
+            final double i = v.getElementAt(8, 9);
+            final double j = v.getElementAt(9, 9);
+
+            setParameters(a, b, c, d, e, f, g, h, i, j);
+        } catch (final AlgebraException ex) {
             throw new CoincidentPlanesException(ex);
-        }        
+        }
     }
-    
+
     /**
      * Creates a canonical instance of the dual absolute quadric in the metric
      * stratum.
-     * In an ideal metric stratum, in order to preserve orthogonality, the dual 
-     * absolute quadric is defined as a generate dual quadric (i.e. cannot be 
-     * inverted to obtain a quadric) containing the canonical dual absolute 
+     * In an ideal metric stratum, in order to preserve orthogonality, the dual
+     * absolute quadric is defined as a degenerate dual quadric (i.e. cannot be
+     * inverted to obtain a quadric) containing the canonical dual absolute
      * conic (i.e. the identity) in its top left submatrix
+     *
      * @return a canonical instance of the dual absolute quadric
      */
     public static DualQuadric createCanonicalDualAbsoluteQuadric() {
-        return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+        return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0);
-    }        
+    }
 }

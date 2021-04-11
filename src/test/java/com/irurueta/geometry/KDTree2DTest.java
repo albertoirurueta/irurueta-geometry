@@ -17,7 +17,7 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,68 +34,57 @@ public class KDTree2DTest {
     private static final int MIN_POINTS = 50;
     private static final int MAX_POINTS = 500;
 
-    public KDTree2DTest() { }
-
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-
-    @Before
-    public void setUp() { }
-
-    @After
-    public void tearDown() { }
-
     @Test
     public void testConsructor() {
         KDTree2D tree = null;
 
-        //test empty list
+        // test empty list
         List<Point2D> points = new ArrayList<>();
 
-        //check
+        // check
         try {
             tree = new KDTree2D(points);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(tree);
 
-        //one point list
+        // one point list
         points.add(Point2D.create());
 
-        //check
+        // check
         try {
             tree = new KDTree2D(points);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(tree);
 
-        //two point list
+        // two point list
         points.add(Point2D.create());
 
-        //check
+        // check
         try {
             tree = new KDTree2D(points);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(tree);
 
-        //three point list
+        // three point list
         points.add(Point2D.create());
         tree = new KDTree2D(points);
 
         assertNotNull(tree);
 
-        //random list of points
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        // random list of points
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
         points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
@@ -108,26 +97,27 @@ public class KDTree2DTest {
 
     @Test
     public void testDistance() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        Point2D pi, pj;
+        Point2D pi;
+        Point2D pj;
         for (int i = 0; i < n; i++) {
             pi = points.get(i);
 
             for (int j = 0; j < n; j++) {
 
                 if (i == j) {
-                    //for equal indices distance is BIG
+                    // for equal indices distance is BIG
                     assertEquals(tree.distance(i, j), KDTree.BIG, 0.0);
                 } else {
                     pj = points.get(j);
@@ -139,78 +129,78 @@ public class KDTree2DTest {
 
     @Test
     public void testLocateBoxIndex() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
         for (int i = 0; i < n; i++) {
-            Point2D p = points.get(i);
-            int boxIndex = tree.locateBoxIndex(p);
+            final Point2D p = points.get(i);
+            final int boxIndex = tree.locateBoxIndex(p);
 
             KDTree2D.BoxNode<Point2D> box = tree.mBoxes[boxIndex];
 
-            //point is inside box, so its distance is zero
+            // point is inside box, so its distance is zero
             assertEquals(box.getDistance(p), 0.0, 0.0);
         }
     }
 
     @Test
     public void testLocateBox() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
         for (int i = 0; i < n; i++) {
-            Point2D p = points.get(i);
-            KDTree2D.BoxNode<Point2D> box = tree.locateBox(p);
+            final Point2D p = points.get(i);
+            final KDTree2D.BoxNode<Point2D> box = tree.locateBox(p);
 
-            //point is inside box, so its distance is zero
+            // point is inside box, so its distance is zero
             assertEquals(box.getDistance(p), 0.0, 0.0);
         }
     }
 
     @Test
     public void testNearestIndex() {
-        //test with a point inside the collection
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        // test with a point inside the collection
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
         int bestIndex = 0;
         for (int i = 0; i < n; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
-            //find nearest
+            // find nearest
             bestDist = Double.MAX_VALUE;
             for (int j = 0; j < n; j++) {
-
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
                 dist = pi.distanceTo(pj);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -219,7 +209,7 @@ public class KDTree2DTest {
                 }
             }
 
-            int nearestIndex = tree.nearestIndex(pi);
+            final int nearestIndex = tree.nearestIndex(pi);
 
             assertSame(points.get(nearestIndex), bestP);
             assertEquals(nearestIndex, bestIndex);
@@ -228,31 +218,31 @@ public class KDTree2DTest {
 
     @Test
     public void testNearestIndex2() {
-        //test with a point not contained in the collection
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        // test with a point not contained in the collection
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        InhomogeneousPoint2D p = new InhomogeneousPoint2D(x, y);
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final InhomogeneousPoint2D p = new InhomogeneousPoint2D(x, y);
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
         int bestIndex = 0;
-        //find nearest
+        // find nearest
         bestDist = Double.MAX_VALUE;
         for (int j = 0; j < n; j++) {
-
-            Point2D pj = points.get(j);
+            final Point2D pj = points.get(j);
             dist = p.distanceTo(pj);
             if (dist < bestDist) {
                 bestDist = dist;
@@ -261,7 +251,7 @@ public class KDTree2DTest {
             }
         }
 
-        int nearestIndex = tree.nearestIndex(p);
+        final int nearestIndex = tree.nearestIndex(p);
 
         assertSame(points.get(nearestIndex), bestP);
         assertEquals(nearestIndex, bestIndex);
@@ -269,28 +259,28 @@ public class KDTree2DTest {
 
     @Test
     public void testNearestPoint() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
         for (int i = 0; i < n; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
-            //find nearest
+            // find nearest
             bestDist = Double.MAX_VALUE;
             for (int j = 0; j < n; j++) {
-
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
                 dist = pi.distanceTo(pj);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -298,7 +288,7 @@ public class KDTree2DTest {
                 }
             }
 
-            Point2D nearestPoint = tree.nearestPoint(pi);
+            final Point2D nearestPoint = tree.nearestPoint(pi);
 
             assertSame(nearestPoint, bestP);
         }
@@ -306,29 +296,29 @@ public class KDTree2DTest {
 
     @Test
     public void testNearestPoint2() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        InhomogeneousPoint2D p = new InhomogeneousPoint2D(x, y);
+        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final InhomogeneousPoint2D p = new InhomogeneousPoint2D(x, y);
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
-        //find nearest
+        // find nearest
         bestDist = Double.MAX_VALUE;
         for (int j = 0; j < n; j++) {
-
-            Point2D pj = points.get(j);
+            final Point2D pj = points.get(j);
             dist = p.distanceTo(pj);
             if (dist < bestDist) {
                 bestDist = dist;
@@ -336,41 +326,42 @@ public class KDTree2DTest {
             }
         }
 
-        Point2D nearestPoint = tree.nearestPoint(p);
+        final Point2D nearestPoint = tree.nearestPoint(p);
 
         assertSame(nearestPoint, bestP);
     }
 
     @Test
     public void testNNearest() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
         int bestIndex = 0;
-        int[] nn = new int[1];
-        double[] dn = new double[1];
+        final int[] nn = new int[1];
+        final double[] dn = new double[1];
         for (int i = 0; i < n; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
-            //find nearest
+            // find nearest
             bestDist = Double.MAX_VALUE;
             for (int j = 0; j < n; j++) {
                 if (i == j) {
                     continue;
                 }
 
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
                 dist = pi.distanceTo(pj);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -385,54 +376,57 @@ public class KDTree2DTest {
             assertSame(bestP, points.get(nn[0]));
         }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         try {
             tree.nNearest(0, nn, dn, -1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             tree.nNearest(0, nn, dn, n);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            tree.nNearest(0, nn, dn, n-1);
+            tree.nNearest(0, nn, dn, n - 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testNNearest2() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
-        int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
+        final int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
         double dist;
-        double[] bestDistances = new double[numberNearest];
-        int[] bestIndices = new int[numberNearest];
-        int[] nn = new int[numberNearest];
-        double[] dn = new double[numberNearest];
+        final double[] bestDistances = new double[numberNearest];
+        final int[] bestIndices = new int[numberNearest];
+        final int[] nn = new int[numberNearest];
+        final double[] dn = new double[numberNearest];
         for (int i = 0; i < numberPoints; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
             for (int k = 0; k < numberNearest; k++) {
-                //find nearest
+                // find nearest
                 bestDistances[k] = Double.MAX_VALUE;
                 for (int j = 0; j < numberPoints; j++) {
                     if (i == j) {
                         continue;
                     }
 
-                    Point2D pj = points.get(j);
+                    final Point2D pj = points.get(j);
                     dist = pi.distanceTo(pj);
                     if (dist < bestDistances[k]) {
                         bestDistances[k] = dist;
@@ -443,10 +437,10 @@ public class KDTree2DTest {
 
             tree.nNearest(i, nn, dn, numberNearest);
 
-            //check that result contains all nearest points
+            // check that result contains all nearest points
             for (int k = 0; k < numberNearest; k++) {
                 boolean found = false;
-                for(int m = 0; m < numberNearest; m++) {
+                for (int m = 0; m < numberNearest; m++) {
                     if (bestIndices[k] == nn[m]) {
                         found = true;
                         break;
@@ -460,34 +454,35 @@ public class KDTree2DTest {
 
     @Test
     public void testNNearest3() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
         int bestIndex = 0;
-        int[] nn = new int[1];
-        double[] dn = new double[1];
+        final int[] nn = new int[1];
+        final double[] dn = new double[1];
         for (int i = 0; i < n; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
-            //find nearest
+            // find nearest
             bestDist = Double.MAX_VALUE;
             for (int j = 0; j < n; j++) {
                 if (i == j) {
                     continue;
                 }
 
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
                 dist = pi.distanceTo(pj);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -502,54 +497,57 @@ public class KDTree2DTest {
             assertSame(bestP, points.get(nn[0]));
         }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         try {
             tree.nNearest(points.get(0), nn, dn, -1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             tree.nNearest(points.get(0), nn, dn, n);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            tree.nNearest(points.get(0), nn, dn, n-1);
+            tree.nNearest(points.get(0), nn, dn, n - 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testNNearest4() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
-        int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
+        final int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
         double dist;
-        double[] bestDistances = new double[numberNearest];
-        int[] bestIndices = new int[numberNearest];
-        int[] nn = new int[numberNearest];
-        double[] dn = new double[numberNearest];
+        final double[] bestDistances = new double[numberNearest];
+        final int[] bestIndices = new int[numberNearest];
+        final int[] nn = new int[numberNearest];
+        final double[] dn = new double[numberNearest];
         for (int i = 0; i < numberPoints; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
             for (int k = 0; k < numberNearest; k++) {
-                //find nearest
+                // find nearest
                 bestDistances[k] = Double.MAX_VALUE;
                 for (int j = 0; j < numberPoints; j++) {
                     if (i == j) {
                         continue;
                     }
 
-                    Point2D pj = points.get(j);
+                    final Point2D pj = points.get(j);
                     dist = pi.distanceTo(pj);
                     if (dist < bestDistances[k]) {
                         bestDistances[k] = dist;
@@ -560,10 +558,10 @@ public class KDTree2DTest {
 
             tree.nNearest(pi, nn, dn, numberNearest);
 
-            //check that result contains all nearest points
+            // check that result contains all nearest points
             for (int k = 0; k < numberNearest; k++) {
                 boolean found = false;
-                for(int m = 0; m < numberNearest; m++) {
+                for (int m = 0; m < numberNearest; m++) {
                     if (bestIndices[k] == nn[m]) {
                         found = true;
                         break;
@@ -577,33 +575,34 @@ public class KDTree2DTest {
 
     @Test
     public void testNNearest5() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
-        Point2D[] pn = new Point2D[1];
-        double[] dn = new double[1];
+        final Point2D[] pn = new Point2D[1];
+        final double[] dn = new double[1];
         for (int i = 0; i < n; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
-            //find nearest
+            // find nearest
             bestDist = Double.MAX_VALUE;
             for (int j = 0; j < n; j++) {
                 if (i == j) {
                     continue;
                 }
 
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
                 dist = pi.distanceTo(pj);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -616,54 +615,57 @@ public class KDTree2DTest {
             assertSame(bestP, pn[0]);
         }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         try {
             tree.nNearest(0, pn, dn, -1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             tree.nNearest(0, pn, dn, n);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            tree.nNearest(0, pn, dn, n-1);
+            tree.nNearest(0, pn, dn, n - 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testNNearest6() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
-        int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
+        final int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
         double dist;
-        double[] bestDistances = new double[numberNearest];
-        Point2D[] bestPoints = new Point2D[numberNearest];
-        Point2D[] pn = new Point2D[numberNearest];
-        double[] dn = new double[numberNearest];
+        final double[] bestDistances = new double[numberNearest];
+        final Point2D[] bestPoints = new Point2D[numberNearest];
+        final Point2D[] pn = new Point2D[numberNearest];
+        final double[] dn = new double[numberNearest];
         for (int i = 0; i < numberPoints; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
             for (int k = 0; k < numberNearest; k++) {
-                //find nearest
+                // find nearest
                 bestDistances[k] = Double.MAX_VALUE;
                 for (int j = 0; j < numberPoints; j++) {
                     if (i == j) {
                         continue;
                     }
 
-                    Point2D pj = points.get(j);
+                    final Point2D pj = points.get(j);
                     dist = pi.distanceTo(pj);
                     if (dist < bestDistances[k]) {
                         bestDistances[k] = dist;
@@ -674,10 +676,10 @@ public class KDTree2DTest {
 
             tree.nNearest(i, pn, dn, numberNearest);
 
-            //check that result contains all nearest points
+            // check that result contains all nearest points
             for (int k = 0; k < numberNearest; k++) {
                 boolean found = false;
-                for(int m = 0; m < numberNearest; m++) {
+                for (int m = 0; m < numberNearest; m++) {
                     if (bestPoints[k] == pn[m]) {
                         found = true;
                         break;
@@ -691,33 +693,34 @@ public class KDTree2DTest {
 
     @Test
     public void testNNearest7() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int n = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         Point2D bestP = null;
-        Point2D[] pn = new Point2D[1];
-        double[] dn = new double[1];
+        final Point2D[] pn = new Point2D[1];
+        final double[] dn = new double[1];
         for (int i = 0; i < n; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
-            //find nearest
+            // find nearest
             bestDist = Double.MAX_VALUE;
             for (int j = 0; j < n; j++) {
                 if (i == j) {
                     continue;
                 }
 
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
                 dist = pi.distanceTo(pj);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -730,54 +733,57 @@ public class KDTree2DTest {
             assertSame(bestP, pn[0]);
         }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         try {
             tree.nNearest(points.get(0), pn, dn, -1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             tree.nNearest(points.get(0), pn, dn, n);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            tree.nNearest(points.get(0), pn, dn, n-1);
+            tree.nNearest(points.get(0), pn, dn, n - 1);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testNNearest8() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
-        int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
+        final int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
         }
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
         double dist;
-        double[] bestDistances = new double[numberNearest];
-        Point2D[] bestPoints = new Point2D[numberNearest];
-        Point2D[] pn = new Point2D[numberNearest];
-        double[] dn = new double[numberNearest];
+        final double[] bestDistances = new double[numberNearest];
+        final Point2D[] bestPoints = new Point2D[numberNearest];
+        final Point2D[] pn = new Point2D[numberNearest];
+        final double[] dn = new double[numberNearest];
         for (int i = 0; i < numberPoints; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
             for (int k = 0; k < numberNearest; k++) {
-                //find nearest
+                // find nearest
                 bestDistances[k] = Double.MAX_VALUE;
                 for (int j = 0; j < numberPoints; j++) {
                     if (i == j) {
                         continue;
                     }
 
-                    Point2D pj = points.get(j);
+                    final Point2D pj = points.get(j);
                     dist = pi.distanceTo(pj);
                     if (dist < bestDistances[k]) {
                         bestDistances[k] = dist;
@@ -788,10 +794,10 @@ public class KDTree2DTest {
 
             tree.nNearest(pi, pn, dn, numberNearest);
 
-            //check that result contains all nearest points
+            // check that result contains all nearest points
             for (int k = 0; k < numberNearest; k++) {
                 boolean found = false;
-                for(int m = 0; m < numberNearest; m++) {
+                for (int m = 0; m < numberNearest; m++) {
                     if (bestPoints[k] == pn[m]) {
                         found = true;
                         break;
@@ -805,17 +811,17 @@ public class KDTree2DTest {
 
     @Test
     public void testLocateNear() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double maxY = -Double.MAX_VALUE;
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
 
             if (x < minX) {
@@ -832,74 +838,77 @@ public class KDTree2DTest {
             }
         }
 
-        Point2D lo = new InhomogeneousPoint2D(minX, minY);
-        Point2D hi = new InhomogeneousPoint2D(maxX, maxY);
-        double maxDist = lo.distanceTo(hi);
+        final Point2D lo = new InhomogeneousPoint2D(minX, minY);
+        final Point2D hi = new InhomogeneousPoint2D(maxX, maxY);
+        final double maxDist = lo.distanceTo(hi);
 
-        double r = maxDist * randomizer.nextDouble(0.25, 0.5);
+        final double r = maxDist * randomizer.nextDouble(0.25, 0.5);
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        List<Point2D> expected = new ArrayList<>();
+        final List<Point2D> expected = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
             expected.clear();
 
             for (int j = 0; j < numberPoints; j++) {
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
 
                 if (pi.distanceTo(pj) <= r) {
                     expected.add(pj);
                 }
             }
 
-            int numExpected = expected.size();
-            int[] list = new int[numExpected];
-            int result = tree.locateNear(pi, r, list, numExpected);
+            final int numExpected = expected.size();
+            final int[] list = new int[numExpected];
+            final int result = tree.locateNear(pi, r, list, numExpected);
 
-            //check
+            // check
             assertEquals(result, numExpected);
 
             for (int j = 0; j < numExpected; j++) {
-                Point2D pj = points.get(list[j]);
+                final Point2D pj = points.get(list[j]);
 
                 assertTrue(expected.contains(pj));
                 assertTrue(pj.distanceTo(pi) <= r);
             }
         }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         int[] list = new int[numberPoints];
         try {
             tree.locateNear(points.get(0), -1.0, list, numberPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             tree.locateNear(points.get(0), 1.0, list, 0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
 
         list = new int[numberPoints - 1];
         try {
             tree.locateNear(points.get(0), 1.0, list, numberPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testLocateNear2() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double maxY = -Double.MAX_VALUE;
-        List<Point2D> points = new ArrayList<>();
+        final List<Point2D> points = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             points.add(new InhomogeneousPoint2D(x, y));
 
             if (x < minX) {
@@ -916,75 +925,78 @@ public class KDTree2DTest {
             }
         }
 
-        Point2D lo = new InhomogeneousPoint2D(minX, minY);
-        Point2D hi = new InhomogeneousPoint2D(maxX, maxY);
-        double maxDist = lo.distanceTo(hi);
+        final Point2D lo = new InhomogeneousPoint2D(minX, minY);
+        final Point2D hi = new InhomogeneousPoint2D(maxX, maxY);
+        final double maxDist = lo.distanceTo(hi);
 
-        double r = maxDist * randomizer.nextDouble(0.25, 0.5);
+        final double r = maxDist * randomizer.nextDouble(0.25, 0.5);
 
-        KDTree2D tree = new KDTree2D(points);
+        final KDTree2D tree = new KDTree2D(points);
 
-        List<Point2D> expected = new ArrayList<>();
+        final List<Point2D> expected = new ArrayList<>();
         for (int i = 0; i < numberPoints; i++) {
-            Point2D pi = points.get(i);
+            final Point2D pi = points.get(i);
 
             expected.clear();
 
             for (int j = 0; j < numberPoints; j++) {
-                Point2D pj = points.get(j);
+                final Point2D pj = points.get(j);
 
                 if (pi.distanceTo(pj) <= r) {
                     expected.add(pj);
                 }
             }
 
-            int numExpected = expected.size();
-            Point2D[] plist = new Point2D[numExpected];
-            int result = tree.locateNear(pi, r, plist, numExpected);
+            final int numExpected = expected.size();
+            final Point2D[] plist = new Point2D[numExpected];
+            final int result = tree.locateNear(pi, r, plist, numExpected);
 
-            //check
+            // check
             assertEquals(result, numExpected);
 
             for (int j = 0; j < numExpected; j++) {
-                Point2D pj = plist[j];
+                final Point2D pj = plist[j];
 
                 assertTrue(expected.contains(pj));
                 assertTrue(pj.distanceTo(pi) <= r);
             }
         }
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         Point2D[] plist = new Point2D[numberPoints];
         try {
             tree.locateNear(points.get(0), -1.0, plist, numberPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             tree.locateNear(points.get(0), 1.0, plist, 0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
 
         plist = new Point2D[numberPoints - 1];
         try {
             tree.locateNear(points.get(0), 1.0, plist, numberPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testBoxNode() {
 
-        Point2D lo = Point2D.create();
-        Point2D hi = Point2D.create();
-        int mom = 1;
-        int d1 = 2;
-        int d2 = 3;
-        int ptLo = 4;
-        int ptHi = 5;
+        final Point2D lo = Point2D.create();
+        final Point2D hi = Point2D.create();
+        final int mom = 1;
+        final int d1 = 2;
+        final int d2 = 3;
+        final int ptLo = 4;
+        final int ptHi = 5;
 
         KDTree.BoxNode<Point2D> node = new KDTree.BoxNode<>(lo, hi, mom, d1, d2, ptLo, ptHi);
 
-        //check
+        // check
         assertSame(node.getLo(), lo);
         assertSame(node.getHi(), hi);
         assertEquals(node.getMom(), mom);
@@ -993,18 +1005,21 @@ public class KDTree2DTest {
         assertEquals(node.getPtLo(), ptLo);
         assertEquals(node.getPtHi(), ptHi);
 
-        //Force IllegalArgumentException
+        // Force IllegalArgumentException
         try {
             node.setLo(hi);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             node.setHi(lo);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             node.setBounds(hi, lo);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 }

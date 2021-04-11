@@ -17,7 +17,7 @@ package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,26 +25,12 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
-    
-    public LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
     public void testCreate() {
         LineCorrespondenceProjectiveTransformation2DRobustEstimator estimator;
-        
-        //create with robust estimator method
+
+        // create with robust estimator method
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -58,11 +44,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -73,8 +59,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -88,8 +74,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -103,34 +89,34 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
-        assertFalse(estimator.isReady());  
+        assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //create with lines and method
-        List<Line2D> inputLines = new ArrayList<>();
-        List<Line2D> outputLines = new ArrayList<>();
+        assertNull(estimator.getCovariance());
+
+        // create with lines and method
+        final List<Line2D> inputLines = new ArrayList<>();
+        final List<Line2D> outputLines = new ArrayList<>();
         for (int i = 0; i < LineCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
         }
-        
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -141,11 +127,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -156,11 +142,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -171,11 +157,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -186,11 +172,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
@@ -201,48 +187,57 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
-        List<Line2D> emptyLines = new ArrayList<>();
-        
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
+        final List<Line2D> emptyLines = new ArrayList<>();
+
         estimator = null;
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                    create(emptyLines, outputLines, 
-                    RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+                    create(emptyLines, outputLines,
+                            RobustEstimatorMethod.LMedS);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                    create(inputLines, emptyLines, 
-                    RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+                    create(inputLines, emptyLines,
+                            RobustEstimatorMethod.LMedS);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //create with listener and method
-        ProjectiveTransformation2DRobustEstimatorListener listener =
+
+        // create with listener and method
+        final ProjectiveTransformation2DRobustEstimatorListener listener =
                 new ProjectiveTransformation2DRobustEstimatorListener() {
 
-            @Override
-            public void onEstimateStart(ProjectiveTransformation2DRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateStart(final ProjectiveTransformation2DRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateEnd(ProjectiveTransformation2DRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateEnd(final ProjectiveTransformation2DRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateNextIteration(ProjectiveTransformation2DRobustEstimator estimator, int iteration) { }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final ProjectiveTransformation2DRobustEstimator estimator,
+                            final int iteration) {
+                    }
 
-            @Override
-            public void onEstimateProgressChange(ProjectiveTransformation2DRobustEstimator estimator,
-                                                 float progress) { }
-        };
-        
-        
+                    @Override
+                    public void onEstimateProgressChange(
+                            final ProjectiveTransformation2DRobustEstimator estimator,
+                            final float progress) {
+                    }
+                };
+
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -253,11 +248,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -268,11 +263,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -283,11 +278,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -298,11 +293,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
@@ -313,12 +308,12 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and points
+        assertNull(estimator.getCovariance());
+
+        // test with listener and points
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, 
-                RobustEstimatorMethod.RANSAC);
+                create(listener, inputLines, outputLines,
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -330,11 +325,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, 
-                RobustEstimatorMethod.LMedS);
+                create(listener, inputLines, outputLines,
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -346,11 +341,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, 
-                RobustEstimatorMethod.MSAC);
+                create(listener, inputLines, outputLines,
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -362,11 +357,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, 
-                RobustEstimatorMethod.PROSAC);
+                create(listener, inputLines, outputLines,
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -378,11 +373,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, 
-                RobustEstimatorMethod.PROMedS);
+                create(listener, inputLines, outputLines,
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -394,13 +389,13 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with quality scores and method
-        double[] qualityScores = new double[
+        assertNull(estimator.getCovariance());
+
+        // test with quality scores and method
+        final double[] qualityScores = new double[
                 LineCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE];
-        double[] wrongQualityScores = new double[1];
-        
+        final double[] wrongQualityScores = new double[1];
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -414,8 +409,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -429,7 +424,7 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
 
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.MSAC);
@@ -444,8 +439,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -459,8 +454,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores, RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -474,12 +469,12 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points, quality scores and method
+        assertNull(estimator.getCovariance());
+
+        // test with points, quality scores and method
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores, 
-                RobustEstimatorMethod.RANSAC);
+                create(inputLines, outputLines, qualityScores,
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -491,11 +486,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores, 
-                RobustEstimatorMethod.LMedS);
+                create(inputLines, outputLines, qualityScores,
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -507,11 +502,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores, 
-                RobustEstimatorMethod.MSAC);
+                create(inputLines, outputLines, qualityScores,
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -523,11 +518,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores, 
-                RobustEstimatorMethod.PROSAC);
+                create(inputLines, outputLines, qualityScores,
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -539,11 +534,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores, 
-                RobustEstimatorMethod.PROMedS);
+                create(inputLines, outputLines, qualityScores,
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -555,31 +550,34 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(emptyLines, outputLines, qualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(emptyLines, outputLines, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, emptyLines, qualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(inputLines, emptyLines, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, wrongQualityScores, 
-                RobustEstimatorMethod.PROMedS);            
+                    create(inputLines, outputLines, wrongQualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener, quality scores and method
+
+        // test with listener, quality scores and method
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
@@ -593,8 +591,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -608,8 +606,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -623,8 +621,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
@@ -638,8 +636,8 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores, RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -653,12 +651,12 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener, points, quality scores and method
+        assertNull(estimator.getCovariance());
+
+        // test with listener, points, quality scores and method
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, qualityScores,
-                RobustEstimatorMethod.RANSAC);
+                        RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -670,11 +668,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                        RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
                 LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -686,11 +684,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, qualityScores,
-                RobustEstimatorMethod.MSAC);
+                        RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -702,11 +700,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, qualityScores,
-                RobustEstimatorMethod.PROSAC);
+                        RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -718,11 +716,11 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
+        assertNull(estimator.getCovariance());
+
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                        RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
                 PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
@@ -734,31 +732,34 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, emptyLines, outputLines, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, emptyLines, outputLines, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, emptyLines, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, inputLines, emptyLines, qualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, wrongQualityScores,
-                RobustEstimatorMethod.PROMedS);
+                    create(listener, inputLines, outputLines, wrongQualityScores,
+                            RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test no arguments
+
+        // test no arguments
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create();
         assertTrue(estimator instanceof
@@ -772,13 +773,13 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points
+        assertNull(estimator.getCovariance());
+
+        // test with points
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
         assertFalse(estimator.isReady());
@@ -788,27 +789,29 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(emptyLines, outputLines);
+                    create(emptyLines, outputLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, emptyLines);
+                    create(inputLines, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener
+
+        // test with listener
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
@@ -818,13 +821,13 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and points
+        assertNull(estimator.getCovariance());
+
+        // test with listener and points
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
         assertFalse(estimator.isReady());
@@ -834,27 +837,29 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //Force IllegalArgumentException
+        assertNull(estimator.getCovariance());
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, emptyLines, outputLines);
+                    create(listener, emptyLines, outputLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, emptyLines);
+                    create(listener, inputLines, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with quality scores
+
+        // test with quality scores
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(qualityScores);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
@@ -864,13 +869,13 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with points and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with points and quality scores
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
         assertTrue(estimator.isReady());
@@ -880,13 +885,13 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with listener and quality scores
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
@@ -896,13 +901,13 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
-        
-        //test with listener, points and quality scores
+        assertNull(estimator.getCovariance());
+
+        // test with listener, points and quality scores
         estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, qualityScores);
         assertTrue(estimator instanceof
-                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);        
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator);
         assertSame(estimator.getInputLines(), inputLines);
         assertSame(estimator.getOutputLines(), outputLines);
         assertTrue(estimator.isReady());
@@ -912,6 +917,6 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertEquals(estimator.isResultRefined(),
                 ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(estimator.isCovarianceKept());
-        assertNull(estimator.getCovariance());        
+        assertNull(estimator.getCovariance());
     }
 }

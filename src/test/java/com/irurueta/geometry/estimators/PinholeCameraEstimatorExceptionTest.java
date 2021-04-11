@@ -15,26 +15,12 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
 public class PinholeCameraEstimatorExceptionTest {
-    
-    public PinholeCameraEstimatorExceptionTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testConstructor() {
         PinholeCameraEstimatorException ex = new PinholeCameraEstimatorException();
@@ -42,7 +28,7 @@ public class PinholeCameraEstimatorExceptionTest {
 
         ex = new PinholeCameraEstimatorException("message");
         assertNotNull(ex);
-        
+
         ex = new PinholeCameraEstimatorException(
                 new Exception());
         assertNotNull(ex);

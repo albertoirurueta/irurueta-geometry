@@ -24,7 +24,7 @@ import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -33,66 +33,52 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class EuclideanTransformation2DRefinerTest implements 
+public class EuclideanTransformation2DRefinerTest implements
         RefinerListener<EuclideanTransformation2D> {
-    
+
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
-    
+
     private static final double MIN_RANDOM_DEGREES = -180.0;
     private static final double MAX_RANDOM_DEGREES = 180.0;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-6;
-    
+
     private static final int MIN_POINTS = 50;
     private static final int MAX_POINTS = 100;
-    
+
     private static final int PERCENTAGE_OUTLIER = 20;
-    
+
     private static final double STD_ERROR = 100.0;
     private static final double THRESHOLD = 1e-6;
-    
+
     private static final int TIMES = 100;
-    
+
     private int mRefineStart;
     private int mRefineEnd;
-    
-    public EuclideanTransformation2DRefinerTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException, 
+    public void testConstructor() throws AlgebraException, LockedException,
             NotReadyException, RobustEstimatorException {
-        RANSACEuclideanTransformation2DRobustEstimator estimator = 
+        final RANSACEuclideanTransformation2DRobustEstimator estimator =
                 createRobustEstimator();
-        EuclideanTransformation2D transformation = estimator.estimate();
-        InliersData inliersData = estimator.getInliersData();
-        BitSet inliers = inliersData.getInliers();
-        double[] residuals = inliersData.getResiduals();
-        int numInliers = inliersData.getNumInliers();
-        double refinementStandardDeviation = estimator.getThreshold();
-        List<Point2D> samples1 = estimator.getInputPoints();
-        List<Point2D> samples2 = estimator.getOutputPoints();
-        
+        final EuclideanTransformation2D transformation = estimator.estimate();
+        final InliersData inliersData = estimator.getInliersData();
+        final BitSet inliers = inliersData.getInliers();
+        final double[] residuals = inliersData.getResiduals();
+        final int numInliers = inliersData.getNumInliers();
+        final double refinementStandardDeviation = estimator.getThreshold();
+        final List<Point2D> samples1 = estimator.getInputPoints();
+        final List<Point2D> samples2 = estimator.getOutputPoints();
+
         assertNotNull(transformation);
         assertNotNull(inliersData);
-        
-        //test empty constructor
-        EuclideanTransformation2DRefiner refiner = 
+
+        // test empty constructor
+        EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
-        
-        //check default values
+
+        // check default values
         assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
         assertNull(refiner.getSamples1());
         assertNull(refiner.getSamples2());
@@ -106,13 +92,13 @@ public class EuclideanTransformation2DRefinerTest implements
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
 
-        //test non-empty constructor
+        // test non-empty constructor
         refiner = new EuclideanTransformation2DRefiner(
-                transformation, true, inliers, residuals, numInliers, samples1, 
+                transformation, true, inliers, residuals, numInliers, samples1,
                 samples2, refinementStandardDeviation);
 
-        //check default values
-        assertEquals(refiner.getRefinementStandardDeviation(), 
+        // check default values
+        assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
         assertSame(refiner.getSamples1(), samples1);
         assertSame(refiner.getSamples2(), samples2);
@@ -125,14 +111,14 @@ public class EuclideanTransformation2DRefinerTest implements
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
-        assertNull(refiner.getListener());        
-        
+        assertNull(refiner.getListener());
+
         refiner = new EuclideanTransformation2DRefiner(
-                transformation, true, inliersData, samples1, samples2, 
+                transformation, true, inliersData, samples1, samples2,
                 refinementStandardDeviation);
 
-        //check default values
-        assertEquals(refiner.getRefinementStandardDeviation(), 
+        // check default values
+        assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
         assertSame(refiner.getSamples1(), samples1);
         assertSame(refiner.getSamples2(), samples2);
@@ -145,229 +131,230 @@ public class EuclideanTransformation2DRefinerTest implements
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
-        assertNull(refiner.getListener());                
+        assertNull(refiner.getListener());
     }
-    
+
     @Test
     public void testGetSetListener() {
-        EuclideanTransformation2DRefiner refiner = 
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default value
+        // check default value
         assertNull(refiner.getListener());
-        
-        //set new value
+
+        // set new value
         refiner.setListener(this);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getListener(), this);
     }
-    
+
     @Test
     public void testGetSetRefinementStandardDeviation() throws LockedException {
-        EuclideanTransformation2DRefiner refiner = 
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default value
+        // check default value
         assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
-        
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double refinementStandardDeviation = randomizer.nextDouble(
+
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double refinementStandardDeviation = randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
-        
-        //check correctness
-        assertEquals(refiner.getRefinementStandardDeviation(), 
-                refinementStandardDeviation, 0.0);        
+
+        // check correctness
+        assertEquals(refiner.getRefinementStandardDeviation(),
+                refinementStandardDeviation, 0.0);
     }
-    
+
     @Test
     public void testGetSetSamples1() throws LockedException {
-        EuclideanTransformation2DRefiner refiner = 
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
-        
-        //check default value
+
+        // check default value
         assertNull(refiner.getSamples1());
-        
-        //set new value
-        List<Point2D> samples1 = new ArrayList<>();
+
+        // set new value
+        final List<Point2D> samples1 = new ArrayList<>();
         refiner.setSamples1(samples1);
-        
-        //check correctness
-        assertSame(refiner.getSamples1(), samples1);        
+
+        // check correctness
+        assertSame(refiner.getSamples1(), samples1);
     }
-    
+
     @Test
     public void testGetSetSamples2() throws LockedException {
-        EuclideanTransformation2DRefiner refiner = 
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
-        
-        //check default value
+
+        // check default value
         assertNull(refiner.getSamples2());
-        
-        //set new value
-        List<Point2D> samples2 = new ArrayList<>();
+
+        // set new value
+        final List<Point2D> samples2 = new ArrayList<>();
         refiner.setSamples2(samples2);
-        
-        //check correctness
-        assertSame(refiner.getSamples2(), samples2);        
+
+        // check correctness
+        assertSame(refiner.getSamples2(), samples2);
     }
-    
+
     @Test
     public void testGetSetInliers() throws LockedException,
             NotReadyException, RobustEstimatorException {
-        RANSACEuclideanTransformation2DRobustEstimator estimator = 
+        final RANSACEuclideanTransformation2DRobustEstimator estimator =
                 createRobustEstimator();
-        
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        BitSet inliers = inliersData.getInliers();        
-        
-        EuclideanTransformation2DRefiner refiner = 
+        final InliersData inliersData = estimator.getInliersData();
+        final BitSet inliers = inliersData.getInliers();
+
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default value
+        // check default value
         assertNull(refiner.getInliers());
-        
-        //set new value
+
+        // set new value
         refiner.setInliers(inliers);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getInliers(), inliers);
     }
-    
+
     @Test
     public void testGetSetResiduals() throws LockedException,
             NotReadyException, RobustEstimatorException {
-        RANSACEuclideanTransformation2DRobustEstimator estimator = 
+        final RANSACEuclideanTransformation2DRobustEstimator estimator =
                 createRobustEstimator();
-        
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        double[] residuals = inliersData.getResiduals();
-        
-        EuclideanTransformation2DRefiner refiner = 
+        final InliersData inliersData = estimator.getInliersData();
+        final double[] residuals = inliersData.getResiduals();
+
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default value
+        // check default value
         assertNull(refiner.getResiduals());
-        
-        //set new value
+
+        // set new value
         refiner.setResiduals(residuals);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getResiduals(), residuals);
     }
-    
+
     @Test
     public void testGetSetNumInliers() throws LockedException,
             NotReadyException, RobustEstimatorException {
-        RANSACEuclideanTransformation2DRobustEstimator estimator = 
+        final RANSACEuclideanTransformation2DRobustEstimator estimator =
                 createRobustEstimator();
-        
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        int numInliers = inliersData.getNumInliers();
-        
-        EuclideanTransformation2DRefiner refiner = 
+        final InliersData inliersData = estimator.getInliersData();
+        final int numInliers = inliersData.getNumInliers();
+
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default value
+        // check default value
         assertEquals(refiner.getNumInliers(), 0);
-        
-        //set new value
+
+        // set new value
         refiner.setNumInliers(numInliers);
-        
-        //check correctness
+
+        // check correctness
         assertEquals(refiner.getNumInliers(), numInliers);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             refiner.setNumInliers(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
-    
+
     @Test
     public void testSetInliersData() throws LockedException,
             NotReadyException, RobustEstimatorException {
-        RANSACEuclideanTransformation2DRobustEstimator estimator = 
+        final RANSACEuclideanTransformation2DRobustEstimator estimator =
                 createRobustEstimator();
-        
+
         assertNotNull(estimator.estimate());
-        InliersData inliersData = estimator.getInliersData();
-        
-        EuclideanTransformation2DRefiner refiner = 
+        final InliersData inliersData = estimator.getInliersData();
+
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default values
+        // check default values
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
         assertEquals(refiner.getNumInliers(), 0);
-        
-        //set new value
+
+        // set new value
         refiner.setInliersData(inliersData);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getInliers(), inliersData.getInliers());
         assertSame(refiner.getResiduals(), inliersData.getResiduals());
         assertEquals(refiner.getNumInliers(), inliersData.getNumInliers());
     }
-    
+
     @Test
     public void testGetSetInitialEstimation() throws LockedException {
-        EuclideanTransformation2DRefiner refiner = 
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default values
+        // check default values
         assertNull(refiner.getInitialEstimation());
-        
-        //set new value
-        EuclideanTransformation2D transformation = 
+
+        // set new value
+        final EuclideanTransformation2D transformation =
                 new EuclideanTransformation2D();
         refiner.setInitialEstimation(transformation);
-        
-        //check correctness
+
+        // check correctness
         assertSame(refiner.getInitialEstimation(), transformation);
     }
-    
+
     @Test
     public void testIsSetCovarianceKept() throws LockedException {
-        EuclideanTransformation2DRefiner refiner = 
+        final EuclideanTransformation2DRefiner refiner =
                 new EuclideanTransformation2DRefiner();
 
-        //check default values
+        // check default values
         assertFalse(refiner.isCovarianceKept());
-        
-        //set new value
+
+        // set new value
         refiner.setCovarianceKept(true);
-        
-        //check correctness
+
+        // check correctness
         assertTrue(refiner.isCovarianceKept());
     }
-    
+
     @Test
     public void testRefine() throws LockedException, NotReadyException,
             RobustEstimatorException, RefinerException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            RANSACEuclideanTransformation2DRobustEstimator estimator = 
+            final RANSACEuclideanTransformation2DRobustEstimator estimator =
                     createRobustEstimator();
-            
-            EuclideanTransformation2D transformation = estimator.estimate();
-            InliersData inliersData = estimator.getInliersData();
-            double refineStandardDeviation = estimator.getThreshold();
-            List<Point2D> samples1 = estimator.getInputPoints();
-            List<Point2D> samples2 = estimator.getOutputPoints();
-            
-            EuclideanTransformation2DRefiner refiner = 
+
+            final EuclideanTransformation2D transformation = estimator.estimate();
+            final InliersData inliersData = estimator.getInliersData();
+            final double refineStandardDeviation = estimator.getThreshold();
+            final List<Point2D> samples1 = estimator.getInputPoints();
+            final List<Point2D> samples2 = estimator.getOutputPoints();
+
+            final EuclideanTransformation2DRefiner refiner =
                     new EuclideanTransformation2DRefiner(transformation, true,
-                    inliersData, samples1, samples2, refineStandardDeviation);
+                            inliersData, samples1, samples2, refineStandardDeviation);
             refiner.setListener(this);
-            
-            EuclideanTransformation2D result1 = new EuclideanTransformation2D();
-            
+
+            final EuclideanTransformation2D result1 = new EuclideanTransformation2D();
+
             reset();
             assertEquals(mRefineStart, 0);
             assertEquals(mRefineEnd, 0);
@@ -379,158 +366,166 @@ public class EuclideanTransformation2DRefinerTest implements
             } catch (Exception e) {
                 continue;
             }
-            
-            EuclideanTransformation2D result2 = refiner.refine();
-            
+
+            final EuclideanTransformation2D result2 = refiner.refine();
+
             assertEquals(mRefineStart, 2);
             assertEquals(mRefineEnd, 2);
-            
-            assertTrue(result1.asMatrix().equals(result2.asMatrix(), 
+
+            assertTrue(result1.asMatrix().equals(result2.asMatrix(),
                     ABSOLUTE_ERROR));
-            
+
             numValid++;
-            
-            if (numValid > 0) {
-                break;
-            }            
+            break;
         }
-        
+
         assertTrue(numValid > 0);
     }
-    
-    private RANSACEuclideanTransformation2DRobustEstimator 
-            createRobustEstimator() throws LockedException {
-            
-        EuclideanTransformation2D transformation = createTransformation();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        
-        List<Point2D> inputPoints = new ArrayList<>();
-        List<Point2D> outputPointsWithError = new ArrayList<>();
-        Point2D inputPoint, outputPoint, outputPointWithError;
-        GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+
+    private RANSACEuclideanTransformation2DRobustEstimator createRobustEstimator()
+            throws LockedException {
+
+        final EuclideanTransformation2D transformation = createTransformation();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+
+        final List<Point2D> inputPoints = new ArrayList<>();
+        final List<Point2D> outputPointsWithError = new ArrayList<>();
+        Point2D inputPoint;
+        Point2D outputPoint;
+        Point2D outputPointWithError;
+        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, STD_ERROR);
         for (int i = 0; i < nPoints; i++) {
-            //generate input point
+            // generate input point
             inputPoint = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             outputPoint = transformation.transformAndReturnNew(inputPoint);
-            
+
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                //point is outlier
-                double errorX = errorRandomizer.nextDouble();
-                double errorY = errorRandomizer.nextDouble();
+                // point is outlier
+                final double errorX = errorRandomizer.nextDouble();
+                final double errorY = errorRandomizer.nextDouble();
                 outputPointWithError = new InhomogeneousPoint2D(
                         outputPoint.getInhomX() + errorX,
                         outputPoint.getInhomY() + errorY);
             } else {
-                //inlier point (without error)
+                // inlier point (without error)
                 outputPointWithError = outputPoint;
             }
-            
+
             inputPoints.add(inputPoint);
             outputPointsWithError.add(outputPointWithError);
         }
-        
-        RANSACEuclideanTransformation2DRobustEstimator estimator =
+
+        final RANSACEuclideanTransformation2DRobustEstimator estimator =
                 new RANSACEuclideanTransformation2DRobustEstimator(inputPoints,
-                outputPointsWithError);
-        
+                        outputPointsWithError);
+
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
         estimator.setComputeAndKeepResidualsEnabled(true);
         estimator.setResultRefined(false);
         estimator.setCovarianceKept(false);
-        
+
         return estimator;
     }
-    
+
     private EuclideanTransformation2D createTransformation() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        Rotation2D rotation = new Rotation2D(randomizer.nextDouble(
-                Utils.convertToRadians(MIN_RANDOM_DEGREES), 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final Rotation2D rotation = new Rotation2D(randomizer.nextDouble(
+                Utils.convertToRadians(MIN_RANDOM_DEGREES),
                 Utils.convertToRadians(MAX_RANDOM_DEGREES)));
-        double[] translation = new double[
+        final double[] translation = new double[
                 EuclideanTransformation2D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
+
         return new EuclideanTransformation2D(rotation, translation);
     }
 
     private void reset() {
         mRefineStart = mRefineEnd = 0;
     }
-    
+
     @Override
-    public void onRefineStart(Refiner<EuclideanTransformation2D> refiner, 
-            EuclideanTransformation2D initialEstimation) {
+    public void onRefineStart(final Refiner<EuclideanTransformation2D> refiner,
+                              final EuclideanTransformation2D initialEstimation) {
         mRefineStart++;
-        checkLocked((EuclideanTransformation2DRefiner)refiner);
+        checkLocked((EuclideanTransformation2DRefiner) refiner);
     }
 
     @Override
-    public void onRefineEnd(Refiner<EuclideanTransformation2D> refiner, 
-            EuclideanTransformation2D initialEstimation, 
-            EuclideanTransformation2D result, boolean errorDecreased) {
+    public void onRefineEnd(final Refiner<EuclideanTransformation2D> refiner,
+                            final EuclideanTransformation2D initialEstimation,
+                            final EuclideanTransformation2D result, boolean errorDecreased) {
         mRefineEnd++;
-        checkLocked((EuclideanTransformation2DRefiner)refiner);
+        checkLocked((EuclideanTransformation2DRefiner) refiner);
     }
-    
-    private void checkLocked(EuclideanTransformation2DRefiner refiner) {
+
+    private void checkLocked(final EuclideanTransformation2DRefiner refiner) {
         assertTrue(refiner.isLocked());
         try {
             refiner.setInitialEstimation(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.refine(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) {
-        } catch (Exception e) {
+        } catch (final LockedException ignore) {
+        } catch (final Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.refine();
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) {
-        } catch (Exception e) {
+        } catch (final LockedException ignore) {
+        } catch (final Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.setInliers(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setResiduals(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setNumInliers(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setInliersData(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setSamples1(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setSamples2(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
         try {
             refiner.setRefinementStandardDeviation(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException ignore) { }
+        } catch (final LockedException ignore) {
+        }
     }
 }

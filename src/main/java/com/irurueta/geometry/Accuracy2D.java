@@ -23,7 +23,6 @@ import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
  * Contains methods to convert covariance matrices into ellipses representing accuracy
  * with requested confidence.
  */
-@SuppressWarnings("WeakerAccess")
 public class Accuracy2D extends Accuracy {
 
     /**
@@ -35,44 +34,48 @@ public class Accuracy2D extends Accuracy {
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be 2x2 and positive
      *                         definite.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to an ellipse).
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to an ellipse).
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy2D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+    public Accuracy2D(final Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix);
     }
 
     /**
      * Constructor.
+     *
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy2D(double confidence) {
+    public Accuracy2D(final double confidence) {
         super(confidence);
     }
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be 2x2 and positive
      *                         definite.
-     * @param confidence confidence of provided accuracy of an estimated position.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to an ellipse, or if provided
-     * confidence value is not within 0 and 1.
+     * @param confidence       confidence of provided accuracy of an estimated position.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to an ellipse, or if provided
+     *                                                     confidence value is not within 0 and 1.
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy2D(Matrix covarianceMatrix, double confidence)
+    public Accuracy2D(final Matrix covarianceMatrix, final double confidence)
             throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix, confidence);
     }
 
     /**
      * Gets number of dimensions.
+     *
      * @return always returns 2.
      */
     @Override
@@ -83,15 +86,16 @@ public class Accuracy2D extends Accuracy {
     /**
      * Converts provided covariance matrix into a 2D ellipse taking into account current
      * confidence and standard deviation factor.
+     *
      * @return ellipse representing accuracy of covariance matrix with current confidence and
      * standard deviation factor.
-     * @throws NullPointerException if covariance matrix has not been provided yet.
+     * @throws NullPointerException           if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
     public Ellipse toEllipse() throws InvalidRotationMatrixException {
-        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
+        final double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
                 mSqrtSingularValues, mStandardDeviationFactor);
-        Rotation2D rotation = new Rotation2D(mU);
+        final Rotation2D rotation = new Rotation2D(mU);
         return new Ellipse(Point2D.create(), semiAxesLengths[0], semiAxesLengths[1], rotation);
     }
 }

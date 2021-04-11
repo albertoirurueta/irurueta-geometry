@@ -26,29 +26,15 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
-    
-    public DLTPointCorrespondencePinholeCameraRobustEstimatorTest() { }
-    
-    @BeforeClass
-    public static void setUpClass() { }
-    
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
+
     @Test
     public void testCreate() {
         DLTPointCorrespondencePinholeCameraRobustEstimator estimator;
-        
-        //create with robust estimator method
+
+        // create with robust estimator method
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -56,18 +42,18 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 RobustEstimatorMethod.LMedS);
         assertTrue(estimator instanceof
@@ -78,18 +64,18 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);        
-        
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
@@ -100,17 +86,17 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);        
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 RobustEstimatorMethod.PROSAC);
@@ -122,18 +108,18 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);        
-     
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 RobustEstimatorMethod.PROMedS);
         assertTrue(estimator instanceof
@@ -144,29 +130,29 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //create with robust estimator method and points
-        List<Point3D> points3D = new ArrayList<>();
-        List<Point2D> points2D = new ArrayList<>();
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // create with robust estimator method and points
+        final List<Point3D> points3D = new ArrayList<>();
+        final List<Point2D> points2D = new ArrayList<>();
         for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
         }
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -174,21 +160,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -196,21 +182,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -218,21 +204,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -240,21 +226,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -262,56 +248,64 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //Force IllegalArgumentException
-        List<Point3D> empty3D = new ArrayList<>();
-        List<Point2D> empty2D = new ArrayList<>();
+
+        // Force IllegalArgumentException
+        final List<Point3D> empty3D = new ArrayList<>();
+        final List<Point2D> empty2D = new ArrayList<>();
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //create with listener and robust estimator method
-        PinholeCameraRobustEstimatorListener listener =
+
+        // create with listener and robust estimator method
+        final PinholeCameraRobustEstimatorListener listener =
                 new PinholeCameraRobustEstimatorListener() {
 
-            @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateStart(final PinholeCameraRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
+                    @Override
+                    public void onEstimateEnd(final PinholeCameraRobustEstimator estimator) {
+                    }
 
-            @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final PinholeCameraRobustEstimator estimator, final int iteration) {
+                    }
 
-            @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
-        };
-        
+                    @Override
+                    public void onEstimateProgressChange(
+                            final PinholeCameraRobustEstimator estimator, final float progress) {
+                    }
+                };
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -319,21 +313,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -341,21 +335,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -363,21 +357,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -385,21 +379,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -407,22 +401,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //test with listener, points and robust estimator method
+
+        // test with listener, points and robust estimator method
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -430,21 +424,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -452,21 +446,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -474,21 +468,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -496,21 +490,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -518,27 +512,27 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //test with quality scores and robust estimator method
-        double[] qualityScores = new double[
+
+        // test with quality scores and robust estimator method
+        final double[] qualityScores = new double[
                 PointCorrespondencePinholeCameraRobustEstimator.
-                MIN_NUMBER_OF_POINT_CORRESPONDENCES];
-        double[] shortScores = new double[1];
-        
+                        MIN_NUMBER_OF_POINT_CORRESPONDENCES];
+        final double[] shortScores = new double[1];
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -546,21 +540,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -568,21 +562,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -590,21 +584,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -612,21 +606,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -634,32 +628,33 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(shortScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with points, quality scores and robust estimator method
+
+        // test with points, quality scores and robust estimator method
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, qualityScores, 
+                points3D, points2D, qualityScores,
                 RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -667,22 +662,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, qualityScores, 
+                points3D, points2D, qualityScores,
                 RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -690,22 +685,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, qualityScores, 
+                points3D, points2D, qualityScores,
                 RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -713,22 +708,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, qualityScores, 
+                points3D, points2D, qualityScores,
                 RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -736,22 +731,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, qualityScores, 
+                points3D, points2D, qualityScores,
                 RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -759,47 +754,50 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
-                    create(empty3D, empty2D, qualityScores, 
-                    RobustEstimatorMethod.PROSAC);
+                    create(empty3D, empty2D, qualityScores,
+                            RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
-                    create(points3D, empty2D, qualityScores, 
-                    RobustEstimatorMethod.PROSAC);
+                    create(points3D, empty2D, qualityScores,
+                            RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //short scores
+            // short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
-                    create(points3D, points2D, shortScores, 
-                    RobustEstimatorMethod.PROSAC);
+                    create(points3D, points2D, shortScores,
+                            RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener, quality scores and method
+
+        // test with listener, quality scores and method
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -807,21 +805,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -829,21 +827,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -851,21 +849,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -873,21 +871,21 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
@@ -895,32 +893,33 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, shortScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener, points, quality scores and method
+
+        // test with listener, points, quality scores and method
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, qualityScores, 
+                listener, points3D, points2D, qualityScores,
                 RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 RANSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -928,22 +927,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
 
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, qualityScores, 
+                listener, points3D, points2D, qualityScores,
                 RobustEstimatorMethod.LMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 LMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -951,22 +950,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, qualityScores, 
+                listener, points3D, points2D, qualityScores,
                 RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 MSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -974,22 +973,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, qualityScores, 
+                listener, points3D, points2D, qualityScores,
                 RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROSACDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -997,22 +996,22 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        
+
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, qualityScores, 
+                listener, points3D, points2D, qualityScores,
                 RobustEstimatorMethod.PROMedS);
-        assertTrue(estimator instanceof 
+        assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
         assertSame(estimator.getPoints2D(), points2D);
         assertSame(estimator.getPoints3D(), points3D);
@@ -1020,44 +1019,47 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, empty3D, empty2D, qualityScores, 
-                    RobustEstimatorMethod.PROSAC);
+                    create(listener, empty3D, empty2D, qualityScores,
+                            RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, points3D, empty2D, qualityScores, 
-                    RobustEstimatorMethod.PROSAC);
+                    create(listener, points3D, empty2D, qualityScores,
+                            RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //short scores
+            // short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, points3D, points2D, shortScores, 
-                    RobustEstimatorMethod.PROSAC);
+                    create(listener, points3D, points2D, shortScores,
+                            RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with no arguments
+
+        // test with no arguments
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create();
         assertTrue(estimator instanceof
                 PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator);
@@ -1067,19 +1069,19 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
 
-        //test with points
+        // test with points
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D);
         assertTrue(estimator instanceof
@@ -1090,35 +1092,37 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //Force IllegalArgumentException
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);     
-        
-        //test with listener
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+        // test with listener
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener);
         assertTrue(estimator instanceof
@@ -1129,19 +1133,19 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //test with listener and points
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // test with listener and points
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D);
         assertTrue(estimator instanceof
@@ -1152,35 +1156,37 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //Force IllegalArgumentException
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, empty3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, points3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);     
-        
-        //test with quality scores
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+        // test with quality scores
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores);
         assertTrue(estimator instanceof
@@ -1191,28 +1197,29 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //Force IllegalArgumentException
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with points and quality scores
+
+        // test with points and quality scores
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 points3D, points2D, qualityScores);
         assertTrue(estimator instanceof
@@ -1223,41 +1230,44 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //Force IllegalArgumentException
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //short scores
+            // short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, points2D, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);     
-        
-        //test with listener and scores
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
+        // test with listener and scores
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores);
         assertTrue(estimator instanceof
@@ -1268,28 +1278,29 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //force IllegalArgumentException
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // force IllegalArgumentException
         estimator = null;
         try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertNull(estimator);
-        
-        //test with listener, points and quality scores
+
+        // test with listener, points and quality scores
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
                 listener, points3D, points2D, qualityScores);
         assertTrue(estimator instanceof
@@ -1300,39 +1311,42 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         assertEquals(estimator.isNormalizeSubsetPointCorrespondences(),
                 PointCorrespondencePinholeCameraRobustEstimator.
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+                        DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
         assertSame(estimator.getListener(), listener);
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(), 
+        assertEquals(estimator.getProgressDelta(),
                 PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
         assertEquals(estimator.getConfidence(),
                 PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(), 
+        assertEquals(estimator.getMaxIterations(),
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
-        
-        //Force IllegalArgumentException
+        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
+
+        // Force IllegalArgumentException
         estimator = null;
         try {
-            //empty points
+            // empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //different sizes
+            // different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            //short scores
+            // short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, points2D, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        assertNull(estimator);     
-        
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(estimator);
+
     }
 }

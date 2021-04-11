@@ -29,7 +29,6 @@ import java.io.Serializable;
  * This class contains utility methods to convert covariance matrices into geometric figures
  * with the requested confidence.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class Accuracy implements Serializable {
 
     /**
@@ -39,12 +38,12 @@ public abstract class Accuracy implements Serializable {
      * Gaussian distribution this is equivalent to providing a 95.44% of confidence on provided
      * accuracy.
      */
-    public static final double DEFAULT_STANDARD_DEVIATION_FACTOR = 2.0;
+    private static final double DEFAULT_STANDARD_DEVIATION_FACTOR = 2.0;
 
     /**
      * Covariance matrix representing the accuracy of an estimated position.
      */
-    protected Matrix mCovarianceMatrix;
+    private Matrix mCovarianceMatrix;
 
     /**
      * Standard deviation factor to account for a given accuracy confidence.
@@ -68,7 +67,7 @@ public abstract class Accuracy implements Serializable {
     /**
      * Singular value decomposer to find principal axes of provided covariance matrix.
      */
-    protected SingularValueDecomposer mSvdDecomposer = new SingularValueDecomposer();
+    private final SingularValueDecomposer mSvdDecomposer = new SingularValueDecomposer();
 
     /**
      * Square root of singular values of decomposed covariance matrix.
@@ -104,43 +103,47 @@ public abstract class Accuracy implements Serializable {
     /**
      * Constructor.
      */
-    public Accuracy() { }
+    protected Accuracy() {
+    }
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be NxN where N
      *                         is the number of dimensions and positive definite.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to a geometric figure - e.g. an ellipse or
-     * an ellipsoid).
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to a geometric figure - e.g. an ellipse or
+     *                                                     an ellipsoid).
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+    protected Accuracy(final Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
         setCovarianceMatrix(covarianceMatrix);
     }
 
     /**
      * Constructor.
+     *
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy(double confidence) {
+    protected Accuracy(final double confidence) {
         setConfidence(confidence);
     }
 
     /**
      * Constructor.
+     *
      * @param covarianceMatrix covariance matrix to be set. Must be NxN where N
      *                         is the number of dimensions and positive definite.
-     * @param confidence confidence of provided accuracy of an estimated position.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to a geometric figure - e.g. an ellipse or
-     * an ellipsoid), or if provided confidence value is not within 0 and 1.
+     * @param confidence       confidence of provided accuracy of an estimated position.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to a geometric figure - e.g. an ellipse or
+     *                                                     an ellipsoid), or if provided confidence value is not within 0 and 1.
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public Accuracy(Matrix covarianceMatrix, double confidence)
+    protected Accuracy(final Matrix covarianceMatrix, final double confidence)
             throws NonSymmetricPositiveDefiniteMatrixException {
         setCovarianceMatrix(covarianceMatrix);
         setConfidence(confidence);
@@ -148,6 +151,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Gets covariance matrix representing the accuracy of an estimated point or measure.
+     *
      * @return covariance matrix representing the accuracy of an estimated point or measure.
      */
     public Matrix getCovarianceMatrix() {
@@ -156,17 +160,18 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Sets covariance matrix representing the accuracy of an estimated point or measure.
+     *
      * @param covarianceMatrix covariance matrix representing the accuracy of an estimated
      *                         point or measure.
-     * @throws IllegalArgumentException if provided matrix is not square (it must also be
-     * positive definite to be properly converted to a geometric figure - e.g. an ellipse
-     * or an ellipsoid).
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to a geometric figure - e.g. an ellipse
+     *                                                     or an ellipsoid).
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
-     * positive definite.
+     *                                                     positive definite.
      */
-    public void setCovarianceMatrix(Matrix covarianceMatrix)
+    public void setCovarianceMatrix(final Matrix covarianceMatrix)
             throws NonSymmetricPositiveDefiniteMatrixException {
-        int dims = getNumberOfDimensions();
+        final int dims = getNumberOfDimensions();
         if (covarianceMatrix.getRows() != dims || covarianceMatrix.getColumns() != dims) {
             throw new IllegalArgumentException();
         }
@@ -175,16 +180,16 @@ public abstract class Accuracy implements Serializable {
             mSvdDecomposer.setInputMatrix(covarianceMatrix);
             mSvdDecomposer.decompose();
 
-            double[] singularValues = mSvdDecomposer.getSingularValues();
-            double [] sqrtSingularValues = new double[dims];
+            final double[] singularValues = mSvdDecomposer.getSingularValues();
+            final double[] sqrtSingularValues = new double[dims];
 
             double minSqrtSingularValue = Double.MAX_VALUE;
             double maxSqrtSingularValue = -Double.MAX_VALUE;
             double avgSqrtSingularValue = 0.0;
             int i = 0;
-            for (double singularValue : singularValues) {
+            for (final double singularValue : singularValues) {
                 if (singularValue < 0.0) {
-                    //matrix is not positive definite
+                    // matrix is not positive definite
                     throw new NonSymmetricPositiveDefiniteMatrixException();
                 }
 
@@ -209,7 +214,7 @@ public abstract class Accuracy implements Serializable {
             mAvgSqrtSingularValue = avgSqrtSingularValue;
 
             mCovarianceMatrix = covarianceMatrix;
-        } catch (AlgebraException e) {
+        } catch (final AlgebraException e) {
             throw new NonSymmetricPositiveDefiniteMatrixException(e);
         }
     }
@@ -220,6 +225,7 @@ public abstract class Accuracy implements Serializable {
      * a geometric figure of size equal to 2 times the standard deviation. Assuming a
      * Gaussian distribution this is equivalent to providing a 95.44% confidence on provided
      * accuracy.
+     *
      * @return standard deviation factor.
      */
     public double getStandardDeviationFactor() {
@@ -232,10 +238,11 @@ public abstract class Accuracy implements Serializable {
      * a geometric figure of size equal to 2 times the standard deviation. Assuming a
      * Gaussian distribution this is equivalent to providing a 95.44% confidence on provided
      * accuracy.
+     *
      * @param standardDeviationFactor standard deviation factor to be set.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setStandardDeviationFactor(double standardDeviationFactor) {
+    public void setStandardDeviationFactor(final double standardDeviationFactor) {
         if (standardDeviationFactor <= 0.0) {
             throw new IllegalArgumentException();
         }
@@ -247,6 +254,7 @@ public abstract class Accuracy implements Serializable {
      * Gets confidence of provided accuracy of estimated point or measure.
      * This is expressed as a value between 0 and 1, where 1 indicates a 100% confidence
      * that the real point or measure is within provided accuracy.
+     *
      * @return confidence of provided accuracy of estimated point or measure.
      */
     public double getConfidence() {
@@ -257,10 +265,11 @@ public abstract class Accuracy implements Serializable {
      * Sets confidence of provided accuracy of estimated point or measure.
      * This is expressed as a value between 0 and 1, where 1 indicates a 100% confidence
      * that the real point or measure is within provided accuracy.
+     *
      * @param confidence confidence of provided accuracy of estimated point or measure.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public void setConfidence(double confidence) {
+    public void setConfidence(final double confidence) {
         if (confidence < 0.0 || confidence > 1.0) {
             throw new IllegalArgumentException();
         }
@@ -272,6 +281,7 @@ public abstract class Accuracy implements Serializable {
     /**
      * Gets smallest (best) accuracy in any direction (i.e. either 2D or 3D).
      * This value is represented by the smallest semi axis representing the ellipse or ellipsoid of accuracy.
+     *
      * @return smallest accuracy in any direction.
      */
     public double getSmallestAccuracy() {
@@ -281,6 +291,7 @@ public abstract class Accuracy implements Serializable {
     /**
      * Gets largest (worse) accuracy in any direction (i.e. either 2D or 3D).
      * This value is represented by the largest semi axis representing the ellipse or ellipsoid of accuracy.
+     *
      * @return largest accuracy in any direction.
      */
     public double getLargestAccuracy() {
@@ -291,6 +302,7 @@ public abstract class Accuracy implements Serializable {
      * Gets average accuracy among all directions.
      * This value is equal to the average value of all semi axes representing the ellipse or ellipsoid of
      * accuracy.
+     *
      * @return average accuracy among all directions.
      */
     public double getAverageAccuracy() {
@@ -300,6 +312,7 @@ public abstract class Accuracy implements Serializable {
     /**
      * Gets number of dimensions.
      * This is equal to 2 for 2D, and to 3 for 3D.
+     *
      * @return number of dimensions.
      */
     public abstract int getNumberOfDimensions();

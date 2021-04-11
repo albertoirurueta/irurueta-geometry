@@ -27,7 +27,7 @@ public enum CameraType {
      * Pinhole cameras perform projective mappings between 3D and 2D worlds,
      * in other words, the farther an object is, the smaller is represented or
      * parallel lines converge into vanishing points.
-     * Pinhole cameras cannot be used for orthographic projections (where 
+     * Pinhole cameras cannot be used for orthographic projections (where
      * parallelism between lines is preserved and there are no vanishing points).
      */
     PINHOLE_CAMERA

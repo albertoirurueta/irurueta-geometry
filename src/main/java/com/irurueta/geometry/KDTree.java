@@ -24,7 +24,7 @@ import java.util.Collection;
  * Once a K-D tree is built for a collection of points, it can later be used to efficiently do certain operations
  * such as point location, nearest points searches, etc.
  */
-public abstract class KDTree<P extends Point> {
+public abstract class KDTree<P extends Point<P>> {
 
     /**
      * Minimum number of allowed points to be stored in the tree.
@@ -50,18 +50,18 @@ public abstract class KDTree<P extends Point> {
      * Indices of points pointing from boxes in the tree to the input collection of points.
      * Indices are sorted as the tree is built.
      */
-    private int[] mPtIndx;
+    private final int[] mPtIndx;
 
     /**
      * Indices of points pointing from input collection of points to boxes in the tree.
      * This is the reverse of mPtIndx.
      */
-    private int[] mRPtIndx;
+    private final int[] mRPtIndx;
 
     /**
      * Number of points stored by the tree.
      */
-    private int mNpts;
+    private final int mNpts;
 
     /**
      * Array of points containing input collection of points.
@@ -70,23 +70,24 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Constructor.
-     * @param pts collection of points to store in the tree.
+     *
+     * @param pts   collection of points to store in the tree.
      * @param clazz class of point implementation to use.
      */
-    public KDTree(Collection<P> pts, Class<P> clazz) {
+    protected KDTree(final Collection<P> pts, final Class<P> clazz) {
         mNpts = pts.size();
         if (mNpts < MIN_PTS) {
             throw new IllegalArgumentException("number of points must be at least 3");
         }
 
         //noinspection unchecked
-        mPts = (P[])Array.newInstance(clazz, pts.size());
+        mPts = (P[]) Array.newInstance(clazz, pts.size());
         mPts = pts.toArray(mPts);
         mPtIndx = new int[mNpts];
         mRPtIndx = new int[mNpts];
-        int dim = getDimensions();
+        final int dim = getDimensions();
 
-        //build tree
+        // build tree
         int ntmp;
         int m;
         int k;
@@ -101,8 +102,8 @@ public abstract class KDTree<P extends Point> {
         int pthi;
         int hpOffset;
         int cpOffset;
-        int[] taskmom = new int[N_TASKS];
-        int[] taskdim = new int[N_TASKS];
+        final int[] taskmom = new int[N_TASKS];
+        final int[] taskdim = new int[N_TASKS];
         for (k = 0; k < mNpts; k++) {
             mPtIndx[k] = k;
         }
@@ -110,14 +111,14 @@ public abstract class KDTree<P extends Point> {
         for (ntmp = mNpts; ntmp != 0; ntmp >>= 1) {
             m <<= 1;
         }
-        int nboxes = 2 * mNpts - (m >> 1); //number of boxes to store points
+        int nboxes = 2 * mNpts - (m >> 1); // number of boxes to store points
         if (m < nboxes) {
             nboxes = m;
         }
         nboxes--;
         //noinspection unchecked
-        mBoxes = (BoxNode[])Array.newInstance(BoxNode.class, nboxes);
-        double[] coords = new double[dim * mNpts];
+        mBoxes = (BoxNode<P>[]) Array.newInstance(BoxNode.class, nboxes);
+        final double[] coords = new double[dim * mNpts];
         for (j = 0, kk = 0; j < dim; j++, kk += mNpts) {
             for (k = 0; k < mNpts; k++) {
                 coords[kk + k] = mPts[k].getInhomogeneousCoordinate(j);
@@ -144,7 +145,7 @@ public abstract class KDTree<P extends Point> {
             hi = copyPoint(mBoxes[tmom].getHi());
             lo = copyPoint(mBoxes[tmom].getLo());
 
-            double value = coords[tdim * mNpts + mPtIndx[hpOffset + kk]];
+            final double value = coords[tdim * mNpts + mPtIndx[hpOffset + kk]];
             hi.setInhomogeneousCoordinate(tdim, value);
             lo.setInhomogeneousCoordinate(tdim, value);
 
@@ -170,26 +171,27 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Gets distance between points located at provided positions on input collection.
+     *
      * @param jpt index of 1st point.
      * @param kpt index of 2nd point.
      * @return distance between points or BIG if indices are equal.
      */
-    public double distance(int jpt, int kpt) {
+    public double distance(final int jpt, final int kpt) {
         if (jpt == kpt) {
             return BIG;
         } else {
-            //noinspection unchecked
             return mPts[jpt].distanceTo(mPts[kpt]);
         }
     }
 
     /**
      * Gets position of smallest box containing provided point in the input list of points.
+     *
      * @param pt point to locate its containing box. Does not need to be contained in input collection.
      * @return position of smallest box containing the point.
      */
-    public int locateBoxIndex(P pt) {
-        int dim = getDimensions();
+    public int locateBoxIndex(final P pt) {
+        final int dim = getDimensions();
 
         int nb = 0;
         int d1;
@@ -208,41 +210,42 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Gets smallest box containing provided point in the input list of points.
+     *
      * @param pt point to locate its containing box. Does not need to be contained in input collection.
      * @return smallest box containing the point.
      */
-    public BoxNode<P> locateBox(P pt) {
+    public BoxNode<P> locateBox(final P pt) {
         return mBoxes[locateBoxIndex(pt)];
     }
 
     /**
      * Index in provided input list of points of closest point to provided one.
+     *
      * @param pt point to check against. Does not need to be contained in input collection.
      * @return position of closest point.
      */
-    public int nearestIndex(P pt) {
+    public int nearestIndex(final P pt) {
         int i;
         int k;
         int nrst = 0;
         int ntask;
         int pi;
-        int[] task = new int[N_TASKS];
+        final int[] task = new int[N_TASKS];
         double dnrst = BIG;
         double d;
 
-        //find smallest box index containing point
+        // find smallest box index containing point
         k = locateBoxIndex(pt);
         for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
             pi = mPtIndx[i];
-            //noinspection unchecked
             d = mPts[pi].distanceTo(pt);
             if (d < dnrst) {
-                nrst = pi; //index of nearest point
-                dnrst = d; //distance to nearest point
+                nrst = pi; // index of nearest point
+                dnrst = d; // distance to nearest point
             }
         }
 
-        //check other boxes in case they contain any nearer point
+        // check other boxes in case they contain any nearer point
         task[1] = 0;
         ntask = 1;
         while (ntask != 0) {
@@ -253,7 +256,6 @@ public abstract class KDTree<P extends Point> {
                     task[++ntask] = mBoxes[k].mDau2;
                 } else {
                     for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
-                        //noinspection unchecked
                         d = mPts[mPtIndx[i]].distanceTo(pt);
                         if (d < dnrst) {
                             nrst = mPtIndx[i];
@@ -268,23 +270,25 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Closest point to provided one.
+     *
      * @param pt point to be checked. Does not need to be contained in input collection.
      * @return closest point.
      */
-    public P nearestPoint(P pt) {
+    public P nearestPoint(final P pt) {
         return mPts[nearestIndex(pt)];
     }
 
     /**
      * Gets n nearest point indices to a given one in the input collection.
+     *
      * @param jpt index of point to search nearest ones for.
-     * @param nn array containing resulting indices of nearest points up to the number of found points.
-     * @param dn array containing resulting distances to nearest points up to the number of found points.
-     * @param n number of nearest points to find.
+     * @param nn  array containing resulting indices of nearest points up to the number of found points.
+     * @param dn  array containing resulting distances to nearest points up to the number of found points.
+     * @param n   number of nearest points to find.
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
-     * containing results are not valid either.
+     *                                  containing results are not valid either.
      */
-    public void nNearest(int jpt, int[] nn, double[] dn, int n) {
+    public void nNearest(final int jpt, final int[] nn, final double[] dn, final int n) {
         if (n < 0) {
             throw new IllegalArgumentException("no neighbours requested");
         }
@@ -299,7 +303,7 @@ public abstract class KDTree<P extends Point> {
         int k;
         int ntask;
         int kp;
-        int[] task = new int[N_TASKS];
+        final int[] task = new int[N_TASKS];
         double d;
         for (i = 0; i < n; i++) {
             dn[i] = BIG;
@@ -350,32 +354,34 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Gets n nearest point indices to a given point in the input collection.
+     *
      * @param pt point to search nearest ones for.
      * @param nn array containing resulting indices of nearest points up to the number of found points.
      * @param dn array containing resulting distances to nearest points up to the number of found points.
-     * @param n number of nearest points to find.
+     * @param n  number of nearest points to find.
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
-     * containing results are not valid either.
+     *                                  containing results are not valid either.
      */
-    public void nNearest(P pt, int[] nn, double[] dn, int n) {
+    public void nNearest(final P pt, final int[] nn, final double[] dn, final int n) {
         nNearest(nearestIndex(pt), nn, dn, n);
     }
 
     /**
      * Gets n nearest points to a given point index in the input collection.
+     *
      * @param jpt index of point to search nearest ones for.
-     * @param pn array containing nearest points up to the number of found points.
-     * @param dn array containing resulting distances to nearest points up to the number of found points.
-     * @param n number of nearest points to find.
+     * @param pn  array containing nearest points up to the number of found points.
+     * @param dn  array containing resulting distances to nearest points up to the number of found points.
+     * @param n   number of nearest points to find.
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
-     * containing results are not valid either.
+     *                                  containing results are not valid either.
      */
-    public void nNearest(int jpt, P[] pn, double[] dn, int n) {
+    public void nNearest(final int jpt, final P[] pn, final double[] dn, final int n) {
         if (n < 0) {
             throw new IllegalArgumentException("no neighbours requested");
         }
 
-        int[] nn = new int[n];
+        final int[] nn = new int[n];
 
         nNearest(jpt, nn, dn, n);
 
@@ -386,14 +392,15 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Gets n nearest points to a given point in the input collection.
+     *
      * @param pt point to search nearest ones for.
      * @param pn array containing nearest points up to the number of found points.
      * @param dn array containing resulting distances to nearest points up to the number of found points.
-     * @param n number of nearest points to find.
+     * @param n  number of nearest points to find.
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
-     * containing results are not valid either.
+     *                                  containing results are not valid either.
      */
-    public void nNearest(P pt, P[] pn, double[] dn, int n) {
+    public void nNearest(final P pt, final P[] pn, final double[] dn, final int n) {
         nNearest(nearestIndex(pt), pn, dn, n);
     }
 
@@ -401,15 +408,16 @@ public abstract class KDTree<P extends Point> {
      * Locates some near points to provided one up to a certain radius of search.
      * This method only returns up to nmax results, which means that not all points within required
      * radius are returned if more points than provided nmax value are within such radius.
-     * @param pt point to search nearby.
-     * @param r radius of search.
+     *
+     * @param pt   point to search nearby.
+     * @param r    radius of search.
      * @param list list where indices of found points are stored up to the number of found points.
      * @param nmax maximum number of points to search.
      * @return number of found points.
      * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
-     * or list where indices are stored is not large enough.
+     *                                  or list where indices are stored is not large enough.
      */
-    public int locateNear(P pt, double r, int[] list, int nmax) {
+    public int locateNear(final P pt, final double r, final int[] list, final int nmax) {
         if (r < 0.0) {
             throw new IllegalArgumentException("radius must be nonnegative");
         }
@@ -420,7 +428,7 @@ public abstract class KDTree<P extends Point> {
             throw new IllegalArgumentException("result might not fit into provided list");
         }
 
-        int dim = getDimensions();
+        final int dim = getDimensions();
 
         int k;
         int i;
@@ -431,14 +439,14 @@ public abstract class KDTree<P extends Point> {
         int jdim;
         int d1;
         int d2;
-        int[] task = new int[N_TASKS];
+        final int[] task = new int[N_TASKS];
         nb = jdim = nret = 0;
 
         while (mBoxes[nb].mDau1 != 0) {
             nbold = nb;
             d1 = mBoxes[nb].mDau1;
             d2 = mBoxes[nb].mDau2;
-            double coord = pt.getInhomogeneousCoordinate(jdim);
+            final double coord = pt.getInhomogeneousCoordinate(jdim);
             if (coord + r <= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
                 nb = d1;
             } else if (coord - r >= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {
@@ -461,7 +469,6 @@ public abstract class KDTree<P extends Point> {
                 task[++ntask] = mBoxes[k].mDau2;
             } else {
                 for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
-                    //noinspection unchecked
                     if (mPts[mPtIndx[i]].distanceTo(pt) <= r && nret < nmax) {
                         list[nret++] = mPtIndx[i];
                     }
@@ -476,15 +483,16 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Locates near points to provided one up to a certain radius of search defined in a bounding box.
-     * @param pt point to search nearby.
-     * @param r radius of search defining a bounding box.
+     *
+     * @param pt    point to search nearby.
+     * @param r     radius of search defining a bounding box.
      * @param plist list where found points are stored up to the number of found points.
-     * @param nmax maximum number of points to search.
+     * @param nmax  maximum number of points to search.
      * @return number of found points.
      * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
-     * or list where points are stored is not large enough.
+     *                                  or list where points are stored is not large enough.
      */
-    public int locateNear(P pt, double r, P[] plist, int nmax) {
+    public int locateNear(final P pt, final double r, final P[] plist, final int nmax) {
         if (r < 0.0) {
             throw new IllegalArgumentException("radius must be nonnegative");
         }
@@ -495,8 +503,8 @@ public abstract class KDTree<P extends Point> {
             throw new IllegalArgumentException("result might not fit into provided list");
         }
 
-        int[] list = new int[nmax];
-        int result = locateNear(pt, r, list, nmax);
+        final int[] list = new int[nmax];
+        final int result = locateNear(pt, r, list, nmax);
 
         for (int i = 0; i < result; i++) {
             plist[i] = mPts[list[i]];
@@ -507,33 +515,37 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Gets number of dimensions supported by this k-D tree implementation on provided list of points.
+     *
      * @return number of dimensions.
      */
     public abstract int getDimensions();
 
     /**
      * Creates a point.
+     *
      * @param value value to be set on point coordinates.
      * @return created point.
      */
-    protected abstract P createPoint(double value);
+    protected abstract P createPoint(final double value);
 
     /**
      * Copies a point.
+     *
      * @param point point to be copied.
      * @return copied point.
      */
-    protected abstract P copyPoint(P point);
+    protected abstract P copyPoint(final P point);
 
     /**
      * Gets position of point on input collection for provided internal boxes position.
+     *
      * @param jpt internal position in the boxes.
      * @return position in the input collection of points.
      */
-    private int locate(int jpt) {
+    private int locate(final int jpt) {
         int nb = 0;
         int d1;
-        int jh = mRPtIndx[jpt];
+        final int jh = mRPtIndx[jpt];
         while (mBoxes[nb].mDau1 != 0) {
             d1 = mBoxes[nb].mDau1;
             if (jh <= mBoxes[d1].mPtHi) {
@@ -552,16 +564,18 @@ public abstract class KDTree<P extends Point> {
      * So that positions between 0 and k-1 are not in any particular order but is less than
      * k position, and positions between k+1 and n neither have any particular order but is
      * more than k position.
-     * @param k sorted position to retrieve.
+     *
+     * @param k          sorted position to retrieve.
      * @param indxOffset offset where indx search starts.
-     * @param indx array to be sorted (i.e. selected).
-     * @param n length of arrays.
-     * @param arrOffset offset of distances array. This is usually equal to indxOffset.
-     * @param arr resulting array containing distances to each selected point.
+     * @param indx       array to be sorted (i.e. selected).
+     * @param n          length of arrays.
+     * @param arrOffset  offset of distances array. This is usually equal to indxOffset.
+     * @param arr        resulting array containing distances to each selected point.
      * @return index of selected point.
      */
-    @SuppressWarnings("all")
-    private static int selecti(int k, int indxOffset, int[] indx, int n, int arrOffset, double[] arr) {
+    @SuppressWarnings("UnusedReturnValue")
+    private static int selecti(final int k, final int indxOffset, final int[] indx, final int n,
+                               final int arrOffset, final double[] arr) {
         int i;
         int ia;
         int ir = n - 1;
@@ -570,7 +584,7 @@ public abstract class KDTree<P extends Point> {
         int mid;
         double a;
 
-        for (;;) {
+        for (; ; ) {
             if (ir <= l + 1) {
                 if (ir == l + 1 && arr[arrOffset + indx[indxOffset + ir]] < arr[arrOffset + indx[indxOffset + l]]) {
                     swap(indx, indxOffset + l, indx, indxOffset + ir);
@@ -586,13 +600,13 @@ public abstract class KDTree<P extends Point> {
                     swap(indx, indxOffset + l + 1, indx, indxOffset + ir);
                 }
                 if (arr[arrOffset + indx[indxOffset + l]] > arr[arrOffset + indx[indxOffset + l + 1]]) {
-                    swap(indx, indxOffset + l, indx,indxOffset + l + 1);
+                    swap(indx, indxOffset + l, indx, indxOffset + l + 1);
                 }
                 i = l + 1;
                 j = ir;
                 ia = indx[indxOffset + l + 1];
                 a = arr[arrOffset + ia];
-                for (;;) {
+                for (; ; ) {
                     do {
                         i++;
                     } while (arr[arrOffset + indx[indxOffset + i]] < a);
@@ -618,16 +632,17 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Moves things around.
+     *
      * @param heap array of distances.
-     * @param ndx array of indices.
-     * @param nn number of indices to move.
+     * @param ndx  array of indices.
+     * @param nn   number of indices to move.
      */
-    private static void siftDown(double[] heap, int[] ndx, int nn) {
-        int n = nn - 1;
+    private static void siftDown(final double[] heap, final int[] ndx, final int nn) {
+        final int n = nn - 1;
         int j = 1;
         int jold = 0;
-        int ia = ndx[0];
-        double a = heap[0];
+        final int ia = ndx[0];
+        final double a = heap[0];
         while (j <= n) {
             if (j < n && heap[j] < heap[j + 1]) {
                 j++;
@@ -646,13 +661,14 @@ public abstract class KDTree<P extends Point> {
 
     /**
      * Swaps values.
-     * @param a 1st array containing values to swap.
+     *
+     * @param a    1st array containing values to swap.
      * @param posA position to be swapped on 1st array.
-     * @param b 2nd array containing values to swap.
+     * @param b    2nd array containing values to swap.
      * @param posB position to be swapped on 2nd array.
      */
-    private static void swap(int[] a, int posA, int[] b, int posB) {
-        int tmp = a[posA];
+    private static void swap(final int[] a, final int posA, final int[] b, final int posB) {
+        final int tmp = a[posA];
 
         a[posA] = b[posB];
         b[posB] = tmp;
@@ -661,12 +677,12 @@ public abstract class KDTree<P extends Point> {
     /**
      * Contains a node of a KD Tree.
      */
-    public static class BoxNode<P extends Point> extends Box<P> {
+    public static class BoxNode<P extends Point<P>> extends Box<P> {
 
         /**
          * Position of mother node in the list of nodes of a tree.
          */
-        private int mMom;
+        private final int mMom;
 
         /**
          * Position of 1st daughter node in the list of nodes of a tree.
@@ -682,25 +698,27 @@ public abstract class KDTree<P extends Point> {
          * Low index of list of points inside this box.
          * mPtLo and mPtHi define the range of points inside the box.
          */
-        private int mPtLo;
+        private final int mPtLo;
 
         /**
          * High index of list of points inside this box.
          * mPtLo and mPtHi define the range of points inside the box.
          */
-        private int mPtHi;
+        private final int mPtHi;
 
         /**
          * Constructor.
-         * @param lo low coordinate values.
-         * @param hi high coordinate values.
-         * @param mom index of mother node.
-         * @param d1 index of 1st daughter.
-         * @param d2 index of 2nd daughter.
+         *
+         * @param lo   low coordinate values.
+         * @param hi   high coordinate values.
+         * @param mom  index of mother node.
+         * @param d1   index of 1st daughter.
+         * @param d2   index of 2nd daughter.
          * @param ptLo low index of list of points inside this box.
          * @param ptHi high index of list of points inside this box.
          */
-        public BoxNode(P lo, P hi, int mom, int d1, int d2, int ptLo, int ptHi) {
+        public BoxNode(final P lo, final P hi, final int mom, final int d1, final int d2, final int ptLo,
+                       final int ptHi) {
             super(lo, hi);
             mMom = mom;
             mDau1 = d1;
@@ -711,6 +729,7 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Gets position of mother node in the list of nodes of a tree.
+         *
          * @return position of mother node in the list of nodes of a tree.
          */
         public int getMom() {
@@ -719,6 +738,7 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Gets position of 1st daughter node in the list of nodes of a tree.
+         *
          * @return position of 1st daughter node in the list of nodes of a tree.
          */
         public int getDau1() {
@@ -727,6 +747,7 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Gets position of 2nd daughter node of a tree.
+         *
          * @return position of 2nd daughter node of a tree.
          */
         public int getDau2() {
@@ -737,6 +758,7 @@ public abstract class KDTree<P extends Point> {
          * Gets low index of list of points inside this box.
          * getPtLo() and {@link #getPtHi()} define the range of indices of points
          * contained in this box.
+         *
          * @return low index of list of points inside this box.
          */
         public int getPtLo() {
@@ -747,6 +769,7 @@ public abstract class KDTree<P extends Point> {
          * Gets high index of list of points inside this box.
          * {@link #getPtLo()} and getPtHi() define the range of indices of points
          * contained in this box.
+         *
          * @return high index of list of points inside this box.
          */
         public int getPtHi() {
@@ -755,31 +778,34 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Sets low coordinate values.
+         *
          * @param lo low coordinate values.
          * @throws IllegalArgumentException always thrown.
          */
         @Override
-        public void setLo(P lo) {
+        public void setLo(final P lo) {
             throw new IllegalArgumentException();
         }
 
         /**
          * Sets high coordinate values.
+         *
          * @param hi high coordinate values.
          * @throws IllegalArgumentException always thrown.
          */
-        public void setHi(P hi) {
+        public void setHi(final P hi) {
             throw new IllegalArgumentException();
         }
 
         /**
          * Sets boundaries.
+         *
          * @param lo low coordinate values.
          * @param hi high coordinate values.
          * @throws IllegalArgumentException always thrown.
          */
         @Override
-        public void setBounds(P lo, P hi) {
+        public void setBounds(final P lo, final P hi) {
             throw new IllegalArgumentException();
         }
     }

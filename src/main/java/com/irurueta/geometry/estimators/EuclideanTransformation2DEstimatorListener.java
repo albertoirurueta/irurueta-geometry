@@ -19,16 +19,18 @@ package com.irurueta.geometry.estimators;
  * Listener to be notified of events such as when estimation starts or ends.
  */
 public interface EuclideanTransformation2DEstimatorListener {
-    
+
     /**
      * Called when estimation starts.
+     *
      * @param estimator estimator raising the event.
      */
-    void onEstimateStart(EuclideanTransformation2DEstimator estimator);
-    
+    void onEstimateStart(final EuclideanTransformation2DEstimator estimator);
+
     /**
      * Called when estimation ends.
+     *
      * @param estimator estimator raising the event.
      */
-    void onEstimateEnd(EuclideanTransformation2DEstimator estimator);
+    void onEstimateEnd(final EuclideanTransformation2DEstimator estimator);
 }

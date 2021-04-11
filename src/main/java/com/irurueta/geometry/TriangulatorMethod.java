@@ -22,6 +22,7 @@ public enum TriangulatorMethod {
     /**
      * Trangulator using Vang Gogh (aka ear cutting) algorithm.
      */
-    VAN_GOGH_TRIANGULATOR,
-    //DELAUNAY_TRIANGULATOR
+    VAN_GOGH_TRIANGULATOR
+
+    //TODO: DELAUNAY_TRIANGULATOR
 }

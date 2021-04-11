@@ -20,37 +20,40 @@ import com.irurueta.geometry.GeometryException;
 /**
  * This is the base exception class of this package.
  */
-public class GeometryEstimatorException extends GeometryException{
-    
+public class GeometryEstimatorException extends GeometryException {
+
     /**
      * Constructor.
      */
     public GeometryEstimatorException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public GeometryEstimatorException(String message) {
+    public GeometryEstimatorException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public GeometryEstimatorException(String message, Throwable cause) {
+    public GeometryEstimatorException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public GeometryEstimatorException(Throwable cause) {
+    public GeometryEstimatorException(final Throwable cause) {
         super(cause);
     }
 }

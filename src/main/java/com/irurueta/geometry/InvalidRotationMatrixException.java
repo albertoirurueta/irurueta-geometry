@@ -16,7 +16,7 @@
 package com.irurueta.geometry;
 
 /**
- *  Exception raised if provided rotation matrix is not orthonormal.
+ * Exception raised if provided rotation matrix is not orthonormal.
  */
 public class InvalidRotationMatrixException extends GeometryException {
     /**
@@ -25,29 +25,32 @@ public class InvalidRotationMatrixException extends GeometryException {
     public InvalidRotationMatrixException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public InvalidRotationMatrixException(String message) {
+    public InvalidRotationMatrixException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public InvalidRotationMatrixException(String message, Throwable cause) {
+    public InvalidRotationMatrixException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public InvalidRotationMatrixException(Throwable cause) {
+    public InvalidRotationMatrixException(final Throwable cause) {
         super(cause);
-    }    
+    }
 }

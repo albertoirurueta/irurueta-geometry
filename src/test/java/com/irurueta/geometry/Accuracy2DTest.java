@@ -32,248 +32,257 @@ public class Accuracy2DTest {
     private static final double MAX_ANGLE_DEGREES = 90.0;
     private static final double ABSOLUTE_ERROR = 1e-6;
 
-    private static final int TIMES = 50;
-
     @Test
     public void testConstructor() throws AlgebraException, GeometryException {
-        for (int t = 0; t < TIMES; t++) {
-            //empty constructor
-            Accuracy2D accuracy = new Accuracy2D();
+        // empty constructor
+        Accuracy2D accuracy = new Accuracy2D();
 
-            //check default values
-            assertNull(accuracy.getCovarianceMatrix());
-            assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
-            assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
-            assertEquals(accuracy.getConfidence(),
-                    2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
-            assertEquals(accuracy.getSmallestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-            assertEquals(accuracy.getLargestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-            assertEquals(accuracy.getAverageAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-            assertEquals(accuracy.getNumberOfDimensions(), 2);
-
-
-            //constructor with covariance matrix
-            UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double semiMinorAxis = randomizer.nextDouble();
-            double semiMajorAxis = semiMinorAxis + randomizer.nextDouble();
-            double rotationAngle = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            Ellipse ellipse = new Ellipse(Point2D.create(), semiMajorAxis, semiMinorAxis,
-                    rotationAngle);
-
-            Rotation2D rotation2D = new Rotation2D(rotationAngle);
-            Matrix rotationMatrix = rotation2D.asInhomogeneousMatrix();
-            Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
-                    Matrix.diagonal(new double[]{
-                            semiMajorAxis * semiMajorAxis,
-                            semiMinorAxis * semiMinorAxis}).
-                            multiplyAndReturnNew(rotationMatrix));
-
-            accuracy = new Accuracy2D(covarianceMatrix);
-
-            //check
-            assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
-            assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
-            assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
-            assertEquals(accuracy.getConfidence(),
-                    2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
-            assertEquals(accuracy.getSmallestAccuracy(),
-                    accuracy.getStandardDeviationFactor() * semiMinorAxis, ABSOLUTE_ERROR);
-            assertEquals(accuracy.getLargestAccuracy(),
-                    accuracy.getStandardDeviationFactor() * semiMajorAxis, ABSOLUTE_ERROR);
-            assertEquals(accuracy.getAverageAccuracy(),
-                    0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
-                    ABSOLUTE_ERROR);
-            assertEquals(accuracy.getNumberOfDimensions(), 2);
-
-            Ellipse ellipse2 = accuracy.toEllipse();
-            assertEquals(ellipse.getCenter(), ellipse2.getCenter());
-            assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
-            assertEquals(ellipse2.getSemiMajorAxis(),
-                    semiMajorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-            assertEquals(ellipse2.getSemiMinorAxis(),
-                    semiMinorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-            assertEquals(ellipse2.getRotationAngle(), rotationAngle, ABSOLUTE_ERROR);
+        // check default values
+        assertNull(accuracy.getCovarianceMatrix());
+        assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
+        assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
+        assertEquals(accuracy.getConfidence(),
+                2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
+        assertEquals(accuracy.getSmallestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(accuracy.getLargestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(accuracy.getAverageAccuracy(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(accuracy.getNumberOfDimensions(), 2);
 
 
-            //force IllegalArgumentException
-            accuracy = null;
-            try {
-                accuracy = new Accuracy2D(new Matrix(1, 1));
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ignore) { }
-            assertNull(accuracy);
+        // constructor with covariance matrix
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double semiMinorAxis = randomizer.nextDouble();
+        final double semiMajorAxis = semiMinorAxis + randomizer.nextDouble();
+        final double rotationAngle = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final Ellipse ellipse = new Ellipse(Point2D.create(), semiMajorAxis, semiMinorAxis,
+                rotationAngle);
 
-            //force NonSymmetricPositiveDefiniteMatrixException
-            Matrix m = Matrix.diagonal(new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY});
+        final Rotation2D rotation2D = new Rotation2D(rotationAngle);
+        final Matrix rotationMatrix = rotation2D.asInhomogeneousMatrix();
+        final Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
+                Matrix.diagonal(new double[]{
+                        semiMajorAxis * semiMajorAxis,
+                        semiMinorAxis * semiMinorAxis}).
+                        multiplyAndReturnNew(rotationMatrix));
 
-            try {
-                accuracy = new Accuracy2D(m);
-                fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
-            } catch (NonSymmetricPositiveDefiniteMatrixException ignore) { }
-            assertNull(accuracy);
+        accuracy = new Accuracy2D(covarianceMatrix);
 
+        // check
+        assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
+        assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
+        assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
+        assertEquals(accuracy.getConfidence(),
+                2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
+        assertEquals(accuracy.getSmallestAccuracy(),
+                accuracy.getStandardDeviationFactor() * semiMinorAxis, ABSOLUTE_ERROR);
+        assertEquals(accuracy.getLargestAccuracy(),
+                accuracy.getStandardDeviationFactor() * semiMajorAxis, ABSOLUTE_ERROR);
+        assertEquals(accuracy.getAverageAccuracy(),
+                0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
+                ABSOLUTE_ERROR);
+        assertEquals(accuracy.getNumberOfDimensions(), 2);
 
-            //constructor with confidence
-            double conf = randomizer.nextDouble(0.0, 1.0);
-            accuracy = new Accuracy2D(conf);
-
-            //check default values
-            assertNull(accuracy.getCovarianceMatrix());
-            assertTrue(accuracy.getStandardDeviationFactor() > 0.0);
-            assertEquals(accuracy.getStandardDeviationFactor(),
-                    NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
-            assertEquals(accuracy.getConfidence(), conf, 0.0);
-            assertEquals(accuracy.getSmallestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-            assertEquals(accuracy.getLargestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-            assertEquals(accuracy.getAverageAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-            assertEquals(accuracy.getNumberOfDimensions(), 2);
-
-            //force IllegalArgumentException
-            accuracy = null;
-            try {
-                accuracy = new Accuracy2D(-1.0);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ignore) { }
-            try {
-                accuracy = new Accuracy2D(2.0);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ignore) { }
-            assertNull(accuracy);
+        Ellipse ellipse2 = accuracy.toEllipse();
+        assertEquals(ellipse.getCenter(), ellipse2.getCenter());
+        assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getSemiMajorAxis(),
+                semiMajorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getSemiMinorAxis(),
+                semiMinorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getRotationAngle(), rotationAngle, ABSOLUTE_ERROR);
 
 
-            //constructor with covariance matrix and confidence
-            accuracy = new Accuracy2D(covarianceMatrix, conf);
-
-            //check
-            assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
-            assertTrue(accuracy.getStandardDeviationFactor() > 0.0);
-            assertEquals(accuracy.getStandardDeviationFactor(),
-                    NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
-            assertEquals(accuracy.getConfidence(), conf, 0.0);
-            assertEquals(accuracy.getSmallestAccuracy(),
-                    accuracy.getStandardDeviationFactor() * semiMinorAxis, ABSOLUTE_ERROR);
-            assertEquals(accuracy.getLargestAccuracy(),
-                    accuracy.getStandardDeviationFactor() * semiMajorAxis, ABSOLUTE_ERROR);
-            assertEquals(accuracy.getAverageAccuracy(),
-                    0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
-                    ABSOLUTE_ERROR);
-            assertEquals(accuracy.getNumberOfDimensions(), 2);
-
-            ellipse2 = accuracy.toEllipse();
-            assertEquals(ellipse.getCenter(), ellipse2.getCenter());
-            assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
-            assertEquals(ellipse2.getSemiMajorAxis(),
-                    semiMajorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-            assertEquals(ellipse2.getSemiMinorAxis(),
-                    semiMinorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-            assertEquals(ellipse2.getRotationAngle(), rotationAngle, ABSOLUTE_ERROR);
-
-
-            //force IllegalArgumentException
-            accuracy = null;
-            try {
-                accuracy = new Accuracy2D(new Matrix(1, 1), conf);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ignore) { }
-            try {
-                accuracy = new Accuracy2D(covarianceMatrix, -1.0);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ignore) { }
-            try {
-                accuracy = new Accuracy2D(covarianceMatrix, 2.0);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ignore) { }
-            assertNull(accuracy);
-
-            //force NonSymmetricPositiveDefiniteMatrixException
-            try {
-                accuracy = new Accuracy2D(m, conf);
-                fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
-            } catch (NonSymmetricPositiveDefiniteMatrixException ignore) { }
-            assertNull(accuracy);
+        // force IllegalArgumentException
+        accuracy = null;
+        try {
+            accuracy = new Accuracy2D(new Matrix(1, 1));
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
         }
+        assertNull(accuracy);
+
+        // force NonSymmetricPositiveDefiniteMatrixException
+        final Matrix m = Matrix.diagonal(new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY});
+
+        try {
+            accuracy = new Accuracy2D(m);
+            fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
+        } catch (final NonSymmetricPositiveDefiniteMatrixException ignore) {
+        }
+        assertNull(accuracy);
+
+
+        // constructor with confidence
+        final double conf = randomizer.nextDouble(0.0, 1.0);
+        accuracy = new Accuracy2D(conf);
+
+        // check default values
+        assertNull(accuracy.getCovarianceMatrix());
+        assertTrue(accuracy.getStandardDeviationFactor() > 0.0);
+        assertEquals(accuracy.getStandardDeviationFactor(),
+                NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
+        assertEquals(accuracy.getConfidence(), conf, 0.0);
+        assertEquals(accuracy.getSmallestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(accuracy.getLargestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(accuracy.getAverageAccuracy(), Double.POSITIVE_INFINITY, 0.0);
+        assertEquals(accuracy.getNumberOfDimensions(), 2);
+
+        // force IllegalArgumentException
+        accuracy = null;
+        try {
+            accuracy = new Accuracy2D(-1.0);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            accuracy = new Accuracy2D(2.0);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(accuracy);
+
+
+        // constructor with covariance matrix and confidence
+        accuracy = new Accuracy2D(covarianceMatrix, conf);
+
+        // check
+        assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
+        assertTrue(accuracy.getStandardDeviationFactor() > 0.0);
+        assertEquals(accuracy.getStandardDeviationFactor(),
+                NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
+        assertEquals(accuracy.getConfidence(), conf, 0.0);
+        assertEquals(accuracy.getSmallestAccuracy(),
+                accuracy.getStandardDeviationFactor() * semiMinorAxis, ABSOLUTE_ERROR);
+        assertEquals(accuracy.getLargestAccuracy(),
+                accuracy.getStandardDeviationFactor() * semiMajorAxis, ABSOLUTE_ERROR);
+        assertEquals(accuracy.getAverageAccuracy(),
+                0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
+                ABSOLUTE_ERROR);
+        assertEquals(accuracy.getNumberOfDimensions(), 2);
+
+        ellipse2 = accuracy.toEllipse();
+        assertEquals(ellipse.getCenter(), ellipse2.getCenter());
+        assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getSemiMajorAxis(),
+                semiMajorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getSemiMinorAxis(),
+                semiMinorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getRotationAngle(), rotationAngle, ABSOLUTE_ERROR);
+
+
+        // force IllegalArgumentException
+        accuracy = null;
+        try {
+            accuracy = new Accuracy2D(new Matrix(1, 1), conf);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            accuracy = new Accuracy2D(covarianceMatrix, -1.0);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            accuracy = new Accuracy2D(covarianceMatrix, 2.0);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertNull(accuracy);
+
+        // force NonSymmetricPositiveDefiniteMatrixException
+        try {
+            accuracy = new Accuracy2D(m, conf);
+            fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
+        } catch (final NonSymmetricPositiveDefiniteMatrixException ignore) {
+        }
+        assertNull(accuracy);
     }
 
     @Test
     public void testGetSetCovarianceMatrix() throws AlgebraException {
-        Accuracy2D accuracy = new Accuracy2D();
+        final Accuracy2D accuracy = new Accuracy2D();
 
-        //check default value
+        // check default value
         assertNull(accuracy.getCovarianceMatrix());
 
-        //set new value
-        Matrix covarianceMatrix = Matrix.identity(2, 2);
+        // set new value
+        final Matrix covarianceMatrix = Matrix.identity(2, 2);
         accuracy.setCovarianceMatrix(covarianceMatrix);
 
-        //check
+        // check
         assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
 
-        //force IllegalArgumentException
+        // force IllegalArgumentException
         try {
             accuracy.setCovarianceMatrix(new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
 
-        //force NonSymmetricPositiveDefiniteMatrixException
-        Matrix m = Matrix.diagonal(new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY});
+        // force NonSymmetricPositiveDefiniteMatrixException
+        final Matrix m = Matrix.diagonal(new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY});
         try {
             accuracy.setCovarianceMatrix(m);
             fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
-        } catch (NonSymmetricPositiveDefiniteMatrixException ignore) { }
+        } catch (final NonSymmetricPositiveDefiniteMatrixException ignore) {
+        }
     }
 
     @Test
     public void testGetSetStandardDeviationFactor() {
-        Accuracy2D accuracy = new Accuracy2D();
+        final Accuracy2D accuracy = new Accuracy2D();
 
-        //check default value
+        // check default value
         assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
 
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double factor = randomizer.nextDouble(10.0);
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double factor = randomizer.nextDouble(10.0);
         accuracy.setStandardDeviationFactor(factor);
 
-        //check
+        // check
         assertEquals(accuracy.getStandardDeviationFactor(), factor, 0.0);
         assertEquals(accuracy.getConfidence(),
                 2.0 * NormalDist.cdf(factor, 0.0, 1.0) - 1.0, 0.0);
 
-        //force IllegalArgumentException
+        // force IllegalArgumentException
         try {
             accuracy.setStandardDeviationFactor(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testGetSetConfidence() {
-        Accuracy2D accuracy = new Accuracy2D();
+        final Accuracy2D accuracy = new Accuracy2D();
 
-        //check default value
+        // check default value
         assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
         assertEquals(accuracy.getConfidence(),
                 2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
 
-        //set new value
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double conf = randomizer.nextDouble();
+        // set new value
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double conf = randomizer.nextDouble();
         accuracy.setConfidence(conf);
 
-        //check
+        // check
         assertEquals(accuracy.getConfidence(), conf, 0.0);
         assertEquals(accuracy.getStandardDeviationFactor(),
                 NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
 
-        //force IllegalArgumentException
+        // force IllegalArgumentException
         try {
             accuracy.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             accuracy.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 }

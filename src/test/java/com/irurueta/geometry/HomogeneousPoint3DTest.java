@@ -17,7 +17,7 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -25,28 +25,14 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 public class HomogeneousPoint3DTest {
-    
+
     private static final int HOM_COORDS = 4;
     private static final int INHOM_COORDS = 3;
-    
+
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double MIN_RANDOM_VALUE = 1.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
-    
-    public HomogeneousPoint3DTest() { }
 
-    @BeforeClass
-    public static void setUpClass() { }
-
-    @AfterClass
-    public static void tearDownClass() { }
-    
-    @Before
-    public void setUp() { }
-    
-    @After
-    public void tearDown() { }
-    
     @Test
     public void testConstructor() {
         HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
@@ -55,62 +41,62 @@ public class HomogeneousPoint3DTest {
         assertEquals(hPoint.getHomZ(), 0.0, 0.0);
         assertEquals(hPoint.getHomW(), 0.0, 1.0);
         assertFalse(hPoint.isNormalized());
-        
+
         double[] array = new double[HOM_COORDS];
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
+
         hPoint = new HomogeneousPoint3D(array);
-        
-        double[] array2 = hPoint.asArray();
+
+        final double[] array2 = hPoint.asArray();
         assertArrayEquals(array, array2, 0.0);
         assertFalse(hPoint.isNormalized());
-        
-        double a = randomizer.nextDouble();
-        double b = randomizer.nextDouble();
-        double c = randomizer.nextDouble();
-        double d = randomizer.nextDouble();
-        
+
+        final double a = randomizer.nextDouble();
+        final double b = randomizer.nextDouble();
+        final double c = randomizer.nextDouble();
+        final double d = randomizer.nextDouble();
+
         hPoint = new HomogeneousPoint3D(a, b, c, d);
         array = hPoint.asArray();
-        
+
         assertEquals(a, array[0], 0.0);
         assertEquals(b, array[1], 0.0);
         assertEquals(c, array[2], 0.0);
         assertEquals(d, array[3], 0.0);
         assertFalse(hPoint.isNormalized());
-        
+
         Point3D point = Point3D.create(
                 CoordinatesType.HOMOGENEOUS_COORDINATES);
         hPoint = new HomogeneousPoint3D(point);
-        assertEquals(hPoint.getType(), 
+        assertEquals(hPoint.getType(),
                 CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertFalse(hPoint.isNormalized());
-        
+
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
         hPoint = new HomogeneousPoint3D(point);
         assertEquals(hPoint.getType(),
                 CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertFalse(hPoint.isNormalized());
     }
-    
+
     @Test
     public void testGettersAndSetters() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        double x = randomizer.nextDouble();
-        double y = randomizer.nextDouble();
-        double z = randomizer.nextDouble();
-        double w = randomizer.nextDouble();
-        double homX = randomizer.nextDouble();
-        double homY = randomizer.nextDouble();
-        double homZ = randomizer.nextDouble();
-        double homW = randomizer.nextDouble();
-        double inhomX = randomizer.nextDouble();
-        double inhomY = randomizer.nextDouble();
-        double inhomZ = randomizer.nextDouble();
-        
-        HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final double x = randomizer.nextDouble();
+        final double y = randomizer.nextDouble();
+        final double z = randomizer.nextDouble();
+        final double w = randomizer.nextDouble();
+        final double homX = randomizer.nextDouble();
+        final double homY = randomizer.nextDouble();
+        final double homZ = randomizer.nextDouble();
+        final double homW = randomizer.nextDouble();
+        final double inhomX = randomizer.nextDouble();
+        final double inhomY = randomizer.nextDouble();
+        final double inhomZ = randomizer.nextDouble();
+
+        final HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
         hPoint.setX(x);
         hPoint.setY(y);
         hPoint.setZ(z);
@@ -119,7 +105,7 @@ public class HomogeneousPoint3DTest {
         assertEquals(hPoint.getY(), y, 0.0);
         assertEquals(hPoint.getZ(), z, 0.0);
         assertEquals(hPoint.getW(), w, 0.0);
-        
+
         hPoint.setHomogeneousCoordinates(homX, homY, homZ, homW);
         assertEquals(hPoint.getHomX(), homX, 0.0);
         assertEquals(hPoint.getHomY(), homY, 0.0);
@@ -128,7 +114,7 @@ public class HomogeneousPoint3DTest {
         assertEquals(hPoint.getX(), homX, 0.0);
         assertEquals(hPoint.getY(), homY, 0.0);
         assertEquals(hPoint.getW(), homW, 0.0);
-        
+
         hPoint.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
         assertEquals(hPoint.getInhomX(), inhomX, 0.0);
         assertEquals(hPoint.getInhomY(), inhomY, 0.0);
@@ -137,66 +123,68 @@ public class HomogeneousPoint3DTest {
         assertEquals(hPoint.getY() / hPoint.getW(), inhomY, 0.0);
         assertEquals(hPoint.getZ() / hPoint.getW(), inhomZ, 0.0);
     }
-    
+
     @Test
     public void testToInhomogeneous() {
-        double[] array = new double[HOM_COORDS];
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] array = new double[HOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
-        HomogeneousPoint3D hPoint = new HomogeneousPoint3D(array);
-        
-        InhomogeneousPoint3D iPoint = hPoint.toInhomogeneous();
-        
-        assertEquals(iPoint.getX(), hPoint.getX() / hPoint.getW(), 
+
+        final HomogeneousPoint3D hPoint = new HomogeneousPoint3D(array);
+
+        final InhomogeneousPoint3D iPoint = hPoint.toInhomogeneous();
+
+        assertEquals(iPoint.getX(), hPoint.getX() / hPoint.getW(),
                 ABSOLUTE_ERROR);
-        assertEquals(iPoint.getY(), hPoint.getY() / hPoint.getW(), 
+        assertEquals(iPoint.getY(), hPoint.getY() / hPoint.getW(),
                 ABSOLUTE_ERROR);
-        assertEquals(iPoint.getZ(), hPoint.getZ() / hPoint.getW(), 
+        assertEquals(iPoint.getZ(), hPoint.getZ() / hPoint.getW(),
                 ABSOLUTE_ERROR);
     }
-    
+
     @Test
     public void testSetCoordinates() {
         double[] array = new double[HOM_COORDS];
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
+
         HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
         hPoint.setCoordinates(array);
         double[] array2 = hPoint.asArray();
-        
+
         assertArrayEquals(array, array2, 0.0);
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         array = new double[HOM_COORDS + 1];
         hPoint = new HomogeneousPoint3D();
         try {
             hPoint.setCoordinates(array);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
+        } catch (final IllegalArgumentException ignore) {
+        }
+
         array = new double[HOM_COORDS - 1];
         hPoint = new HomogeneousPoint3D();
         try {
             hPoint.setCoordinates(array);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
-        
-        double x = randomizer.nextDouble();
-        double y = randomizer.nextDouble();
-        double z = randomizer.nextDouble();
-        double w = randomizer.nextDouble();
+        } catch (final IllegalArgumentException ignore) {
+        }
+
+        final double x = randomizer.nextDouble();
+        final double y = randomizer.nextDouble();
+        final double z = randomizer.nextDouble();
+        final double w = randomizer.nextDouble();
         hPoint = new HomogeneousPoint3D();
         hPoint.setCoordinates(x, y, z, w);
         assertEquals(hPoint.getX(), x, 0.0);
         assertEquals(hPoint.getY(), y, 0.0);
         assertEquals(hPoint.getZ(), z, 0.0);
         assertEquals(hPoint.getW(), w, 0.0);
-        
-        double inhomX = randomizer.nextDouble();
-        double inhomY = randomizer.nextDouble();
-        double inhomZ = randomizer.nextDouble();
+
+        final double inhomX = randomizer.nextDouble();
+        final double inhomY = randomizer.nextDouble();
+        final double inhomZ = randomizer.nextDouble();
         hPoint = new HomogeneousPoint3D();
         hPoint.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
         assertEquals(hPoint.getInhomX(), inhomX, 0.0);
@@ -207,20 +195,19 @@ public class HomogeneousPoint3DTest {
         assertEquals(hPoint.getZ() / hPoint.getW(), inhomZ, 0.0);
 
         array = new double[HOM_COORDS];
-        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);        
-        HomogeneousPoint3D hPoint2 = new HomogeneousPoint3D(array);        
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final HomogeneousPoint3D hPoint2 = new HomogeneousPoint3D(array);
         hPoint = new HomogeneousPoint3D();
-        //pass another point to set coordinates
+        // pass another point to set coordinates
         hPoint.setCoordinates(hPoint2);
         array2 = hPoint.asArray();
         assertArrayEquals(array, array2, 0.0);
 
-        
         array = new double[INHOM_COORDS];
-        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);        
-        InhomogeneousPoint3D iPoint = new InhomogeneousPoint3D(array);
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final InhomogeneousPoint3D iPoint = new InhomogeneousPoint3D(array);
         hPoint = new HomogeneousPoint3D();
-        //pass another point to set coordinates
+        // pass another point to set coordinates
         hPoint.setCoordinates(iPoint);
         array2 = hPoint.asArray();
         assertEquals(array[0], array2[0], 0.0);
@@ -228,191 +215,198 @@ public class HomogeneousPoint3DTest {
         assertEquals(array[2], array2[2], 0.0);
         assertEquals(1.0, array2[3], 0.0);
     }
-    
+
     @Test
     public void testAsArray() {
-        double[] array = new double[HOM_COORDS];
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] array = new double[HOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
-        HomogeneousPoint3D hPoint = new HomogeneousPoint3D(array);
-        double[] array2 = hPoint.asArray();        
+
+        final HomogeneousPoint3D hPoint = new HomogeneousPoint3D(array);
+        double[] array2 = hPoint.asArray();
         assertArrayEquals(array, array2, 0.0);
-        
+
         array2 = new double[HOM_COORDS];
         hPoint.asArray(array2);
         assertArrayEquals(array, array2, 0.0);
     }
-    
+
     @Test
     public void testEquals() {
-        double[] array = new double[HOM_COORDS];
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] array = new double[HOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
+
         HomogeneousPoint3D hPoint1 = new HomogeneousPoint3D(array);
         HomogeneousPoint3D hPoint2 = new HomogeneousPoint3D(array);
         assertTrue(hPoint1.equals(hPoint2, 0.0));
-        assertTrue(hPoint1.equals((Point3D)hPoint2, 0.0));
-        
-        array[0] = hPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE, 
+        assertTrue(hPoint1.equals((Point3D) hPoint2, 0.0));
+
+        array[0] = hPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
         array[1] = hPoint1.getY();
         array[2] = hPoint1.getZ();
         array[3] = hPoint1.getW();
-        
+
         hPoint2 = new HomogeneousPoint3D(array);
         assertFalse(hPoint1.equals(hPoint2, 0.0));
-        assertFalse(hPoint1.equals((Point3D)hPoint2, 0.0));
-        
+        assertFalse(hPoint1.equals((Point3D) hPoint2, 0.0));
+
         array[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[1] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[2] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[3] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
+
         hPoint1 = new HomogeneousPoint3D(array);
         array[0] *= 2.0;
         hPoint2 = new HomogeneousPoint3D(array);
         assertTrue(hPoint1.equals(hPoint2, 2.0));
-        assertTrue(hPoint1.equals((Point3D)hPoint2, 2.0));
+        assertTrue(hPoint1.equals((Point3D) hPoint2, 2.0));
         assertFalse(hPoint1.equals(hPoint2, 0.0));
-        assertFalse(hPoint1.equals((Point3D)hPoint2, 0.0));
-        
-        //Testing equals from one inhomogeneous point
-        double[] iArray = new double[INHOM_COORDS];
+        assertFalse(hPoint1.equals((Point3D) hPoint2, 0.0));
+
+        // Testing equals from one inhomogeneous point
+        final double[] iArray = new double[INHOM_COORDS];
         iArray[0] = array[0] / array[3];
         iArray[1] = array[1] / array[3];
         iArray[2] = array[2] / array[3];
-        
+
         HomogeneousPoint3D hPoint = new HomogeneousPoint3D(array);
-        InhomogeneousPoint3D iPoint = new InhomogeneousPoint3D(iArray);        
+        InhomogeneousPoint3D iPoint = new InhomogeneousPoint3D(iArray);
         assertTrue(hPoint.equals(iPoint, ABSOLUTE_ERROR));
-        assertTrue(hPoint.equals((Point3D)iPoint, ABSOLUTE_ERROR));
-        
+        assertTrue(hPoint.equals((Point3D) iPoint, ABSOLUTE_ERROR));
+
         iArray[0] = hPoint.getInhomX() + 1.0;
         iArray[1] = hPoint.getInhomY() + 1.0;
         iArray[2] = hPoint.getInhomZ() + 1.0;
         iPoint = new InhomogeneousPoint3D(iArray);
         assertFalse(hPoint.equals(iPoint, 0.0));
-        assertFalse(hPoint.equals((Point3D)iPoint, 0.0));
-        
+        assertFalse(hPoint.equals((Point3D) iPoint, 0.0));
+
         array[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[1] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[2] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[3] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         hPoint = new HomogeneousPoint3D(array);
-        
+
         iArray[0] = hPoint.getInhomX() + 1.0;
         iArray[1] = hPoint.getInhomY() + 1.0;
         iArray[2] = hPoint.getInhomZ() + 1.0;
         iPoint = new InhomogeneousPoint3D(iArray);
         assertTrue(hPoint.equals(iPoint, 1.1));
-        assertTrue(hPoint.equals((Point3D)iPoint, 1.1));
+        assertTrue(hPoint.equals((Point3D) iPoint, 1.1));
         assertFalse(hPoint.equals(iPoint, 0.5));
-        assertFalse(hPoint.equals((Point3D)iPoint, 0.5));
-        
-        //Force IllegalArgumentException
+        assertFalse(hPoint.equals((Point3D) iPoint, 0.5));
+
+        // Force IllegalArgumentException
         boolean value = false;
         try {
             value = hPoint.equals(hPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
             value = hPoint.equals(iPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         try {
-            value = hPoint.equals((Point3D)iPoint, -ABSOLUTE_ERROR);
+            value = hPoint.equals((Point3D) iPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
         assertFalse(value);
-    }    
-    
+    }
+
     @Test
     public void testIsAtInfinity() {
-        HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
-        //sets point at infinity
+        final HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
+        // sets point at infinity
         hPoint.setW(0.0);
         assertTrue(hPoint.isAtInfinity());
-        //Forces point not being at infinity
+        // Forces point not being at infinity
         hPoint.setW(1.0);
         assertFalse(hPoint.isAtInfinity());
-        
-        //Testing with threshold
+
+        // Testing with threshold
         hPoint.setW(4.0);
         assertTrue(hPoint.isAtInfinity(4.5));
         hPoint.setW(5.0);
         assertFalse(hPoint.isAtInfinity(4.5));
-        
-        //Force IllegalArgumentException
+
+        // Force IllegalArgumentException
         try {
             hPoint.isAtInfinity(-ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) { }
+        } catch (final IllegalArgumentException ignore) {
+        }
     }
 
     @Test
     public void testNormalize() {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
-        HomogeneousPoint3D point = new HomogeneousPoint3D(homX, homY, homZ, 
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final HomogeneousPoint3D point = new HomogeneousPoint3D(homX, homY, homZ,
                 homW);
         assertEquals(point.getHomX(), homX, 0.0);
         assertEquals(point.getHomY(), homY, 0.0);
         assertEquals(point.getHomZ(), homZ, 0.0);
         assertEquals(point.getHomW(), homW, 0.0);
         assertFalse(point.isNormalized());
-        
-        //compute norm
-        double norm = Math.sqrt(homX * homX + homY * homY + homZ * homZ +
+
+        // compute norm
+        final double norm = Math.sqrt(homX * homX + homY * homY + homZ * homZ +
                 homW * homW);
-        
-        //normalize
+
+        // normalize
         point.normalize();
         assertTrue(point.isNormalized());
-        
-        //check correctness after normalization
-        assertEquals(point.getHomX(), homX / norm,  ABSOLUTE_ERROR);
-        assertEquals(point.getHomY(), homY / norm,  ABSOLUTE_ERROR);
-        assertEquals(point.getHomZ(), homZ / norm,  ABSOLUTE_ERROR);
-        assertEquals(point.getHomW(), homW / norm,  ABSOLUTE_ERROR);
-        
+
+        // check correctness after normalization
+        assertEquals(point.getHomX(), homX / norm, ABSOLUTE_ERROR);
+        assertEquals(point.getHomY(), homY / norm, ABSOLUTE_ERROR);
+        assertEquals(point.getHomZ(), homZ / norm, ABSOLUTE_ERROR);
+        assertEquals(point.getHomW(), homW / norm, ABSOLUTE_ERROR);
+
         point.setHomogeneousCoordinates(homX, homY, homZ, homW);
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());
-        
+
         point.setCoordinates(homX, homY, homZ, homW);
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());
 
-        point.setInhomogeneousCoordinates(homX / homW, homY / homW, 
+        point.setInhomogeneousCoordinates(homX / homW, homY / homW,
                 homZ / homW);
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());
 
-        double[] array = new double[HOM_COORDS];
-        Arrays.fill(array, 0.0); //initialize to zeros
+        final double[] array = new double[HOM_COORDS];
+        // initialize to zeros
+        Arrays.fill(array, 0.0);
         point.setCoordinates(array);
         assertFalse(point.isNormalized());
-        point.normalize(); //normalization is not done because of numerical 
-                            //instability
+        // normalization is not done because of numerical
+        point.normalize();
+        // instability
         assertFalse(point.isNormalized());
-        
-        //fill array with random values
+
+        // fill array with random values
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         point.setCoordinates(array);
         assertFalse(point.isNormalized());
-        point.normalize(); //now normalization is done
-        assertTrue(point.isNormalized());        
-        
-        HomogeneousPoint3D point2 = new HomogeneousPoint3D();
+        // now normalization is done
+        point.normalize();
+        assertTrue(point.isNormalized());
+
+        final HomogeneousPoint3D point2 = new HomogeneousPoint3D();
         point.setCoordinates(point2);
         assertFalse(point.isNormalized());
         point.normalize();
@@ -436,6 +430,6 @@ public class HomogeneousPoint3DTest {
         point.setW(homW);
         assertFalse(point.isNormalized());
         point.normalize();
-        assertTrue(point.isNormalized());        
-    }    
+        assertTrue(point.isNormalized());
+    }
 }

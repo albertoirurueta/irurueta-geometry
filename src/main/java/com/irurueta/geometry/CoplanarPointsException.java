@@ -25,29 +25,32 @@ public class CoplanarPointsException extends GeometryException {
     public CoplanarPointsException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public CoplanarPointsException(String message) {
+    public CoplanarPointsException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public CoplanarPointsException(String message, Throwable cause) {
+    public CoplanarPointsException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public CoplanarPointsException(Throwable cause) {
+    public CoplanarPointsException(final Throwable cause) {
         super(cause);
     }
 }

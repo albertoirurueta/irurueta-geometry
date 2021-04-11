@@ -28,79 +28,80 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
+@SuppressWarnings("DuplicatedCode")
 public abstract class Line2DRobustEstimator {
     /**
      * Minimum number of 2D points required to estimate a line.
      */
     public static final int MINIMUM_SIZE = 2;
-    
+
     /**
      * Default amount of progress variation before notifying a change in
      * estimation progress. By default this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
-    
+
     /**
      * Minimum allowed value for progress delta.
      */
     public static final float MIN_PROGRESS_DELTA = 0.0f;
-    
+
     /**
      * Maximum allowed value for progress delta.
      */
     public static final float MAX_PROGRESS_DELTA = 1.0f;
-    
+
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
      * accurate because chosen subsamples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
-    
+
     /**
      * Default maximum allowed number of iterations.
      */
     public static final int DEFAULT_MAX_ITERATIONS = 5000;
-    
+
     /**
      * Minimum allowed confidence value.
      */
     public static final double MIN_CONFIDENCE = 0.0;
-    
+
     /**
      * Maximum allowed confidence value.
      */
     public static final double MAX_CONFIDENCE = 1.0;
-    
+
     /**
      * Minimum allowed number of iterations.
      */
     public static final int MIN_ITERATIONS = 1;
-    
+
     /**
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
             RobustEstimatorMethod.PROMedS;
-    
+
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
     protected Line2DRobustEstimatorListener mListener;
-    
+
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
     protected volatile boolean mLocked;
-    
+
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
     protected float mProgressDelta;
-    
+
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
      * equivalent to 100%). The amount of confidence indicates the probability
@@ -108,106 +109,113 @@ public abstract class Line2DRobustEstimator {
      * to 1.0, but not exactly 1.0.
      */
     protected double mConfidence;
-    
+
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;   
-    
+    protected int mMaxIterations;
+
     /**
      * List of points to be used to estimate a 2D line. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
     protected List<Point2D> mPoints;
-    
+
     /**
      * Constructor.
      */
-    public Line2DRobustEstimator() {
+    protected Line2DRobustEstimator() {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;                
+        mMaxIterations = DEFAULT_MAX_ITERATIONS;
     }
-    
+
     /**
      * Constructor.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      */
-    public Line2DRobustEstimator(Line2DRobustEstimatorListener listener) {
+    protected Line2DRobustEstimator(final Line2DRobustEstimatorListener listener) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;        
+        mMaxIterations = DEFAULT_MAX_ITERATIONS;
     }
-    
+
     /**
      * Constructor with points.
+     *
      * @param points 2D points to estimate a 2D line.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public Line2DRobustEstimator(List<Point2D> points) {
+    protected Line2DRobustEstimator(final List<Point2D> points) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS; 
+        mMaxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
-    
+
     /**
      * Constructor.
-     * @param points 2D points to estimate a 2D line.
+     *
+     * @param points   2D points to estimate a 2D line.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public Line2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            List<Point2D> points) {
+    protected Line2DRobustEstimator(final Line2DRobustEstimatorListener listener,
+                                    final List<Point2D> points) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
-    
-    
+
+
     /**
-     * Returns reference to listener to be notified of events such as when 
+     * Returns reference to listener to be notified of events such as when
      * estimation starts, ends or its progress significantly changes.
+     *
      * @return listener to be notified of events.
      */
     public Line2DRobustEstimatorListener getListener() {
         return mListener;
     }
-    
+
     /**
      * Sets listener to be notified of events such as when estimation starts,
      * ends or its progress significantly changes.
+     *
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(Line2DRobustEstimatorListener listener) 
+    public void setListener(final Line2DRobustEstimatorListener listener)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         mListener = listener;
     }
-    
+
     /**
-     * Indicates whether listener has been provided and is available for 
+     * Indicates whether listener has been provided and is available for
      * retrieval.
+     *
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
         return mListener != null;
     }
-    
+
     /**
      * Indicates if this instance is locked because estimation is being computed.
+     *
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
@@ -215,26 +223,28 @@ public abstract class Line2DRobustEstimator {
     }
 
     /**
-     * Returns amount of progress variation before notifying a progress change 
+     * Returns amount of progress variation before notifying a progress change
      * during estimation.
+     *
      * @return amount of progress variation before notifying a progress change
      * during estimation.
      */
     public float getProgressDelta() {
         return mProgressDelta;
     }
-    
+
     /**
-     * Sets amount of progress variation before notifying a progress change 
+     * Sets amount of progress variation before notifying a progress change
      * during estimation.
-     * @param progressDelta amount of progress variation before notifying a 
-     * progress change during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
-     * greater than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setProgressDelta(float progressDelta) throws LockedException {
+    public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -244,30 +254,32 @@ public abstract class Line2DRobustEstimator {
         }
         mProgressDelta = progressDelta;
     }
-    
+
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
      * (which is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
         return mConfidence;
     }
-    
+
     /**
      * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
-     * is equivalent to 100%). The amount of confidence indicates the 
+     * is equivalent to 100%). The amount of confidence indicates the
      * probability that the estimated result is correct. Usually this value will
      * be close to 1.0, but not exactly 1.0.
+     *
      * @param confidence confidence to be set as a value between 0.0 and 1.0.
-     * @throws IllegalArgumentException if provided value is not between 0.0 and 
-     * 1.0.
-     * @throws LockedException if this estimator is locked because an estimator 
-     * is being computed.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
      */
-    public void setConfidence(double confidence) throws LockedException {
+    public void setConfidence(final double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -276,27 +288,29 @@ public abstract class Line2DRobustEstimator {
         }
         mConfidence = confidence;
     }
-    
+
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
-     * of iterations is achieved without converging to a result when calling 
+     * of iterations is achieved without converging to a result when calling
      * estimate(), a RobustEstimatorException will be raised.
+     *
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
         return mMaxIterations;
     }
-    
+
     /**
      * Sets maximum allowed number of iterations. When the maximum number of
-     * iterations is exceeded, result will not be available, however an 
+     * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
+     *
      * @param maxIterations maximum allowed number of iterations to be set.
      * @throws IllegalArgumentException if provided value is less than 1.
-     * @throws LockedException if this estimator is locked because an estimation
-     * is being computed.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
      */
-    public void setMaxIterations(int maxIterations) throws LockedException {
+    public void setMaxIterations(final int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -304,74 +318,81 @@ public abstract class Line2DRobustEstimator {
             throw new IllegalArgumentException();
         }
         mMaxIterations = maxIterations;
-    }  
-    
+    }
+
     /**
      * Returns list of points to be used to estimate a 2D line.
      * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
      * @return list of points to be used to estimate a 2D line.
      */
     public List<Point2D> getPoints() {
         return mPoints;
     }
-    
+
     /**
      * Sets list of points to be used to estimate a 2D line.
      * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
      * @param points list of points to be used to estimate a 2D line.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
-     * @throws LockedException if estimator is locked because a computation is
-     * already in progress.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
      */
-    public void setPoints(List<Point2D> points) throws LockedException {
+    public void setPoints(final List<Point2D> points) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         internalSetPoints(points);
     }
-    
+
     /**
      * Indicates if estimator is ready to start the 2D line estimation.
      * This is true when a minimum of MINIMUM_SIZE points are available.
+     *
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
         return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
     }
-    
+
     /**
      * Returns quality scores corresponding to each point.
      * The larger the score value the better the quality of the point measure.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @return quality scores corresponding to each point.
      */
     public double[] getQualityScores() {
         return null;
     }
-    
+
     /**
      * Sets quality scores corresponding to each point.
      * The larger the score value the better the quality of the point measure.
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
+     *
      * @param qualityScores quality scores corresponding to each sampled point.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 samples).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException { }
-    
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+    }
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided robust estimator method.
+     *
      * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     *               2D line.
      * @return an instance of a 2D line robust estimator.
      */
-    public static Line2DRobustEstimator create(RobustEstimatorMethod method) {
+    public static Line2DRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator();
@@ -386,19 +407,20 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator();
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided points and robust estimator method.
+     *
      * @param points 2D points to estimate a 2D line.
      * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     *               2D line.
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(List<Point2D> points, 
-            RobustEstimatorMethod method) {
+    public static Line2DRobustEstimator create(final List<Point2D> points,
+                                               final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator(points);
@@ -413,19 +435,20 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator(points);
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 2D line.
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, 
-            RobustEstimatorMethod method) {
+            final Line2DRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator(listener);
@@ -440,22 +463,23 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator(listener);
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener and points.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 2D points to estimate a 2D line.
-     * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a 2D line.
+     * @param method   method of a robust estimator algorithm to estimate best
+     *                 2D line.
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, List<Point2D> points,
-            RobustEstimatorMethod method) {
+            final Line2DRobustEstimatorListener listener, final List<Point2D> points,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator(listener, points);
@@ -470,19 +494,20 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator(listener, points);
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 points).
      */
-    public static Line2DRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) {
+    public static Line2DRobustEstimator create(
+            final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator();
@@ -497,21 +522,23 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator();
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided points and robust estimator method.
-     * @param points 2D points to estimate a 2D line.
+     *
+     * @param points        2D points to estimate a 2D line.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      2D line.
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(List<Point2D> points, 
-            double[] qualityScores, RobustEstimatorMethod method) {
+    public static Line2DRobustEstimator create(
+            final List<Point2D> points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator(points);
@@ -526,22 +553,23 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator(points);
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) {
+            final Line2DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator(listener);
@@ -556,194 +584,207 @@ public abstract class Line2DRobustEstimator {
                 return new RANSACLine2DRobustEstimator(listener);
         }
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener and points.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 2D points to estimate a 2D line.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        2D points to estimate a 2D line.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method method of a robust estimator algorithm to estimate best
-     * 2D line.
+     * @param method        method of a robust estimator algorithm to estimate best
+     *                      2D line.
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, List<Point2D> points,
-            double[] qualityScores, RobustEstimatorMethod method) {
+            final Line2DRobustEstimatorListener listener, final List<Point2D> points,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLine2DRobustEstimator(listener, points);
             case MSAC:
                 return new MSACLine2DRobustEstimator(listener, points);
             case PROSAC:
-                return new PROSACLine2DRobustEstimator(listener, points, 
+                return new PROSACLine2DRobustEstimator(listener, points,
                         qualityScores);
             case PROMedS:
-                return new PROMedSLine2DRobustEstimator(listener, points, 
+                return new PROMedSLine2DRobustEstimator(listener, points,
                         qualityScores);
             case RANSAC:
             default:
                 return new RANSACLine2DRobustEstimator(listener, points);
         }
-    }    
-    
+    }
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * default robust estimator method.
+     *
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create() {
         return create(DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided points and default robust estimator method.
+     *
      * @param points 2D points to estimate a 2D line.
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(List<Point2D> points) {
+    public static Line2DRobustEstimator create(final List<Point2D> points) {
         return create(points, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener and default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *                 starts, ends or its progress significantly changes.
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener) {
+            final Line2DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener and lines and default robust estimator method.
+     *
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 2D points to estimate a line.
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a line.
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, List<Point2D> points) {
+            final Line2DRobustEstimatorListener listener, final List<Point2D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * default robust estimator method.
+     *
      * @param qualityScores quality scores corresponding to each provided point
      * @return an instance of a 2D point robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 points).
      */
-    public static Line2DRobustEstimator create(double[] qualityScores) {
+    public static Line2DRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided points and default estimator method.
-     * @param points 2D points to estimate a 2D line.
+     *
+     * @param points        2D points to estimate a 2D line.
      * @param qualityScores quality scores corresponding to each provided point
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or if their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(List<Point2D> points, 
-            double[] qualityScores) {
+    public static Line2DRobustEstimator create(final List<Point2D> points,
+                                               final double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener and default estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point
      * @return an instance of a circle robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 points).
+     *                                  smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, double[] qualityScores) {
+            final Line2DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
-    
+
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided listener and points and default estimator method.
-     * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes.
-     * @param points 2D points to estimate a 2D line.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        2D points to estimate a 2D line.
      * @param qualityScores quality scores corresponding to each provided point
      * @return an instance of a 2D line robust estimator.
-     * @throws IllegalArgumentException if provided list of points don't have 
-     * the same size as the list of provided quality scores, or if their size 
-     * is not greater or equal than MINIMUM_SIZE.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, List<Point2D> points,
-            double[] qualityScores) {
+            final Line2DRobustEstimatorListener listener, final List<Point2D> points,
+            final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
-    }        
-    
+    }
+
     /**
-     * Estimates a 2D line using a robust estimator and the best set of 2D 
+     * Estimates a 2D line using a robust estimator and the best set of 2D
      * points that pass through the estimated 2D line (i.e. belong to its locus)
+     *
      * @return a 2D line.
-     * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress.
-     * @throws NotReadyException if provided input data is not enough to start
-     * the estimation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc).
+     *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Line2D estimate() throws LockedException, 
+    public abstract Line2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException;
-        
+
     /**
      * Returns method being used for robust estimation.
+     *
      * @return method being used for robust estimation.
      */
-    public abstract RobustEstimatorMethod getMethod();   
-    
+    public abstract RobustEstimatorMethod getMethod();
+
     /**
-     * Internal method to set list of 2D points to be used to estimate a 2D 
+     * Internal method to set list of 2D points to be used to estimate a 2D
      * line.
      * This method does not check whether estimator is locked or not.
+     *
      * @param points list of points to be used to estimate a 2D line.
      * @throws IllegalArgumentException if provided list of points doesn't have
-     * a size greater or equal than MINIMUM_SIZE.
+     *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPoints(List<Point2D> points) {
+    private void internalSetPoints(final List<Point2D> points) {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
         mPoints = points;
     }
-    
+
     /**
      * Computes the residual between a 2D point and a line.
-     * @param l a 2D line.
+     *
+     * @param l     a 2D line.
      * @param point a 2D point.
      * @return residual.
      */
-    protected double residual(Line2D l, Point2D point) {
+    protected double residual(final Line2D l, final Point2D point) {
         l.normalize();
         point.normalize();
-        
+
         return Math.abs(l.signedDistance(point));
-    }        
+    }
 }

@@ -19,36 +19,39 @@ package com.irurueta.geometry.estimators;
  * Thrown when a pair of lists don't have equal size.
  */
 public class WrongListSizesException extends GeometryEstimatorException {
-    
+
     /**
      * Constructor.
      */
     public WrongListSizesException() {
         super();
     }
-    
+
     /**
      * Constructor with String containing message.
+     *
      * @param message Message indicating the cause of the exception.
      */
-    public WrongListSizesException(String message) {
+    public WrongListSizesException(final String message) {
         super(message);
     }
-    
+
     /**
      * Constructor with message and cause.
+     *
      * @param message Message describing the cause of the exception.
-     * @param cause Instance containing the cause of the exception.
+     * @param cause   Instance containing the cause of the exception.
      */
-    public WrongListSizesException(String message, Throwable cause) {
+    public WrongListSizesException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
     /**
      * Constructor with cause.
+     *
      * @param cause Instance containing the cause of the exception.
      */
-    public WrongListSizesException(Throwable cause) {
+    public WrongListSizesException(final Throwable cause) {
         super(cause);
     }
 }

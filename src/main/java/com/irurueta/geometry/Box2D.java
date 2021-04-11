@@ -36,46 +36,50 @@ public class Box2D extends Box<Point2D> {
 
     /**
      * Constructor.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public Box2D(Point2D lo, Point2D hi) {
+    public Box2D(final Point2D lo, final Point2D hi) {
         super(lo, hi);
     }
 
     /**
      * Constructor from rectangle.
+     *
      * @param rectangle a rectangle.
      */
-    public Box2D(Rectangle rectangle) {
+    public Box2D(final Rectangle rectangle) {
         fromRectangle(rectangle);
     }
 
     /**
      * Sets boundaries.
+     *
      * @param loX horizontal low coordinate.
      * @param loY vertical low coordinate.
      * @param hiX horizontal high coordinate.
      * @param hiY vertical high coordinate.
      */
-    public final void setBounds(double loX, double loY, double hiX, double hiY) {
+    public final void setBounds(final double loX, final double loY, final double hiX, final double hiY) {
         setBounds(new InhomogeneousPoint2D(loX, loY),
                 new InhomogeneousPoint2D(hiX, hiY));
     }
 
     /**
      * Sets values of this box from provided rectangle.
+     *
      * @param rectangle a rectangle containing boundaries.
      */
-    public final void fromRectangle(Rectangle rectangle) {
-        Point2D topLeft = rectangle.getTopLeft();
-        Point2D bottomRight = rectangle.getBottomRight();
+    public final void fromRectangle(final Rectangle rectangle) {
+        final Point2D topLeft = rectangle.getTopLeft();
+        final Point2D bottomRight = rectangle.getBottomRight();
 
-        double loX = topLeft.getInhomX();
-        double loY = bottomRight.getInhomY();
+        final double loX = topLeft.getInhomX();
+        final double loY = bottomRight.getInhomY();
 
-        double hiX = bottomRight.getInhomX();
-        double hiY = topLeft.getInhomY();
+        final double hiX = bottomRight.getInhomX();
+        final double hiY = topLeft.getInhomY();
 
         mLo = new InhomogeneousPoint2D(loX, loY);
         mHi = new InhomogeneousPoint2D(hiX, hiY);
@@ -83,24 +87,26 @@ public class Box2D extends Box<Point2D> {
 
     /**
      * Creates a rectangle equivalent to this box.
+     *
      * @return a rectangle equivalent to this box.
      */
     public Rectangle toRectangle() {
-        Rectangle result = new Rectangle();
+        final Rectangle result = new Rectangle();
         toRectangle(result);
         return result;
     }
 
     /**
      * Sets values into provided rectangle to make it equivalent to this box.
+     *
      * @param result instance where values will be stored.
      */
-    public void toRectangle(Rectangle result) {
-        double left = mLo.getInhomX();
-        double right = mHi.getInhomX();
+    public void toRectangle(final Rectangle result) {
+        final double left = mLo.getInhomX();
+        final double right = mHi.getInhomX();
 
-        double bottom = mLo.getInhomY();
-        double top = mHi.getInhomY();
+        final double bottom = mLo.getInhomY();
+        final double top = mHi.getInhomY();
 
         result.setBounds(left, top, right, bottom);
     }

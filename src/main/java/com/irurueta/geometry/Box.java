@@ -20,9 +20,10 @@ import java.io.Serializable;
 
 /**
  * Abstract representation of a box for a point in an n-dimensional representation.
+ *
  * @param <P> a point implementation.
  */
-public abstract class Box<P extends Point> implements Serializable {
+public abstract class Box<P extends Point<P>> implements Serializable {
 
     /**
      * Low coordinate values.
@@ -37,19 +38,22 @@ public abstract class Box<P extends Point> implements Serializable {
     /**
      * Empty constructor.
      */
-    protected Box() { }
+    protected Box() {
+    }
 
     /**
      * Constructor.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public Box(P lo, P hi) {
+    protected Box(final P lo, final P hi) {
         internalSetBounds(lo, hi);
     }
 
     /**
      * Gets low coordinate values.
+     *
      * @return low coordinate values.
      */
     public P getLo() {
@@ -58,14 +62,16 @@ public abstract class Box<P extends Point> implements Serializable {
 
     /**
      * Sets low coordinate values.
+     *
      * @param lo low coordinate values.
      */
-    public void setLo(P lo) {
+    public void setLo(final P lo) {
         mLo = lo;
     }
 
     /**
      * Gets high coordinate values.
+     *
      * @return high coordinate values.
      */
     public P getHi() {
@@ -74,29 +80,32 @@ public abstract class Box<P extends Point> implements Serializable {
 
     /**
      * Sets high coordinate values.
+     *
      * @param hi high coordinate values.
      */
-    public void setHi(P hi) {
+    public void setHi(final P hi) {
         mHi = hi;
     }
 
     /**
      * Sets boundaries.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public void setBounds(P lo, P hi) {
+    public void setBounds(final P lo, final P hi) {
         internalSetBounds(lo, hi);
     }
 
     /**
      * Gets square distance of provided point to the boundaries of this box or zero if the point is
      * inside this box.
+     *
      * @param point point to be checked.
      * @return distance of provided point.
      */
-    public double getSqrDistance(P point) {
-        int dim = point.getDimensions();
+    public double getSqrDistance(final P point) {
+        final int dim = point.getDimensions();
 
         double dd = 0.0;
         double pointValue;
@@ -120,28 +129,31 @@ public abstract class Box<P extends Point> implements Serializable {
     /**
      * Gets distance of provided point to the boundaries of this box or zero if the point is
      * inside this box.
+     *
      * @param point point to be checked.
      * @return distance of provided point.
      */
-    public double getDistance(P point) {
+    public double getDistance(final P point) {
         return Math.sqrt(getSqrDistance(point));
     }
 
     /**
      * Returns the squared value.
+     *
      * @param value value to be squared.
      * @return squared value.
      */
-    private double sqr(double value) {
+    private double sqr(final double value) {
         return value * value;
     }
 
     /**
      * Internally sets boundaries.
+     *
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    private void internalSetBounds(P lo, P hi) {
+    private void internalSetBounds(final P lo, final P hi) {
         mLo = lo;
         mHi = hi;
     }

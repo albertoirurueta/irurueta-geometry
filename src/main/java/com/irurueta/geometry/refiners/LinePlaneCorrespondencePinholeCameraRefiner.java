@@ -32,59 +32,61 @@ import java.util.List;
  * Typically a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
-@SuppressWarnings("WeakerAccess")
-public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends 
+public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
         PinholeCameraRefiner<Plane, Line2D> {
 
     /**
      * Plane to be reused when computing residuals.
      */
-    private Plane mResidualTestPlane = new Plane();
-    
+    private final Plane mResidualTestPlane = new Plane();
+
     /**
      * Constructor.
      */
-    public LinePlaneCorrespondencePinholeCameraRefiner() { }
-    
+    protected LinePlaneCorrespondencePinholeCameraRefiner() {
+    }
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliers set indicating which of the provided matches are inliers.
-     * @param residuals residuals for matched samples.
-     * @param numInliers number of inliers on initial estimation.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
      * @param refinementStandardDeviation standard deviation used for
-     * Levenberg-Marquardt fitting.
+     *                                    Levenberg-Marquardt fitting.
      */
-    public LinePlaneCorrespondencePinholeCameraRefiner(
-            PinholeCamera initialEstimation, boolean keepCovariance,
-            BitSet inliers, double[] residuals, int numInliers,
-            List<Plane> samples1, List<Line2D> samples2,
-            double refinementStandardDeviation) {
+    protected LinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List<Plane> samples1, final List<Line2D> samples2,
+            final double refinementStandardDeviation) {
         super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
                 samples1, samples2, refinementStandardDeviation);
     }
-    
+
     /**
      * Constructor.
-     * @param initialEstimation initial estimation to be set.
-     * @param keepCovariance true if covariance of estimation must be kept after
-     * refinement, false otherwise.
-     * @param inliersData inlier data, typically obtained from a robust 
-     * estimator.
-     * @param samples1 1st set of paired samples.
-     * @param samples2 2nd set of paired samples.
-     * @param refinementStandardDeviation standard deviation used for 
-     * Levenberg-Marquardt fitting.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
      */
-    public LinePlaneCorrespondencePinholeCameraRefiner(
-            PinholeCamera initialEstimation, boolean keepCovariance,
-            InliersData inliersData, List<Plane> samples1, 
-            List<Line2D> samples2, double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1, 
+    protected LinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List<Plane> samples1,
+            final List<Line2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1,
                 samples2, refinementStandardDeviation);
     }
 
@@ -93,32 +95,34 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
      * Powell refinement uses Powell algorithm to minimize a cost function
      * consisting on the sum of squared projection residuals plus the
      * suggestion residual for any suggested terms.
+     *
      * @param pinholeCamera camera to be checked.
-     * @param params camera parameters. In the following order: 
-     * skewness, horizontal focal length, vertical focal length, 
-     * horizontal principal point, vertical principal point, quaternion A,
-     * quaternion B, quaternion C, quaternion D, center x, center y, center z.
-     * @param weight weight for suggestion residual.
+     * @param params        camera parameters. In the following order:
+     *                      skewness, horizontal focal length, vertical focal length,
+     *                      horizontal principal point, vertical principal point, quaternion A,
+     *                      quaternion B, quaternion C, quaternion D, center x, center y, center z.
+     * @param weight        weight for suggestion residual.
      * @return total residual during Powell refinement.
      */
-    protected double residualPowell(PinholeCamera pinholeCamera, 
-            double[] params, double weight) {
-        return backprojectionResidual(pinholeCamera) + 
+    protected double residualPowell(final PinholeCamera pinholeCamera,
+                                    final double[] params, final double weight) {
+        return backprojectionResidual(pinholeCamera) +
                 suggestionResidual(params, weight);
     }
-    
+
     /**
      * Computes total line backprojection residual for provided camera.
      * This method computes the sum of the squared residuals for all inlier
      * backprojected lines.
+     *
      * @param pinholeCamera camera to compute residual for.
      * @return total backprojection residual.
      */
-    private double backprojectionResidual(PinholeCamera pinholeCamera) {
+    private double backprojectionResidual(final PinholeCamera pinholeCamera) {
         pinholeCamera.normalize();
-        
-        //backprojection inlier lines into test plane
-        int nSamples = mInliers.length();
+
+        // backprojection inlier lines into test plane
+        final int nSamples = mInliers.length();
         Line2D line;
         Plane plane;
         double residual = 0.0;
@@ -126,58 +130,62 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
             if (mInliers.get(i)) {
                 line = mSamples2.get(i);
                 plane = mSamples1.get(i);
-                
+
                 line.normalize();
                 plane.normalize();
-                
+
                 residual += Math.pow(singleBackprojectionResidual(
                         pinholeCamera, line, plane), 2.0);
             }
         }
-        
+
         return residual;
-    }  
-    
+    }
+
     /**
      * Computes total residual to be used during Levenberg/Marquard covariance
      * estimation.
+     *
      * @param pinholeCamera camera to estimate covariance for.
-     * @param line 2D line to be backprojected with provided pinhole camera.
-     * @param plane plane to be compared with backprojected line.
-     * @param params camera parameters. In the following order:
-     * skewness, horizontal focal length, vertical focal length, 
-     * horizontal principal point, vertical principal point, quaternion A,
-     * quaternion B, quaternion C, quaternion D, center x, center y, center z.
-     * @param weight weight for suggestion residual.
+     * @param line          2D line to be backprojected with provided pinhole camera.
+     * @param plane         plane to be compared with backprojected line.
+     * @param params        camera parameters. In the following order:
+     *                      skewness, horizontal focal length, vertical focal length,
+     *                      horizontal principal point, vertical principal point, quaternion A,
+     *                      quaternion B, quaternion C, quaternion D, center x, center y, center z.
+     * @param weight        weight for suggestion residual.
      * @return total residual.
      */
-    protected double residualLevenbergMarquardt(PinholeCamera pinholeCamera, 
-            Line2D line, Plane plane, double[] params, double weight) {
-        double residual = singleBackprojectionResidual(pinholeCamera, line, 
+    protected double residualLevenbergMarquardt(
+            final PinholeCamera pinholeCamera, final Line2D line, final Plane plane,
+            final double[] params, final double weight) {
+        double residual = singleBackprojectionResidual(pinholeCamera, line,
                 plane);
         if (hasSuggestions()) {
             residual += suggestionResidual(params, weight);
         }
         return residual;
     }
-    
+
     /**
      * Backprojection residual/error for a single line using provided camera.
+     *
      * @param pinholeCamera camera ot be checked.
-     * @param line line to be backprojected.
-     * @param plane plane to check against.
+     * @param line          line to be backprojected.
+     * @param plane         plane to check against.
      * @return dot product distance between backprojected line and plane.
      */
-    protected double singleBackprojectionResidual(PinholeCamera pinholeCamera, 
-            Line2D line, Plane plane) {
-        //backproject line into test plane
+    @SuppressWarnings("DuplicatedCode")
+    private double singleBackprojectionResidual(final PinholeCamera pinholeCamera,
+                                                final Line2D line, final Plane plane) {
+        // backproject line into test plane
         pinholeCamera.backProject(line, mResidualTestPlane);
         mResidualTestPlane.normalize();
-        
-        double dotProduct = Math.abs(plane.getA() * mResidualTestPlane.getA() +
+
+        final double dotProduct = Math.abs(plane.getA() * mResidualTestPlane.getA() +
                 plane.getB() * mResidualTestPlane.getB() +
-                plane.getC() * mResidualTestPlane.getC() + 
+                plane.getC() * mResidualTestPlane.getC() +
                 plane.getD() * mResidualTestPlane.getD());
         return 1.0 - dotProduct;
-    }        
+    }
 }
