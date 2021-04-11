@@ -117,7 +117,7 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of points don't have</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">     *                                  the same size or their size is smaller than MINIMUM_SIZE.</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/estimators/PointCorrespondenceProjectiveTransformation3DRobustEstimator.html">PointCorrespondenceProjectiveTransformation3DRobustEstimator</a>(
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/estimators/PointCorrespondenceProjectiveTransformation3DRobustEstimator.html">PointCorrespondenceProjectiveTransformation3DRobustEstimator</a>(
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/estimators/ProjectiveTransformation3DRobustEstimatorListener.html">ProjectiveTransformation3DRobustEstimatorListener</a> listener,
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>             <strong class="jxr_keyword">final</strong> List&lt;Point3D&gt; inputPoints, <strong class="jxr_keyword">final</strong> List&lt;Point3D&gt; outputPoints) {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">super</strong>(listener);
@@ -647,59 +647,60 @@
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">     * @return solution after refinement (if requested) or the provided</em>
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">     * non-refined solution if not requested or refinement failed.</em>
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a> attemptRefine(
-<a class="jxr_linenumber" name="L643" href="#L643">643</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a> transformation) {
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>         <strong class="jxr_keyword">if</strong> (mRefineResult) {
-<a class="jxr_linenumber" name="L645" href="#L645">645</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/refiners/PointCorrespondenceProjectiveTransformation3DRefiner.html">PointCorrespondenceProjectiveTransformation3DRefiner</a> refiner =
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/PointCorrespondenceProjectiveTransformation3DRefiner.html">PointCorrespondenceProjectiveTransformation3DRefiner</a>(
-<a class="jxr_linenumber" name="L647" href="#L647">647</a>                             transformation, mKeepCovariance, getInliersData(),
-<a class="jxr_linenumber" name="L648" href="#L648">648</a>                             mInputPoints, mOutputPoints,
-<a class="jxr_linenumber" name="L649" href="#L649">649</a>                             getRefinementStandardDeviation());
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a> result =
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a>();
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> improved = refiner.refine(result);
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
-<a class="jxr_linenumber" name="L656" href="#L656">656</a>                 <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
-<a class="jxr_linenumber" name="L657" href="#L657">657</a>                     <em class="jxr_comment">// keep covariance</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a>                     mCovariance = refiner.getCovariance();
-<a class="jxr_linenumber" name="L659" href="#L659">659</a>                 }
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 
-<a class="jxr_linenumber" name="L661" href="#L661">661</a>                 <strong class="jxr_keyword">return</strong> improved ? result : transformation;
-<a class="jxr_linenumber" name="L662" href="#L662">662</a>             } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
-<a class="jxr_linenumber" name="L663" href="#L663">663</a>                 <em class="jxr_comment">// refinement failed, so we return input value</em>
-<a class="jxr_linenumber" name="L664" href="#L664">664</a>                 <strong class="jxr_keyword">return</strong> transformation;
-<a class="jxr_linenumber" name="L665" href="#L665">665</a>             }
-<a class="jxr_linenumber" name="L666" href="#L666">666</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>             <strong class="jxr_keyword">return</strong> transformation;
-<a class="jxr_linenumber" name="L668" href="#L668">668</a>         }
-<a class="jxr_linenumber" name="L669" href="#L669">669</a>     }
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
-<a class="jxr_linenumber" name="L671" href="#L671">671</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">     * Internal method to set lists of points to be used to estimate a</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">     * projective 3D transformation.</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">     * This method does not check whether estimator is locked or not.</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">     * @param inputPoints  list of input points to be used to estimate a</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">     *                     projective 3D transformation.</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">     * @param outputPoints list of output points to be used to estimate a</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">     *                     projective 3D transformation.</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of points don't have</em>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     *                                  the same size or their size is smaller than MINIMUM_SIZE.</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetPoints(<strong class="jxr_keyword">final</strong> List&lt;Point3D&gt; inputPoints,
-<a class="jxr_linenumber" name="L684" href="#L684">684</a>                                    <strong class="jxr_keyword">final</strong> List&lt;Point3D&gt; outputPoints) {
-<a class="jxr_linenumber" name="L685" href="#L685">685</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() &lt; MINIMUM_SIZE) {
-<a class="jxr_linenumber" name="L686" href="#L686">686</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L687" href="#L687">687</a>         }
-<a class="jxr_linenumber" name="L688" href="#L688">688</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() != outputPoints.size()) {
-<a class="jxr_linenumber" name="L689" href="#L689">689</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L690" href="#L690">690</a>         }
-<a class="jxr_linenumber" name="L691" href="#L691">691</a>         mInputPoints = inputPoints;
-<a class="jxr_linenumber" name="L692" href="#L692">692</a>         mOutputPoints = outputPoints;
-<a class="jxr_linenumber" name="L693" href="#L693">693</a>     }
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> }
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>     @SuppressWarnings(<span class="jxr_string">"DuplicatedCode"</span>)
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a> attemptRefine(
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a> transformation) {
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>         <strong class="jxr_keyword">if</strong> (mRefineResult) {
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/refiners/PointCorrespondenceProjectiveTransformation3DRefiner.html">PointCorrespondenceProjectiveTransformation3DRefiner</a> refiner =
+<a class="jxr_linenumber" name="L647" href="#L647">647</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/PointCorrespondenceProjectiveTransformation3DRefiner.html">PointCorrespondenceProjectiveTransformation3DRefiner</a>(
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>                             transformation, mKeepCovariance, getInliersData(),
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>                             mInputPoints, mOutputPoints,
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>                             getRefinementStandardDeviation());
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 
+<a class="jxr_linenumber" name="L652" href="#L652">652</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a> result =
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/ProjectiveTransformation3D.html">ProjectiveTransformation3D</a>();
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> improved = refiner.refine(result);
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>                 <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a>                     <em class="jxr_comment">// keep covariance</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>                     mCovariance = refiner.getCovariance();
+<a class="jxr_linenumber" name="L660" href="#L660">660</a>                 }
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>                 <strong class="jxr_keyword">return</strong> improved ? result : transformation;
+<a class="jxr_linenumber" name="L663" href="#L663">663</a>             } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
+<a class="jxr_linenumber" name="L664" href="#L664">664</a>                 <em class="jxr_comment">// refinement failed, so we return input value</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>                 <strong class="jxr_keyword">return</strong> transformation;
+<a class="jxr_linenumber" name="L666" href="#L666">666</a>             }
+<a class="jxr_linenumber" name="L667" href="#L667">667</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>             <strong class="jxr_keyword">return</strong> transformation;
+<a class="jxr_linenumber" name="L669" href="#L669">669</a>         }
+<a class="jxr_linenumber" name="L670" href="#L670">670</a>     }
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">     * Internal method to set lists of points to be used to estimate a</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">     * projective 3D transformation.</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">     * This method does not check whether estimator is locked or not.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">     * @param inputPoints  list of input points to be used to estimate a</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">     *                     projective 3D transformation.</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">     * @param outputPoints list of output points to be used to estimate a</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">     *                     projective 3D transformation.</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of points don't have</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">     *                                  the same size or their size is smaller than MINIMUM_SIZE.</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetPoints(<strong class="jxr_keyword">final</strong> List&lt;Point3D&gt; inputPoints,
+<a class="jxr_linenumber" name="L685" href="#L685">685</a>                                    <strong class="jxr_keyword">final</strong> List&lt;Point3D&gt; outputPoints) {
+<a class="jxr_linenumber" name="L686" href="#L686">686</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() &lt; MINIMUM_SIZE) {
+<a class="jxr_linenumber" name="L687" href="#L687">687</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L688" href="#L688">688</a>         }
+<a class="jxr_linenumber" name="L689" href="#L689">689</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() != outputPoints.size()) {
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L691" href="#L691">691</a>         }
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>         mInputPoints = inputPoints;
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>         mOutputPoints = outputPoints;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>     }
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>

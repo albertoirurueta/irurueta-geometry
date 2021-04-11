@@ -175,7 +175,7 @@
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lsit of lines don't have</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">     *                                  a size greater or equal than MINIMUM_SIZE.</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/estimators/DualConicRobustEstimator.html">DualConicRobustEstimator</a>(<strong class="jxr_keyword">final</strong> List&lt;Line2D&gt; lines) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/estimators/DualConicRobustEstimator.html">DualConicRobustEstimator</a>(<strong class="jxr_keyword">final</strong> List&lt;Line2D&gt; lines) {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>         mProgressDelta = DEFAULT_PROGRESS_DELTA;
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>         mConfidence = DEFAULT_CONFIDENCE;
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided list of lines don't have a</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">     *                                  size greater or equal than MINIMUM_SIZE.</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/estimators/DualConicRobustEstimator.html">DualConicRobustEstimator</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/estimators/DualConicRobustEstimatorListener.html">DualConicRobustEstimatorListener</a> listener,
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/estimators/DualConicRobustEstimator.html">DualConicRobustEstimator</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/estimators/DualConicRobustEstimatorListener.html">DualConicRobustEstimatorListener</a> listener,
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>                                     <strong class="jxr_keyword">final</strong> List&lt;Line2D&gt; lines) {
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>         mListener = listener;
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>         mProgressDelta = DEFAULT_PROGRESS_DELTA;

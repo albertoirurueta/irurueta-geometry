@@ -88,7 +88,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @param listener listener to be notified of events such as when estimation
      *                 stars, ends or its progress significantly changes.
      */
-    public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
+    protected PointCorrespondenceProjectiveTransformation2DRobustEstimator(
             final ProjectiveTransformation2DRobustEstimatorListener listener) {
 <span class="fc" id="L93">        super(listener);</span>
 <span class="fc" id="L94">    }</span>
@@ -109,7 +109,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
+    protected PointCorrespondenceProjectiveTransformation2DRobustEstimator(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
 <span class="fc" id="L115">        super(listener);</span>

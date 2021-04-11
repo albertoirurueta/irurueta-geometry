@@ -2436,10 +2436,10 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         // components. Fix by reversing one quaternion.
         Quaternion q2b;
 <span class="pc bpc" id="L2438" title="1 of 2 branches missed.">        if (dot &lt; 0.0) {</span>
-<span class="fc" id="L2439">            q2b = new Quaternion(-q2.mA, -q2.mB, -q2.mC, -q2.mD);</span>
-<span class="fc" id="L2440">            dot = -dot;</span>
+<span class="nc" id="L2439">            q2b = new Quaternion(-q2.mA, -q2.mB, -q2.mC, -q2.mD);</span>
+<span class="nc" id="L2440">            dot = -dot;</span>
         } else {
-<span class="nc" id="L2442">            q2b = q2;</span>
+<span class="fc" id="L2442">            q2b = q2;</span>
         }
 
 <span class="fc" id="L2445">        final double theta0 = Math.acos(dot);</span>

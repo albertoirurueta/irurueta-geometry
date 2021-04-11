@@ -630,8 +630,8 @@ public abstract class Rotation3D {
             }
 
             // compare sum of angles (because rotation angle is also reversed)
-<span class="fc bfc" id="L633" title="All 2 branches covered.">            return Math.abs(thisAngle + otherAngle) &lt;= threshold ||</span>
-<span class="pc bpc" id="L634" title="1 of 2 branches missed.">                    Math.abs(thisAngle + otherAngle - 2 * Math.PI) &lt;= threshold;</span>
+<span class="pc bpc" id="L633" title="1 of 2 branches missed.">            return Math.abs(thisAngle + otherAngle) &lt;= threshold ||</span>
+<span class="pc bnc" id="L634" title="All 2 branches missed.">                    Math.abs(thisAngle + otherAngle - 2 * Math.PI) &lt;= threshold;</span>
         }
     }
 

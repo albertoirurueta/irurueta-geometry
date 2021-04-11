@@ -222,7 +222,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
 <span class="fc" id="L222">                        new LMedSRobustEstimatorListener&lt;AffineTransformation2D&gt;() {</span>
 
                             // point to be reused when computing residuals
-<span class="fc" id="L225">                            final private Point2D mTestPoint = Point2D.create(</span>
+<span class="fc" id="L225">                            private final Point2D mTestPoint = Point2D.create(</span>
                                     CoordinatesType.HOMOGENEOUS_COORDINATES);
 
                             @Override

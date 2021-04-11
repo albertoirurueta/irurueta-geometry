@@ -109,7 +109,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public PointCorrespondenceProjectiveTransformation3DRobustEstimator(
+    protected PointCorrespondenceProjectiveTransformation3DRobustEstimator(
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
 <span class="fc" id="L115">        super(listener);</span>
@@ -639,32 +639,33 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return solution after refinement (if requested) or the provided
      * non-refined solution if not requested or refinement failed.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     protected ProjectiveTransformation3D attemptRefine(
             final ProjectiveTransformation3D transformation) {
-<span class="fc bfc" id="L644" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L645">            final PointCorrespondenceProjectiveTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L645" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L646">            final PointCorrespondenceProjectiveTransformation3DRefiner refiner =</span>
                     new PointCorrespondenceProjectiveTransformation3DRefiner(
-<span class="fc" id="L647">                            transformation, mKeepCovariance, getInliersData(),</span>
+<span class="fc" id="L648">                            transformation, mKeepCovariance, getInliersData(),</span>
                             mInputPoints, mOutputPoints,
-<span class="fc" id="L649">                            getRefinementStandardDeviation());</span>
+<span class="fc" id="L650">                            getRefinementStandardDeviation());</span>
 
             try {
-<span class="fc" id="L652">                final ProjectiveTransformation3D result =</span>
+<span class="fc" id="L653">                final ProjectiveTransformation3D result =</span>
                         new ProjectiveTransformation3D();
-<span class="fc" id="L654">                final boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L655">                final boolean improved = refiner.refine(result);</span>
 
-<span class="pc bpc" id="L656" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L657" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     // keep covariance
-<span class="fc" id="L658">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L659">                    mCovariance = refiner.getCovariance();</span>
                 }
 
-<span class="fc bfc" id="L661" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="fc" id="L662">            } catch (final Exception e) {</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L663">            } catch (final Exception e) {</span>
                 // refinement failed, so we return input value
-<span class="fc" id="L664">                return transformation;</span>
+<span class="fc" id="L665">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L667">            return transformation;</span>
+<span class="fc" id="L668">            return transformation;</span>
         }
     }
 
@@ -682,14 +683,14 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     private void internalSetPoints(final List&lt;Point3D&gt; inputPoints,
                                    final List&lt;Point3D&gt; outputPoints) {
-<span class="fc bfc" id="L685" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L686">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L686" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L687">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L688" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L689">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L689" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L690">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L691">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L692">        mOutputPoints = outputPoints;</span>
-<span class="fc" id="L693">    }</span>
+<span class="fc" id="L692">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L693">        mOutputPoints = outputPoints;</span>
+<span class="fc" id="L694">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
