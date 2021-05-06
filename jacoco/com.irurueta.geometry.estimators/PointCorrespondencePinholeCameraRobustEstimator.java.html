@@ -206,7 +206,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
      *
@@ -622,7 +622,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param method                   method of a robust estimator algorithm to estimate best
@@ -653,7 +653,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -692,7 +692,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param method                   method of a robust estimator algorithm to estimate best
@@ -726,7 +726,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -764,7 +764,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param qualityScores            quality scores corresponding to each pair of matched
@@ -800,7 +800,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -843,7 +843,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param qualityScores            quality scores corresponding to each pair of matched
@@ -882,7 +882,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -988,7 +988,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores) {
@@ -1142,7 +1142,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final PinholeCameraIntrinsicParameters intrinsic, final double[] qualityScores) {
@@ -1228,7 +1228,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @return an instance of a pinhole camera robust estimator.
@@ -1248,7 +1248,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1277,7 +1277,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @return an instance of a pinhole camera robust estimator.
@@ -1300,7 +1300,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1329,14 +1329,14 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final double skewness, final double horizontalPrincipalPoint,
@@ -1353,7 +1353,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1385,7 +1385,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param qualityScores            quality scores corresponding to each pair of matched
@@ -1412,7 +1412,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.

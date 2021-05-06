@@ -190,8 +190,8 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>         <em class="jxr_comment">// constructor from matrix rotation</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         q = <strong class="jxr_keyword">new</strong> Quaternion(axis, theta);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>         matrixRotation = <strong class="jxr_keyword">new</strong> MatrixRotation3D(axis, theta);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         matrixRotation = <strong class="jxr_keyword">new</strong> MatrixRotation3D(axis, theta);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>         q = <strong class="jxr_keyword">new</strong> Quaternion(matrixRotation);
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>         <em class="jxr_comment">// check correctness</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>         <em class="jxr_comment">//noinspection AssertBetweenInconvertibleTypes</em>
@@ -1604,7 +1604,7 @@
 <a class="jxr_linenumber" name="L1596" href="#L1596">1596</a>                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
 <a class="jxr_linenumber" name="L1597" href="#L1597">1597</a>                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 <a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 
-<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a>         <em class="jxr_comment">// ensure that points are not colinear</em>
+<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a>         <em class="jxr_comment">// ensure that points are not co-linear</em>
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 
 <a class="jxr_linenumber" name="L1601" href="#L1601">1601</a>         <strong class="jxr_keyword">while</strong> (Plane.areColinearPoints(point1, point2, point3)) {
 <a class="jxr_linenumber" name="L1602" href="#L1602">1602</a>             point2.setInhomogeneousCoordinates(
@@ -1790,7 +1790,7 @@
 <a class="jxr_linenumber" name="L1782" href="#L1782">1782</a>     }
 <a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> 
 <a class="jxr_linenumber" name="L1784" href="#L1784">1784</a>     @Test
-<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMatrixRotationToQuaternionAndSetfromMatrixRotation()
+<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMatrixRotationToQuaternionAndSetFromMatrixRotation()
 <a class="jxr_linenumber" name="L1786" href="#L1786">1786</a>             <strong class="jxr_keyword">throws</strong> AlgebraException {
 <a class="jxr_linenumber" name="L1787" href="#L1787">1787</a>         <strong class="jxr_keyword">final</strong> UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
 <a class="jxr_linenumber" name="L1788" href="#L1788">1788</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,

@@ -124,7 +124,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *               pinhole camera.
      * @param method method of a robust estimator algorithm to estimate best
      *               pinhole camera.
-     * @return an instance of a pinhole camera robust esitmator.
+     * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
      *                                  don't have the same size or their size is smaller than required minimum
      *                                  size (4 correspondences).
@@ -188,7 +188,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     /**
      * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided listener, planes and lines, and robust
-     * estimaotr method.
+     * estimator method.
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
@@ -351,7 +351,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
-     *                                  quality scores odn't have the same size or their size is smaller than
+     *                                  quality scores don't have the same size or their size is smaller than
      *                                  required minimum size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
@@ -478,7 +478,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
 
     /**
      * Creates a pinhole camera robust estimator based on plane/line
-     * correspondences and using provided listener, qualitys cores and default
+     * correspondences and using provided listener, quality scores and default
      * robust estimator method.
      *
      * @param listener      listener to be notified of events such as when estimation

@@ -427,7 +427,7 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> locateNear(<strong class="jxr_keyword">final</strong> P pt, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> r, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] list, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nmax) {
 <a class="jxr_linenumber" name="L421" href="#L421">421</a>         <strong class="jxr_keyword">if</strong> (r &lt; 0.0) {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"radius must be nonnegative"</span>);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"radius must be non-negative"</span>);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a>         }
 <a class="jxr_linenumber" name="L424" href="#L424">424</a>         <strong class="jxr_keyword">if</strong> (nmax &lt;= 0) {
 <a class="jxr_linenumber" name="L425" href="#L425">425</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"number of points to search must be at least 1"</span>);
@@ -502,7 +502,7 @@
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L495" href="#L495">495</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> locateNear(<strong class="jxr_keyword">final</strong> P pt, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> r, <strong class="jxr_keyword">final</strong> P[] plist, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nmax) {
 <a class="jxr_linenumber" name="L496" href="#L496">496</a>         <strong class="jxr_keyword">if</strong> (r &lt; 0.0) {
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"radius must be nonnegative"</span>);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"radius must be non-negative"</span>);
 <a class="jxr_linenumber" name="L498" href="#L498">498</a>         }
 <a class="jxr_linenumber" name="L499" href="#L499">499</a>         <strong class="jxr_keyword">if</strong> (nmax &lt;= 0) {
 <a class="jxr_linenumber" name="L500" href="#L500">500</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"number of points to search must be at least 1"</span>);
@@ -567,7 +567,7 @@
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 
 <a class="jxr_linenumber" name="L560" href="#L560">560</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">     * Makes a selection so that we obtain ordered index at provided k position so that</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">     * distances are ordered in such a way that resulting array arr containg distances</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">     * distances are ordered in such a way that resulting array arr contains distances</em>
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">     * as follows: arr[indx[0 .. k-1]] &amp;lt;= arr[indx[k]] &amp;lt;= arr[indx[k+1 .. n]].</em>
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">     * So that positions between 0 and k-1 are not in any particular order but is less than</em>
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">     * k position, and positions between k+1 and n neither have any particular order but is</em>

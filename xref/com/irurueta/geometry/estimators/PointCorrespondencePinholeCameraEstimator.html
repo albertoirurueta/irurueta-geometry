@@ -535,8 +535,8 @@
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 
 <a class="jxr_linenumber" name="L528" href="#L528">528</a>                 pinholeCameraMatrix = invTrans2DMatrix;
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>                 <em class="jxr_comment">// normalize by frobenius norm to increase accuracy after point</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>                 <em class="jxr_comment">// denormalization</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>                 <em class="jxr_comment">// normalize by Frobenius norm to increase accuracy after point</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>                 <em class="jxr_comment">// de-normalization</em>
 <a class="jxr_linenumber" name="L532" href="#L532">532</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> norm = Utils.normF(pinholeCameraMatrix);
 <a class="jxr_linenumber" name="L533" href="#L533">533</a>                 pinholeCameraMatrix.multiplyByScalar(1.0 / norm);
 <a class="jxr_linenumber" name="L534" href="#L534">534</a>             }

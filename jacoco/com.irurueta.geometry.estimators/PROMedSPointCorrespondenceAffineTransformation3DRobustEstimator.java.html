@@ -78,7 +78,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Quality scores corresponding to each pair of matched points..
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -300,7 +300,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */
@@ -329,7 +329,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
 <span class="fc" id="L329">    }</span>
 
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.
@@ -355,142 +355,143 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public AffineTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L361" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L362">            throw new LockedException();</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L363">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L364" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L365">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L366">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L368">        final PROMedSRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator =</span>
+<span class="fc" id="L369">        final PROMedSRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L370">                        new PROMedSRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
+<span class="fc" id="L371">                        new PROMedSRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
 
                             // point to be reused when computing residuals
-<span class="fc" id="L373">                            private final Point3D mTestPoint = Point3D.create(</span>
+<span class="fc" id="L374">                            private final Point3D mTestPoint = Point3D.create(</span>
                                     CoordinatesType.HOMOGENEOUS_COORDINATES);
 
                             @Override
                             public double getThreshold() {
-<span class="fc" id="L378">                                return mStopThreshold;</span>
+<span class="fc" id="L379">                                return mStopThreshold;</span>
                             }
 
                             @Override
                             public int getTotalSamples() {
-<span class="fc" id="L383">                                return mInputPoints.size();</span>
+<span class="fc" id="L384">                                return mInputPoints.size();</span>
                             }
 
                             @Override
                             public int getSubsetSize() {
-<span class="fc" id="L388">                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L389">                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
                             }
 
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;AffineTransformation3D&gt; solutions) {
-<span class="fc" id="L394">                                final Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L395">                                final Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L396">                                final Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L397">                                final Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L395">                                final Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L396">                                final Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L397">                                final Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L398">                                final Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
 
-<span class="fc" id="L399">                                final Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L400">                                final Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L401">                                final Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L402">                                final Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L400">                                final Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L401">                                final Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L402">                                final Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L403">                                final Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
 
                                 try {
-<span class="fc" id="L405">                                    final AffineTransformation3D transformation =</span>
+<span class="fc" id="L406">                                    final AffineTransformation3D transformation =</span>
                                             new AffineTransformation3D(inputPoint1, inputPoint2,
                                                     inputPoint3, inputPoint4, outputPoint1, outputPoint2,
                                                     outputPoint3, outputPoint4);
-<span class="fc" id="L409">                                    solutions.add(transformation);</span>
-<span class="nc" id="L410">                                } catch (final CoincidentPointsException e) {</span>
+<span class="fc" id="L410">                                    solutions.add(transformation);</span>
+<span class="nc" id="L411">                                } catch (final CoincidentPointsException e) {</span>
                                     // if points are coincident, no solution is added
-<span class="fc" id="L412">                                }</span>
-<span class="fc" id="L413">                            }</span>
+<span class="fc" id="L413">                                }</span>
+<span class="fc" id="L414">                            }</span>
 
                             @Override
                             public double computeResidual(
                                     final AffineTransformation3D currentEstimation, final int i) {
-<span class="fc" id="L418">                                final Point3D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L419">                                final Point3D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L419">                                final Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L420">                                final Point3D outputPoint = mOutputPoints.get(i);</span>
 
                                 // transform input point and store result in mTestPoint
-<span class="fc" id="L422">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L423">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
 
-<span class="fc" id="L424">                                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L425">                                return outputPoint.distanceTo(mTestPoint);</span>
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L429">                                return PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.</span>
-<span class="fc" id="L430">                                        this.isReady();</span>
+<span class="fc" id="L430">                                return PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.</span>
+<span class="fc" id="L431">                                        this.isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L436" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L437">                                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L438">                                    mListener.onEstimateStart(</span>
                                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                                 }
-<span class="fc" id="L440">                            }</span>
+<span class="fc" id="L441">                            }</span>
 
                             @Override
                             public void onEstimateEnd(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L445" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L446">                                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L446" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L447">                                    mListener.onEstimateEnd(</span>
                                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                                 }
-<span class="fc" id="L449">                            }</span>
+<span class="fc" id="L450">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
                                     final int iteration) {
-<span class="pc bpc" id="L455" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L456">                                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L456" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L457">                                    mListener.onEstimateNextIteration(</span>
                                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this,
                                             iteration);
                                 }
-<span class="fc" id="L460">                            }</span>
+<span class="fc" id="L461">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
                                     final float progress) {
-<span class="nc bnc" id="L466" title="All 2 branches missed.">                                if (mListener != null) {</span>
-<span class="nc" id="L467">                                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L467" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L468">                                    mListener.onEstimateProgressChange(</span>
                                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this,
                                             progress);
                                 }
-<span class="nc" id="L471">                            }</span>
+<span class="nc" id="L472">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {
-<span class="fc" id="L475">                                return mQualityScores;</span>
+<span class="fc" id="L476">                                return mQualityScores;</span>
                             }
                         });
 
         try {
-<span class="fc" id="L480">            mLocked = true;</span>
-<span class="fc" id="L481">            mInliersData = null;</span>
-<span class="fc" id="L482">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L483">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L484">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L485">            final AffineTransformation3D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L486">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L487">            return attemptRefine(transformation);</span>
-<span class="nc" id="L488">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L489">            throw new LockedException(e);</span>
-<span class="nc" id="L490">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L491">            throw new NotReadyException(e);</span>
+<span class="fc" id="L481">            mLocked = true;</span>
+<span class="fc" id="L482">            mInliersData = null;</span>
+<span class="fc" id="L483">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L484">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L485">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L486">            final AffineTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L487">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L488">            return attemptRefine(transformation);</span>
+<span class="nc" id="L489">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L490">            throw new LockedException(e);</span>
+<span class="nc" id="L491">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L492">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L493">            mLocked = false;</span>
+<span class="fc" id="L494">            mLocked = false;</span>
         }
     }
 
@@ -501,7 +502,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L504">        return RobustEstimatorMethod.PROMedS;</span>
+<span class="fc" id="L505">        return RobustEstimatorMethod.PROMedS;</span>
     }
 
     /**
@@ -517,12 +518,12 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L520">        final PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
-<span class="fc" id="L521">                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();</span>
+<span class="fc" id="L521">        final PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L522">                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();</span>
 
         // avoid setting a threshold too strict
-<span class="fc" id="L524">        final double threshold = inliersData.getEstimatedThreshold();</span>
-<span class="fc" id="L525">        return Math.max(threshold, mStopThreshold);</span>
+<span class="fc" id="L525">        final double threshold = inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L526">        return Math.max(threshold, mStopThreshold);</span>
     }
 
     /**
@@ -535,11 +536,11 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      *                                  smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(final double[] qualityScores) {
-<span class="fc bfc" id="L538" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L539">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L539" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L540">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L542">        mQualityScores = qualityScores;</span>
-<span class="fc" id="L543">    }</span>
+<span class="fc" id="L543">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L544">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

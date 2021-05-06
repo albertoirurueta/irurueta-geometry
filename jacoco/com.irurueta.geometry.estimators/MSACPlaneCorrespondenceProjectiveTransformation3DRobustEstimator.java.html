@@ -113,7 +113,7 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
-     * @param listener     lsitener to be notified of events such as when estimation
+     * @param listener     listener to be notified of events such as when estimation
      *                     starts, ends or its progress significantly changes.
      * @param inputPlanes  list of input planes to be used to estimate a projective
      *                     3D transformation.

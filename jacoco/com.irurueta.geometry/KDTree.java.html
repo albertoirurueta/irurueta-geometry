@@ -342,8 +342,8 @@ public abstract class KDTree&lt;P extends Point&lt;P&gt;&gt; {
 <span class="fc bfc" id="L342" title="All 2 branches covered.">                        if (d &lt; dn[0]) {</span>
 <span class="fc" id="L343">                            dn[0] = d;</span>
 <span class="fc" id="L344">                            nn[0] = mPtIndx[i];</span>
-<span class="fc bfc" id="L345" title="All 2 branches covered.">                            if (n &gt; 1) {</span>
-<span class="fc" id="L346">                                siftDown(dn, nn, n);</span>
+<span class="pc bpc" id="L345" title="1 of 2 branches missed.">                            if (n &gt; 1) {</span>
+<span class="nc" id="L346">                                siftDown(dn, nn, n);</span>
                             }
                         }
                     }
@@ -419,7 +419,7 @@ public abstract class KDTree&lt;P extends Point&lt;P&gt;&gt; {
      */
     public int locateNear(final P pt, final double r, final int[] list, final int nmax) {
 <span class="fc bfc" id="L421" title="All 2 branches covered.">        if (r &lt; 0.0) {</span>
-<span class="fc" id="L422">            throw new IllegalArgumentException(&quot;radius must be nonnegative&quot;);</span>
+<span class="fc" id="L422">            throw new IllegalArgumentException(&quot;radius must be non-negative&quot;);</span>
         }
 <span class="fc bfc" id="L424" title="All 2 branches covered.">        if (nmax &lt;= 0) {</span>
 <span class="fc" id="L425">            throw new IllegalArgumentException(&quot;number of points to search must be at least 1&quot;);</span>
@@ -447,16 +447,16 @@ public abstract class KDTree&lt;P extends Point&lt;P&gt;&gt; {
 <span class="fc" id="L447">            d1 = mBoxes[nb].mDau1;</span>
 <span class="fc" id="L448">            d2 = mBoxes[nb].mDau2;</span>
 <span class="fc" id="L449">            final double coord = pt.getInhomogeneousCoordinate(jdim);</span>
-<span class="pc bpc" id="L450" title="1 of 2 branches missed.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
-<span class="nc" id="L451">                nb = d1;</span>
-<span class="pc bpc" id="L452" title="1 of 2 branches missed.">            } else if (coord - r &gt;= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {</span>
-<span class="nc" id="L453">                nb = d2;</span>
+<span class="fc bfc" id="L450" title="All 2 branches covered.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L451">                nb = d1;</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">            } else if (coord - r &gt;= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L453">                nb = d2;</span>
             }
 <span class="fc" id="L455">            jdim = ++jdim % dim;</span>
-<span class="pc bpc" id="L456" title="1 of 2 branches missed.">            if (nb == nbold) {</span>
+<span class="fc bfc" id="L456" title="All 2 branches covered.">            if (nb == nbold) {</span>
 <span class="fc" id="L457">                break;</span>
             }
-<span class="nc" id="L459">        }</span>
+<span class="fc" id="L459">        }</span>
 <span class="fc" id="L460">        task[1] = nb;</span>
 <span class="fc" id="L461">        ntask = 1;</span>
 <span class="pc bpc" id="L462" title="1 of 2 branches missed.">        while (ntask != 0) {</span>
@@ -494,7 +494,7 @@ public abstract class KDTree&lt;P extends Point&lt;P&gt;&gt; {
      */
     public int locateNear(final P pt, final double r, final P[] plist, final int nmax) {
 <span class="fc bfc" id="L496" title="All 2 branches covered.">        if (r &lt; 0.0) {</span>
-<span class="fc" id="L497">            throw new IllegalArgumentException(&quot;radius must be nonnegative&quot;);</span>
+<span class="fc" id="L497">            throw new IllegalArgumentException(&quot;radius must be non-negative&quot;);</span>
         }
 <span class="fc bfc" id="L499" title="All 2 branches covered.">        if (nmax &lt;= 0) {</span>
 <span class="fc" id="L500">            throw new IllegalArgumentException(&quot;number of points to search must be at least 1&quot;);</span>
@@ -559,7 +559,7 @@ public abstract class KDTree&lt;P extends Point&lt;P&gt;&gt; {
 
     /**
      * Makes a selection so that we obtain ordered index at provided k position so that
-     * distances are ordered in such a way that resulting array arr containg distances
+     * distances are ordered in such a way that resulting array arr contains distances
      * as follows: arr[indx[0 .. k-1]] &amp;lt;= arr[indx[k]] &amp;lt;= arr[indx[k+1 .. n]].
      * So that positions between 0 and k-1 are not in any particular order but is less than
      * k position, and positions between k+1 and n neither have any particular order but is

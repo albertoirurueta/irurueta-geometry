@@ -444,7 +444,7 @@
 <a class="jxr_linenumber" name="L436" href="#L436">436</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> NullPointerException ignore) {
 <a class="jxr_linenumber" name="L437" href="#L437">437</a>         }
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>         <em class="jxr_comment">// Foce IllegalArgumentException</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>         <em class="jxr_comment">// Force IllegalArgumentException</em>
 <a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a>             transformation = <strong class="jxr_keyword">new</strong> AffineTransformation2D(scale, rotation,
 <a class="jxr_linenumber" name="L442" href="#L442">442</a>                     badTranslation);
@@ -2037,7 +2037,7 @@
 <a class="jxr_linenumber" name="L2029" href="#L2029">2029</a>         assertTrue(inputPoint.equals(invTransfPoint1, ABSOLUTE_ERROR));
 <a class="jxr_linenumber" name="L2030" href="#L2030">2030</a>         assertTrue(inputPoint.equals(invTransfPoint2, ABSOLUTE_ERROR));
 <a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 
-<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a>         <em class="jxr_comment">// try inversing original transformation</em>
+<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a>         <em class="jxr_comment">// try inverting original transformation</em>
 <a class="jxr_linenumber" name="L2033" href="#L2033">2033</a>         transformation.inverse();
 <a class="jxr_linenumber" name="L2034" href="#L2034">2034</a>         <strong class="jxr_keyword">final</strong> Point2D outPoint = transformation.transformAndReturnNew(transfPoint);
 <a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 
@@ -2073,7 +2073,7 @@
 <a class="jxr_linenumber" name="L2065" href="#L2065">2065</a>         norm = Utils.normF(projectiveMatrix);
 <a class="jxr_linenumber" name="L2066" href="#L2066">2066</a>         projectiveMatrix.multiplyByScalar(1.0 / norm);
 <a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 
-<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a>         <em class="jxr_comment">// check equalness up to scale</em>
+<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a>         <em class="jxr_comment">// check equal-ness up to scale</em>
 <a class="jxr_linenumber" name="L2069" href="#L2069">2069</a>         assertTrue(expectedMatrix.equals(projectiveMatrix, ABSOLUTE_ERROR));
 <a class="jxr_linenumber" name="L2070" href="#L2070">2070</a>     }
 <a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 

@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">     * Constructor with listener and lists of planes to be used to estimate</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">     * affine 3D tranformation.</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">     * affine 3D transformation.</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">     * Planes in the list located at the same position are considered to be</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">     * matched. Hence, both lists must have the same size, and their size must</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">     * be greater or equal than MINIMUM_SIZE.</em>
@@ -193,7 +193,7 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">     * Returns quality scores corresponding to each pair of matched planes.</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     * The larger the score value the betther the quality of the matching.</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     * The larger the score value the better the quality of the matching.</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     * This implementation always returns null.</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">     * Subclasses using quality scores must implement proper behaviour.</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">     *</em>
@@ -673,58 +673,59 @@
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">     *                         estimated transformation.</em>
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">     * @return computed residual.</em>
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L668" href="#L668">668</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> getResidual(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Plane.html">Plane</a> plane, <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Plane.html">Plane</a> transformedPlane) {
-<a class="jxr_linenumber" name="L669" href="#L669">669</a>         plane.normalize();
-<a class="jxr_linenumber" name="L670" href="#L670">670</a>         transformedPlane.normalize();
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
-<a class="jxr_linenumber" name="L672" href="#L672">672</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +
-<a class="jxr_linenumber" name="L673" href="#L673">673</a>                 plane.getB() * transformedPlane.getB() +
-<a class="jxr_linenumber" name="L674" href="#L674">674</a>                 plane.getC() * transformedPlane.getC() +
-<a class="jxr_linenumber" name="L675" href="#L675">675</a>                 plane.getD() * transformedPlane.getD());
-<a class="jxr_linenumber" name="L676" href="#L676">676</a>         <strong class="jxr_keyword">return</strong> 1.0 - dotProduct;
-<a class="jxr_linenumber" name="L677" href="#L677">677</a>     }
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">     * Attempts to refine provided solution if refinement is requested.</em>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     * This method returns a refined solution of the same provided solution</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">     * if refinement is not requested or has failed.</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">     * If refinement is enabled and it is requested to keep covariance, this</em>
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">     * method will also keep covariance of refined transformation.</em>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">     * @param transformation transformation estimated by a robust estimator</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">     *                       without refinement.</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">     * @return solution after refinement (if requested) or the provided</em>
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">     * non-refined solution if not requested or refinement failed.</em>
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a>     @SuppressWarnings(<span class="jxr_string">"DuplicatedCode"</span>)
-<a class="jxr_linenumber" name="L692" href="#L692">692</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a> attemptRefine(
-<a class="jxr_linenumber" name="L693" href="#L693">693</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a> transformation) {
-<a class="jxr_linenumber" name="L694" href="#L694">694</a>         <strong class="jxr_keyword">if</strong> (mRefineResult) {
-<a class="jxr_linenumber" name="L695" href="#L695">695</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/refiners/PlaneCorrespondenceAffineTransformation3DRefiner.html">PlaneCorrespondenceAffineTransformation3DRefiner</a> refiner =
-<a class="jxr_linenumber" name="L696" href="#L696">696</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/PlaneCorrespondenceAffineTransformation3DRefiner.html">PlaneCorrespondenceAffineTransformation3DRefiner</a>(
-<a class="jxr_linenumber" name="L697" href="#L697">697</a>                             transformation, mKeepCovariance, getInliersData(),
-<a class="jxr_linenumber" name="L698" href="#L698">698</a>                             mInputPlanes, mOutputPlanes,
-<a class="jxr_linenumber" name="L699" href="#L699">699</a>                             getRefinementStandardDeviation());
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 
-<a class="jxr_linenumber" name="L701" href="#L701">701</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L702" href="#L702">702</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a> result = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a>();
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> improved = refiner.refine(result);
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
-<a class="jxr_linenumber" name="L705" href="#L705">705</a>                 <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
-<a class="jxr_linenumber" name="L706" href="#L706">706</a>                     <em class="jxr_comment">// keep covariance</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a>                     mCovariance = refiner.getCovariance();
-<a class="jxr_linenumber" name="L708" href="#L708">708</a>                 }
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 
-<a class="jxr_linenumber" name="L710" href="#L710">710</a>                 <strong class="jxr_keyword">return</strong> improved ? result : transformation;
-<a class="jxr_linenumber" name="L711" href="#L711">711</a>             } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
-<a class="jxr_linenumber" name="L712" href="#L712">712</a>                 <em class="jxr_comment">//final refinement failed, so we return input value</em>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a>                 <strong class="jxr_keyword">return</strong> transformation;
-<a class="jxr_linenumber" name="L714" href="#L714">714</a>             }
-<a class="jxr_linenumber" name="L715" href="#L715">715</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L716" href="#L716">716</a>             <strong class="jxr_keyword">return</strong> transformation;
-<a class="jxr_linenumber" name="L717" href="#L717">717</a>         }
-<a class="jxr_linenumber" name="L718" href="#L718">718</a>     }
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> }
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>     @SuppressWarnings(<span class="jxr_string">"DuplicatedCode"</span>)
+<a class="jxr_linenumber" name="L669" href="#L669">669</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong> getResidual(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Plane.html">Plane</a> plane, <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Plane.html">Plane</a> transformedPlane) {
+<a class="jxr_linenumber" name="L670" href="#L670">670</a>         plane.normalize();
+<a class="jxr_linenumber" name="L671" href="#L671">671</a>         transformedPlane.normalize();
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
+<a class="jxr_linenumber" name="L673" href="#L673">673</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +
+<a class="jxr_linenumber" name="L674" href="#L674">674</a>                 plane.getB() * transformedPlane.getB() +
+<a class="jxr_linenumber" name="L675" href="#L675">675</a>                 plane.getC() * transformedPlane.getC() +
+<a class="jxr_linenumber" name="L676" href="#L676">676</a>                 plane.getD() * transformedPlane.getD());
+<a class="jxr_linenumber" name="L677" href="#L677">677</a>         <strong class="jxr_keyword">return</strong> 1.0 - dotProduct;
+<a class="jxr_linenumber" name="L678" href="#L678">678</a>     }
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 
+<a class="jxr_linenumber" name="L680" href="#L680">680</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     * Attempts to refine provided solution if refinement is requested.</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">     * This method returns a refined solution of the same provided solution</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">     * if refinement is not requested or has failed.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">     * If refinement is enabled and it is requested to keep covariance, this</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">     * method will also keep covariance of refined transformation.</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">     * @param transformation transformation estimated by a robust estimator</em>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">     *                       without refinement.</em>
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">     * @return solution after refinement (if requested) or the provided</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">     * non-refined solution if not requested or refinement failed.</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>     @SuppressWarnings(<span class="jxr_string">"DuplicatedCode"</span>)
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a> attemptRefine(
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a> transformation) {
+<a class="jxr_linenumber" name="L695" href="#L695">695</a>         <strong class="jxr_keyword">if</strong> (mRefineResult) {
+<a class="jxr_linenumber" name="L696" href="#L696">696</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/refiners/PlaneCorrespondenceAffineTransformation3DRefiner.html">PlaneCorrespondenceAffineTransformation3DRefiner</a> refiner =
+<a class="jxr_linenumber" name="L697" href="#L697">697</a>                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/PlaneCorrespondenceAffineTransformation3DRefiner.html">PlaneCorrespondenceAffineTransformation3DRefiner</a>(
+<a class="jxr_linenumber" name="L698" href="#L698">698</a>                             transformation, mKeepCovariance, getInliersData(),
+<a class="jxr_linenumber" name="L699" href="#L699">699</a>                             mInputPlanes, mOutputPlanes,
+<a class="jxr_linenumber" name="L700" href="#L700">700</a>                             getRefinementStandardDeviation());
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 
+<a class="jxr_linenumber" name="L702" href="#L702">702</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a> result = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/AffineTransformation3D.html">AffineTransformation3D</a>();
+<a class="jxr_linenumber" name="L704" href="#L704">704</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> improved = refiner.refine(result);
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L706" href="#L706">706</a>                 <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
+<a class="jxr_linenumber" name="L707" href="#L707">707</a>                     <em class="jxr_comment">// keep covariance</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a>                     mCovariance = refiner.getCovariance();
+<a class="jxr_linenumber" name="L709" href="#L709">709</a>                 }
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 
+<a class="jxr_linenumber" name="L711" href="#L711">711</a>                 <strong class="jxr_keyword">return</strong> improved ? result : transformation;
+<a class="jxr_linenumber" name="L712" href="#L712">712</a>             } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
+<a class="jxr_linenumber" name="L713" href="#L713">713</a>                 <em class="jxr_comment">//final refinement failed, so we return input value</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a>                 <strong class="jxr_keyword">return</strong> transformation;
+<a class="jxr_linenumber" name="L715" href="#L715">715</a>             }
+<a class="jxr_linenumber" name="L716" href="#L716">716</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L717" href="#L717">717</a>             <strong class="jxr_keyword">return</strong> transformation;
+<a class="jxr_linenumber" name="L718" href="#L718">718</a>         }
+<a class="jxr_linenumber" name="L719" href="#L719">719</a>     }
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>

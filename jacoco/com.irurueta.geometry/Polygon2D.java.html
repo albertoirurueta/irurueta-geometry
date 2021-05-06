@@ -416,7 +416,7 @@ public class Polygon2D implements Serializable {
                 // closest point lies within segment of polygon boundary, so we
                 // keep distance
 <span class="fc" id="L418">                dist = point.distanceTo(pointInLine);</span>
-<span class="pc bpc" id="L419" title="1 of 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
                     // a better point has been found
 <span class="fc" id="L421">                    bestDist = dist;</span>
 <span class="fc" id="L422">                    found = true;</span>
@@ -445,8 +445,8 @@ public class Polygon2D implements Serializable {
 <span class="pc bpc" id="L445" title="1 of 2 branches missed.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
             // closest point lies within segment of polygon boundary, so we
             // keep distance
-<span class="fc" id="L448">            dist = point.distanceTo(pointInLine);</span>
-<span class="pc bpc" id="L449" title="1 of 2 branches missed.">            if (dist &lt; bestDist) {</span>
+<span class="nc" id="L448">            dist = point.distanceTo(pointInLine);</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">            if (dist &lt; bestDist) {</span>
                 // a better point has been found
 <span class="nc" id="L451">                bestDist = dist;</span>
 <span class="nc" id="L452">                found = true;</span>
@@ -527,7 +527,7 @@ public class Polygon2D implements Serializable {
                 // closest point lies within segment of polygon boundary, so we
                 // keep distance and point
 <span class="fc" id="L529">                dist = point.distanceTo(pointInLine);</span>
-<span class="pc bpc" id="L530" title="1 of 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="fc bfc" id="L530" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
                     // a better point has been found
 <span class="fc" id="L532">                    bestDist = dist;</span>
 <span class="fc" id="L533">                    result.setCoordinates(pointInLine);</span>
@@ -558,8 +558,8 @@ public class Polygon2D implements Serializable {
 <span class="pc bpc" id="L558" title="1 of 2 branches missed.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
             // closest point lies within segment of polygon boundary, so we
             // keep distance
-<span class="fc" id="L561">            dist = point.distanceTo(pointInLine);</span>
-<span class="pc bpc" id="L562" title="1 of 2 branches missed.">            if (dist &lt; bestDist) {</span>
+<span class="nc" id="L561">            dist = point.distanceTo(pointInLine);</span>
+<span class="nc bnc" id="L562" title="All 2 branches missed.">            if (dist &lt; bestDist) {</span>
                 // a better point has been found
 <span class="nc" id="L564">                bestDist = dist;</span>
 <span class="nc" id="L565">                result.setCoordinates(pointInLine);</span>
@@ -596,7 +596,7 @@ public class Polygon2D implements Serializable {
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
     public void triangulate() throws TriangulatorException {
-<span class="pc bpc" id="L599" title="1 of 2 branches missed.">        if (!mTriangulated) {</span>
+<span class="fc bfc" id="L599" title="All 2 branches covered.">        if (!mTriangulated) {</span>
 <span class="fc" id="L600">            final Triangulator2D triangulator = Triangulator2D.create(</span>
                     mTriangulatorMethod);
 <span class="fc" id="L602">            mTriangles = triangulator.triangulate(mVertices);</span>

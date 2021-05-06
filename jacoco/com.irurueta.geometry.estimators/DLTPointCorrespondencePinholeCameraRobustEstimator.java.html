@@ -22,7 +22,7 @@ import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import java.util.List;
 
 /**
- * Base abstract class for algorithms to robustly find the best pihole camera
+ * Base abstract class for algorithms to robustly find the best pinhole camera
  * for collections of matched 3D/2D points using DLT (Direct Linear Transform)
  * algorithm.
  * Implementations of this class should be able to detect and discard outliers
@@ -445,7 +445,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *                      points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores) {

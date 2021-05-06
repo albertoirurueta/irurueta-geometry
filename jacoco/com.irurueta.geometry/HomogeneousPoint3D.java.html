@@ -510,7 +510,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      */
     public boolean equals(final HomogeneousPoint3D point) {
-<span class="nc" id="L513">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L513">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -547,7 +547,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      */
     public boolean equals(final InhomogeneousPoint3D point) {
-<span class="nc" id="L550">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L550">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -594,20 +594,19 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * its norm. This only applies to homogeneous 3D points, because they are
      * defined up to scale.
      */
-    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public void normalize() {
-<span class="fc bfc" id="L600" title="All 2 branches covered.">        if (!mNormalized) {</span>
-<span class="fc" id="L601">            double norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);</span>
-<span class="fc bfc" id="L602" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
-<span class="fc" id="L603">                mX /= norm;</span>
-<span class="fc" id="L604">                mY /= norm;</span>
-<span class="fc" id="L605">                mZ /= norm;</span>
-<span class="fc" id="L606">                mW /= norm;</span>
-<span class="fc" id="L607">                mNormalized = true;</span>
+<span class="fc bfc" id="L599" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L600">            double norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);</span>
+<span class="fc bfc" id="L601" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L602">                mX /= norm;</span>
+<span class="fc" id="L603">                mY /= norm;</span>
+<span class="fc" id="L604">                mZ /= norm;</span>
+<span class="fc" id="L605">                mW /= norm;</span>
+<span class="fc" id="L606">                mNormalized = true;</span>
             }
         }
-<span class="fc" id="L610">    }</span>
+<span class="fc" id="L609">    }</span>
 
     /**
      * Returns boolean indicating whether this point has already been normalized.
@@ -616,7 +615,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean isNormalized() {
-<span class="fc" id="L619">        return mNormalized;</span>
+<span class="fc" id="L618">        return mNormalized;</span>
     }
 
     /**
@@ -626,7 +625,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Converts and returns this point as an inhomogeneous 3D point.
      */
     public InhomogeneousPoint3D toInhomogeneous() {
-<span class="fc" id="L629">        return new InhomogeneousPoint3D(mX / mW, mY / mW, mZ / mW);</span>
+<span class="fc" id="L628">        return new InhomogeneousPoint3D(mX / mW, mY / mW, mZ / mW);</span>
     }
 
     /**
@@ -636,9 +635,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double[] asArray() {
-<span class="fc" id="L639">        final double[] out = new double[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
-<span class="fc" id="L640">        asArray(out);</span>
-<span class="fc" id="L641">        return out;</span>
+<span class="fc" id="L638">        final double[] out = new double[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L639">        asArray(out);</span>
+<span class="fc" id="L640">        return out;</span>
     }
 
     /**
@@ -649,13 +648,13 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void asArray(final double[] array) {
-<span class="pc bpc" id="L652" title="1 of 2 branches missed.">        if (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
-<span class="nc" id="L653">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L651" title="1 of 2 branches missed.">        if (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L652">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L655">        array[0] = mX;</span>
-<span class="fc" id="L656">        array[1] = mY;</span>
-<span class="fc" id="L657">        array[2] = mZ;</span>
-<span class="fc" id="L658">        array[3] = mW;</span>
-<span class="fc" id="L659">    }</span>
+<span class="fc" id="L654">        array[0] = mX;</span>
+<span class="fc" id="L655">        array[1] = mY;</span>
+<span class="fc" id="L656">        array[2] = mZ;</span>
+<span class="fc" id="L657">        array[3] = mW;</span>
+<span class="fc" id="L658">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

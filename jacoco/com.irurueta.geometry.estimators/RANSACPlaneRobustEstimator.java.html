@@ -38,7 +38,7 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * Because typical resolution for points is 1 voxel, then default threshold
      * is defined as 1.
      */
-    public static final double DEFAULT_THRESHOLD = 1;
+    public static final double DEFAULT_THRESHOLD = 1.0;
 
     /**
      * Minimum value that can be set as threshold.

@@ -105,7 +105,7 @@ public class Ellipse implements Serializable {
      * @param point2 2nd point.
      * @param center center of ellipse.
      * @param theta  rotation angle expressed in radians.
-     * @throws ColinearPointsException if points are in a colinear or degenerate
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
     public Ellipse(final Point2D point1, final Point2D point2, final Point2D center, final double theta)
@@ -122,7 +122,7 @@ public class Ellipse implements Serializable {
      * @param point3 3rd point.
      * @param point4 4th point.
      * @param point5 5th point.
-     * @throws ColinearPointsException if points are in a colinear or degenerate
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
     public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3,
@@ -140,7 +140,7 @@ public class Ellipse implements Serializable {
      * @param point5    5th point.
      * @param threshold threshold to determine whether points form an ellipse.
      *                  This is usually a very small value
-     * @throws ColinearPointsException if points are in a colinear or degenerate
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
     public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3,
@@ -513,7 +513,7 @@ public class Ellipse implements Serializable {
      * @param point2 2nd point.
      * @param center center of ellipse.
      * @param theta  rotation angle expressed in radians.
-     * @throws ColinearPointsException if points are in a colinear or degenerate
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
     public final void setParametersFromPointsCenterAndRotation(
@@ -649,7 +649,7 @@ public class Ellipse implements Serializable {
      * @param point3 3rd point.
      * @param point4 4th point.
      * @param point5 5th point.
-     * @throws ColinearPointsException if points are in a colinear or degenerate
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
     public final void setParametersFromPoints(
@@ -669,7 +669,7 @@ public class Ellipse implements Serializable {
      * @param point5    5th point.
      * @param threshold threshold to determine whether points form an ellipse.
      *                  This is usually a very small value
-     * @throws ColinearPointsException if points are in a colinear or degenerate
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
     public final void setParametersFromPoints(
@@ -1330,7 +1330,7 @@ public class Ellipse implements Serializable {
      * @param threshold threshold to determine if provided point is locus.
      * @throws NotLocusException        if provided point is not locus of this circle
      *                                  up to provided threshold.
-     * @throws IllegalArgumentException if provided threshold is negtive.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentLineAt(final Point2D point, final Line2D line, final double threshold)
             throws NotLocusException {

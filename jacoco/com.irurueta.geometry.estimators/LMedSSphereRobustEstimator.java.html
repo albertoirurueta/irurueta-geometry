@@ -188,102 +188,103 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public Sphere estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L195">            throw new LockedException();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L196">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L197" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L198">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L199">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L201">        final LMedSRobustEstimator&lt;Sphere&gt; innerEstimator =</span>
+<span class="fc" id="L202">        final LMedSRobustEstimator&lt;Sphere&gt; innerEstimator =</span>
                 new LMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L203">                        new LMedSRobustEstimatorListener&lt;Sphere&gt;() {</span>
+<span class="fc" id="L204">                        new LMedSRobustEstimatorListener&lt;Sphere&gt;() {</span>
 
                             @Override
                             public int getTotalSamples() {
-<span class="fc" id="L207">                                return mPoints.size();</span>
+<span class="fc" id="L208">                                return mPoints.size();</span>
                             }
 
                             @Override
                             public int getSubsetSize() {
-<span class="fc" id="L212">                                return SphereRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L213">                                return SphereRobustEstimator.MINIMUM_SIZE;</span>
                             }
 
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;Sphere&gt; solutions) {
-<span class="fc" id="L218">                                final Point3D point1 = mPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L219">                                final Point3D point2 = mPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L220">                                final Point3D point3 = mPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L221">                                final Point3D point4 = mPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L219">                                final Point3D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L220">                                final Point3D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L221">                                final Point3D point3 = mPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L222">                                final Point3D point4 = mPoints.get(samplesIndices[3]);</span>
 
                                 try {
-<span class="fc" id="L224">                                    final Sphere sphere = new Sphere(point1, point2, point3, point4);</span>
-<span class="fc" id="L225">                                    solutions.add(sphere);</span>
-<span class="fc" id="L226">                                } catch (final CoplanarPointsException e) {</span>
+<span class="fc" id="L225">                                    final Sphere sphere = new Sphere(point1, point2, point3, point4);</span>
+<span class="fc" id="L226">                                    solutions.add(sphere);</span>
+<span class="fc" id="L227">                                } catch (final CoplanarPointsException e) {</span>
                                     // if points are coincident, no solution is added
-<span class="fc" id="L228">                                }</span>
-<span class="fc" id="L229">                            }</span>
+<span class="fc" id="L229">                                }</span>
+<span class="fc" id="L230">                            }</span>
 
                             @Override
                             public double computeResidual(final Sphere currentEstimation, final int i) {
-<span class="fc" id="L233">                                return residual(currentEstimation, mPoints.get(i));</span>
+<span class="fc" id="L234">                                return residual(currentEstimation, mPoints.get(i));</span>
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L238">                                return LMedSSphereRobustEstimator.this.isReady();</span>
+<span class="fc" id="L239">                                return LMedSSphereRobustEstimator.this.isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(final RobustEstimator&lt;Sphere&gt; estimator) {
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L244">                                    mListener.onEstimateStart(LMedSSphereRobustEstimator.this);</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L245">                                    mListener.onEstimateStart(LMedSSphereRobustEstimator.this);</span>
                                 }
-<span class="fc" id="L246">                            }</span>
+<span class="fc" id="L247">                            }</span>
 
                             @Override
                             public void onEstimateEnd(final RobustEstimator&lt;Sphere&gt; estimator) {
-<span class="pc bpc" id="L250" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L251">                                    mListener.onEstimateEnd(LMedSSphereRobustEstimator.this);</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L252">                                    mListener.onEstimateEnd(LMedSSphereRobustEstimator.this);</span>
                                 }
-<span class="fc" id="L253">                            }</span>
+<span class="fc" id="L254">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;Sphere&gt; estimator, final int iteration) {
-<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L259">                                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L260">                                    mListener.onEstimateNextIteration(</span>
                                             LMedSSphereRobustEstimator.this, iteration);
                                 }
-<span class="fc" id="L262">                            }</span>
+<span class="fc" id="L263">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;Sphere&gt; estimator, final float progress) {
-<span class="pc bpc" id="L267" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L268">                                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L269">                                    mListener.onEstimateProgressChange(</span>
                                             LMedSSphereRobustEstimator.this, progress);
                                 }
-<span class="fc" id="L271">                            }</span>
+<span class="fc" id="L272">                            }</span>
                         });
 
         try {
-<span class="fc" id="L275">            mLocked = true;</span>
-<span class="fc" id="L276">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L277">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L278">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L279">            innerEstimator.setStopThreshold(mStopThreshold);</span>
-<span class="fc" id="L280">            return innerEstimator.estimate();</span>
-<span class="nc" id="L281">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L282">            throw new LockedException(e);</span>
-<span class="nc" id="L283">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L284">            throw new NotReadyException(e);</span>
+<span class="fc" id="L276">            mLocked = true;</span>
+<span class="fc" id="L277">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L278">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L279">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L280">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L281">            return innerEstimator.estimate();</span>
+<span class="nc" id="L282">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L283">            throw new LockedException(e);</span>
+<span class="nc" id="L284">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L285">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L286">            mLocked = false;</span>
+<span class="fc" id="L287">            mLocked = false;</span>
         }
     }
 
@@ -294,7 +295,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L297">        return RobustEstimatorMethod.LMedS;</span>
+<span class="fc" id="L298">        return RobustEstimatorMethod.LMedS;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

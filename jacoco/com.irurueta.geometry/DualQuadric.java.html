@@ -217,7 +217,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @param threshold Threshold of tolerance to determine whether the planes
      *                  are perpendicular or not. This is needed because of limited machine
      *                  precision. If threshold is not provided, then
-     *                  DEFAULT_PERPENDICULAR_THREHSOLD is used instead.
+     *                  DEFAULT_PERPENDICULAR_THRESHOLD is used instead.
      * @return True if provided planes are perpendicular, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is
      *                                  negative.
@@ -285,7 +285,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     }
 
     /**
-     * Computes the quadric correpsonding to this dual quadric and stores the
+     * Computes the quadric corresponding to this dual quadric and stores the
      * result in provided instance.
      *
      * @param quadric Quadric where result is stored.
@@ -536,7 +536,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * In an ideal metric stratum, in order to preserve orthogonality, the dual
      * absolute quadric is defined as a degenerate dual quadric (i.e. cannot be
      * inverted to obtain a quadric) containing the canonical dual absolute
-     * conic (i.e. the identity) in its top left submatrix
+     * conic (i.e. the identity) in its top left sub-matrix
      *
      * @return a canonical instance of the dual absolute quadric
      */

@@ -121,7 +121,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on
+     * The threshold refers to the amount of error a possible solution has on
      * a given point.
      *
      * @param threshold threshold to be set.

@@ -76,7 +76,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
 
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample.
+     * The larger the score value the better the quality of the sample.
      */
     private double[] mQualityScores;
 

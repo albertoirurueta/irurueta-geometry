@@ -58,7 +58,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -241,7 +241,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * during estimation.
      *
      * @param progressDelta amount of progress variation before notifying a
-     *                      progress change during estimatoin.
+     *                      progress change during estimation.
      * @throws IllegalArgumentException if progress delta is less than zero or
      *                                  greater than 1.
      * @throws LockedException          if this estimator is locked because an estimation
@@ -349,7 +349,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     }
 
     /**
-     * Specifies whether result must be refined using LEvenberg-Marquardt
+     * Specifies whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      *
      * @param refineResult true to refine result, false to simply use result

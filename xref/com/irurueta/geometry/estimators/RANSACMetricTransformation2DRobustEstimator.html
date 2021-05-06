@@ -45,7 +45,7 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * Constant defining default threshold to determine whether points are</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * inliers or not.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * By defaul 1.0 is considered a good value for cases where measures are</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * By default 1.0 is considered a good value for cases where measures are</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * done on pixels, since typically the minimum resolution is 1 pixel.</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> DEFAULT_THRESHOLD = 1.0;
@@ -251,7 +251,7 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">     * Sets threshold to determine whether points are inliers or not when</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">     * testing possible estimation solutions.</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">     * Thre threshold refers to the amount of error (i.e. euclidean distance) a</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">     * The threshold refers to the amount of error (i.e. euclidean distance) a</em>
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">     * possible solution has on a matched pair of points.</em>
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">     * @param threshold threshold to be set.</em>
@@ -333,175 +333,176 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">     * @throws RobustEstimatorException if estimation fails for any reason</em>
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">     *                                  (i.e. numerical instability, no solution available, etc).</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>     @Override
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/MetricTransformation2D.html">MetricTransformation2D</a> estimate() <strong class="jxr_keyword">throws</strong> LockedException,
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>             NotReadyException, RobustEstimatorException {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>         }
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         <strong class="jxr_keyword">if</strong> (!isReady()) {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>();
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         }
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         <strong class="jxr_keyword">final</strong> RANSACRobustEstimator&lt;MetricTransformation2D&gt; innerEstimator =
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>                 <strong class="jxr_keyword">new</strong> RANSACRobustEstimator&lt;&gt;(
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>                         <strong class="jxr_keyword">new</strong> RANSACRobustEstimatorListener&lt;MetricTransformation2D&gt;() {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>                             <em class="jxr_comment">// point to be reused when computing residuals</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> mTestPoint = Point2D.create(
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>                                     CoordinatesType.HOMOGENEOUS_COORDINATES);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a> mNonRobustEstimator =
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>                                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a>(
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>                                             isWeakMinimumSizeAllowed());
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Point2D&gt; mSubsetInputPoints =
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>                                     <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Point2D&gt; mSubsetOutputPoints =
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>                                     <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>                             @Override
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getThreshold() {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>                                 <strong class="jxr_keyword">return</strong> mThreshold;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>                             }
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>                             @Override
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getTotalSamples() {
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>                                 <strong class="jxr_keyword">return</strong> mInputPoints.size();
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>                             }
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>                             @Override
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getSubsetSize() {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                                 <strong class="jxr_keyword">return</strong> mNonRobustEstimator.getMinimumPoints();
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>                             }
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>                             @Override
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> estimatePreliminarSolutions(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] samplesIndices,
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>                                                                     List&lt;MetricTransformation2D&gt; solutions) {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>                                 mSubsetInputPoints.clear();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>                                 mSubsetOutputPoints.clear();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>                                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> samplesIndex : samplesIndices) {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>                                     mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>                                     mSubsetOutputPoints.add(mOutputPoints.get(
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>                                             samplesIndex));
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>                                 }
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>                                 <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>                                     mNonRobustEstimator.setPoints(mSubsetInputPoints,
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>                                             mSubsetOutputPoints);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>                                     solutions.add(mNonRobustEstimator.estimate());
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>                                 } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>                                     <em class="jxr_comment">// if points are coincident, no solution is added</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>                                 }
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>                             }
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>                             @Override
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> computeResidual(
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                                     <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/MetricTransformation2D.html">MetricTransformation2D</a> currentEstimation, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint = mInputPoints.get(i);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>                                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint = mOutputPoints.get(i);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>                                 <em class="jxr_comment">// transform input point and store result in mTestPoint</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>                                 currentEstimation.transform(inputPoint, mTestPoint);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>                                 <strong class="jxr_keyword">return</strong> outputPoint.distanceTo(mTestPoint);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>                             }
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>                             @Override
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isReady() {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>                                 <strong class="jxr_keyword">return</strong> RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>.
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>                                         isReady();
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>                             }
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>                             @Override
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateStart(
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>                                     mListener.onEstimateStart(
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>                                 }
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>                             }
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>                             @Override
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateEnd(
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>                                     mListener.onEstimateEnd(
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>                                 }
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>                             }
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>                             @Override
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateNextIteration(
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator,
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>                                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> iteration) {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>                                     mListener.onEstimateNextIteration(
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>                                             iteration);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                                 }
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>                             }
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>                             @Override
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateProgressChange(
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator,
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>                                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> progress) {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>                                     mListener.onEstimateProgressChange(
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>                                             progress);
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>                                 }
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>                             }
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>                         });
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>             mLocked = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>             mInliersData = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>             innerEstimator.setComputeAndKeepInliersEnabled(
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                     mComputeAndKeepInliers || mRefineResult);
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>             innerEstimator.setComputeAndKeepResidualsEnabled(
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>                     mComputeAndKeepResiduals || mRefineResult);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>             innerEstimator.setConfidence(mConfidence);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>             innerEstimator.setMaxIterations(mMaxIterations);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>             innerEstimator.setProgressDelta(mProgressDelta);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/MetricTransformation2D.html">MetricTransformation2D</a> transformation = innerEstimator.estimate();
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>             mInliersData = innerEstimator.getInliersData();
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>             <strong class="jxr_keyword">return</strong> attemptRefine(transformation);
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> com.irurueta.numerical.LockedException e) {
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>(e);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> com.irurueta.numerical.NotReadyException e) {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>(e);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>         } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>             mLocked = false;
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>         }
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>     }
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * Returns method being used for robust estimation.</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * @return method being used for robust estimation.</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>     @Override
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>     <strong class="jxr_keyword">public</strong> RobustEstimatorMethod getMethod() {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>         <strong class="jxr_keyword">return</strong> RobustEstimatorMethod.RANSAC;
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>     }
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">     * Gets standard deviation used for Levenberg-Marquardt fitting during</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">     * refinement.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">     * Returned value gives an indication of how much variance each residual</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">     * has.</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">     * Typically this value is related to the threshold used on each robust</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">     * estimation, since residuals of found inliers are within the range of</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">     * such threshold.</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">     * @return standard deviation used for refinement.</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>     @Override
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">double</strong> getRefinementStandardDeviation() {
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">return</strong> mThreshold;
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>     }
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> }
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     @SuppressWarnings(<span class="jxr_string">"DuplicatedCode"</span>)
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     @Override
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/irurueta/geometry/MetricTransformation2D.html">MetricTransformation2D</a> estimate() <strong class="jxr_keyword">throws</strong> LockedException,
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>             NotReadyException, RobustEstimatorException {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>         }
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         <strong class="jxr_keyword">if</strong> (!isReady()) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>();
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>         }
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         <strong class="jxr_keyword">final</strong> RANSACRobustEstimator&lt;MetricTransformation2D&gt; innerEstimator =
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>                 <strong class="jxr_keyword">new</strong> RANSACRobustEstimator&lt;&gt;(
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>                         <strong class="jxr_keyword">new</strong> RANSACRobustEstimatorListener&lt;MetricTransformation2D&gt;() {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>                             <em class="jxr_comment">// point to be reused when computing residuals</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> mTestPoint = Point2D.create(
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>                                     CoordinatesType.HOMOGENEOUS_COORDINATES);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a> mNonRobustEstimator =
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>                                     <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a>(
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>                                             isWeakMinimumSizeAllowed());
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Point2D&gt; mSubsetInputPoints =
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>                                     <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>                             <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Point2D&gt; mSubsetOutputPoints =
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>                                     <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                             @Override
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getThreshold() {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>                                 <strong class="jxr_keyword">return</strong> mThreshold;
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>                             }
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>                             @Override
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getTotalSamples() {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>                                 <strong class="jxr_keyword">return</strong> mInputPoints.size();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                             }
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>                             @Override
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getSubsetSize() {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>                                 <strong class="jxr_keyword">return</strong> mNonRobustEstimator.getMinimumPoints();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>                             }
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>                             @Override
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> estimatePreliminarSolutions(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>[] samplesIndices,
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>                                                                     List&lt;MetricTransformation2D&gt; solutions) {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>                                 mSubsetInputPoints.clear();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>                                 mSubsetOutputPoints.clear();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>                                 <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> samplesIndex : samplesIndices) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                                     mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>                                     mSubsetOutputPoints.add(mOutputPoints.get(
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>                                             samplesIndex));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>                                 }
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>                                 <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>                                     mNonRobustEstimator.setPoints(mSubsetInputPoints,
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>                                             mSubsetOutputPoints);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>                                     solutions.add(mNonRobustEstimator.estimate());
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>                                 } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>                                     <em class="jxr_comment">// if points are coincident, no solution is added</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                                 }
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                             }
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>                             @Override
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> computeResidual(
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                                     <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/MetricTransformation2D.html">MetricTransformation2D</a> currentEstimation, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>                                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint = mInputPoints.get(i);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                                 <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint = mOutputPoints.get(i);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>                                 <em class="jxr_comment">// transform input point and store result in mTestPoint</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>                                 currentEstimation.transform(inputPoint, mTestPoint);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>                                 <strong class="jxr_keyword">return</strong> outputPoint.distanceTo(mTestPoint);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                             }
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>                             @Override
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isReady() {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>                                 <strong class="jxr_keyword">return</strong> RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>.
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>                                         isReady();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>                             }
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>                             @Override
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateStart(
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>                                     mListener.onEstimateStart(
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>                                 }
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>                             }
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>                             @Override
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateEnd(
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>                                     mListener.onEstimateEnd(
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>                                 }
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>                             }
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>                             @Override
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateNextIteration(
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>                                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> iteration) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>                                     mListener.onEstimateNextIteration(
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>                                             iteration);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>                                 }
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>                             }
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>                             @Override
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>                             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onEstimateProgressChange(
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>                                     <strong class="jxr_keyword">final</strong> RobustEstimator&lt;MetricTransformation2D&gt; estimator,
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>                                     <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">float</strong> progress) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>                                 <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                                     mListener.onEstimateProgressChange(
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>                                             RANSACMetricTransformation2DRobustEstimator.<strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>                                             progress);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>                                 }
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>                             }
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>                         });
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>             mLocked = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>             mInliersData = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>             innerEstimator.setComputeAndKeepInliersEnabled(
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>                     mComputeAndKeepInliers || mRefineResult);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>             innerEstimator.setComputeAndKeepResidualsEnabled(
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>                     mComputeAndKeepResiduals || mRefineResult);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>             innerEstimator.setConfidence(mConfidence);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>             innerEstimator.setMaxIterations(mMaxIterations);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>             innerEstimator.setProgressDelta(mProgressDelta);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/MetricTransformation2D.html">MetricTransformation2D</a> transformation = innerEstimator.estimate();
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>             mInliersData = innerEstimator.getInliersData();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>             <strong class="jxr_keyword">return</strong> attemptRefine(transformation);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> com.irurueta.numerical.LockedException e) {
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>(e);
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> com.irurueta.numerical.NotReadyException e) {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>(e);
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>             mLocked = false;
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>         }
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>     }
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     * Returns method being used for robust estimation.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * @return method being used for robust estimation.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>     @Override
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>     <strong class="jxr_keyword">public</strong> RobustEstimatorMethod getMethod() {
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>         <strong class="jxr_keyword">return</strong> RobustEstimatorMethod.RANSAC;
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>     }
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">     * Gets standard deviation used for Levenberg-Marquardt fitting during</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">     * refinement.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">     * Returned value gives an indication of how much variance each residual</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">     * has.</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">     * Typically this value is related to the threshold used on each robust</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">     * estimation, since residuals of found inliers are within the range of</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">     * such threshold.</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">     * @return standard deviation used for refinement.</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>     @Override
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">double</strong> getRefinementStandardDeviation() {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>         <strong class="jxr_keyword">return</strong> mThreshold;
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>     }
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>

@@ -78,7 +78,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -300,7 +300,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */

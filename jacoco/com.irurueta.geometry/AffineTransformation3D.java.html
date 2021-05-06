@@ -479,7 +479,7 @@ public class AffineTransformation3D extends Transformation3D
     /**
      * Sets scale of this transformation.
      *
-     * @param scale acale value to be set. a value between 0.0 and 1.0 indicates
+     * @param scale scale value to be set. a value between 0.0 and 1.0 indicates
      *              that objects will be reduced, a value greater than 1.0 indicates that
      *              objects will be enlarged, and a negative value indicates that objects
      *              will be reversed.
@@ -961,7 +961,7 @@ public class AffineTransformation3D extends Transformation3D
      * provided output camera.
      *
      * @param inputCamera  camera to be transformed.
-     * @param outputCamera instance where data of transforeed camera will be
+     * @param outputCamera instance where data of transformed camera will be
      *                     stored.
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.

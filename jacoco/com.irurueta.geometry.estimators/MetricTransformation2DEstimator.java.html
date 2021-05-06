@@ -356,7 +356,7 @@ public class MetricTransformation2DEstimator {
      * @param result instance where result will be stored.
      * @throws LockedException           if estimator is locked.
      * @throws NotReadyException         if not enough data has been provided.
-     * @throws CoincidentPointsException raised if transformaiton cannot be
+     * @throws CoincidentPointsException raised if transformation cannot be
      *                                   estimated for some reason (point configuration degeneracy, duplicate
      *                                   points or numerical instabilities).
      */

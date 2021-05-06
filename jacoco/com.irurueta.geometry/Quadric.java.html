@@ -549,7 +549,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @param threshold threshold to determine if provided point is locus or not
      *                  of this quadric. Usually this is a small value close to zero.
      * @throws NotLocusException        if provided point is not locus of this quadric.
-     * @throws IllegalArgumentException if provided threshold is negtive.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentPlaneAt(final Point3D point, final Plane plane, final double threshold)
             throws NotLocusException {

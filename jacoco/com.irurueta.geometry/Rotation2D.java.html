@@ -303,7 +303,7 @@ public class Rotation2D implements Serializable {
     /**
      * Sets amount of rotation from provided rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinantequal to 1.
+     * transpose must be it's inverse) and must have determinant equal to 1.
      * Provided matrix can be expressed in either inhomogeneous (2x2) or
      * homogeneous (3x3) coordinates.
      * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD

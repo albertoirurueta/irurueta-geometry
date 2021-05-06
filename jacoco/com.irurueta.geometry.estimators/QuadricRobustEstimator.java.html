@@ -57,7 +57,7 @@ public abstract class QuadricRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -130,7 +130,7 @@ public abstract class QuadricRobustEstimator {
      * Matrix representation of a 3D point to be reused when computing
      * residuals.
      */
-    protected Matrix mTestPoint;
+    private Matrix mTestPoint;
 
     /**
      * Matrix representation of a quadric to be reused when computing

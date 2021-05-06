@@ -38,7 +38,7 @@ public class RANSACPointCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Constant defining default threshold to determine whether points are
      * inliers or not.
-     * By defaul 1.0 is considered a good value for cases where measures are
+     * By default 1.0 is considered a good value for cases where measures are
      * done on voxels, since typically the minimum resolution is 1 voxel (the
      * equivalent of a pixel in 3D).
      */

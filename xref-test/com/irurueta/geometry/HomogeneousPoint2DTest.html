@@ -251,158 +251,167 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>         assertTrue(hPoint1.equals(hPoint2, 2.0));
 <a class="jxr_linenumber" name="L244" href="#L244">244</a>         assertTrue(hPoint1.equals((Point2D) hPoint2, 2.0));
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>         assertFalse(hPoint1.equals(hPoint2, 0.0));
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>         <em class="jxr_comment">// Testing equals from one inhomogeneous point</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] iArray = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[INHOM_COORDS];
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>         iArray[0] = array[0] / array[2];
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>         iArray[1] = array[1] / array[2];
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>         HomogeneousPoint2D hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(array);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>         InhomogeneousPoint2D iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D(iArray);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>         assertTrue(hPoint.equals(iPoint, ABSOLUTE_ERROR));
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>         assertTrue(hPoint.equals((Point2D) iPoint, ABSOLUTE_ERROR));
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>         iArray[0] = hPoint.getInhomX() + 1.0;
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>         iArray[1] = hPoint.getInhomY() + 1.0;
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>         iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D(iArray);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>         assertFalse(hPoint.equals(iPoint, 0.0));
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>         assertFalse(hPoint.equals((Point2D) iPoint, 0.0));
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>         hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(array);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>         iArray[0] = hPoint.getInhomX() + 1.0;
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>         iArray[1] = hPoint.getInhomY() + 1.0;
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>         iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D(iArray);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>         assertTrue(hPoint.equals(iPoint, 1.1));
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>         assertTrue(hPoint.equals((Point2D) iPoint, 1.1));
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>         assertFalse(hPoint.equals(iPoint, 0.5));
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>         assertFalse(hPoint.equals((Point2D) iPoint, 0.5));
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>         <em class="jxr_comment">// Force IllegalArgumentException</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>         <strong class="jxr_keyword">boolean</strong> value = false;
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>             value = hPoint.equals(hPoint, -ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>         }
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>             value = hPoint.equals(iPoint, -ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>         }
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>             value = hPoint.equals((Point2D) iPoint, -ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>         }
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         assertFalse(value);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>     }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>         assertFalse(hPoint1.equals((Point2D) hPoint2, 0.0));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         <em class="jxr_comment">// Testing equals from one inhomogeneous point</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] iArray = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[INHOM_COORDS];
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>         iArray[0] = array[0] / array[2];
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>         iArray[1] = array[1] / array[2];
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>         HomogeneousPoint2D hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(array);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>         InhomogeneousPoint2D iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D(iArray);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>         assertTrue(hPoint.equals(iPoint, ABSOLUTE_ERROR));
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>         assertTrue(hPoint.equals((Point2D) iPoint, ABSOLUTE_ERROR));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>         iArray[0] = hPoint.getInhomX() + 1.0;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>         iArray[1] = hPoint.getInhomY() + 1.0;
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>         iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D(iArray);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>         assertFalse(hPoint.equals(iPoint, 0.0));
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>         assertFalse(hPoint.equals((Point2D) iPoint, 0.0));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>         hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(array);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         iArray[0] = hPoint.getInhomX() + 1.0;
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>         iArray[1] = hPoint.getInhomY() + 1.0;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D(iArray);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         assertTrue(hPoint.equals(iPoint, 1.1));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>         assertTrue(hPoint.equals((Point2D) iPoint, 1.1));
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>         assertFalse(hPoint.equals(iPoint, 0.5));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>         assertFalse(hPoint.equals((Point2D) iPoint, 0.5));
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>         <em class="jxr_comment">// Force IllegalArgumentException</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>         <strong class="jxr_keyword">boolean</strong> value = false;
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>             value = hPoint.equals(hPoint, -ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>         }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>             value = hPoint.equals(iPoint, -ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         }
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>             value = hPoint.equals((Point2D) iPoint, -ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>         }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>         assertFalse(value);
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>     @Test
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIsAtInfinity() {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>         <strong class="jxr_keyword">final</strong> HomogeneousPoint2D hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>         <em class="jxr_comment">// Sets point at infinity</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>         hPoint.setW(0.0);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>         assertTrue(hPoint.isAtInfinity());
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>         <em class="jxr_comment">// Forces point not being at infinity</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>         hPoint.setW(1.0);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>         assertFalse(hPoint.isAtInfinity());
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>         <em class="jxr_comment">// Testing with threshold</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>         hPoint.setW(4.0);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>         assertTrue(hPoint.isAtInfinity(4.5));
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>         hPoint.setW(5.0);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>         assertFalse(hPoint.isAtInfinity(4.5));
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <em class="jxr_comment">// Force IllegalArgumentException</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>             hPoint.isAtInfinity(-ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>         }
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>     }
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>     @Test
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNormalize() {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>         <strong class="jxr_keyword">final</strong> UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>         <strong class="jxr_keyword">final</strong> HomogeneousPoint2D point = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(homX, homY, homW);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>         assertEquals(point.getHomX(), homX, 0.0);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>         assertEquals(point.getHomY(), homY, 0.0);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>         assertEquals(point.getHomW(), homW, 0.0);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>         <em class="jxr_comment">// compute norm</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> norm = Math.sqrt(homX * homX + homY * homY + homW * homW);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D();
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>         iPoint = <strong class="jxr_keyword">new</strong> InhomogeneousPoint2D();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         assertTrue(hPoint.equals(iPoint));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>         hPoint2 = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(hPoint);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>         assertTrue(hPoint.equals(hPoint2));
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         assertTrue(hPoint.equals((Point2D) iPoint));
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         assertTrue(hPoint.equals((Point2D) hPoint2));
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>     }
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>     @Test
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIsAtInfinity() {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>         <strong class="jxr_keyword">final</strong> HomogeneousPoint2D hPoint = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>         <em class="jxr_comment">// Sets point at infinity</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>         hPoint.setW(0.0);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>         assertTrue(hPoint.isAtInfinity());
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <em class="jxr_comment">// Forces point not being at infinity</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>         hPoint.setW(1.0);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>         assertFalse(hPoint.isAtInfinity());
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>         <em class="jxr_comment">// Testing with threshold</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>         hPoint.setW(4.0);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         assertTrue(hPoint.isAtInfinity(4.5));
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         hPoint.setW(5.0);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         assertFalse(hPoint.isAtInfinity(4.5));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>         <em class="jxr_comment">// Force IllegalArgumentException</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>             hPoint.isAtInfinity(-ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>             fail(<span class="jxr_string">"IllegalArgumentException expected but not thrown"</span>);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException ignore) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>         }
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>     }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     @Test
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNormalize() {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>         <strong class="jxr_keyword">final</strong> UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         <em class="jxr_comment">// normalize</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>         point.normalize();
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         <em class="jxr_comment">// check correctness after normalization</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>         assertEquals(point.getHomX(), homX / norm, ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         assertEquals(point.getHomY(), homY / norm, ABSOLUTE_ERROR);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>         assertEquals(point.getHomW(), homW / norm, ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>         <strong class="jxr_keyword">final</strong> HomogeneousPoint2D point = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(homX, homY, homW);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         assertEquals(point.getHomX(), homX, 0.0);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>         assertEquals(point.getHomY(), homY, 0.0);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>         assertEquals(point.getHomW(), homW, 0.0);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <em class="jxr_comment">// compute norm</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> norm = Math.sqrt(homX * homX + homY * homY + homW * homW);
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>         point.setHomogeneousCoordinates(homX, homY, homW);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>         point.normalize();
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>         point.setCoordinates(homX, homY, homW);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>         point.normalize();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>         point.setInhomogeneousCoordinates(homX / homW, homY / homW);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>         point.normalize();
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] array = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[HOM_COORDS];
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>         <em class="jxr_comment">// initialize to zeros</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>         Arrays.fill(array, 0.0);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>         point.setCoordinates(array);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>         <em class="jxr_comment">// normalization is not done because of numerical</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>         <em class="jxr_comment">// normalize</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>         point.normalize();
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         <em class="jxr_comment">// check correctness after normalization</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         assertEquals(point.getHomX(), homX / norm, ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         assertEquals(point.getHomY(), homY / norm, ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         assertEquals(point.getHomW(), homW / norm, ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>         point.setHomogeneousCoordinates(homX, homY, homW);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>         point.normalize();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>         point.setCoordinates(homX, homY, homW);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>         point.normalize();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>         point.setInhomogeneousCoordinates(homX / homW, homY / homW);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>         assertFalse(point.isNormalized());
 <a class="jxr_linenumber" name="L364" href="#L364">364</a>         point.normalize();
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>         <em class="jxr_comment">// instability</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>         <em class="jxr_comment">// fill array with random values</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] array = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[HOM_COORDS];
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>         <em class="jxr_comment">// initialize to zeros</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>         Arrays.fill(array, 0.0);
 <a class="jxr_linenumber" name="L370" href="#L370">370</a>         point.setCoordinates(array);
 <a class="jxr_linenumber" name="L371" href="#L371">371</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>         <em class="jxr_comment">// now normalization is done</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>         <em class="jxr_comment">// normalization is not done because of numerical</em>
 <a class="jxr_linenumber" name="L373" href="#L373">373</a>         point.normalize();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>         <strong class="jxr_keyword">final</strong> HomogeneousPoint2D point2 = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D();
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>         point.setCoordinates(point2);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>         point.normalize();
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>         point.setX(homX);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>         point.normalize();
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>         point.setY(homY);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>         point.normalize();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>         point.setW(homW);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>         assertFalse(point.isNormalized());
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>         point.normalize();
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>         assertTrue(point.isNormalized());
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>     }
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>         <em class="jxr_comment">// instability</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>         <em class="jxr_comment">// fill array with random values</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>         point.setCoordinates(array);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>         <em class="jxr_comment">// now normalization is done</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>         point.normalize();
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>         <strong class="jxr_keyword">final</strong> HomogeneousPoint2D point2 = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D();
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>         point.setCoordinates(point2);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>         point.normalize();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>         point.setX(homX);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>         point.normalize();
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>         point.setY(homY);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>         point.normalize();
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>         point.setW(homW);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         assertFalse(point.isNormalized());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         point.normalize();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>         assertTrue(point.isNormalized());
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>     }
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>

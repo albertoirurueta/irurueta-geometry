@@ -1018,9 +1018,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param translationY y coordinate to be added to current translation.
      */
     public void addTranslation(final double translationX, final double translationY) {
-<span class="nc" id="L1021">        addTranslationX(translationX);</span>
-<span class="nc" id="L1022">        addTranslationY(translationY);</span>
-<span class="nc" id="L1023">    }</span>
+<span class="fc" id="L1021">        addTranslationX(translationX);</span>
+<span class="fc" id="L1022">        addTranslationY(translationY);</span>
+<span class="fc" id="L1023">    }</span>
 
     /**
      * Adds provided coordinates to current translation assigned to this
@@ -1029,8 +1029,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param translation x, y coordinates to be added to current translation.
      */
     public void addTranslation(final Point2D translation) {
-<span class="nc" id="L1032">        addTranslation(translation.getInhomX(), translation.getInhomY());</span>
-<span class="nc" id="L1033">    }</span>
+<span class="fc" id="L1032">        addTranslation(translation.getInhomX(), translation.getInhomY());</span>
+<span class="fc" id="L1033">    }</span>
 
     /**
      * Represents this transformation as a 3x3 matrix.
@@ -1100,7 +1100,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                    stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      *                                     the resulting output conic matrix is not considered to be symmetric.
-     * @throws AlgebraException            raised if transform cannot be computed becauseof
+     * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
     @Override

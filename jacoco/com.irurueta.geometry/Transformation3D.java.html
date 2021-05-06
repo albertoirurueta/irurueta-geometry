@@ -115,7 +115,7 @@ public abstract class Transformation3D {
      * @return a new transformed quadric.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      *                                     the resulting output quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException            raised if transform cannot be computed becauseof
+     * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
     public Quadric transformAndReturnNew(final Quadric inputQuadric)
@@ -353,7 +353,7 @@ public abstract class Transformation3D {
      *
      * @param inputLines lines to be transformed.
      * @return transformed lines.
-     * @throws CoincidentPlanesException taised if transformation is degenerate
+     * @throws CoincidentPlanesException raised if transformation is degenerate
      *                                   and results in planes forming a line being coincident.
      * @throws AlgebraException          raised if transform cannot be computed because
      *                                   of numerical instabilities.

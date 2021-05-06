@@ -213,79 +213,80 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
 <span class="fc" id="L213">                                return Point2DRobustEstimator.MINIMUM_SIZE;</span>
                             }
 
+                            @SuppressWarnings(&quot;DuplicatedCode&quot;)
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;Point2D&gt; solutions) {
-<span class="fc" id="L219">                                final Line2D line1 = mLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L220">                                final Line2D line2 = mLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L220">                                final Line2D line1 = mLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L221">                                final Line2D line2 = mLines.get(samplesIndices[1]);</span>
 
                                 try {
-<span class="fc" id="L223">                                    final Point2D point = line1.getIntersection(line2);</span>
-<span class="fc" id="L224">                                    solutions.add(point);</span>
-<span class="nc" id="L225">                                } catch (final NoIntersectionException e) {</span>
+<span class="fc" id="L224">                                    final Point2D point = line1.getIntersection(line2);</span>
+<span class="fc" id="L225">                                    solutions.add(point);</span>
+<span class="nc" id="L226">                                } catch (final NoIntersectionException e) {</span>
                                     // if points are coincident, no solution is added
-<span class="fc" id="L227">                                }</span>
-<span class="fc" id="L228">                            }</span>
+<span class="fc" id="L228">                                }</span>
+<span class="fc" id="L229">                            }</span>
 
                             @Override
                             public double computeResidual(final Point2D currentEstimation, final int i) {
-<span class="fc" id="L232">                                return residual(currentEstimation, mLines.get(i));</span>
+<span class="fc" id="L233">                                return residual(currentEstimation, mLines.get(i));</span>
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L237">                                return LMedSPoint2DRobustEstimator.this.isReady();</span>
+<span class="fc" id="L238">                                return LMedSPoint2DRobustEstimator.this.isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(final RobustEstimator&lt;Point2D&gt; estimator) {
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L243">                                    mListener.onEstimateStart(LMedSPoint2DRobustEstimator.this);</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L244">                                    mListener.onEstimateStart(LMedSPoint2DRobustEstimator.this);</span>
                                 }
-<span class="fc" id="L245">                            }</span>
+<span class="fc" id="L246">                            }</span>
 
                             @Override
                             public void onEstimateEnd(final RobustEstimator&lt;Point2D&gt; estimator) {
-<span class="pc bpc" id="L249" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L250">                                    mListener.onEstimateEnd(LMedSPoint2DRobustEstimator.this);</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L251">                                    mListener.onEstimateEnd(LMedSPoint2DRobustEstimator.this);</span>
                                 }
-<span class="fc" id="L252">                            }</span>
+<span class="fc" id="L253">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;Point2D&gt; estimator, final int iteration) {
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L258">                                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L259">                                    mListener.onEstimateNextIteration(</span>
                                             LMedSPoint2DRobustEstimator.this, iteration);
                                 }
-<span class="fc" id="L261">                            }</span>
+<span class="fc" id="L262">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;Point2D&gt; estimator, final float progress) {
-<span class="pc bpc" id="L266" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L267">                                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L268">                                    mListener.onEstimateProgressChange(</span>
                                             LMedSPoint2DRobustEstimator.this, progress);
                                 }
-<span class="fc" id="L270">                            }</span>
+<span class="fc" id="L271">                            }</span>
                         });
 
         try {
-<span class="fc" id="L274">            mLocked = true;</span>
-<span class="fc" id="L275">            mInliersData = null;</span>
-<span class="fc" id="L276">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L277">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L278">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L279">            innerEstimator.setStopThreshold(mStopThreshold);</span>
-<span class="fc" id="L280">            final Point2D result = innerEstimator.estimate();</span>
-<span class="fc" id="L281">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L282">            return attemptRefine(result);</span>
-<span class="nc" id="L283">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L284">            throw new LockedException(e);</span>
-<span class="nc" id="L285">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L286">            throw new NotReadyException(e);</span>
+<span class="fc" id="L275">            mLocked = true;</span>
+<span class="fc" id="L276">            mInliersData = null;</span>
+<span class="fc" id="L277">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L278">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L279">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L280">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L281">            final Point2D result = innerEstimator.estimate();</span>
+<span class="fc" id="L282">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L283">            return attemptRefine(result);</span>
+<span class="nc" id="L284">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L285">            throw new LockedException(e);</span>
+<span class="nc" id="L286">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L287">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L288">            mLocked = false;</span>
+<span class="fc" id="L289">            mLocked = false;</span>
         }
     }
 
@@ -296,7 +297,7 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L299">        return RobustEstimatorMethod.LMedS;</span>
+<span class="fc" id="L300">        return RobustEstimatorMethod.LMedS;</span>
     }
 
     /**
@@ -312,9 +313,9 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L315">        final LMedSRobustEstimator.LMedSInliersData inliersData =</span>
-<span class="fc" id="L316">                (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
-<span class="fc" id="L317">        return inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L316">        final LMedSRobustEstimator.LMedSInliersData inliersData =</span>
+<span class="fc" id="L317">                (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+<span class="fc" id="L318">        return inliersData.getEstimatedThreshold();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

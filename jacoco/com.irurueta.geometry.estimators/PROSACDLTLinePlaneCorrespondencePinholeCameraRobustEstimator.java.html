@@ -71,7 +71,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Threshold to determine whether planes are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a
-     * plane respect the backprojected plane of a line using estimated camera.
+     * plane respect the back-projected plane of a line using estimated camera.
      */
     private double mThreshold;
 
@@ -267,7 +267,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Returns threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a
-     * plane respect the backprojected plane of a line using estimated camera
+     * plane respect the back-projected plane of a line using estimated camera
      * Residuals to determine whether planes are inliers or not are computed by
      * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).
@@ -289,7 +289,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Sets threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a
-     * plane respect the backprojected plane of a line using estimated camera
+     * plane respect the back-projected plane of a line using estimated camera
      * Residuals to determine whether planes are inliers or not are computed by
      * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).
@@ -565,11 +565,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;PinholeCamera&gt; estimator, final float progress) {
-<span class="pc bpc" id="L568" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L569">                                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,</span>
+<span class="nc bnc" id="L568" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L569">                                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,</span>
                                             progress);
                                 }
-<span class="fc" id="L572">                            }</span>
+<span class="nc" id="L572">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {

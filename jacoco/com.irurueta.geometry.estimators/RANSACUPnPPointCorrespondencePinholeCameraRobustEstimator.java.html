@@ -38,7 +38,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Constant defining default threshold to determine whether points are
      * inliers or not.
-     * By defaul 1.0 is considered a good value for cases where measures are
+     * By default 1.0 is considered a good value for cases where measures are
      * done on pixels, since typically the minimum resolution is 1 pixel.
      */
     public static final double DEFAULT_THRESHOLD = 1.0;
@@ -103,7 +103,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -163,7 +163,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on projected 2D points.
      *
      * @param threshold threshold to be set.
@@ -189,7 +189,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="nc" id="L192">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L192">        return mComputeAndKeepInliers;</span>
     }
 
     /**
@@ -201,11 +201,11 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
             throws LockedException {
-<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L205">            throw new LockedException();</span>
         }
-<span class="nc" id="L207">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="nc" id="L208">    }</span>
+<span class="fc" id="L207">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L208">    }</span>
 
     /**
      * Indicates whether residuals must be computed and kept.
@@ -214,7 +214,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="nc" id="L217">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L217">        return mComputeAndKeepResiduals;</span>
     }
 
     /**
@@ -226,11 +226,11 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public void setComputeAndKeepResidualsEnabled(
             final boolean computeAndKeepResiduals) throws LockedException {
-<span class="nc bnc" id="L229" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L230">            throw new LockedException();</span>
         }
-<span class="nc" id="L232">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="nc" id="L233">    }</span>
+<span class="fc" id="L232">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L233">    }</span>
 
     /**
      * Estimates a pinhole camera using a robust estimator and
@@ -245,200 +245,201 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public PinholeCamera estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {
-<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L252">            throw new LockedException();</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L253">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L254" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L255">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L256">            throw new NotReadyException();</span>
         }
 
-        // pinhole camera estimator using UPnP (Uncalibrated PErspective-n-Point)
+        // pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point)
         // algorithm
-<span class="fc" id="L260">        final UPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
+<span class="fc" id="L261">        final UPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
                 new UPnPPointCorrespondencePinholeCameraEstimator();
 
-<span class="fc" id="L263">        nonRobustEstimator.setPlanarConfigurationAllowed(</span>
+<span class="fc" id="L264">        nonRobustEstimator.setPlanarConfigurationAllowed(</span>
                 mPlanarConfigurationAllowed);
-<span class="fc" id="L265">        nonRobustEstimator.setNullspaceDimension2Allowed(</span>
+<span class="fc" id="L266">        nonRobustEstimator.setNullspaceDimension2Allowed(</span>
                 mNullspaceDimension2Allowed);
-<span class="fc" id="L267">        nonRobustEstimator.setPlanarThreshold(mPlanarThreshold);</span>
-<span class="fc" id="L268">        nonRobustEstimator.setSkewness(mSkewness);</span>
-<span class="fc" id="L269">        nonRobustEstimator.setHorizontalPrincipalPoint(</span>
+<span class="fc" id="L268">        nonRobustEstimator.setPlanarThreshold(mPlanarThreshold);</span>
+<span class="fc" id="L269">        nonRobustEstimator.setSkewness(mSkewness);</span>
+<span class="fc" id="L270">        nonRobustEstimator.setHorizontalPrincipalPoint(</span>
                 mHorizontalPrincipalPoint);
-<span class="fc" id="L271">        nonRobustEstimator.setVerticalPrincipalPoint(mVerticalPrincipalPoint);</span>
+<span class="fc" id="L272">        nonRobustEstimator.setVerticalPrincipalPoint(mVerticalPrincipalPoint);</span>
 
         // suggestions
-<span class="fc" id="L274">        nonRobustEstimator.setSuggestSkewnessValueEnabled(</span>
-<span class="fc" id="L275">                isSuggestSkewnessValueEnabled());</span>
-<span class="fc" id="L276">        nonRobustEstimator.setSuggestedSkewnessValue(</span>
-<span class="fc" id="L277">                getSuggestedSkewnessValue());</span>
-<span class="fc" id="L278">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(</span>
-<span class="fc" id="L279">                isSuggestHorizontalFocalLengthEnabled());</span>
-<span class="fc" id="L280">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(</span>
-<span class="fc" id="L281">                getSuggestedHorizontalFocalLengthValue());</span>
-<span class="fc" id="L282">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(</span>
-<span class="fc" id="L283">                isSuggestVerticalFocalLengthEnabled());</span>
-<span class="fc" id="L284">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(</span>
-<span class="fc" id="L285">                getSuggestedVerticalFocalLengthValue());</span>
-<span class="fc" id="L286">        nonRobustEstimator.setSuggestAspectRatioEnabled(</span>
-<span class="fc" id="L287">                isSuggestAspectRatioEnabled());</span>
-<span class="fc" id="L288">        nonRobustEstimator.setSuggestedAspectRatioValue(</span>
-<span class="fc" id="L289">                getSuggestedAspectRatioValue());</span>
-<span class="fc" id="L290">        nonRobustEstimator.setSuggestPrincipalPointEnabled(</span>
-<span class="fc" id="L291">                isSuggestPrincipalPointEnabled());</span>
-<span class="fc" id="L292">        nonRobustEstimator.setSuggestedPrincipalPointValue(</span>
-<span class="fc" id="L293">                getSuggestedPrincipalPointValue());</span>
-<span class="fc" id="L294">        nonRobustEstimator.setSuggestRotationEnabled(</span>
-<span class="fc" id="L295">                isSuggestRotationEnabled());</span>
-<span class="fc" id="L296">        nonRobustEstimator.setSuggestedRotationValue(</span>
-<span class="fc" id="L297">                getSuggestedRotationValue());</span>
-<span class="fc" id="L298">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
-<span class="fc" id="L299">        nonRobustEstimator.setSuggestedCenterValue(</span>
-<span class="fc" id="L300">                getSuggestedCenterValue());</span>
+<span class="fc" id="L275">        nonRobustEstimator.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L276">                isSuggestSkewnessValueEnabled());</span>
+<span class="fc" id="L277">        nonRobustEstimator.setSuggestedSkewnessValue(</span>
+<span class="fc" id="L278">                getSuggestedSkewnessValue());</span>
+<span class="fc" id="L279">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L280">                isSuggestHorizontalFocalLengthEnabled());</span>
+<span class="fc" id="L281">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L282">                getSuggestedHorizontalFocalLengthValue());</span>
+<span class="fc" id="L283">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L284">                isSuggestVerticalFocalLengthEnabled());</span>
+<span class="fc" id="L285">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L286">                getSuggestedVerticalFocalLengthValue());</span>
+<span class="fc" id="L287">        nonRobustEstimator.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L288">                isSuggestAspectRatioEnabled());</span>
+<span class="fc" id="L289">        nonRobustEstimator.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L290">                getSuggestedAspectRatioValue());</span>
+<span class="fc" id="L291">        nonRobustEstimator.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L292">                isSuggestPrincipalPointEnabled());</span>
+<span class="fc" id="L293">        nonRobustEstimator.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L294">                getSuggestedPrincipalPointValue());</span>
+<span class="fc" id="L295">        nonRobustEstimator.setSuggestRotationEnabled(</span>
+<span class="fc" id="L296">                isSuggestRotationEnabled());</span>
+<span class="fc" id="L297">        nonRobustEstimator.setSuggestedRotationValue(</span>
+<span class="fc" id="L298">                getSuggestedRotationValue());</span>
+<span class="fc" id="L299">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
+<span class="fc" id="L300">        nonRobustEstimator.setSuggestedCenterValue(</span>
+<span class="fc" id="L301">                getSuggestedCenterValue());</span>
 
 
-<span class="fc" id="L303">        final RANSACRobustEstimator&lt;PinholeCamera&gt; innerEstimator =</span>
+<span class="fc" id="L304">        final RANSACRobustEstimator&lt;PinholeCamera&gt; innerEstimator =</span>
                 new RANSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L305">                        new RANSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
+<span class="fc" id="L306">                        new RANSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
 
                             // point to be reused when computing residuals
-<span class="fc" id="L308">                            private final Point2D mTestPoint = Point2D.create(</span>
+<span class="fc" id="L309">                            private final Point2D mTestPoint = Point2D.create(</span>
                                     CoordinatesType.HOMOGENEOUS_COORDINATES);
 
                             // 3D points for a subset of samples
-<span class="fc" id="L312">                            private final List&lt;Point3D&gt; mSubset3D = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L313">                            private final List&lt;Point3D&gt; mSubset3D = new ArrayList&lt;&gt;();</span>
 
                             // 2D points for a subset of samples
-<span class="fc" id="L315">                            private final List&lt;Point2D&gt; mSubset2D = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L316">                            private final List&lt;Point2D&gt; mSubset2D = new ArrayList&lt;&gt;();</span>
 
                             @Override
                             public double getThreshold() {
-<span class="fc" id="L319">                                return mThreshold;</span>
+<span class="fc" id="L320">                                return mThreshold;</span>
                             }
 
                             @Override
                             public int getTotalSamples() {
-<span class="fc" id="L324">                                return mPoints3D.size();</span>
+<span class="fc" id="L325">                                return mPoints3D.size();</span>
                             }
 
                             @Override
                             public int getSubsetSize() {
-<span class="fc" id="L329">                                return EPnPPointCorrespondencePinholeCameraEstimator.</span>
+<span class="fc" id="L330">                                return EPnPPointCorrespondencePinholeCameraEstimator.</span>
                                         MIN_NUMBER_OF_POINT_CORRESPONDENCES;
                             }
 
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;PinholeCamera&gt; solutions) {
-<span class="fc" id="L336">                                mSubset3D.clear();</span>
-<span class="fc" id="L337">                                mSubset3D.add(mPoints3D.get(samplesIndices[0]));</span>
-<span class="fc" id="L338">                                mSubset3D.add(mPoints3D.get(samplesIndices[1]));</span>
-<span class="fc" id="L339">                                mSubset3D.add(mPoints3D.get(samplesIndices[2]));</span>
-<span class="fc" id="L340">                                mSubset3D.add(mPoints3D.get(samplesIndices[3]));</span>
-<span class="fc" id="L341">                                mSubset3D.add(mPoints3D.get(samplesIndices[4]));</span>
-<span class="fc" id="L342">                                mSubset3D.add(mPoints3D.get(samplesIndices[5]));</span>
+<span class="fc" id="L337">                                mSubset3D.clear();</span>
+<span class="fc" id="L338">                                mSubset3D.add(mPoints3D.get(samplesIndices[0]));</span>
+<span class="fc" id="L339">                                mSubset3D.add(mPoints3D.get(samplesIndices[1]));</span>
+<span class="fc" id="L340">                                mSubset3D.add(mPoints3D.get(samplesIndices[2]));</span>
+<span class="fc" id="L341">                                mSubset3D.add(mPoints3D.get(samplesIndices[3]));</span>
+<span class="fc" id="L342">                                mSubset3D.add(mPoints3D.get(samplesIndices[4]));</span>
+<span class="fc" id="L343">                                mSubset3D.add(mPoints3D.get(samplesIndices[5]));</span>
 
-<span class="fc" id="L344">                                mSubset2D.clear();</span>
-<span class="fc" id="L345">                                mSubset2D.add(mPoints2D.get(samplesIndices[0]));</span>
-<span class="fc" id="L346">                                mSubset2D.add(mPoints2D.get(samplesIndices[1]));</span>
-<span class="fc" id="L347">                                mSubset2D.add(mPoints2D.get(samplesIndices[2]));</span>
-<span class="fc" id="L348">                                mSubset2D.add(mPoints2D.get(samplesIndices[3]));</span>
-<span class="fc" id="L349">                                mSubset2D.add(mPoints2D.get(samplesIndices[4]));</span>
-<span class="fc" id="L350">                                mSubset2D.add(mPoints2D.get(samplesIndices[5]));</span>
+<span class="fc" id="L345">                                mSubset2D.clear();</span>
+<span class="fc" id="L346">                                mSubset2D.add(mPoints2D.get(samplesIndices[0]));</span>
+<span class="fc" id="L347">                                mSubset2D.add(mPoints2D.get(samplesIndices[1]));</span>
+<span class="fc" id="L348">                                mSubset2D.add(mPoints2D.get(samplesIndices[2]));</span>
+<span class="fc" id="L349">                                mSubset2D.add(mPoints2D.get(samplesIndices[3]));</span>
+<span class="fc" id="L350">                                mSubset2D.add(mPoints2D.get(samplesIndices[4]));</span>
+<span class="fc" id="L351">                                mSubset2D.add(mPoints2D.get(samplesIndices[5]));</span>
 
                                 try {
-<span class="fc" id="L353">                                    nonRobustEstimator.setLists(mSubset3D, mSubset2D);</span>
+<span class="fc" id="L354">                                    nonRobustEstimator.setLists(mSubset3D, mSubset2D);</span>
 
-<span class="fc" id="L355">                                    final PinholeCamera cam = nonRobustEstimator.estimate();</span>
-<span class="fc" id="L356">                                    solutions.add(cam);</span>
-<span class="nc" id="L357">                                } catch (final Exception e) {</span>
+<span class="fc" id="L356">                                    final PinholeCamera cam = nonRobustEstimator.estimate();</span>
+<span class="fc" id="L357">                                    solutions.add(cam);</span>
+<span class="nc" id="L358">                                } catch (final Exception e) {</span>
                                     // if points configuration is degenerate, no solution is
                                     // added
-<span class="fc" id="L360">                                }</span>
-<span class="fc" id="L361">                            }</span>
+<span class="fc" id="L361">                                }</span>
+<span class="fc" id="L362">                            }</span>
 
                             @Override
                             public double computeResidual(final PinholeCamera currentEstimation,
                                                           final int i) {
                                 // pick i-th points
-<span class="fc" id="L367">                                final Point3D point3D = mPoints3D.get(i);</span>
-<span class="fc" id="L368">                                final Point2D point2D = mPoints2D.get(i);</span>
+<span class="fc" id="L368">                                final Point3D point3D = mPoints3D.get(i);</span>
+<span class="fc" id="L369">                                final Point2D point2D = mPoints2D.get(i);</span>
 
                                 // project point3D into test point
-<span class="fc" id="L371">                                currentEstimation.project(point3D, mTestPoint);</span>
+<span class="fc" id="L372">                                currentEstimation.project(point3D, mTestPoint);</span>
 
                                 // compare test point and 2D point
-<span class="fc" id="L374">                                return mTestPoint.distanceTo(point2D);</span>
+<span class="fc" id="L375">                                return mTestPoint.distanceTo(point2D);</span>
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L379">                                return RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.</span>
-<span class="fc" id="L380">                                        this.isReady();</span>
+<span class="fc" id="L380">                                return RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.</span>
+<span class="fc" id="L381">                                        this.isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(
                                     final RobustEstimator&lt;PinholeCamera&gt; estimator) {
-<span class="pc bpc" id="L386" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L387">                                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L388">                                    mListener.onEstimateStart(</span>
                                             RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this);
                                 }
-<span class="fc" id="L390">                            }</span>
+<span class="fc" id="L391">                            }</span>
 
                             @Override
                             public void onEstimateEnd(
                                     final RobustEstimator&lt;PinholeCamera&gt; estimator) {
-<span class="pc bpc" id="L395" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L396">                                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L397">                                    mListener.onEstimateEnd(</span>
                                             RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this);
                                 }
-<span class="fc" id="L399">                            }</span>
+<span class="fc" id="L400">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;PinholeCamera&gt; estimator, final int iteration) {
-<span class="pc bpc" id="L404" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L405">                                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L406">                                    mListener.onEstimateNextIteration(</span>
                                             RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this,
                                             iteration);
                                 }
-<span class="fc" id="L409">                            }</span>
+<span class="fc" id="L410">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;PinholeCamera&gt; estimator, final float progress) {
-<span class="pc bpc" id="L414" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L415">                                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L415" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L416">                                    mListener.onEstimateProgressChange(</span>
                                             RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this,
                                             progress);
                                 }
-<span class="fc" id="L419">                            }</span>
+<span class="fc" id="L420">                            }</span>
                         });
 
         try {
-<span class="fc" id="L423">            mLocked = true;</span>
-<span class="fc" id="L424">            mInliersData = null;</span>
-<span class="pc bpc" id="L425" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L424">            mLocked = true;</span>
+<span class="fc" id="L425">            mInliersData = null;</span>
+<span class="pc bpc" id="L426" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L427" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L428" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);
-<span class="fc" id="L429">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L430">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L431">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L432">            final PinholeCamera result = innerEstimator.estimate();</span>
-<span class="fc" id="L433">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L434">            return attemptRefine(result,</span>
-<span class="fc" id="L435">                    nonRobustEstimator.getMaxSuggestionWeight());</span>
-<span class="nc" id="L436">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L437">            throw new LockedException(e);</span>
-<span class="nc" id="L438">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L439">            throw new NotReadyException(e);</span>
+<span class="fc" id="L430">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L431">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L432">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L433">            final PinholeCamera result = innerEstimator.estimate();</span>
+<span class="fc" id="L434">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L435">            return attemptRefine(result,</span>
+<span class="fc" id="L436">                    nonRobustEstimator.getMaxSuggestionWeight());</span>
+<span class="nc" id="L437">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L438">            throw new LockedException(e);</span>
+<span class="nc" id="L439">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L440">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L441">            mLocked = false;</span>
+<span class="fc" id="L442">            mLocked = false;</span>
         }
     }
 
@@ -449,7 +450,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L452">        return RobustEstimatorMethod.RANSAC;</span>
+<span class="fc" id="L453">        return RobustEstimatorMethod.RANSAC;</span>
     }
 
     /**
@@ -465,7 +466,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L468">        return mThreshold;</span>
+<span class="fc" id="L469">        return mThreshold;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -631,7 +631,7 @@ public class Polygon3D implements Serializable {
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
     public void triangulate() throws TriangulatorException {
-<span class="pc bpc" id="L634" title="1 of 2 branches missed.">        if (!mTriangulated) {</span>
+<span class="fc bfc" id="L634" title="All 2 branches covered.">        if (!mTriangulated) {</span>
 <span class="fc" id="L635">            final Triangulator3D triangulator = Triangulator3D.create(</span>
                     mTriangulatorMethod);
 <span class="fc" id="L637">            mTriangles = triangulator.triangulate(mVertices);</span>

@@ -102,7 +102,7 @@ public class Accuracy3D extends Accuracy {
      * Flattens accuracy representation to 2D by taking into account only x and y coordinates and
      * ignoring variance related to z coordinates.
      *
-     * @return flattenned accuracy representation in 2D.
+     * @return flattened accuracy representation in 2D.
      * @throws NullPointerException if covariance matrix is not defined.
      * @throws GeometryException    if intersection cannot be computed.
      */
@@ -148,7 +148,7 @@ public class Accuracy3D extends Accuracy {
      * confidence and standard deviation factor.
      *
      * @param standardDeviationFactor standard deviation factor.
-     * @return ellipsoid representinc accuracy of covariance matrix with provided standard
+     * @return ellipsoid representing accuracy of covariance matrix with provided standard
      * deviation factor.
      * @throws NullPointerException           if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.

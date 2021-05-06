@@ -63,42 +63,42 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> PINHOLE_CAMERA_MATRIX_COLS = 4;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * Indicates if camera should be decomposed into intrinsic parameters and</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * rotation by default after creation or setting new parameters.</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> DEFAULT_DECOMPOSE_INTRINSICS_AND_ROTATION =
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * Indicates if camera should be decomposed to obtain its center after</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     * creation or setting new parameters.</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> DEFAULT_DECOMPOSE_CAMERA_CENTER = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * Threshold to determine whether a point is in front or behind the camera.</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> FRONT_THRESHOLD = 0.0;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     * Threshold to determine camera sign. If camera sign is negative, its sign</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     * must be fixed (multiplying its matrix by -1) so that point cheirality</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     * to determine whether points are in front or behind the camera can be</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * correctly determined. When sign is reversed, cheirality gets reversed</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     * too. Notice that camera matrix is expressed in homogeneous coordinates,</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     * hence multiplying it by -1.0 has no effect on point projection.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * Constant defining the number of inhomogeneous coordinates.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> INHOM_COORDS = 3;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * Constant defining a tiny value close to machine precision.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> EPS = 1e-12;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * Indicates if camera should be decomposed into intrinsic parameters and</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * rotation by default after creation or setting new parameters.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> DEFAULT_DECOMPOSE_INTRINSICS_AND_ROTATION =
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     * Indicates if camera should be decomposed to obtain its center after</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     * creation or setting new parameters.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> DEFAULT_DECOMPOSE_CAMERA_CENTER = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     * Threshold to determine whether a point is in front or behind the camera.</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> SIGN_THRESHOLD = 0.0;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> FRONT_THRESHOLD = 0.0;
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     * Constant defining the number of inhomogeneous coordinates.</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> INHOM_COORDS = 3;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     * Constant defining a tiny value close to machine precision.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     * Threshold to determine camera sign. If camera sign is negative, its sign</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     * must be fixed (multiplying its matrix by -1) so that point cheirality</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * to determine whether points are in front or behind the camera can be</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * correctly determined. When sign is reversed, cheirality gets reversed</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * too. Notice that camera matrix is expressed in homogeneous coordinates,</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     * hence multiplying it by -1.0 has no effect on point projection.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> EPS = 1e-12;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> SIGN_THRESHOLD = 0.0;
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">     * Internal matrix defining this camera.</em>
@@ -359,11 +359,11 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a>     }
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 
 <a class="jxr_linenumber" name="L353" href="#L353">353</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">     * Backprojects a line into a plane and stores the result into provided</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">     * Back-projects a line into a plane and stores the result into provided</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">     * instance.</em>
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">     * @param line   2D line to be backprojected.</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">     * @param result Instance where computed backprojected 3D plane data is</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">     * @param line   2D line to be back-projected.</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">     * @param result Instance where computed back-projected 3D plane data is</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">     *               stored.</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L361" href="#L361">361</a>     @Override
@@ -396,18 +396,18 @@
 <a class="jxr_linenumber" name="L388" href="#L388">388</a>     }
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 
 <a class="jxr_linenumber" name="L390" href="#L390">390</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">     * Backprojects provided 2D point into a 3D point and stores the result into</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">     * Back-projects provided 2D point into a 3D point and stores the result into</em>
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">     * provided instance.</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">     * Notice that estimated solution is not unique, since backprojecting a 2D</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">     * Notice that estimated solution is not unique, since back-projecting a 2D</em>
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">     * point results in an infinite number of 3D points located in the same</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">     * ray of light.</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">     * This method only computes one possible solution. Any other solution can</em>
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">     * be computed as a linear combination between the camera center and the</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">     * estimated backprojeted point.</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">     * estimated back-projeted point.</em>
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">     * @param point  2D point to be backprojected.</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">     * @param result Instance where backprojected 3D point data will be stored.</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">     * @throws CameraException thrown if 2D point cannot be backprojected</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">     * @param point  2D point to be back-projected.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">     * @param result Instance where back-projected 3D point data will be stored.</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">     * @throws CameraException thrown if 2D point cannot be back-projected</em>
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">     *                         because camera is degenerate.</em>
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a>     @Override
@@ -434,7 +434,7 @@
 <a class="jxr_linenumber" name="L426" href="#L426">426</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> norm = Utils.normF(pseudoInverseInternalMatrix);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a>             pseudoInverseInternalMatrix.multiplyByScalar(1.0 / norm);
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>             <em class="jxr_comment">// backprojected point (ray of light) is the product of pseudo-</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>             <em class="jxr_comment">// back-projected point (ray of light) is the product of pseudo-</em>
 <a class="jxr_linenumber" name="L430" href="#L430">430</a>             <em class="jxr_comment">// inverse of internal matrix with image point matrix</em>
 <a class="jxr_linenumber" name="L431" href="#L431">431</a>             pseudoInverseInternalMatrix.multiply(m);
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 
@@ -449,11 +449,11 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a>     }
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
 <a class="jxr_linenumber" name="L443" href="#L443">443</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">     * Backprojects a 2D conic into a 3D quadric and stores the result into</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">     * Back-projects a 2D conic into a 3D quadric and stores the result into</em>
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">     * provided instance.</em>
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">     * @param conic  2D conic to be backprojected.</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">     * @param result Instance where data of backprojected 3D quadric will be</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">     * @param conic  2D conic to be back-rojected.</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">     * @param result Instance where data of back-projected 3D quadric will be</em>
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">     *               stored.</em>
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a>     @Override
@@ -576,7 +576,7 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">     * Normalization can help to increase accuracy on camera operations.</em>
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">     * This method should only called when an increase on accuracy is needed</em>
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">     * to save the additional computational cost.</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">     * Notice that affine pinhole cameras are never normalized, since elments</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">     * Notice that affine pinhole cameras are never normalized, since elements</em>
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">     * to be used for normalization have norm equal to zero in such case.</em>
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L574" href="#L574">574</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> normalize() {
@@ -686,7 +686,7 @@
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 
 <a class="jxr_linenumber" name="L679" href="#L679">679</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">     * Sets internal matrix of this camera. Internal matrix of a pinhole camera</em>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     * msut have size 3x4 (i.e. 3 rows and 4 columns).</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     * must have size 3x4 (i.e. 3 rows and 4 columns).</em>
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">     * @param internalMatrix internal matrix to be set</em>
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">     * @throws WrongSizeException if provided matrix doesn't have size 3x4.</em>
@@ -750,13 +750,13 @@
 <a class="jxr_linenumber" name="L742" href="#L742">742</a>             <strong class="jxr_keyword">final</strong> Matrix k = mIntrinsicParameters.getInternalMatrix();
 <a class="jxr_linenumber" name="L743" href="#L743">743</a>             <strong class="jxr_keyword">final</strong> Matrix r = cameraRotation.asInhomogeneousMatrix();
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>             <em class="jxr_comment">// compute new left 3x3 submatrix of pinhole camera matrix</em>
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>             <em class="jxr_comment">// compute new left 3x3 sub-matrix of pinhole camera matrix</em>
 <a class="jxr_linenumber" name="L746" href="#L746">746</a>             <strong class="jxr_keyword">final</strong> Matrix mp = k.multiplyAndReturnNew(r);
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 
 <a class="jxr_linenumber" name="L748" href="#L748">748</a>             <em class="jxr_comment">// set new rotation</em>
 <a class="jxr_linenumber" name="L749" href="#L749">749</a>             mCameraRotation = cameraRotation;
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 
-<a class="jxr_linenumber" name="L751" href="#L751">751</a>             <em class="jxr_comment">// set new rotation on left 3x3 submatrix of internal pinhole camera</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a>             <em class="jxr_comment">// set new rotation on left 3x3 sub-matrix of internal pinhole camera</em>
 <a class="jxr_linenumber" name="L752" href="#L752">752</a>             <em class="jxr_comment">// matrix</em>
 <a class="jxr_linenumber" name="L753" href="#L753">753</a>             mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L754" href="#L754">754</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1, mp);
@@ -903,7 +903,7 @@
 <a class="jxr_linenumber" name="L895" href="#L895">895</a>         <strong class="jxr_keyword">final</strong> Matrix k = intrinsicParameters.getInternalMatrix();
 <a class="jxr_linenumber" name="L896" href="#L896">896</a>         <strong class="jxr_keyword">final</strong> Matrix r = mCameraRotation.asInhomogeneousMatrix();
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> 
-<a class="jxr_linenumber" name="L898" href="#L898">898</a>         <em class="jxr_comment">// compute now left 3x3 submatrix of pinhole camera matrix</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a>         <em class="jxr_comment">// compute now left 3x3 sub-matrix of pinhole camera matrix</em>
 <a class="jxr_linenumber" name="L899" href="#L899">899</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L900" href="#L900">900</a>             k.multiply(r);
 <a class="jxr_linenumber" name="L901" href="#L901">901</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> WrongSizeException ignore) {
@@ -911,7 +911,7 @@
 <a class="jxr_linenumber" name="L903" href="#L903">903</a>         }
 <a class="jxr_linenumber" name="L904" href="#L904">904</a>         mIntrinsicParameters = intrinsicParameters;
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 
-<a class="jxr_linenumber" name="L906" href="#L906">906</a>         <em class="jxr_comment">// set new intrinsic parameters on left 3x3 submatrix of internal</em>
+<a class="jxr_linenumber" name="L906" href="#L906">906</a>         <em class="jxr_comment">// set new intrinsic parameters on left 3x3 sub-matrix of internal</em>
 <a class="jxr_linenumber" name="L907" href="#L907">907</a>         <em class="jxr_comment">// pinhole camera matrix</em>
 <a class="jxr_linenumber" name="L908" href="#L908">908</a>         mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L909" href="#L909">909</a>                 PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
@@ -957,7 +957,7 @@
 <a class="jxr_linenumber" name="L949" href="#L949">949</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L950" href="#L950">950</a>             normalize();
 <a class="jxr_linenumber" name="L951" href="#L951">951</a>             <em class="jxr_comment">// new last column is the product of left 3x3 pinhole camera</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a>             <em class="jxr_comment">// submatrix by the inhomogeneous coordinates of new camera center</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a>             <em class="jxr_comment">// sub-matrix by the inhomogeneous coordinates of new camera center</em>
 <a class="jxr_linenumber" name="L953" href="#L953">953</a>             <strong class="jxr_keyword">final</strong> Matrix mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);
 <a class="jxr_linenumber" name="L954" href="#L954">954</a>             <strong class="jxr_keyword">final</strong> Matrix center = <strong class="jxr_keyword">new</strong> Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);
 <a class="jxr_linenumber" name="L955" href="#L955">955</a>             center.setElementAtIndex(0, cameraCenter.getInhomX());
@@ -999,7 +999,7 @@
 <a class="jxr_linenumber" name="L991" href="#L991">991</a>             <strong class="jxr_keyword">final</strong> Matrix k = intrinsicParameters.getInternalMatrix();
 <a class="jxr_linenumber" name="L992" href="#L992">992</a>             <strong class="jxr_keyword">final</strong> Matrix r = rotation.asInhomogeneousMatrix();
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 
-<a class="jxr_linenumber" name="L994" href="#L994">994</a>             <em class="jxr_comment">// compute new left 3x3 submatrix of pinhole camera matrix (also known as Mp)</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a>             <em class="jxr_comment">// compute new left 3x3 sub-matrix of pinhole camera matrix (also known as Mp)</em>
 <a class="jxr_linenumber" name="L995" href="#L995">995</a>             k.multiply(r);
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 
 <a class="jxr_linenumber" name="L997" href="#L997">997</a>             <em class="jxr_comment">// set new intrinsic parameters</em>
@@ -1008,7 +1008,7 @@
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a>             <em class="jxr_comment">// set new rotation</em>
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a>             mCameraRotation = rotation;
 <a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a>             <em class="jxr_comment">// set new left 3x3 submatrix of internal pinhole camera matrix</em>
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a>             <em class="jxr_comment">// set new left 3x3 sub-matrix of internal pinhole camera matrix</em>
 <a class="jxr_linenumber" name="L1004" href="#L1004">1004</a>             mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
 <a class="jxr_linenumber" name="L1006" href="#L1006">1006</a>             mCameraSignFixed = false;
@@ -1442,7 +1442,7 @@
 <a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 
 <a class="jxr_linenumber" name="L1435" href="#L1435">1435</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a>             <em class="jxr_comment">// the principal point is retrieved as the product of the 3x3</em>
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a>             <em class="jxr_comment">// top-left submatrix of the internal camera with its second row</em>
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a>             <em class="jxr_comment">// top-left sub-matrix of the internal camera with its second row</em>
 <a class="jxr_linenumber" name="L1438" href="#L1438">1438</a>             <strong class="jxr_keyword">final</strong> Matrix mMp = mInternalMatrix.getSubmatrix(0, 0,
 <a class="jxr_linenumber" name="L1439" href="#L1439">1439</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
@@ -1671,7 +1671,7 @@
 <a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> <em class="jxr_javadoccomment">     * A positive cheirality indicates that a point is in front of the camera,</em>
 <a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> <em class="jxr_javadoccomment">     * a negative value indicates that a point is behind the camera.</em>
 <a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> <em class="jxr_javadoccomment">     * Cheirality is less expensive to compute than point depth, for that reason</em>
-<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> <em class="jxr_javadoccomment">     * when trying to determine if a poitn is in front or behind the camera it</em>
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> <em class="jxr_javadoccomment">     * when trying to determine if a point is in front or behind the camera it</em>
 <a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> <em class="jxr_javadoccomment">     * is preferable to check cheirality sign rather than depth sign.</em>
 <a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> <em class="jxr_javadoccomment">     * @param points list of points to be checked.</em>
@@ -1691,7 +1691,7 @@
 <a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> <em class="jxr_javadoccomment">     * A positive cheirality indicates that a point is in front of the camera,</em>
 <a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> <em class="jxr_javadoccomment">     * a negative value indicates that a point is behind the camera.</em>
 <a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> <em class="jxr_javadoccomment">     * Cheirality is less expensive to compute than point depth, for that reason</em>
-<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> <em class="jxr_javadoccomment">     * when trying to determine if a poitn is in front or behind the camera it</em>
+<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> <em class="jxr_javadoccomment">     * when trying to determine if a point is in front or behind the camera it</em>
 <a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> <em class="jxr_javadoccomment">     * is preferable to check cheirality sign rather than depth sign.</em>
 <a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> <em class="jxr_javadoccomment">     * @param points list of points to be checked.</em>
@@ -1824,7 +1824,7 @@
 <a class="jxr_linenumber" name="L1816" href="#L1816">1816</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
 <a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 
 <a class="jxr_linenumber" name="L1818" href="#L1818">1818</a>             <em class="jxr_comment">// Use RQ decomposition to obtain intrinsic parameters as R ensuring</em>
-<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a>             <em class="jxr_comment">// that elements on the diagonal are positive and eement (3, 3) is 1,</em>
+<a class="jxr_linenumber" name="L1819" href="#L1819">1819</a>             <em class="jxr_comment">// that elements on the diagonal are positive and element (3, 3) is 1,</em>
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a>             <em class="jxr_comment">// and Q is an orthogonal matrix</em>
 <a class="jxr_linenumber" name="L1821" href="#L1821">1821</a>             <strong class="jxr_keyword">final</strong> RQDecomposer decomposer = <strong class="jxr_keyword">new</strong> RQDecomposer(mMp);
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a>             decomposer.decompose();
@@ -2071,7 +2071,7 @@
 <a class="jxr_linenumber" name="L2063" href="#L2063">2063</a>             <em class="jxr_comment">// to increase accuracy</em>
 <a class="jxr_linenumber" name="L2064" href="#L2064">2064</a>             normalize();
 <a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> 
-<a class="jxr_linenumber" name="L2066" href="#L2066">2066</a>             <em class="jxr_comment">// get top-left 3x3 submatrix</em>
+<a class="jxr_linenumber" name="L2066" href="#L2066">2066</a>             <em class="jxr_comment">// get top-left 3x3 sub-matrix</em>
 <a class="jxr_linenumber" name="L2067" href="#L2067">2067</a>             <strong class="jxr_keyword">final</strong> Matrix mMp = mInternalMatrix.getSubmatrix(0, 0,
 <a class="jxr_linenumber" name="L2068" href="#L2068">2068</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L2069" href="#L2069">2069</a>                     PINHOLE_CAMERA_MATRIX_ROWS - 1);

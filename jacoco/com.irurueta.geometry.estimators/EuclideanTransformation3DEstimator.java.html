@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * Estimator of a 3D euclidean transformation based on point correspondences.
- * This estimator uses Kabsch alhorithm.
+ * This estimator uses Kabsch algorithm.
  * A minimum of 4 non-coincident matched 3D input/output points is required for
  * estimation.
  * For some point configurations 3 points are enough to find a valid solution.

@@ -38,7 +38,7 @@ public class PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
     /**
      * Constant defining default threshold to determine whether points are
      * inliers or not.
-     * By defaul 1.0 is considered a good value for cases where measures are
+     * By default 1.0 is considered a good value for cases where measures are
      * done on pixels, since typically the minimum resolution is 1 pixel.
      */
     public static final double DEFAULT_THRESHOLD = 1.0;

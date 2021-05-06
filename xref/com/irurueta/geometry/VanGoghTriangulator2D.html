@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * This class defines a triangulator for 2D polygons. Triangulators divide</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * polygons into triangles, which are the simplest geometric figure.</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * This implementation uses Van Gogh or Ear Cutting algorith for triangulation.</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * This implementation uses Van Gogh or Ear Cutting algorithm for triangulation.</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/irurueta/geometry/VanGoghTriangulator2D.html">VanGoghTriangulator2D</a> <strong class="jxr_keyword">extends</strong> <a href="../../../com/irurueta/geometry/Triangulator2D.html">Triangulator2D</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     *                 indices won't be stored in this list.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @return List of triangles forming the polygon that has been triangulated</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * @throws TriangulatorException Raised if triangulation cannot be done.</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     *                               Usuallyt his indicates numerical instability or polygon degeneracy.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     *                               Usually this indicates numerical instability or polygon degeneracy.</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      @Override
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">public</strong> List&lt;Triangle2D&gt; triangulate(<strong class="jxr_keyword">final</strong> List&lt;Point2D&gt; vertices,
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> arePointsColinear = triangle.areVerticesColinear();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <em class="jxr_comment">// only add final triangle if not colinear (area greater than small</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <em class="jxr_comment">// only add final triangle if not co-linear (area greater than small</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>         <em class="jxr_comment">// threshold)</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a>         <strong class="jxr_keyword">if</strong> (!arePointsColinear)
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>             result.add(triangle);

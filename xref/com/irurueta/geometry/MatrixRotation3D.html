@@ -412,8 +412,8 @@
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">     * might be two possible sets of solutions (#getRollAngle(),</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">     * #getPitchAngle2(), #getYawAngle2()).</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">     * When a gimbal lock occurs this both pitch angles are equal because only</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">     * yaw is undefined, buth pitch and roll are unique.</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">     * When a gimbal lock occurs, both pitch angles are equal because only</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">     * yaw is undefined, but pitch and roll are unique.</em>
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">     * @return pitch angle around y axis.</em>
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">     * @see &lt;a href="<a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf" target="alexandria_uri">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>"&gt;<a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf" target="alexandria_uri">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>&lt;/a&gt;</em>
@@ -447,7 +447,7 @@
 <a class="jxr_linenumber" name="L439" href="#L439">439</a>     }
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 
 <a class="jxr_linenumber" name="L441" href="#L441">441</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">     * Returns yaw angle arounx z axis expressed in radians for the 2nd possible</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">     * Returns yaw angle around z axis expressed in radians for the 2nd possible</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">     * set of solutions.</em>
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">     * When a gimbal lock occurs (pitch angle is close to +- 90 degrees), then</em>
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">     * yaw angle is undefined, and can be any value, although this method will</em>
@@ -830,7 +830,7 @@
 <a class="jxr_linenumber" name="L822" href="#L822">822</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L823" href="#L823">823</a>             result = Matrix.identity(ROTATION3D_HOM_MATRIX_ROWS,
 <a class="jxr_linenumber" name="L824" href="#L824">824</a>                     ROTATION3D_HOM_MATRIX_COLS);
-<a class="jxr_linenumber" name="L825" href="#L825">825</a>             <em class="jxr_comment">// sets into 3x3 top-left submatrix the internal matrix of this</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a>             <em class="jxr_comment">// sets into 3x3 top-left sub-matrix the internal matrix of this</em>
 <a class="jxr_linenumber" name="L826" href="#L826">826</a>             <em class="jxr_comment">// instance, the remaining part will continue to be the identity</em>
 <a class="jxr_linenumber" name="L827" href="#L827">827</a>             result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L828" href="#L828">828</a>                     ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
@@ -856,7 +856,7 @@
 <a class="jxr_linenumber" name="L848" href="#L848">848</a>         }
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 
 <a class="jxr_linenumber" name="L850" href="#L850">850</a>         result.initialize(0.0);
-<a class="jxr_linenumber" name="L851" href="#L851">851</a>         <em class="jxr_comment">// sets into 3x3 top-left submatrix the internal matrix of this instance</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a>         <em class="jxr_comment">// sets into 3x3 top-left sub-matrix the internal matrix of this instance</em>
 <a class="jxr_linenumber" name="L852" href="#L852">852</a>         result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,
 <a class="jxr_linenumber" name="L853" href="#L853">853</a>                 ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
 <a class="jxr_linenumber" name="L854" href="#L854">854</a>         <em class="jxr_comment">// set las element to 1.0 (to be like the identity</em>
@@ -1083,7 +1083,7 @@
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a>     }
 <a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 
 <a class="jxr_linenumber" name="L1077" href="#L1077">1077</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">     * Converts this 3D rotation into a quaterion storing the result into</em>
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">     * Converts this 3D rotation into a quaternion storing the result into</em>
 <a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> <em class="jxr_javadoccomment">     * provided instance.</em>
 <a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> <em class="jxr_javadoccomment">     * @param result instance where result will be stored.</em>

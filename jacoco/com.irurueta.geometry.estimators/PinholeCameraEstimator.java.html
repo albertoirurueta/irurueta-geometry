@@ -28,7 +28,7 @@ public abstract class PinholeCameraEstimator {
     /**
      * Default estimator type.
      */
-<span class="fc" id="L31">    private static final PinholeCameraEstimatorType DEFAULT_ESTIMATOR_TYPE =</span>
+<span class="fc" id="L31">    public static final PinholeCameraEstimatorType DEFAULT_ESTIMATOR_TYPE =</span>
             PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR;
 
     /**
@@ -334,7 +334,7 @@ public abstract class PinholeCameraEstimator {
 <span class="fc" id="L334">    }</span>
 
     /**
-     * Indicats whether skewness value is suggested or not. When enabled, the
+     * Indicates whether skewness value is suggested or not. When enabled, the
      * estimator will attempt to enforce suggested value in an iterative manner
      * starting from an initially estimated camera.
      * Even when suggestion is enabled, the iterative algorithm might not reach
@@ -967,13 +967,13 @@ public abstract class PinholeCameraEstimator {
      */
     public static PinholeCameraEstimator create(
             final PinholeCameraEstimatorType type) {
-<span class="pc bpc" id="L970" title="3 of 4 branches missed.">        switch (type) {</span>
+<span class="fc bfc" id="L970" title="All 4 branches covered.">        switch (type) {</span>
             case DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR:
-<span class="nc" id="L972">                return new DLTLinePlaneCorrespondencePinholeCameraEstimator();</span>
+<span class="fc" id="L972">                return new DLTLinePlaneCorrespondencePinholeCameraEstimator();</span>
             case WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR:
-<span class="nc" id="L974">                return new WeightedLinePlaneCorrespondencePinholeCameraEstimator();</span>
+<span class="fc" id="L974">                return new WeightedLinePlaneCorrespondencePinholeCameraEstimator();</span>
             case WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR:
-<span class="nc" id="L976">                return new WeightedPointCorrespondencePinholeCameraEstimator();</span>
+<span class="fc" id="L976">                return new WeightedPointCorrespondencePinholeCameraEstimator();</span>
             case DLT_POINT_PINHOLE_CAMERA_ESTIMATOR:
             default:
 <span class="fc" id="L979">                return new DLTPointCorrespondencePinholeCameraEstimator();</span>

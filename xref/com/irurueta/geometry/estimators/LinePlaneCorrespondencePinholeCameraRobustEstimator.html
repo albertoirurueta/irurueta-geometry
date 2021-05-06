@@ -553,16 +553,16 @@
 <a class="jxr_linenumber" name="L545" href="#L545">545</a>     }
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 
 <a class="jxr_linenumber" name="L547" href="#L547">547</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">     * Backprojection residual/error for a single line using provided camera.</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">     * Back-projection residual/error for a single line using provided camera.</em>
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">     * @param pinholeCamera camera ot be checked.</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">     * @param line          line to be backprojected.</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">     * @param line          line to be back-projected.</em>
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">     * @param plane         plane to check against.</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">     * @return dot product distance between backprojected line and plane.</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">     * @return dot product distance between back-projected line and plane.</em>
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L555" href="#L555">555</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">double</strong> singleBackprojectionResidual(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> pinholeCamera,
 <a class="jxr_linenumber" name="L556" href="#L556">556</a>                                                   <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Line2D.html">Line2D</a> line, <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/Plane.html">Plane</a> plane) {
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>         <em class="jxr_comment">// backproject line into test plane</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         <em class="jxr_comment">// back-project line into test plane</em>
 <a class="jxr_linenumber" name="L558" href="#L558">558</a>         pinholeCamera.backProject(line, mResidualTestPlane);
 <a class="jxr_linenumber" name="L559" href="#L559">559</a>         mResidualTestPlane.normalize();
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 
@@ -600,7 +600,7 @@
 <a class="jxr_linenumber" name="L592" href="#L592">592</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">     * Attempts to refine provided camera using a slow but more accurate and</em>
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">     * stable algorithm by first doing a Powell optimization and then obtaining</em>
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">     * covariance using LEvenberg/Marquardt if needed.</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">     * covariance using Levenberg/Marquardt if needed.</em>
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">     * @param pinholeCamera camera to be refined.</em>
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">     * @param weight        weight for suggestion residual.</em>

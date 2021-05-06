@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     * Constructor with lists of points to be used to estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">     * Points in the lists located at the same position are cnsidered to be</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">     * Points in the lists located at the same position are considered to be</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">     * matched. Hence, both lists must have the same size, and their size must</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     *</em>
@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">     * Sets threshold to determine whether points are inliers or not when</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">     * testing possible estimation solutions.</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * Thre threshold refers to the amount of error (i.e. euclidean distance) a</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * The threshold refers to the amount of error (i.e. euclidean distance) a</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">     * possible solution has on projected 2D points.</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">     * @param threshold threshold to be set.</em>
@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>();
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>         }
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>         <em class="jxr_comment">// pinhole camera estimator using UPnP (Uncalibrated PErspective-n-Point)</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         <em class="jxr_comment">// pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point)</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>         <em class="jxr_comment">// algorithm</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/estimators/UPnPPointCorrespondencePinholeCameraEstimator.html">UPnPPointCorrespondencePinholeCameraEstimator</a> nonRobustEstimator =
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/UPnPPointCorrespondencePinholeCameraEstimator.html">UPnPPointCorrespondencePinholeCameraEstimator</a>();

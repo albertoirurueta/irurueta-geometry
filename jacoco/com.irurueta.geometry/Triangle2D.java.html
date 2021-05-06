@@ -428,14 +428,14 @@ public class Triangle2D implements Serializable {
         // given triangle ABC made by vectors:
         // ab = p2 - p1, and ac = p3 - p1
 
-        // If point (x, y) lies within triangle ABC, then we have 3 subtriangles
+        // If point (x, y) lies within triangle ABC, then we have 3 sub-triangles
         // ApB, BpC and ApC made of points:
         // ApB: mVertex1, point, mVertex2
         // BpC: mVertex2, point, mVertex3
         // ApC: mVertex3, point, mVertex1
 
         // The point will lie inside triangle ABC if the sum of the areas of the
-        // 3 subtriangles ApB, BpC and ApC equals the area of triangle ABC (up to
+        // 3 sub-triangles ApB, BpC and ApC equals the area of triangle ABC (up to
         // certain accuracy to account for numerical precision)
 
         // Then the areas of triangles are:

@@ -90,7 +90,7 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes  list of input planes to be used to estimate a
      *                     projective 3D transformation.
@@ -124,7 +124,7 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
-     * @param listener     lsitener to be notified of events such as when estimation
+     * @param listener     listener to be notified of events such as when estimation
      *                     starts, ends or its progress significantly changes.
      * @param inputPlanes  list of input lines to be used to estimate a
      *                     projective 3D transformation.

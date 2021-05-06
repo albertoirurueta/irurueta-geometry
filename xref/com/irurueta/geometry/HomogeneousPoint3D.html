@@ -602,70 +602,69 @@
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">     * its norm. This only applies to homogeneous 3D points, because they are</em>
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">     * defined up to scale.</em>
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>     @SuppressWarnings(<span class="jxr_string">"DuplicatedCode"</span>)
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>     @Override
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> normalize() {
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>         <strong class="jxr_keyword">if</strong> (!mNormalized) {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a>             <strong class="jxr_keyword">double</strong> norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>             <strong class="jxr_keyword">if</strong> (norm &gt; PRECISION) {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>                 mX /= norm;
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>                 mY /= norm;
-<a class="jxr_linenumber" name="L605" href="#L605">605</a>                 mZ /= norm;
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>                 mW /= norm;
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>                 mNormalized = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>             }
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>         }
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>     }
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">     * Returns boolean indicating whether this point has already been normalized.</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">     * @return True if normalized, false otherwise.</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>     @Override
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isNormalized() {
-<a class="jxr_linenumber" name="L619" href="#L619">619</a>         <strong class="jxr_keyword">return</strong> mNormalized;
-<a class="jxr_linenumber" name="L620" href="#L620">620</a>     }
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
-<a class="jxr_linenumber" name="L622" href="#L622">622</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">     * Converts this instance into an inhomogeneous 3D point and returns the</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">     * result as a new inhomogeneous 3D point instance.</em>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">     * @return Converts and returns this point as an inhomogeneous 3D point.</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/InhomogeneousPoint3D.html">InhomogeneousPoint3D</a> toInhomogeneous() {
-<a class="jxr_linenumber" name="L629" href="#L629">629</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/InhomogeneousPoint3D.html">InhomogeneousPoint3D</a>(mX / mW, mY / mW, mZ / mW);
-<a class="jxr_linenumber" name="L630" href="#L630">630</a>     }
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 
-<a class="jxr_linenumber" name="L632" href="#L632">632</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">     * Returns an array containing the coordinates of this Point2D.</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">     * @return Array containing coordinates of this Point2D.</em>
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a>     @Override
-<a class="jxr_linenumber" name="L638" href="#L638">638</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] asArray() {
-<a class="jxr_linenumber" name="L639" href="#L639">639</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] out = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
-<a class="jxr_linenumber" name="L640" href="#L640">640</a>         asArray(out);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a>         <strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L642" href="#L642">642</a>     }
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">     * Uses provided array to store the coordinates of this HomogeneousPoint2D.</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">     * @param array Array where coordinates will be stored.</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if length of array is not 3.</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a>     @Override
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> asArray(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] array) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a>         <strong class="jxr_keyword">if</strong> (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>         }
-<a class="jxr_linenumber" name="L655" href="#L655">655</a>         array[0] = mX;
-<a class="jxr_linenumber" name="L656" href="#L656">656</a>         array[1] = mY;
-<a class="jxr_linenumber" name="L657" href="#L657">657</a>         array[2] = mZ;
-<a class="jxr_linenumber" name="L658" href="#L658">658</a>         array[3] = mW;
-<a class="jxr_linenumber" name="L659" href="#L659">659</a>     }
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> }
+<a class="jxr_linenumber" name="L597" href="#L597">597</a>     @Override
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> normalize() {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a>         <strong class="jxr_keyword">if</strong> (!mNormalized) {
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>             <strong class="jxr_keyword">double</strong> norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>             <strong class="jxr_keyword">if</strong> (norm &gt; PRECISION) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>                 mX /= norm;
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>                 mY /= norm;
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>                 mZ /= norm;
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>                 mW /= norm;
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>                 mNormalized = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>             }
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>         }
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>     }
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">     * Returns boolean indicating whether this point has already been normalized.</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">     * @return True if normalized, false otherwise.</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>     @Override
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isNormalized() {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>         <strong class="jxr_keyword">return</strong> mNormalized;
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>     }
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
+<a class="jxr_linenumber" name="L621" href="#L621">621</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">     * Converts this instance into an inhomogeneous 3D point and returns the</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">     * result as a new inhomogeneous 3D point instance.</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">     * @return Converts and returns this point as an inhomogeneous 3D point.</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/InhomogeneousPoint3D.html">InhomogeneousPoint3D</a> toInhomogeneous() {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/InhomogeneousPoint3D.html">InhomogeneousPoint3D</a>(mX / mW, mY / mW, mZ / mW);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a>     }
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">     * Returns an array containing the coordinates of this Point2D.</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">     * @return Array containing coordinates of this Point2D.</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a>     @Override
+<a class="jxr_linenumber" name="L637" href="#L637">637</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] asArray() {
+<a class="jxr_linenumber" name="L638" href="#L638">638</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] out = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>         asArray(out);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>         <strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L641" href="#L641">641</a>     }
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">     * Uses provided array to store the coordinates of this HomogeneousPoint2D.</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">     * @param array Array where coordinates will be stored.</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if length of array is not 3.</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a>     @Override
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> asArray(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] array) {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a>         <strong class="jxr_keyword">if</strong> (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
+<a class="jxr_linenumber" name="L652" href="#L652">652</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>         }
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>         array[0] = mX;
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>         array[1] = mY;
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>         array[2] = mZ;
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>         array[3] = mW;
+<a class="jxr_linenumber" name="L658" href="#L658">658</a>     }
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>

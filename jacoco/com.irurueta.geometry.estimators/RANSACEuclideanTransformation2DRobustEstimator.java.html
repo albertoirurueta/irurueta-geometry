@@ -244,7 +244,7 @@ public class RANSACEuclideanTransformation2DRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to be set.

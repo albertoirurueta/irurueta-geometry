@@ -420,14 +420,14 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a>         <em class="jxr_comment">// given triangle ABC made by vectors:</em>
 <a class="jxr_linenumber" name="L413" href="#L413">413</a>         <em class="jxr_comment">// ab = p2 - p1, and ac = p3 - p1</em>
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>         <em class="jxr_comment">// If point (x, y) lies within triangle ABC, then we have 3 subtriangles</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>         <em class="jxr_comment">// If point (x, y) lies within triangle ABC, then we have 3 sub-triangles</em>
 <a class="jxr_linenumber" name="L416" href="#L416">416</a>         <em class="jxr_comment">// ApB, BpC and ApC made of points:</em>
 <a class="jxr_linenumber" name="L417" href="#L417">417</a>         <em class="jxr_comment">// ApB: mVertex1, point, mVertex2</em>
 <a class="jxr_linenumber" name="L418" href="#L418">418</a>         <em class="jxr_comment">// BpC: mVertex2, point, mVertex3</em>
 <a class="jxr_linenumber" name="L419" href="#L419">419</a>         <em class="jxr_comment">// ApC: mVertex3, point, mVertex1</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 
 <a class="jxr_linenumber" name="L421" href="#L421">421</a>         <em class="jxr_comment">// The point will lie inside triangle ABC if the sum of the areas of the</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>         <em class="jxr_comment">// 3 subtriangles ApB, BpC and ApC equals the area of triangle ABC (up to</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>         <em class="jxr_comment">// 3 sub-triangles ApB, BpC and ApC equals the area of triangle ABC (up to</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a>         <em class="jxr_comment">// certain accuracy to account for numerical precision)</em>
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 
 <a class="jxr_linenumber" name="L425" href="#L425">425</a>         <em class="jxr_comment">// Then the areas of triangles are:</em>
@@ -447,7 +447,7 @@
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">     * @return A plane.</em>
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">     * @throws ColinearPointsException Raised if vertices of this triangle are</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">     *                                 colinear (triangle has area equal or very close to 0.0).</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">     *                                 co-linear (triangle has area equal or very close to 0.0).</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L444" href="#L444">444</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/Plane.html">Plane</a> toPlane() <strong class="jxr_keyword">throws</strong> ColinearPointsException {
 <a class="jxr_linenumber" name="L445" href="#L445">445</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/Plane.html">Plane</a>(mVertex1, mVertex2, mVertex3);
@@ -461,7 +461,7 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">     * @param result Instance where resulting plane will be stored.</em>
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">     * @throws ColinearPointsException Raised if vertices of this triangle are</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">     *                                 colinear (triangle has area equal or very close to 0.0).</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">     *                                 co-linear (triangle has area equal or very close to 0.0).</em>
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L458" href="#L458">458</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> toPlane(<strong class="jxr_keyword">final</strong> <a href="../../../com/irurueta/geometry/Plane.html">Plane</a> result) <strong class="jxr_keyword">throws</strong> ColinearPointsException {
 <a class="jxr_linenumber" name="L459" href="#L459">459</a>         result.setParametersFromThreePoints(mVertex1, mVertex2, mVertex3);

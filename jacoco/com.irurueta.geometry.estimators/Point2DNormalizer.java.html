@@ -29,7 +29,7 @@ import java.util.List;
  * of floating point quantization, accuracy of the computations increase for
  * normalized values between -1.0 and 1.0.
  * This implementation uses point inhomogeneous coordinates, hence, it should
- * not be used for points located at or close to infininity (i.e. very large
+ * not be used for points located at or close to infinity (i.e. very large
  * inhomogeneous values).
  */
 public class Point2DNormalizer {
@@ -153,7 +153,7 @@ public class Point2DNormalizer {
      * Indicates whether this instance is locked because computation is
      * in progress.
      * While an instance is in progress, no parameter can be modified and
-     * no furter computations can be done until instance becomes unlocked.
+     * no further computations can be done until instance becomes unlocked.
      *
      * @return true if instance is locked, false otherwise.
      */
@@ -243,7 +243,7 @@ public class Point2DNormalizer {
     }
 
     /**
-     * Returns transformaiton to denormalize points, which corresponds to the
+     * Returns transformation to denormalize points, which corresponds to the
      * inverse transformation.
      *
      * @return transformation to denormalize points.
@@ -263,7 +263,7 @@ public class Point2DNormalizer {
     }
 
     /**
-     * Computes normalization and denormalization transformaitons.
+     * Computes normalization and de-normalization transformations.
      *
      * @throws NotReadyException   if not enough data has been provided to
      *                             compute normalization.

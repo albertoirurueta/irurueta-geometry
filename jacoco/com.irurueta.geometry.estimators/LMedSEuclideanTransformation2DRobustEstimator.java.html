@@ -267,7 +267,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
 <span class="fc" id="L267">    }</span>
 
     /**
-     * Estimates an euclidean 2D transformaiton using a robust estimator and
+     * Estimates an euclidean 2D transformation using a robust estimator and
      * the best set of matched 2d point correspondences found using the robust
      * estimator.
      *
@@ -316,102 +316,103 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
 <span class="fc" id="L316">                                return mNonRobustEstimator.getMinimumPoints();</span>
                             }
 
+                            @SuppressWarnings(&quot;DuplicatedCode&quot;)
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;EuclideanTransformation2D&gt; solutions) {
-<span class="fc" id="L322">                                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L323">                                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L324" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L325">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L326">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+<span class="fc" id="L323">                                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L324">                                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L325" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L326">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L327">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
                                             samplesIndex));
                                 }
 
                                 try {
-<span class="fc" id="L331">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
+<span class="fc" id="L332">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
                                             mSubsetOutputPoints);
-<span class="fc" id="L333">                                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L334">                                } catch (final Exception e) {</span>
+<span class="fc" id="L334">                                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L335">                                } catch (final Exception e) {</span>
                                     // if points are coincident, no solution is added
-<span class="fc" id="L336">                                }</span>
-<span class="fc" id="L337">                            }</span>
+<span class="fc" id="L337">                                }</span>
+<span class="fc" id="L338">                            }</span>
 
                             @Override
                             public double computeResidual(
                                     final EuclideanTransformation2D currentEstimation, final int i) {
-<span class="fc" id="L342">                                final Point2D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L343">                                final Point2D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L343">                                final Point2D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L344">                                final Point2D outputPoint = mOutputPoints.get(i);</span>
 
                                 // transform input point and store result in mTestPoint
-<span class="fc" id="L346">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L347">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
 
-<span class="fc" id="L348">                                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L349">                                return outputPoint.distanceTo(mTestPoint);</span>
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L353">                                return LMedSEuclideanTransformation2DRobustEstimator.this.</span>
-<span class="fc" id="L354">                                        isReady();</span>
+<span class="fc" id="L354">                                return LMedSEuclideanTransformation2DRobustEstimator.this.</span>
+<span class="fc" id="L355">                                        isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L360" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L361">                                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L361" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L362">                                    mListener.onEstimateStart(</span>
                                             LMedSEuclideanTransformation2DRobustEstimator.this);
                                 }
-<span class="fc" id="L364">                            }</span>
+<span class="fc" id="L365">                            }</span>
 
                             @Override
                             public void onEstimateEnd(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L369" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L370">                                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L371">                                    mListener.onEstimateEnd(</span>
                                             LMedSEuclideanTransformation2DRobustEstimator.this);
                                 }
-<span class="fc" id="L373">                            }</span>
+<span class="fc" id="L374">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator,
                                     final int iteration) {
-<span class="pc bpc" id="L379" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L380">                                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L381">                                    mListener.onEstimateNextIteration(</span>
                                             LMedSEuclideanTransformation2DRobustEstimator.this,
                                             iteration);
                                 }
-<span class="fc" id="L384">                            }</span>
+<span class="fc" id="L385">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator,
                                     final float progress) {
-<span class="pc bpc" id="L390" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L391">                                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L392">                                    mListener.onEstimateProgressChange(</span>
                                             LMedSEuclideanTransformation2DRobustEstimator.this,
                                             progress);
                                 }
-<span class="fc" id="L395">                            }</span>
+<span class="fc" id="L396">                            }</span>
                         });
 
         try {
-<span class="fc" id="L399">            mLocked = true;</span>
-<span class="fc" id="L400">            mInliersData = null;</span>
-<span class="fc" id="L401">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L402">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L403">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L404">            innerEstimator.setStopThreshold(mStopThreshold);</span>
-<span class="fc" id="L405">            final EuclideanTransformation2D transformation =</span>
-<span class="fc" id="L406">                    innerEstimator.estimate();</span>
-<span class="fc" id="L407">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L408">            return attemptRefine(transformation);</span>
-<span class="nc" id="L409">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L410">            throw new LockedException(e);</span>
-<span class="nc" id="L411">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L412">            throw new NotReadyException(e);</span>
+<span class="fc" id="L400">            mLocked = true;</span>
+<span class="fc" id="L401">            mInliersData = null;</span>
+<span class="fc" id="L402">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L403">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L404">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L405">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L406">            final EuclideanTransformation2D transformation =</span>
+<span class="fc" id="L407">                    innerEstimator.estimate();</span>
+<span class="fc" id="L408">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L409">            return attemptRefine(transformation);</span>
+<span class="nc" id="L410">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L411">            throw new LockedException(e);</span>
+<span class="nc" id="L412">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L413">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L414">            mLocked = false;</span>
+<span class="fc" id="L415">            mLocked = false;</span>
         }
     }
 
@@ -422,7 +423,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L425">        return RobustEstimatorMethod.LMedS;</span>
+<span class="fc" id="L426">        return RobustEstimatorMethod.LMedS;</span>
     }
 
     /**
@@ -438,9 +439,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L441">        final LMedSRobustEstimator.LMedSInliersData inliersData =</span>
-<span class="fc" id="L442">                (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
-<span class="fc" id="L443">        return inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L442">        final LMedSRobustEstimator.LMedSInliersData inliersData =</span>
+<span class="fc" id="L443">                (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+<span class="fc" id="L444">        return inliersData.getEstimatedThreshold();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

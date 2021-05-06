@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * Constant defining default confidence of the estimated result, which is</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * 99%. This means that with a probability of 99% estimation will be</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * accurate because chosen subsamples will be inliers.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * accurate because chosen sub-samples will be inliers.</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> DEFAULT_CONFIDENCE = 0.99;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
@@ -417,7 +417,7 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a>     }
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
 <a class="jxr_linenumber" name="L411" href="#L411">411</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">     * Indicats whether skewness value is suggested or not. When enabled, the</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">     * Indicates whether skewness value is suggested or not. When enabled, the</em>
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">     * estimator will attempt to enforce suggested value in an iterative manner</em>
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">     * starting from an initially estimated camera.</em>
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">     * Even when suggestion is enabled, the iterative algorithm might not reach</em>
@@ -1173,7 +1173,7 @@
 <a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> <em class="jxr_javadoccomment">     * @param points3D      list of 3D points used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> <em class="jxr_javadoccomment">     * @param points2D      list of corresponding projected 2D points used to</em>
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> <em class="jxr_javadoccomment">     *                      estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> <em class="jxr_javadoccomment">     *                      points.</em>
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> <em class="jxr_javadoccomment">     * @param method        method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> <em class="jxr_javadoccomment">     *                      pinhole camera.</em>
@@ -1199,7 +1199,7 @@
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> <em class="jxr_javadoccomment">     * @param points3D      list of 3D points used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> <em class="jxr_javadoccomment">     * @param points2D      list of corresponding projected 2D points used to</em>
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> <em class="jxr_javadoccomment">     *                      estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">     *                      points.</em>
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> <em class="jxr_javadoccomment">     * @param method        method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> <em class="jxr_javadoccomment">     *                      pinhole camera.</em>
@@ -1359,7 +1359,7 @@
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> <em class="jxr_javadoccomment">     * @param points3D      list of 3D points used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> <em class="jxr_javadoccomment">     * @param points2D      list of corresponding projected 2D points used to</em>
 <a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> <em class="jxr_javadoccomment">     *                      estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> <em class="jxr_javadoccomment">     *                      points.</em>
 <a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> <em class="jxr_javadoccomment">     * @param method        method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">     *                      pinhole camera.</em>
@@ -1387,7 +1387,7 @@
 <a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> <em class="jxr_javadoccomment">     * @param points3D      list of 3D points used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> <em class="jxr_javadoccomment">     * @param points2D      list of corresponding projected 2D points used to</em>
 <a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> <em class="jxr_javadoccomment">     *                      estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">     *                      points.</em>
 <a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> <em class="jxr_javadoccomment">     * @param method        method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">     *                      pinhole camera.</em>
@@ -1505,7 +1505,7 @@
 <a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
@@ -1536,7 +1536,7 @@
 <a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
@@ -1567,13 +1567,13 @@
 <a class="jxr_linenumber" name="L1559" href="#L1559">1559</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1560" href="#L1560">1560</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1561" href="#L1561">1561</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1562" href="#L1562">1562</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1563" href="#L1563">1563</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1564" href="#L1564">1564</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1565" href="#L1565">1565</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> <em class="jxr_javadoccomment">     * @param points2D                 list of corresponding projected 2D points used to</em>
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> <em class="jxr_javadoccomment">     *                                 estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">     * @param qualityScores            quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> <em class="jxr_javadoccomment">     * @param qualityScores            quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> <em class="jxr_javadoccomment">     *                                 points.</em>
 <a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> <em class="jxr_javadoccomment">     * @param method                   method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> <em class="jxr_javadoccomment">     *                                 pinhole camera.</em>
@@ -1602,13 +1602,13 @@
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> <em class="jxr_javadoccomment">     * @param points2D                 list of corresponding projected 2D points used to</em>
 <a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> <em class="jxr_javadoccomment">     *                                 estimate a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> <em class="jxr_javadoccomment">     * @param qualityScores            quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> <em class="jxr_javadoccomment">     * @param qualityScores            quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> <em class="jxr_javadoccomment">     *                                 points.</em>
 <a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> <em class="jxr_javadoccomment">     * @param method                   method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1606" href="#L1606">1606</a> <em class="jxr_javadoccomment">     *                                 pinhole camera.</em>
@@ -1635,7 +1635,7 @@
 <a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1629" href="#L1629">1629</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1630" href="#L1630">1630</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
@@ -1665,7 +1665,7 @@
 <a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
@@ -1694,7 +1694,7 @@
 <a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
@@ -1726,7 +1726,7 @@
 <a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> <em class="jxr_javadoccomment">     * @param skewness                 skewness value of intrinsic parameters of camera to be</em>
 <a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> <em class="jxr_javadoccomment">     *                                 estimated.</em>
 <a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> <em class="jxr_javadoccomment">     * @param horizontalPrincipalPoint horizontal principal point value of</em>
-<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of cmera to be estimated.</em>
+<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> <em class="jxr_javadoccomment">     * @param verticalPrincipalPoint   vertical principal point value of</em>
 <a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> <em class="jxr_javadoccomment">     *                                 intrinsic parameters of camera to be estimated.</em>
 <a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> <em class="jxr_javadoccomment">     * @param points3D                 list of 3D points used to estimate a pinhole camera.</em>
@@ -1802,7 +1802,7 @@
 <a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> <em class="jxr_javadoccomment">     * @param planes        list of 3D planes used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> <em class="jxr_javadoccomment">     * @param lines         list of corresponding projected 2D lines used to estimate</em>
 <a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> <em class="jxr_javadoccomment">     *                      a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> <em class="jxr_javadoccomment">     *                      samples.</em>
 <a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> <em class="jxr_javadoccomment">     * @param method        method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> <em class="jxr_javadoccomment">     *                      pinhole camera.</em>
@@ -1828,7 +1828,7 @@
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> <em class="jxr_javadoccomment">     * @param planes        list of 3D planes used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> <em class="jxr_javadoccomment">     * @param lines         list of corresponding projected 2D lines used to estimate</em>
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> <em class="jxr_javadoccomment">     *                      a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> <em class="jxr_javadoccomment">     *                      samples.</em>
 <a class="jxr_linenumber" name="L1825" href="#L1825">1825</a> <em class="jxr_javadoccomment">     * @param method        method of a robust estimator algorithm to estimate best</em>
 <a class="jxr_linenumber" name="L1826" href="#L1826">1826</a> <em class="jxr_javadoccomment">     *                      pinhole camera.</em>
@@ -1893,7 +1893,7 @@
 <a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> <em class="jxr_javadoccomment">     * @param planes        list of 3D planes used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> <em class="jxr_javadoccomment">     * @param lines         list of corresponding projected 2D lines used to estimate</em>
 <a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> <em class="jxr_javadoccomment">     *                      a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> <em class="jxr_javadoccomment">     *                      samples.</em>
 <a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> <em class="jxr_javadoccomment">     * @return an instance of a pinhole camera robust estimator.</em>
 <a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of planes/lines and</em>
@@ -1916,7 +1916,7 @@
 <a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> <em class="jxr_javadoccomment">     * @param planes        list of 3D planes used to estimate a pinhole camera.</em>
 <a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> <em class="jxr_javadoccomment">     * @param lines         list of corresponding projected 2D lines used to estimate</em>
 <a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> <em class="jxr_javadoccomment">     *                      a pinhole camera.</em>
-<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of mtched</em>
+<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> <em class="jxr_javadoccomment">     * @param qualityScores quality scores corresponding to each pair of matched</em>
 <a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> <em class="jxr_javadoccomment">     *                      samples.</em>
 <a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> <em class="jxr_javadoccomment">     * @return an instance of a pinhole camera robust estimator.</em>
 <a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of planes/lines and</em>

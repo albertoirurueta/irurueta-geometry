@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * Estimator of a 2D euclidean transformation based on point correspondences.
- * This estimator uses Kabsch alhorithm on 2D.
+ * This estimator uses Kabsch algorithm on 2D.
  * A minimum of 3 non-coincident matched 2D input/output points is required for
  * estimation.
  * For some point configurations 2 points are enough to find a valid solution.
@@ -187,7 +187,7 @@ public class EuclideanTransformation2DEstimator {
     /**
      * Returns list of input points to be used to estimate an euclidean 2D
      * transformation.
-     * Each point in the list of input points must be mathed with the
+     * Each point in the list of input points must be matched with the
      * corresponding point in the list of output points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
@@ -203,7 +203,7 @@ public class EuclideanTransformation2DEstimator {
      * Returns list of output points to be used to estimate an euclidean 2D
      * transformation.
      * Each point in the list of output points must be matched with the
-     * corresponding point in thel ist of input points located at the same
+     * corresponding point in the list of input points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      *
@@ -351,7 +351,7 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Estimates an euclidean 2D transformaiton using the list of matched input
+     * Estimates an euclidean 2D transformation using the list of matched input
      * and output 2D points.
      * A minimum of 3 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.

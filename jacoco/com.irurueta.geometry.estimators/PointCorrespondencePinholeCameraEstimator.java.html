@@ -527,8 +527,8 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
 
 <span class="fc" id="L528">                pinholeCameraMatrix = invTrans2DMatrix;</span>
 
-                // normalize by frobenius norm to increase accuracy after point
-                // denormalization
+                // normalize by Frobenius norm to increase accuracy after point
+                // de-normalization
 <span class="fc" id="L532">                final double norm = Utils.normF(pinholeCameraMatrix);</span>
 <span class="fc" id="L533">                pinholeCameraMatrix.multiplyByScalar(1.0 / norm);</span>
             }

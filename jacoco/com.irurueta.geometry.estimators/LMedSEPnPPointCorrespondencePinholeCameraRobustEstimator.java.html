@@ -100,7 +100,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -168,7 +168,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera
      * and intrinsic parameters.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *

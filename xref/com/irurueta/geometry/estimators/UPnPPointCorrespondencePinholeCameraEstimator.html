@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> DEFAULT_PLANAR_CONFIGURATION_ALLOWED = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * Indicates that by default a dimension 2 nullspace is not allowed.</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * Indicates that by default a dimension 2 null-space is not allowed.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> DEFAULT_NULLSPACE_DIMENSION2_ALLOWED = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>             DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">     * Inicates whether the case where a dimension 2 nullspace is allowed.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">     * Indicates whether the case where a dimension 2 null-space is allowed.</em>
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">     * When allowed, additional constraints are taken into account to ensure</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">     * equality of scales so that less point correspondences are required.</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">     * Enabling this parameter is usually ok.</em>
@@ -180,7 +180,7 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">private</strong> Matrix mM;
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">     * List containing columns of nullspace of M. Linear combinations of these</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">     * List containing columns of null-space of M. Linear combinations of these</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">     * columns contain possible solutions for control points coordinates in</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">     * camera reference (up to scale) with z terms normalized by an unknown</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">     * focal length.</em>
@@ -300,7 +300,7 @@
 <a class="jxr_linenumber" name="L292" href="#L292">292</a>     }
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">     * Indicates whether the case where a dimension 2 nullspace is allowed.</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">     * Indicates whether the case where a dimension 2 null-space is allowed.</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">     * When allowed, additional constraints are taken into account to ensure</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">     * equality of scales so that less point correspondences are required.</em>
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">     * Enabling this parameter is usually ok.</em>
@@ -312,12 +312,12 @@
 <a class="jxr_linenumber" name="L304" href="#L304">304</a>     }
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
 <a class="jxr_linenumber" name="L306" href="#L306">306</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     * Specifies whether the case where a dimension 2 nullspace is allowed.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     * Specifies whether the case where a dimension 2 null-space is allowed.</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">     * When allowed, additional constraints are taken into account to ensure</em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">     * equality of scales so that less point correspondences are required.</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">     * Enabling this parameter is usually ok.</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">     * @param nullspaceDimension2Allowed true to allow 2 dimensional nullspace,</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">     * @param nullspaceDimension2Allowed true to allow 2 dimensional null-space,</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">     *                                   false otherwise.</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">     */</em>
@@ -616,7 +616,7 @@
 <a class="jxr_linenumber" name="L608" href="#L608">608</a>     }
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 
 <a class="jxr_linenumber" name="L610" href="#L610">610</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">     * Picks best solution (the one having the smallest reprojection error).</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">     * Picks best solution (the one having the smallest re-projection error).</em>
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">     * @return best solution.</em>
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">     */</em>
@@ -671,7 +671,7 @@
 <a class="jxr_linenumber" name="L663" href="#L663">663</a>         <em class="jxr_comment">// [beta11, beta12, betaff12]</em>
 <a class="jxr_linenumber" name="L664" href="#L664">664</a>         <em class="jxr_comment">// [beta11, beta12, betaff22]</em>
 <a class="jxr_linenumber" name="L665" href="#L665">665</a>         <em class="jxr_comment">// [beta11, beta22, betaff11]</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a>         <em class="jxr_comment">// the solution with the smallest reprojection error will be picked</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a>         <em class="jxr_comment">// the solution with the smallest re-projection error will be picked</em>
 <a class="jxr_linenumber" name="L667" href="#L667">667</a>         <strong class="jxr_keyword">double</strong> beta1;
 <a class="jxr_linenumber" name="L668" href="#L668">668</a>         <strong class="jxr_keyword">double</strong> beta2;
 <a class="jxr_linenumber" name="L669" href="#L669">669</a>         <strong class="jxr_keyword">double</strong> focalLength;
@@ -999,7 +999,7 @@
 <a class="jxr_linenumber" name="L991" href="#L991">991</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">     * Fills constraint matrix to solve betas and focal length using control</em>
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">     * points (with normalized z coordinates by an unknown focal length) from</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">     * last 2 columns of v (the nullspace).</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">     * last 2 columns of v (the null-space).</em>
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">     * The solution obtained with this constraint matrix and rhos will be</em>
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">     * control points in camera coordinates and estimated focal length.</em>
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">     *</em>
@@ -1035,7 +1035,7 @@
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">     * Fills a row of constraint matrix for solution2.</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">     * Solution 2 takes into account the last 2 columns of v as its nullspace:</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">     * Solution 2 takes into account the last 2 columns of v as its null-space:</em>
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">     * va = [vax, vay, vaz/f] and vb = [vbx, vby, vbz/f].</em>
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">     * Constraint:</em>
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">     * ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4</em>
@@ -1137,20 +1137,20 @@
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> <em class="jxr_javadoccomment">     * Tests solution 1 for general point configuration.</em>
 <a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> <em class="jxr_javadoccomment">     * Because solution is up to scale. Two possible solutions must be evaluated</em>
-<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> <em class="jxr_javadoccomment">     * (positive or negative scale). The one with the smallest reprojection</em>
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> <em class="jxr_javadoccomment">     * (positive or negative scale). The one with the smallest re-projection</em>
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> <em class="jxr_javadoccomment">     * error will be picked.</em>
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if a numerical degeneracy occurs.</em>
 <a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L1137" href="#L1137">1137</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> generalSolution1() <strong class="jxr_keyword">throws</strong> AlgebraException {
-<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a>         <em class="jxr_comment">// pick last column of nullspace, contains control points in camera</em>
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a>         <em class="jxr_comment">// pick last column of null-space, contains control points in camera</em>
 <a class="jxr_linenumber" name="L1139" href="#L1139">1139</a>         <em class="jxr_comment">// coordinates up to scale (including sign change)</em>
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] v = mNullspace.get(0);
 <a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 
-<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a>         <em class="jxr_comment">// The following constraint is imposed on the nullspace of v = [vx, vy, vz/f].</em>
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a>         <em class="jxr_comment">// The following constraint is imposed on the null-space of v = [vx, vy, vz/f].</em>
 <a class="jxr_linenumber" name="L1143" href="#L1143">1143</a>         <em class="jxr_comment">// Constraint:</em>
 <a class="jxr_linenumber" name="L1144" href="#L1144">1144</a>         <em class="jxr_comment">// ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4</em>
-<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a>         <em class="jxr_comment">// This results in a linear systemo f 6 equations (when we have 4 control points)</em>
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a>         <em class="jxr_comment">// This results in a linear system of 6 equations (when we have 4 control points)</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a>         <em class="jxr_comment">// The previous constraint can be expanded as follows:</em>
 <a class="jxr_linenumber" name="L1147" href="#L1147">1147</a>         <em class="jxr_comment">// (beta*vi - beta*vj)^2 = (ci - cj)^2</em>
 <a class="jxr_linenumber" name="L1148" href="#L1148">1148</a>         <em class="jxr_comment">// (beta*vix - beta*vjx)^2 + (beta*viy - beta*vjy)^2 + (beta*viz*f - beta*vjz*f)^2 = (cix - cjx)^2 + (ciy - cjy)^2 + (ciz - cjz)^2,     i,j 1...4</em>
@@ -1208,14 +1208,14 @@
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a>     }
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">     * Denormalizes v array containing the nullspace of M, which contains the</em>
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">     * Denormalizes v array containing the null-space of M, which contains the</em>
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">     * control points in camera coordinates in consecutive order but having z</em>
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">     * coordinates normalized by focal length.</em>
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">     * After execution of this method, z coordinates will be denormalized.</em>
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">     * @param v           array containing the nullspace of M with normalized z</em>
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">     * @param v           array containing the null-space of M with normalized z</em>
 <a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">     *                    coordinates.</em>
-<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> <em class="jxr_javadoccomment">     * @param focalLength focal length to use for denormalization.</em>
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> <em class="jxr_javadoccomment">     * @param focalLength focal length to use for de-normalization.</em>
 <a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L1212" href="#L1212">1212</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> denormalizeV(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] v, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> focalLength) {
 <a class="jxr_linenumber" name="L1213" href="#L1213">1213</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = 1; i &lt; v.length; i++, j++) {
@@ -1228,7 +1228,7 @@
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> <em class="jxr_javadoccomment">     * Fills constraint matrix to solve beta and focal length using control</em>
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> <em class="jxr_javadoccomment">     * points (with normalized z coordinates by an unknown focal length) from</em>
-<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> <em class="jxr_javadoccomment">     * the last column of v (the nullspace).</em>
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> <em class="jxr_javadoccomment">     * the last column of v (the null-space).</em>
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> <em class="jxr_javadoccomment">     * The solution obtained with this constraint matrix and rhos will be</em>
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> <em class="jxr_javadoccomment">     * control points in camera coordinates and estimated focal length.</em>
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> <em class="jxr_javadoccomment">     *</em>
@@ -1260,11 +1260,11 @@
 <a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 
 <a class="jxr_linenumber" name="L1253" href="#L1253">1253</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> <em class="jxr_javadoccomment">     * Fills a row of constraint matrix for solution 1.</em>
-<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> <em class="jxr_javadoccomment">     * The following constraint is imposed on the nullspace of</em>
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> <em class="jxr_javadoccomment">     * The following constraint is imposed on the null-space of</em>
 <a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> <em class="jxr_javadoccomment">     * v = [vx, vy, vz/f].</em>
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> <em class="jxr_javadoccomment">     * Constraint:</em>
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> <em class="jxr_javadoccomment">     * ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4</em>
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">     * This results in a linear systemo f 6 equations (when we have 4 control</em>
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">     * This results in a linear system of 6 equations (when we have 4 control</em>
 <a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">     * points) and 2 unknowns.</em>
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">     * The previous constraint can be expanded as follows:</em>
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">     * (beta*vi - beta*vj)^2 = (ci - cj)^2</em>
@@ -1309,7 +1309,7 @@
 <a class="jxr_linenumber" name="L1301" href="#L1301">1301</a>     }
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> <em class="jxr_javadoccomment">     * Computes a possible solution with camera, transformation, reprojection</em>
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> <em class="jxr_javadoccomment">     * Computes a possible solution with camera, transformation, re-projection</em>
 <a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> <em class="jxr_javadoccomment">     * error and control points in camera coordinates.</em>
 <a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> <em class="jxr_javadoccomment">     * @param controlCameraPoints control points in camera coordinates.</em>
@@ -1419,10 +1419,10 @@
 <a class="jxr_linenumber" name="L1411" href="#L1411">1411</a>     }
 <a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 
 <a class="jxr_linenumber" name="L1413" href="#L1413">1413</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">     * Total reprojection error for provided camera.</em>
+<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">     * Total re-projection error for provided camera.</em>
 <a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">     * @param camera camera to estimate reprojection error.</em>
-<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">     * @return reprojection error.</em>
+<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">     * @param camera camera to estimate re-projection error.</em>
+<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">     * @return re-projection error.</em>
 <a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L1419" href="#L1419">1419</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">double</strong> reprojectionError(<strong class="jxr_keyword">final</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> camera) {
 <a class="jxr_linenumber" name="L1420" href="#L1420">1420</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> n = mPoints2D.size();
@@ -1442,11 +1442,11 @@
 <a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 
 <a class="jxr_linenumber" name="L1435" href="#L1435">1435</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> <em class="jxr_javadoccomment">     * Computes list of control points from provided array containing one column</em>
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">     * of the nullspace of M or a linear combination of columns of the</em>
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">     * nullspace.</em>
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">     * of the null-space of M or a linear combination of columns of the</em>
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">     * null-space.</em>
 <a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">     * @param v one column of the nullspace of M or a linear combination of</em>
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">     *          columns of the nullspace.</em>
+<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">     * @param v one column of the null-space of M or a linear combination of</em>
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">     *          columns of the null-space.</em>
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">     * @return control points.</em>
 <a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L1444" href="#L1444">1444</a>     <strong class="jxr_keyword">private</strong> List&lt;Point3D&gt; controlPointsFromV(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] v) {
@@ -1464,7 +1464,7 @@
 <a class="jxr_linenumber" name="L1456" href="#L1456">1456</a>     }
 <a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 
 <a class="jxr_linenumber" name="L1458" href="#L1458">1458</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> <em class="jxr_javadoccomment">     * Solves nullspace of matrix M containing possible solutions of camera</em>
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> <em class="jxr_javadoccomment">     * Solves null-space of matrix M containing possible solutions of camera</em>
 <a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">     * coordinates of control points.</em>
 <a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if something fails due to numerical</em>
@@ -1490,11 +1490,11 @@
 <a class="jxr_linenumber" name="L1482" href="#L1482">1482</a>         <em class="jxr_comment">// Each column of v contains coordinates of control points in camera</em>
 <a class="jxr_linenumber" name="L1483" href="#L1483">1483</a>         <em class="jxr_comment">// coordinates.</em>
 <a class="jxr_linenumber" name="L1484" href="#L1484">1484</a>         <em class="jxr_comment">// A solution for the linear system M*x = 0 is obtained as a linear</em>
-<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a>         <em class="jxr_comment">// combination of the columns of v forming the nullspace.</em>
+<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a>         <em class="jxr_comment">// combination of the columns of v forming the null-space.</em>
 <a class="jxr_linenumber" name="L1486" href="#L1486">1486</a>         <strong class="jxr_keyword">final</strong> Matrix v = decomposer.getV();
 <a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 
 <a class="jxr_linenumber" name="L1488" href="#L1488">1488</a>         <em class="jxr_comment">// although nullity of M could be determined after SVD, it is assumed</em>
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a>         <em class="jxr_comment">// instead that nullspace could be located in any of the latter columns</em>
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a>         <em class="jxr_comment">// instead that null-space could be located in any of the latter columns</em>
 <a class="jxr_linenumber" name="L1490" href="#L1490">1490</a>         <em class="jxr_comment">// of v up to the number of control points.</em>
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a>         <em class="jxr_comment">// Hence, for general configuration we pick the last 4 columns of v and</em>
 <a class="jxr_linenumber" name="L1492" href="#L1492">1492</a>         <em class="jxr_comment">// for planar configuration we pick the last 3.</em>
@@ -1602,7 +1602,7 @@
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> <em class="jxr_javadoccomment">     * both reference frames are centered in the centroid), alphas can be used</em>
 <a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> <em class="jxr_javadoccomment">     * in both world and camera coordinates.</em>
 <a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if there are numerical unstabilities.</em>
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if there are numerical instabilities.</em>
 <a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L1599" href="#L1599">1599</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> computeBarycentricCoordinates() <strong class="jxr_keyword">throws</strong> AlgebraException {
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a>         <em class="jxr_comment">// we need to express world points in terms of control points in world</em>
@@ -1726,7 +1726,7 @@
 <a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> <em class="jxr_javadoccomment">     * points.</em>
 <a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> <em class="jxr_javadoccomment">     * @throws AlgebraException if something fails because of numerical</em>
-<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> <em class="jxr_javadoccomment">     *                          unstabilities.</em>
+<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> <em class="jxr_javadoccomment">     *                          instabilities.</em>
 <a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L1723" href="#L1723">1723</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> computeWorldControlPointsAndPointConfiguration()
 <a class="jxr_linenumber" name="L1724" href="#L1724">1724</a>             <strong class="jxr_keyword">throws</strong> AlgebraException {
@@ -1850,7 +1850,7 @@
 <a class="jxr_linenumber" name="L1842" href="#L1842">1842</a> <em class="jxr_javadoccomment">         * x = K * [R t] * Xw = K * [R - R*C] * Xw = x = P * Xw,</em>
 <a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> <em class="jxr_javadoccomment">         * where R is a rotation and C is the camera center in world</em>
 <a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> <em class="jxr_javadoccomment">         * coordinates.</em>
-<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> <em class="jxr_javadoccomment">         * Assuminc that control points are obtained up to scale, then instead</em>
+<a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> <em class="jxr_javadoccomment">         * Assuming that control points are obtained up to scale, then instead</em>
 <a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> <em class="jxr_javadoccomment">         * of an euclidean transformation we will assume that Tw-&amp;lt;c is a metric</em>
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> <em class="jxr_javadoccomment">         * transformation, hence:</em>
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> <em class="jxr_javadoccomment">         * Tw-&amp;lt;c = [s*R t2]</em>
@@ -1875,7 +1875,7 @@
 <a class="jxr_linenumber" name="L1867" href="#L1867">1867</a>         <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> camera;
 <a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 
 <a class="jxr_linenumber" name="L1869" href="#L1869">1869</a>         <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> <em class="jxr_javadoccomment">         * Reprojection error.</em>
+<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> <em class="jxr_javadoccomment">         * Re-projection error.</em>
 <a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> <em class="jxr_javadoccomment">         */</em>
 <a class="jxr_linenumber" name="L1872" href="#L1872">1872</a>         <strong class="jxr_keyword">double</strong> reprojectionError;
 <a class="jxr_linenumber" name="L1873" href="#L1873">1873</a>     }

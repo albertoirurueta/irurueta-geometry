@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * This class defines a triangulator for 2D polygons. Triangulators divide
  * polygons into triangles, which are the simplest geometric figure.
- * This implementation uses Van Gogh or Ear Cutting algorith for triangulation.
+ * This implementation uses Van Gogh or Ear Cutting algorithm for triangulation.
  */
 <span class="fc" id="L27">public class VanGoghTriangulator2D extends Triangulator2D {</span>
 
@@ -91,7 +91,7 @@ import java.util.List;
      *                 indices won't be stored in this list.
      * @return List of triangles forming the polygon that has been triangulated
      * @throws TriangulatorException Raised if triangulation cannot be done.
-     *                               Usuallyt his indicates numerical instability or polygon degeneracy.
+     *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
     public List&lt;Triangle2D&gt; triangulate(final List&lt;Point2D&gt; vertices,
@@ -190,7 +190,7 @@ import java.util.List;
 
 <span class="fc" id="L191">        final boolean arePointsColinear = triangle.areVerticesColinear();</span>
 
-        // only add final triangle if not colinear (area greater than small
+        // only add final triangle if not co-linear (area greater than small
         // threshold)
 <span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (!arePointsColinear)</span>
 <span class="fc" id="L196">            result.add(triangle);</span>

@@ -95,7 +95,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Constructor with listener and lists of planes to be used to estimate
-     * affine 3D tranformation.
+     * affine 3D transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -185,7 +185,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Returns quality scores corresponding to each pair of matched planes.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
      *
@@ -665,15 +665,16 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                         estimated transformation.
      * @return computed residual.
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     protected static double getResidual(final Plane plane, final Plane transformedPlane) {
-<span class="fc" id="L669">        plane.normalize();</span>
-<span class="fc" id="L670">        transformedPlane.normalize();</span>
+<span class="fc" id="L670">        plane.normalize();</span>
+<span class="fc" id="L671">        transformedPlane.normalize();</span>
 
-<span class="fc" id="L672">        final double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +</span>
-<span class="fc" id="L673">                plane.getB() * transformedPlane.getB() +</span>
-<span class="fc" id="L674">                plane.getC() * transformedPlane.getC() +</span>
-<span class="fc" id="L675">                plane.getD() * transformedPlane.getD());</span>
-<span class="fc" id="L676">        return 1.0 - dotProduct;</span>
+<span class="fc" id="L673">        final double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +</span>
+<span class="fc" id="L674">                plane.getB() * transformedPlane.getB() +</span>
+<span class="fc" id="L675">                plane.getC() * transformedPlane.getC() +</span>
+<span class="fc" id="L676">                plane.getD() * transformedPlane.getD());</span>
+<span class="fc" id="L677">        return 1.0 - dotProduct;</span>
     }
 
     /**
@@ -691,29 +692,29 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
     @SuppressWarnings(&quot;DuplicatedCode&quot;)
     protected AffineTransformation3D attemptRefine(
             final AffineTransformation3D transformation) {
-<span class="fc bfc" id="L694" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L695">            final PlaneCorrespondenceAffineTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L695" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L696">            final PlaneCorrespondenceAffineTransformation3DRefiner refiner =</span>
                     new PlaneCorrespondenceAffineTransformation3DRefiner(
-<span class="fc" id="L697">                            transformation, mKeepCovariance, getInliersData(),</span>
+<span class="fc" id="L698">                            transformation, mKeepCovariance, getInliersData(),</span>
                             mInputPlanes, mOutputPlanes,
-<span class="fc" id="L699">                            getRefinementStandardDeviation());</span>
+<span class="fc" id="L700">                            getRefinementStandardDeviation());</span>
 
             try {
-<span class="fc" id="L702">                final AffineTransformation3D result = new AffineTransformation3D();</span>
-<span class="fc" id="L703">                final boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L703">                final AffineTransformation3D result = new AffineTransformation3D();</span>
+<span class="fc" id="L704">                final boolean improved = refiner.refine(result);</span>
 
-<span class="pc bpc" id="L705" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L706" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     // keep covariance
-<span class="fc" id="L707">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L708">                    mCovariance = refiner.getCovariance();</span>
                 }
 
-<span class="pc bpc" id="L710" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
-<span class="nc" id="L711">            } catch (final Exception e) {</span>
+<span class="pc bpc" id="L711" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
+<span class="nc" id="L712">            } catch (final Exception e) {</span>
                 //final refinement failed, so we return input value
-<span class="nc" id="L713">                return transformation;</span>
+<span class="nc" id="L714">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L716">            return transformation;</span>
+<span class="fc" id="L717">            return transformation;</span>
         }
     }
 }

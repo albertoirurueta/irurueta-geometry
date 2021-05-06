@@ -31,6 +31,7 @@ import java.util.List;
  * Finds the best affine 3D transformation for provided collections of matched
  * planes using RANSAC algorithm.
  */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
 public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
         extends PlaneCorrespondenceAffineTransformation3DRobustEstimator {
 
@@ -88,18 +89,18 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * Constructor.
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
-<span class="fc" id="L91">        super();</span>
-<span class="fc" id="L92">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L93">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L94">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L92">        super();</span>
+<span class="fc" id="L93">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L94">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L95">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L96">    }</span>
 
     /**
      * Constructor with lists of planes to be used to estimate an affine 3D
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes  list of input planes to be used to estimate an affine
      *                     3D transformation.
@@ -110,11 +111,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L113">        super(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L114">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L115">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L116">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L114">        super(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L115">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L116">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L117">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L118">    }</span>
 
     /**
      * Constructor.
@@ -124,11 +125,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L127">        super(listener);</span>
-<span class="fc" id="L128">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L129">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L130">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L128">        super(listener);</span>
+<span class="fc" id="L129">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L130">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L131">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L132">    }</span>
 
     /**
      * Constructor with listener and lists of planes to be used to estimate an
@@ -149,11 +150,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final AffineTransformation3DRobustEstimatorListener listener,
             final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
-<span class="fc" id="L152">        super(listener, inputPlanes, outputPlanes);</span>
-<span class="fc" id="L153">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L154">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L155">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L153">        super(listener, inputPlanes, outputPlanes);</span>
+<span class="fc" id="L154">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L155">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L156">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L157">    }</span>
 
     /**
      * Returns threshold to determine whether planes are inliers or not when
@@ -172,7 +173,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return threshold to determine whether matched planes are inliers or not.
      */
     public double getThreshold() {
-<span class="fc" id="L175">        return mThreshold;</span>
+<span class="fc" id="L176">        return mThreshold;</span>
     }
 
     /**
@@ -197,14 +198,14 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  estimation is already in progress.
      */
     public void setThreshold(final double threshold) throws LockedException {
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L201">            throw new LockedException();</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L202">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L204">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L205">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L206">        mThreshold = threshold;</span>
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L207">        mThreshold = threshold;</span>
+<span class="fc" id="L208">    }</span>
 
     /**
      * Indicates whether inliers must be computed and kept.
@@ -213,7 +214,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L216">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L217">        return mComputeAndKeepInliers;</span>
     }
 
     /**
@@ -225,11 +226,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L229">            throw new LockedException();</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L230">            throw new LockedException();</span>
         }
-<span class="fc" id="L231">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L232">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L233">    }</span>
 
     /**
      * Indicates whether residuals must be computed and kept.
@@ -238,7 +239,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L241">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L242">        return mComputeAndKeepResiduals;</span>
     }
 
     /**
@@ -250,11 +251,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public void setComputeAndKeepResidualsEnabled(
             final boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L254">            throw new LockedException();</span>
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L255">            throw new LockedException();</span>
         }
-<span class="fc" id="L256">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L257">    }</span>
+<span class="fc" id="L257">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L258">    }</span>
 
     /**
      * Estimates an affine 3D transformation using a robust estimator and
@@ -272,144 +273,144 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     @Override
     public AffineTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L276">            throw new LockedException();</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L277">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L279">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L280">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L282">        final RANSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator =</span>
+<span class="fc" id="L283">        final RANSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator =</span>
                 new RANSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L284">                        new RANSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
+<span class="fc" id="L285">                        new RANSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
 
                             // plane to be reused when computing residuals
-<span class="fc" id="L287">                            private final Plane mTestPlane = new Plane();</span>
+<span class="fc" id="L288">                            private final Plane mTestPlane = new Plane();</span>
 
                             @Override
                             public double getThreshold() {
-<span class="fc" id="L291">                                return mThreshold;</span>
+<span class="fc" id="L292">                                return mThreshold;</span>
                             }
 
                             @Override
                             public int getTotalSamples() {
-<span class="fc" id="L296">                                return mInputPlanes.size();</span>
+<span class="fc" id="L297">                                return mInputPlanes.size();</span>
                             }
 
                             @Override
                             public int getSubsetSize() {
-<span class="fc" id="L301">                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L302">                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
                             }
 
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;AffineTransformation3D&gt; solutions) {
-<span class="fc" id="L307">                                final Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L308">                                final Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L309">                                final Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L310">                                final Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);</span>
+<span class="fc" id="L308">                                final Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L309">                                final Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L310">                                final Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L311">                                final Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);</span>
 
-<span class="fc" id="L312">                                final Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L313">                                final Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L314">                                final Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L315">                                final Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);</span>
+<span class="fc" id="L313">                                final Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L314">                                final Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L315">                                final Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L316">                                final Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);</span>
 
                                 try {
-<span class="fc" id="L318">                                    final AffineTransformation3D transformation =</span>
+<span class="fc" id="L319">                                    final AffineTransformation3D transformation =</span>
                                             new AffineTransformation3D(inputPlane1, inputPlane2,
                                                     inputPlane3, inputPlane4, outputPlane1,
                                                     outputPlane2, outputPlane3, outputPlane4);
-<span class="fc" id="L322">                                    solutions.add(transformation);</span>
-<span class="nc" id="L323">                                } catch (final CoincidentPlanesException e) {</span>
+<span class="fc" id="L323">                                    solutions.add(transformation);</span>
+<span class="nc" id="L324">                                } catch (final CoincidentPlanesException e) {</span>
                                     // if lines are coincident, no solution is added
-<span class="fc" id="L325">                                }</span>
-<span class="fc" id="L326">                            }</span>
+<span class="fc" id="L326">                                }</span>
+<span class="fc" id="L327">                            }</span>
 
                             @Override
                             public double computeResidual(
                                     final AffineTransformation3D currentEstimation, final int i) {
-<span class="fc" id="L331">                                final Plane inputPlane = mInputPlanes.get(i);</span>
-<span class="fc" id="L332">                                final Plane outputPlane = mOutputPlanes.get(i);</span>
+<span class="fc" id="L332">                                final Plane inputPlane = mInputPlanes.get(i);</span>
+<span class="fc" id="L333">                                final Plane outputPlane = mOutputPlanes.get(i);</span>
 
                                 // transform input plane and store result in mTestPlane
                                 try {
-<span class="fc" id="L336">                                    currentEstimation.transform(inputPlane, mTestPlane);</span>
+<span class="fc" id="L337">                                    currentEstimation.transform(inputPlane, mTestPlane);</span>
 
-<span class="fc" id="L338">                                    return getResidual(outputPlane, mTestPlane);</span>
-<span class="nc" id="L339">                                } catch (final AlgebraException e) {</span>
+<span class="fc" id="L339">                                    return getResidual(outputPlane, mTestPlane);</span>
+<span class="nc" id="L340">                                } catch (final AlgebraException e) {</span>
                                     // this happens when internal matrix of affine transformation
                                     // cannot be reversed (i.e. transformation is not well defined,
                                     // numerical instabilities, etc)
-<span class="nc" id="L343">                                    return Double.MAX_VALUE;</span>
+<span class="nc" id="L344">                                    return Double.MAX_VALUE;</span>
                                 }
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L349">                                return RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.</span>
-<span class="fc" id="L350">                                        this.isReady();</span>
+<span class="fc" id="L350">                                return RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.</span>
+<span class="fc" id="L351">                                        this.isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="fc bfc" id="L356" title="All 2 branches covered.">                                if (mListener != null) {</span>
-<span class="fc" id="L357">                                    mListener.onEstimateStart(</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">                                if (mListener != null) {</span>
+<span class="fc" id="L358">                                    mListener.onEstimateStart(</span>
                                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
                                 }
-<span class="fc" id="L360">                            }</span>
+<span class="fc" id="L361">                            }</span>
 
                             @Override
                             public void onEstimateEnd(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="fc bfc" id="L365" title="All 2 branches covered.">                                if (mListener != null) {</span>
-<span class="fc" id="L366">                                    mListener.onEstimateEnd(</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">                                if (mListener != null) {</span>
+<span class="fc" id="L367">                                    mListener.onEstimateEnd(</span>
                                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
                                 }
-<span class="fc" id="L369">                            }</span>
+<span class="fc" id="L370">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
                                     final int iteration) {
-<span class="fc bfc" id="L375" title="All 2 branches covered.">                                if (mListener != null) {</span>
-<span class="fc" id="L376">                                    mListener.onEstimateNextIteration(</span>
+<span class="fc bfc" id="L376" title="All 2 branches covered.">                                if (mListener != null) {</span>
+<span class="fc" id="L377">                                    mListener.onEstimateNextIteration(</span>
                                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
                                             iteration);
                                 }
-<span class="fc" id="L380">                            }</span>
+<span class="fc" id="L381">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
                                     final float progress) {
-<span class="fc bfc" id="L386" title="All 2 branches covered.">                                if (mListener != null) {</span>
-<span class="fc" id="L387">                                    mListener.onEstimateProgressChange(</span>
+<span class="fc bfc" id="L387" title="All 2 branches covered.">                                if (mListener != null) {</span>
+<span class="fc" id="L388">                                    mListener.onEstimateProgressChange(</span>
                                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
                                             progress);
                                 }
-<span class="fc" id="L391">                            }</span>
+<span class="fc" id="L392">                            }</span>
                         });
 
         try {
-<span class="fc" id="L395">            mLocked = true;</span>
-<span class="fc" id="L396">            mInliersData = null;</span>
-<span class="pc bpc" id="L397" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L396">            mLocked = true;</span>
+<span class="fc" id="L397">            mInliersData = null;</span>
+<span class="pc bpc" id="L398" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L399" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L400" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);
-<span class="fc" id="L401">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L402">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L403">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L404">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L405">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L406">            return attemptRefine(transformation);</span>
-<span class="nc" id="L407">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L408">            throw new LockedException(e);</span>
-<span class="nc" id="L409">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L410">            throw new NotReadyException(e);</span>
+<span class="fc" id="L402">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L403">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L404">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L405">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L406">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L407">            return attemptRefine(transformation);</span>
+<span class="nc" id="L408">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L409">            throw new LockedException(e);</span>
+<span class="nc" id="L410">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L411">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L412">            mLocked = false;</span>
+<span class="fc" id="L413">            mLocked = false;</span>
         }
     }
 
@@ -420,7 +421,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L423">        return RobustEstimatorMethod.RANSAC;</span>
+<span class="fc" id="L424">        return RobustEstimatorMethod.RANSAC;</span>
     }
 
     /**
@@ -436,7 +437,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L439">        return mThreshold;</span>
+<span class="fc" id="L440">        return mThreshold;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

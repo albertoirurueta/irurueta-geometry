@@ -71,7 +71,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Threshold to determine whether planes are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a
-     * plane respect the backprojected plane of a line using estimated camera.
+     * plane respect the back-projected plane of a line using estimated camera.
      */
     private double mThreshold;
 
@@ -160,7 +160,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Returns threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a
-     * plane respect the backprojected plane of a line using estimated camera
+     * plane respect the back-projected plane of a line using estimated camera
      * Residuals to determine whether planes are inliers or not are computed by
      * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).
@@ -182,7 +182,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Sets threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a
-     * plane respect the backprojected plane of a line using estimated camera
+     * plane respect the back-projected plane of a line using estimated camera
      * Residuals to determine whether planes are inliers or not are computed by
      * comparing two planes algebraically (e.g. doing the dot product of their
      * parameters).

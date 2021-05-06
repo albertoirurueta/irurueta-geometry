@@ -16,7 +16,7 @@
 package com.irurueta.geometry;
 
 /**
- * Raised when provided points are colinear (lay on a single line).
+ * Raised when provided points are co-linear (lay on a single line).
  */
 public class ColinearPointsException extends GeometryException {
     /**

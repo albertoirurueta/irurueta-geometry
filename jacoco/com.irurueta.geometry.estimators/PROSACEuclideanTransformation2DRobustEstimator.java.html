@@ -97,7 +97,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints  list of input points to be used to estimate an
      *                     euclidean 2D transformation.
@@ -171,7 +171,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
 <span class="fc" id="L171">    }</span>
 
     /**
-     * Constructor withlists of points to be used to estimate an euclidean 2D
+     * Constructor with lists of points to be used to estimate an euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -274,7 +274,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints            list of input points to be used to estimate an
      *                               euclidean 2D transformation.
@@ -355,7 +355,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
 <span class="fc" id="L355">    }</span>
 
     /**
-     * Constructor withlists of points to be used to estimate an euclidean 2D
+     * Constructor with lists of points to be used to estimate an euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -459,7 +459,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to determine whether points are inliers or not
@@ -481,7 +481,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */
@@ -510,7 +510,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
 <span class="fc" id="L510">    }</span>
 
     /**
-     * Indicates if eatimator is ready to start the euclidean 2D transformation
+     * Indicates if estimator is ready to start the euclidean 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.
@@ -586,153 +586,154 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public EuclideanTransformation2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L592" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L593">            throw new LockedException();</span>
+<span class="fc bfc" id="L593" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L594">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L595" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L596">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L597">            throw new NotReadyException();</span>
         }
 
-<span class="fc" id="L599">        final PROSACRobustEstimator&lt;EuclideanTransformation2D&gt; innerEstimator =</span>
+<span class="fc" id="L600">        final PROSACRobustEstimator&lt;EuclideanTransformation2D&gt; innerEstimator =</span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L601">                        new PROSACRobustEstimatorListener&lt;EuclideanTransformation2D&gt;() {</span>
+<span class="fc" id="L602">                        new PROSACRobustEstimatorListener&lt;EuclideanTransformation2D&gt;() {</span>
 
                             // point to be reused when computing residuals
-<span class="fc" id="L604">                            private final Point2D mTestPoint = Point2D.create(</span>
+<span class="fc" id="L605">                            private final Point2D mTestPoint = Point2D.create(</span>
                                     CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-<span class="fc" id="L607">                            private final EuclideanTransformation2DEstimator mNonRobustEstimator =</span>
+<span class="fc" id="L608">                            private final EuclideanTransformation2DEstimator mNonRobustEstimator =</span>
                                     new EuclideanTransformation2DEstimator(
-<span class="fc" id="L609">                                            isWeakMinimumSizeAllowed());</span>
+<span class="fc" id="L610">                                            isWeakMinimumSizeAllowed());</span>
 
-<span class="fc" id="L611">                            private final List&lt;Point2D&gt; mSubsetInputPoints =</span>
+<span class="fc" id="L612">                            private final List&lt;Point2D&gt; mSubsetInputPoints =</span>
                                     new ArrayList&lt;&gt;();
-<span class="fc" id="L613">                            private final List&lt;Point2D&gt; mSubsetOutputPoints =</span>
+<span class="fc" id="L614">                            private final List&lt;Point2D&gt; mSubsetOutputPoints =</span>
                                     new ArrayList&lt;&gt;();
 
                             @Override
                             public double getThreshold() {
-<span class="fc" id="L618">                                return mThreshold;</span>
+<span class="fc" id="L619">                                return mThreshold;</span>
                             }
 
                             @Override
                             public int getTotalSamples() {
-<span class="fc" id="L623">                                return mInputPoints.size();</span>
+<span class="fc" id="L624">                                return mInputPoints.size();</span>
                             }
 
                             @Override
                             public int getSubsetSize() {
-<span class="fc" id="L628">                                return mNonRobustEstimator.getMinimumPoints();</span>
+<span class="fc" id="L629">                                return mNonRobustEstimator.getMinimumPoints();</span>
                             }
 
                             @SuppressWarnings(&quot;DuplicatedCode&quot;)
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List&lt;EuclideanTransformation2D&gt; solutions) {
-<span class="fc" id="L635">                                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L636">                                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L637" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L638">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L639">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+<span class="fc" id="L636">                                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L637">                                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L638" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L639">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L640">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
                                             samplesIndex));
                                 }
 
                                 try {
-<span class="fc" id="L644">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
+<span class="fc" id="L645">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
                                             mSubsetOutputPoints);
-<span class="fc" id="L646">                                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L647">                                } catch (final Exception e) {</span>
+<span class="fc" id="L647">                                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L648">                                } catch (final Exception e) {</span>
                                     // if points are coincident, no solution is added
-<span class="fc" id="L649">                                }</span>
-<span class="fc" id="L650">                            }</span>
+<span class="fc" id="L650">                                }</span>
+<span class="fc" id="L651">                            }</span>
 
                             @Override
                             public double computeResidual(
                                     final EuclideanTransformation2D currentEstimation, final int i) {
-<span class="fc" id="L655">                                final Point2D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L656">                                final Point2D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L656">                                final Point2D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L657">                                final Point2D outputPoint = mOutputPoints.get(i);</span>
 
                                 // transform input point and store result in mTestPoint
-<span class="fc" id="L659">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L660">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
 
-<span class="fc" id="L661">                                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L662">                                return outputPoint.distanceTo(mTestPoint);</span>
                             }
 
                             @Override
                             public boolean isReady() {
-<span class="fc" id="L666">                                return PROSACEuclideanTransformation2DRobustEstimator.this.</span>
-<span class="fc" id="L667">                                        isReady();</span>
+<span class="fc" id="L667">                                return PROSACEuclideanTransformation2DRobustEstimator.this.</span>
+<span class="fc" id="L668">                                        isReady();</span>
                             }
 
                             @Override
                             public void onEstimateStart(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L673" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L674">                                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L674" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L675">                                    mListener.onEstimateStart(</span>
                                             PROSACEuclideanTransformation2DRobustEstimator.this);
                                 }
-<span class="fc" id="L677">                            }</span>
+<span class="fc" id="L678">                            }</span>
 
                             @Override
                             public void onEstimateEnd(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L682" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L683">                                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L683" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L684">                                    mListener.onEstimateEnd(</span>
                                             PROSACEuclideanTransformation2DRobustEstimator.this);
                                 }
-<span class="fc" id="L686">                            }</span>
+<span class="fc" id="L687">                            }</span>
 
                             @Override
                             public void onEstimateNextIteration(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator,
                                     final int iteration) {
-<span class="pc bpc" id="L692" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L693">                                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L693" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L694">                                    mListener.onEstimateNextIteration(</span>
                                             PROSACEuclideanTransformation2DRobustEstimator.this,
                                             iteration);
                                 }
-<span class="fc" id="L697">                            }</span>
+<span class="fc" id="L698">                            }</span>
 
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator,
                                     final float progress) {
-<span class="nc bnc" id="L703" title="All 2 branches missed.">                                if (mListener != null) {</span>
-<span class="nc" id="L704">                                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L704" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L705">                                    mListener.onEstimateProgressChange(</span>
                                             PROSACEuclideanTransformation2DRobustEstimator.this,
                                             progress);
                                 }
-<span class="nc" id="L708">                            }</span>
+<span class="fc" id="L709">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {
-<span class="fc" id="L712">                                return mQualityScores;</span>
+<span class="fc" id="L713">                                return mQualityScores;</span>
                             }
                         });
 
         try {
-<span class="fc" id="L717">            mLocked = true;</span>
-<span class="fc" id="L718">            mInliersData = null;</span>
-<span class="pc bpc" id="L719" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L718">            mLocked = true;</span>
+<span class="fc" id="L719">            mInliersData = null;</span>
+<span class="pc bpc" id="L720" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L721" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L722" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);
-<span class="fc" id="L723">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L724">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L725">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L726">            final EuclideanTransformation2D transformation =</span>
-<span class="fc" id="L727">                    innerEstimator.estimate();</span>
-<span class="fc" id="L728">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L729">            return attemptRefine(transformation);</span>
-<span class="nc" id="L730">        } catch (final com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L731">            throw new LockedException(e);</span>
-<span class="nc" id="L732">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L733">            throw new NotReadyException(e);</span>
+<span class="fc" id="L724">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L725">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L726">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L727">            final EuclideanTransformation2D transformation =</span>
+<span class="fc" id="L728">                    innerEstimator.estimate();</span>
+<span class="fc" id="L729">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L730">            return attemptRefine(transformation);</span>
+<span class="nc" id="L731">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L732">            throw new LockedException(e);</span>
+<span class="nc" id="L733">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L734">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L735">            mLocked = false;</span>
+<span class="fc" id="L736">            mLocked = false;</span>
         }
     }
 
@@ -743,7 +744,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L746">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L747">        return RobustEstimatorMethod.PROSAC;</span>
     }
 
     /**
@@ -759,7 +760,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L762">        return mThreshold;</span>
+<span class="fc" id="L763">        return mThreshold;</span>
     }
 
     /**
@@ -772,11 +773,11 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(final double[] qualityScores) {
-<span class="fc bfc" id="L775" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L776">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L776" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L777">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L779">        mQualityScores = qualityScores;</span>
-<span class="fc" id="L780">    }</span>
+<span class="fc" id="L780">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L781">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

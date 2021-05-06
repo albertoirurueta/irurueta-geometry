@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * @param pointC Third 3D point to compute the plane.</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">     * @throws ColinearPointsException Raised if provided points lay in a line</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">     *                                 preventing a single plane to be estimated. This happens in degenerate</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">     *                                 configurations where points are colinear and an infinite set of planes</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">     *                                 configurations where points are co-linear and an infinite set of planes</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">     *                                 pass through them.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/Plane.html">Plane</a>(<strong class="jxr_keyword">final</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> pointA, <strong class="jxr_keyword">final</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> pointB, <strong class="jxr_keyword">final</strong> <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> pointC)
@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">     * @param pointA 1st point.</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">     * @param pointB 2nd point.</em>
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">     * @param pointC 3rd point.</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * @throws ColinearPointsException if provided points are in a colinear or</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * @throws ColinearPointsException if provided points are in a co-linear or</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     *                                 degenerate configuration.</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setParametersFromThreePoints(
@@ -297,7 +297,7 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a>             decomposer.decompose();
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
 <a class="jxr_linenumber" name="L291" href="#L291">291</a>             <strong class="jxr_keyword">if</strong> (decomposer.getRank() &lt; 3) {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>                 <em class="jxr_comment">// points where colinear, and so the null-space of those 3 points</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>                 <em class="jxr_comment">// points where co-linear, and so the null-space of those 3 points</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a>                 <em class="jxr_comment">// has dimension greater than one (a pencil of planes instead</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>                 <em class="jxr_comment">// of just one plane can be defined)</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/ColinearPointsException.html">ColinearPointsException</a>();
@@ -324,7 +324,7 @@
 <a class="jxr_linenumber" name="L316" href="#L316">316</a>     }
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">     * Determines if provided points are colinear or have a degenerate</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">     * Determines if provided points are co-linear or have a degenerate</em>
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">     * configuration. If returned value is true, then such points cannot be used</em>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">     * to estimate a plane.</em>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">     *</em>
@@ -364,7 +364,7 @@
 <a class="jxr_linenumber" name="L356" href="#L356">356</a>             <strong class="jxr_keyword">final</strong> SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(m);
 <a class="jxr_linenumber" name="L357" href="#L357">357</a>             decomposer.decompose();
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>             <em class="jxr_comment">// if points were colinear, their null-space has dimension greater</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>             <em class="jxr_comment">// if points were co-linear, their null-space has dimension greater</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a>             <em class="jxr_comment">// than one (a pencil of planes instead of just one plane can be</em>
 <a class="jxr_linenumber" name="L361" href="#L361">361</a>             <em class="jxr_comment">// defined)</em>
 <a class="jxr_linenumber" name="L362" href="#L362">362</a>             <strong class="jxr_keyword">return</strong> (decomposer.getRank() &lt; 3);
@@ -789,7 +789,7 @@
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 
 <a class="jxr_linenumber" name="L782" href="#L782">782</a>             <strong class="jxr_keyword">final</strong> Matrix v = decomposer.getV();
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 
-<a class="jxr_linenumber" name="L784" href="#L784">784</a>             <em class="jxr_comment">// last column of V contains the right nullspace of m, which is the</em>
+<a class="jxr_linenumber" name="L784" href="#L784">784</a>             <em class="jxr_comment">// last column of V contains the right null-space of m, which is the</em>
 <a class="jxr_linenumber" name="L785" href="#L785">785</a>             <em class="jxr_comment">// intersection of lines expressed in homogeneous coordinates.</em>
 <a class="jxr_linenumber" name="L786" href="#L786">786</a>             <em class="jxr_comment">// because column is already normalized by SVD decomposition, point</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a>             <em class="jxr_comment">// will also be normalized</em>

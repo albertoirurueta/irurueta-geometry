@@ -78,7 +78,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
 
     /**
      * Quality scores corresponding to each pair of matched planes.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -95,7 +95,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes  list of input planes to be used to estimate a
      *                     projective 3D transformation.
@@ -165,7 +165,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes   list of input planes to be used to estimate a
      *                      projective 3D transformation.

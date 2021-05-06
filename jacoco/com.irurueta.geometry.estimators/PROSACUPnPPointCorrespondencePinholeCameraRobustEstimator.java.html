@@ -70,7 +70,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -342,7 +342,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="nc" id="L345">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L345">        return mComputeAndKeepInliers;</span>
     }
 
     /**
@@ -354,11 +354,11 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
             throws LockedException {
-<span class="nc bnc" id="L357" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L358">            throw new LockedException();</span>
         }
-<span class="nc" id="L360">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="nc" id="L361">    }</span>
+<span class="fc" id="L360">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L361">    }</span>
 
     /**
      * Indicates whether residuals must be computed and kept.
@@ -367,7 +367,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="nc" id="L370">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L370">        return mComputeAndKeepResiduals;</span>
     }
 
     /**
@@ -379,11 +379,11 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public void setComputeAndKeepResidualsEnabled(
             final boolean computeAndKeepResiduals) throws LockedException {
-<span class="nc bnc" id="L382" title="All 2 branches missed.">        if (isLocked()) {</span>
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">        if (isLocked()) {</span>
 <span class="nc" id="L383">            throw new LockedException();</span>
         }
-<span class="nc" id="L385">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="nc" id="L386">    }</span>
+<span class="fc" id="L385">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L386">    }</span>
 
     /**
      * Estimates an affine 2D transformation using a robust estimator and
@@ -408,7 +408,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
 <span class="nc" id="L408">            throw new NotReadyException();</span>
         }
 
-        // pinhole camera estimator using UPnP (Uncalibrated PErspective-n-Point)
+        // pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point)
         // algorithm
 <span class="fc" id="L413">        final UPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
                 new UPnPPointCorrespondencePinholeCameraEstimator();

@@ -638,18 +638,18 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @see AffineTransformation3D
      */
     public final void setA(final Matrix a) {
-<span class="nc bnc" id="L641" title="All 2 branches missed.">        if (a == null) {</span>
-<span class="nc" id="L642">            throw new NullPointerException();</span>
+<span class="fc bfc" id="L641" title="All 2 branches covered.">        if (a == null) {</span>
+<span class="fc" id="L642">            throw new NullPointerException();</span>
         }
-<span class="nc bnc" id="L644" title="All 4 branches missed.">        if (a.getRows() != INHOM_COORDS || a.getColumns() != INHOM_COORDS) {</span>
-<span class="nc" id="L645">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L644" title="1 of 4 branches missed.">        if (a.getRows() != INHOM_COORDS || a.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L645">            throw new IllegalArgumentException();</span>
         }
 
-<span class="nc" id="L648">        t.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+<span class="fc" id="L648">        t.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
                 INHOM_COORDS - 1,
-<span class="nc" id="L650">                a.multiplyByScalarAndReturnNew(t.getElementAt(</span>
+<span class="fc" id="L650">                a.multiplyByScalarAndReturnNew(t.getElementAt(</span>
                         HOM_COORDS - 1, HOM_COORDS - 1)));
-<span class="nc" id="L652">    }</span>
+<span class="fc" id="L652">    }</span>
 
     /**
      * Normalizes current matrix instance.
@@ -1091,10 +1091,10 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public void addTranslation(
             final double translationX, final double translationY, final double translationZ) {
-<span class="nc" id="L1094">        addTranslationX(translationX);</span>
-<span class="nc" id="L1095">        addTranslationY(translationY);</span>
-<span class="nc" id="L1096">        addTranslationZ(translationZ);</span>
-<span class="nc" id="L1097">    }</span>
+<span class="fc" id="L1094">        addTranslationX(translationX);</span>
+<span class="fc" id="L1095">        addTranslationY(translationY);</span>
+<span class="fc" id="L1096">        addTranslationZ(translationZ);</span>
+<span class="fc" id="L1097">    }</span>
 
     /**
      * Adds provided coordinates to current translation assigned to this
@@ -1104,9 +1104,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                    translation.
      */
     public void addTranslation(final Point3D translation) {
-<span class="nc" id="L1107">        addTranslation(translation.getInhomX(), translation.getInhomY(),</span>
-<span class="nc" id="L1108">                translation.getInhomZ());</span>
-<span class="nc" id="L1109">    }</span>
+<span class="fc" id="L1107">        addTranslation(translation.getInhomX(), translation.getInhomY(),</span>
+<span class="fc" id="L1108">                translation.getInhomZ());</span>
+<span class="fc" id="L1109">    }</span>
 
     /**
      * Represents this transformation as a 4x4 matrix.
@@ -1178,7 +1178,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                      stored.
      * @throws NonSymmetricMatrixException Raised if due to numerical precision
      *                                     the resulting output quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException            raised if transform cannot be computed becauseof
+     * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
     @Override
@@ -1296,7 +1296,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * provided output camera.
      *
      * @param inputCamera  camera to be transformed.
-     * @param outputCamera instance where data of transforeed camera will be
+     * @param outputCamera instance where data of transformed camera will be
      *                     stored.
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
@@ -1329,7 +1329,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * new transformation instance.
      *
      * @return inverse transformation.
-     * @throws AlgebraException if inverse transfor cannot be computed because
+     * @throws AlgebraException if inverse transform cannot be computed because
      *                          of numerical instabilities.
      */
     public Transformation3D inverseAndReturnNew() throws AlgebraException {

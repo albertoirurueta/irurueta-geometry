@@ -68,7 +68,7 @@ public abstract class PinholeCameraRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -409,7 +409,7 @@ public abstract class PinholeCameraRobustEstimator {
     }
 
     /**
-     * Indicats whether skewness value is suggested or not. When enabled, the
+     * Indicates whether skewness value is suggested or not. When enabled, the
      * estimator will attempt to enforce suggested value in an iterative manner
      * starting from an initially estimated camera.
      * Even when suggestion is enabled, the iterative algorithm might not reach
@@ -1165,7 +1165,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D      list of 3D points used to estimate a pinhole camera.
      * @param points2D      list of corresponding projected 2D points used to
      *                      estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      pinhole camera.
@@ -1191,7 +1191,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D      list of 3D points used to estimate a pinhole camera.
      * @param points2D      list of corresponding projected 2D points used to
      *                      estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      pinhole camera.
@@ -1351,7 +1351,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D      list of 3D points used to estimate a pinhole camera.
      * @param points2D      list of corresponding projected 2D points used to
      *                      estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      pinhole camera.
@@ -1379,7 +1379,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D      list of 3D points used to estimate a pinhole camera.
      * @param points2D      list of corresponding projected 2D points used to
      *                      estimate a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      pinhole camera.
@@ -1497,7 +1497,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1528,7 +1528,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1559,13 +1559,13 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
      * @param points2D                 list of corresponding projected 2D points used to
      *                                 estimate a pinhole camera.
-     * @param qualityScores            quality scores corresponding to each pair of mtched
+     * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
      * @param method                   method of a robust estimator algorithm to estimate best
      *                                 pinhole camera.
@@ -1594,13 +1594,13 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
      * @param points2D                 list of corresponding projected 2D points used to
      *                                 estimate a pinhole camera.
-     * @param qualityScores            quality scores corresponding to each pair of mtched
+     * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
      * @param method                   method of a robust estimator algorithm to estimate best
      *                                 pinhole camera.
@@ -1627,7 +1627,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1657,7 +1657,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1686,7 +1686,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1718,7 +1718,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param skewness                 skewness value of intrinsic parameters of camera to be
      *                                 estimated.
      * @param horizontalPrincipalPoint horizontal principal point value of
-     *                                 intrinsic parameters of cmera to be estimated.
+     *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
@@ -1794,7 +1794,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param planes        list of 3D planes used to estimate a pinhole camera.
      * @param lines         list of corresponding projected 2D lines used to estimate
      *                      a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      samples.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      pinhole camera.
@@ -1820,7 +1820,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param planes        list of 3D planes used to estimate a pinhole camera.
      * @param lines         list of corresponding projected 2D lines used to estimate
      *                      a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      samples.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      pinhole camera.
@@ -1885,7 +1885,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param planes        list of 3D planes used to estimate a pinhole camera.
      * @param lines         list of corresponding projected 2D lines used to estimate
      *                      a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      samples.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes/lines and
@@ -1908,7 +1908,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param planes        list of 3D planes used to estimate a pinhole camera.
      * @param lines         list of corresponding projected 2D lines used to estimate
      *                      a pinhole camera.
-     * @param qualityScores quality scores corresponding to each pair of mtched
+     * @param qualityScores quality scores corresponding to each pair of matched
      *                      samples.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes/lines and
