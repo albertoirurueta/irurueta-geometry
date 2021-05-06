@@ -32,10 +32,10 @@ public class VanGoghTriangulator2DTest {
     private static final double MIN_RADIUS = 1.0;
     private static final double MAX_RADIUS = 10.0;
 
-    public static final double MIN_ANGLE_DEGREES = -180.0;
-    public static final double MAX_ANGLE_DEGREES = 180.0;
+    private static final double MIN_ANGLE_DEGREES = -180.0;
+    private static final double MAX_ANGLE_DEGREES = 180.0;
 
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
 
     @Test
     public void testConstructorAndGetMethod() {

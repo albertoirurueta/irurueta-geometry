@@ -76,7 +76,7 @@ public class PROMedSSphereRobustEstimator extends SphereRobustEstimator {
 
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample.
+     * The larger the score value the better the quality of the sample.
      */
     private double[] mQualityScores;
 
@@ -259,7 +259,7 @@ public class PROMedSSphereRobustEstimator extends SphereRobustEstimator {
 
     /**
      * Returns quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sampled point.
+     * The larger the score value the better the quality of the sampled point.
      *
      * @return quality scores corresponding to each point.
      */

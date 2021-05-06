@@ -71,6 +71,38 @@ public class PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertTrue(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(0.05f, PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, PinholeCameraRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, PinholeCameraRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, PinholeCameraRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, PinholeCameraRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, PinholeCameraRobustEstimator.MIN_ITERATIONS);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(6, PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -971,7 +1003,7 @@ public class PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSugestSkewnessValueEnabled() throws LockedException {
+    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
         final PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator();
 

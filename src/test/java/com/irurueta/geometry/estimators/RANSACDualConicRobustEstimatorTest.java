@@ -57,6 +57,22 @@ public class RANSACDualConicRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-7, RANSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, RANSACDualConicRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertEquals(5, RANSACDualConicRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, RANSACDualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, RANSACDualConicRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, RANSACDualConicRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, RANSACDualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, RANSACDualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, RANSACDualConicRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, RANSACDualConicRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, RANSACDualConicRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, RANSACDualConicRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACDualConicRobustEstimator estimator = new RANSACDualConicRobustEstimator();

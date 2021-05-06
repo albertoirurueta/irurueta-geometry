@@ -71,6 +71,19 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertFalse(PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -144,6 +157,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertNull(estimator.getQualityScores());
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // test constructor with listener
@@ -219,6 +236,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertNull(estimator.getQualityScores());
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // test constructor with points
@@ -301,6 +322,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertNull(estimator.getQualityScores());
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
         // Force IllegalArgumentException
         final List<Point3D> points3DEmpty = new ArrayList<>();
@@ -396,6 +421,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertNull(estimator.getQualityScores());
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
         // Force IllegalArgumentException
         estimator = null;
@@ -489,6 +518,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertSame(estimator.getQualityScores(), qualityScores);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // test constructor with listener
@@ -564,6 +597,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertSame(estimator.getQualityScores(), qualityScores);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // test constructor with points
@@ -639,6 +676,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertSame(estimator.getQualityScores(), qualityScores);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // Force IllegalArgumentException
@@ -733,6 +774,10 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
         assertSame(estimator.getQualityScores(), qualityScores);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
         // Force IllegalArgumentException
         estimator = null;
@@ -800,6 +845,36 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
+        final PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
+                new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+
+        // check default value
+        assertFalse(estimator.isComputeAndKeepInliersEnabled());
+
+        // set new value
+        estimator.setComputeAndKeepInliersEnabled(true);
+
+        // check
+        assertTrue(estimator.isComputeAndKeepInliersEnabled());
+    }
+
+    @Test
+    public void testIsSetComputeAndKeepResidualsEnabled() throws LockedException {
+        final PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
+                new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+
+        // check default value
+        assertFalse(estimator.isComputeAndKeepResidualsEnabled());
+
+        // set new value
+        estimator.setComputeAndKeepResidualsEnabled(true);
+
+        // check
+        assertTrue(estimator.isComputeAndKeepResidualsEnabled());
     }
 
     @Test
@@ -971,7 +1046,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSugestSkewnessValueEnabled() throws LockedException {
+    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
         final PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 

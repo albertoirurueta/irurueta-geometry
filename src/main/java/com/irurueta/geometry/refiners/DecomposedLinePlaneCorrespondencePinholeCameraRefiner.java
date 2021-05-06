@@ -100,7 +100,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * The faster the weights are increased the less likely that suggested
      * values can be converged if they differ too much from the original ones.
      */
-    protected double mMaxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;
+    private double mMaxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;
 
     /**
      * Step to increase suggestion weight. This weight is used to slowly draw
@@ -314,12 +314,10 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * @throws NotReadyException if not enough input data has been provided.
      * @throws LockedException   if estimator is locked because refinement is
      *                           already in progress.
-     * @throws RefinerException  if refinement fails for some reason (e.g. unable
-     *                           to converge to a result).
      */
     @Override
     public boolean refine(final PinholeCamera result) throws NotReadyException,
-            LockedException, RefinerException {
+            LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -565,10 +563,9 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
          *
          * @param point parameters to evaluate cost function.
          * @return cost value.
-         * @throws EvaluationException if anything fails.
          */
         @Override
-        public double evaluate(final double[] point) throws EvaluationException {
+        public double evaluate(final double[] point) {
             parametersToCamera(point, mRefineCamera);
             return residualPowell(mRefineCamera, point, weight);
         }

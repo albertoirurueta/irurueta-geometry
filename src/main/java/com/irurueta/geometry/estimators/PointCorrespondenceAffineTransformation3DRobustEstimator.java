@@ -185,7 +185,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
      *

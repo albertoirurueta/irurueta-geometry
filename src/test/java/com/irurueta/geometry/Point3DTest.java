@@ -39,6 +39,15 @@ public class Point3DTest {
     private static final int MAX_POINTS = 500;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-10, Point3D.DEFAULT_COMPARISON_THRESHOLD, 0.0);
+        assertEquals(0.0, Point3D.MIN_THRESHOLD, 0.0);
+        assertEquals(4, Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
+        assertEquals(3, Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, Point3D.DEFAULT_COORDINATES_TYPE);
+    }
+
+    @Test
     public void testCreate() {
         Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);

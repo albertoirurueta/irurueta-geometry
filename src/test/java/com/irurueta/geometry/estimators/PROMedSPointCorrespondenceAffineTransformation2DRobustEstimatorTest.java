@@ -60,6 +60,28 @@ public class PROMedSPointCorrespondenceAffineTransformation2DRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, AffineTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, AffineTransformation2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, AffineTransformation2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, AffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, AffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, AffineTransformation2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, AffineTransformation2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, AffineTransformation2DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(AffineTransformation2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0,
+                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator estimator =

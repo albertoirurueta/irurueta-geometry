@@ -66,7 +66,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -157,19 +157,19 @@ public abstract class MetricTransformation3DRobustEstimator {
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    protected boolean mKeepCovariance;
+    private boolean mKeepCovariance;
 
     /**
      * Estimated covariance of estimated 2D euclidean transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    protected Matrix mCovariance;
+    private Matrix mCovariance;
 
     /**
      * List of points to be used to estimate a metric 3D transformation.
      * Each point in the list of input points must be matched with the
-     * corresponding point in the list of outputp oints located at the same
+     * corresponding point in the list of output points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
@@ -578,7 +578,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * of iterations is achieved without converging to a result when calling
      * estimate(), a RobustEstimatorException will be raised.
      *
-     * @return maximum allowed number of itertions.
+     * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
         return mMaxIterations;
@@ -627,7 +627,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     }
 
     /**
-     * Specifies whether result must be refined using LEvenberg-Marquardt
+     * Specifies whether result must be refined using Levenberg-Marquardt
      * fitting algorithm over found inliers.
      *
      * @param refineResult true to refine result, false to simply use result
@@ -767,7 +767,7 @@ public abstract class MetricTransformation3DRobustEstimator {
 
     /**
      * Creates a metric 3D transformation estimator based on 3D point
-     * correspondences and using provided robust esitmator method.
+     * correspondences and using provided robust estimator method.
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
@@ -1058,7 +1058,7 @@ public abstract class MetricTransformation3DRobustEstimator {
 
     /**
      * Creates a metric 3D transformation estimator based on 3D point
-     * correspondences and using provided robust esitmator method.
+     * correspondences and using provided robust estimator method.
      *
      * @param listener               listener to be notified of events such as when estimation
      *                               starts, ends or its progress significantly changes.

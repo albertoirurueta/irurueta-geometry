@@ -36,6 +36,12 @@ public class EllipseTest {
     private static final int TIMES = 500;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-9, Ellipse.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, Ellipse.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws ColinearPointsException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -1427,6 +1433,10 @@ public class EllipseTest {
 
         // find tangent line at locus point
         final Line2D line = ellipse.getTangentLineAt(point, ABSOLUTE_ERROR);
+        final Line2D line2 = new Line2D();
+        ellipse.tangentLineAt(point, line2, ABSOLUTE_ERROR);
+
+        assertEquals(line, line2);
 
         // check that point is also at line's locus
         assertTrue(line.isLocus(point));
@@ -1444,7 +1454,7 @@ public class EllipseTest {
 
         // Force NotLocusException (because of accuracy)
         try {
-            ellipse.getTangentLineAt(point);
+            assertNotNull(ellipse.getTangentLineAt(point));
         } catch (final NotLocusException ignore) {
         }
     }

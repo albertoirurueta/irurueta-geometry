@@ -28,6 +28,21 @@ import static org.junit.Assert.*;
 public class ProjectiveTransformation3DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(5, ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, ProjectiveTransformation3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0, ProjectiveTransformation3DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, ProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, ProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, ProjectiveTransformation3DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, ProjectiveTransformation3DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, ProjectiveTransformation3DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(ProjectiveTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+    }
+
+    @Test
     public void testCreateFromPoints() {
         // create with points and method
         final List<Point3D> inputPoints = new ArrayList<>();

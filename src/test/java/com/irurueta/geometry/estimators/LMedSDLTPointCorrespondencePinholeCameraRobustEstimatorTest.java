@@ -68,6 +68,14 @@ public class LMedSDLTPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, LMedSDLTPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, LMedSDLTPointCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         LMedSDLTPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -874,209 +882,196 @@ public class LMedSDLTPointCorrespondencePinholeCameraRobustEstimatorTest
     public void testEstimateWithoutRefinement() throws IllegalArgumentException,
             LockedException, NotReadyException, RobustEstimatorException,
             CameraException, NotAvailableException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double horizontalFocalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double verticalFocalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double horizontalFocalLength = randomizer.nextDouble(
+                MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(
+                MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final double horizontalPrincipalPoint = randomizer.nextDouble(
+                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final double verticalPrincipalPoint = randomizer.nextDouble(
+                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                            verticalFocalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+        final PinholeCameraIntrinsicParameters intrinsic =
+                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
+                        verticalFocalLength, horizontalPrincipalPoint,
+                        verticalPrincipalPoint, skewness);
 
-            // create rotation parameters
-            final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        // create rotation parameters
+        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-            final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                    gammaEuler);
+        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
+                gammaEuler);
 
-            // create camera center
-            final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+        // create camera center
+        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+                cameraCenterArray);
 
-            // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+        // instantiate camera
+        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
+                cameraCenter);
 
-            // normalize the camera to improve accuracy
-            camera.normalize();
+        // normalize the camera to improve accuracy
+        camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>();
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new HomogeneousPoint3D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                points3D.add(point3D);
-            }
-
-            final List<Point2D> points2D = camera.project(points3D);
-
-            // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            for (final Point2D point2D : points2D) {
-                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
-                    point2DWithError = new HomogeneousPoint2D(
-                            point2D.getHomX() + errorX,
-                            point2D.getHomY() + errorY,
-                            point2D.getHomW() + errorW);
-                } else {
-                    // inlier point (without error)
-                    point2DWithError = point2D;
-                }
-
-                points2DWithError.add(point2DWithError);
-            }
-
-            final LMedSDLTPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
-
-            estimator.setStopThreshold(THRESHOLD);
-            estimator.setResultRefined(false);
-            estimator.setCovarianceKept(false);
-
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
-            assertTrue(estimator.isReady());
-            assertFalse(estimator.isLocked());
-            assertNull(estimator.getCovariance());
-
-            final PinholeCamera camera2 = estimator.estimate();
-
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
-            assertTrue(estimateNextIteration > 0);
-            assertTrue(estimateProgressChange >= 0);
-            assertNotNull(estimator.getInliersData());
-            assertNotNull(estimator.getInliersData().getInliers());
-            assertNotNull(estimator.getInliersData().getResiduals());
-            assertTrue(estimator.getInliersData().getNumInliers() > 0);
-            assertNull(estimator.getCovariance());
-            reset();
-
-            // check correctness of estimation
-
-            // project original 3D points using estimated camera and check
-            // distance to 2D points without error
-            Point2D originalPoint2D, estimatedPoint2D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = points3D.get(i);
-                originalPoint2D = points2D.get(i);
-                estimatedPoint2D = camera2.project(point3D);
-
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D), 0.0,
-                        ABSOLUTE_ERROR);
-            }
-
-            // decompose estimated camera and check its parameters
-            camera2.decompose();
-
-            // compare intrinsic parameters
-            final PinholeCameraIntrinsicParameters estimatedIntrinsic =
-                    camera2.getIntrinsicParameters();
-
-            assertEquals(horizontalFocalLength,
-                    estimatedIntrinsic.getHorizontalFocalLength(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(verticalFocalLength,
-                    estimatedIntrinsic.getVerticalFocalLength(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(horizontalPrincipalPoint,
-                    estimatedIntrinsic.getHorizontalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(verticalPrincipalPoint,
-                    estimatedIntrinsic.getVerticalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(skewness, estimatedIntrinsic.getSkewness(),
-                    LARGE_ABSOLUTE_ERROR);
-
-            // Comparing estimated rotation
-            final Rotation3D estimatedRotation = camera2.getCameraRotation();
-
-            final MatrixRotation3D estimatedRotation2 =
-                    (MatrixRotation3D) estimatedRotation;
-            final double estimatedAlphaEuler =
-                    estimatedRotation2.getAlphaEulerAngle();
-            final double estimatedBetaEuler =
-                    estimatedRotation2.getBetaEulerAngle();
-            final double estimatedGammaEuler =
-                    estimatedRotation2.getGammaEulerAngle();
-            final boolean validAlphaEuler;
-            final boolean validBetaEuler;
-            final boolean validGammaEuler;
-
-            if (Math.abs(alphaEuler - estimatedAlphaEuler) <=
-                    LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
-            } else {
-                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
-            }
-
-            if (Math.abs(betaEuler - estimatedBetaEuler) <=
-                    LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
-            } else {
-                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
-            }
-
-            if (Math.abs(gammaEuler - estimatedGammaEuler) <=
-                    LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
-            } else {
-                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
-            }
-
-
-            assertTrue(validAlphaEuler);
-            assertTrue(validBetaEuler);
-            assertTrue(validGammaEuler);
-
-
-            // comparing estimated camera center
-            final Point3D estimatedCameraCenter = camera2.getCameraCenter();
-            assertTrue(cameraCenter.equals(estimatedCameraCenter,
-                    LARGE_ABSOLUTE_ERROR));
-
-            numValid++;
-
-            if (numValid > 0) {
-                break;
-            }
+        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final List<Point3D> points3D = new ArrayList<>();
+        Point3D point3D;
+        for (int i = 0; i < nPoints; i++) {
+            point3D = new HomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+            points3D.add(point3D);
         }
 
-        assertTrue(numValid > 0);
+        final List<Point2D> points2D = camera.project(points3D);
+
+        // create outliers
+        Point2D point2DWithError;
+        final List<Point2D> points2DWithError = new ArrayList<>();
+        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+                new Random(), 0.0, STD_ERROR);
+        for (final Point2D point2D : points2D) {
+            if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                // point is outlier
+                final double errorX = errorRandomizer.nextDouble();
+                final double errorY = errorRandomizer.nextDouble();
+                final double errorW = errorRandomizer.nextDouble();
+                point2DWithError = new HomogeneousPoint2D(
+                        point2D.getHomX() + errorX,
+                        point2D.getHomY() + errorY,
+                        point2D.getHomW() + errorW);
+            } else {
+                // inlier point (without error)
+                point2DWithError = point2D;
+            }
+
+            points2DWithError.add(point2DWithError);
+        }
+
+        final LMedSDLTPointCorrespondencePinholeCameraRobustEstimator estimator =
+                new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
+                        this, points3D, points2DWithError);
+
+        estimator.setStopThreshold(THRESHOLD);
+        estimator.setResultRefined(false);
+        estimator.setCovarianceKept(false);
+
+        assertEquals(estimateStart, 0);
+        assertEquals(estimateEnd, 0);
+        assertEquals(estimateNextIteration, 0);
+        assertEquals(estimateProgressChange, 0);
+        assertTrue(estimator.isReady());
+        assertFalse(estimator.isLocked());
+        assertNull(estimator.getCovariance());
+
+        final PinholeCamera camera2 = estimator.estimate();
+
+        assertEquals(estimateStart, 1);
+        assertEquals(estimateEnd, 1);
+        assertTrue(estimateNextIteration > 0);
+        assertTrue(estimateProgressChange >= 0);
+        assertNotNull(estimator.getInliersData());
+        assertNotNull(estimator.getInliersData().getInliers());
+        assertNotNull(estimator.getInliersData().getResiduals());
+        assertTrue(estimator.getInliersData().getNumInliers() > 0);
+        assertNull(estimator.getCovariance());
+        reset();
+
+        // check correctness of estimation
+
+        // project original 3D points using estimated camera and check
+        // distance to 2D points without error
+        Point2D originalPoint2D, estimatedPoint2D;
+        for (int i = 0; i < nPoints; i++) {
+            point3D = points3D.get(i);
+            originalPoint2D = points2D.get(i);
+            estimatedPoint2D = camera2.project(point3D);
+
+            assertEquals(originalPoint2D.distanceTo(estimatedPoint2D), 0.0,
+                    ABSOLUTE_ERROR);
+        }
+
+        // decompose estimated camera and check its parameters
+        camera2.decompose();
+
+        // compare intrinsic parameters
+        final PinholeCameraIntrinsicParameters estimatedIntrinsic =
+                camera2.getIntrinsicParameters();
+
+        assertEquals(horizontalFocalLength,
+                estimatedIntrinsic.getHorizontalFocalLength(),
+                LARGE_ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength,
+                estimatedIntrinsic.getVerticalFocalLength(),
+                LARGE_ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint,
+                estimatedIntrinsic.getHorizontalPrincipalPoint(),
+                LARGE_ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint,
+                estimatedIntrinsic.getVerticalPrincipalPoint(),
+                LARGE_ABSOLUTE_ERROR);
+        assertEquals(skewness, estimatedIntrinsic.getSkewness(),
+                LARGE_ABSOLUTE_ERROR);
+
+        // Comparing estimated rotation
+        final Rotation3D estimatedRotation = camera2.getCameraRotation();
+
+        final MatrixRotation3D estimatedRotation2 =
+                (MatrixRotation3D) estimatedRotation;
+        final double estimatedAlphaEuler =
+                estimatedRotation2.getAlphaEulerAngle();
+        final double estimatedBetaEuler =
+                estimatedRotation2.getBetaEulerAngle();
+        final double estimatedGammaEuler =
+                estimatedRotation2.getGammaEulerAngle();
+        final boolean validAlphaEuler;
+        final boolean validBetaEuler;
+        final boolean validGammaEuler;
+
+        if (Math.abs(alphaEuler - estimatedAlphaEuler) <=
+                LARGE_ABSOLUTE_ERROR) {
+            validAlphaEuler = true;
+        } else {
+            validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                    Math.PI) <= LARGE_ABSOLUTE_ERROR;
+        }
+
+        if (Math.abs(betaEuler - estimatedBetaEuler) <=
+                LARGE_ABSOLUTE_ERROR) {
+            validBetaEuler = true;
+        } else {
+            validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                    Math.PI) <= LARGE_ABSOLUTE_ERROR;
+        }
+
+        if (Math.abs(gammaEuler - estimatedGammaEuler) <=
+                LARGE_ABSOLUTE_ERROR) {
+            validGammaEuler = true;
+        } else {
+            validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                    Math.PI) <= LARGE_ABSOLUTE_ERROR;
+        }
+
+        assertTrue(validAlphaEuler);
+        assertTrue(validBetaEuler);
+        assertTrue(validGammaEuler);
+
+        // comparing estimated camera center
+        final Point3D estimatedCameraCenter = camera2.getCameraCenter();
+        assertTrue(cameraCenter.equals(estimatedCameraCenter,
+                LARGE_ABSOLUTE_ERROR));
     }
 
     @Test

@@ -97,7 +97,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints  list of input points to be used to estimate an
      *                     euclidean 2D transformation.
@@ -171,7 +171,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Constructor withlists of points to be used to estimate an euclidean 2D
+     * Constructor with lists of points to be used to estimate an euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -274,7 +274,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints            list of input points to be used to estimate an
      *                               euclidean 2D transformation.
@@ -355,7 +355,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Constructor withlists of points to be used to estimate an euclidean 2D
+     * Constructor with lists of points to be used to estimate an euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -459,7 +459,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to determine whether points are inliers or not
@@ -481,7 +481,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */
@@ -510,7 +510,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Indicates if eatimator is ready to start the euclidean 2D transformation
+     * Indicates if estimator is ready to start the euclidean 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.
@@ -586,6 +586,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public EuclideanTransformation2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {

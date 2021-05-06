@@ -53,6 +53,14 @@ public class MSACPoint3DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACPoint3DRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACPoint3DRobustEstimator estimator = new MSACPoint3DRobustEstimator();

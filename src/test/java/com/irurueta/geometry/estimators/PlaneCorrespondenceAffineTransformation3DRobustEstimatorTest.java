@@ -27,6 +27,12 @@ import static org.junit.Assert.*;
 public class PlaneCorrespondenceAffineTransformation3DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         // create with robust estimator method
         PlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =

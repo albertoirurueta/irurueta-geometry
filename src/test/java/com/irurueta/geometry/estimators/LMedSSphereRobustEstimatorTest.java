@@ -56,6 +56,14 @@ public class LMedSSphereRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-3, LMedSSphereRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, LMedSSphereRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         //test constructor without arguments
         LMedSSphereRobustEstimator estimator = new LMedSSphereRobustEstimator();

@@ -64,6 +64,27 @@ public class RANSACEuclideanTransformation2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, EuclideanTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(2, EuclideanTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(0.05f, EuclideanTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, EuclideanTransformation2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, EuclideanTransformation2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, EuclideanTransformation2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, EuclideanTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, EuclideanTransformation2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, EuclideanTransformation2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, EuclideanTransformation2DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(EuclideanTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(EuclideanTransformation2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(RobustEstimatorMethod.PROMedS, EuclideanTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, RANSACEuclideanTransformation2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, RANSACEuclideanTransformation2DRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertFalse(RANSACEuclideanTransformation2DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(RANSACEuclideanTransformation2DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACEuclideanTransformation2DRobustEstimator estimator =

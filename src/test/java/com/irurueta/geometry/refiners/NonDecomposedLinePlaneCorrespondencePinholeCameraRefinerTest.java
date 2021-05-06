@@ -67,6 +67,23 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     private int mRefineEnd;
 
     @Test
+    public void testConstants() {
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraRefiner.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                0.0);
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0, PinholeCameraRefiner.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                0.0);
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(2.0,
+                NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner.DEFAULT_SUGGESTION_ERROR_WEIGHT, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws LockedException, NotReadyException,
             RobustEstimatorException {
         final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =

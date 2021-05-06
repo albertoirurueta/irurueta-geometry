@@ -412,14 +412,14 @@ public class Triangle3D implements Serializable {
         // given triangle ABC made by vectors:
         // ab = p2 - p1, and ac = p3 - p1
 
-        // If point (x, y) lies within triangle ABC, then we have 3 subtriangles
+        // If point (x, y) lies within triangle ABC, then we have 3 sub-triangles
         // ApB, BpC and ApC made of points:
         // ApB: mVertex1, point, mVertex2
         // BpC: mVertex2, point, mVertex3
         // ApC: mVertex3, point, mVertex1
 
         // The point will lie inside triangle ABC if the sum of the areas of the
-        // 3 subtriangles ApB, BpC and ApC equals the area of triangle ABC (up to
+        // 3 sub-triangles ApB, BpC and ApC equals the area of triangle ABC (up to
         // certain accuracy to account for numerical precision)
 
         // Then the areas of triangles are:
@@ -439,7 +439,7 @@ public class Triangle3D implements Serializable {
      *
      * @return A plane.
      * @throws ColinearPointsException Raised if vertices of this triangle are
-     *                                 colinear (triangle has area equal or very close to 0.0).
+     *                                 co-linear (triangle has area equal or very close to 0.0).
      */
     public Plane toPlane() throws ColinearPointsException {
         return new Plane(mVertex1, mVertex2, mVertex3);
@@ -453,7 +453,7 @@ public class Triangle3D implements Serializable {
      *
      * @param result Instance where resulting plane will be stored.
      * @throws ColinearPointsException Raised if vertices of this triangle are
-     *                                 colinear (triangle has area equal or very close to 0.0).
+     *                                 co-linear (triangle has area equal or very close to 0.0).
      */
     public void toPlane(final Plane result) throws ColinearPointsException {
         result.setParametersFromThreePoints(mVertex1, mVertex2, mVertex3);

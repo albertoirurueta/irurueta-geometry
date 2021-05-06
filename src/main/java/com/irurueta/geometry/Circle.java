@@ -84,7 +84,7 @@ public class Circle implements Serializable {
      * @param point2 point 2.
      * @param point3 point 3.
      * @throws ColinearPointsException if provided set of points are coincident
-     *                                 or colinear (form a single line). In such cases a singularity occurs
+     *                                 or co-linear (form a single line). In such cases a singularity occurs
      *                                 since a circle having an infinite radius would be required to contain all
      *                                 three points in its locus.
      */
@@ -170,7 +170,7 @@ public class Circle implements Serializable {
      * @param point2 point 2.
      * @param point3 point 3.
      * @throws ColinearPointsException if provided set of points are coincident
-     *                                 or colinear (form a single line). In such cases a singularity occurs
+     *                                 or co-linear (form a single line). In such cases a singularity occurs
      *                                 since a circle having an infinite radius would be required to contain all
      *                                 three points in its locus.
      */

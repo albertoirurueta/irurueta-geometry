@@ -47,12 +47,18 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
 
     private static final int PERCENTAGE_OUTLIER = 20;
 
-    private static final int TIMES = 100;
-
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
+
+    @Test
+    public void testConstants() {
+        assertEquals(1e-6, MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
 
     @Test
     public void testConstructor() {
@@ -511,125 +517,114 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     @Test
     public void testEstimateWithRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            // create an affine transformation
-            Matrix a;
-            do {
-                // ensure A matrix is invertible
-                a = Matrix.createWithUniformRandomValues(
-                        AffineTransformation3D.INHOM_COORDS,
-                        AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
-                final double norm = Utils.normF(a);
-                // normalize T to increase accuracy
-                a.multiplyByScalar(1.0 / norm);
-            } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
+        // create an affine transformation
+        Matrix a;
+        do {
+            // ensure A matrix is invertible
+            a = Matrix.createWithUniformRandomValues(
+                    AffineTransformation3D.INHOM_COORDS,
+                    AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
+            final double norm = Utils.normF(a);
+            // normalize T to increase accuracy
+            a.multiplyByScalar(1.0 / norm);
+        } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
 
-            final double[] translation = new double[
-                    AffineTransformation3D.INHOM_COORDS];
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            randomizer.fill(translation, -1.0, 1.0);
+        final double[] translation = new double[
+                AffineTransformation3D.INHOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        randomizer.fill(translation, -1.0, 1.0);
 
-            final AffineTransformation3D transformation1 =
-                    new AffineTransformation3D(a, translation);
+        final AffineTransformation3D transformation1 =
+                new AffineTransformation3D(a, translation);
 
-            // generate random lines
-            final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            final List<Plane> inputPlanes = new ArrayList<>();
-            final List<Plane> outputPlanes = new ArrayList<>();
-            final List<Plane> outputPlanesWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            for (int i = 0; i < nPlanes; i++) {
-                final Plane inputPlane = new Plane(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                final Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
-                final Plane outputPlaneWithError;
-                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // line is outlier
-                    final double errorA = errorRandomizer.nextDouble();
-                    final double errorB = errorRandomizer.nextDouble();
-                    final double errorC = errorRandomizer.nextDouble();
-                    final double errorD = errorRandomizer.nextDouble();
-                    outputPlaneWithError = new Plane(
-                            outputPlane.getA() + errorA,
-                            outputPlane.getB() + errorB,
-                            outputPlane.getC() + errorC,
-                            outputPlane.getD() + errorD);
-                } else {
-                    // inlier line (without error)
-                    outputPlaneWithError = outputPlane;
-                }
-
-                inputPlanes.add(inputPlane);
-                outputPlanes.add(outputPlane);
-                outputPlanesWithError.add(outputPlaneWithError);
+        // generate random lines
+        final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+        final List<Plane> inputPlanes = new ArrayList<>();
+        final List<Plane> outputPlanes = new ArrayList<>();
+        final List<Plane> outputPlanesWithError = new ArrayList<>();
+        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
+                new Random(), 0.0, STD_ERROR);
+        for (int i = 0; i < nPlanes; i++) {
+            final Plane inputPlane = new Plane(
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+            final Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
+            final Plane outputPlaneWithError;
+            if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                // line is outlier
+                final double errorA = errorRandomizer.nextDouble();
+                final double errorB = errorRandomizer.nextDouble();
+                final double errorC = errorRandomizer.nextDouble();
+                final double errorD = errorRandomizer.nextDouble();
+                outputPlaneWithError = new Plane(
+                        outputPlane.getA() + errorA,
+                        outputPlane.getB() + errorB,
+                        outputPlane.getC() + errorC,
+                        outputPlane.getD() + errorD);
+            } else {
+                // inlier line (without error)
+                outputPlaneWithError = outputPlane;
             }
 
-            final MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                    new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                            this, inputPlanes, outputPlanesWithError);
-
-            estimator.setThreshold(THRESHOLD);
-            estimator.setResultRefined(true);
-            estimator.setCovarianceKept(true);
-
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
-            assertTrue(estimator.isReady());
-            assertFalse(estimator.isLocked());
-
-            final AffineTransformation3D transformation2 = estimator.estimate();
-
-            assertNotNull(estimator.getInliersData());
-            assertNotNull(estimator.getInliersData().getInliers());
-            assertNotNull(estimator.getInliersData().getResiduals());
-            assertTrue(estimator.getInliersData().getNumInliers() > 0);
-            assertNotNull(estimator.getCovariance());
-            assertEquals(estimator.getCovariance().getRows(),
-                    AffineTransformation3D.INHOM_COORDS *
-                            AffineTransformation3D.INHOM_COORDS +
-                            AffineTransformation3D.NUM_TRANSLATION_COORDS);
-            assertEquals(estimator.getCovariance().getColumns(),
-                    AffineTransformation3D.INHOM_COORDS *
-                            AffineTransformation3D.INHOM_COORDS +
-                            AffineTransformation3D.NUM_TRANSLATION_COORDS);
-
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
-            assertTrue(estimateNextIteration > 0);
-            assertTrue(estimateProgressChange >= 0);
-            reset();
-
-            // check correctness of estimation by transforming input planes
-            // using estimated transformation (transformation2) and checking
-            // that output planes are equal to the original output planes without
-            // error
-            Plane p1, p2;
-            for (int i = 0; i < nPlanes; i++) {
-                p1 = outputPlanes.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
-                p1.normalize();
-                p2.normalize();
-                assertEquals(
-                        PlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                                getResidual(p1, p2), 0.0, ABSOLUTE_ERROR);
-                assertTrue(p1.equals(p2, ABSOLUTE_ERROR));
-            }
-
-            numValid++;
-
-            if (numValid > 0) {
-                break;
-            }
+            inputPlanes.add(inputPlane);
+            outputPlanes.add(outputPlane);
+            outputPlanesWithError.add(outputPlaneWithError);
         }
 
-        assertTrue(numValid > 0);
+        final MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
+                new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                        this, inputPlanes, outputPlanesWithError);
+
+        estimator.setThreshold(THRESHOLD);
+        estimator.setResultRefined(true);
+        estimator.setCovarianceKept(true);
+
+        assertEquals(estimateStart, 0);
+        assertEquals(estimateEnd, 0);
+        assertEquals(estimateNextIteration, 0);
+        assertEquals(estimateProgressChange, 0);
+        assertTrue(estimator.isReady());
+        assertFalse(estimator.isLocked());
+
+        final AffineTransformation3D transformation2 = estimator.estimate();
+
+        assertNotNull(estimator.getInliersData());
+        assertNotNull(estimator.getInliersData().getInliers());
+        assertNotNull(estimator.getInliersData().getResiduals());
+        assertTrue(estimator.getInliersData().getNumInliers() > 0);
+        assertNotNull(estimator.getCovariance());
+        assertEquals(estimator.getCovariance().getRows(),
+                AffineTransformation3D.INHOM_COORDS *
+                        AffineTransformation3D.INHOM_COORDS +
+                        AffineTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(estimator.getCovariance().getColumns(),
+                AffineTransformation3D.INHOM_COORDS *
+                        AffineTransformation3D.INHOM_COORDS +
+                        AffineTransformation3D.NUM_TRANSLATION_COORDS);
+
+        assertEquals(estimateStart, 1);
+        assertEquals(estimateEnd, 1);
+        assertTrue(estimateNextIteration > 0);
+        assertTrue(estimateProgressChange >= 0);
+        reset();
+
+        // check correctness of estimation by transforming input planes
+        // using estimated transformation (transformation2) and checking
+        // that output planes are equal to the original output planes without
+        // error
+        Plane p1, p2;
+        for (int i = 0; i < nPlanes; i++) {
+            p1 = outputPlanes.get(i);
+            p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
+            p1.normalize();
+            p2.normalize();
+            assertEquals(
+                    PlaneCorrespondenceAffineTransformation3DRobustEstimator.
+                            getResidual(p1, p2), 0.0, ABSOLUTE_ERROR);
+            assertTrue(p1.equals(p2, ABSOLUTE_ERROR));
+        }
     }
 
     @Override

@@ -70,7 +70,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -408,7 +408,7 @@ public class PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new NotReadyException();
         }
 
-        // pinhole camera estimator using UPnP (Uncalibrated PErspective-n-Point)
+        // pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point)
         // algorithm
         final UPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =
                 new UPnPPointCorrespondencePinholeCameraEstimator();

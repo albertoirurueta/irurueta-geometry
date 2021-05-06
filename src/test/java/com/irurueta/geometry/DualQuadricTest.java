@@ -38,6 +38,16 @@ public class DualQuadricTest {
     private static final int TIMES = 10;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_ROW_SIZE);
+        assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_COLUMN_SIZE);
+        assertEquals(10, BaseQuadric.N_PARAMS);
+        assertEquals(1e-12, BaseQuadric.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(1e-12, BaseQuadric.DEFAULT_PERPENDICULAR_THRESHOLD, 0.0);
+        assertEquals(0.0, BaseQuadric.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongSizeException,
             IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentPlanesException {
@@ -1270,6 +1280,11 @@ public class DualQuadricTest {
         final DualQuadric dualQuadric = new DualQuadric(dualQuadricMatrix);
 
         final Quadric quadric = dualQuadric.getQuadric();
+        final Quadric quadric2 = new Quadric();
+        dualQuadric.quadric(quadric2);
+
+        assertEquals(quadric.asMatrix(), quadric2.asMatrix());
+
         final Matrix quadricMatrix2 = quadric.asMatrix();
 
         // normalize quadric matrices

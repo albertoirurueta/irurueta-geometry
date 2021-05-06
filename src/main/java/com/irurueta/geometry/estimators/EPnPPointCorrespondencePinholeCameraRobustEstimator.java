@@ -48,7 +48,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
                     DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
 
     /**
-     * Inicates whether the case where a dimension 2 nullspace is allowed.
+     * Indicates whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -58,7 +58,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
                     DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
 
     /**
-     * Indicates whether the case where a dimension 3 nullspace is allowed.
+     * Indicates whether the case where a dimension 3 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
@@ -99,7 +99,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
 
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -165,7 +165,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera
      * and intrinsic parameters.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -240,7 +240,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     }
 
     /**
-     * Indicates whether the case where a dimension 2 nullspace is allowed.
+     * Indicates whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -252,7 +252,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     }
 
     /**
-     * Specifies whether the case where a dimension 2 nullspace is allowed.
+     * Specifies whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -270,7 +270,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     }
 
     /**
-     * Indicates whether the case where a dimension 3 nullspace is allowed.
+     * Indicates whether the case where a dimension 3 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
@@ -283,7 +283,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     }
 
     /**
-     * Specifies whether the case where a dimension 3 nullspace is allowed.
+     * Specifies whether the case where a dimension 3 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
@@ -510,7 +510,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                 estimate a pinhole camera.
      * @param method   method of a robust estimator algorithm to estimate best
      *                 pinhole camera.
-     * @return an instance of a pinhole camera robust esitmator.
+     * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than required minimum size (6
      *                                  correspondences).
@@ -808,7 +808,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                  estimate a pinhole camera.
      * @param method    method of a robust estimator algorithm to estimate best
      *                  pinhole camera.
-     * @return an instance of a pinhole camera robust esitmator.
+     * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than required minimum size (6
      *                                  correspondences).
@@ -1070,7 +1070,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                      points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores) {
@@ -1222,7 +1222,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                      points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             final PinholeCameraIntrinsicParameters intrinsic,

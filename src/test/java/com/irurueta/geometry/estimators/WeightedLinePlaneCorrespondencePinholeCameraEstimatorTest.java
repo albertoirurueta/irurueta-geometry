@@ -67,6 +67,27 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     private int progressCount = 0;
 
     @Test
+    public void testConstants() {
+        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                PinholeCameraEstimator.DEFAULT_ESTIMATOR_TYPE);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0, PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(0.1, PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(2.0, PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(0.475, PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(50, WeightedLinePlaneCorrespondencePinholeCameraEstimator.DEFAULT_MAX_CORRESPONDENCES);
+        assertTrue(WeightedLinePlaneCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS);
+        assertEquals(1e-8, WeightedLinePlaneCorrespondencePinholeCameraEstimator.EPS, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongListSizesException,
             NotAvailableException {
 
@@ -2618,7 +2639,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     }
 
     @Test
-    public void testEstimateZeroSkewnesssZeroPrincipalPointAndEqualFocalLength()
+    public void testEstimateZeroSkewnessZeroPrincipalPointAndEqualFocalLength()
             throws WrongListSizesException, LockedException, NotReadyException,
             NotAvailableException, CameraException {
 

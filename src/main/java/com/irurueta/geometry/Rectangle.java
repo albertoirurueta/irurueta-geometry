@@ -312,7 +312,7 @@ public class Rectangle implements Serializable {
      * lowest position and will be positive otherwise.
      *
      * @param topLeft     top-left corner.
-     * @param bottomRight bottom-rigth corner.
+     * @param bottomRight bottom-right corner.
      * @return signed height.
      */
     public static double getSignedHeight(
@@ -322,7 +322,7 @@ public class Rectangle implements Serializable {
 
     /**
      * Gets signed height of this rectangle defined as the difference between
-     * its bototm-right and top-left vertical coordinates.
+     * its bottom-right and top-left vertical coordinates.
      * Signed height will be negative if bottom right corner is located at the
      * lowest position and will be positive otherwise.
      *
@@ -334,7 +334,7 @@ public class Rectangle implements Serializable {
 
     /**
      * Gets height of a rectangle defined as the absolute difference between
-     * bottom-rigth and top-left vertical coordinates.
+     * bottom-right and top-left vertical coordinates.
      *
      * @param topLeft     top-left corner.
      * @param bottomRight bottom-right corner.
@@ -356,7 +356,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets area of the rectangle defined by provided top-left and bototm-right
+     * Gets area of the rectangle defined by provided top-left and bottom-right
      * corners.
      *
      * @param topLeft     top-left corner.
@@ -481,13 +481,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets perimeter of a rectangle having provided top-left and bototm-right
+     * Gets perimeter of a rectangle having provided top-left and bottom-right
      * corners.
      *
      * @param left   left coordinate.
      * @param top    top coordinate.
      * @param right  right coordinate.
-     * @param bottom borrom coordinate.
+     * @param bottom bottom coordinate.
      * @return perimeter of rectangle.
      */
     public static double getPerimeter(
@@ -682,7 +682,7 @@ public class Rectangle implements Serializable {
      * @param point       point to be checked.
      * @param topLeft     top-left corner.
      * @param bottomRight bottom-right corner.
-     * @param threshold   threshold to use as a margin to deterine whether point
+     * @param threshold   threshold to use as a margin to determine whether point
      *                    lies inside or not.
      * @return true if point is inside, false otherwise.
      */
@@ -1801,7 +1801,7 @@ public class Rectangle implements Serializable {
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
      * @param threshold   threshold to use as a margin to determine whether point
-     *                    liest at top-right corner side or not.
+     *                    lies at top-right corner side or not.
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(
@@ -1975,7 +1975,7 @@ public class Rectangle implements Serializable {
      * moves right border to the right.
      *
      * @param x         x coordinate of point to be checked.
-     * @param y         y coodinate of point to be checked.
+     * @param y         y coordinate of point to be checked.
      * @param left      left coordinate of rectangle.
      * @param top       top coordinate of rectangle.
      * @param right     right coordinate of rectangle.
@@ -2001,7 +2001,7 @@ public class Rectangle implements Serializable {
      * Indicates if point at provided coordinates is located at right side of
      * rectangle defined by provided top-left and bottom-right corners.
      *
-     * @param x      x coordinate of poitn to be checked.
+     * @param x      x coordinate of point to be checked.
      * @param y      y coordinate of point to be checked.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
@@ -2101,7 +2101,7 @@ public class Rectangle implements Serializable {
      * @param point       point to be checked.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @param threshold   thrshold to use as a margin to determine whether point
+     * @param threshold   threshold to use as a margin to determine whether point
      *                    lies at right side or not.
      * @return true if point lies at right side, false otherwise.
      */
@@ -2278,8 +2278,8 @@ public class Rectangle implements Serializable {
      * @param right     right coordinate of rectangle.
      * @param bottom    bottom coordinate of rectangle.
      * @param threshold threshold to use as a margin to determine whether point
-     *                  lies at bototm-right corner, false otherwise
-     * @return true if point is at bototm-right corner, false otherwise.
+     *                  lies at bottom-right corner, false otherwise
+     * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(
             final double x, final double y, final double left,
@@ -2294,7 +2294,7 @@ public class Rectangle implements Serializable {
 
     /**
      * Indicates if point at provided coordinates is located at bottom-right
-     * corner of rectangle defined by provided top-left and bototm-right
+     * corner of rectangle defined by provided top-left and bottom-right
      * corners.
      *
      * @param x      x coordinate of point to be checked.
@@ -2470,7 +2470,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return true if point is at bototm-right corner, false otherwise.
+     * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(
             final double x, final double y,
@@ -2528,7 +2528,7 @@ public class Rectangle implements Serializable {
      * @param y         y coordinate of point to be checked.
      * @param threshold threshold to use as a margin to determine whether point
      *                  lies at bottom-right corner or not.
-     * @return true if point is at bototm-right corner, false otherwise.
+     * @return true if point is at bottom-right corner, false otherwise.
      */
     public boolean isAtBottomRightCorner(
             final double x, final double y, final double threshold) {
@@ -2541,7 +2541,7 @@ public class Rectangle implements Serializable {
      *
      * @param x x coordinate of point to be checked.
      * @param y y coordinate of point to be checked.
-     * @return true if point is at bototm-right corner, false otherwise.
+     * @return true if point is at bottom-right corner, false otherwise.
      */
     public boolean isAtBottomRightCorner(
             final double x, final double y) {
@@ -2749,7 +2749,7 @@ public class Rectangle implements Serializable {
      * @param width     width of rectangle.
      * @param height    height of rectangle.
      * @param threshold threshold to use as a margin to determine whether point
-     *                  lies at bototm side or not.
+     *                  lies at bottom side or not.
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(
@@ -2919,7 +2919,7 @@ public class Rectangle implements Serializable {
 
     /**
      * Indicates if provided point is located at bottom-left corner of rectangle
-     * defined by provided top-left and bototm-right corners up to a certain
+     * defined by provided top-left and bottom-right corners up to a certain
      * threshold.
      * A positive threshold moves bottom-right corner towards rectangle
      * interior, a negative threshold moves top-right corner towards rectangle
@@ -2961,7 +2961,7 @@ public class Rectangle implements Serializable {
 
     /**
      * Indicates if provided point coordinates are located at bottom-left corner
-     * of rectangle defined by provided top-left and bototm-right corners up to
+     * of rectangle defined by provided top-left and bottom-right corners up to
      * a certain threshold.
      * A positive threshold moves bottom-right corner towards rectangle
      * interior, a negative threshold moves top-right corner towards rectangle
@@ -3050,7 +3050,7 @@ public class Rectangle implements Serializable {
      * @param width     width of rectangle.
      * @param height    height of rectangle.
      * @param threshold threshold to use as a margin to determine whether point
-     *                  lies at bototm-left corner or not.
+     *                  lies at bottom-left corner or not.
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(
@@ -4620,7 +4620,7 @@ public class Rectangle implements Serializable {
      * @param point       point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle lcous.
+     * @return distance to closest point in the rectangle locus.
      */
     public static double getDistance(
             final Point2D point, final Point2D topLeft,
@@ -4896,7 +4896,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return closest point in the retangle locus.
+     * @return closest point in the rectangle locus.
      */
     public static Point2D getClosestPoint(
             final double x, final double y, final double left,
@@ -5492,7 +5492,7 @@ public class Rectangle implements Serializable {
      * @param x         x coordinate of point to be checked.
      * @param y         y coordinate of point to be checked.
      * @param threshold threshold to use as a margin to determine whether point
-     *                  is locus to top side of retangle.
+     *                  is locus to top side of rectangle.
      * @return true if point is locus to top side of rectangle, false
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
@@ -5806,7 +5806,7 @@ public class Rectangle implements Serializable {
      * @param x         x coordinate of point to be checked.
      * @param y         y coordinate of point to be checked.
      * @param threshold threshold to use as a margin to determine whether point
-     *                  is locus to right side of retangle.
+     *                  is locus to right side of rectangle.
      * @return true if point is locus to right side of rectangle, false
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.

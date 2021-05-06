@@ -68,6 +68,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstant() {
+        assertEquals(1.0, MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACMetricTransformation2DRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACMetricTransformation2DRobustEstimator estimator =

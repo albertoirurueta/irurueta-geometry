@@ -55,6 +55,16 @@ public class PinholeCamera extends Camera implements Serializable {
     public static final int PINHOLE_CAMERA_MATRIX_COLS = 4;
 
     /**
+     * Constant defining the number of inhomogeneous coordinates.
+     */
+    public static final int INHOM_COORDS = 3;
+
+    /**
+     * Constant defining a tiny value close to machine precision.
+     */
+    public static final double EPS = 1e-12;
+
+    /**
      * Indicates if camera should be decomposed into intrinsic parameters and
      * rotation by default after creation or setting new parameters.
      */
@@ -81,16 +91,6 @@ public class PinholeCamera extends Camera implements Serializable {
      * hence multiplying it by -1.0 has no effect on point projection.
      */
     private static final double SIGN_THRESHOLD = 0.0;
-
-    /**
-     * Constant defining the number of inhomogeneous coordinates.
-     */
-    public static final int INHOM_COORDS = 3;
-
-    /**
-     * Constant defining a tiny value close to machine precision.
-     */
-    public static final double EPS = 1e-12;
 
     /**
      * Internal matrix defining this camera.
@@ -351,11 +351,11 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Backprojects a line into a plane and stores the result into provided
+     * Back-projects a line into a plane and stores the result into provided
      * instance.
      *
-     * @param line   2D line to be backprojected.
-     * @param result Instance where computed backprojected 3D plane data is
+     * @param line   2D line to be back-projected.
+     * @param result Instance where computed back-projected 3D plane data is
      *               stored.
      */
     @Override
@@ -388,18 +388,18 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Backprojects provided 2D point into a 3D point and stores the result into
+     * Back-projects provided 2D point into a 3D point and stores the result into
      * provided instance.
-     * Notice that estimated solution is not unique, since backprojecting a 2D
+     * Notice that estimated solution is not unique, since back-projecting a 2D
      * point results in an infinite number of 3D points located in the same
      * ray of light.
      * This method only computes one possible solution. Any other solution can
      * be computed as a linear combination between the camera center and the
-     * estimated backprojeted point.
+     * estimated back-projeted point.
      *
-     * @param point  2D point to be backprojected.
-     * @param result Instance where backprojected 3D point data will be stored.
-     * @throws CameraException thrown if 2D point cannot be backprojected
+     * @param point  2D point to be back-projected.
+     * @param result Instance where back-projected 3D point data will be stored.
+     * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
     @Override
@@ -426,7 +426,7 @@ public class PinholeCamera extends Camera implements Serializable {
             final double norm = Utils.normF(pseudoInverseInternalMatrix);
             pseudoInverseInternalMatrix.multiplyByScalar(1.0 / norm);
 
-            // backprojected point (ray of light) is the product of pseudo-
+            // back-projected point (ray of light) is the product of pseudo-
             // inverse of internal matrix with image point matrix
             pseudoInverseInternalMatrix.multiply(m);
 
@@ -441,11 +441,11 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Backprojects a 2D conic into a 3D quadric and stores the result into
+     * Back-projects a 2D conic into a 3D quadric and stores the result into
      * provided instance.
      *
-     * @param conic  2D conic to be backprojected.
-     * @param result Instance where data of backprojected 3D quadric will be
+     * @param conic  2D conic to be back-rojected.
+     * @param result Instance where data of back-projected 3D quadric will be
      *               stored.
      */
     @Override
@@ -568,7 +568,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Normalization can help to increase accuracy on camera operations.
      * This method should only called when an increase on accuracy is needed
      * to save the additional computational cost.
-     * Notice that affine pinhole cameras are never normalized, since elments
+     * Notice that affine pinhole cameras are never normalized, since elements
      * to be used for normalization have norm equal to zero in such case.
      */
     public void normalize() {
@@ -678,7 +678,7 @@ public class PinholeCamera extends Camera implements Serializable {
 
     /**
      * Sets internal matrix of this camera. Internal matrix of a pinhole camera
-     * msut have size 3x4 (i.e. 3 rows and 4 columns).
+     * must have size 3x4 (i.e. 3 rows and 4 columns).
      *
      * @param internalMatrix internal matrix to be set
      * @throws WrongSizeException if provided matrix doesn't have size 3x4.
@@ -742,13 +742,13 @@ public class PinholeCamera extends Camera implements Serializable {
             final Matrix k = mIntrinsicParameters.getInternalMatrix();
             final Matrix r = cameraRotation.asInhomogeneousMatrix();
 
-            // compute new left 3x3 submatrix of pinhole camera matrix
+            // compute new left 3x3 sub-matrix of pinhole camera matrix
             final Matrix mp = k.multiplyAndReturnNew(r);
 
             // set new rotation
             mCameraRotation = cameraRotation;
 
-            // set new rotation on left 3x3 submatrix of internal pinhole camera
+            // set new rotation on left 3x3 sub-matrix of internal pinhole camera
             // matrix
             mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1,
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, mp);
@@ -895,7 +895,7 @@ public class PinholeCamera extends Camera implements Serializable {
         final Matrix k = intrinsicParameters.getInternalMatrix();
         final Matrix r = mCameraRotation.asInhomogeneousMatrix();
 
-        // compute now left 3x3 submatrix of pinhole camera matrix
+        // compute now left 3x3 sub-matrix of pinhole camera matrix
         try {
             k.multiply(r);
         } catch (final WrongSizeException ignore) {
@@ -903,7 +903,7 @@ public class PinholeCamera extends Camera implements Serializable {
         }
         mIntrinsicParameters = intrinsicParameters;
 
-        // set new intrinsic parameters on left 3x3 submatrix of internal
+        // set new intrinsic parameters on left 3x3 sub-matrix of internal
         // pinhole camera matrix
         mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1,
                 PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
@@ -949,7 +949,7 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             normalize();
             // new last column is the product of left 3x3 pinhole camera
-            // submatrix by the inhomogeneous coordinates of new camera center
+            // sub-matrix by the inhomogeneous coordinates of new camera center
             final Matrix mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);
             final Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);
             center.setElementAtIndex(0, cameraCenter.getInhomX());
@@ -991,7 +991,7 @@ public class PinholeCamera extends Camera implements Serializable {
             final Matrix k = intrinsicParameters.getInternalMatrix();
             final Matrix r = rotation.asInhomogeneousMatrix();
 
-            // compute new left 3x3 submatrix of pinhole camera matrix (also known as Mp)
+            // compute new left 3x3 sub-matrix of pinhole camera matrix (also known as Mp)
             k.multiply(r);
 
             // set new intrinsic parameters
@@ -1000,7 +1000,7 @@ public class PinholeCamera extends Camera implements Serializable {
             // set new rotation
             mCameraRotation = rotation;
 
-            // set new left 3x3 submatrix of internal pinhole camera matrix
+            // set new left 3x3 sub-matrix of internal pinhole camera matrix
             mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1,
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
             mCameraSignFixed = false;
@@ -1434,7 +1434,7 @@ public class PinholeCamera extends Camera implements Serializable {
 
         try {
             // the principal point is retrieved as the product of the 3x3
-            // top-left submatrix of the internal camera with its second row
+            // top-left sub-matrix of the internal camera with its second row
             final Matrix mMp = mInternalMatrix.getSubmatrix(0, 0,
                     PINHOLE_CAMERA_MATRIX_ROWS - 1,
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
@@ -1663,7 +1663,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * A positive cheirality indicates that a point is in front of the camera,
      * a negative value indicates that a point is behind the camera.
      * Cheirality is less expensive to compute than point depth, for that reason
-     * when trying to determine if a poitn is in front or behind the camera it
+     * when trying to determine if a point is in front or behind the camera it
      * is preferable to check cheirality sign rather than depth sign.
      *
      * @param points list of points to be checked.
@@ -1683,7 +1683,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * A positive cheirality indicates that a point is in front of the camera,
      * a negative value indicates that a point is behind the camera.
      * Cheirality is less expensive to compute than point depth, for that reason
-     * when trying to determine if a poitn is in front or behind the camera it
+     * when trying to determine if a point is in front or behind the camera it
      * is preferable to check cheirality sign rather than depth sign.
      *
      * @param points list of points to be checked.
@@ -1816,7 +1816,7 @@ public class PinholeCamera extends Camera implements Serializable {
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
 
             // Use RQ decomposition to obtain intrinsic parameters as R ensuring
-            // that elements on the diagonal are positive and eement (3, 3) is 1,
+            // that elements on the diagonal are positive and element (3, 3) is 1,
             // and Q is an orthogonal matrix
             final RQDecomposer decomposer = new RQDecomposer(mMp);
             decomposer.decompose();
@@ -2063,7 +2063,7 @@ public class PinholeCamera extends Camera implements Serializable {
             // to increase accuracy
             normalize();
 
-            // get top-left 3x3 submatrix
+            // get top-left 3x3 sub-matrix
             final Matrix mMp = mInternalMatrix.getSubmatrix(0, 0,
                     PINHOLE_CAMERA_MATRIX_ROWS - 1,
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);

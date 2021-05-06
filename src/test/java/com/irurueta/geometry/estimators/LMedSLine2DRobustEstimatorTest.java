@@ -55,6 +55,14 @@ public class LMedSLine2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-3, LMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, LMedSLine2DRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         LMedSLine2DRobustEstimator estimator = new LMedSLine2DRobustEstimator();

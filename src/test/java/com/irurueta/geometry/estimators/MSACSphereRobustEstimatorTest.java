@@ -55,6 +55,12 @@ public class MSACSphereRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, MSACSphereRobustEstimator.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACSphereRobustEstimator estimator = new MSACSphereRobustEstimator();

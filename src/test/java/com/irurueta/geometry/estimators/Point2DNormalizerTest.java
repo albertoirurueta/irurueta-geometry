@@ -41,6 +41,11 @@ public class Point2DNormalizerTest {
     private static final int TIMES = 100;
 
     @Test
+    public void testConstants() {
+        assertEquals(2, Point2DNormalizer.MIN_POINTS);
+    }
+
+    @Test
     public void testConstructor() {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 

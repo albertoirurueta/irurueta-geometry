@@ -28,6 +28,12 @@ import static org.junit.Assert.*;
 public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                LinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         LinePlaneCorrespondencePinholeCameraRobustEstimator estimator;
 

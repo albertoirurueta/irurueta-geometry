@@ -68,6 +68,14 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACDLTPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACDLTPointCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACDLTPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -2589,7 +2597,7 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest
                     new Random(), 0.0, STD_ERROR);
             for (final Point2D point2D : points2D) {
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is oulier
+                    // point is outlier
                     final double errorX = errorRandomizer.nextDouble();
                     final double errorY = errorRandomizer.nextDouble();
                     final double errorW = errorRandomizer.nextDouble();

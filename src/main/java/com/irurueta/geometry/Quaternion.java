@@ -525,8 +525,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * provided instance. This method also computes the Jacobians wrt of Q1 and
      * Q2 if provided.
      *
-     * @param q1         1st productor operator of quaternions.
-     * @param q2         2nd productor operator of quaternions.
+     * @param q1         1st product operator of quaternions.
+     * @param q2         2nd product operator of quaternions.
      * @param result     instance where result of product is stored.
      * @param jacobianQ1 instance where jacobian of q1 is stored.
      * @param jacobianQ2 instance where jacobian of q2 is stored.
@@ -863,7 +863,12 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         final double n = com.irurueta.algebra.Utils.normF(v);
 
         // normalized rotation axis
-        ArrayUtils.multiplyByScalar(v, 1.0 / n, axis);
+        if (n > 0.0) {
+            ArrayUtils.multiplyByScalar(v, 1.0 / n, axis);
+        } else {
+            axis[0] = axis[1] = 0.0;
+            axis[2] = 1.0;
+        }
 
         // scalar part
         final double s = mA;
@@ -995,7 +1000,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
                     vA.multiply(jacobianAngle);
                     // vU * jacobianAxis
                     vU.multiply(jacobianAxis);
-                    // vA * jacobianAnle + vU * jacobianAxis
+                    // vA * jacobianAngle + vU * jacobianAxis
                     vA.add(vU);
 
                     jacobian.copyFrom(vA);
@@ -1419,7 +1424,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param jacobianPoint      jacobian wrt of point.
      * @param jacobianQuaternion jacobian wrt of quaternion.
      * @throws IllegalArgumentException if jacobian of point is not 3x3 or
-     *                                  jacobian of quaternoin is not 3x4.
+     *                                  jacobian of quaternion is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotate(final Quaternion q, final Point3D inputPoint,
@@ -1838,7 +1843,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * rotation angle) into a quaternion.
      *
      * @param rotationVector input rotation vector to be converted.
-     * @param result         quaternioln where result will be stored.
+     * @param result         quaternion where result will be stored.
      * @throws IllegalArgumentException if provided rotation vector is not
      *                                  length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>

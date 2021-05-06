@@ -243,6 +243,7 @@ public class HomogeneousPoint2DTest {
         assertTrue(hPoint1.equals(hPoint2, 2.0));
         assertTrue(hPoint1.equals((Point2D) hPoint2, 2.0));
         assertFalse(hPoint1.equals(hPoint2, 0.0));
+        assertFalse(hPoint1.equals((Point2D) hPoint2, 0.0));
 
         // Testing equals from one inhomogeneous point
         final double[] iArray = new double[INHOM_COORDS];
@@ -289,6 +290,14 @@ public class HomogeneousPoint2DTest {
         } catch (final IllegalArgumentException ignore) {
         }
         assertFalse(value);
+
+        hPoint = new HomogeneousPoint2D();
+        iPoint = new InhomogeneousPoint2D();
+        assertTrue(hPoint.equals(iPoint));
+        hPoint2 = new HomogeneousPoint2D(hPoint);
+        assertTrue(hPoint.equals(hPoint2));
+        assertTrue(hPoint.equals((Point2D) iPoint));
+        assertTrue(hPoint.equals((Point2D) hPoint2));
     }
 
     @Test

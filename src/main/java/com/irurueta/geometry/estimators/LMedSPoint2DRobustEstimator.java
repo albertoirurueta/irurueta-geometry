@@ -213,6 +213,7 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
                                 return Point2DRobustEstimator.MINIMUM_SIZE;
                             }
 
+                            @SuppressWarnings("DuplicatedCode")
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List<Point2D> solutions) {

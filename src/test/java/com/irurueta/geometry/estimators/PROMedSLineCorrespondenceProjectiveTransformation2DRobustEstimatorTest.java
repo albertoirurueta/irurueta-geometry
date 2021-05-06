@@ -58,6 +58,27 @@ public class PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimatorT
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, ProjectiveTransformation2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, ProjectiveTransformation2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, ProjectiveTransformation2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, ProjectiveTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, ProjectiveTransformation2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, ProjectiveTransformation2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, ProjectiveTransformation2DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(ProjectiveTransformation2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                LineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1e-6,
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(0.0,
+                PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.MIN_STOP_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =

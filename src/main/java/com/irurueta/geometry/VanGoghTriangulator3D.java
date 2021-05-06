@@ -340,7 +340,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
 
         final boolean arePointsColinear = triangle.areVerticesColinear();
 
-        // only add final triangle if not colinear (area greater than small
+        // only add final triangle if not co-linear (area greater than small
         // threshold)
         if (!arePointsColinear) {
             result.add(triangle);

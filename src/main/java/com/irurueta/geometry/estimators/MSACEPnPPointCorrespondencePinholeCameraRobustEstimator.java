@@ -40,7 +40,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Constant defining default threshold to determine whether points are
      * inliers or not.
-     * By defaul 1.0 is considered a good value for cases where measures are
+     * By default 1.0 is considered a good value for cases where measures are
      * done on pixels, since typically the minimum resolution is 1 pixel.
      */
     public static final double DEFAULT_THRESHOLD = 1.0;
@@ -81,7 +81,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -149,7 +149,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera
      * and intrinsic parameters.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -209,7 +209,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on projected 2D points.
      *
      * @param threshold threshold to be set.

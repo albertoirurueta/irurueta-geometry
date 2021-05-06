@@ -27,6 +27,20 @@ import static org.junit.Assert.*;
 public class Line2DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(2, Line2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, Line2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, Line2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, Line2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, Line2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, Line2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, Line2DRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, Line2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         Line2DRobustEstimator estimator;
 

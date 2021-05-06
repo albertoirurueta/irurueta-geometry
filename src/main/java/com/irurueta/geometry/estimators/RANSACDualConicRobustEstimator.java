@@ -122,7 +122,7 @@ public class RANSACDualConicRobustEstimator extends DualConicRobustEstimator {
     /**
      * Sets threshold to determine whether lines are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of algebrauc error a possible
+     * The threshold refers to the amount of algebraic error a possible
      * solution has on a given line.
      *
      * @param threshold threshold to be set.

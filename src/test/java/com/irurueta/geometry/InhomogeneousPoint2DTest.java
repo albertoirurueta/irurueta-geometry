@@ -32,8 +32,6 @@ public class InhomogeneousPoint2DTest {
     private static final double MIN_RANDOM_VALUE = 1.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
 
-    private static final int TIMES = 100;
-
     @Test
     public void testConstructor() {
         InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D();
@@ -214,83 +212,89 @@ public class InhomogeneousPoint2DTest {
 
     @Test
     public void testEquals() {
-        for (int i = 0; i < TIMES; i++) {
-            final double[] array = new double[INHOM_COORDS];
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            InhomogeneousPoint2D iPoint1 = new InhomogeneousPoint2D(array);
-            InhomogeneousPoint2D iPoint2 = new InhomogeneousPoint2D(array);
-            assertTrue(iPoint1.equals(iPoint2, 0.0));
-            assertTrue(iPoint1.equals((Point2D) iPoint2, 0.0));
+        final double[] array = new double[INHOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        InhomogeneousPoint2D iPoint1 = new InhomogeneousPoint2D(array);
+        InhomogeneousPoint2D iPoint2 = new InhomogeneousPoint2D(array);
+        assertTrue(iPoint1.equals(iPoint2, 0.0));
+        assertTrue(iPoint1.equals((Point2D) iPoint2, 0.0));
 
-            array[0] = iPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            array[1] = iPoint1.getY();
-            iPoint2 = new InhomogeneousPoint2D(array);
-            assertFalse(iPoint1.equals(iPoint2, 0.0));
-            assertFalse(iPoint1.equals((Point2D) iPoint2, 0.0));
+        array[0] = iPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        array[1] = iPoint1.getY();
+        iPoint2 = new InhomogeneousPoint2D(array);
+        assertFalse(iPoint1.equals(iPoint2, 0.0));
+        assertFalse(iPoint1.equals((Point2D) iPoint2, 0.0));
 
-            array[0] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            array[1] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            iPoint1 = new InhomogeneousPoint2D(array);
-            array[0] += 1.0;
-            iPoint2 = new InhomogeneousPoint2D(array);
-            assertTrue(iPoint1.equals(iPoint2, 1.0 + ABSOLUTE_ERROR));
-            assertTrue(iPoint1.equals((Point2D) iPoint2, 1.0 + ABSOLUTE_ERROR));
-            assertFalse(iPoint1.equals(iPoint2, 0.5));
-            assertFalse(iPoint1.equals(iPoint2, 0.5));
+        array[0] = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        array[1] = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        iPoint1 = new InhomogeneousPoint2D(array);
+        array[0] += 1.0;
+        iPoint2 = new InhomogeneousPoint2D(array);
+        assertTrue(iPoint1.equals(iPoint2, 1.0 + ABSOLUTE_ERROR));
+        assertTrue(iPoint1.equals((Point2D) iPoint2, 1.0 + ABSOLUTE_ERROR));
+        assertFalse(iPoint1.equals(iPoint2, 0.5));
+        assertFalse(iPoint1.equals(iPoint2, 0.5));
 
-            // Testing equals from one homogeneous point
-            final double[] hArray = new double[HOM_COORDS];
-            randomizer.fill(hArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            array[0] = hArray[0] / hArray[2];
-            array[1] = hArray[1] / hArray[2];
+        // Testing equals from one homogeneous point
+        final double[] hArray = new double[HOM_COORDS];
+        randomizer.fill(hArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        array[0] = hArray[0] / hArray[2];
+        array[1] = hArray[1] / hArray[2];
 
-            InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D(array);
-            HomogeneousPoint2D hPoint = new HomogeneousPoint2D(hArray);
-            assertTrue(iPoint.equals(hPoint, ABSOLUTE_ERROR));
-            assertTrue(iPoint.equals((Point2D) hPoint, ABSOLUTE_ERROR));
+        InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D(array);
+        HomogeneousPoint2D hPoint = new HomogeneousPoint2D(hArray);
+        assertTrue(iPoint.equals(hPoint, ABSOLUTE_ERROR));
+        assertTrue(iPoint.equals((Point2D) hPoint, ABSOLUTE_ERROR));
 
-            hArray[0] = iPoint.getHomX() + 1.0;
-            hArray[1] = iPoint.getHomY() + 1.0;
-            hArray[2] = iPoint.getHomW() + 1.0;
-            hPoint = new HomogeneousPoint2D(hArray);
-            assertFalse(iPoint.equals(hPoint, 0.0));
-            assertFalse(iPoint.equals((Point2D) hPoint, 0.0));
+        hArray[0] = iPoint.getHomX() + 1.0;
+        hArray[1] = iPoint.getHomY() + 1.0;
+        hArray[2] = iPoint.getHomW() + 1.0;
+        hPoint = new HomogeneousPoint2D(hArray);
+        assertFalse(iPoint.equals(hPoint, 0.0));
+        assertFalse(iPoint.equals((Point2D) hPoint, 0.0));
 
-            randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            iPoint = new InhomogeneousPoint2D(array);
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        iPoint = new InhomogeneousPoint2D(array);
 
-            hArray[0] = iPoint.getHomX() + iPoint.getHomW();
-            hArray[1] = iPoint.getHomY() + iPoint.getHomW();
-            hArray[2] = iPoint.getHomW();
-            hPoint = new HomogeneousPoint2D(hArray);
-            assertTrue(iPoint.equals(hPoint, 1.1));
-            assertTrue(iPoint.equals((Point2D) hPoint, 1.1));
-            assertFalse(iPoint.equals(hPoint, 0.5));
-            assertFalse(iPoint.equals((Point2D) hPoint, 0.5));
+        hArray[0] = iPoint.getHomX() + iPoint.getHomW();
+        hArray[1] = iPoint.getHomY() + iPoint.getHomW();
+        hArray[2] = iPoint.getHomW();
+        hPoint = new HomogeneousPoint2D(hArray);
+        assertTrue(iPoint.equals(hPoint, 1.1));
+        assertTrue(iPoint.equals((Point2D) hPoint, 1.1));
+        assertFalse(iPoint.equals(hPoint, 0.5));
+        assertFalse(iPoint.equals((Point2D) hPoint, 0.5));
 
-            // Force IllegalArgumentException
-            boolean value = false;
-            try {
-                value = iPoint.equals(hPoint, -ABSOLUTE_ERROR);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            try {
-                value = iPoint.equals(iPoint, -ABSOLUTE_ERROR);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            try {
-                value = iPoint.equals((Point2D) iPoint, -ABSOLUTE_ERROR);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
-            assertFalse(value);
+        // Force IllegalArgumentException
+        boolean value = false;
+        try {
+            value = iPoint.equals(hPoint, -ABSOLUTE_ERROR);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
         }
+        try {
+            value = iPoint.equals(iPoint, -ABSOLUTE_ERROR);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            value = iPoint.equals((Point2D) iPoint, -ABSOLUTE_ERROR);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (final IllegalArgumentException ignore) {
+        }
+        assertFalse(value);
+
+        hPoint = new HomogeneousPoint2D();
+        iPoint = new InhomogeneousPoint2D();
+        assertTrue(iPoint.equals(hPoint));
+        iPoint2 = new InhomogeneousPoint2D(iPoint);
+        assertTrue(iPoint.equals(iPoint2));
+        assertTrue(iPoint.equals((Point2D) hPoint));
+        assertTrue(iPoint.equals((Point2D) iPoint2));
     }
 
     @Test

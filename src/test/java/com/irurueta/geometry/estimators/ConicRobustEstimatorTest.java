@@ -27,6 +27,20 @@ import static org.junit.Assert.*;
 public class ConicRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(5, ConicRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, ConicRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, ConicRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, ConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, ConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, ConicRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, ConicRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, ConicRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, ConicRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         ConicRobustEstimator estimator;
 

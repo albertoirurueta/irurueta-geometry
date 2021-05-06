@@ -139,7 +139,7 @@ public class Plane implements Serializable {
      * @param pointC Third 3D point to compute the plane.
      * @throws ColinearPointsException Raised if provided points lay in a line
      *                                 preventing a single plane to be estimated. This happens in degenerate
-     *                                 configurations where points are colinear and an infinite set of planes
+     *                                 configurations where points are co-linear and an infinite set of planes
      *                                 pass through them.
      */
     public Plane(final Point3D pointA, final Point3D pointB, final Point3D pointC)
@@ -252,7 +252,7 @@ public class Plane implements Serializable {
      * @param pointA 1st point.
      * @param pointB 2nd point.
      * @param pointC 3rd point.
-     * @throws ColinearPointsException if provided points are in a colinear or
+     * @throws ColinearPointsException if provided points are in a co-linear or
      *                                 degenerate configuration.
      */
     public final void setParametersFromThreePoints(
@@ -289,7 +289,7 @@ public class Plane implements Serializable {
             decomposer.decompose();
 
             if (decomposer.getRank() < 3) {
-                // points where colinear, and so the null-space of those 3 points
+                // points where co-linear, and so the null-space of those 3 points
                 // has dimension greater than one (a pencil of planes instead
                 // of just one plane can be defined)
                 throw new ColinearPointsException();
@@ -316,7 +316,7 @@ public class Plane implements Serializable {
     }
 
     /**
-     * Determines if provided points are colinear or have a degenerate
+     * Determines if provided points are co-linear or have a degenerate
      * configuration. If returned value is true, then such points cannot be used
      * to estimate a plane.
      *
@@ -356,7 +356,7 @@ public class Plane implements Serializable {
             final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
-            // if points were colinear, their null-space has dimension greater
+            // if points were co-linear, their null-space has dimension greater
             // than one (a pencil of planes instead of just one plane can be
             // defined)
             return (decomposer.getRank() < 3);
@@ -781,7 +781,7 @@ public class Plane implements Serializable {
 
             final Matrix v = decomposer.getV();
 
-            // last column of V contains the right nullspace of m, which is the
+            // last column of V contains the right null-space of m, which is the
             // intersection of lines expressed in homogeneous coordinates.
             // because column is already normalized by SVD decomposition, point
             // will also be normalized

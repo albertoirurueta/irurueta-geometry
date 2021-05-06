@@ -29,6 +29,15 @@ import static org.junit.Assert.*;
 public class PointCorrespondencePinholeCameraRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+
+    }
+
+    @Test
     public void testCreate() {
         // create with robust estimator method
         PointCorrespondencePinholeCameraRobustEstimator estimator =

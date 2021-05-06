@@ -111,17 +111,17 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
     }
 
     /**
-     * Computes total line backprojection residual for provided camera.
+     * Computes total line back-projection residual for provided camera.
      * This method computes the sum of the squared residuals for all inlier
-     * backprojected lines.
+     * back-projected lines.
      *
      * @param pinholeCamera camera to compute residual for.
-     * @return total backprojection residual.
+     * @return total back-projection residual.
      */
     private double backprojectionResidual(final PinholeCamera pinholeCamera) {
         pinholeCamera.normalize();
 
-        // backprojection inlier lines into test plane
+        // back-projection inlier lines into test plane
         final int nSamples = mInliers.length();
         Line2D line;
         Plane plane;
@@ -147,8 +147,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
      * estimation.
      *
      * @param pinholeCamera camera to estimate covariance for.
-     * @param line          2D line to be backprojected with provided pinhole camera.
-     * @param plane         plane to be compared with backprojected line.
+     * @param line          2D line to be back-projected with provided pinhole camera.
+     * @param plane         plane to be compared with back-projected line.
      * @param params        camera parameters. In the following order:
      *                      skewness, horizontal focal length, vertical focal length,
      *                      horizontal principal point, vertical principal point, quaternion A,
@@ -168,17 +168,17 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
     }
 
     /**
-     * Backprojection residual/error for a single line using provided camera.
+     * Back-projection residual/error for a single line using provided camera.
      *
      * @param pinholeCamera camera ot be checked.
-     * @param line          line to be backprojected.
+     * @param line          line to be back-projected.
      * @param plane         plane to check against.
-     * @return dot product distance between backprojected line and plane.
+     * @return dot product distance between back-projected line and plane.
      */
     @SuppressWarnings("DuplicatedCode")
     private double singleBackprojectionResidual(final PinholeCamera pinholeCamera,
                                                 final Line2D line, final Plane plane) {
-        // backproject line into test plane
+        // back-project line into test plane
         pinholeCamera.backProject(line, mResidualTestPlane);
         mResidualTestPlane.normalize();
 

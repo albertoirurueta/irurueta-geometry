@@ -21,7 +21,7 @@ import java.util.Collection;
 /**
  * Implementation of a k-D tree in 3D.
  * Once a K-D tree is built for a collection of points, it can later be used to efficiently do certain operations
- * such as point locaiton, nearest points searches, etc.
+ * such as point location, nearest points searches, etc.
  */
 public class KDTree3D extends KDTree<Point3D> {
 

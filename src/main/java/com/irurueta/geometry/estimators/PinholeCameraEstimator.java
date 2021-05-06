@@ -28,7 +28,7 @@ public abstract class PinholeCameraEstimator {
     /**
      * Default estimator type.
      */
-    private static final PinholeCameraEstimatorType DEFAULT_ESTIMATOR_TYPE =
+    public static final PinholeCameraEstimatorType DEFAULT_ESTIMATOR_TYPE =
             PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR;
 
     /**
@@ -334,7 +334,7 @@ public abstract class PinholeCameraEstimator {
     }
 
     /**
-     * Indicats whether skewness value is suggested or not. When enabled, the
+     * Indicates whether skewness value is suggested or not. When enabled, the
      * estimator will attempt to enforce suggested value in an iterative manner
      * starting from an initially estimated camera.
      * Even when suggestion is enabled, the iterative algorithm might not reach

@@ -30,33 +30,33 @@ import static org.junit.Assert.*;
 public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         PinholeCameraEstimatorListener {
 
-    public static final double ABSOLUTE_ERROR = 1e-5;
-    public static final double LARGE_ABSOLUTE_ERROR = 5e-1;
+    private static final double ABSOLUTE_ERROR = 1e-5;
+    private static final double LARGE_ABSOLUTE_ERROR = 5e-1;
 
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
 
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
 
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
 
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
 
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
 
-    public static final int INHOM_3D_COORDS = 3;
+    private static final int INHOM_3D_COORDS = 3;
 
-    public static final int N_POINTS = 6;
-    public static final int MIN_POINTS = 7;
-    public static final int MAX_POINTS = 100;
+    private static final int N_POINTS = 6;
+    private static final int MIN_POINTS = 7;
+    private static final int MAX_POINTS = 100;
 
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
 
-    public static final double ERROR_STD = 1e-5;
+    private static final double ERROR_STD = 1e-5;
 
     private int startCount = 0;
     private int endCount = 0;
@@ -64,6 +64,9 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
 
     @Test
     public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(1e-8, PointCorrespondencePinholeCameraEstimator.EPS, 0.0);
         assertEquals(11, DLTPointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_EQUATIONS);
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.DEFAULT_ALLOW_LMSE_SOLUTION);
     }

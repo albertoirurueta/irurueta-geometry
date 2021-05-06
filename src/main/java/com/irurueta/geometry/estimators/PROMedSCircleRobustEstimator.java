@@ -76,7 +76,7 @@ public class PROMedSCircleRobustEstimator extends CircleRobustEstimator {
 
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample.
+     * The larger the score value the better the quality of the sample.
      */
     private double[] mQualityScores;
 
@@ -259,7 +259,7 @@ public class PROMedSCircleRobustEstimator extends CircleRobustEstimator {
 
     /**
      * Returns quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sampled point.
+     * The larger the score value the better the quality of the sampled point.
      *
      * @return quality scores corresponding to each point.
      */
@@ -287,7 +287,7 @@ public class PROMedSCircleRobustEstimator extends CircleRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the conic estimation.
+     * Indicates if estimator is ready to start the conic estimation.
      * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
      *

@@ -757,7 +757,7 @@ public class Rotation2DTest {
         final Rotation2D rotation2 = new Rotation2D(theta);
         final Rotation2D rotation3 = new Rotation2D(theta2);
 
-        // check equalness
+        // check equal-ness
         assertEquals(rotation1, rotation1);
         assertEquals(rotation1.hashCode(), rotation1.hashCode());
 
@@ -771,5 +771,7 @@ public class Rotation2DTest {
                 Rotation2D.DEFAULT_COMPARISON_THRESHOLD));
         // check with larger threshold
         assertTrue(rotation1.equals(rotation3, 2.0 * threshold));
+        assertTrue(rotation1.equals(rotation2));
+        assertFalse(rotation1.equals(rotation3));
     }
 }

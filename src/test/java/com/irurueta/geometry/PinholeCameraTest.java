@@ -90,6 +90,14 @@ public class PinholeCameraTest {
     private static final int TIMES = 10;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS);
+        assertEquals(4, PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
+        assertEquals(3, PinholeCamera.INHOM_COORDS);
+        assertEquals(1e-12, PinholeCamera.EPS, 0.0);
+    }
+
+    @Test
     public void testConstructors() throws WrongSizeException, RotationException,
             CameraException, NotAvailableException, WrongListSizesException,
             com.irurueta.geometry.estimators.LockedException,
@@ -474,7 +482,7 @@ public class PinholeCameraTest {
         estimator.setLMSESolutionAllowed(false);
         PinholeCamera estimatedCamera = estimator.estimate();
 
-        // check equalness of cameras
+        // check equal-ness of cameras
         camera.decompose();
         estimatedCamera.decompose();
 
@@ -570,7 +578,7 @@ public class PinholeCameraTest {
         estimator2.setLMSESolutionAllowed(false);
         estimatedCamera = estimator2.estimate();
 
-        // check equalness of cameras
+        // check equal-ness of cameras
         camera.decompose();
         estimatedCamera.decompose();
 
@@ -698,6 +706,8 @@ public class PinholeCameraTest {
 
         // list of image points to be tested
         final List<Point2D> imagePointList2 = camera.project(worldPointList);
+        final List<Point2D> imagePointList3 = new ArrayList<>();
+        camera.project(worldPointList, imagePointList3);
 
         assertEquals(imagePointList2.size(), nPoints);
         assertEquals(imagePointList.size(), nPoints);
@@ -715,6 +725,8 @@ public class PinholeCameraTest {
 
             assertTrue(imagePoint.equals(imagePoint2, ABSOLUTE_ERROR));
         }
+
+        assertEquals(imagePointList2, imagePointList3);
 
         // project single world point
         final double[] homWorldPointArray = new double[
@@ -808,7 +820,7 @@ public class PinholeCameraTest {
 
         final Matrix cameraMatrix = camera.getInternalMatrix();
 
-        // instantiate random line to backproject
+        // instantiate random line to back-project
         final double[] lineArray = new double[HOM_2D_COORDS];
         randomizer.fill(lineArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final Matrix lineMatrix = Matrix.newFromArray(lineArray, true);
@@ -821,6 +833,8 @@ public class PinholeCameraTest {
                 lineMatrix);
 
         Plane plane = camera.backProject(line);
+        final Plane plane2 = new Plane();
+        camera.backProject(line, plane2);
 
         double scaleA = plane.getA() / planeMatrix.getElementAtIndex(0);
         double scaleB = plane.getB() / planeMatrix.getElementAtIndex(1);
@@ -831,6 +845,7 @@ public class PinholeCameraTest {
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
         assertEquals(scaleC, scaleD, ABSOLUTE_ERROR);
         assertEquals(scaleD, scaleA, ABSOLUTE_ERROR);
+        assertEquals(plane, plane2);
 
         // test again back projection
         plane = new Plane();
@@ -874,7 +889,7 @@ public class PinholeCameraTest {
                 v.getElementAt(0, 3), v.getElementAt(1, 3),
                 v.getElementAt(2, 3), v.getElementAt(3, 3));
 
-        // check that world points above belong to backprojected plane
+        // check that world points above belong to back-projected plane
         assertTrue(plane.isLocus(worldPoint1, ABSOLUTE_ERROR));
         assertTrue(plane.isLocus(worldPoint2, ABSOLUTE_ERROR));
         assertTrue(plane.isLocus(worldPoint3, ABSOLUTE_ERROR));
@@ -942,10 +957,13 @@ public class PinholeCameraTest {
         // test that any point on such ray of light at any random distance will
         // project on the same image point
         final Point3D rayOfLight = camera.backProject(imagePoint);
+        final Point3D rayOfLight2 = Point3D.create();
+        camera.backProject(imagePoint, rayOfLight2);
 
         Point2D imagePoint2 = camera.project(rayOfLight);
 
         assertTrue(imagePoint.equals(imagePoint2, ABSOLUTE_ERROR));
+        assertEquals(rayOfLight, rayOfLight2);
 
         // now make a list of world points
         final int nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
@@ -2296,12 +2314,15 @@ public class PinholeCameraTest {
 
         // get principal point
         final Point2D principalPoint = camera.getPrincipalPoint();
+        final Point2D principalPoint2 = Point2D.create();
+        camera.principalPoint(principalPoint2);
 
         // and check correctness
         assertEquals(principalPoint.getInhomX(), horizontalPrincipalPoint,
                 ABSOLUTE_ERROR);
         assertEquals(principalPoint.getInhomY(), verticalPrincipalPoint,
                 ABSOLUTE_ERROR);
+        assertEquals(principalPoint, principalPoint2);
     }
 
     @Test
@@ -2387,7 +2408,7 @@ public class PinholeCameraTest {
         principalPlaneMatrix.setElementAtIndex(3, principalPlane.getD());
 
         // use SVD decomposition of principalPlaneMatrix to find points on the
-        // plane as any arbitrary linear combination of the nullspace of
+        // plane as any arbitrary linear combination of the null-space of
         // principalPlaneMatrix
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(
                 principalPlaneMatrix);
@@ -2457,6 +2478,7 @@ public class PinholeCameraTest {
         assertTrue(camera.isPointInFrontOfCamera(frontPoint1));
         assertTrue(camera.isPointInFrontOfCamera(frontPoint2));
         assertTrue(camera.isPointInFrontOfCamera(frontPoint3));
+        assertTrue(camera.isPointInFrontOfCamera(frontPoint1, 0.0));
 
         // now for back points
         assertEquals(camera.getDepth(backPoint1), negativeDepth,
@@ -2989,17 +3011,21 @@ public class PinholeCameraTest {
             final PinholeCamera camera = new PinholeCamera(cameraMatrix);
 
             try {
-                // backproject dual conic into dual quadric
+                // back-project dual conic into dual quadric
                 final DualQuadric dualQuadric = camera.backProject(dualConic);
+                final DualQuadric dualQuadric2 = new DualQuadric();
+                camera.backProject(dualConic, dualQuadric2);
 
-                // backproject planes of dual conic
+                assertEquals(dualQuadric.asMatrix(), dualQuadric2.asMatrix());
+
+                // back-project planes of dual conic
                 final Plane plane1 = camera.backProject(line1);
                 final Plane plane2 = camera.backProject(line2);
                 final Plane plane3 = camera.backProject(line3);
                 final Plane plane4 = camera.backProject(line4);
                 final Plane plane5 = camera.backProject(line5);
 
-                // check that backprojected planes are locus of backprojected dual
+                // check that back-projected planes are locus of back-projected dual
                 // quadric
                 assertTrue(dualQuadric.isLocus(plane1));
                 assertTrue(dualQuadric.isLocus(plane2));
@@ -3009,6 +3035,10 @@ public class PinholeCameraTest {
 
                 // project dual quadric into dual conic
                 final DualConic dualConic2 = camera.project(dualQuadric);
+                final DualConic dualConic3 = new DualConic();
+                camera.project(dualQuadric, dualConic3);
+
+                assertEquals(dualConic2.asMatrix(), dualConic3.asMatrix());
 
                 // check that lines are locus of projected dual conic
                 assertTrue(dualConic2.isLocus(line1));
@@ -3184,22 +3214,37 @@ public class PinholeCameraTest {
                 MAX_RANDOM_VALUE);
         final PinholeCamera camera = new PinholeCamera(cameraMatrix);
 
-        // backproject conic into quadric
+        // back-project conic into quadric
         final Quadric quadric = camera.backProject(conic);
+        final Quadric quadric2 = new Quadric();
+        camera.backProject(conic, quadric2);
 
-        // backproject planes of dual conic
+        assertEquals(quadric.asMatrix(), quadric2.asMatrix());
+
+        // back-project planes of dual conic
         final Point3D point1b = camera.backProject(point1);
         final Point3D point2b = camera.backProject(point2);
         final Point3D point3b = camera.backProject(point3);
         final Point3D point4b = camera.backProject(point4);
         final Point3D point5b = camera.backProject(point5);
 
-        // check that backprojected points are locus of backprojected quadric
+        // check that back-projected points are locus of back-projected quadric
         assertTrue(quadric.isLocus(point1b, ABSOLUTE_ERROR));
         assertTrue(quadric.isLocus(point2b, ABSOLUTE_ERROR));
         assertTrue(quadric.isLocus(point3b, ABSOLUTE_ERROR));
         assertTrue(quadric.isLocus(point4b, ABSOLUTE_ERROR));
         assertTrue(quadric.isLocus(point5b, ABSOLUTE_ERROR));
+
+        // project quadric into conic
+        final Conic conic2 = camera.project(quadric);
+        final Conic conic3 = new Conic();
+        camera.project(quadric, conic3);
+
+        conic.normalize();
+        conic2.normalize();
+        conic3.normalize();
+
+        assertEquals(conic2.asMatrix(), conic3.asMatrix());
     }
 
     @Test
@@ -3455,6 +3500,10 @@ public class PinholeCameraTest {
         lines2D.add(line2D4);
 
         final List<Plane> planes = camera1.backProjectLines(lines2D);
+        final List<Plane> planes2 = new ArrayList<>();
+        camera1.backProjectLines(lines2D, planes2);
+
+        assertEquals(planes, planes2);
 
         final PinholeCamera camera2 = new PinholeCamera();
         camera2.setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4,

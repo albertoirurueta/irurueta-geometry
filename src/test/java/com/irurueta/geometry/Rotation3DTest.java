@@ -40,6 +40,16 @@ public class Rotation3DTest {
     private static final int TIMES = 10;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-12, Rotation3D.DEFAULT_VALID_THRESHOLD, 0.0);
+        assertEquals(0.0, Rotation3D.MIN_THRESHOLD, 0.0);
+        assertEquals(3, Rotation3D.INHOM_COORDS);
+        assertEquals(4, Rotation3D.HOM_COORDS);
+        assertEquals(Rotation3DType.QUATERNION, Rotation3D.DEFAULT_TYPE);
+        assertEquals(1e-9, Rotation3D.DEFAULT_COMPARISON_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testCreate() throws WrongSizeException, RotationException {
         Rotation3D rotation = Rotation3D.create();
         assertEquals(rotation.getType(), Rotation3D.DEFAULT_TYPE);
@@ -55,6 +65,12 @@ public class Rotation3DTest {
 
         rotation = Rotation3D.create(Rotation3DType.MATRIX_ROTATION3D);
         assertEquals(rotation.getType(), Rotation3DType.MATRIX_ROTATION3D);
+        m = rotation.asInhomogeneousMatrix();
+        assertTrue(m.equals(Matrix.identity(INHOM_COORDS, INHOM_COORDS),
+                ABSOLUTE_ERROR));
+
+        rotation = Rotation3D.create(Rotation3DType.QUATERNION);
+        assertEquals(rotation.getType(), Rotation3DType.QUATERNION);
         m = rotation.asInhomogeneousMatrix();
         assertTrue(m.equals(Matrix.identity(INHOM_COORDS, INHOM_COORDS),
                 ABSOLUTE_ERROR));
@@ -81,18 +97,6 @@ public class Rotation3DTest {
 
         rotation = Rotation3D.create(axis, theta);
         assertEquals(rotation.getType(), Rotation3D.DEFAULT_TYPE);
-        assertArrayEquals(axis, rotation.getRotationAxis(), ABSOLUTE_ERROR);
-        assertEquals(theta, rotation.getRotationAngle(), ABSOLUTE_ERROR);
-
-        rotation = Rotation3D.create(axis, theta,
-                Rotation3DType.AXIS_ROTATION3D);
-        assertEquals(rotation.getType(), Rotation3DType.AXIS_ROTATION3D);
-        assertArrayEquals(axis, rotation.getRotationAxis(), ABSOLUTE_ERROR);
-        assertEquals(theta, rotation.getRotationAngle(), ABSOLUTE_ERROR);
-
-        rotation = Rotation3D.create(axis, theta,
-                Rotation3DType.MATRIX_ROTATION3D);
-        assertEquals(rotation.getType(), Rotation3DType.MATRIX_ROTATION3D);
         double[] axis2 = rotation.getRotationAxis();
         // check axis are equal up to scale
         double scaleX = axis[0] / axis2[0];
@@ -104,12 +108,50 @@ public class Rotation3DTest {
         assertEquals(Math.abs(theta / rotation.getRotationAngle()), 1.0,
                 ABSOLUTE_ERROR);
 
+        rotation = Rotation3D.create(axis, theta,
+                Rotation3DType.AXIS_ROTATION3D);
+        assertEquals(rotation.getType(), Rotation3DType.AXIS_ROTATION3D);
+        assertArrayEquals(axis, rotation.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getRotationAngle(), ABSOLUTE_ERROR);
+
+        rotation = Rotation3D.create(axis, theta,
+                Rotation3DType.MATRIX_ROTATION3D);
+        assertEquals(rotation.getType(), Rotation3DType.MATRIX_ROTATION3D);
+        axis2 = rotation.getRotationAxis();
+        // check axis are equal up to scale
+        scaleX = axis[0] / axis2[0];
+        scaleY = axis[1] / axis2[1];
+        scaleZ = axis[2] / axis2[2];
+        assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
+        assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
+        assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta / rotation.getRotationAngle()), 1.0,
+                ABSOLUTE_ERROR);
+
+        rotation = Rotation3D.create(axis, theta, Rotation3DType.QUATERNION);
+        assertEquals(rotation.getType(), Rotation3DType.QUATERNION);
+        axis2 = rotation.getRotationAxis();
+        // check axis are equal up to scale
+        scaleX = axis[0] / axis2[0];
+        scaleY = axis[1] / axis2[1];
+        scaleZ = axis[2] / axis2[2];
+        assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
+        assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
+        assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta / rotation.getRotationAngle()), 1.0,
+                ABSOLUTE_ERROR);
+
         rotation = Rotation3D.create(axisX, axisY, axisZ, theta);
         assertEquals(rotation.getType(), Rotation3D.DEFAULT_TYPE);
-        assertEquals(axisX, rotation.getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(axisY, rotation.getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(axisZ, rotation.getRotationAxis()[2], ABSOLUTE_ERROR);
-        assertEquals(theta, rotation.getRotationAngle(), ABSOLUTE_ERROR);
+        axis2 = rotation.getRotationAxis();
+        scaleX = axisX / axis2[0];
+        scaleY = axisY / axis2[1];
+        scaleZ = axisZ / axis2[2];
+        assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
+        assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
+        assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta / rotation.getRotationAngle()), 1.0,
+                ABSOLUTE_ERROR);
 
         rotation = Rotation3D.create(axisX, axisY, axisZ, theta,
                 Rotation3DType.AXIS_ROTATION3D);
@@ -122,6 +164,19 @@ public class Rotation3DTest {
         rotation = Rotation3D.create(axisX, axisY, axisZ, theta,
                 Rotation3DType.MATRIX_ROTATION3D);
         assertEquals(rotation.getType(), Rotation3DType.MATRIX_ROTATION3D);
+        axis2 = rotation.getRotationAxis();
+        scaleX = axisX / axis2[0];
+        scaleY = axisY / axis2[1];
+        scaleZ = axisZ / axis2[2];
+        assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
+        assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
+        assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta / rotation.getRotationAngle()), 1.0,
+                ABSOLUTE_ERROR);
+
+        rotation = Rotation3D.create(axisX, axisY, axisZ, theta,
+                Rotation3DType.QUATERNION);
+        assertEquals(rotation.getType(), Rotation3DType.QUATERNION);
         axis2 = rotation.getRotationAxis();
         scaleX = axisX / axis2[0];
         scaleY = axisY / axis2[1];
@@ -184,6 +239,8 @@ public class Rotation3DTest {
         assertTrue(axisMatrix.equals(axisMatrix2, ABSOLUTE_ERROR));
 
         final double[] axis2 = rotation.getRotationAxis();
+        final double[] axis3 = new double[3];
+        rotation.rotationAxis(axis3);
 
         final double scaleX = axis[0] / axis2[0];
         final double scaleY = axis[0] / axis2[0];
@@ -192,6 +249,7 @@ public class Rotation3DTest {
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
         assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+        assertArrayEquals(axis2, axis3, 0.0);
 
         // and point on rotated plane should be rotated exactly theta
         // radians
@@ -199,7 +257,91 @@ public class Rotation3DTest {
 
         // because vPoint is already normalized (from SVD decomposition)
         // we only need to normalize rotated point to compute the rotation
-        // angle as the arcosine of their dot product
+        // angle as the arc-cosine of their dot product
+        final double norm2 = Utils.normF(pointMatrix2);
+        pointMatrix2.multiplyByScalar(1.0 / norm2);
+
+        final double dotProduct = pointMatrix.transposeAndReturnNew().
+                multiplyAndReturnNew(pointMatrix2).getElementAtIndex(0);
+
+        final double theta2 = Math.acos(dotProduct);
+        final double theta2b = rotation.getRotationAngle();
+
+        // check correctness of angles (up to sign for this test)
+        assertEquals(Math.abs(theta), Math.abs(theta2), ABSOLUTE_ERROR);
+
+        // check correctness of angles (including sign) for method in class
+        if (scaleX > 0.0) {
+            assertEquals(theta, theta2b, ABSOLUTE_ERROR);
+        } else {
+            assertEquals(theta, -theta2b, ABSOLUTE_ERROR);
+        }
+    }
+
+    @Test
+    public void testGetSetAxisAndRotation2() throws WrongSizeException,
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, RotationException {
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+        final Rotation3D rotation = Rotation3D.create();
+
+        // Find any 3 orthogonal vectors, 1st will be axis of rotation, and the
+        // remaining two will lie on the rotation plane and will be used to test
+        // theta angle
+
+        // To find 3 orthogonal vectors, we use V matrix of a singular value
+        // decomposition of any Nx3 matrix
+        final Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+
+        decomposer.decompose();
+
+        final Matrix v = decomposer.getV();
+
+        // axis of rotation
+        final Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
+
+        // inhomogeneous coordinates of point laying on rotation plane
+        final Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
+
+        final double axisX = axisMatrix.getElementAtIndex(0);
+        final double axisY = axisMatrix.getElementAtIndex(1);
+        final double axisZ = axisMatrix.getElementAtIndex(2);
+        final double[] axis = axisMatrix.toArray();
+        rotation.setAxisAndRotation(axisX, axisY, axisZ, theta);
+
+        // To test correctness of rotation, axis should remain equal
+        final Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
+
+        final Matrix axisMatrix2 = rotationMatrix.multiplyAndReturnNew(axisMatrix);
+
+        assertTrue(axisMatrix.equals(axisMatrix2, ABSOLUTE_ERROR));
+
+        final double[] axis2 = rotation.getRotationAxis();
+        final double[] axis3 = new double[3];
+        rotation.rotationAxis(axis3);
+
+        final double scaleX = axis[0] / axis2[0];
+        final double scaleY = axis[0] / axis2[0];
+        final double scaleZ = axis[0] / axis2[0];
+
+        assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
+        assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
+        assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+        assertArrayEquals(axis2, axis3, 0.0);
+
+        // and point on rotated plane should be rotated exactly theta
+        // radians
+        final Matrix pointMatrix2 = rotationMatrix.multiplyAndReturnNew(pointMatrix);
+
+        // because vPoint is already normalized (from SVD decomposition)
+        // we only need to normalize rotated point to compute the rotation
+        // angle as the arc-cosine of their dot product
         final double norm2 = Utils.normF(pointMatrix2);
         pointMatrix2.multiplyByScalar(1.0 / norm2);
 
@@ -265,7 +407,7 @@ public class Rotation3DTest {
             axis3[2] = axisZ + randomizer.nextDouble();
             final Rotation3D rotation5 = Rotation3D.create(axis3, theta);
 
-            // check equalness
+            // check equal-ness
             assertEquals(rotation1, rotation1);
             assertTrue(rotation1.equals(rotation1,
                     Rotation3D.DEFAULT_COMPARISON_THRESHOLD));

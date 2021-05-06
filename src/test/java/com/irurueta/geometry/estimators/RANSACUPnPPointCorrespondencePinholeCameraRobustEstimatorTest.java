@@ -68,6 +68,39 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertTrue(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(0.05f, PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, PinholeCameraRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, PinholeCameraRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, PinholeCameraRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, PinholeCameraRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, PinholeCameraRobustEstimator.MIN_ITERATIONS);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(6, PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertFalse(RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -140,6 +173,10 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getSkewness(), 0.0, 0.0);
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // test constructor with listener
@@ -214,6 +251,10 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getSkewness(), 0.0, 0.0);
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
 
         // test constructor with points
@@ -295,6 +336,10 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getSkewness(), 0.0, 0.0);
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
         // Force IllegalArgumentException
         final List<Point3D> points3DEmpty = new ArrayList<>();
@@ -388,6 +433,10 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(estimator.getSkewness(), 0.0, 0.0);
         assertEquals(estimator.getHorizontalPrincipalPoint(), 0.0, 0.0);
         assertEquals(estimator.getVerticalPrincipalPoint(), 0.0, 0.0);
+        assertEquals(estimator.isComputeAndKeepInliersEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(estimator.isComputeAndKeepResidualsEnabled(),
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
 
         // Force IllegalArgumentException
         estimator = null;
@@ -409,14 +458,14 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetStopThreshold() throws LockedException {
+    public void testGetSetThreshold() throws LockedException {
         final RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(estimator.getThreshold(),
-                LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
+                RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator.
+                        DEFAULT_THRESHOLD, 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
@@ -430,6 +479,36 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
+        final RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
+                new RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+
+        // check default value
+        assertFalse(estimator.isComputeAndKeepInliersEnabled());
+
+        // set new value
+        estimator.setComputeAndKeepInliersEnabled(true);
+
+        // check
+        assertTrue(estimator.isComputeAndKeepInliersEnabled());
+    }
+
+    @Test
+    public void testIsSetComputeAndKeepResidualsEnabled() throws LockedException {
+        final RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
+                new RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+
+        // check default value
+        assertFalse(estimator.isComputeAndKeepResidualsEnabled());
+
+        // set new value
+        estimator.setComputeAndKeepResidualsEnabled(true);
+
+        // check
+        assertTrue(estimator.isComputeAndKeepResidualsEnabled());
     }
 
     @Test
@@ -601,7 +680,7 @@ public class RANSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSugestSkewnessValueEnabled() throws LockedException {
+    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
         final RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 

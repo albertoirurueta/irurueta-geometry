@@ -48,7 +48,7 @@ public abstract class AffineTransformation3DRefiner<S1, S2> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    protected double mRefinementStandardDeviation;
+    private double mRefinementStandardDeviation;
 
     /**
      * Constructor.

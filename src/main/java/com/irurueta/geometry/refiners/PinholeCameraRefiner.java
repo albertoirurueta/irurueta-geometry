@@ -123,7 +123,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestSkewnessValueEnabled =
+    private boolean mSuggestSkewnessValueEnabled =
             DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
 
     /**
@@ -353,7 +353,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
     }
 
     /**
-     * Indicats whether skewness value is suggested or not. When enabled, the
+     * Indicates whether skewness value is suggested or not. When enabled, the
      * estimator will attempt to enforce suggested value in an iterative manner
      * starting from an initially estimated camera.
      * Even when suggestion is enabled, the iterative algorithm might not reach

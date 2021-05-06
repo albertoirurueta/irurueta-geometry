@@ -71,7 +71,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -460,7 +460,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to determine whether points are inliers or
@@ -511,7 +511,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     }
 
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.

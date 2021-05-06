@@ -23,7 +23,29 @@ public class PinholeCameraEstimatorTest {
 
     @Test
     public void testCreate() {
-        PinholeCameraEstimator estimator = PinholeCameraEstimator.create();
+        // create with type
+        PinholeCameraEstimator estimator = PinholeCameraEstimator.create(
+                PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(estimator.getType(),
+                PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
+
+        estimator = PinholeCameraEstimator.create(
+                PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(estimator.getType(),
+                PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
+
+        estimator = PinholeCameraEstimator.create(
+                PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(estimator.getType(),
+                PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+
+        estimator = PinholeCameraEstimator.create(
+                PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(estimator.getType(),
+                PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
+
+
+        estimator = PinholeCameraEstimator.create();
 
         // check correctness
         assertNull(estimator.getListener());

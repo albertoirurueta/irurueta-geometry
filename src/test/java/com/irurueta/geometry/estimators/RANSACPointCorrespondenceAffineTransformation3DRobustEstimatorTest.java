@@ -57,6 +57,29 @@ public class RANSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, AffineTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, AffineTransformation3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, AffineTransformation3DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, AffineTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, AffineTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, AffineTransformation3DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, AffineTransformation3DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, AffineTransformation3DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(AffineTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(AffineTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.MIN_THRESHOLD,
+                0.0);
+        assertFalse(RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACPointCorrespondenceAffineTransformation3DRobustEstimator estimator =

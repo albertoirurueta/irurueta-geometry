@@ -42,6 +42,16 @@ public class ConicTest {
     private static final int TIMES = 10;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, BaseConic.BASECONIC_MATRIX_ROW_SIZE);
+        assertEquals(3, BaseConic.BASECONIC_MATRIX_COLUMN_SIZE);
+        assertEquals(6, BaseConic.N_PARAMS);
+        assertEquals(1e-12, BaseConic.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(1e-12, BaseConic.DEFAULT_PERPENDICULAR_THRESHOLD, 0.0);
+        assertEquals(0.0, BaseConic.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongSizeException,
             IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentPointsException {
@@ -820,7 +830,11 @@ public class ConicTest {
 
         final Conic conic = new Conic(conicMatrix);
         final DualConic dualConic = conic.getDualConic();
+        final DualConic dualConic2 = new DualConic();
+        conic.dualConic(dualConic2);
+
         final Matrix dualConicMatrix2 = dualConic.asMatrix();
+        assertEquals(dualConic.asMatrix(), dualConic2.asMatrix());
 
         // normalize dual conic matrices
         double norm = com.irurueta.algebra.Utils.normF(dualConicMatrix);
@@ -1049,5 +1063,159 @@ public class ConicTest {
         assertEquals(ac.getF(), 1.0, 0.0);
 
         assertEquals(ac.asMatrix(), Matrix.identity(3, 3));
+    }
+
+    @Test
+    public void testSetParametersFromPoints() throws WrongSizeException, DecomposerException, CoincidentPointsException {
+        Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        HomogeneousPoint2D point1 = new HomogeneousPoint2D(
+                m.getElementAt(0, 0), m.getElementAt(0, 1),
+                m.getElementAt(0, 2));
+        HomogeneousPoint2D point2 = new HomogeneousPoint2D(
+                m.getElementAt(1, 0), m.getElementAt(1, 1),
+                m.getElementAt(1, 2));
+        HomogeneousPoint2D point3 = new HomogeneousPoint2D(
+                m.getElementAt(2, 0), m.getElementAt(2, 1),
+                m.getElementAt(2, 2));
+        HomogeneousPoint2D point4 = new HomogeneousPoint2D(
+                m.getElementAt(3, 0), m.getElementAt(3, 1),
+                m.getElementAt(3, 2));
+        HomogeneousPoint2D point5 = new HomogeneousPoint2D(
+                m.getElementAt(4, 0), m.getElementAt(4, 1),
+                m.getElementAt(4, 2));
+
+        // estimate conic that lies inside of provided 5 homogeneous 2D
+        // points
+        Matrix conicMatrix = new Matrix(5, 6);
+        double x = point1.getHomX();
+        double y = point1.getHomY();
+        double w = point1.getHomW();
+        conicMatrix.setElementAt(0, 0, x * x);
+        conicMatrix.setElementAt(0, 1, x * y);
+        conicMatrix.setElementAt(0, 2, y * y);
+        conicMatrix.setElementAt(0, 3, x * w);
+        conicMatrix.setElementAt(0, 4, y * w);
+        conicMatrix.setElementAt(0, 5, w * w);
+        x = point2.getHomX();
+        y = point2.getHomY();
+        w = point2.getHomW();
+        conicMatrix.setElementAt(1, 0, x * x);
+        conicMatrix.setElementAt(1, 1, x * y);
+        conicMatrix.setElementAt(1, 2, y * y);
+        conicMatrix.setElementAt(1, 3, x * w);
+        conicMatrix.setElementAt(1, 4, y * w);
+        conicMatrix.setElementAt(1, 5, w * w);
+        x = point3.getHomX();
+        y = point3.getHomY();
+        w = point3.getHomW();
+        conicMatrix.setElementAt(2, 0, x * x);
+        conicMatrix.setElementAt(2, 1, x * y);
+        conicMatrix.setElementAt(2, 2, y * y);
+        conicMatrix.setElementAt(2, 3, x * w);
+        conicMatrix.setElementAt(2, 4, y * w);
+        conicMatrix.setElementAt(2, 5, w * w);
+        x = point4.getHomX();
+        y = point4.getHomY();
+        w = point4.getHomW();
+        conicMatrix.setElementAt(3, 0, x * x);
+        conicMatrix.setElementAt(3, 1, x * y);
+        conicMatrix.setElementAt(3, 2, y * y);
+        conicMatrix.setElementAt(3, 3, x * w);
+        conicMatrix.setElementAt(3, 4, y * w);
+        conicMatrix.setElementAt(3, 5, w * w);
+        x = point5.getHomX();
+        y = point5.getHomY();
+        w = point5.getHomW();
+        conicMatrix.setElementAt(4, 0, x * x);
+        conicMatrix.setElementAt(4, 1, x * y);
+        conicMatrix.setElementAt(4, 2, y * y);
+        conicMatrix.setElementAt(4, 3, x * w);
+        conicMatrix.setElementAt(4, 4, y * w);
+        conicMatrix.setElementAt(4, 5, w * w);
+
+        while (com.irurueta.algebra.Utils.rank(conicMatrix) < 5) {
+            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            point1 = new HomogeneousPoint2D(
+                    m.getElementAt(0, 0), m.getElementAt(0, 1),
+                    m.getElementAt(0, 2));
+            point2 = new HomogeneousPoint2D(
+                    m.getElementAt(1, 0), m.getElementAt(1, 1),
+                    m.getElementAt(1, 2));
+            point3 = new HomogeneousPoint2D(
+                    m.getElementAt(2, 0), m.getElementAt(2, 1),
+                    m.getElementAt(2, 2));
+            point4 = new HomogeneousPoint2D(
+                    m.getElementAt(3, 0), m.getElementAt(3, 1),
+                    m.getElementAt(3, 2));
+            point5 = new HomogeneousPoint2D(
+                    m.getElementAt(4, 0), m.getElementAt(4, 1),
+                    m.getElementAt(4, 2));
+
+            conicMatrix = new Matrix(5, 6);
+            x = point1.getHomX();
+            y = point1.getHomY();
+            w = point1.getHomW();
+            conicMatrix.setElementAt(0, 0, x * x);
+            conicMatrix.setElementAt(0, 1, x * y);
+            conicMatrix.setElementAt(0, 2, y * y);
+            conicMatrix.setElementAt(0, 3, x * w);
+            conicMatrix.setElementAt(0, 4, y * w);
+            conicMatrix.setElementAt(0, 5, w * w);
+            x = point2.getHomX();
+            y = point2.getHomY();
+            w = point2.getHomW();
+            conicMatrix.setElementAt(1, 0, x * x);
+            conicMatrix.setElementAt(1, 1, x * y);
+            conicMatrix.setElementAt(1, 2, y * y);
+            conicMatrix.setElementAt(1, 3, x * w);
+            conicMatrix.setElementAt(1, 4, y * w);
+            conicMatrix.setElementAt(1, 5, w * w);
+            x = point3.getHomX();
+            y = point3.getHomY();
+            w = point3.getHomW();
+            conicMatrix.setElementAt(2, 0, x * x);
+            conicMatrix.setElementAt(2, 1, x * y);
+            conicMatrix.setElementAt(2, 2, y * y);
+            conicMatrix.setElementAt(2, 3, x * w);
+            conicMatrix.setElementAt(2, 4, y * w);
+            conicMatrix.setElementAt(2, 5, w * w);
+            x = point4.getHomX();
+            y = point4.getHomY();
+            w = point4.getHomW();
+            conicMatrix.setElementAt(3, 0, x * x);
+            conicMatrix.setElementAt(3, 1, x * y);
+            conicMatrix.setElementAt(3, 2, y * y);
+            conicMatrix.setElementAt(3, 3, x * w);
+            conicMatrix.setElementAt(3, 4, y * w);
+            conicMatrix.setElementAt(3, 5, w * w);
+            x = point5.getHomX();
+            y = point5.getHomY();
+            w = point5.getHomW();
+            conicMatrix.setElementAt(4, 0, x * x);
+            conicMatrix.setElementAt(4, 1, x * y);
+            conicMatrix.setElementAt(4, 2, y * y);
+            conicMatrix.setElementAt(4, 3, x * w);
+            conicMatrix.setElementAt(4, 4, y * w);
+            conicMatrix.setElementAt(4, 5, w * w);
+        }
+
+        final Conic conic = new Conic();
+        conic.setParametersFromPoints(point1, point2, point3, point4, point5);
+        assertTrue(conic.isLocus(point1, LOCUS_THRESHOLD));
+        assertTrue(conic.isLocus(point2, LOCUS_THRESHOLD));
+        assertTrue(conic.isLocus(point3, LOCUS_THRESHOLD));
+        assertTrue(conic.isLocus(point4, LOCUS_THRESHOLD));
+        assertTrue(conic.isLocus(point5, LOCUS_THRESHOLD));
+
+        // Force CoincidentPointsException
+        try {
+            conic.setParametersFromPoints(point1, point2, point3, point4, point4);
+            fail("CoincidentPointsException expected but not thrown");
+        } catch (final CoincidentPointsException ignore) {
+        }
     }
 }

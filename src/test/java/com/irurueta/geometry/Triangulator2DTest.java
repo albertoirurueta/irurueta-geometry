@@ -38,6 +38,13 @@ public class Triangulator2DTest {
     private static final double ABSOLUTE_ERROR = 1e-8;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, Triangulator2D.MIN_VERTICES);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
+                Triangulator2D.DEFAULT_TRIANGULATOR_METHOD);
+    }
+
+    @Test
     public void testCreateAndGetMethod() {
         Triangulator2D triangulator = Triangulator2D.create();
         assertNotNull(triangulator);

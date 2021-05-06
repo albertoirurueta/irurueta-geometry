@@ -32,5 +32,8 @@ public class NotAvailableExceptionTest {
         ex = new NotAvailableException("message",
                 new Exception());
         assertNotNull(ex);
+
+        ex = new NotAvailableException(new Exception());
+        assertNotNull(ex);
     }
 }

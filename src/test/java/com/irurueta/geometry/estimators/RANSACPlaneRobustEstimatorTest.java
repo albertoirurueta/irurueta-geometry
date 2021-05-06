@@ -55,6 +55,22 @@ public class RANSACPlaneRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, PlaneRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, PlaneRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, PlaneRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, PlaneRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, PlaneRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, PlaneRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, PlaneRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, RANSACPlaneRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, RANSACPlaneRobustEstimator.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACPlaneRobustEstimator estimator = new RANSACPlaneRobustEstimator();

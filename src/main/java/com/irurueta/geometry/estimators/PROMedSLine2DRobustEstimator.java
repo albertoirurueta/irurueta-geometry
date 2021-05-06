@@ -76,7 +76,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
 
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample.
+     * The larger the score value the better the quality of the sample.
      */
     private double[] mQualityScores;
 
@@ -287,7 +287,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the 2D line estimation.
+     * Indicates if estimator is ready to start the 2D line estimation.
      * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
      *

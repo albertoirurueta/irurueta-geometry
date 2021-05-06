@@ -114,7 +114,7 @@ public class PROSACQuadricRobustEstimator extends QuadricRobustEstimator {
     /**
      * Constructor.
      *
-     * @param qualityScores quality socres corresponding to each provided point.
+     * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 9 points).
      */
@@ -201,7 +201,7 @@ public class PROSACQuadricRobustEstimator extends QuadricRobustEstimator {
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on
+     * The threshold refers to the amount of error a possible solution has on
      * a given point.
      *
      * @param threshold threshold to be set.
@@ -250,7 +250,7 @@ public class PROSACQuadricRobustEstimator extends QuadricRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the conic estimation.
+     * Indicates if estimator is ready to start the conic estimation.
      * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
      *

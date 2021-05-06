@@ -313,7 +313,7 @@ public class Point3DNormalizer {
     }
 
     /**
-     * Computes normalization and denormalization transformations
+     * Computes normalization and de-normalization transformations
      *
      * @throws NotReadyException   if not enough data has been provided to
      *                             compute normalization.

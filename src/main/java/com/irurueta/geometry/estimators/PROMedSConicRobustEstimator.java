@@ -75,7 +75,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -261,7 +261,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
 
     /**
      * Returns quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sampled point.
+     * The larger the score value the better the quality of the sampled point.
      *
      * @return quality scores corresponding to each point.
      */
@@ -289,7 +289,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the conic estimation.
+     * Indicates if estimator is ready to start the conic estimation.
      * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
      *

@@ -35,6 +35,7 @@ import java.util.Arrays;
  * at very large coordinates, since numerical instabilities may occur. For
  * those cases use a ProjectiveTransformation2D instead.
  */
+@SuppressWarnings("DuplicatedCode")
 public class AffineTransformation2D extends Transformation2D
         implements Serializable {
 
@@ -813,12 +814,10 @@ public class AffineTransformation2D extends Transformation2D
      *                        be stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      *                                     the resulting output dual conic matrix is not considered to be symmetric.
-     * @throws AlgebraException            raised if transform cannot be computed because
-     *                                     of numerical instabilities.
      */
     @Override
     public void transform(final DualConic inputDualConic, final DualConic outputDualConic)
-            throws NonSymmetricMatrixException, AlgebraException {
+            throws NonSymmetricMatrixException {
         // line' * dualConic * line = 0
         // line' * T^-1 * T * dualConic * T' * T^-1'* line
 

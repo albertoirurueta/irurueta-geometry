@@ -35,6 +35,14 @@ public class CircleTest {
     private static final double MAX_RANDOM_DEGREES = 180.0;
 
     @Test
+    public void testConstants() {
+        assertEquals(0.0, Circle.MIN_RADIUS, 0.0);
+        assertEquals(1e-9, Circle.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, Circle.MIN_THRESHOLD, 0.0);
+        assertEquals(1e-12, Circle.EPS, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws ColinearPointsException {
         // Test empty constructor
         Circle circle = new Circle();
@@ -569,10 +577,13 @@ public class CircleTest {
         // find tangent line at locus point
         final Line2D line = circle.getTangentLineAt(point);
         final Line2D line2 = circle.getTangentLineAt(point, Circle.DEFAULT_THRESHOLD);
+        final Line2D line3 = new Line2D();
+        circle.tangentLineAt(point, line3, Circle.DEFAULT_THRESHOLD);
 
         // check that point is also at line's locus
         assertTrue(line.isLocus(point));
         assertTrue(line2.isLocus(point));
+        assertEquals(line2, line3);
 
         // check that line angle is equal to theta
         final double lineAngle = line.getAngle();

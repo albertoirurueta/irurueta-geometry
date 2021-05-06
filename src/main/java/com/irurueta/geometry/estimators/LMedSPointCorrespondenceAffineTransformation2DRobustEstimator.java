@@ -207,6 +207,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public AffineTransformation2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {

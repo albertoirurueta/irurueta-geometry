@@ -59,6 +59,14 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACPointCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACPointCorrespondenceAffineTransformation2DRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACPointCorrespondenceAffineTransformation2DRobustEstimator estimator =

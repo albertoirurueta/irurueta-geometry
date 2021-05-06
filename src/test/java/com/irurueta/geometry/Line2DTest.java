@@ -44,6 +44,8 @@ public class Line2DTest {
     public void testConstants() {
         assertEquals(3, Line2D.LINE_NUMBER_PARAMS);
         assertEquals(1e-12, Line2D.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(0.0, Line2D.MIN_THRESHOLD, 0.0);
+        assertEquals(1e-10, Line2D.DEFAULT_COMPARISON_THRESHOLD, 0.0);
     }
 
     @Test
@@ -125,7 +127,7 @@ public class Line2DTest {
             decomposer.decompose();
         }
 
-        // V contains the nullspace of m in the last column, which is the line
+        // V contains the null-space of m in the last column, which is the line
         //joining both points in the rows of m
         final Matrix v = decomposer.getV();
 
@@ -298,7 +300,7 @@ public class Line2DTest {
         lineArray[1] = V.getElementAt(1, 2);
         lineArray[2] = V.getElementAt(2, 2);
 
-        // find colinear point using a third point up to scale of the 1st one
+        // find co-linear point using a third point up to scale of the 1st one
         //using homogeneous coordinates
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double scaleValue = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -335,7 +337,7 @@ public class Line2DTest {
     }
 
     @Test
-    public void testSetParamsetersFromPointAndDirectorVector() {
+    public void testSetParametersFromPointAndDirectorVector() {
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);

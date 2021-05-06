@@ -65,6 +65,14 @@ public class MSACEuclideanTransformation2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACEuclideanTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACEuclideanTransformation2DRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACEuclideanTransformation2DRobustEstimator estimator =

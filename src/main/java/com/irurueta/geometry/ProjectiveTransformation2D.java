@@ -1100,7 +1100,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                    stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      *                                     the resulting output conic matrix is not considered to be symmetric.
-     * @throws AlgebraException            raised if transform cannot be computed becauseof
+     * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
     @Override

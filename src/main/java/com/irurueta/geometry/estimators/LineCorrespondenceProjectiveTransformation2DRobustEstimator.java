@@ -95,7 +95,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
 
     /**
      * Constructor with listener and lists of lines to be used to estimate
-     * projective 2D tranformation.
+     * projective 2D transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -186,7 +186,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
 
     /**
      * Returns quality scores corresponding to each pair of matched lines.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
      *
@@ -688,6 +688,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @return solution after refinement (if requested) or the provided
      * non-refined solution if not requested or refinement failed.
      */
+    @SuppressWarnings("DuplicatedCode")
     protected ProjectiveTransformation2D attemptRefine(
             final ProjectiveTransformation2D transformation) {
         if (mRefineResult) {

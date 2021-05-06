@@ -59,6 +59,14 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         LMedSPointCorrespondenceAffineTransformation2DRobustEstimator estimator =

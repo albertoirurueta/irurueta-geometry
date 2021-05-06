@@ -79,7 +79,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -298,7 +298,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */
@@ -327,7 +327,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
     }
 
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.

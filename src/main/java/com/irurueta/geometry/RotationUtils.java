@@ -325,7 +325,7 @@ public class RotationUtils {
             final Matrix p = Matrix.newFromArray(point, true);
             r.multiply(p);
 
-            // copty to result
+            // copy to result
             r.getSubmatrixAsArray(0, 0, r.getRows() - 1,
                     r.getColumns() - 1, result);
 
@@ -390,7 +390,7 @@ public class RotationUtils {
     }
 
     /**
-     * Rotates a point by using the rotation matrix obtained from a quaterinon.
+     * Rotates a point by using the rotation matrix obtained from a quaternion.
      *
      * @param q      quaternion containing rotation information.
      * @param point  array containing inhomogeneous 3D coordinates of a point to
@@ -407,7 +407,7 @@ public class RotationUtils {
     }
 
     /**
-     * Rotates a poing by using the rotation matrix obtained from a quaternion.
+     * Rotates a point by using the rotation matrix obtained from a quaternion.
      *
      * @param q     quaternion containing rotation information.
      * @param point array containing inhomogeneous 3D coordinates of a point to
@@ -727,7 +727,7 @@ public class RotationUtils {
     /**
      * Rotation to convert camera body to camera sensor.
      *
-     * @return a new instance containint rotation.
+     * @return a new instance containing rotation.
      */
     public static MatrixRotation3D cameraBodyToCameraSensorRotation() {
         final MatrixRotation3D result = new MatrixRotation3D();
@@ -738,7 +738,7 @@ public class RotationUtils {
     /**
      * Transform quaternion Gaussian to Euler Gaussian.
      * The Gaussian quaternion is provided as N(q, Q) where q is the quaternion
-     * mean and Q is the quaternon covariance, and returns an Euler angles
+     * mean and Q is the quaternion covariance, and returns an Euler angles
      * Gaussian as N(e,E) where e is the Euler angles mean and E is the Euler
      * angles covariance.
      *

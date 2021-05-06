@@ -267,7 +267,7 @@ public class LMedSMetricTransformation2DRobustEstimator extends
     }
 
     /**
-     * Estimates a metric 2D transformaiton using a robust estimator and
+     * Estimates a metric 2D transformation using a robust estimator and
      * the best set of matched 2D point correspondences found using the robust
      * estimator.
      *

@@ -1178,7 +1178,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                      stored.
      * @throws NonSymmetricMatrixException Raised if due to numerical precision
      *                                     the resulting output quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException            raised if transform cannot be computed becauseof
+     * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
     @Override
@@ -1296,7 +1296,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * provided output camera.
      *
      * @param inputCamera  camera to be transformed.
-     * @param outputCamera instance where data of transforeed camera will be
+     * @param outputCamera instance where data of transformed camera will be
      *                     stored.
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
@@ -1329,7 +1329,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * new transformation instance.
      *
      * @return inverse transformation.
-     * @throws AlgebraException if inverse transfor cannot be computed because
+     * @throws AlgebraException if inverse transform cannot be computed because
      *                          of numerical instabilities.
      */
     public Transformation3D inverseAndReturnNew() throws AlgebraException {

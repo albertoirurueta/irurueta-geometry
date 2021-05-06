@@ -56,7 +56,7 @@ public abstract class DualQuadricRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -129,7 +129,7 @@ public abstract class DualQuadricRobustEstimator {
      * Matrix representation of a 3D plane to be reused when computing
      * residuals
      */
-    protected Matrix mTestPlane;
+    private Matrix mTestPlane;
 
     /**
      * Matrix representation of a dual quadric to be reused when computing
@@ -240,7 +240,7 @@ public abstract class DualQuadricRobustEstimator {
      * Returns amount of progress variation before notifying a progress change
      * during estimation.
      *
-     * @return amount of progress variation before notiying a progres change
+     * @return amount of progress variation before notifying a progress change
      * during estimation.
      */
     public float getProgressDelta() {
@@ -377,7 +377,7 @@ public abstract class DualQuadricRobustEstimator {
      * This implementation always return null.
      * Subclasses using quality scores must implement proper behaviour.
      *
-     * @return quality scores coresponding to each plane.
+     * @return quality scores corresponding to each plane.
      */
     public double[] getQualityScores() {
         return null;
@@ -542,7 +542,7 @@ public abstract class DualQuadricRobustEstimator {
      * using provided planes and robust estimator method.
      *
      * @param planes        3D planes to estimate a dual quadric.
-     * @param qualityScores quality scores correspondign to each provided plane.
+     * @param qualityScores quality scores corresponding to each provided plane.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      dual quadric.
      * @return an instance of a dual quadric robust estimator.
@@ -605,7 +605,7 @@ public abstract class DualQuadricRobustEstimator {
 
     /**
      * Creates a dual conic robust estimator based on 3D plane samples and using
-     * provied listener and planes.
+     * provided listener and planes.
      *
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
@@ -615,7 +615,7 @@ public abstract class DualQuadricRobustEstimator {
      *                      dual quadric.
      * @return an instance of a dual quadric robust estimator.
      * @throws IllegalArgumentException if provided list of planes don't have
-     *                                  the same size as the list of provided qualitys cores, or it their size is
+     *                                  the same size as the list of provided quality scores, or it their size is
      *                                  not greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(
@@ -709,7 +709,7 @@ public abstract class DualQuadricRobustEstimator {
      *
      * @param planes        3D planes to estimate a dual quadric.
      * @param qualityScores quality scores corresponding to each provided plane.
-     * @return an instance of adual conic robust estimator.
+     * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of planes don't have the
      *                                  same size as the list of provided quality scores, or if their size is not
      *                                  greater or equal than MINIMUM_SIZE.
@@ -762,9 +762,9 @@ public abstract class DualQuadricRobustEstimator {
      * @return a dual quadric.
      * @throws LockedException          if robust estimator is locked because an
      *                                  estimation is already in progress.
-     * @throws NotReadyException        if provided input data is not enouth to start
+     * @throws NotReadyException        if provided input data is not enough to start
      *                                  the estimation.
-     * @throws RobustEstimatorException if estimation fails for any readon (i.e.
+     * @throws RobustEstimatorException if estimation fails for any reason (i.e.
      *                                  numerical instability, no solution available, etc).
      */
     public abstract DualQuadric estimate() throws LockedException,

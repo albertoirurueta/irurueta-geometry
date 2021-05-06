@@ -95,7 +95,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Constructor with listener and lists of planes to be used to estimate
-     * affine 3D tranformation.
+     * affine 3D transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -185,7 +185,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Returns quality scores corresponding to each pair of matched planes.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
      *
@@ -665,6 +665,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                         estimated transformation.
      * @return computed residual.
      */
+    @SuppressWarnings("DuplicatedCode")
     protected static double getResidual(final Plane plane, final Plane transformedPlane) {
         plane.normalize();
         transformedPlane.normalize();

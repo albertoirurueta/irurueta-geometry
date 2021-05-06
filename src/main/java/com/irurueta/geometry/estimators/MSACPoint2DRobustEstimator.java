@@ -39,7 +39,7 @@ public class MSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * Because typical resolution for points is 1 pixel, then default threshold
      * is defined as 1.
      */
-    public static final double DEFAULT_THRESHOLD = 1;
+    public static final double DEFAULT_THRESHOLD = 1.0;
 
     /**
      * Minimum value that can be set as threshold.
@@ -118,7 +118,7 @@ public class MSACPoint2DRobustEstimator extends Point2DRobustEstimator {
     /**
      * Sets threshold to determine whether lines are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on
+     * The threshold refers to the amount of error a possible solution has on
      * a given line.
      *
      * @param threshold threshold to be set.

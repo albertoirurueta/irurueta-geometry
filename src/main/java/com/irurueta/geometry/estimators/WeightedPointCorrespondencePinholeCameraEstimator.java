@@ -557,7 +557,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
             pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));
 
             // because pinholeCameraMatrix has been obtained as the last column
-            // of V, then its frobenius norm will be 1 because SVD already
+            // of V, then its Frobenius norm will be 1 because SVD already
             // returns normalized singular vector
 
             return pinholeCameraMatrix;

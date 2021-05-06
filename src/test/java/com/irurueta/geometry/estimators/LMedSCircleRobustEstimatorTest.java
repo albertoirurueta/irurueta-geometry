@@ -55,6 +55,22 @@ public class LMedSCircleRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, CircleRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, CircleRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, CircleRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, CircleRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, CircleRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, CircleRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, CircleRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1e-3, LMedSCircleRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(0.0, LMedSCircleRobustEstimator.MIN_STOP_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         LMedSCircleRobustEstimator estimator;
 
@@ -424,7 +440,7 @@ public class LMedSCircleRobustEstimatorTest implements
             reset();
 
             // check correctness of estimation by checking that all points
-            // are within the estimated circlelocus
+            // are within the estimated circle locus
             for (final Point2D p : points) {
                 assertTrue(circle2.isLocus(p, ABSOLUTE_ERROR));
             }

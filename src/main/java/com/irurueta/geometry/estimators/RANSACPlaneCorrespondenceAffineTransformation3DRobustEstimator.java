@@ -31,6 +31,7 @@ import java.util.List;
  * Finds the best affine 3D transformation for provided collections of matched
  * planes using RANSAC algorithm.
  */
+@SuppressWarnings("DuplicatedCode")
 public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
         extends PlaneCorrespondenceAffineTransformation3DRobustEstimator {
 
@@ -99,7 +100,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes  list of input planes to be used to estimate an affine
      *                     3D transformation.

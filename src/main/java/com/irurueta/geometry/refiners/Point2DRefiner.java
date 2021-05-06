@@ -45,7 +45,7 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    protected double mRefinementStandardDeviation;
+    private double mRefinementStandardDeviation;
 
     /**
      * Constructor.
@@ -110,7 +110,7 @@ public abstract class Point2DRefiner<T extends Point2D> extends
     }
 
     /**
-     * Sets standard deviation used for Levenberg-Marquardt fittin during
+     * Sets standard deviation used for Levenberg-Marquardt fitting during
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.

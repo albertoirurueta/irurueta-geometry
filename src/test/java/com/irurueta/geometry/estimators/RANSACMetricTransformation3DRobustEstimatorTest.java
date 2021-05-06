@@ -85,6 +85,27 @@ public class RANSACMetricTransformation3DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, MetricTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(3, MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(0.05f, MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, MetricTransformation3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, MetricTransformation3DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, MetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, MetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, MetricTransformation3DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, MetricTransformation3DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, MetricTransformation3DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(MetricTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(RobustEstimatorMethod.PROMedS, MetricTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, RANSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, RANSACMetricTransformation3DRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertFalse(RANSACMetricTransformation3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(RANSACMetricTransformation3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACMetricTransformation3DRobustEstimator estimator =

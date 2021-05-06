@@ -71,6 +71,9 @@ public class ProjectiveTransformation3DTest {
     public void testConstants() {
         assertEquals(3, ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
         assertEquals(4, ProjectiveTransformation3D.NUM_PROJECTIVE_PARAMS);
+        assertEquals(3, ProjectiveTransformation3D.INHOM_COORDS);
+        assertEquals(4, ProjectiveTransformation3D.HOM_COORDS);
+        assertEquals(1e-12, ProjectiveTransformation3D.EPS, 0.0);
     }
 
     @Test
@@ -1122,17 +1125,17 @@ public class ProjectiveTransformation3DTest {
     @Test
     public void testGetSetA() throws WrongSizeException {
         final Matrix a = Matrix.createWithUniformRandomValues(
-                ProjectiveTransformation2D.INHOM_COORDS,
-                ProjectiveTransformation2D.INHOM_COORDS, MIN_RANDOM_VALUE,
+                ProjectiveTransformation3D.INHOM_COORDS,
+                ProjectiveTransformation3D.INHOM_COORDS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation3D transformation =
+                new ProjectiveTransformation3D();
 
         // check default value
         assertTrue(transformation.getA().equals(Matrix.identity(
-                AffineParameters2D.INHOM_COORDS,
-                AffineParameters2D.INHOM_COORDS), ABSOLUTE_ERROR));
+                AffineParameters3D.INHOM_COORDS,
+                AffineParameters3D.INHOM_COORDS), ABSOLUTE_ERROR));
 
         // set matrix A
         transformation.setA(a);
@@ -1148,8 +1151,8 @@ public class ProjectiveTransformation3DTest {
         }
 
         // Force IllegalArgumentException
-        final Matrix badA = new Matrix(ProjectiveTransformation2D.INHOM_COORDS + 1,
-                ProjectiveTransformation2D.INHOM_COORDS + 1);
+        final Matrix badA = new Matrix(ProjectiveTransformation3D.INHOM_COORDS + 1,
+                ProjectiveTransformation3D.INHOM_COORDS + 1);
 
         try {
             transformation.setA(badA);
@@ -1177,7 +1180,7 @@ public class ProjectiveTransformation3DTest {
         // normalize
         transformation.normalize();
 
-        // check equalness with normalized T matrix
+        // check equal-ness with normalized T matrix
         assertTrue(transformation.getT().equals(normT, ABSOLUTE_ERROR));
     }
 
@@ -1426,14 +1429,10 @@ public class ProjectiveTransformation3DTest {
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
+        final double[] translation2 = transformation.getTranslation();
+        assertEquals(translation2.length,
                 ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation[2],
-                ABSOLUTE_ERROR);
+        assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
         assertEquals(transformation.getTranslationX(), translation[0],
                 ABSOLUTE_ERROR);
         assertEquals(transformation.getTranslationY(), translation[1],
@@ -1449,6 +1448,11 @@ public class ProjectiveTransformation3DTest {
             transformation.setTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            transformation.getTranslation(badTranslation);
+            fail("WrongSizeException expected but not thrown");
+        } catch (final WrongSizeException ignore) {
         }
     }
 
@@ -1522,6 +1526,136 @@ public class ProjectiveTransformation3DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testAddTranslation2() {
+        final ProjectiveTransformation3D transformation =
+                new ProjectiveTransformation3D();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] translation1 = new double[
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double[] translation2 = new double[
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        // check default value
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+
+        // set new value
+        final double[] translationCopy = Arrays.copyOf(translation1,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        transformation.setTranslation(translationCopy);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1[0],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1[1],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[2], translation1[2],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1[0],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1[1],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationZ(), translation1[2],
+                ABSOLUTE_ERROR);
+
+        // add translation
+        transformation.addTranslation(
+                translation2[0], translation2[1], translation2[2]);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1[0] +
+                translation2[0], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1[1] +
+                translation2[1], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[2], translation1[2] +
+                translation2[2], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1[0] +
+                translation2[0], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1[1] +
+                translation2[1], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationZ(), translation1[2] +
+                translation2[2], ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testAddTranslation3() {
+        final ProjectiveTransformation3D transformation =
+                new ProjectiveTransformation3D();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final Point3D translation1 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        translation1.setInhomogeneousCoordinates(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final Point3D translation2 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        translation2.setInhomogeneousCoordinates(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+
+        // check default value
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+
+        // set new value
+        final Point3D translationCopy = new InhomogeneousPoint3D(translation1);
+        transformation.setTranslation(translationCopy);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1.getInhomX(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1.getInhomY(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[2], translation1.getInhomZ(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1.getInhomX(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1.getInhomY(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationZ(), translation1.getInhomZ(),
+                ABSOLUTE_ERROR);
+
+        // add translation
+        transformation.addTranslation(translation2);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation3D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1.getInhomX() +
+                translation2.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1.getInhomY() +
+                translation2.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[2], translation1.getInhomZ() +
+                translation2.getInhomZ(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1.getInhomX() +
+                translation2.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1.getInhomY() +
+                translation2.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationZ(), translation1.getInhomZ() +
+                translation2.getInhomZ(), ABSOLUTE_ERROR);
     }
 
     @Test

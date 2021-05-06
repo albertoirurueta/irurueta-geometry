@@ -58,6 +58,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimatorTest implements
     private int estimationProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(1e-8, PointCorrespondencePinholeCameraEstimator.EPS, 0.0);
+        assertTrue(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
+        assertTrue(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
+        assertTrue(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
+        assertEquals(1e13, EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongListSizesException,
             NotAvailableException {
 

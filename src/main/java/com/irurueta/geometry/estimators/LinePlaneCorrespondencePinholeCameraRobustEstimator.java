@@ -545,16 +545,16 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     }
 
     /**
-     * Backprojection residual/error for a single line using provided camera.
+     * Back-projection residual/error for a single line using provided camera.
      *
      * @param pinholeCamera camera ot be checked.
-     * @param line          line to be backprojected.
+     * @param line          line to be back-projected.
      * @param plane         plane to check against.
-     * @return dot product distance between backprojected line and plane.
+     * @return dot product distance between back-projected line and plane.
      */
     protected double singleBackprojectionResidual(final PinholeCamera pinholeCamera,
                                                   final Line2D line, final Plane plane) {
-        // backproject line into test plane
+        // back-project line into test plane
         pinholeCamera.backProject(line, mResidualTestPlane);
         mResidualTestPlane.normalize();
 
@@ -592,7 +592,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     /**
      * Attempts to refine provided camera using a slow but more accurate and
      * stable algorithm by first doing a Powell optimization and then obtaining
-     * covariance using LEvenberg/Marquardt if needed.
+     * covariance using Levenberg/Marquardt if needed.
      *
      * @param pinholeCamera camera to be refined.
      * @param weight        weight for suggestion residual.

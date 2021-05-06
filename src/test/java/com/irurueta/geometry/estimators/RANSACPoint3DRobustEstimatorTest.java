@@ -53,6 +53,26 @@ public class RANSACPoint3DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, Point3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, Point3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, Point3DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, Point3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, Point3DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, Point3DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, Point3DRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, Point3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertTrue(Point3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(Point3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(1.0, RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, RANSACPoint3DRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertFalse(RANSACPoint3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(RANSACPoint3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACPoint3DRobustEstimator estimator = new RANSACPoint3DRobustEstimator();

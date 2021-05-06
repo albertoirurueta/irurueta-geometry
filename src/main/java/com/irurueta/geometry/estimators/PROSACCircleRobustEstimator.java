@@ -247,7 +247,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the conic estimation.
+     * Indicates if estimator is ready to start the conic estimation.
      * This is true when input data (i.e. 2D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
      *

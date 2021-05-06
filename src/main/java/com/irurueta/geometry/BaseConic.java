@@ -55,14 +55,14 @@ public abstract class BaseConic implements Serializable {
     public static final double DEFAULT_PERPENDICULAR_THRESHOLD = 1e-12;
 
     /**
-     * Threshold above zero to determine whether one matrix is symmetric or not.
-     */
-    private static final double DEFAULT_SYMMETRIC_THRESHOLD = 1e-12;
-
-    /**
      * Minimum allowed threshold.
      */
     public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold above zero to determine whether one matrix is symmetric or not.
+     */
+    private static final double DEFAULT_SYMMETRIC_THRESHOLD = 1e-12;
 
     /**
      * Machine precision.
@@ -388,7 +388,7 @@ public abstract class BaseConic implements Serializable {
     }
 
     /**
-     * Returns boolean indicating whether this base quadric has already been
+     * Returns boolean indicating whether this base conic has already been
      * normalized.
      *
      * @return True if normalized, false otherwise.

@@ -28,6 +28,21 @@ import static org.junit.Assert.*;
 public class AffineTransformation3DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(4, AffineTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, AffineTransformation3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, AffineTransformation3DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, AffineTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, AffineTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, AffineTransformation3DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, AffineTransformation3DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, AffineTransformation3DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(AffineTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(AffineTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+    }
+
+    @Test
     public void testCreateFromPoints() {
         AffineTransformation3DRobustEstimator estimator;
 
@@ -106,13 +121,13 @@ public class AffineTransformation3DRobustEstimatorTest {
         try {
             estimator = AffineTransformation3DRobustEstimator.createFromPoints(
                     emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
+            fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = AffineTransformation3DRobustEstimator.createFromPoints(
                     inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
+            fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);

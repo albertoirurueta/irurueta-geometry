@@ -69,6 +69,14 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-6, MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
@@ -955,7 +963,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             for (int i = 0; i < nSamples; i++) {
@@ -1172,7 +1180,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             boolean failed = false;
@@ -1409,7 +1417,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             boolean failed = false;

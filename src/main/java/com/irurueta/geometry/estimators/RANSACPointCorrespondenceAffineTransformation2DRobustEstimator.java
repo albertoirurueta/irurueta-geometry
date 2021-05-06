@@ -163,7 +163,7 @@ public class RANSACPointCorrespondenceAffineTransformation2DRobustEstimator
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to be set.
@@ -245,6 +245,7 @@ public class RANSACPointCorrespondenceAffineTransformation2DRobustEstimator
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public AffineTransformation2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {

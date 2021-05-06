@@ -172,7 +172,7 @@ public class PROSACMetricTransformation3DRobustEstimator extends
     }
 
     /**
-     * Constructor withlists of points to be used to estimate a metric 3D
+     * Constructor with lists of points to be used to estimate a metric 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -275,7 +275,7 @@ public class PROSACMetricTransformation3DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints            list of input points to be used to estimate a
      *                               metric 3D transformation.
@@ -356,7 +356,7 @@ public class PROSACMetricTransformation3DRobustEstimator extends
     }
 
     /**
-     * Constructor withlists of points to be used to estimate a metric 3D
+     * Constructor with lists of points to be used to estimate a metric 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -460,7 +460,7 @@ public class PROSACMetricTransformation3DRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to determine whether points are inliers or not
@@ -511,7 +511,7 @@ public class PROSACMetricTransformation3DRobustEstimator extends
     }
 
     /**
-     * Indicates if eatimator is ready to start the metric 3D transformation
+     * Indicates if estimator is ready to start the metric 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.

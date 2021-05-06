@@ -78,7 +78,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Quality scores corresponding to each pair of matched points..
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -300,7 +300,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */
@@ -329,7 +329,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
     }
 
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.
@@ -355,6 +355,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public AffineTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {

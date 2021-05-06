@@ -310,6 +310,14 @@ public class InhomogeneousPoint3DTest {
         } catch (final IllegalArgumentException ignore) {
         }
         assertFalse(value);
+
+        hPoint = new HomogeneousPoint3D();
+        iPoint1 = new InhomogeneousPoint3D();
+        assertTrue(iPoint1.equals(hPoint));
+        iPoint2 = new InhomogeneousPoint3D(iPoint1);
+        assertTrue(iPoint1.equals(iPoint2));
+        assertTrue(iPoint1.equals((Point3D) hPoint));
+        assertTrue(iPoint1.equals((Point3D) iPoint2));
     }
 
     @Test

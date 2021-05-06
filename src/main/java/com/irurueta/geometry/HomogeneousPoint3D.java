@@ -594,7 +594,6 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * its norm. This only applies to homogeneous 3D points, because they are
      * defined up to scale.
      */
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public void normalize() {
         if (!mNormalized) {

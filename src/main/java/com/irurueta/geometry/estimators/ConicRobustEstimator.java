@@ -57,7 +57,7 @@ public abstract class ConicRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -130,7 +130,7 @@ public abstract class ConicRobustEstimator {
      * Matrix representation of a 2D point to be reused when computing
      * residuals.
      */
-    protected Matrix mTestPoint;
+    private Matrix mTestPoint;
 
     /**
      * Matrix representation of a conic to be reused when computing

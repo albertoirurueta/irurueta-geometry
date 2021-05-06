@@ -436,7 +436,7 @@ public class AffineTransformation2DTest {
         } catch (final NullPointerException ignore) {
         }
 
-        // Foce IllegalArgumentException
+        // Force IllegalArgumentException
         try {
             transformation = new AffineTransformation2D(scale, rotation,
                     badTranslation);
@@ -2029,7 +2029,7 @@ public class AffineTransformation2DTest {
         assertTrue(inputPoint.equals(invTransfPoint1, ABSOLUTE_ERROR));
         assertTrue(inputPoint.equals(invTransfPoint2, ABSOLUTE_ERROR));
 
-        // try inversing original transformation
+        // try inverting original transformation
         transformation.inverse();
         final Point2D outPoint = transformation.transformAndReturnNew(transfPoint);
 
@@ -2065,7 +2065,7 @@ public class AffineTransformation2DTest {
         norm = Utils.normF(projectiveMatrix);
         projectiveMatrix.multiplyByScalar(1.0 / norm);
 
-        // check equalness up to scale
+        // check equal-ness up to scale
         assertTrue(expectedMatrix.equals(projectiveMatrix, ABSOLUTE_ERROR));
     }
 

@@ -71,6 +71,14 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0,
+                LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(0.0,
+                LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -605,7 +613,7 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSugestSkewnessValueEnabled() throws LockedException {
+    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
         final LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator();
 

@@ -230,10 +230,10 @@ public class AffineParameters3DTest {
         assertEquals(params.getScaleZ(), AffineParameters3D.DEFAULT_SCALE, 0.0);
 
         // set new value
-        params.setScaleY(scaleZ);
+        params.setScaleZ(scaleZ);
 
         // check correctness
-        assertEquals(params.getScaleY(), scaleZ, 0.0);
+        assertEquals(params.getScaleZ(), scaleZ, 0.0);
     }
 
     @Test

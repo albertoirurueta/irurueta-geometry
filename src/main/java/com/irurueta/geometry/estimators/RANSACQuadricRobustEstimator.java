@@ -120,7 +120,7 @@ public class RANSACQuadricRobustEstimator extends QuadricRobustEstimator {
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on
+     * The threshold refers to the amount of error a possible solution has on
      * a given point.
      *
      * @param threshold threshold to be set.
@@ -153,6 +153,7 @@ public class RANSACQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public Quadric estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {

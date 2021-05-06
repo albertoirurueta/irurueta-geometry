@@ -57,7 +57,7 @@ public abstract class DualConicRobustEstimator {
     /**
      * Constant defining default confidence of the estimated result, which is
      * 99%. This means that with a probability of 99% estimation will be
-     * accurate because chosen subsamples will be inliers.
+     * accurate because chosen sub-samples will be inliers.
      */
     public static final double DEFAULT_CONFIDENCE = 0.99;
 
@@ -130,7 +130,7 @@ public abstract class DualConicRobustEstimator {
      * Matrix representation of a 2D line to be reused when computing
      * residuals.
      */
-    protected Matrix mTestLine;
+    private Matrix mTestLine;
 
     /**
      * Matrix representation of a dual conic to be reused when computing
@@ -164,7 +164,7 @@ public abstract class DualConicRobustEstimator {
      * Constructor with lines.
      *
      * @param lines 2D lines to estimate a dual conic.
-     * @throws IllegalArgumentException if provided lsit of lines don't have
+     * @throws IllegalArgumentException if provided list of lines don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected DualConicRobustEstimator(final List<Line2D> lines) {
@@ -240,7 +240,7 @@ public abstract class DualConicRobustEstimator {
      * Returns amount of progress variation before notifying a progress change
      * during estimation.
      *
-     * @return amount of progress variation before notiying a progres change
+     * @return amount of progress variation before notifying a progress change
      * during estimation.
      */
     public float getProgressDelta() {
@@ -377,7 +377,7 @@ public abstract class DualConicRobustEstimator {
      * This implementation always return null.
      * Subclasses using quality scores must implement proper behaviour.
      *
-     * @return quality scores coresponding to each line.
+     * @return quality scores corresponding to each line.
      */
     public double[] getQualityScores() {
         return null;
@@ -542,7 +542,7 @@ public abstract class DualConicRobustEstimator {
      * using provided lines and robust estimator method.
      *
      * @param lines         2D lines to estimate a dual conic.
-     * @param qualityScores quality scores correspondign to each provided line.
+     * @param qualityScores quality scores corresponding to each provided line.
      * @param method        method of a robust estimator algorithm to estimate best
      *                      dual conic.
      * @return an instance of a dual conic robust estimator.
@@ -605,7 +605,7 @@ public abstract class DualConicRobustEstimator {
 
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
-     * provied listener and lines.
+     * provided listener and lines.
      *
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
@@ -615,7 +615,7 @@ public abstract class DualConicRobustEstimator {
      *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have
-     *                                  the same size as the list of provided qualitys cores, or it their size is
+     *                                  the same size as the list of provided quality scores, or it their size is
      *                                  not greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
@@ -709,7 +709,7 @@ public abstract class DualConicRobustEstimator {
      *
      * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores corresponding to each provided line
-     * @return an instance of adual conic robust estimator.
+     * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have the
      *                                  same size as the list of provided quality scores, or if their size is not
      *                                  greater or equal than MINIMUM_SIZE.
@@ -762,9 +762,9 @@ public abstract class DualConicRobustEstimator {
      * @return a dual conic.
      * @throws LockedException          if robust estimator is locked because an
      *                                  estimation is already in progress.
-     * @throws NotReadyException        if provided input data is not enouth to start
+     * @throws NotReadyException        if provided input data is not enough to start
      *                                  the estimation.
-     * @throws RobustEstimatorException if estimation fails for any readon (i.e.
+     * @throws RobustEstimatorException if estimation fails for any reason (i.e.
      *                                  numerical instability, no solution available, etc).
      */
     public abstract DualConic estimate() throws LockedException,

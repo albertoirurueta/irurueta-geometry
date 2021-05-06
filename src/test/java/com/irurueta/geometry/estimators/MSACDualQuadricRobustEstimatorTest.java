@@ -57,6 +57,14 @@ public class MSACDualQuadricRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-7,
+                MSACDualQuadricRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, MSACDualQuadricRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACDualQuadricRobustEstimator estimator = new MSACDualQuadricRobustEstimator();

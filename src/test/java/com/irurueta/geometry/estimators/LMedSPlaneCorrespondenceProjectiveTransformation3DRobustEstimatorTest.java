@@ -57,6 +57,14 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-6,
+                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(0.0, LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =

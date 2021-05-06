@@ -37,6 +37,14 @@ public class PlaneTest {
     private static final double ABSOLUTE_ERROR = 1e-8;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, Plane.PLANE_NUMBER_PARAMS);
+        assertEquals(1e-12, Plane.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(0.0, Plane.MIN_THRESHOLD, 0.0);
+        assertEquals(1e-10, Plane.DEFAULT_COMPARISON_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongSizeException, NotReadyException,
             LockedException, DecomposerException,
             com.irurueta.algebra.NotAvailableException, ColinearPointsException,
@@ -91,7 +99,7 @@ public class PlaneTest {
 
         final double lambda = randomizer.nextDouble();
 
-        // find 3rd point as a colinear point of 1st and 2nd point
+        // find 3rd point as a co-linear point of 1st and 2nd point
         final double[] array3 = new double[HOM_COORDS];
         // array3 = lamda * array2
         ArrayUtils.multiplyByScalar(array2, lambda, array3);
@@ -114,7 +122,7 @@ public class PlaneTest {
         }
         assertNull(plane);
 
-        // try with 3 non-colinear points
+        // try with 3 non co-linear points
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
@@ -128,7 +136,7 @@ public class PlaneTest {
             decomposer.decompose();
         }
 
-        // V contains the right nullspace of m in the last column, which is the
+        // V contains the right null-space of m in the last column, which is the
         // plane where the points belong to in the rows of m
         Matrix v = decomposer.getV();
 
@@ -327,7 +335,7 @@ public class PlaneTest {
             decomposer.decompose();
         }
 
-        // the right nullspace of m (last column of V) contains the plane where
+        // the right null-space of m (last column of V) contains the plane where
         // the 3 points belong to
         final Matrix v = decomposer.getV();
 
@@ -378,7 +386,7 @@ public class PlaneTest {
         assertTrue(plane.isLocus(point3, PRECISION_ERROR));
 
         // Force ColinearPointsException
-        // find colinear points using a third point being a linear combination
+        // find co-linear points using a third point being a linear combination
         // of two other points so that a plane cannot be defined
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
@@ -392,7 +400,7 @@ public class PlaneTest {
 
         final double lambda = randomizer.nextDouble();
 
-        // find 3rd point as a colinear point of 1st and 2nd point
+        // find 3rd point as a co-linear point of 1st and 2nd point
         final double[] array3 = new double[HOM_COORDS];
         // array3 = lamda * array2
         ArrayUtils.multiplyByScalar(array2, lambda, array3);
@@ -617,7 +625,7 @@ public class PlaneTest {
 
         assertFalse(plane.isLocus(point4, PRECISION_ERROR));
 
-        // indeed point4 is at normDirectorVector distanfe from plane
+        // indeed point4 is at normDirectorVector distance from plane
         assertEquals(plane.signedDistance(point4), normDirectorVector,
                 PRECISION_ERROR);
     }
@@ -882,7 +890,7 @@ public class PlaneTest {
         m3.setSubmatrix(0, 0, 0, HOM_COORDS - 1,
                 m1.getSubmatrix(0, 0, 0, HOM_COORDS - 1));
 
-        // ensure that all matrices have rank 3 (points are not colinear)
+        // ensure that all matrices have rank 3 (points are not co-linear)
         while (com.irurueta.algebra.Utils.rank(m1) < 3 ||
                 com.irurueta.algebra.Utils.rank(m2) < 3 ||
                 com.irurueta.algebra.Utils.rank(m3) < 3) {
@@ -955,7 +963,7 @@ public class PlaneTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure points are not colinear
+        // ensure points are not co-linear
         while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);

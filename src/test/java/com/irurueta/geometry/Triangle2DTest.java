@@ -38,6 +38,13 @@ public class Triangle2DTest {
     private static final int TIMES = 100;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-9, Triangle2D.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, Triangle2D.MIN_THRESHOLD, 0.0);
+        assertEquals(3, Triangle2D.NUM_VERTICES);
+    }
+
+    @Test
     public void testConstructor() {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 

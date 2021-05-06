@@ -67,6 +67,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     public void testConstants() {
         assertEquals(11, DLTLinePlaneCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_EQUATIONS);
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.DEFAULT_ALLOW_LMSE_SOLUTION);
+        assertEquals(1e-8, DLTLinePlaneCorrespondencePinholeCameraEstimator.EPS, 0.0);
     }
 
     @Test

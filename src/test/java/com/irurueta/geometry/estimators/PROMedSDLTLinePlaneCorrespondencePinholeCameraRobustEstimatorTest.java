@@ -72,6 +72,38 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertTrue(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(0.05f, PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, PinholeCameraRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, PinholeCameraRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, PinholeCameraRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, PinholeCameraRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, PinholeCameraRobustEstimator.MIN_ITERATIONS);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(4,
+                LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                LinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
@@ -1321,7 +1353,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             for (int i = 0; i < nSamples; i++) {
@@ -1548,7 +1580,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             boolean failed = false;
@@ -1792,7 +1824,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             boolean failed = false;

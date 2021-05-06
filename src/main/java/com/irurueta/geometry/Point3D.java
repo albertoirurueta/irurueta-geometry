@@ -398,10 +398,10 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     }
 
     /**
-     * Returns euclidian distance between this point and provided point.
+     * Returns euclidean distance between this point and provided point.
      *
      * @param point Point to compare.
-     * @return Euclidian distance between this point and provided point.
+     * @return Euclidean distance between this point and provided point.
      */
     @Override
     public double distanceTo(final Point3D point) {

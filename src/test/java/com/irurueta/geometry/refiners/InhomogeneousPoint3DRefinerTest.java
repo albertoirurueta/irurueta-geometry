@@ -35,21 +35,21 @@ import static org.junit.Assert.*;
 public class InhomogeneousPoint3DRefinerTest implements
         RefinerListener<InhomogeneousPoint3D> {
 
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
 
-    public static final double ABSOLUTE_ERROR = 5e-6;
+    private static final double ABSOLUTE_ERROR = 5e-6;
 
-    public static final int MIN_LINES = 500;
-    public static final int MAX_LINES = 1000;
+    private static final int MIN_LINES = 500;
+    private static final int MAX_LINES = 1000;
 
-    public static final double THRESHOLD = 1e-6;
+    private static final double THRESHOLD = 1e-6;
 
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
 
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
 
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
 
     private int mRefineStart;
     private int mRefineEnd;

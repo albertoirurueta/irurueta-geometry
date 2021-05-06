@@ -55,6 +55,12 @@ public class MSACPlaneRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACPlaneRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, MSACPlaneRobustEstimator.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACPlaneRobustEstimator estimator = new MSACPlaneRobustEstimator();

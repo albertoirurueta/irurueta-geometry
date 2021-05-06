@@ -42,6 +42,15 @@ public class VanGoghTriangulator3DTest {
     private static final double MAX_ANGLE_DEGREES = 180.0;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, Triangulator3D.MIN_VERTICES);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, Triangulator3D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Math.PI / 2.0, VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD, 0.0);
+        assertEquals(0.0, VanGoghTriangulator3D.MIN_THRESHOLD, 0.0);
+        assertEquals(3, VanGoghTriangulator3D.INHOM_COORDS);
+    }
+
+    @Test
     public void testConstructorAndGetMethod() {
         final VanGoghTriangulator2D triangulator = new VanGoghTriangulator2D();
         assertNotNull(triangulator);
@@ -64,7 +73,7 @@ public class VanGoghTriangulator3DTest {
         final Point3D v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
 
-        // parallelipede
+        // parallelepiped
         final List<Point3D> vertices1 = new ArrayList<>();
         final List<Point3D> vertices2 = new ArrayList<>();
         vertices1.add(v1);
@@ -187,14 +196,14 @@ public class VanGoghTriangulator3DTest {
         assertTrue(VanGoghTriangulator3D.isEar(triangle, polygonVertices));
 
 
-        // Parallepipede
+        // Parallelepiped
         polygonVertices.clear();
         polygonVertices.add(v1);
         polygonVertices.add(v2);
         polygonVertices.add(v3);
         polygonVertices.add(v4);
 
-        // all consecutive vertices of parallepipede are also ears
+        // all consecutive vertices of parallelepiped are also ears
 
         // 1st triangle
         triangle.setVertices(v1, v2, v3);
@@ -290,7 +299,7 @@ public class VanGoghTriangulator3DTest {
         assertTrue(triangle.getVertex2().equals(v2, ABSOLUTE_ERROR));
         assertTrue(triangle.getVertex3().equals(v4, ABSOLUTE_ERROR));
 
-        // Test for Parallepipede polygon
+        // Test for Parallelepiped polygon
         polygonVertices.clear();
         polygonVertices.add(v1);
         polygonVertices.add(v2);
@@ -299,7 +308,7 @@ public class VanGoghTriangulator3DTest {
 
         triangles = triangulator.triangulate(polygonVertices);
 
-        // parallepipede is divided into 2 triangles
+        // parallelepiped is divided into 2 triangles
         assertEquals(triangles.size(), 2);
         // 1st triangle is formed by v4, v1 and v2
         Triangle3D triangle1 = triangles.get(0);

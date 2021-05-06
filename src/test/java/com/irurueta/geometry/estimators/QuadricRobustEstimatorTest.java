@@ -17,10 +17,6 @@ package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Point3D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -30,23 +26,18 @@ import static org.junit.Assert.*;
 
 public class QuadricRobustEstimatorTest {
 
-    public QuadricRobustEstimatorTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+    @Test
+    public void testConstants() {
+        assertEquals(9, QuadricRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, QuadricRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, QuadricRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, QuadricRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, QuadricRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, QuadricRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, QuadricRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, QuadricRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, QuadricRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, QuadricRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test

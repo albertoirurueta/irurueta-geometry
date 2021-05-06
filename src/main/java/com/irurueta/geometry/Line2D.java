@@ -701,7 +701,7 @@ public class Line2D implements Serializable {
 
             final Matrix v = decomposer.getV();
 
-            // last column of V contains the right nullspace of m, which is the
+            // last column of V contains the right null-space of m, which is the
             // intersection of lines expressed in homogeneous coordinates.
             // because column is already normalized by SVD decomposition, point
             // will also be normalized

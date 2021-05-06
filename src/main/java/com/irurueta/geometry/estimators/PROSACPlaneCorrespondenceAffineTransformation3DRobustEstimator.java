@@ -107,7 +107,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes  list of input planes to be used to estimate an affine
      *                     3D transformation.
@@ -185,7 +185,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPlanes   list of input planes to be used to estimate an affine
      *                      3D transformation.
@@ -348,7 +348,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     }
 
     /**
-     * Indicates if eatimator is ready to start the affine 3D transformation
+     * Indicates if estimator is ready to start the affine 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched planes and quality
      * scores) are provided and a minimum of MINIMUM_SIZE planes are available.

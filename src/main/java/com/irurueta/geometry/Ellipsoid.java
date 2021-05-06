@@ -100,7 +100,7 @@ public class Ellipsoid implements Serializable {
     }
 
     /**
-     * Gets lenghts of all three semi-axes.
+     * Gets lengths of all three semi-axes.
      *
      * @return lengths of all three semi-axes.
      */
@@ -163,7 +163,7 @@ public class Ellipsoid implements Serializable {
     /**
      * Returns volume of this ellipsoid.
      *
-     * @return volume of htis ellipsoid.
+     * @return volume of this ellipsoid.
      */
     public double getVolume() {
         final double a = mSemiAxesLengths[0];
@@ -191,7 +191,7 @@ public class Ellipsoid implements Serializable {
      * Converts this ellipsoid into a quadric.
      * Quadrics a re a more general representation of ellipsoids.
      *
-     * @return a quadric representinc this ellipsoid.
+     * @return a quadric representing this ellipsoid.
      * @throws GeometryException if quadric cannot be determined due to
      *                           numerical instabilities.
      */

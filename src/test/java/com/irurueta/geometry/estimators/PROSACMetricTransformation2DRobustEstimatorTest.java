@@ -71,6 +71,27 @@ public class PROSACMetricTransformation2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(2, MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(0.05f, MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, MetricTransformation2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, MetricTransformation2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, MetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, MetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, MetricTransformation2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, MetricTransformation2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, MetricTransformation2DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(MetricTransformation2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(RobustEstimatorMethod.PROMedS, MetricTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, PROSACMetricTransformation2DRobustEstimator.MIN_THRESHOLD, 0.0);
+        assertFalse(PROSACMetricTransformation2DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(PROSACMetricTransformation2DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROSACMetricTransformation2DRobustEstimator estimator =

@@ -322,7 +322,7 @@ public class PROSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
     }
 
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.

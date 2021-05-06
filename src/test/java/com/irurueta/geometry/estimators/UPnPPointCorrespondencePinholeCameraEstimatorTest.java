@@ -63,6 +63,19 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     private int estimationProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(1e-8, PointCorrespondencePinholeCameraEstimator.EPS, 0.0);
+        assertTrue(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
+        assertTrue(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
+        assertEquals(1e13, UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(0.0, UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(0.0, UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_HORIZONTAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(0.0, UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_VERTICAL_PRINCIPAL_POINT, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongListSizesException,
             NotAvailableException {
         // testing constructor without parameters

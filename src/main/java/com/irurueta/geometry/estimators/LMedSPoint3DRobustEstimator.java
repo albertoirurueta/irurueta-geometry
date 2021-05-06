@@ -213,6 +213,7 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
                                 return Point3DRobustEstimator.MINIMUM_SIZE;
                             }
 
+                            @SuppressWarnings("DuplicatedCode")
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List<Point3D> solutions) {

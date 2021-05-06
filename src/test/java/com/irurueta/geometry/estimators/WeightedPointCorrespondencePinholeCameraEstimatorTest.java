@@ -66,6 +66,15 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     private int progressCount = 0;
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(1e-8, PointCorrespondencePinholeCameraEstimator.EPS, 0.0);
+        assertEquals(50, WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS);
+        assertTrue(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS);
+    }
+
+    @Test
     public void testConstructor() throws IllegalArgumentException,
             WrongListSizesException, NotAvailableException {
 
@@ -2579,7 +2588,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     }
 
     @Test
-    public void testEstimateZeroSkewnesssZeroPrincipalPointAndEqualFocalLength()
+    public void testEstimateZeroSkewnessZeroPrincipalPointAndEqualFocalLength()
             throws WrongListSizesException, LockedException, NotReadyException,
             CameraException, NotAvailableException {
 

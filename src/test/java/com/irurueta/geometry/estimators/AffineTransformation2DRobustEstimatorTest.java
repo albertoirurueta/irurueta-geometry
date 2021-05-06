@@ -28,6 +28,21 @@ import static org.junit.Assert.*;
 public class AffineTransformation2DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(3, AffineTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, AffineTransformation2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, AffineTransformation2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, AffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, AffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, AffineTransformation2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, AffineTransformation2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, AffineTransformation2DRobustEstimator.MIN_ITERATIONS);
+        assertTrue(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(AffineTransformation2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+    }
+
+    @Test
     public void testCreateFromPoints() {
         AffineTransformation2DRobustEstimator estimator;
 
@@ -106,13 +121,13 @@ public class AffineTransformation2DRobustEstimatorTest {
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
+            fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
+            fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
@@ -559,13 +574,13 @@ public class AffineTransformation2DRobustEstimatorTest {
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     emptyLines, outputLines, RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
+            fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     inputLines, emptyLines, RobustEstimatorMethod.LMedS);
-            fail("IllegalArugmentException expected but not thrown");
+            fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);

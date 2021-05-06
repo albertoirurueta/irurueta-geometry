@@ -38,6 +38,16 @@ public class DualConicTest {
     private static final int TIMES = 10;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, BaseConic.BASECONIC_MATRIX_ROW_SIZE);
+        assertEquals(3, BaseConic.BASECONIC_MATRIX_COLUMN_SIZE);
+        assertEquals(6, BaseConic.N_PARAMS);
+        assertEquals(1e-12, BaseConic.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(1e-12, BaseConic.DEFAULT_PERPENDICULAR_THRESHOLD, 0.0);
+        assertEquals(0.0, BaseConic.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongSizeException,
             IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentLinesException {

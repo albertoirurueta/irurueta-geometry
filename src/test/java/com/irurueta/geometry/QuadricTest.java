@@ -43,6 +43,16 @@ public class QuadricTest {
     private static final int TIMES = 100;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_ROW_SIZE);
+        assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_COLUMN_SIZE);
+        assertEquals(10, BaseQuadric.N_PARAMS);
+        assertEquals(1e-12, BaseQuadric.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(1e-12, BaseQuadric.DEFAULT_PERPENDICULAR_THRESHOLD, 0.0);
+        assertEquals(0.0, BaseQuadric.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongSizeException,
             IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentPointsException {
@@ -1339,6 +1349,53 @@ public class QuadricTest {
     }
 
     @Test
+    public void testSetParametersFromPoints() throws WrongSizeException,
+            CoincidentPointsException {
+        Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        HomogeneousPoint3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+                m.getElementAt(0, 1), m.getElementAt(0, 2), 1.0);
+        HomogeneousPoint3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+                m.getElementAt(1, 1), m.getElementAt(1, 2), 1.0);
+        HomogeneousPoint3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+                m.getElementAt(2, 1), m.getElementAt(2, 2), 1.0);
+        HomogeneousPoint3D point4 = new HomogeneousPoint3D(m.getElementAt(3, 0),
+                m.getElementAt(3, 1), m.getElementAt(3, 2), 1.0);
+        HomogeneousPoint3D point5 = new HomogeneousPoint3D(m.getElementAt(4, 0),
+                m.getElementAt(4, 1), m.getElementAt(4, 2), 1.0);
+        HomogeneousPoint3D point6 = new HomogeneousPoint3D(m.getElementAt(5, 0),
+                m.getElementAt(5, 1), m.getElementAt(5, 2), 1.0);
+        HomogeneousPoint3D point7 = new HomogeneousPoint3D(m.getElementAt(6, 0),
+                m.getElementAt(6, 1), m.getElementAt(6, 2), 1.0);
+        HomogeneousPoint3D point8 = new HomogeneousPoint3D(m.getElementAt(7, 0),
+                m.getElementAt(7, 1), m.getElementAt(7, 2), 1.0);
+        HomogeneousPoint3D point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
+                m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
+
+        final Quadric quadric = new Quadric();
+        quadric.setParametersFromPoints(point1, point2, point3, point4, point5, point6, point7, point8, point9);
+
+        assertTrue(quadric.isLocus(point1, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point2, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point3, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point4, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point5, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point6, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point7, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point8, PRECISION_ERROR));
+        assertTrue(quadric.isLocus(point9, PRECISION_ERROR));
+
+        // Force CoincidentPointsException
+        try {
+            quadric.setParametersFromPoints(point1, point2, point3, point4, point5,
+                    point6, point7, point8, point8);
+            fail("CoincidentPointsException expected but not thrown");
+        } catch (final CoincidentPointsException ignore) {
+        }
+    }
+
+    @Test
     public void testNormalize() throws WrongSizeException,
             IllegalArgumentException, NonSymmetricMatrixException {
 
@@ -1478,8 +1535,14 @@ public class QuadricTest {
             // find tangent plane at locus point
             final Plane plane = sphere.getTangentPlaneAt(point);
             final Plane plane2 = quadric.getTangentPlaneAt(point);
+            final Plane plane3 = new Plane();
+            quadric.tangentPlaneAt(point, plane3, ABSOLUTE_ERROR);
+            final Plane plane4 = new Plane();
+            quadric.tangentPlaneAt(point, plane4, ABSOLUTE_ERROR);
 
             assertTrue(plane.equals(plane2, ABSOLUTE_ERROR));
+            assertTrue(plane.equals(plane3, ABSOLUTE_ERROR));
+            assertTrue(plane.equals(plane4, ABSOLUTE_ERROR));
 
             // check that point is also at plane's locus
             assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));

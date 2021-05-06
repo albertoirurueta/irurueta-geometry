@@ -38,7 +38,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * Because typical resolution for points is 1 voxel, then default threshold
      * is defined as 1.
      */
-    public static final double DEFAULT_THRESHOLD = 1;
+    public static final double DEFAULT_THRESHOLD = 1.0;
 
     /**
      * Minimum value that can be set as threshold.
@@ -117,7 +117,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     /**
      * Sets threshold to determine whether planes are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on
+     * The threshold refers to the amount of error a possible solution has on
      * a given plane.
      *
      * @param threshold threshold to be set.
@@ -149,6 +149,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public Point3D estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {

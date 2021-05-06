@@ -59,6 +59,22 @@ public class PROSACSphereRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(4, SphereRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, SphereRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, SphereRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, SphereRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, SphereRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, SphereRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, SphereRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, PROSACSphereRobustEstimator.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         //test constructor without arguments
         PROSACSphereRobustEstimator estimator = new PROSACSphereRobustEstimator();

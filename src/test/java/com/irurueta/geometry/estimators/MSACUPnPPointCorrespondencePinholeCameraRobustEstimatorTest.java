@@ -68,6 +68,14 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -602,7 +610,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSugestSkewnessValueEnabled() throws LockedException {
+    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
         final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
@@ -1339,7 +1347,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     new Random(), 0.0, OUTLIER_STD_ERROR);
             for (final Point2D point2D : points2D) {
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is oulier
+                    // point is outlier
                     final double errorX = errorRandomizer.nextDouble();
                     final double errorY = errorRandomizer.nextDouble();
                     final double errorW = errorRandomizer.nextDouble();
@@ -2503,7 +2511,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     new Random(), 0.0, OUTLIER_STD_ERROR);
             for (final Point2D point2D : points2D) {
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is oulier
+                    // point is outlier
                     final double errorX = errorRandomizer.nextDouble();
                     final double errorY = errorRandomizer.nextDouble();
                     final double errorW = errorRandomizer.nextDouble();

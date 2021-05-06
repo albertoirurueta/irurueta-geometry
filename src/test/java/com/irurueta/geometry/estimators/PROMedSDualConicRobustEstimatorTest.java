@@ -61,6 +61,22 @@ public class PROMedSDualConicRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(5, DualConicRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, DualConicRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, DualConicRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, DualConicRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, DualConicRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, DualConicRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, DualConicRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1e-9, PROMedSDualConicRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(0.0, PROMedSDualConicRobustEstimator.MIN_STOP_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSDualConicRobustEstimator estimator = new PROMedSDualConicRobustEstimator();

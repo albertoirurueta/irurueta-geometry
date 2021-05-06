@@ -47,7 +47,12 @@ public class Polygon3DTest {
 
     @Test
     public void testConstants() {
+        assertEquals(1e-9, Polygon3D.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, Polygon3D.MIN_THRESHOLD, 0.0);
         assertEquals(3, Polygon3D.MIN_VERTICES);
+        assertEquals(3, Polygon3D.INHOM_COORDS);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
+                Polygon3D.DEFAULT_TRIANGULATOR_METHOD);
     }
 
     @Test
@@ -201,6 +206,11 @@ public class Polygon3DTest {
 
         assertEquals(polygon.getArea(), area, ABSOLUTE_ERROR);
         assertEquals(polygon.getArea(), areaTriangles, ABSOLUTE_ERROR);
+
+        // triangulate again
+        polygon.triangulate();
+
+        assertTrue(polygon.isTriangulated());
     }
 
     @Test
@@ -712,7 +722,7 @@ public class Polygon3DTest {
         // X: 0, Y: 1, Z: 5 (W: 1)
         final Point3D v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
-        // parallelipede
+        // parallelepiped
         final List<Point3D> vertices1 = new ArrayList<>();
         final List<Point3D> vertices2 = new ArrayList<>();
         vertices1.add(v1);

@@ -27,6 +27,22 @@ import static org.junit.Assert.*;
 public class Point2DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(2, Point2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, Point2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, Point2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, Point2DRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, Point2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, Point2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, Point2DRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, Point2DRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, Point2DRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, Point2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertTrue(Point2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(Point2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+    }
+
+    @Test
     public void testCreate() {
         // test with robust method
         Point2DRobustEstimator estimator = Point2DRobustEstimator.create(RobustEstimatorMethod.RANSAC);

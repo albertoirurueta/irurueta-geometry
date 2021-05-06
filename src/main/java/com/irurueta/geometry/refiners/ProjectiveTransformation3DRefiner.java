@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Base class for ProjectiveTransformation3D refiner.
  * Implementations of this class refine a 3D projective transformation by taking
- * into account an initial estimaton, inlier point or plane matches and their
+ * into account an initial estimation, inlier point or plane matches and their
  * residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
@@ -48,7 +48,7 @@ public abstract class ProjectiveTransformation3DRefiner<S1, S2> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    protected double mRefinementStandardDeviation;
+    private double mRefinementStandardDeviation;
 
     /**
      * Constructor.

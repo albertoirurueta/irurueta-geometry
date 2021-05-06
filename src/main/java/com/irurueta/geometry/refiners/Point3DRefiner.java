@@ -45,7 +45,7 @@ public abstract class Point3DRefiner<T extends Point3D> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    protected double mRefinementStandardDeviation;
+    private double mRefinementStandardDeviation;
 
     /**
      * Constructor.

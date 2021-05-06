@@ -101,7 +101,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
      * Constructor with listener and lists of points to be used to estimate a
      * metric 3D transformation.
      * Points in the list located at the same position are considered to be
-     * matched. Hence, both lists must have the same size, and their size msut
+     * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
      * @param listener     listener to be notified of events such as when estimation
@@ -170,8 +170,8 @@ public class MSACMetricTransformation3DRobustEstimator extends
     /**
      * Constructor with listener and lists of points to be used to estimate a
      * metric 3D transformation.
-     * Points in thelist located at the same position are considered to be
-     * matched. Hence, both lists must have the same size, and their size msut
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
      * @param listener               listener to be notified of events such as when estimation
@@ -238,7 +238,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
      *                                  estimation is already in progress.
      * @throws NotReadyException        if provided input data is not enough to start
      *                                  the estimation.
-     * @throws RobustEstimatorException if estimatoin fails for any reason
+     * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override

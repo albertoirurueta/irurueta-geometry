@@ -34,6 +34,16 @@ public class Point2DTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-10, Point2D.DEFAULT_COMPARISON_THRESHOLD, 0.0);
+        assertEquals(0.0, Point2D.MIN_THRESHOLD, 0.0);
+        assertEquals(3, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+        assertEquals(2, Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES,
+                Point2D.DEFAULT_COORDINATES_TYPE);
+    }
+
+    @Test
     public void testCreate() {
         Point2D point = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);

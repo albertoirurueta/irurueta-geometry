@@ -38,7 +38,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * Because typical resolution for points is 1 voxel, then default threshold
      * is defined as 1.
      */
-    public static final double DEFAULT_THRESHOLD = 1;
+    public static final double DEFAULT_THRESHOLD = 1.0;
 
     /**
      * Minimum value that can be set as threshold.
@@ -226,6 +226,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public Point3D estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {

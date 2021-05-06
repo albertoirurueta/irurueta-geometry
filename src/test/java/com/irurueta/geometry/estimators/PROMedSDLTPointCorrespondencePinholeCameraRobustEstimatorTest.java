@@ -71,6 +71,18 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator estimator =

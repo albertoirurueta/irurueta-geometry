@@ -37,6 +37,12 @@ public class Line3DTest {
     private static final double LARGE_ABSOLUTE_ERROR = 1e-6;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-12, Line3D.DEFAULT_LOCUS_THRESHOLD, 0.0);
+        assertEquals(0.0, Line3D.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws WrongSizeException, NotReadyException,
             LockedException, DecomposerException, NotAvailableException,
             CoincidentPlanesException, NoIntersectionException,

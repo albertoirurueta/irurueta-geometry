@@ -69,6 +69,41 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertTrue(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(0.05f, PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, PinholeCameraRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, PinholeCameraRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, PinholeCameraRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, PinholeCameraRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, PinholeCameraRobustEstimator.MIN_ITERATIONS);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(4,
+                LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                LinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1e-6, RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                0.0);
+        assertEquals(0.0, RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD,
+                0.0);
+        assertFalse(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
+        assertFalse(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_RESIDUALS);
+
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
@@ -1021,7 +1056,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane;
             Plane estimatedPlane;
@@ -1241,7 +1276,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane;
             Plane estimatedPlane;
@@ -1479,7 +1514,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane;
             Plane estimatedPlane;

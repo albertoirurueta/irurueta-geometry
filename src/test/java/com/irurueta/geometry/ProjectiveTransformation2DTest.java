@@ -53,6 +53,9 @@ public class ProjectiveTransformation2DTest {
     public void testConstants() {
         assertEquals(2, ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
         assertEquals(3, ProjectiveTransformation2D.NUM_PROJECTIVE_PARAMS);
+        assertEquals(2, ProjectiveTransformation2D.INHOM_COORDS);
+        assertEquals(3, ProjectiveTransformation2D.HOM_COORDS);
+        assertEquals(1e-12, ProjectiveTransformation2D.EPS, 0.0);
     }
 
     @Test
@@ -937,7 +940,7 @@ public class ProjectiveTransformation2DTest {
         // normalize
         transformation.normalize();
 
-        // check equalness with normalized T matrix
+        // check equal-ness with normalized T matrix
         assertTrue(transformation.getT().equals(normT, ABSOLUTE_ERROR));
     }
 
@@ -1108,12 +1111,10 @@ public class ProjectiveTransformation2DTest {
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
+        final double[] translation2 = transformation.getTranslation();
+        assertEquals(translation2.length,
                 ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
+        assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
         assertEquals(transformation.getTranslationX(), translation[0],
                 ABSOLUTE_ERROR);
         assertEquals(transformation.getTranslationY(), translation[1],
@@ -1127,6 +1128,12 @@ public class ProjectiveTransformation2DTest {
             transformation.setTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
+        }
+        try {
+            transformation.getTranslation(badTranslation);
+            fail("WrongSizeException expected but not thrown");
+        } catch (final WrongSizeException ignore) {
+
         }
     }
 
@@ -1192,6 +1199,116 @@ public class ProjectiveTransformation2DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testAddTranslation2() {
+        final ProjectiveTransformation2D transformation =
+                new ProjectiveTransformation2D();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] translation1 = new double[
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double[] translation2 = new double[
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+
+        // check default value
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+
+        // set new value
+        final double[] translationCopy = Arrays.copyOf(translation1,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        transformation.setTranslation(translationCopy);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1[0],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1[1],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1[0],
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1[1],
+                ABSOLUTE_ERROR);
+
+        // add translation
+        transformation.addTranslation(translation2[0], translation2[1]);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1[0] +
+                translation2[0], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1[1] +
+                translation2[1], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1[0] +
+                translation2[0], ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1[1] +
+                translation2[1], ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testAddTranslation3() {
+        final ProjectiveTransformation2D transformation =
+                new ProjectiveTransformation2D();
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final Point2D translation1 = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        translation1.setInhomogeneousCoordinates(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final Point2D translation2 = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        translation2.setInhomogeneousCoordinates(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+
+        // check default value
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+
+        // set new value
+        final Point2D translationCopy = new InhomogeneousPoint2D(translation1);
+        transformation.setTranslation(translationCopy);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1.getInhomX(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1.getInhomY(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1.getInhomX(),
+                ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1.getInhomY(),
+                ABSOLUTE_ERROR);
+
+        // add translation
+        transformation.addTranslation(translation2);
+
+        // check correctness
+        assertEquals(transformation.getTranslation().length,
+                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(transformation.getTranslation()[0], translation1.getInhomX() +
+                translation2.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslation()[1], translation1.getInhomY() +
+                translation2.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationX(), translation1.getInhomX() +
+                translation2.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(transformation.getTranslationY(), translation1.getInhomY() +
+                translation2.getInhomY(), ABSOLUTE_ERROR);
     }
 
     @Test

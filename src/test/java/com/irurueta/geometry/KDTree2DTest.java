@@ -35,7 +35,7 @@ public class KDTree2DTest {
     private static final int MAX_POINTS = 500;
 
     @Test
-    public void testConsructor() {
+    public void testConstructor() {
         KDTree2D tree = null;
 
         // test empty list

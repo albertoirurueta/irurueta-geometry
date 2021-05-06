@@ -281,7 +281,7 @@ public class MatrixRotation3DTest {
 
             // because vPoint is already normalized (from SVD decomposition)
             // we only need to normalize rotated point to compute the rotation
-            // angle as the arcosine of their dot product
+            // angle as the arc-cosine of their dot product
             final double norm2 = Utils.normF(mPoint2);
             mPoint2.multiplyByScalar(1.0 / norm2);
 
@@ -366,6 +366,10 @@ public class MatrixRotation3DTest {
         // but still rotation matrix remains from previous valid assignment
         assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(),
                 ABSOLUTE_ERROR));
+
+        rotation.setInternalMatrix(Matrix.identity(ROTATION_ROWS, ROTATION_COLS));
+
+        assertEquals(Matrix.identity(ROTATION_ROWS, ROTATION_COLS), rotation.getInternalMatrix());
     }
 
     @Test
@@ -516,7 +520,7 @@ public class MatrixRotation3DTest {
 
         // because vPoint is already normalized (from SVD decomposition)
         // we only need to normalize rotated point to compute the rotation
-        // angle as the arcosine of their dot product
+        // angle as the arc-cosine of their dot product
         final double norm2 = Utils.normF(pointMatrix2);
         pointMatrix2.multiplyByScalar(1.0 / norm2);
 
@@ -669,7 +673,7 @@ public class MatrixRotation3DTest {
 
         final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS,
                 HOM_ROTATION_COLS);
-        // set top-left 3x3 submatrix
+        // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0,
                 2, 2, rotationMatrix);
 
@@ -713,7 +717,7 @@ public class MatrixRotation3DTest {
 
         final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS,
                 HOM_ROTATION_COLS);
-        // set top-left 3x3 submatrix
+        // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0,
                 2, 2, rotationMatrix);
 
@@ -828,7 +832,7 @@ public class MatrixRotation3DTest {
 
         final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS,
                 HOM_ROTATION_COLS);
-        // set top-left 3x3 submatrix
+        // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0,
                 2, 2, rotationMatrix);
 
@@ -896,7 +900,7 @@ public class MatrixRotation3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        // ensure that points are not colinear
+        // ensure that points are not co-linear
 
         while (Plane.areColinearPoints(point1, point2, point3)) {
             point2.setInhomogeneousCoordinates(

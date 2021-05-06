@@ -53,7 +53,7 @@ public abstract class Rotation3D {
     /**
      * Constant defining default type if none is provided.
      */
-    public static final Rotation3DType DEFAULT_TYPE = Rotation3DType.AXIS_ROTATION3D;
+    public static final Rotation3DType DEFAULT_TYPE = Rotation3DType.QUATERNION;
 
     /**
      * Default threshold to determine if two instances are equal.
@@ -495,8 +495,10 @@ public abstract class Rotation3D {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D();
             case MATRIX_ROTATION3D:
-            default:
                 return new MatrixRotation3D();
+            case QUATERNION:
+            default:
+                return new Quaternion();
         }
     }
 
@@ -534,8 +536,10 @@ public abstract class Rotation3D {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D(axis, theta);
             case MATRIX_ROTATION3D:
-            default:
                 return new MatrixRotation3D(axis, theta);
+            case QUATERNION:
+            default:
+                return new Quaternion(axis, theta);
         }
     }
 
@@ -574,8 +578,12 @@ public abstract class Rotation3D {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D(axisX, axisY, axisZ, theta);
             case MATRIX_ROTATION3D:
-            default:
                 return new MatrixRotation3D(axisX, axisY, axisZ, theta);
+            case QUATERNION:
+            default:
+                final Quaternion result = new Quaternion();
+                result.setAxisAndRotation(axisX, axisY, axisZ, theta);
+                return result;
         }
     }
 
@@ -710,7 +718,7 @@ public abstract class Rotation3D {
     public abstract void fromRotation(final Quaternion q);
 
     /**
-     * Sets vcalues of this rotation from another rotation.
+     * Sets values of this rotation from another rotation.
      *
      * @param rot a 3D rotation to set values from.
      * @throws IllegalArgumentException if provided rotation type is

@@ -95,7 +95,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Average square root of singular value of decomposed covariance matrix. Can be used to
-     * determine the average accuracy on a geomtric figure (i.e. the average semi-axis on
+     * determine the average accuracy on a geometric figure (i.e. the average semi-axis on
      * an ellipse or an ellipsoid).
      */
     private double mAvgSqrtSingularValue = Double.POSITIVE_INFINITY;

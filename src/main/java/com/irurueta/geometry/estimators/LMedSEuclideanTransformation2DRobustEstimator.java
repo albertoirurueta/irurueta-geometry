@@ -267,7 +267,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Estimates an euclidean 2D transformaiton using a robust estimator and
+     * Estimates an euclidean 2D transformation using a robust estimator and
      * the best set of matched 2d point correspondences found using the robust
      * estimator.
      *
@@ -316,6 +316,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
                                 return mNonRobustEstimator.getMinimumPoints();
                             }
 
+                            @SuppressWarnings("DuplicatedCode")
                             @Override
                             public void estimatePreliminarSolutions(final int[] samplesIndices,
                                                                     final List<EuclideanTransformation2D> solutions) {

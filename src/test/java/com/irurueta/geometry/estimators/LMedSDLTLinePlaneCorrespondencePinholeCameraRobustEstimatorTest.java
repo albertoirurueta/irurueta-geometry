@@ -69,6 +69,14 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1.0, LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
@@ -954,7 +962,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             for (int i = 0; i < nSamples; i++) {
@@ -1170,7 +1178,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             boolean failed = false;
@@ -1406,7 +1414,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
             // check correctness of estimation
 
-            // backproject original 2D lines using estimated camera and check
+            // back-project original 2D lines using estimated camera and check
             // distance to 3D planes without error
             Plane originalPlane, estimatedPlane;
             boolean failed = false;
@@ -4589,7 +4597,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             throws IllegalArgumentException, LockedException, NotReadyException,
             CameraException, NotAvailableException {
         int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 5 * TIMES; t++) {
             final UniformRandomizer randomizer = new UniformRandomizer(new Random());
             final double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);

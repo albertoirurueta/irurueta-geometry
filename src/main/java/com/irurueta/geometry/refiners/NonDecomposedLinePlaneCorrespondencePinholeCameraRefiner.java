@@ -170,7 +170,7 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
 
             // output values to be fitted/optimized will contain residuals
             final double[] y = new double[mNumInliers];
-            // input values will contain line and plane to compute reiduals
+            // input values will contain line and plane to compute residuals
             final int nDims = Line2D.LINE_NUMBER_PARAMS +
                     Plane.PLANE_NUMBER_PARAMS;
             final Matrix x = new Matrix(mNumInliers, nDims);

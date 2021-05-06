@@ -41,7 +41,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
                     DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
 
     /**
-     * Indicates whether the case where a dimension 2 nullspace is allowed.
+     * Indicates whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -172,19 +172,19 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
     }
 
     /**
-     * Indicates whether the case where a dimension 2 nullspace is allowed.
+     * Indicates whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @return true to allow 2 dimensional nullspace, false otherwise.
+     * @return true to allow 2 dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
         return mNullspaceDimension2Allowed;
     }
 
     /**
-     * Specifies whether the case where a dimension 2 nullspace is allowed.
+     * Specifies whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -301,7 +301,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
 
     /**
      * Sets vertical coordinate of principal point on intrinsic parameters to
-     * be used on estiamted camera.
+     * be used on estimated camera.
      *
      * @param verticalPrincipalPoint vertical coordinate of principal point.
      * @throws LockedException if estimator is locked.
@@ -450,7 +450,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *                 estimate a pinhole camera.
      * @param method   method of a robust estimator algorithm to estimate best
      *                 pinhole camera.
-     * @return an instance of a pinhole camera robust esitmator.
+     * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than required minimum size (6
      *                                  correspondences).
@@ -700,7 +700,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *                      points.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     *                                  smalelr than required minimum size (6 samples).
+     *                                  smaller than required minimum size (6 samples).
      */
     public static UPnPPointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores) {

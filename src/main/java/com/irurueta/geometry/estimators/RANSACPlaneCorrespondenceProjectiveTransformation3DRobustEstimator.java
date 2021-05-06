@@ -269,6 +269,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public ProjectiveTransformation3D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {

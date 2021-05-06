@@ -31,6 +31,39 @@ import static org.junit.Assert.*;
 public class PinholeCameraRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertTrue(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(0.05f, PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                0.0f);
+        assertEquals(0.0f, PinholeCameraRobustEstimator.MIN_PROGRESS_DELTA,
+                0.0f);
+        assertEquals(1.0f, PinholeCameraRobustEstimator.MAX_PROGRESS_DELTA,
+                0.0f);
+        assertEquals(0.99, PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                0.0);
+        assertEquals(5000,
+                PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, PinholeCameraRobustEstimator.MIN_CONFIDENCE,
+                0.0);
+        assertEquals(1.0, PinholeCameraRobustEstimator.MAX_CONFIDENCE,
+                0.0);
+        assertEquals(1, PinholeCameraRobustEstimator.MIN_ITERATIONS);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(0.0, PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(1.0,
+                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertFalse(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+    }
+
+    @Test
     public void testCreateFromPoints() {
         // create with points
         final List<Point2D> points2D = new ArrayList<>();
@@ -418,7 +451,7 @@ public class PinholeCameraRobustEstimatorTest {
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
 
-        // create with listener, points and qualitys cores
+        // create with listener, points and quality scores
         estimator = PinholeCameraRobustEstimator.createFromPoints(listener,
                 points3D, points2D, pointQualityScores);
         assertTrue(estimator instanceof
@@ -831,7 +864,7 @@ public class PinholeCameraRobustEstimatorTest {
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
 
-        // create with listener, points and qualitys cores
+        // create with listener, points and quality scores
         estimator = PinholeCameraRobustEstimator.createFromPoints(listener,
                 intrinsic, points3D, points2D, pointQualityScores);
         assertTrue(estimator instanceof
@@ -1263,7 +1296,7 @@ public class PinholeCameraRobustEstimatorTest {
                 PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS);
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
 
-        // create with listener, points and qualitys cores
+        // create with listener, points and quality scores
         estimator = PinholeCameraRobustEstimator.createFromPoints(listener,
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
                 points3D, points2D, pointQualityScores);

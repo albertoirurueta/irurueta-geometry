@@ -267,7 +267,7 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
     }
 
     /**
-     * Estimates an euclidean 3D transformaiton using a robust estimator and
+     * Estimates an euclidean 3D transformation using a robust estimator and
      * the best set of matched 3D point correspondences found using the robust
      * estimator.
      *

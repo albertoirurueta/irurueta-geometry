@@ -111,14 +111,16 @@ public class MetricTransformation3DTest {
         transformation = new MetricTransformation3D(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), theta,
-                ABSOLUTE_ERROR);
+        final double sign = Math.signum(
+                transformation.getRotation().getRotationAngle() * theta);
+        assertEquals(transformation.getRotation().getRotationAngle(),
+                theta * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis[0], ABSOLUTE_ERROR);
+                rotAxis[0] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis[1], ABSOLUTE_ERROR);
+                rotAxis[1] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis[2], ABSOLUTE_ERROR);
+                rotAxis[2] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getTranslation().length,
                 MetricTransformation3D.NUM_TRANSLATION_COORDS);
         assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
@@ -352,14 +354,16 @@ public class MetricTransformation3DTest {
         transformation.setRotation(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), theta,
-                ABSOLUTE_ERROR);
+        final double sign = Math.signum(
+                transformation.getRotation().getRotationAngle() * theta);
+        assertEquals(transformation.getRotation().getRotationAngle(),
+                theta * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis[0], ABSOLUTE_ERROR);
+                rotAxis[0] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis[1], ABSOLUTE_ERROR);
+                rotAxis[1] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis[2], ABSOLUTE_ERROR);
+                rotAxis[2] * sign, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         try {
@@ -398,14 +402,16 @@ public class MetricTransformation3DTest {
         transformation.setRotation(rotation1);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), theta1,
-                ABSOLUTE_ERROR);
+        final double sign = Math.signum(
+                transformation.getRotation().getRotationAngle() * theta1);
+        assertEquals(transformation.getRotation().getRotationAngle(),
+                theta1 * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis1[0], ABSOLUTE_ERROR);
+                rotAxis1[0] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis1[1], ABSOLUTE_ERROR);
+                rotAxis1[1] * sign, ABSOLUTE_ERROR);
         assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis1[2], ABSOLUTE_ERROR);
+                rotAxis1[2] * sign, ABSOLUTE_ERROR);
 
         // add second rotation
         transformation.addRotation(rotation2);

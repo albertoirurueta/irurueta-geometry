@@ -41,7 +41,11 @@ public class Polygon2DTest {
 
     @Test
     public void testConstants() {
+        assertEquals(1e-9, Polygon2D.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, Polygon2D.MIN_THRESHOLD, 0.0);
         assertEquals(3, Polygon2D.MIN_VERTICES);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
+                Polygon2D.DEFAULT_TRIANGULATOR_METHOD);
     }
 
     @Test
@@ -165,6 +169,11 @@ public class Polygon2DTest {
         assertEquals(polygon.getArea(), areaTriangles, ABSOLUTE_ERROR);
         assertEquals(polygon.getSignedArea(), signedAreaTriangles,
                 ABSOLUTE_ERROR);
+
+        // triangulate again
+        polygon.triangulate();
+
+        assertTrue(polygon.isTriangulated());
     }
 
     @Test

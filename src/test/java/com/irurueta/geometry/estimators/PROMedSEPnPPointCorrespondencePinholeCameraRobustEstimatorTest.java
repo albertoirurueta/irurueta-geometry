@@ -71,6 +71,18 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(6, PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+        assertTrue(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES);
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1.0, PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
@@ -1732,7 +1744,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSugestSkewnessValueEnabled() throws LockedException {
+    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
         final PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
@@ -3476,7 +3488,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                         MAX_SCORE_ERROR);
                 qualityScores[j] = 1.0 + scoreError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is oulier
+                    // point is outlier
                     final double errorX = errorRandomizer.nextDouble();
                     final double errorY = errorRandomizer.nextDouble();
                     final double errorW = errorRandomizer.nextDouble();
@@ -5480,7 +5492,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                         MAX_SCORE_ERROR);
                 qualityScores[j] = 1.0 + scoreError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is oulier
+                    // point is outlier
                     final double errorX = errorRandomizer.nextDouble();
                     final double errorY = errorRandomizer.nextDouble();
                     final double errorW = errorRandomizer.nextDouble();

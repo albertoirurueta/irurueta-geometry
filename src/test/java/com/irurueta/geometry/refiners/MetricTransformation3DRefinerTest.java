@@ -15,7 +15,6 @@
  */
 package com.irurueta.geometry.refiners;
 
-import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
@@ -36,34 +35,32 @@ import static org.junit.Assert.*;
 public class MetricTransformation3DRefinerTest implements
         RefinerListener<MetricTransformation3D> {
 
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
 
-    public static final double MIN_RANDOM_DEGREES = -180.0;
-    public static final double MAX_RANDOM_DEGREES = 180.0;
+    private static final double MIN_RANDOM_DEGREES = -180.0;
+    private static final double MAX_RANDOM_DEGREES = 180.0;
 
-    public static final double MIN_SCALE = 0.5;
-    public static final double MAX_SCALE = 2.0;
+    private static final double MIN_SCALE = 0.5;
+    private static final double MAX_SCALE = 2.0;
 
-    public static final int INHOM_COORDS = 2;
+    private static final double ABSOLUTE_ERROR = 1e-6;
 
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final int MIN_POINTS = 50;
+    private static final int MAX_POINTS = 100;
 
-    public static final int MIN_POINTS = 50;
-    public static final int MAX_POINTS = 100;
+    private static final int PERCENTAGE_OUTLIER = 20;
 
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final double STD_ERROR = 100.0;
+    private static final double THRESHOLD = 1e-6;
 
-    public static final double STD_ERROR = 100.0;
-    public static final double THRESHOLD = 1e-6;
-
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
 
     private int mRefineStart;
     private int mRefineEnd;
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException,
+    public void testConstructor() throws LockedException,
             NotReadyException, RobustEstimatorException {
         final RANSACMetricTransformation3DRobustEstimator estimator =
                 createRobustEstimator();

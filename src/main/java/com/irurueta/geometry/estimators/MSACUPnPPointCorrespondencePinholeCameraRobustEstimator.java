@@ -80,7 +80,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -136,7 +136,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on projected 2D points.
      *
      * @param threshold threshold to be set.
@@ -178,7 +178,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new NotReadyException();
         }
 
-        // pinhole camera estimator using UPnP (Uncalibrated PErspective-n-Point)
+        // pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point)
         // algorithm
         final UPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =
                 new UPnPPointCorrespondencePinholeCameraEstimator();

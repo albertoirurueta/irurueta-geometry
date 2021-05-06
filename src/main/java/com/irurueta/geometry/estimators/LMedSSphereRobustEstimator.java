@@ -188,6 +188,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public Sphere estimate() throws LockedException, NotReadyException,
             RobustEstimatorException {

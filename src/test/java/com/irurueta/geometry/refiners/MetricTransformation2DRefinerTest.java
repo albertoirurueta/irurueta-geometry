@@ -15,7 +15,6 @@
  */
 package com.irurueta.geometry.refiners;
 
-import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
@@ -61,7 +60,7 @@ public class MetricTransformation2DRefinerTest implements
     private int mRefineEnd;
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException,
+    public void testConstructor() throws LockedException,
             NotReadyException, RobustEstimatorException {
         final RANSACMetricTransformation2DRobustEstimator estimator =
                 createRobustEstimator();

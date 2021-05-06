@@ -45,6 +45,12 @@ public class AxisRotation3DTest {
     private static final int TIMES = 10;
 
     @Test
+    public void testConstants() {
+        assertEquals(3, AxisRotation3D.AXIS_PARAMS);
+        assertEquals(1e-12, AxisRotation3D.EPS, 0.0);
+    }
+
+    @Test
     public void testConstructor() throws RotationException, WrongSizeException,
             NotReadyException, LockedException, DecomposerException,
             NotAvailableException {
@@ -131,7 +137,7 @@ public class AxisRotation3DTest {
 
         // because vPoint is already normalized (from SVD decomposition)
         // we only need to normalize rotated point to compute the rotation
-        // angle as the arcosine of their dot product
+        // angle as the arc-cosine of their dot product
         final double norm2 = Utils.normF(mPoint2);
         mPoint2.multiplyByScalar(1.0 / norm2);
 
@@ -152,10 +158,13 @@ public class AxisRotation3DTest {
         }
 
         // Test copy constructor
-        final AxisRotation3D rotation2 = new AxisRotation3D(
+        AxisRotation3D rotation2 = new AxisRotation3D(
                 rotation);
         assertEquals(rotation2.asInhomogeneousMatrix(),
                 rotation.asInhomogeneousMatrix());
+
+        rotation2 = new AxisRotation3D(rotation.toQuaternion());
+        assertTrue(rotation2.equals(rotation, ABSOLUTE_ERROR));
     }
 
     @Test
@@ -224,7 +233,86 @@ public class AxisRotation3DTest {
 
         // because vPoint is already normalized (from SVD decomposition)
         // we only need to normalize rotated point to compute the rotation
-        // angle as the arcosine of their dot product
+        // angle as the arc-cosine of their dot product
+        final double norm2 = Utils.normF(pointMatrix2);
+        pointMatrix2.multiplyByScalar(1.0 / norm2);
+
+        final double dotProduct = pointMatrix.transposeAndReturnNew().
+                multiplyAndReturnNew(pointMatrix2).getElementAtIndex(0);
+
+        final double theta2 = Math.acos(dotProduct);
+        final double theta2b = rotation.getRotationAngle();
+
+        // check correctness of angles (up to sign for this test)
+        assertEquals(Math.abs(theta), Math.abs(theta2), ABSOLUTE_ERROR);
+
+        // check correctness of angles (including sign) for method in class
+        if (scaleX > 0.0) {
+            assertEquals(theta, theta2b, ABSOLUTE_ERROR);
+        } else {
+            assertEquals(theta, -theta2b, ABSOLUTE_ERROR);
+        }
+    }
+
+    @Test
+    public void testSetAxis() throws WrongSizeException,
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, RotationException {
+
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+        final AxisRotation3D rotation = new AxisRotation3D();
+
+        // Find any 3 orthogonal vectors, 1st will be axis of rotation, and the
+        // remaining two will lie on the rotation plane and will be used to test
+        // theta angle
+
+        // To find 3 orthogonal vectors, we use V matrix of a singular value
+        // decomposition of any Nx3 matrix
+        final Matrix a = Matrix.createWithUniformRandomValues(1, INHOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+
+        decomposer.decompose();
+
+        final Matrix v = decomposer.getV();
+
+        // axis of rotation
+        final Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
+
+        // inhomogeneous coordinates of point laying on rotation plane
+        final Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
+
+        double[] axis = axisMatrix.toArray();
+        ArrayUtils.multiplyByScalar(axis, theta, axis);
+        rotation.setAxis(axis[0], axis[1], axis[2]);
+
+        // To test correctness of rotation, axis should remain equal
+        final Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
+
+        final Matrix axisMatrix2 = rotationMatrix.multiplyAndReturnNew(axisMatrix);
+
+        assertTrue(axisMatrix.equals(axisMatrix2, ABSOLUTE_ERROR));
+
+        final double[] axis2 = rotation.getRotationAxis();
+
+        final double scaleX = axis[0] / axis2[0];
+        final double scaleY = axis[0] / axis2[0];
+        final double scaleZ = axis[0] / axis2[0];
+
+        assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
+        assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
+        assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
+
+        // and point on rotated plane should be rotated exactly theta
+        // radians
+        final Matrix pointMatrix2 = rotationMatrix.multiplyAndReturnNew(pointMatrix);
+
+        // because vPoint is already normalized (from SVD decomposition)
+        // we only need to normalize rotated point to compute the rotation
+        // angle as the arc-cosine of their dot product
         final double norm2 = Utils.normF(pointMatrix2);
         pointMatrix2.multiplyByScalar(1.0 / norm2);
 
@@ -421,7 +509,7 @@ public class AxisRotation3DTest {
         assertTrue(rotationMatrix.equals(rotationMatrix2, ABSOLUTE_ERROR));
 
         final Matrix homRotationMatrix = Matrix.identity(HOM_COORDS, HOM_COORDS);
-        // set top-left 3x3 submatrix
+        // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0, 2, 2,
                 rotation.asInhomogeneousMatrix());
 
@@ -466,7 +554,7 @@ public class AxisRotation3DTest {
         final Point3D outputPoint2 = rotation2.rotate(inputPoint);
 
         final Matrix homRotationMatrix = Matrix.identity(HOM_COORDS, HOM_COORDS);
-        // set top-left 3x3 submatrix
+        // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0, 2, 2, rotationMatrix);
 
         final AxisRotation3D rotation = new AxisRotation3D();
@@ -603,7 +691,7 @@ public class AxisRotation3DTest {
 
         final Matrix homRotationMatrix = Matrix.identity(HOM_COORDS,
                 HOM_COORDS);
-        // set top-left 3x3 submatrix
+        // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0, 2, 2, rotationMatrix);
 
         final AxisRotation3D rotation = new AxisRotation3D();
@@ -692,7 +780,7 @@ public class AxisRotation3DTest {
         // to increase accuracy
         point3.normalize();
 
-        // ensure that points are not colinear
+        // ensure that points are not co-linear
 
         while (Plane.areColinearPoints(point1, point2, point3)) {
             point2.setInhomogeneousCoordinates(

@@ -36,7 +36,7 @@ public interface RefinerListener<T> {
      * @param refiner           refiner that raised the event.
      * @param initialEstimation initial estimation before refinement.
      * @param result            refined instance.
-     * @param errorDecreased    true if error decreased after refinemnt, false
+     * @param errorDecreased    true if error decreased after refinement, false
      *                          otherwise.
      */
     void onRefineEnd(final Refiner<T> refiner, final T initialEstimation, final T result,

@@ -55,6 +55,12 @@ public class MSACLine2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1, MSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, MSACLine2DRobustEstimator.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         MSACLine2DRobustEstimator estimator = new MSACLine2DRobustEstimator();
@@ -433,7 +439,7 @@ public class MSACLine2DRobustEstimatorTest implements
             // check correctness of estimation by checking that all points without
             // error have estimated line as locus
             for (final Point2D p : points) {
-                assertTrue(line2.isLocus(p, ABSOLUTE_ERROR));
+                assertTrue(line2.isLocus(p, 5.0 * ABSOLUTE_ERROR));
             }
 
             // check that both lines are equal

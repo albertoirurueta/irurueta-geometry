@@ -265,7 +265,7 @@ public class PROMedSDualQuadricRobustEstimator extends
 
     /**
      * Returns quality scores corresponding to each provided plane.
-     * The larger the score value the betther the quality of the sampled plane.
+     * The larger the score value the better the quality of the sampled plane.
      *
      * @return quality scores corresponding to each point.
      */

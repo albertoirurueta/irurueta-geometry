@@ -415,6 +415,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      *                                   estimated for some reason (point configuration degeneracy, duplicate
      *                                   points or numerical instabilities).
      */
+    @SuppressWarnings("DuplicatedCode")
     private void internalSetTransformationFromPoints(
             final Point2D inputPoint1, final Point2D inputPoint2,
             final Point2D inputPoint3, final Point2D outputPoint1,

@@ -27,6 +27,20 @@ import static org.junit.Assert.*;
 public class DualQuadricRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(9, DualQuadricRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, DualQuadricRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, DualQuadricRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, DualQuadricRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, DualQuadricRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, DualQuadricRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, DualQuadricRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, DualQuadricRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, DualQuadricRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, DualQuadricRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         DualQuadricRobustEstimator estimator;
 

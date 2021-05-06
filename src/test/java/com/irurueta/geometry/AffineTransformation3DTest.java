@@ -3417,7 +3417,7 @@ public class AffineTransformation3DTest {
         norm = Utils.normF(projectiveMatrix);
         projectiveMatrix.multiplyByScalar(1.0 / norm);
 
-        // check equalness up to scale
+        // check equal-ness up to scale
         assertTrue(expectedMatrix.equals(projectiveMatrix, ABSOLUTE_ERROR));
     }
 

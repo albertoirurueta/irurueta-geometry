@@ -182,8 +182,8 @@ public class QuaternionTest {
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 
         // constructor from matrix rotation
-        q = new Quaternion(axis, theta);
         matrixRotation = new MatrixRotation3D(axis, theta);
+        q = new Quaternion(matrixRotation);
 
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
@@ -1596,7 +1596,7 @@ public class QuaternionTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        // ensure that points are not colinear
+        // ensure that points are not co-linear
 
         while (Plane.areColinearPoints(point1, point2, point3)) {
             point2.setInhomogeneousCoordinates(
@@ -1782,7 +1782,7 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testMatrixRotationToQuaternionAndSetfromMatrixRotation()
+    public void testMatrixRotationToQuaternionAndSetFromMatrixRotation()
             throws AlgebraException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,

@@ -78,7 +78,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
 
     /**
      * Quality scores corresponding to each pair of matched lines.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -107,7 +107,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputLines  list of input lines to be used to estimate an affine
      *                    2D transformation.
@@ -185,7 +185,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputLines    list of input lines to be used to estimate an affine
      *                      2D transformation.
@@ -348,7 +348,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     }
 
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched lines and quality
      * scores) are provided and a minimum of MINIMUM_SIZE lines are available.

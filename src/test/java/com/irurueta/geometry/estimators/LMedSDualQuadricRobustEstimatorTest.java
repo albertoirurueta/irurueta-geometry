@@ -57,6 +57,14 @@ public class LMedSDualQuadricRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-9, LMedSDualQuadricRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                0.0);
+        assertEquals(0.0, LMedSDualQuadricRobustEstimator.MIN_STOP_THRESHOLD,
+                0.0);
+    }
+
+    @Test
     public void testConstructor() {
         LMedSDualQuadricRobustEstimator estimator;
 

@@ -80,10 +80,10 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects a 2D line into a 3D plane.
+     * Back-projects a 2D line into a 3D plane.
      *
-     * @param line 2D line to be backprojected.
-     * @return 3D plane that has been backprojected.
+     * @param line 2D line to be back-projected.
+     * @return 3D plane that has been back-projected.
      */
     public Plane backProject(final Line2D line) {
         final Plane plane = new Plane();
@@ -98,20 +98,20 @@ public abstract class Camera {
     // PLANE = P^T * l
 
     /**
-     * Backprojects a line into a plane and stores the result into provided
+     * Back-projects a line into a plane and stores the result into provided
      * instance.
      *
-     * @param line   2D line to be backprojected.
-     * @param result Instance where computed backprojected 3D plane data is
+     * @param line   2D line to be back-projected.
+     * @param result Instance where computed back-projected 3D plane data is
      *               stored.
      */
     public abstract void backProject(final Line2D line, final Plane result);
 
     /**
-     * Backprojects provided 2D lines into their corresponding 3D planes.
+     * Back-projects provided 2D lines into their corresponding 3D planes.
      *
-     * @param lines 2D lines to be backprojected.
-     * @return 3D planes that have been backprojected.
+     * @param lines 2D lines to be back-projected.
+     * @return 3D planes that have been back-projected.
      */
     public List<Plane> backProjectLines(final List<Line2D> lines) {
         final List<Plane> planes = new ArrayList<>(lines.size());
@@ -120,13 +120,13 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects provided 2D lines into their corresponding 3D planes and
+     * Back-projects provided 2D lines into their corresponding 3D planes and
      * stores the result into provided list.
      * Note that if result list is not empty, its contents will be cleared when
      * calling this method and then the estimated 3D planes will be stored in it.
      *
-     * @param lines  2D lines to be backprojected.
-     * @param result 3D planes that have been backprojected.
+     * @param lines  2D lines to be back-projected.
+     * @param result 3D planes that have been back-projected.
      */
     public void backProjectLines(final List<Line2D> lines, final List<Plane> result) {
         result.clear();
@@ -135,21 +135,21 @@ public abstract class Camera {
         }
     }
 
-    // Note: multiple point3D points can be backprojected (indeed is a ray of
+    // Note: multiple point3D points can be back-projected (indeed is a ray of
     // light). In other words, solution is not unique
 
     /**
-     * Backprojects provided 2D point into a 3D point.
-     * Notice that estimated solution is not unique, since backprojecting a 2D
+     * Back-projects provided 2D point into a 3D point.
+     * Notice that estimated solution is not unique, since back-projecting a 2D
      * point results in an infinite number of 3D points located in the same
      * ray of light.
      * This method only returns one possible solution. Any possible solution can
      * be computed as a linear combination between the camera center and the
      * estimated point.
      *
-     * @param point 2D point to be backprojected.
-     * @return A backprojected 3D point.
-     * @throws CameraException thrown if 2D point cannot be backprojected
+     * @param point 2D point to be back-projected.
+     * @return A back-projected 3D point.
+     * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
     public Point3D backProject(final Point2D point) throws CameraException {
@@ -159,29 +159,29 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects provided 2D point into a 3D point and stores the result into
+     * Back-projects provided 2D point into a 3D point and stores the result into
      * provided instance.
-     * Notice that estimated solution is not unique, since backprojecting a 2D
+     * Notice that estimated solution is not unique, since back-projecting a 2D
      * point results in an infinite number of 3D points located in the same
      * ray of light.
-     * This method only computes one possible solution. Any other solutionc an
+     * This method only computes one possible solution. Any other solution can
      * be computed as a linear combination between the camera center and the
-     * estimated backprojeted point.
+     * estimated back-projeted point.
      *
-     * @param point  2D point to be backprojected.
-     * @param result Instance where backprojected 3D point data will be stored
-     * @throws CameraException thrown if 2D point cannot be backprojected
+     * @param point  2D point to be back-projected.
+     * @param result Instance where back-projected 3D point data will be stored
+     * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
     public abstract void backProject(final Point2D point, final Point3D result)
             throws CameraException;
 
     /**
-     * Backprojects provided 2D points into their corresponding 3D points.
+     * Back-projects provided 2D points into their corresponding 3D points.
      *
-     * @param points 2D points to be backprojected.
-     * @return 3D points that have been backprojected.
-     * @throws CameraException thrown if 2D point cannot be backprojected
+     * @param points 2D points to be back-projected.
+     * @return 3D points that have been back-projected.
+     * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
     public List<Point3D> backProjectPoints(final List<Point2D> points)
@@ -193,14 +193,14 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects provided 2D points into their corresponding 3D points and
+     * Back-projects provided 2D points into their corresponding 3D points and
      * stores the result into provided list.
      * Note that if result list is not empty, its contents will be cleared when
      * calling this method and then the estimated 3D points will be stored in it.
      *
-     * @param points 2D points to be backprojected.
-     * @param result 3D points that have been backprojected.
-     * @throws CameraException thrown if 2D point cannot be backprojected
+     * @param points 2D points to be back-projected.
+     * @param result 3D points that have been back-projected.
+     * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
     public void backProjectPoints(final List<Point2D> points, final List<Point3D> result)
@@ -213,10 +213,10 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects a 2D conic into a 3D quadric.
+     * Back-projects a 2D conic into a 3D quadric.
      *
-     * @param conic 2D conic to be backprojected.
-     * @return A backprojected 3D quadric.
+     * @param conic 2D conic to be back-projected.
+     * @return A back-projected 3D quadric.
      */
     public Quadric backProject(final Conic conic) {
         final Quadric quadric = new Quadric();
@@ -225,11 +225,11 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects a 2D conic into a 3D quadric and stores the result into
+     * Back-projects a 2D conic into a 3D quadric and stores the result into
      * provided instance.
      *
-     * @param conic  2D conic to be backprojected.
-     * @param result Instance where data of backprojected 3D quadric will be
+     * @param conic  2D conic to be back-projected.
+     * @param result Instance where data of back-projected 3D quadric will be
      *               stored.
      */
     public abstract void backProject(final Conic conic, final Quadric result);
@@ -260,7 +260,7 @@ public abstract class Camera {
      * Projects a 3D quadric into a 2D conic.
      * The internal implementation of this method needs to compute the dual
      * quadric of provided quadric, and also needs to compute the resulting
-     * conic from an internal dual conic, for that reason a CameraExceptio might
+     * conic from an internal dual conic, for that reason a CameraException might
      * be raised if provided quadric is degenerate or if internal estimated dual
      * conic is degenerate and cannot be converted into a conic.
      *
@@ -301,15 +301,15 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects a 2D dual conic into a 3D dual quadric.
+     * Back-projects a 2D dual conic into a 3D dual quadric.
      * The internal implementation of this method needs to compute a conic from
      * provided dual conic, and also needs to compute the resulting dual quadric
      * from an internal quadric. For that reason a CameraException might be
      * raised if provided dual conic is degenerate or a if internal estimated
      * quadric is degenerate and cannot be converted into a dual quadric.
      *
-     * @param dualConic 2D dual conic to be backprojected.
-     * @return A backprojected 3D dual quadric.
+     * @param dualConic 2D dual conic to be back-projected.
+     * @return A back-projected 3D dual quadric.
      * @throws CameraException thrown if there are geometric degeneracies.
      */
     public DualQuadric backProject(final DualConic dualConic) throws CameraException {
@@ -319,7 +319,7 @@ public abstract class Camera {
     }
 
     /**
-     * Backprojects a 2D dual conic into a 3D dual quadric and stores the result
+     * Back-projects a 2D dual conic into a 3D dual quadric and stores the result
      * into provided dual quadric instance.
      * The internal implementation of this method needs to compute a conic from
      * provided dual conic, and also needs to compute the resulting dual quadric
@@ -327,8 +327,8 @@ public abstract class Camera {
      * raised if provided dual conic is degenerate or a if internal estimated
      * quadric is degenerate and cannot be converted into a dual quadric.
      *
-     * @param dualConic 2D dual conic to be backprojected.
-     * @param result    Instance where data of backprojected 3D dual quadric will
+     * @param dualConic 2D dual conic to be back-projected.
+     * @param result    Instance where data of back-projected 3D dual quadric will
      *                  be stored.
      * @throws CameraException thrown if there are geometric degeneracies.
      */

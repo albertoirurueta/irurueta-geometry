@@ -52,6 +52,22 @@ public class RANSACQuadricRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(9, QuadricRobustEstimator.MINIMUM_SIZE);
+        assertEquals(0.05f, QuadricRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.0f, QuadricRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
+        assertEquals(1.0f, QuadricRobustEstimator.MAX_PROGRESS_DELTA, 0.0f);
+        assertEquals(0.99, QuadricRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(5000, QuadricRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(0.0, QuadricRobustEstimator.MIN_CONFIDENCE, 0.0);
+        assertEquals(1.0, QuadricRobustEstimator.MAX_CONFIDENCE, 0.0);
+        assertEquals(1, QuadricRobustEstimator.MIN_ITERATIONS);
+        assertEquals(RobustEstimatorMethod.PROMedS, QuadricRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(1e-6, RANSACQuadricRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, RANSACQuadricRobustEstimator.MIN_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test constructor without arguments
         RANSACQuadricRobustEstimator estimator = new RANSACQuadricRobustEstimator();

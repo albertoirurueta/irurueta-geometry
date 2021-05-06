@@ -98,7 +98,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints  list of input points to be used to estimate a
      *                     metric 2D transformation.
@@ -172,7 +172,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
     }
 
     /**
-     * Constructor withlists of points to be used to estimate a metric 2D
+     * Constructor with lists of points to be used to estimate a metric 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -275,7 +275,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be breater or equal than MINIMUM_SIZE.
+     * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints            list of input points to be used to estimate a
      *                               metric 2D transformation.
@@ -356,7 +356,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
     }
 
     /**
-     * Constructor withlists of points to be used to estimate a metric 2D
+     * Constructor with lists of points to be used to estimate a metric 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -460,7 +460,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
     /**
      * Sets threshold to determine whether points are inliers or not when
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error (i.e. euclidean distance) a
+     * The threshold refers to the amount of error (i.e. euclidean distance) a
      * possible solution has on a matched pair of points.
      *
      * @param threshold threshold to determine whether points are inliers or not
@@ -482,7 +482,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
 
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      *
      * @return quality scores corresponding to each pair of matched points.
      */

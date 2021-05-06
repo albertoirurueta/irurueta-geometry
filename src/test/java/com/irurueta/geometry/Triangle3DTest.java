@@ -40,6 +40,14 @@ public class Triangle3DTest {
     private static final int INHOM_COORDS = 3;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-9, Triangle3D.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, Triangle3D.MIN_THRESHOLD, 0.0);
+        assertEquals(3, Triangle3D.INHOM_COORDS);
+        assertEquals(3, Triangle3D.NUM_VERTICES);
+    }
+
+    @Test
     public void testConstructor() {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
@@ -370,7 +378,7 @@ public class Triangle3DTest {
         }
 
         // if threshold is large enough, points will always be considered to be
-        // colinear
+        // co-linear
         assertTrue(triangle.areVerticesColinear(expectedArea + ABSOLUTE_ERROR));
 
         // If two points are coincident, then area must be zero or close to zero
@@ -380,7 +388,7 @@ public class Triangle3DTest {
                 ABSOLUTE_ERROR);
         assertEquals(triangle.getArea(), 0.0, ABSOLUTE_ERROR);
 
-        // because area is zero, then points are colinear
+        // because area is zero, then points are co-linear
         assertTrue(triangle.areVerticesColinear());
         assertTrue(triangle.areVerticesColinear(ABSOLUTE_ERROR));
 

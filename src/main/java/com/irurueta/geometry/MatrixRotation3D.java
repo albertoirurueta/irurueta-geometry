@@ -404,8 +404,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * might be two possible sets of solutions (#getRollAngle(),
      * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
      * #getPitchAngle2(), #getYawAngle2()).
-     * When a gimbal lock occurs this both pitch angles are equal because only
-     * yaw is undefined, buth pitch and roll are unique.
+     * When a gimbal lock occurs, both pitch angles are equal because only
+     * yaw is undefined, but pitch and roll are unique.
      *
      * @return pitch angle around y axis.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
@@ -439,7 +439,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns yaw angle arounx z axis expressed in radians for the 2nd possible
+     * Returns yaw angle around z axis expressed in radians for the 2nd possible
      * set of solutions.
      * When a gimbal lock occurs (pitch angle is close to +- 90 degrees), then
      * yaw angle is undefined, and can be any value, although this method will
@@ -822,7 +822,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         try {
             result = Matrix.identity(ROTATION3D_HOM_MATRIX_ROWS,
                     ROTATION3D_HOM_MATRIX_COLS);
-            // sets into 3x3 top-left submatrix the internal matrix of this
+            // sets into 3x3 top-left sub-matrix the internal matrix of this
             // instance, the remaining part will continue to be the identity
             result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,
                     ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
@@ -848,7 +848,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         }
 
         result.initialize(0.0);
-        // sets into 3x3 top-left submatrix the internal matrix of this instance
+        // sets into 3x3 top-left sub-matrix the internal matrix of this instance
         result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,
                 ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
         // set las element to 1.0 (to be like the identity
@@ -1075,7 +1075,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Converts this 3D rotation into a quaterion storing the result into
+     * Converts this 3D rotation into a quaternion storing the result into
      * provided instance.
      *
      * @param result instance where result will be stored.

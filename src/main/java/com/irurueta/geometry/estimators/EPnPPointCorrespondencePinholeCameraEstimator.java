@@ -44,12 +44,12 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     public static final boolean DEFAULT_PLANAR_CONFIGURATION_ALLOWED = true;
 
     /**
-     * Indicates that by default a dimension 2 nullspace is allowed.
+     * Indicates that by default a dimension 2 null-space is allowed.
      */
     public static final boolean DEFAULT_NULLSPACE_DIMENSION2_ALLOWED = true;
 
     /**
-     * Indicates that by default a dimension 3 nullspace is allowed.
+     * Indicates that by default a dimension 3 null-space is allowed.
      */
     public static final boolean DEFAULT_NULLSPACE_DIMENSION3_ALLOWED = true;
 
@@ -81,7 +81,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
 
     /**
-     * Inicates whether the case where a dimension 2 nullspace is allowed.
+     * Indicates whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -90,7 +90,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
 
     /**
-     * Indicates whether the case where a dimension 3 nullspace is allowed.
+     * Indicates whether the case where a dimension 3 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
@@ -145,7 +145,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     private Matrix mM;
 
     /**
-     * List containing columns of nullspace of M. Linear combinations of these
+     * List containing columns of null-space of M. Linear combinations of these
      * columns contain possible solutions for control points coordinates in
      * camera reference (up to scale).
      * First item of the list contains last column of v, which corresponds to
@@ -332,7 +332,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Indicates whether the case where a dimension 2 nullspace is allowed.
+     * Indicates whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
@@ -344,12 +344,12 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Specifies whether the case where a dimension 2 nullspace is allowed.
+     * Specifies whether the case where a dimension 2 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @param nullspaceDimension2Allowed true to allow 2 dimensional nullspace,
+     * @param nullspaceDimension2Allowed true to allow 2 dimensional null-space,
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
@@ -362,26 +362,26 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Indicates whether the case where a dimension 3 nullspace is allowed.
+     * Indicates whether the case where a dimension 3 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
      * when a nullspace of dimension 2 is used.
      *
-     * @return true to allow 3 dimensional nullspace, false otherwise.
+     * @return true to allow 3 dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension3Allowed() {
         return mNullspaceDimension3Allowed;
     }
 
     /**
-     * Specifies whether the case where a dimension 3 nullspace is allowed.
+     * Specifies whether the case where a dimension 3 null-space is allowed.
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
      * when a nullspace of dimension 2 is used.
      *
-     * @param nullspaceDimension3Allowed true to allow 3 dimensional nullspace,
+     * @param nullspaceDimension3Allowed true to allow 3 dimensional null-space,
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
@@ -630,7 +630,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Picks best solution (the one having the smallest reprojection error).
+     * Picks best solution (the one having the smallest re-projection error).
      *
      * @return best solution.
      */
@@ -770,7 +770,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
         // because solutions are square roots, beta1, beta2 and beta3 can have
         // different signs, so we add solutions for each combination so that the
-        // one with the smallest reprojection error will be picked
+        // one with the smallest re-projection error will be picked
         beta1 = -initialBeta1;
         // no need to set: beta2 = initialBeta2 and beta3 = initialBeta3 because they already have
         // those values
@@ -906,7 +906,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // control camera points (v):
         // ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4
         // we need to find beta to scale control camera points
-        // in the case we pick 2 columns of the nullspace v, then v is a linear
+        // in the case we pick 2 columns of the null-space v, then v is a linear
         // combination v = beta1*vA + beta2*vB and previous equation becomes
         // ||(beta1*vAi + beta2*vBi) - (beta1*vAj + beta2*vBj)||^2 = ||ci - cj||^2, i,j 1...4
         // This equation can be expanded in x,y,z coordinates as follows:
@@ -991,7 +991,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
         // because solutions are square roots, beta1 and beta2 can have different
         // signs, so we add solutions for each combination so that the one with
-        // the smallest reprojection error will be picked
+        // the smallest re-projection error will be picked
         beta1 = -initialBeta1;
         beta2 = -initialBeta2;
 
@@ -1036,7 +1036,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
     /**
      * Fills constraint matrix to solve betas when using control points from the
-     * last 3 columns of v (the nullspace).
+     * last 3 columns of v (the null-space).
      * The solution will be the linear combination of control points from the
      * last 3 columns using estimated betas. This solution will be control
      * points in camera coordinates.
@@ -1078,7 +1078,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
     /**
      * Fills constraint matrix to solve betas when using control points from the
-     * last 2 columns of v (the nullspace).
+     * last 2 columns of v (the null-space).
      * The solution will be the linear combination of control points from the
      * last 2 columns using estimated betas. This solution will be control
      * points in camera coordinates.
@@ -1119,17 +1119,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param row row to be filled.
      * @param c   matrix to be filled.
      * @param vai i-th control point in camera coordinates of last column of v
-     *            (i.e. the nullspace).
+     *            (i.e. the null-space).
      * @param vaj j-th control point in camera coordinates of last column of v
-     *            (i.e. the nullspace).
+     *            (i.e. the null-space).
      * @param vbi i-th control point in camera coordinates of second last column
-     *            of v (i.e. the nullspace).
+     *            of v (i.e. the null-space).
      * @param vbj j-th control point in camera coordinates of second last column
-     *            of v (i.e. the nullspace).
+     *            of v (i.e. the null-space).
      * @param vci i-th control point in camera coordinates of third last column
-     *            of v (i.e. the nullspace).
+     *            of v (i.e. the null-space).
      * @param vcj j-th control point in camera coordinates of third last column
-     *            of v (i.e. the nullspace).
+     *            of v (i.e. the null-space).
      */
     private static void fillRowConstraintMatrixSolution3(
             final int row, final Matrix c, final Point3D vai,
@@ -1191,13 +1191,13 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param row row to be filled.
      * @param c   matrix to be filled.
      * @param vai i-th control point in camera coordinates of last column of v
-     *            (i.e. the nullspace).
+     *            (i.e. the null-space).
      * @param vaj j-th control point in camera coordinates of last column of v
-     *            (i.e. the nullspace).
+     *            (i.e. the null-space).
      * @param vbi i-th control point in camera coordinates of second last column
-     *            of v (i.e. the nullspace).
+     *            of v (i.e. the null-space).
      * @param vbj j-th control point in camera coordinates of second last column
-     *            of v (i.e. the nullspace).
+     *            of v (i.e. the null-space).
      */
     private static void fillRowConstraintMatrixSolution2(
             final int row, final Matrix c, final Point3D vai,
@@ -1235,7 +1235,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     /**
      * Tests solution 1 for general point configuration.
      * Because solution is up to scale. Two possible solutions must be evaluated
-     * (positive or negative scale). The one with the smallest reprojection
+     * (positive or negative scale). The one with the smallest re-projection
      * error will be picked.
      *
      * @throws LockedException           never happens.
@@ -1244,7 +1244,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private void generalSolution1() throws LockedException,
             NotReadyException, CoincidentPointsException {
-        // pick last column of nullspace, contains control points in camera
+        // pick last column of null-space, contains control points in camera
         // coordinates up to scale (including sign change)
         double[] v = mNullspace.get(0);
         List<Point3D> controlCameraPoints = controlPointsFromV(v);
@@ -1283,7 +1283,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Computes a possible solution with camera, transformation, reprojection
+     * Computes a possible solution with camera, transformation, re-projection
      * error and control points in camera coordinates.
      *
      * @param controlCameraPoints control points in camera coordinates.
@@ -1386,7 +1386,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Total reprojection error for provided camera.
+     * Total re-projection error for provided camera.
      *
      * @param camera camera to estimate reprojection error.
      * @return reprojection error.
@@ -1409,11 +1409,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
     /**
      * Computes list of control points from provided array containing one column
-     * of the nullspace of M or a linear combination of columns of the
-     * nullspace.
+     * of the null-space of M or a linear combination of columns of the
+     * null-space.
      *
-     * @param v one column of the nullspace of M or a linear combination of
-     *          columns of the nullspace.
+     * @param v one column of the null-space of M or a linear combination of
+     *          columns of the null-space.
      * @return control points.
      */
     private List<Point3D> controlPointsFromV(final double[] v) {
@@ -1431,11 +1431,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Solves nullspace of matrix M containing possible solutions of camera
+     * Solves null-space of matrix M containing possible solutions of camera
      * coordinates of control points.
      *
-     * @throws AlgebraException if something fails due to numerica
-     *                          unstabilities.
+     * @throws AlgebraException if something fails due to numerical
+     *                          instabilities.
      */
     private void solveNullspace() throws AlgebraException {
         final int rows = mM.getRows();
@@ -1457,11 +1457,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // Each column of v contains coordinates of control points in camera
         // coordinates.
         // A solution for the linear system M*x = 0 is obtained as a linear
-        // combination of the columns of v forming the nullspace.
+        // combination of the columns of v forming the null-space.
         final Matrix v = decomposer.getV();
 
         // although nullity of M could be determined after SVD, it is assumed
-        // instead that nullspace could be located in any of the latter columns
+        // instead that null-space could be located in any of the latter columns
         // of v up to the number of control points.
         // Hence, for general configuration we pick the last 4 columns of v and
         // for planar configuration we pick the last 3.
@@ -1513,7 +1513,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * (planar configuration), where n is the number of provided 2D observed
      * points.
      *
-     * @throws AlgebraException if numerical unstabilities occur.
+     * @throws AlgebraException if numerical instabilities occur.
      */
     private void buildM() throws AlgebraException {
         final int n = mPoints2D.size();
@@ -1574,7 +1574,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * both reference frames are centered in the centroid), alphas can be used
      * in both world and camera coordinates.
      *
-     * @throws AlgebraException if there are numerical unstabilities.
+     * @throws AlgebraException if there are numerical instabilities.
      */
     private void computeBarycentricCoordinates() throws AlgebraException {
         // we need to express world points in terms of control points in world
@@ -1699,7 +1699,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * points.
      *
      * @throws AlgebraException if something fails because of numerical
-     *                          unstabilities.
+     *                          instabilities.
      */
     private void computeWorldControlPointsAndPointConfiguration()
             throws AlgebraException {
@@ -1761,7 +1761,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         if (!mPlanarConfigurationAllowed ||
                 Math.abs(singularValues[0]) <
                         Math.abs(singularValues[2]) * mPlanarThreshold) {
-            // general onfiguration
+            // general configuration
             numControl = GENERAL_NUM_CONTROL_POINTS;
             mIsPlanar = false;
         } else {
@@ -1823,7 +1823,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
          * x = K * [R t] * Xw = K * [R - R*C] * Xw = x = P * Xw,
          * where R is a rotation and C is the camera center in world
          * coordinates.
-         * Assuminc that control points are obtained up to scale, then instead
+         * Assuming that control points are obtained up to scale, then instead
          * of an euclidean transformation we will assume that Tw-&lt;c is a metric
          * transformation, hence:
          * Tw-&lt;c = [s*R t2]
@@ -1848,7 +1848,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         PinholeCamera camera;
 
         /**
-         * Reprojection error.
+         * Re-projection error.
          */
         double reprojectionError;
     }

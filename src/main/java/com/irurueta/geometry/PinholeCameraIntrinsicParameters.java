@@ -493,7 +493,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
     /**
      * Creates typical intrinsic parameters for an image of provided size.
      * Typical intrinsic parameters have principal point located at image center
-     * and a focal length which results in a frustrum of approximately 45º.
+     * and a focal length which results in a frustum of approximately 45º.
      *
      * @param imageWidth  Width of image in pixels.
      * @param imageHeight Height of image in pixels.

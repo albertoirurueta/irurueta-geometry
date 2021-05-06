@@ -54,6 +54,11 @@ public class LMedSConicRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
+    public void testConstants() {
+        assertEquals(0.0, LMedSConicRobustEstimator.MIN_STOP_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         LMedSConicRobustEstimator estimator;
 

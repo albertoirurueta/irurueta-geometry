@@ -99,7 +99,7 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Constructor with lists of points to be used to estimate a pinhole camera.
-     * Points in the lists located at the same position are cnsidered to be
+     * Points in the lists located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
      *
@@ -218,7 +218,7 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new NotReadyException();
         }
 
-        // pinhole camera estimator using UPnP (Uncalibrated PErspective-n-Point)
+        // pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point)
         // algorithm
         final UPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =
                 new UPnPPointCorrespondencePinholeCameraEstimator();

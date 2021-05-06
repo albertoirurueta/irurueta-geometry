@@ -76,7 +76,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
 
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
 
@@ -293,7 +293,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
     }
 
     /**
-     * Indicates if eatimator is ready to start the quadric estimation.
+     * Indicates if estimator is ready to start the quadric estimation.
      * This is true when input data (i.e. 3D points and quality scores) are
      * provided and a minimum of MINIMUM_SIZE points are available.
      *

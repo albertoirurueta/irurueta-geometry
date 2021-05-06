@@ -27,6 +27,12 @@ import static org.junit.Assert.*;
 public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                LineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         LineCorrespondenceProjectiveTransformation2DRobustEstimator estimator;
 

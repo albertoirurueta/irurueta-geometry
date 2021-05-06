@@ -29,6 +29,11 @@ public class RectangleTest {
     private static final double MAX_RANDOM_VALUE = 100.0;
 
     @Test
+    public void testConstants() {
+        assertEquals(1e-9, Rectangle.DEFAULT_THRESHOLD, 0.0);
+    }
+
+    @Test
     public void testConstructor() {
         // test empty constructor
         Rectangle r = new Rectangle();
@@ -242,6 +247,9 @@ public class RectangleTest {
 
         // check correctness
         assertEquals(r.getCenter(), center);
+        final Point2D center2 = Point2D.create();
+        r.getCenter(center2);
+        assertEquals(center2, center);
 
         // set center
         r = new Rectangle();

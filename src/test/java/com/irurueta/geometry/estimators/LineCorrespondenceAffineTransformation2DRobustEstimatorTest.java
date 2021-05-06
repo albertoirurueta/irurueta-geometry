@@ -27,6 +27,12 @@ import static org.junit.Assert.*;
 public class LineCorrespondenceAffineTransformation2DRobustEstimatorTest {
 
     @Test
+    public void testConstants() {
+        assertEquals(RobustEstimatorMethod.PROMedS,
+                LineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+    }
+
+    @Test
     public void testCreate() {
         LineCorrespondenceAffineTransformation2DRobustEstimator estimator;
 

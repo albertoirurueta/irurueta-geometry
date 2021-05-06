@@ -86,18 +86,6 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * constructor to create sfrotation from euler angles.
-     *
-     * @param heading  rotation about z axis.
-     * @param attitude rotation about y axis.
-     * @param bank     rotation about x axis.
-     */
-    public AxisRotation3D(final double heading, final double attitude,
-                          final double bank) {
-        setAngles(heading, attitude, bank);
-    }
-
-    /**
      * Copy constructor.
      *
      * @param rotation instance to copy.
@@ -133,30 +121,6 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     @Override
     public Rotation3DType getType() {
         return Rotation3DType.AXIS_ROTATION3D;
-    }
-
-    /**
-     * Sets rotation angles as heading, attitude and bank, which are commonly
-     * used in areas such as aviation.
-     *
-     * @param heading  Heading angle expressed in radians.
-     * @param attitude Attitude angle expressed in radians.
-     * @param bank     Bank angle expressed in radians.
-     */
-    public final void setAngles(
-            final double heading, final double attitude, final double bank) {
-        final double c1 = Math.cos(heading / 2);
-        final double s1 = Math.sin(heading / 2);
-        final double c2 = Math.cos(attitude / 2);
-        final double s2 = Math.sin(attitude / 2);
-        final double c3 = Math.cos(bank / 2);
-        final double s3 = Math.sin(bank / 2);
-        final double c1c2 = c1 * c2;
-        final double s1s2 = s1 * s2;
-        mTheta = c1c2 * c3 + s1s2 * s3;
-        mAxisX = c1c2 * s3 - s1s2 * c3;
-        mAxisY = c1 * s2 * c3 + s1 * c2 * s3;
-        mAxisZ = s1 * c2 * c3 - c1 * s2 * s3;
     }
 
     /**
@@ -407,7 +371,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         Matrix result = null;
         try {
             result = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            // sets into 3x3 top-left submatrix the internal matrix of this
+            // sets into 3x3 top-left sub-matrix the internal matrix of this
             // instance, the remaining part will continue to be the identity
             result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
                     asInhomogeneousMatrix());
@@ -433,7 +397,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         }
 
         result.initialize(0.0);
-        // sets into 3x3 top-left submatrix the internal matrix of this instance
+        // sets into 3x3 top-left sub-matrix the internal matrix of this instance
         result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
                 asInhomogeneousMatrix());
         // set las element to 1.0 (to be like the identity
@@ -772,7 +736,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Converts this 3D rotation into a quaterion storing the result into
+     * Converts this 3D rotation into a quaternion storing the result into
      * provided instance.
      *
      * @param result instance where result will be stored.

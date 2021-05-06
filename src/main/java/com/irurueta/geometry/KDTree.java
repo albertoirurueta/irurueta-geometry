@@ -419,7 +419,7 @@ public abstract class KDTree<P extends Point<P>> {
      */
     public int locateNear(final P pt, final double r, final int[] list, final int nmax) {
         if (r < 0.0) {
-            throw new IllegalArgumentException("radius must be nonnegative");
+            throw new IllegalArgumentException("radius must be non-negative");
         }
         if (nmax <= 0) {
             throw new IllegalArgumentException("number of points to search must be at least 1");
@@ -494,7 +494,7 @@ public abstract class KDTree<P extends Point<P>> {
      */
     public int locateNear(final P pt, final double r, final P[] plist, final int nmax) {
         if (r < 0.0) {
-            throw new IllegalArgumentException("radius must be nonnegative");
+            throw new IllegalArgumentException("radius must be non-negative");
         }
         if (nmax <= 0) {
             throw new IllegalArgumentException("number of points to search must be at least 1");
@@ -559,7 +559,7 @@ public abstract class KDTree<P extends Point<P>> {
 
     /**
      * Makes a selection so that we obtain ordered index at provided k position so that
-     * distances are ordered in such a way that resulting array arr containg distances
+     * distances are ordered in such a way that resulting array arr contains distances
      * as follows: arr[indx[0 .. k-1]] &lt;= arr[indx[k]] &lt;= arr[indx[k+1 .. n]].
      * So that positions between 0 and k-1 are not in any particular order but is less than
      * k position, and positions between k+1 and n neither have any particular order but is

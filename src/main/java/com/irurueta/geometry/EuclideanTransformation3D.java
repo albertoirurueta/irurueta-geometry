@@ -85,7 +85,7 @@ public class EuclideanTransformation3D extends Transformation3D
     /**
      * Creates transformation with provided 3D translation.
      *
-     * @param translation Array indicating 3D translation using inhomogenous
+     * @param translation Array indicating 3D translation using in-homogenous
      *                    coordinates.
      * @throws NullPointerException     Raised if provided array is null.
      * @throws IllegalArgumentException Raised if length of array is not equal
@@ -557,7 +557,7 @@ public class EuclideanTransformation3D extends Transformation3D
         // (plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
         // where:
         // - transformedPlane = T^-1'*plane
-        // - transformedpoint = T*point
+        // - transformedPoint = T*point
 
         inputPlane.normalize();
 
