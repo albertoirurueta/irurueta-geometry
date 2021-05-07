@@ -676,7 +676,7 @@ public class Triangle3D implements Serializable {
 <span class="fc" id="L676">        }</span>
 
         // check if second line is closest to first line
-<span class="fc bfc" id="L679" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
+<span class="pc bpc" id="L679" title="1 of 2 branches missed.">        if (dist &lt; bestDist) {</span>
 <span class="fc" id="L680">            bestDist = dist;</span>
         }
 
@@ -968,10 +968,10 @@ public class Triangle3D implements Serializable {
 <span class="pc bpc" id="L968" title="2 of 4 branches missed.">            } else if (distClosest2 &lt; distClosest1 &amp;&amp;</span>
                     distClosest2 &lt; distClosest3) {
                 // pick closest2
-<span class="nc" id="L971">                result.setCoordinates(closest2);</span>
+<span class="fc" id="L971">                result.setCoordinates(closest2);</span>
             } else {
                 // pick closest3
-<span class="fc" id="L974">                result.setCoordinates(closest3);</span>
+<span class="nc" id="L974">                result.setCoordinates(closest3);</span>
             }
         } else {
             // all closest points are outside vertex limits, so we pick the

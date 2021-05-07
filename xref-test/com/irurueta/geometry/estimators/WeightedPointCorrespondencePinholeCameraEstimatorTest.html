@@ -1842,7 +1842,7 @@
 <a class="jxr_linenumber" name="L1834" href="#L1834">1834</a> 
 <a class="jxr_linenumber" name="L1835" href="#L1835">1835</a>         <em class="jxr_comment">// to account for random degeneracies</em>
 <a class="jxr_linenumber" name="L1836" href="#L1836">1836</a>         <strong class="jxr_keyword">boolean</strong> passedAtLeastOnce = false;
-<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
+<a class="jxr_linenumber" name="L1837" href="#L1837">1837</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; 2 * TIMES; t++) {
 <a class="jxr_linenumber" name="L1838" href="#L1838">1838</a>             <em class="jxr_comment">// create intrinsic parameters</em>
 <a class="jxr_linenumber" name="L1839" href="#L1839">1839</a>             <strong class="jxr_keyword">final</strong> UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
 <a class="jxr_linenumber" name="L1840" href="#L1840">1840</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> horizontalFocalLength = randomizer.nextDouble(

@@ -700,12 +700,12 @@ public class PROSACEuclideanTransformation3DRobustEstimator extends
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator,
                                     final float progress) {
-<span class="pc bpc" id="L703" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L704">                                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L703" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L704">                                    mListener.onEstimateProgressChange(</span>
                                             PROSACEuclideanTransformation3DRobustEstimator.this,
                                             progress);
                                 }
-<span class="fc" id="L708">                            }</span>
+<span class="nc" id="L708">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {

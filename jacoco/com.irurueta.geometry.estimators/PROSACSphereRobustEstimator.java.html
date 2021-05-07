@@ -311,7 +311,7 @@ public class PROSACSphereRobustEstimator extends SphereRobustEstimator {
                                 try {
 <span class="fc" id="L312">                                    final Sphere sphere = new Sphere(point1, point2, point3, point4);</span>
 <span class="fc" id="L313">                                    solutions.add(sphere);</span>
-<span class="nc" id="L314">                                } catch (final CoplanarPointsException e) {</span>
+<span class="fc" id="L314">                                } catch (final CoplanarPointsException e) {</span>
                                     // if points are coincident, no solution is added
 <span class="fc" id="L316">                                }</span>
 <span class="fc" id="L317">                            }</span>
@@ -352,11 +352,11 @@ public class PROSACSphereRobustEstimator extends SphereRobustEstimator {
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;Sphere&gt; estimator, final float progress) {
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
-<span class="fc" id="L356">                                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L355" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L356">                                    mListener.onEstimateProgressChange(</span>
                                             PROSACSphereRobustEstimator.this, progress);
                                 }
-<span class="fc" id="L359">                            }</span>
+<span class="nc" id="L359">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {

@@ -565,11 +565,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
                             @Override
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;PinholeCamera&gt; estimator, final float progress) {
-<span class="nc bnc" id="L568" title="All 2 branches missed.">                                if (mListener != null) {</span>
-<span class="nc" id="L569">                                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,</span>
+<span class="pc bpc" id="L568" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L569">                                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,</span>
                                             progress);
                                 }
-<span class="nc" id="L572">                            }</span>
+<span class="fc" id="L572">                            }</span>
 
                             @Override
                             public double[] getQualityScores() {

@@ -87,17 +87,17 @@ public class Utils {
 <span class="fc" id="L87">        double result = angle;</span>
 <span class="fc" id="L88">        final double fullTurn = 2.0 * halfTurn;</span>
         
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (result &lt;= -halfTurn) {</span>
-<span class="nc" id="L91">            int nTurns = (int)Math.ceil(-result / fullTurn);</span>
-<span class="nc" id="L92">            result += nTurns * fullTurn;</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (result &gt; halfTurn) {</span>
-<span class="nc" id="L94">                result -= fullTurn;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (result &lt;= -halfTurn) {</span>
+<span class="fc" id="L91">            int nTurns = (int)Math.ceil(-result / fullTurn);</span>
+<span class="fc" id="L92">            result += nTurns * fullTurn;</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (result &gt; halfTurn) {</span>
+<span class="fc" id="L94">                result -= fullTurn;</span>
             }
         }
 <span class="fc bfc" id="L97" title="All 2 branches covered.">        if (result &gt; halfTurn) {</span>
 <span class="fc" id="L98">            int nTurns = (int)Math.ceil(result / fullTurn);</span>
 <span class="fc" id="L99">            result -= nTurns * fullTurn;</span>
-<span class="fc bfc" id="L100" title="All 2 branches covered.">            if(result &lt;= -halfTurn){</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">            if(result &lt;= -halfTurn){</span>
 <span class="fc" id="L101">                result += fullTurn;</span>
             }
         }
