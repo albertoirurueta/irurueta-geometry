@@ -1834,7 +1834,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
 
         // to account for random degeneracies
         boolean passedAtLeastOnce = false;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2 * TIMES; t++) {
             // create intrinsic parameters
             final UniformRandomizer randomizer = new UniformRandomizer(new Random());
             final double horizontalFocalLength = randomizer.nextDouble(
