@@ -1839,12 +1839,12 @@ public class PinholeCamera extends Camera implements Serializable {
 <span class="fc" id="L1839">            final double[] vDiag = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
 <span class="fc" id="L1840">            final double[] vDiag2 = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
 
-<span class="pc bpc" id="L1842" title="1 of 2 branches missed.">            if (invNorm * r.getElementAt(0, 0) &gt; 0.0) {</span>
+<span class="fc bfc" id="L1842" title="All 2 branches covered.">            if (invNorm * r.getElementAt(0, 0) &gt; 0.0) {</span>
 <span class="fc" id="L1843">                vDiag[0] = invNorm;</span>
 <span class="fc" id="L1844">                vDiag2[0] = norm;</span>
             } else {
-<span class="nc" id="L1846">                vDiag[0] = -invNorm;</span>
-<span class="nc" id="L1847">                vDiag2[0] = -norm;</span>
+<span class="fc" id="L1846">                vDiag[0] = -invNorm;</span>
+<span class="fc" id="L1847">                vDiag2[0] = -norm;</span>
             }
 <span class="pc bpc" id="L1849" title="1 of 2 branches missed.">            if (invNorm * r.getElementAt(1, 1) &gt; 0.0) {</span>
 <span class="fc" id="L1850">                vDiag[1] = invNorm;</span>
@@ -1874,7 +1874,7 @@ public class PinholeCamera extends Camera implements Serializable {
                     Double.POSITIVE_INFINITY);
 <span class="nc" id="L1875">        } catch (final AlgebraException e) {</span>
 <span class="nc" id="L1876">            throw new CameraException(e);</span>
-<span class="nc" id="L1877">        } catch (final GeometryException ignore) {</span>
+<span class="fc" id="L1877">        } catch (final GeometryException ignore) {</span>
             // never happens
 <span class="fc" id="L1879">        }</span>
 <span class="fc" id="L1880">    }</span>

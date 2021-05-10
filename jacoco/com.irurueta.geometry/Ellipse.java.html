@@ -1297,7 +1297,7 @@ public class Ellipse implements Serializable {
      *                           up to DEFAULT_THRESHOLD.
      */
     public Line2D getTangentLineAt(final Point2D point) throws NotLocusException {
-<span class="nc" id="L1300">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L1300">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
     }
 
     /**
@@ -1335,8 +1335,8 @@ public class Ellipse implements Serializable {
     public void tangentLineAt(final Point2D point, final Line2D line, final double threshold)
             throws NotLocusException {
 
-<span class="fc bfc" id="L1338" title="All 2 branches covered.">        if (!isLocus(point, threshold)) {</span>
-<span class="fc" id="L1339">            throw new NotLocusException();</span>
+<span class="pc bpc" id="L1338" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
+<span class="nc" id="L1339">            throw new NotLocusException();</span>
         }
 
 <span class="fc" id="L1342">        final Conic c = toConic();</span>
