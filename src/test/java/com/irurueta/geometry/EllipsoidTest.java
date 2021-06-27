@@ -18,6 +18,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -292,5 +293,41 @@ public class EllipsoidTest {
                 ABSOLUTE_ERROR);
         assertEquals(Math.abs(quadric1.getJ()), Math.abs(quadric2.getJ()),
                 ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
+                MAX_RANDOM_VALUE);
+        final double roll = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+
+        final Ellipsoid ellipsoid1 = new Ellipsoid(center, semiAxesLengths, rotation);
+
+        // check
+        assertSame(center, ellipsoid1.getCenter());
+        assertSame(semiAxesLengths, ellipsoid1.getSemiAxesLengths());
+        assertSame(rotation, ellipsoid1.getRotation());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(ellipsoid1);
+        final Ellipsoid ellipsoid2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(ellipsoid1.getCenter(), ellipsoid2.getCenter());
+        assertArrayEquals(ellipsoid1.getSemiAxesLengths(),
+                ellipsoid2.getSemiAxesLengths(), 0.0);
+        assertEquals(ellipsoid1.getRotation(), ellipsoid2.getRotation());
     }
 }

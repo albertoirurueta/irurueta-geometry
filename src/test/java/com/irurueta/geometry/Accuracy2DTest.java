@@ -18,10 +18,12 @@ package com.irurueta.geometry;
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
+import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.NormalDist;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -284,5 +286,44 @@ public class Accuracy2DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws WrongSizeException,
+            NonSymmetricPositiveDefiniteMatrixException, IOException,
+            ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double semiMinorAxis = randomizer.nextDouble();
+        final double semiMajorAxis = semiMinorAxis + randomizer.nextDouble();
+        final double rotationAngle = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+
+        final Rotation2D rotation2D = new Rotation2D(rotationAngle);
+        final Matrix rotationMatrix = rotation2D.asInhomogeneousMatrix();
+        final Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
+                Matrix.diagonal(new double[]{
+                        semiMajorAxis * semiMajorAxis,
+                        semiMinorAxis * semiMinorAxis}).
+                        multiplyAndReturnNew(rotationMatrix));
+        final double conf = randomizer.nextDouble(0.0, 1.0);
+
+        final Accuracy2D accuracy1 = new Accuracy2D(covarianceMatrix, conf);
+
+        // check
+        assertSame(accuracy1.getCovarianceMatrix(), covarianceMatrix);
+        assertTrue(accuracy1.getStandardDeviationFactor() > 0.0);
+        assertEquals(accuracy1.getConfidence(), conf, 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(accuracy1);
+        final Accuracy2D accuracy2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(accuracy1.getCovarianceMatrix(),
+                accuracy2.getCovarianceMatrix());
+        assertEquals(accuracy1.getStandardDeviationFactor(),
+                accuracy2.getStandardDeviationFactor(), 0.0);
+        assertEquals(accuracy1.getConfidence(),
+                accuracy2.getConfidence(), 0.0);
     }
 }

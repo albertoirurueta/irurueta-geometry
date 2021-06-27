@@ -19,6 +19,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -211,7 +212,7 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsAndHashCode() {
         final double[] array = new double[INHOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -219,6 +220,7 @@ public class InhomogeneousPoint2DTest {
         InhomogeneousPoint2D iPoint2 = new InhomogeneousPoint2D(array);
         assertTrue(iPoint1.equals(iPoint2, 0.0));
         assertTrue(iPoint1.equals((Point2D) iPoint2, 0.0));
+        assertEquals(iPoint1.hashCode(), iPoint2.hashCode());
 
         array[0] = iPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -291,8 +293,10 @@ public class InhomogeneousPoint2DTest {
         hPoint = new HomogeneousPoint2D();
         iPoint = new InhomogeneousPoint2D();
         assertTrue(iPoint.equals(hPoint));
+        assertEquals(iPoint.hashCode(), hPoint.hashCode());
         iPoint2 = new InhomogeneousPoint2D(iPoint);
         assertTrue(iPoint.equals(iPoint2));
+        assertEquals(iPoint.hashCode(), iPoint2.hashCode());
         assertTrue(iPoint.equals((Point2D) hPoint));
         assertTrue(iPoint.equals((Point2D) iPoint2));
     }
@@ -329,5 +333,20 @@ public class InhomogeneousPoint2DTest {
         iPoint = new InhomogeneousPoint2D(array);
         iPoint.setY(Double.NaN);
         assertTrue(iPoint.isAtInfinity());
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final double[] array = new double[INHOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final InhomogeneousPoint2D iPoint1 = new InhomogeneousPoint2D(array);
+
+        // serialize and deserialice
+        final byte[] bytes = SerializationHelper.serialize(iPoint1);
+        final InhomogeneousPoint2D iPoint2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(iPoint1, iPoint2);
     }
 }

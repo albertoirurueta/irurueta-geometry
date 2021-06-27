@@ -21,6 +21,7 @@ import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This class defines the amount of rotation for 2D points or lines.
@@ -655,9 +656,6 @@ public class Rotation2D implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.theta) ^
-                (Double.doubleToLongBits(this.theta) >>> 32));
-        return hash;
+        return Objects.hash(theta);
     }
 }

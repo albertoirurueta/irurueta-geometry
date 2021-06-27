@@ -20,6 +20,7 @@ import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -116,7 +117,7 @@ public class Polygon2DTest {
     }
 
     @Test
-    public void testGetSetVertices() throws NotEnoughVerticesException {
+    public void testGetSetVertices1() throws NotEnoughVerticesException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -137,6 +138,30 @@ public class Polygon2DTest {
         polygon.setVertices(vertices2);
         assertEquals(polygon.getVertices(), vertices2);
     }
+
+    @Test
+    public void testGetSetVertices2() throws NotEnoughVerticesException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+
+        // build vertices list
+        final List<Point2D> vertices = new LinkedList<>(buildPolygonVertices(sides, radius));
+
+        // build polygon vertices
+        final Polygon2D polygon = new Polygon2D(vertices);
+        assertEquals(polygon.getVertices(), vertices);
+
+        // build new vertices
+        sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+
+        final List<Point2D> vertices2 = new LinkedList<>(buildPolygonVertices(sides, radius));
+
+        polygon.setVertices(vertices2);
+        assertEquals(polygon.getVertices(), vertices2);
+    }
+
 
     @Test
     public void testTriangulateIsTriangulatedAndArea()
@@ -458,6 +483,33 @@ public class Polygon2DTest {
         }
 
         assertTrue(numValid > 0);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws NotEnoughVerticesException,
+            TriangulatorException, IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+
+        // build vertices list
+        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+
+        final Polygon2D polygon1 = new Polygon2D(vertices);
+        polygon1.triangulate();
+
+        assertSame(vertices, polygon1.getVertices());
+        assertFalse(polygon1.getTriangles().isEmpty());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(polygon1);
+        final Polygon2D polygon2 = SerializationHelper.deserialize(bytes);
+
+        assertNotSame(polygon1, polygon2);
+        assertEquals(polygon1.getVertices(), polygon2.getVertices());
+        assertNotSame(polygon1.getVertices(), polygon2.getVertices());
+        assertEquals(polygon1.getTriangles().size(),
+                polygon2.getTriangles().size());
     }
 
     private List<Point2D> buildPolygonVertices(final int sides, final double radius) {

@@ -20,6 +20,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -334,5 +335,33 @@ public class AffineParameters2DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double skewness = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        final AffineParameters2D params1 = new AffineParameters2D(
+                scaleX, scaleY, skewness);
+
+        // check
+        assertEquals(params1.getScaleX(), scaleX, 0.0);
+        assertEquals(params1.getScaleY(), scaleY, 0.0);
+        assertEquals(params1.getSkewness(), skewness, 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(params1);
+        final AffineParameters2D params2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(params1.getScaleX(), params2.getScaleX(), 0.0);
+        assertEquals(params1.getScaleY(), params2.getScaleY(), 0.0);
+        assertEquals(params1.getSkewness(), params2.getSkewness(), 0.0);
     }
 }

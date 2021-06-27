@@ -22,6 +22,7 @@ import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -2814,5 +2815,31 @@ public class QuaternionTest {
         } catch (final IllegalArgumentException ignore) {
         }
         assertTrue(result.equals(new Quaternion()));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Quaternion q1 = new Quaternion(a, b, c, d);
+
+        // check
+        assertEquals(q1.getA(), a, 0.0);
+        assertEquals(q1.getB(), b, 0.0);
+        assertEquals(q1.getC(), c, 0.0);
+        assertEquals(q1.getD(), d, 0.0);
+        assertFalse(q1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(q1);
+        final Quaternion q2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(q1, q2);
+        assertNotSame(q1, q2);
     }
 }

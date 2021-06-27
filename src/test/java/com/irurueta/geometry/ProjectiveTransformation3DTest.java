@@ -21,6 +21,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -6569,6 +6570,29 @@ public class ProjectiveTransformation3DTest {
         } catch (final CoincidentLinesException ignore) {
         }
         assertNull(transformation2);
+    }
+
+    @Test
+    public void testSerializeAndDeserialize() throws WrongSizeException, IOException, ClassNotFoundException {
+        final Matrix t = Matrix.createWithUniformRandomValues(
+                ProjectiveTransformation3D.HOM_COORDS,
+                ProjectiveTransformation3D.HOM_COORDS,
+                MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        // ensure last element is not zero
+        t.setElementAt(ProjectiveTransformation3D.HOM_COORDS - 1,
+                ProjectiveTransformation3D.HOM_COORDS - 1, 1.0);
+        final ProjectiveTransformation3D transformation1 = new ProjectiveTransformation3D(t);
+
+        // check
+        assertSame(t, transformation1.getT());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(transformation1);
+        final ProjectiveTransformation3D transformation2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(transformation1.getT(), transformation2.getT());
     }
 
     private static void transformPoint(

@@ -21,6 +21,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Class defining a plane.
@@ -872,17 +873,7 @@ public class Plane implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mA) ^
-                (Double.doubleToLongBits(this.mA) >>> 32));
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mB) ^
-                (Double.doubleToLongBits(this.mB) >>> 32));
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mC) ^
-                (Double.doubleToLongBits(this.mC) >>> 32));
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mD) ^
-                (Double.doubleToLongBits(this.mD) >>> 32));
-        hash = 67 * hash + (this.mNormalized ? 1 : 0);
-        return hash;
+        return Objects.hash(mA, mB, mC, mD);
     }
 
     /**

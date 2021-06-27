@@ -367,7 +367,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(mX, mY, mZ);
+        return Objects.hash(mX, mY, mZ, 1.0);
     }
 
     /**

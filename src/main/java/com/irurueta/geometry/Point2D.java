@@ -278,9 +278,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @return Hash code.
      */
     @Override
-    public int hashCode() {
-        return 3;
-    }
+    public abstract int hashCode();
 
     /**
      * Checks whether this Point2D is at infinity or not.

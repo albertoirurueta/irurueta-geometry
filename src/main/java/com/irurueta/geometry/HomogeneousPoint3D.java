@@ -17,6 +17,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Subclass of Point3D defining an homogeneous 3D point.
@@ -422,16 +423,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mX) ^
-                (Double.doubleToLongBits(this.mX) >>> 32));
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mY) ^
-                (Double.doubleToLongBits(this.mY) >>> 32));
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mZ) ^
-                (Double.doubleToLongBits(this.mZ) >>> 32));
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mW) ^
-                (Double.doubleToLongBits(this.mW) >>> 32));
-        return hash;
+        return Objects.hash(mX, mY, mZ, mW);
     }
 
     /**

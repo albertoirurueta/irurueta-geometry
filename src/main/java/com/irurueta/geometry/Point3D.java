@@ -301,9 +301,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @return Hash code.
      */
     @Override
-    public int hashCode() {
-        return 3;
-    }
+    public abstract int hashCode();
 
     /**
      * Checks whether this Point3D is at infinity or not.

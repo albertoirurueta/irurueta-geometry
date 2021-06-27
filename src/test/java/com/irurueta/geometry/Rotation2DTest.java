@@ -20,6 +20,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -773,5 +774,21 @@ public class Rotation2DTest {
         assertTrue(rotation1.equals(rotation3, 2.0 * threshold));
         assertTrue(rotation1.equals(rotation2));
         assertFalse(rotation1.equals(rotation3));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
+
+        final Rotation2D rotation1 = new Rotation2D(theta);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(rotation1);
+        final Rotation2D rotation2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(rotation1, rotation2);
+        assertNotSame(rotation1, rotation2);
     }
 }

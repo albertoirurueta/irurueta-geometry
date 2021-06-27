@@ -19,6 +19,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -1217,5 +1218,41 @@ public class ConicTest {
             fail("CoincidentPointsException expected but not thrown");
         } catch (final CoincidentPointsException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Conic conic1 = new Conic(a, b, c, d, e, f);
+
+        // check
+        assertEquals(a, conic1.getA(), 0.0);
+        assertEquals(b, conic1.getB(), 0.0);
+        assertEquals(c, conic1.getC(), 0.0);
+        assertEquals(d, conic1.getD(), 0.0);
+        assertEquals(e, conic1.getE(), 0.0);
+        assertEquals(f, conic1.getF(), 0.0);
+        assertFalse(conic1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(conic1);
+        final Conic conic2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(conic1.getA(), conic2.getA(), 0.0);
+        assertEquals(conic1.getB(), conic2.getB(), 0.0);
+        assertEquals(conic1.getC(), conic2.getC(), 0.0);
+        assertEquals(conic1.getD(), conic2.getD(), 0.0);
+        assertEquals(conic1.getE(), conic2.getE(), 0.0);
+        assertEquals(conic1.getF(), conic2.getF(), 0.0);
+        assertEquals(conic1.isNormalized(), conic2.isNormalized());
     }
 }

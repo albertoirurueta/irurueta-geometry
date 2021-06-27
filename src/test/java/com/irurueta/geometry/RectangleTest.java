@@ -18,6 +18,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -10921,5 +10922,35 @@ public class RectangleTest {
         assertTrue(r.isLocus(pointAtTopBorder));
         assertTrue(r.isLocus(pointAtRightBorder));
         assertTrue(r.isLocus(pointAtBottomBorder));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double right = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double bottom = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        final InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(left, top);
+        final InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(right,
+                bottom);
+
+        final Rectangle r1 = new Rectangle(topLeft, bottomRight);
+
+        assertSame(r1.getTopLeft(), topLeft);
+        assertSame(r1.getBottomRight(), bottomRight);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(r1);
+        final Rectangle r2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(r1.getTopLeft(), r2.getTopLeft());
+        assertNotSame(r1.getTopLeft(), r2.getTopLeft());
+        assertEquals(r1.getBottomRight(), r2.getBottomRight());
+        assertNotSame(r1.getBottomRight(), r2.getBottomRight());
     }
 }

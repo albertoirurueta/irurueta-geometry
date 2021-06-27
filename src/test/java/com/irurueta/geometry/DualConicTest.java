@@ -19,6 +19,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.*;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -1028,5 +1029,41 @@ public class DualConicTest {
         assertEquals(dac.getF(), 1.0, 0.0);
 
         assertEquals(dac.asMatrix(), Matrix.identity(3, 3));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final DualConic dualConic1 = new DualConic(a, b, c, d, e, f);
+
+        // check
+        assertEquals(dualConic1.getA(), a, 0.0);
+        assertEquals(dualConic1.getB(), b, 0.0);
+        assertEquals(dualConic1.getC(), c, 0.0);
+        assertEquals(dualConic1.getD(), d, 0.0);
+        assertEquals(dualConic1.getE(), e, 0.0);
+        assertEquals(dualConic1.getF(), f, 0.0);
+        assertFalse(dualConic1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(dualConic1);
+        final DualConic dualConic2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(dualConic1.getA(), dualConic2.getA(), 0.0);
+        assertEquals(dualConic1.getB(), dualConic2.getB(), 0.0);
+        assertEquals(dualConic1.getC(), dualConic2.getC(), 0.0);
+        assertEquals(dualConic1.getD(), dualConic2.getD(), 0.0);
+        assertEquals(dualConic1.getE(), dualConic2.getE(), 0.0);
+        assertEquals(dualConic1.getF(), dualConic2.getF(), 0.0);
+        assertEquals(dualConic1.isNormalized(),
+                dualConic2.isNormalized());
     }
 }

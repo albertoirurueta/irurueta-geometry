@@ -301,7 +301,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(mX, mY);
+        return Objects.hash(mX, mY, 1.0);
     }
 
     /**

@@ -15,14 +15,12 @@
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
+import com.irurueta.algebra.*;
 import com.irurueta.statistics.NormalDist;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -468,5 +466,54 @@ public class Accuracy3DTest {
         // because ellipses are symmetric, there is a rotation ambiguity
         assertTrue(Math.abs(ellipse.getRotationAngle() - angle) <= ABSOLUTE_ERROR ||
                 Math.abs(Math.abs(ellipse.getRotationAngle() - angle) - Math.PI) <= ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws WrongSizeException,
+            NonSymmetricPositiveDefiniteMatrixException, IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        double previous = 0.0;
+        for (int i = Ellipsoid.DIMENSIONS - 1; i >= 0; i--) {
+            semiAxesLengths[i] = previous + randomizer.nextDouble();
+            previous = semiAxesLengths[i];
+        }
+
+        final double[] sqrSemiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        for (int i = 0; i < Ellipsoid.DIMENSIONS; i++) {
+            sqrSemiAxesLengths[i] = semiAxesLengths[i] * semiAxesLengths[i];
+        }
+
+        final double roll = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final Rotation3D rotation = new MatrixRotation3D(new Quaternion(roll, pitch, yaw));
+
+        final Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
+        final Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
+                Matrix.diagonal(sqrSemiAxesLengths).multiplyAndReturnNew(rotationMatrix));
+        final double conf = randomizer.nextDouble(0.0, 1.0);
+
+        final Accuracy3D accuracy1 = new Accuracy3D(covarianceMatrix, conf);
+
+        // check
+        assertSame(accuracy1.getCovarianceMatrix(), covarianceMatrix);
+        assertTrue(accuracy1.getStandardDeviationFactor() > 0.0);
+        assertEquals(accuracy1.getConfidence(), conf, 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(accuracy1);
+        final Accuracy3D accuracy2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(accuracy1.getCovarianceMatrix(),
+                accuracy2.getCovarianceMatrix());
+        assertEquals(accuracy1.getStandardDeviationFactor(),
+                accuracy2.getStandardDeviationFactor(), 0.0);
+        assertEquals(accuracy1.getConfidence(),
+                accuracy2.getConfidence(), 0.0);
     }
 }

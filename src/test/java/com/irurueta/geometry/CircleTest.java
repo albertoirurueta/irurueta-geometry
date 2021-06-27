@@ -21,6 +21,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -680,5 +681,29 @@ public class CircleTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE));
+
+        final Circle circle1 = new Circle(center, radius);
+
+        // check
+        assertSame(center, circle1.getCenter());
+        assertEquals(radius, circle1.getRadius(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(circle1);
+        final Circle circle2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(circle1.getCenter(), circle2.getCenter());
+        assertEquals(circle1.getRadius(), circle2.getRadius(), 0.0);
     }
 }

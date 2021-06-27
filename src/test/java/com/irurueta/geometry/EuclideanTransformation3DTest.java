@@ -20,6 +20,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -2777,6 +2778,46 @@ public class EuclideanTransformation3DTest {
         assertEquals(q.getC(), q2.getC(), ABSOLUTE_ERROR);
         assertEquals(q.getD(), q2.getD(), ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        // normalize axis
+        final double norm = Utils.normF(rotAxis);
+        ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
+
+        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+
+        final double[] translation =
+                new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final EuclideanTransformation3D transformation1 =
+                new EuclideanTransformation3D(rotation, translation);
+
+        // check
+        assertSame(rotation, transformation1.getRotation());
+        assertSame(translation, transformation1.getTranslation());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(transformation1);
+        final EuclideanTransformation3D transformation2 =
+                SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(transformation1.getRotation(),
+                transformation2.getRotation());
+        assertNotSame(transformation1.getRotation(),
+                transformation2.getRotation());
+        assertArrayEquals(transformation1.getTranslation(),
+                transformation2.getTranslation(), 0.0);
+        assertNotSame(transformation1.getTranslation(),
+                transformation2.getTranslation());
     }
 
     private static void transformPoint(

@@ -1134,4 +1134,29 @@ public class AxisRotation3DTest {
         //noinspection all
         assertEquals(rotation, quaternion2);
     }
+
+    @Test
+    public void testSerializeDeserialize() throws WrongSizeException,
+            LockedException, NotReadyException, DecomposerException,
+            NotAvailableException, RotationException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+        final Matrix a = Matrix.createWithUniformRandomValues(1, INHOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+
+        decomposer.decompose();
+
+        final Matrix vMatrix = decomposer.getV();
+
+        // axis of rotation
+        final double[] vAxis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+
+        final AxisRotation3D rotation1 = new AxisRotation3D(vAxis, theta);
+
+        assertArrayEquals(vAxis, rotation1.getRotationAxis(), 0.0);
+        assertEquals(theta, rotation1.getRotationAngle(), 0.0);
+    }
 }

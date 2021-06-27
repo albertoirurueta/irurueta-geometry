@@ -19,6 +19,7 @@ import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -1457,5 +1458,45 @@ public class EllipseTest {
             assertNotNull(ellipse.getTangentLineAt(point));
         } catch (final NotLocusException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final Point2D center = new InhomogeneousPoint2D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
+                MAX_RANDOM_VALUE);
+        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
+                semiMajorAxis);
+        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES,
+                        MAX_RANDOM_DEGREES));
+        final Ellipse ellipse1 = new Ellipse(center, semiMajorAxis, semiMinorAxis,
+                rotationAngle);
+
+        // check
+        assertSame(center, ellipse1.getCenter());
+        assertEquals(Math.max(semiMajorAxis, semiMinorAxis),
+                ellipse1.getSemiMajorAxis(), 0.0);
+        assertEquals(Math.min(semiMajorAxis, semiMinorAxis),
+                ellipse1.getSemiMinorAxis(), 0.0);
+        assertEquals(rotationAngle, ellipse1.getRotationAngle(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(ellipse1);
+        final Ellipse ellipse2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertNotSame(ellipse1, ellipse2);
+        assertEquals(ellipse1.getCenter(), ellipse2.getCenter());
+        assertNotSame(ellipse1.getCenter(), ellipse2.getCenter());
+        assertEquals(ellipse1.getSemiMajorAxis(),
+                ellipse2.getSemiMajorAxis(), 0.0);
+        assertEquals(ellipse1.getSemiMinorAxis(),
+                ellipse2.getSemiMinorAxis(), 0.0);
+        assertEquals(ellipse1.getRotationAngle(),
+                ellipse2.getRotationAngle(), 0.0);
     }
 }

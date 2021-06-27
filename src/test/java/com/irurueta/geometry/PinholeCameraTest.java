@@ -23,6 +23,7 @@ import com.irurueta.geometry.estimators.WrongListSizesException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -3551,5 +3552,56 @@ public class PinholeCameraTest {
             fail("CameraException expected but not thrown");
         } catch (final CameraException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws CameraException, IOException, ClassNotFoundException {
+        // create camera
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
+                MAX_FOCAL_LENGTH);
+        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
+                MAX_FOCAL_LENGTH);
+        double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        double horizontalPrincipalPoint = randomizer.nextDouble(
+                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        double verticalPrincipalPoint = randomizer.nextDouble(
+                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        // rotation
+        double alphaEuler = randomizer.nextDouble(
+                MIN_ANGLE_DEGREES * Math.PI / 180.0,
+                MAX_ANGLE_DEGREES * Math.PI / 180.0);
+        double betaEuler = randomizer.nextDouble(
+                MIN_ANGLE_DEGREES * Math.PI / 180.0,
+                MAX_ANGLE_DEGREES * Math.PI / 180.0);
+        double gammaEuler = randomizer.nextDouble(
+                MIN_ANGLE_DEGREES * Math.PI / 180.0,
+                MAX_ANGLE_DEGREES * Math.PI / 180.0);
+
+        final PinholeCameraIntrinsicParameters intrinsic =
+                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
+                        verticalFocalLength, horizontalPrincipalPoint,
+                        verticalPrincipalPoint, skewness);
+
+        final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
+                gammaEuler);
+
+        // camera center
+        double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+                cameraCenterArray);
+
+        // test constructor with intrinsic parameters, rotation and image or
+        // origin
+        final PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        camera1.decompose();
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(camera1);
+        final PinholeCamera camera2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(camera1.getInternalMatrix(), camera2.getInternalMatrix());
     }
 }

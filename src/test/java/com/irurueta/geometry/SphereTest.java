@@ -22,6 +22,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -770,5 +771,30 @@ public class SphereTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE));
+
+        final Sphere sphere1 = new Sphere(center, radius);
+
+        // check
+        assertSame(center, sphere1.getCenter());
+        assertEquals(radius, sphere1.getRadius(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(sphere1);
+        final Sphere sphere2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(sphere1.getCenter(), sphere2.getCenter());
+        assertEquals(sphere1.getRadius(), sphere2.getRadius(), 0.0);
     }
 }

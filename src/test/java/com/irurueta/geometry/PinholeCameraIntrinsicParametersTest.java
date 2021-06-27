@@ -21,6 +21,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -540,5 +541,57 @@ public class PinholeCameraIntrinsicParametersTest {
                 ABSOLUTE_ERROR);
         assertEquals(intrinsic.getVerticalPrincipalPoint(), 0.0,
                 ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        // Test constructor with parameters
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
+                MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
+                MAX_FOCAL_LENGTH);
+        final double aspectRatio = verticalFocalLength / horizontalFocalLength;
+
+        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+
+        final double horizontalPrincipalPoint = randomizer.nextDouble(
+                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final double verticalPrincipalPoint = randomizer.nextDouble(
+                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+
+        final PinholeCameraIntrinsicParameters k1 = new PinholeCameraIntrinsicParameters(
+                horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+
+        // check
+        assertEquals(horizontalFocalLength, k1.getHorizontalFocalLength(), 0.0);
+        assertEquals(verticalFocalLength, k1.getVerticalFocalLength(), 0.0);
+        assertEquals(aspectRatio, k1.getAspectRatio(), 0.0);
+        assertEquals(horizontalPrincipalPoint,
+                k1.getHorizontalPrincipalPoint(), 0.0);
+        assertEquals(verticalPrincipalPoint,
+                k1.getVerticalPrincipalPoint(), 0.0);
+        assertEquals(skewness, k1.getSkewness(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(k1);
+        final PinholeCameraIntrinsicParameters k2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertNotSame(k1, k2);
+        assertEquals(k1.getInternalMatrix(), k2.getInternalMatrix());
+        assertNotSame(k1.getInternalMatrix(), k2.getInternalMatrix());
+
+        assertEquals(k1.getHorizontalFocalLength(),
+                k2.getHorizontalFocalLength(), 0.0);
+        assertEquals(k1.getVerticalFocalLength(),
+                k2.getVerticalFocalLength(), 0.0);
+        assertEquals(k1.getAspectRatio(),
+                k2.getAspectRatio(), 0.0);
+        assertEquals(k1.getHorizontalPrincipalPoint(),
+                k2.getHorizontalPrincipalPoint(), 0.0);
+        assertEquals(k1.getVerticalPrincipalPoint(),
+                k2.getVerticalPrincipalPoint(), 0.0);
     }
 }

@@ -412,6 +412,7 @@ public class Rotation3DTest {
             assertTrue(rotation1.equals(rotation1,
                     Rotation3D.DEFAULT_COMPARISON_THRESHOLD));
             assertEquals(rotation1, rotation2);
+            assertEquals(rotation1.hashCode(), rotation2.hashCode());
             assertTrue(rotation1.equals(rotation2,
                     Rotation3D.DEFAULT_COMPARISON_THRESHOLD));
             assertEquals(rotation1, rotation3);

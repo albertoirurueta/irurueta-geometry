@@ -20,6 +20,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1814,6 +1815,43 @@ public class MetricTransformation2DTest {
                 ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
         assertEquals(transformation2.getScale(), scale, ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final Rotation2D rotation = new Rotation2D(theta);
+
+        final double[] translation =
+                new double[MetricTransformation2D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        final MetricTransformation2D transformation1 = new MetricTransformation2D(
+                rotation, translation, scale);
+
+        // check
+        assertSame(rotation, transformation1.getRotation());
+        assertSame(translation, transformation1.getTranslation());
+        assertEquals(scale, transformation1.getScale(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(transformation1);
+        final MetricTransformation2D transformation2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(transformation1.getRotation(), transformation2.getRotation());
+        assertNotSame(transformation1.getRotation(), transformation2.getRotation());
+        assertArrayEquals(transformation1.getTranslation(),
+                transformation2.getTranslation(), 0.0);
+        assertNotSame(transformation1.getTranslation(),
+                transformation2.getTranslation());
+        assertEquals(transformation1.getScale(),
+                transformation2.getScale(), 0.0);
     }
 
     private static void transformPoint(

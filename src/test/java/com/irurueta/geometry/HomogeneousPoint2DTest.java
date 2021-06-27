@@ -19,6 +19,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -217,7 +218,7 @@ public class HomogeneousPoint2DTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsAndHashCode() {
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -225,6 +226,7 @@ public class HomogeneousPoint2DTest {
         HomogeneousPoint2D hPoint2 = new HomogeneousPoint2D(array);
         assertTrue(hPoint1.equals(hPoint2, 0.0));
         assertTrue(hPoint1.equals((Point2D) hPoint2, 0.0));
+        assertEquals(hPoint1.hashCode(), hPoint2.hashCode());
 
         array[0] = hPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -294,8 +296,10 @@ public class HomogeneousPoint2DTest {
         hPoint = new HomogeneousPoint2D();
         iPoint = new InhomogeneousPoint2D();
         assertTrue(hPoint.equals(iPoint));
+        assertEquals(hPoint.hashCode(), iPoint.hashCode());
         hPoint2 = new HomogeneousPoint2D(hPoint);
         assertTrue(hPoint.equals(hPoint2));
+        assertEquals(hPoint.hashCode(), hPoint2.hashCode());
         assertTrue(hPoint.equals((Point2D) iPoint));
         assertTrue(hPoint.equals((Point2D) hPoint2));
     }
@@ -402,5 +406,20 @@ public class HomogeneousPoint2DTest {
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final double[] array = new double[HOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final HomogeneousPoint2D hPoint1 = new HomogeneousPoint2D(array);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(hPoint1);
+        final HomogeneousPoint2D hPoint2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(hPoint1, hPoint2);
     }
 }

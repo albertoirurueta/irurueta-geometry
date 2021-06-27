@@ -21,6 +21,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -499,5 +500,42 @@ public class Line3DTest {
         line.intersection(plane3, intersection);
         assertTrue(intersection.equals(point.toInhomogeneous(),
                 ABSOLUTE_ERROR));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws WrongSizeException,
+            LockedException, NotReadyException, DecomposerException, NotAvailableException, CoincidentPlanesException, IOException, ClassNotFoundException {
+        // Create random homogeneous coordinates for a point
+        Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        // M is a 1x4 matrix having rank 1, hence its right null-space will have
+        // dimension 3. Each vector of the right null-space will follow equation:
+        // m * P = 0, hence each of those vectors will be a plane where the point
+        // will be locus, and hence the point will be the intersection of those
+        // 3 planes, which will be perpendicular among them
+        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        decomposer.decompose();
+
+        final Matrix v = decomposer.getV();
+
+        final Plane plane1 = new Plane(v.getSubmatrixAsArray(0, 1,
+                3, 1));
+        final Plane plane2 = new Plane(v.getSubmatrixAsArray(0, 2,
+                3, 2));
+
+        // create line from 2 planes
+        final Line3D line1 = new Line3D(plane1, plane2);
+
+        assertEquals(line1.getPlane1(), plane1);
+        assertEquals(line1.getPlane2(), plane2);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(line1);
+        final Line3D line2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(line1.getPlane1(), line2.getPlane1());
+        assertEquals(line1.getPlane2(), line2.getPlane2());
     }
 }

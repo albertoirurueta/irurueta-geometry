@@ -20,6 +20,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -1785,5 +1786,52 @@ public class QuadricTest {
 
         assertTrue(conic3.getConicType() == ConicType.CIRCLE_CONIC_TYPE ||
                 conic3.getConicType() == ConicType.ELLIPSE_CONIC_TYPE);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer();
+
+        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final Quadric quadric1 = new Quadric(a, b, c, d, e, f, g, h, i, j);
+
+        // check
+        assertEquals(a, quadric1.getA(), 0.0);
+        assertEquals(b, quadric1.getB(), 0.0);
+        assertEquals(c, quadric1.getC(), 0.0);
+        assertEquals(d, quadric1.getD(), 0.0);
+        assertEquals(e, quadric1.getE(), 0.0);
+        assertEquals(f, quadric1.getF(), 0.0);
+        assertEquals(g, quadric1.getG(), 0.0);
+        assertEquals(h, quadric1.getH(), 0.0);
+        assertEquals(i, quadric1.getI(), 0.0);
+        assertEquals(j, quadric1.getJ(), 0.0);
+        assertFalse(quadric1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(quadric1);
+        final Quadric quadric2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(quadric1.getA(), quadric2.getA(), 0.0);
+        assertEquals(quadric1.getB(), quadric2.getB(), 0.0);
+        assertEquals(quadric1.getC(), quadric2.getC(), 0.0);
+        assertEquals(quadric1.getD(), quadric2.getD(), 0.0);
+        assertEquals(quadric1.getE(), quadric2.getE(), 0.0);
+        assertEquals(quadric1.getF(), quadric2.getF(), 0.0);
+        assertEquals(quadric1.getG(), quadric2.getG(), 0.0);
+        assertEquals(quadric1.getH(), quadric2.getH(), 0.0);
+        assertEquals(quadric1.getI(), quadric2.getI(), 0.0);
+        assertEquals(quadric1.getJ(), quadric2.getJ(), 0.0);
+        assertEquals(quadric1.isNormalized(), quadric2.isNormalized());
     }
 }

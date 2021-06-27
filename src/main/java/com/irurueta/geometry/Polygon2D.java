@@ -16,6 +16,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -125,7 +126,11 @@ public class Polygon2D implements Serializable {
             throw new NotEnoughVerticesException();
         }
 
-        mVertices = vertices;
+        if (vertices instanceof Serializable) {
+            mVertices = vertices;
+        } else {
+            mVertices = new ArrayList<>(vertices);
+        }
         mTriangulated = false;
         mTriangles = null;
     }
@@ -496,6 +501,7 @@ public class Polygon2D implements Serializable {
         Point2D prevPoint = iterator.next();
         // to increase accuracy
         prevPoint.normalize();
+
         Point2D curPoint;
         double bestDist = Double.MAX_VALUE;
         double dist;

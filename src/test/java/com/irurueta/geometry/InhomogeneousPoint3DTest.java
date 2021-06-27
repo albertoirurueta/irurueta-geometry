@@ -19,6 +19,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -225,7 +226,7 @@ public class InhomogeneousPoint3DTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsAndHashCode() {
         double[] array = new double[INHOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -235,6 +236,7 @@ public class InhomogeneousPoint3DTest {
 
         assertTrue(iPoint1.equals(iPoint2, 0.0));
         assertTrue(iPoint1.equals((Point3D) iPoint2, 0.0));
+        assertEquals(iPoint1.hashCode(), iPoint2.hashCode());
 
         array[0] = iPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -314,8 +316,10 @@ public class InhomogeneousPoint3DTest {
         hPoint = new HomogeneousPoint3D();
         iPoint1 = new InhomogeneousPoint3D();
         assertTrue(iPoint1.equals(hPoint));
+        assertEquals(iPoint1.hashCode(), hPoint.hashCode());
         iPoint2 = new InhomogeneousPoint3D(iPoint1);
         assertTrue(iPoint1.equals(iPoint2));
+        assertEquals(iPoint1.hashCode(), iPoint2.hashCode());
         assertTrue(iPoint1.equals((Point3D) hPoint));
         assertTrue(iPoint1.equals((Point3D) iPoint2));
     }
@@ -364,5 +368,21 @@ public class InhomogeneousPoint3DTest {
         
         iPoint = new InhomogeneousPoint3D(array);
         assertFalse(iPoint.isAtInfinity());
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        double[] array = new double[INHOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final InhomogeneousPoint3D iPoint1 = new InhomogeneousPoint3D(array);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(iPoint1);
+        final InhomogeneousPoint3D iPoint2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(iPoint1, iPoint2);
+        assertNotSame(iPoint1, iPoint2);
     }
 }

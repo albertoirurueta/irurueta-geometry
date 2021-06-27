@@ -22,6 +22,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -1153,5 +1154,39 @@ public class Triangle3DTest {
 
         assertEquals(Triangle3D.getAngleBetweenTriangles(triangleA, triangleB),
                 expectedAngle, ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final Point3D point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final Point3D point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+
+        final Triangle3D triangle1 = new Triangle3D(point1, point2, point3);
+
+        // check
+        assertEquals(triangle1.getVertex1(), point1);
+        assertEquals(triangle1.getVertex2(), point2);
+        assertEquals(triangle1.getVertex3(), point3);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(triangle1);
+        final Triangle3D triangle2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(triangle1.getVertex1(), triangle2.getVertex1());
+        assertEquals(triangle1.getVertex2(), triangle2.getVertex2());
+        assertEquals(triangle1.getVertex3(), triangle2.getVertex3());
     }
 }

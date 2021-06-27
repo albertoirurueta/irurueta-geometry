@@ -19,6 +19,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -1100,7 +1101,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsAndHashCode() {
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1111,6 +1112,7 @@ public class PlaneTest {
         assertTrue(plane1.equals(plane2));
         //noinspection all
         assertTrue(plane1.equals((Object) plane2));
+        assertEquals(plane1.hashCode(), plane2.hashCode());
 
         array[0] = plane1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -1186,5 +1188,32 @@ public class PlaneTest {
 
         // check that point at infinity is now locus of plane
         assertTrue(plane.isLocus(point));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Plane plane1 = new Plane(a, b, c, d);
+
+        // check
+        assertEquals(plane1.getA(), a, 0.0);
+        assertEquals(plane1.getB(), b, 0.0);
+        assertEquals(plane1.getC(), c, 0.0);
+        assertEquals(plane1.getD(), d, 0.0);
+        assertFalse(plane1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(plane1);
+        final Plane plane2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(plane1, plane2);
+        assertNotSame(plane1, plane2);
     }
 }

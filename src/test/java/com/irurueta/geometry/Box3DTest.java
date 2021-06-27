@@ -19,10 +19,10 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class Box3DTest {
 
@@ -535,5 +535,35 @@ public class Box3DTest {
                 ABSOLUTE_ERROR);
 
         assertEquals(box.getSqrDistance(center), 0.0, 0.0);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double loZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        final double hiZ = randomizer.nextDouble(loZ, MAX_RANDOM_VALUE);
+
+        final InhomogeneousPoint3D lo = new InhomogeneousPoint3D(loX, loY, loZ);
+        final InhomogeneousPoint3D hi = new InhomogeneousPoint3D(hiX, hiY, hiZ);
+        final Box3D box1 = new Box3D(lo, hi);
+
+        // check
+        assertSame(box1.getLo(), lo);
+        assertSame(box1.getHi(), hi);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(box1);
+        final Box3D box2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertNotSame(box1, box2);
+        assertEquals(box1.getLo(), box2.getLo());
+        assertNotSame(box1.getLo(), box2.getLo());
+        assertEquals(box1.getHi(), box2.getHi());
+        assertNotSame(box1.getHi(), box2.getHi());
     }
 }

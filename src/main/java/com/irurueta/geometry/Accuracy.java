@@ -65,11 +65,6 @@ public abstract class Accuracy implements Serializable {
             DEFAULT_STANDARD_DEVIATION_FACTOR, 0.0, 1.0) - 1.0;
 
     /**
-     * Singular value decomposer to find principal axes of provided covariance matrix.
-     */
-    private final SingularValueDecomposer mSvdDecomposer = new SingularValueDecomposer();
-
-    /**
      * Square root of singular values of decomposed covariance matrix.
      */
     protected double[] mSqrtSingularValues;
@@ -177,10 +172,11 @@ public abstract class Accuracy implements Serializable {
         }
 
         try {
-            mSvdDecomposer.setInputMatrix(covarianceMatrix);
-            mSvdDecomposer.decompose();
+            final SingularValueDecomposer svdDecomposer = new SingularValueDecomposer();
+            svdDecomposer.setInputMatrix(covarianceMatrix);
+            svdDecomposer.decompose();
 
-            final double[] singularValues = mSvdDecomposer.getSingularValues();
+            final double[] singularValues = svdDecomposer.getSingularValues();
             final double[] sqrtSingularValues = new double[dims];
 
             double minSqrtSingularValue = Double.MAX_VALUE;
@@ -207,7 +203,7 @@ public abstract class Accuracy implements Serializable {
             }
 
             mSqrtSingularValues = sqrtSingularValues;
-            mU = mSvdDecomposer.getU();
+            mU = svdDecomposer.getU();
 
             mMinSqrtSingularValue = minSqrtSingularValue;
             mMaxSqrtSingularValue = maxSqrtSingularValue;

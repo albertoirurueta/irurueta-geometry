@@ -20,6 +20,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Line2D in R2. Lines can be expressed using the following expression:
@@ -791,15 +792,7 @@ public class Line2D implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.mA) ^
-                (Double.doubleToLongBits(this.mA) >>> 32));
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.mB) ^
-                (Double.doubleToLongBits(this.mB) >>> 32));
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.mC) ^
-                (Double.doubleToLongBits(this.mC) >>> 32));
-        hash = 73 * hash + (this.mNormalized ? 1 : 0);
-        return hash;
+        return Objects.hash(mA, mB, mC);
     }
 
     /**

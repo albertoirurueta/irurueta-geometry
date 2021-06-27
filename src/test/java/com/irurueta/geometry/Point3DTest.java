@@ -19,6 +19,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -463,5 +464,29 @@ public class Point3DTest {
         assertEquals(mean1.getInhomX(), meanX, ABSOLUTE_ERROR);
         assertEquals(mean1.getInhomY(), meanY, ABSOLUTE_ERROR);
         assertEquals(mean1.getInhomZ(), meanZ, ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Point3D point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+        point1.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
+
+        // check
+        assertEquals(inhomX, point1.getInhomX(), 0.0);
+        assertEquals(inhomY, point1.getInhomY(), 0.0);
+        assertEquals(inhomZ, point1.getInhomZ(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(point1);
+        final Point3D point2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(point1, point2);
+        assertNotSame(point1, point2);
     }
 }

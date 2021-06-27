@@ -16,6 +16,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -130,7 +131,11 @@ public class Polygon3D implements Serializable {
             throw new NotEnoughVerticesException();
         }
 
-        mVertices = vertices;
+        if (vertices instanceof Serializable) {
+            mVertices = vertices;
+        } else {
+            mVertices = new ArrayList<>(vertices);
+        }
         mTriangulated = false;
         mTriangles = null;
     }
@@ -175,7 +180,7 @@ public class Polygon3D implements Serializable {
         final double inhomY0 = origin.getInhomY();
         final double inhomZ0 = origin.getInhomZ();
 
-        Iterator<Point3D> iterator = mVertices.iterator();
+        final Iterator<Point3D> iterator = mVertices.iterator();
 
         // because there are at least 3
         // vertices
@@ -194,7 +199,6 @@ public class Polygon3D implements Serializable {
             final double inhomX2 = curPoint.getInhomX();
             final double inhomY2 = curPoint.getInhomY();
             final double inhomZ2 = curPoint.getInhomZ();
-
 
             // compute cross product of ab = (prevPoint - origin) and
             // ac = (curPoint - origin)
@@ -501,7 +505,7 @@ public class Polygon3D implements Serializable {
      */
     public Point3D getClosestPoint(final Point3D point)
             throws CoincidentPointsException {
-        Point3D result = Point3D.create();
+        final Point3D result = Point3D.create();
         closestPoint(point, result);
         return result;
     }

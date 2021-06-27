@@ -19,6 +19,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -348,5 +349,27 @@ public class Point2DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Point2D point1 = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+        point1.setInhomogeneousCoordinates(inhomX, inhomY);
+
+        // check
+        assertEquals(inhomX, point1.getInhomX(), 0.0);
+        assertEquals(inhomY, point1.getInhomY(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(point1);
+        final Point2D point2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(point1, point2);
+        assertNotSame(point1, point2);
     }
 }

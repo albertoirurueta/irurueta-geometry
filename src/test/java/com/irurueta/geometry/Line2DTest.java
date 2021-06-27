@@ -19,6 +19,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -797,7 +798,7 @@ public class Line2DTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsAndHashCode() {
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -808,6 +809,7 @@ public class Line2DTest {
         assertTrue(line1.equals(line2));
         //noinspection all
         assertTrue(line1.equals((Object) line2));
+        assertEquals(line1.hashCode(), line2.hashCode());
 
         array[0] = line1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -876,5 +878,30 @@ public class Line2DTest {
 
         // check that point at infinity is locus of line
         assertTrue(line.isLocus(point));
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final Line2D line1 = new Line2D(a, b, c);
+
+        // check
+        assertEquals(line1.getA(), a, 0.0);
+        assertEquals(line1.getB(), b, 0.0);
+        assertEquals(line1.getC(), c, 0.0);
+        assertFalse(line1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(line1);
+        final Line2D line2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(line1, line2);
+        assertNotSame(line1, line2);
     }
 }

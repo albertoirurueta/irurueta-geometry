@@ -19,6 +19,7 @@ package com.irurueta.geometry;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -232,7 +233,7 @@ public class HomogeneousPoint3DTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsAndHashCode() {
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -241,6 +242,7 @@ public class HomogeneousPoint3DTest {
         HomogeneousPoint3D hPoint2 = new HomogeneousPoint3D(array);
         assertTrue(hPoint1.equals(hPoint2, 0.0));
         assertTrue(hPoint1.equals((Point3D) hPoint2, 0.0));
+        assertEquals(hPoint1.hashCode(), hPoint2.hashCode());
 
         array[0] = hPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -320,8 +322,10 @@ public class HomogeneousPoint3DTest {
         hPoint = new HomogeneousPoint3D();
         iPoint = new InhomogeneousPoint3D();
         assertTrue(hPoint.equals(iPoint));
+        assertEquals(hPoint.hashCode(), iPoint.hashCode());
         hPoint2 = new HomogeneousPoint3D(hPoint);
         assertTrue(hPoint.equals(hPoint2));
+        assertEquals(hPoint.hashCode(), hPoint2.hashCode());
         assertTrue(hPoint.equals((Point3D) iPoint));
         assertTrue(hPoint.equals((Point3D) hPoint2));
     }
@@ -439,5 +443,22 @@ public class HomogeneousPoint3DTest {
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final double[] array = new double[HOM_COORDS];
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final HomogeneousPoint3D hPoint1 = new HomogeneousPoint3D(array);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(hPoint1);
+        final HomogeneousPoint3D hPoint2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(hPoint1, hPoint2);
+        assertNotSame(hPoint1, hPoint2);
     }
 }

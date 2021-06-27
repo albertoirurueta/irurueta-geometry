@@ -19,6 +19,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -1778,5 +1779,52 @@ public class DualQuadricTest {
         final Matrix m = Matrix.identity(4, 4);
         m.setElementAt(3, 3, 0.0);
         assertEquals(daq.asMatrix(), m);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer();
+
+        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final DualQuadric dualQuadric1 = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
+
+        // check
+        assertEquals(a, dualQuadric1.getA(), 0.0);
+        assertEquals(b, dualQuadric1.getB(), 0.0);
+        assertEquals(c, dualQuadric1.getC(), 0.0);
+        assertEquals(d, dualQuadric1.getD(), 0.0);
+        assertEquals(e, dualQuadric1.getE(), 0.0);
+        assertEquals(f, dualQuadric1.getF(), 0.0);
+        assertEquals(g, dualQuadric1.getG(), 0.0);
+        assertEquals(h, dualQuadric1.getH(), 0.0);
+        assertEquals(i, dualQuadric1.getI(), 0.0);
+        assertEquals(j, dualQuadric1.getJ(), 0.0);
+        assertFalse(dualQuadric1.isNormalized());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(dualQuadric1);
+        final DualQuadric dualQuadric2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(dualQuadric1.getA(), dualQuadric2.getA(), 0.0);
+        assertEquals(dualQuadric1.getB(), dualQuadric2.getB(), 0.0);
+        assertEquals(dualQuadric1.getC(), dualQuadric2.getC(), 0.0);
+        assertEquals(dualQuadric1.getD(), dualQuadric2.getD(), 0.0);
+        assertEquals(dualQuadric1.getE(), dualQuadric2.getE(), 0.0);
+        assertEquals(dualQuadric1.getF(), dualQuadric2.getF(), 0.0);
+        assertEquals(dualQuadric1.getG(), dualQuadric2.getG(), 0.0);
+        assertEquals(dualQuadric1.getH(), dualQuadric2.getH(), 0.0);
+        assertEquals(dualQuadric1.getI(), dualQuadric2.getI(), 0.0);
+        assertEquals(dualQuadric1.getJ(), dualQuadric2.getJ(), 0.0);
+        assertEquals(dualQuadric1.isNormalized(), dualQuadric2.isNormalized());
     }
 }

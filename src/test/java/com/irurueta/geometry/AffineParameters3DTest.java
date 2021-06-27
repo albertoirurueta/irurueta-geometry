@@ -20,6 +20,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -107,7 +108,7 @@ public class AffineParameters3DTest {
         assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
         assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
 
-        // Test constructor with matrix
+        // test constructor with matrix
         final Matrix m = new Matrix(INHOM_COORDS, INHOM_COORDS);
         m.setElementAt(0, 0, scaleX);
         m.setElementAt(1, 1, scaleY);
@@ -451,5 +452,46 @@ public class AffineParameters3DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        final AffineParameters3D params1 = new AffineParameters3D(
+                scaleX, scaleY, scaleZ,
+                skewnessXY, skewnessXZ, skewnessYZ);
+
+        // check
+        assertEquals(params1.getScaleX(), scaleX, 0.0);
+        assertEquals(params1.getScaleY(), scaleY, 0.0);
+        assertEquals(params1.getScaleZ(), scaleZ, 0.0);
+        assertEquals(params1.getSkewnessXY(), skewnessXY, 0.0);
+        assertEquals(params1.getSkewnessXZ(), skewnessXZ, 0.0);
+        assertEquals(params1.getSkewnessYZ(), skewnessYZ, 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(params1);
+        final AffineParameters3D params2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(params1.getScaleX(), params2.getScaleX(), 0.0);
+        assertEquals(params1.getScaleY(), params2.getScaleY(), 0.0);
+        assertEquals(params1.getScaleZ(), params2.getScaleZ(), 0.0);
+        assertEquals(params1.getSkewnessXY(), params2.getSkewnessXY(), 0.0);
+        assertEquals(params1.getSkewnessXZ(), params2.getSkewnessXZ(), 0.0);
+        assertEquals(params1.getSkewnessYZ(), params2.getSkewnessYZ(), 0.0);
     }
 }

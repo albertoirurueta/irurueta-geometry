@@ -20,6 +20,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -2913,6 +2914,33 @@ public class AffineTransformation2DTest {
         } catch (final CoincidentLinesException ignore) {
         }
         assertNull(transformation2);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws WrongSizeException, IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer();
+
+        final Matrix a = Matrix.createWithUniformRandomValues(
+                AffineTransformation2D.INHOM_COORDS,
+                AffineTransformation2D.INHOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        final double[] translation = new double[AffineParameters2D.INHOM_COORDS];
+        randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+        final AffineTransformation2D transformation1 = new AffineTransformation2D(a, translation);
+
+        assertSame(a, transformation1.getA());
+        assertArrayEquals(translation, transformation1.getTranslation(), 0.0);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(transformation1);
+        final AffineTransformation2D transformation2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(transformation1.getA(), transformation2.getA());
+        assertArrayEquals(transformation1.getTranslation(),
+                transformation2.getTranslation(), 0.0);
     }
 
     private static void transformPoint(Point2D inputPoint, Point2D outputPoint,

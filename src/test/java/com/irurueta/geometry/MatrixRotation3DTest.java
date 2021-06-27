@@ -21,6 +21,7 @@ import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -1367,5 +1368,32 @@ public class MatrixRotation3DTest {
         assertEquals(rotation, quaternion1);
         //noinspection all
         assertEquals(rotation, quaternion2);
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws WrongSizeException,
+            LockedException, NotReadyException, DecomposerException,
+            NotAvailableException, InvalidRotationMatrixException, IOException, ClassNotFoundException {
+        final Matrix a = Matrix.createWithUniformRandomValues(ROTATION_ROWS,
+                ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+
+        decomposer.decompose();
+
+        final Matrix rotationMatrix = decomposer.getV();
+
+        final MatrixRotation3D rotation1 = new MatrixRotation3D(rotationMatrix,
+                ABSOLUTE_ERROR);
+
+        // check
+        assertEquals(rotation1.getInternalMatrix(), rotationMatrix);
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(rotation1);
+        final MatrixRotation3D rotation2 = SerializationHelper.deserialize(bytes);
+
+        // check
+        assertEquals(rotation1, rotation2);
+        assertNotSame(rotation1, rotation2);
     }
 }

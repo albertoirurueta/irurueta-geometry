@@ -20,10 +20,8 @@ import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -127,7 +125,7 @@ public class Polygon3DTest {
     }
 
     @Test
-    public void testGetSetVertices() throws NotEnoughVerticesException {
+    public void testGetSetVertices1() throws NotEnoughVerticesException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -146,6 +144,31 @@ public class Polygon3DTest {
         radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         final List<Point3D> vertices2 = buildPolygonVertices(sides, radius, theta);
+
+        polygon.setVertices(vertices2);
+        assertEquals(polygon.getVertices(), vertices2);
+    }
+
+    @Test
+    public void testGetSetVertices2() throws NotEnoughVerticesException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES);
+
+        // build vertices list
+        final List<Point3D> vertices = new LinkedList<>(buildPolygonVertices(sides, radius, theta));
+
+        // build polygon vertices
+        final Polygon3D polygon = new Polygon3D(vertices);
+        assertEquals(polygon.getVertices(), vertices);
+
+        // build new vertices
+        sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+
+        final List<Point3D> vertices2 = new LinkedList<>(buildPolygonVertices(sides, radius, theta));
 
         polygon.setVertices(vertices2);
         assertEquals(polygon.getVertices(), vertices2);
@@ -814,6 +837,36 @@ public class Polygon3DTest {
             fail("CoincidentPointsException expected but not thrown");
         } catch (final CoincidentPointsException ignore) {
         }
+    }
+
+    @Test
+    public void testSerializeDeserialize() throws NotEnoughVerticesException,
+            TriangulatorException, IOException, ClassNotFoundException {
+        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES);
+
+        // build vertices list
+        final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
+
+        // build polygon
+        Polygon3D polygon1 = new Polygon3D(vertices);
+        polygon1.triangulate();
+
+        assertSame(vertices, polygon1.getVertices());
+        assertFalse(polygon1.getTriangles().isEmpty());
+
+        // serialize and deserialize
+        final byte[] bytes = SerializationHelper.serialize(polygon1);
+        final Polygon3D polygon2 = SerializationHelper.deserialize(bytes);
+
+        assertNotSame(polygon1, polygon2);
+        assertEquals(polygon1.getVertices(), polygon2.getVertices());
+        assertNotSame(polygon1.getVertices(), polygon2.getVertices());
+        assertEquals(polygon1.getTriangles().size(),
+                polygon2.getTriangles().size());
     }
 
     private List<Point3D> buildPolygonVertices(
