@@ -301,9 +301,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @return Hash code.
      */
     @Override
-    public int hashCode() {
-<span class="nc" id="L305">        return 3;</span>
-    }
+    public abstract int hashCode();
 
     /**
      * Checks whether this Point3D is at infinity or not.
@@ -325,7 +323,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * This method is meant to be overridden.
      */
     public void normalize() {
-<span class="fc" id="L328">    }</span>
+<span class="fc" id="L326">    }</span>
 
     /**
      * Returns boolean indicating whether this point has already been
@@ -336,7 +334,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @return True if normalized, false otherwise.
      */
     public boolean isNormalized() {
-<span class="nc" id="L339">        return true;</span>
+<span class="nc" id="L337">        return true;</span>
     }
 
     /**
@@ -346,7 +344,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      */
     @Override
     public int getDimensions() {
-<span class="fc" id="L349">        return POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L347">        return POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
     }
 
     /**
@@ -358,18 +356,18 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      */
     @Override
     public double getInhomogeneousCoordinate(final int dim) {
-<span class="fc bfc" id="L361" title="All 4 branches covered.">        if (dim &lt; 0 || dim &gt;= getDimensions()) {</span>
-<span class="fc" id="L362">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L359" title="All 4 branches covered.">        if (dim &lt; 0 || dim &gt;= getDimensions()) {</span>
+<span class="fc" id="L360">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L365" title="All 3 branches covered.">        switch (dim) {</span>
+<span class="fc bfc" id="L363" title="All 3 branches covered.">        switch (dim) {</span>
             case 0:
-<span class="fc" id="L367">                return getInhomX();</span>
+<span class="fc" id="L365">                return getInhomX();</span>
             case 1:
-<span class="fc" id="L369">                return getInhomY();</span>
+<span class="fc" id="L367">                return getInhomY();</span>
             case 2:
             default:
-<span class="fc" id="L372">                return getInhomZ();</span>
+<span class="fc" id="L370">                return getInhomZ();</span>
         }
     }
 
@@ -382,20 +380,20 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      */
     @Override
     public void setInhomogeneousCoordinate(final int dim, final double value) {
-<span class="fc bfc" id="L385" title="All 4 branches covered.">        switch (dim) {</span>
+<span class="fc bfc" id="L383" title="All 4 branches covered.">        switch (dim) {</span>
             case 0:
-<span class="fc" id="L387">                setInhomX(value);</span>
-<span class="fc" id="L388">                break;</span>
+<span class="fc" id="L385">                setInhomX(value);</span>
+<span class="fc" id="L386">                break;</span>
             case 1:
-<span class="fc" id="L390">                setInhomY(value);</span>
-<span class="fc" id="L391">                break;</span>
+<span class="fc" id="L388">                setInhomY(value);</span>
+<span class="fc" id="L389">                break;</span>
             case 2:
-<span class="fc" id="L393">                setInhomZ(value);</span>
-<span class="fc" id="L394">                break;</span>
+<span class="fc" id="L391">                setInhomZ(value);</span>
+<span class="fc" id="L392">                break;</span>
             default:
-<span class="fc" id="L396">                throw new IllegalArgumentException();</span>
+<span class="fc" id="L394">                throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L398">    }</span>
+<span class="fc" id="L396">    }</span>
 
     /**
      * Returns euclidean distance between this point and provided point.
@@ -405,7 +403,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      */
     @Override
     public double distanceTo(final Point3D point) {
-<span class="fc" id="L408">        return Math.sqrt(sqrDistanceTo(point));</span>
+<span class="fc" id="L406">        return Math.sqrt(sqrDistanceTo(point));</span>
     }
 
     /**
@@ -416,11 +414,11 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      */
     @Override
     public double sqrDistanceTo(final Point3D point) {
-<span class="fc" id="L419">        final double diffX = getInhomX() - point.getInhomX();</span>
-<span class="fc" id="L420">        final double diffY = getInhomY() - point.getInhomY();</span>
-<span class="fc" id="L421">        final double diffZ = getInhomZ() - point.getInhomZ();</span>
+<span class="fc" id="L417">        final double diffX = getInhomX() - point.getInhomX();</span>
+<span class="fc" id="L418">        final double diffY = getInhomY() - point.getInhomY();</span>
+<span class="fc" id="L419">        final double diffZ = getInhomZ() - point.getInhomZ();</span>
 
-<span class="fc" id="L423">        return diffX * diffX + diffY * diffY + diffZ * diffZ;</span>
+<span class="fc" id="L421">        return diffX * diffX + diffY * diffY + diffZ * diffZ;</span>
     }
 
     /**
@@ -432,24 +430,24 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      */
     public double dotProduct(final Point3D point) {
 
-<span class="fc" id="L435">        final double thisHomX = getHomX();</span>
-<span class="fc" id="L436">        final double thisHomY = getHomY();</span>
-<span class="fc" id="L437">        final double thisHomZ = getHomZ();</span>
-<span class="fc" id="L438">        final double thisHomW = getHomW();</span>
-<span class="fc" id="L439">        final double otherHomX = point.getHomX();</span>
-<span class="fc" id="L440">        final double otherHomY = point.getHomY();</span>
-<span class="fc" id="L441">        final double otherHomZ = point.getHomZ();</span>
-<span class="fc" id="L442">        final double otherHomW = point.getHomW();</span>
+<span class="fc" id="L433">        final double thisHomX = getHomX();</span>
+<span class="fc" id="L434">        final double thisHomY = getHomY();</span>
+<span class="fc" id="L435">        final double thisHomZ = getHomZ();</span>
+<span class="fc" id="L436">        final double thisHomW = getHomW();</span>
+<span class="fc" id="L437">        final double otherHomX = point.getHomX();</span>
+<span class="fc" id="L438">        final double otherHomY = point.getHomY();</span>
+<span class="fc" id="L439">        final double otherHomZ = point.getHomZ();</span>
+<span class="fc" id="L440">        final double otherHomW = point.getHomW();</span>
 
-<span class="fc" id="L444">        final double thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY +</span>
+<span class="fc" id="L442">        final double thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY +</span>
                 thisHomZ * thisHomZ + thisHomW * thisHomW;
-<span class="fc" id="L446">        final double otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY +</span>
+<span class="fc" id="L444">        final double otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY +</span>
                 otherHomZ * otherHomZ + otherHomW * otherHomW;
-<span class="fc" id="L448">        final double denom = Math.sqrt(thisNormSqr * otherNormSqr);</span>
-<span class="fc" id="L449">        final double num = thisHomX * otherHomX + thisHomY * otherHomY +</span>
+<span class="fc" id="L446">        final double denom = Math.sqrt(thisNormSqr * otherNormSqr);</span>
+<span class="fc" id="L447">        final double num = thisHomX * otherHomX + thisHomY * otherHomY +</span>
                 thisHomZ * otherHomZ + thisHomW * otherHomW;
 
-<span class="fc" id="L452">        return num / denom;</span>
+<span class="fc" id="L450">        return num / denom;</span>
     }
 
     /**
@@ -461,7 +459,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @return True if point is between point1 and point2, false otherwise.
      */
     public boolean isBetween(final Point3D point1, final Point3D point2) {
-<span class="fc" id="L464">        return isBetween(point1, point2, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L462">        return isBetween(point1, point2, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -474,14 +472,14 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @return True if point is between point1 and point2, false otherwise.
      */
     public boolean isBetween(final Point3D point1, final Point3D point2, final double threshold) {
-<span class="fc bfc" id="L477" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L478">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L476">            throw new IllegalArgumentException();</span>
         }
         // If this point is between point1 and point2 then,
         // dist(point1,this) + dist(point2, this) == dist(point1,point2) except
         // for some small difference due to machine precision
-<span class="fc bfc" id="L483" title="All 2 branches covered.">        return Math.abs(distanceTo(point1) + distanceTo(point2) -</span>
-<span class="fc" id="L484">                point1.distanceTo(point2)) &lt;= threshold;</span>
+<span class="fc bfc" id="L481" title="All 2 branches covered.">        return Math.abs(distanceTo(point1) + distanceTo(point2) -</span>
+<span class="fc" id="L482">                point1.distanceTo(point2)) &lt;= threshold;</span>
     }
 
     /**
@@ -492,23 +490,23 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @param result instance where computed centroid will be stored.
      */
     public static void centroid(final Collection&lt;Point3D&gt; points, final Point3D result) {
-<span class="fc" id="L495">        double x = 0.0;</span>
-<span class="fc" id="L496">        double y = 0.0;</span>
-<span class="fc" id="L497">        double z = 0.0;</span>
-<span class="pc bpc" id="L498" title="1 of 2 branches missed.">        if (points != null) {</span>
-<span class="fc" id="L499">            final int n = points.size();</span>
-<span class="fc bfc" id="L500" title="All 2 branches covered.">            for (final Point3D point : points) {</span>
-<span class="fc" id="L501">                x += point.getInhomX();</span>
-<span class="fc" id="L502">                y += point.getInhomY();</span>
-<span class="fc" id="L503">                z += point.getInhomZ();</span>
-<span class="fc" id="L504">            }</span>
+<span class="fc" id="L493">        double x = 0.0;</span>
+<span class="fc" id="L494">        double y = 0.0;</span>
+<span class="fc" id="L495">        double z = 0.0;</span>
+<span class="pc bpc" id="L496" title="1 of 2 branches missed.">        if (points != null) {</span>
+<span class="fc" id="L497">            final int n = points.size();</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">            for (final Point3D point : points) {</span>
+<span class="fc" id="L499">                x += point.getInhomX();</span>
+<span class="fc" id="L500">                y += point.getInhomY();</span>
+<span class="fc" id="L501">                z += point.getInhomZ();</span>
+<span class="fc" id="L502">            }</span>
 
-<span class="fc" id="L506">            x /= n;</span>
-<span class="fc" id="L507">            y /= n;</span>
-<span class="fc" id="L508">            z /= n;</span>
+<span class="fc" id="L504">            x /= n;</span>
+<span class="fc" id="L505">            y /= n;</span>
+<span class="fc" id="L506">            z /= n;</span>
         }
-<span class="fc" id="L510">        result.setInhomogeneousCoordinates(x, y, z);</span>
-<span class="fc" id="L511">    }</span>
+<span class="fc" id="L508">        result.setInhomogeneousCoordinates(x, y, z);</span>
+<span class="fc" id="L509">    }</span>
 
     /**
      * Computes the centroid of provided collection of points by computing the
@@ -518,9 +516,9 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @return computed centroid.
      */
     public static Point3D centroid(final Collection&lt;Point3D&gt; points) {
-<span class="fc" id="L521">        final Point3D result = Point3D.create();</span>
-<span class="fc" id="L522">        centroid(points, result);</span>
-<span class="fc" id="L523">        return result;</span>
+<span class="fc" id="L519">        final Point3D result = Point3D.create();</span>
+<span class="fc" id="L520">        centroid(points, result);</span>
+<span class="fc" id="L521">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

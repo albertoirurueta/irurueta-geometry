@@ -292,7 +292,7 @@ public class Conic extends BaseConic implements Serializable {
 <span class="fc" id="L292">        final double expression = (mB * mB) - (mA * mC);</span>
 
 <span class="fc bfc" id="L294" title="All 2 branches covered.">        if (expression &lt; 0) {</span>
-<span class="fc bfc" id="L295" title="All 4 branches covered.">            if (mA == mC &amp;&amp; mB == 0) {</span>
+<span class="pc bpc" id="L295" title="1 of 4 branches missed.">            if (mA == mC &amp;&amp; mB == 0) {</span>
 <span class="fc" id="L296">                return ConicType.CIRCLE_CONIC_TYPE;</span>
             } else {
 <span class="fc" id="L298">                return ConicType.ELLIPSE_CONIC_TYPE;</span>

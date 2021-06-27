@@ -1142,7 +1142,32 @@
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a>         <em class="jxr_comment">//noinspection all</em>
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a>         assertEquals(rotation, quaternion2);
 <a class="jxr_linenumber" name="L1136" href="#L1136">1136</a>     }
-<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> }
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a>     @Test
+<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSerializeDeserialize() <strong class="jxr_keyword">throws</strong> WrongSizeException,
+<a class="jxr_linenumber" name="L1140" href="#L1140">1140</a>             LockedException, NotReadyException, DecomposerException,
+<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a>             NotAvailableException, RotationException {
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a>         <strong class="jxr_keyword">final</strong> UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a>                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a>         <strong class="jxr_keyword">final</strong> Matrix a = Matrix.createWithUniformRandomValues(1, INHOM_COORDS,
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a>                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a>         <strong class="jxr_keyword">final</strong> SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(a);
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a>         decomposer.decompose();
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a>         <strong class="jxr_keyword">final</strong> Matrix vMatrix = decomposer.getV();
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a>         <em class="jxr_comment">// axis of rotation</em>
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] vAxis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a>         <strong class="jxr_keyword">final</strong> AxisRotation3D rotation1 = <strong class="jxr_keyword">new</strong> AxisRotation3D(vAxis, theta);
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a>         assertArrayEquals(vAxis, rotation1.getRotationAxis(), 0.0);
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a>         assertEquals(theta, rotation1.getRotationAngle(), 0.0);
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a>     }
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2021. All rights reserved.</div>

@@ -447,16 +447,16 @@ public abstract class KDTree&lt;P extends Point&lt;P&gt;&gt; {
 <span class="fc" id="L447">            d1 = mBoxes[nb].mDau1;</span>
 <span class="fc" id="L448">            d2 = mBoxes[nb].mDau2;</span>
 <span class="fc" id="L449">            final double coord = pt.getInhomogeneousCoordinate(jdim);</span>
-<span class="pc bpc" id="L450" title="1 of 2 branches missed.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
-<span class="nc" id="L451">                nb = d1;</span>
-<span class="pc bpc" id="L452" title="1 of 2 branches missed.">            } else if (coord - r &gt;= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {</span>
-<span class="nc" id="L453">                nb = d2;</span>
+<span class="fc bfc" id="L450" title="All 2 branches covered.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L451">                nb = d1;</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">            } else if (coord - r &gt;= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L453">                nb = d2;</span>
             }
 <span class="fc" id="L455">            jdim = ++jdim % dim;</span>
-<span class="pc bpc" id="L456" title="1 of 2 branches missed.">            if (nb == nbold) {</span>
+<span class="fc bfc" id="L456" title="All 2 branches covered.">            if (nb == nbold) {</span>
 <span class="fc" id="L457">                break;</span>
             }
-<span class="nc" id="L459">        }</span>
+<span class="fc" id="L459">        }</span>
 <span class="fc" id="L460">        task[1] = nb;</span>
 <span class="fc" id="L461">        ntask = 1;</span>
 <span class="pc bpc" id="L462" title="1 of 2 branches missed.">        while (ntask != 0) {</span>

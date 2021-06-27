@@ -1846,12 +1846,12 @@ public class PinholeCamera extends Camera implements Serializable {
 <span class="fc" id="L1846">                vDiag[0] = -invNorm;</span>
 <span class="fc" id="L1847">                vDiag2[0] = -norm;</span>
             }
-<span class="pc bpc" id="L1849" title="1 of 2 branches missed.">            if (invNorm * r.getElementAt(1, 1) &gt; 0.0) {</span>
+<span class="fc bfc" id="L1849" title="All 2 branches covered.">            if (invNorm * r.getElementAt(1, 1) &gt; 0.0) {</span>
 <span class="fc" id="L1850">                vDiag[1] = invNorm;</span>
 <span class="fc" id="L1851">                vDiag2[1] = norm;</span>
             } else {
-<span class="nc" id="L1853">                vDiag[1] = -invNorm;</span>
-<span class="nc" id="L1854">                vDiag2[1] = -norm;</span>
+<span class="fc" id="L1853">                vDiag[1] = -invNorm;</span>
+<span class="fc" id="L1854">                vDiag2[1] = -norm;</span>
             }
 
 <span class="fc" id="L1857">            vDiag[2] = invNorm;</span>

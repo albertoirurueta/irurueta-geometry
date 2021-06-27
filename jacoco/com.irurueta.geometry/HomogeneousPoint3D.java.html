@@ -17,6 +17,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Subclass of Point3D defining an homogeneous 3D point.
@@ -70,11 +71,11 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * Empty constructor.
      */
     public HomogeneousPoint3D() {
-<span class="fc" id="L73">        super();</span>
-<span class="fc" id="L74">        mX = mY = mZ = 0.0;</span>
-<span class="fc" id="L75">        mW = 1.0;</span>
-<span class="fc" id="L76">        mNormalized = false;</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L74">        super();</span>
+<span class="fc" id="L75">        mX = mY = mZ = 0.0;</span>
+<span class="fc" id="L76">        mW = 1.0;</span>
+<span class="fc" id="L77">        mNormalized = false;</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Constructor of this class. This constructor sets a new homogeneous
@@ -86,9 +87,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      *                                  different of 4.
      */
     public HomogeneousPoint3D(final double[] v) {
-<span class="fc" id="L89">        super();</span>
-<span class="fc" id="L90">        setCoordinates(v);</span>
-<span class="fc" id="L91">    }</span>
+<span class="fc" id="L90">        super();</span>
+<span class="fc" id="L91">        setCoordinates(v);</span>
+<span class="fc" id="L92">    }</span>
 
     /**
      * Constructor of this class. This constructor sets a new homogeneous 3D
@@ -99,13 +100,13 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param z Z coordinate of the given 3D point.
      * @param w W coordinate of the given 3D point.
      */
-<span class="fc" id="L102">    public HomogeneousPoint3D(final double x, final double y, final double z, final double w) {</span>
-<span class="fc" id="L103">        mX = x;</span>
-<span class="fc" id="L104">        mY = y;</span>
-<span class="fc" id="L105">        mZ = z;</span>
-<span class="fc" id="L106">        mW = w;</span>
-<span class="fc" id="L107">        mNormalized = false;</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L103">    public HomogeneousPoint3D(final double x, final double y, final double z, final double w) {</span>
+<span class="fc" id="L104">        mX = x;</span>
+<span class="fc" id="L105">        mY = y;</span>
+<span class="fc" id="L106">        mZ = z;</span>
+<span class="fc" id="L107">        mW = w;</span>
+<span class="fc" id="L108">        mNormalized = false;</span>
+<span class="fc" id="L109">    }</span>
 
     /**
      * This constructor sets a new homogeneous 3D point using as initialization
@@ -113,9 +114,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      *
      * @param point Point to initialize new instance to
      */
-<span class="fc" id="L116">    public HomogeneousPoint3D(final Point3D point) {</span>
-<span class="fc" id="L117">        setCoordinates(point);</span>
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L117">    public HomogeneousPoint3D(final Point3D point) {</span>
+<span class="fc" id="L118">        setCoordinates(point);</span>
+<span class="fc" id="L119">    }</span>
 
     /**
      * Returns the X coordinate of the given homogeneous 3D point instance.
@@ -123,7 +124,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return X coordinate.
      */
     public double getX() {
-<span class="fc" id="L126">        return mX;</span>
+<span class="fc" id="L127">        return mX;</span>
     }
 
     /**
@@ -132,9 +133,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param x X coordinate.
      */
     public void setX(final double x) {
-<span class="fc" id="L135">        mX = x;</span>
-<span class="fc" id="L136">        mNormalized = false;</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L136">        mX = x;</span>
+<span class="fc" id="L137">        mNormalized = false;</span>
+<span class="fc" id="L138">    }</span>
 
     /**
      * Returns the Y coordinate of the given homogeneous 3D point instance.
@@ -142,7 +143,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Y coordinate.
      */
     public double getY() {
-<span class="fc" id="L145">        return mY;</span>
+<span class="fc" id="L146">        return mY;</span>
     }
 
     /**
@@ -151,9 +152,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param y Y coordinate.
      */
     public void setY(final double y) {
-<span class="fc" id="L154">        mY = y;</span>
-<span class="fc" id="L155">        mNormalized = false;</span>
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L155">        mY = y;</span>
+<span class="fc" id="L156">        mNormalized = false;</span>
+<span class="fc" id="L157">    }</span>
 
     /**
      * Returns the Z coordinate of the given homogeneous 3D point instance.
@@ -161,7 +162,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Z coordinate.
      */
     public double getZ() {
-<span class="fc" id="L164">        return mZ;</span>
+<span class="fc" id="L165">        return mZ;</span>
     }
 
     /**
@@ -170,9 +171,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param z Z coordinate.
      */
     public void setZ(final double z) {
-<span class="fc" id="L173">        mZ = z;</span>
-<span class="fc" id="L174">        mNormalized = false;</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L174">        mZ = z;</span>
+<span class="fc" id="L175">        mNormalized = false;</span>
+<span class="fc" id="L176">    }</span>
 
     /**
      * Returns the W coordinate of the given homogeneous 3D point instance.
@@ -180,7 +181,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return W coordinate.
      */
     public double getW() {
-<span class="fc" id="L183">        return mW;</span>
+<span class="fc" id="L184">        return mW;</span>
     }
 
     /**
@@ -189,9 +190,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param w W coordinate.
      */
     public void setW(final double w) {
-<span class="fc" id="L192">        mW = w;</span>
-<span class="fc" id="L193">        mNormalized = false;</span>
-<span class="fc" id="L194">    }</span>
+<span class="fc" id="L193">        mW = w;</span>
+<span class="fc" id="L194">        mNormalized = false;</span>
+<span class="fc" id="L195">    }</span>
 
     /**
      * Sets the coordinates of this homogeneous 3D point by using provided X,
@@ -203,12 +204,12 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param w W coordinate.
      */
     public void setCoordinates(final double x, final double y, final double z, final double w) {
-<span class="fc" id="L206">        mX = x;</span>
-<span class="fc" id="L207">        mY = y;</span>
-<span class="fc" id="L208">        mZ = z;</span>
-<span class="fc" id="L209">        mW = w;</span>
-<span class="fc" id="L210">        mNormalized = false;</span>
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L207">        mX = x;</span>
+<span class="fc" id="L208">        mY = y;</span>
+<span class="fc" id="L209">        mZ = z;</span>
+<span class="fc" id="L210">        mW = w;</span>
+<span class="fc" id="L211">        mNormalized = false;</span>
+<span class="fc" id="L212">    }</span>
 
     /**
      * Sets the coordinates of a 3D point using an array containing its
@@ -220,16 +221,16 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public final void setCoordinates(final double[] v) {
-<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (v.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
-<span class="fc" id="L224">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (v.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="fc" id="L225">            throw new IllegalArgumentException();</span>
         } else {
-<span class="fc" id="L226">            mX = v[0];</span>
-<span class="fc" id="L227">            mY = v[1];</span>
-<span class="fc" id="L228">            mZ = v[2];</span>
-<span class="fc" id="L229">            mW = v[3];</span>
-<span class="fc" id="L230">            mNormalized = false;</span>
+<span class="fc" id="L227">            mX = v[0];</span>
+<span class="fc" id="L228">            mY = v[1];</span>
+<span class="fc" id="L229">            mZ = v[2];</span>
+<span class="fc" id="L230">            mW = v[3];</span>
+<span class="fc" id="L231">            mNormalized = false;</span>
         }
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L233">    }</span>
 
     /**
      * Sets coordinates of this instance using the coordinates of provided 3D
@@ -239,27 +240,27 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public final void setCoordinates(final Point3D point) {
-<span class="fc bfc" id="L242" title="All 2 branches covered.">        switch (point.getType()) {</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        switch (point.getType()) {</span>
             case INHOMOGENEOUS_COORDINATES:
-<span class="fc" id="L244">                final InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D) point;</span>
-<span class="fc" id="L245">                mX = inhomPoint.getX();</span>
-<span class="fc" id="L246">                mY = inhomPoint.getY();</span>
-<span class="fc" id="L247">                mZ = inhomPoint.getZ();</span>
-<span class="fc" id="L248">                mW = 1.0;</span>
-<span class="fc" id="L249">                mNormalized = false;</span>
-<span class="fc" id="L250">                break;</span>
+<span class="fc" id="L245">                final InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D) point;</span>
+<span class="fc" id="L246">                mX = inhomPoint.getX();</span>
+<span class="fc" id="L247">                mY = inhomPoint.getY();</span>
+<span class="fc" id="L248">                mZ = inhomPoint.getZ();</span>
+<span class="fc" id="L249">                mW = 1.0;</span>
+<span class="fc" id="L250">                mNormalized = false;</span>
+<span class="fc" id="L251">                break;</span>
 
             case HOMOGENEOUS_COORDINATES:
             default:
-<span class="fc" id="L254">                final HomogeneousPoint3D homPoint = (HomogeneousPoint3D) point;</span>
-<span class="fc" id="L255">                mX = homPoint.getX();</span>
-<span class="fc" id="L256">                mY = homPoint.getY();</span>
-<span class="fc" id="L257">                mZ = homPoint.getZ();</span>
-<span class="fc" id="L258">                mW = homPoint.getW();</span>
-<span class="fc" id="L259">                mNormalized = false;</span>
+<span class="fc" id="L255">                final HomogeneousPoint3D homPoint = (HomogeneousPoint3D) point;</span>
+<span class="fc" id="L256">                mX = homPoint.getX();</span>
+<span class="fc" id="L257">                mY = homPoint.getY();</span>
+<span class="fc" id="L258">                mZ = homPoint.getZ();</span>
+<span class="fc" id="L259">                mW = homPoint.getW();</span>
+<span class="fc" id="L260">                mNormalized = false;</span>
                 break;
         }
-<span class="fc" id="L262">    }</span>
+<span class="fc" id="L263">    }</span>
 
     /**
      * Returns X homogeneous coordinate of this 3D point.
@@ -268,7 +269,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getHomX() {
-<span class="fc" id="L271">        return getX();</span>
+<span class="fc" id="L272">        return getX();</span>
     }
 
     /**
@@ -278,7 +279,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getHomY() {
-<span class="fc" id="L281">        return getY();</span>
+<span class="fc" id="L282">        return getY();</span>
     }
 
     /**
@@ -288,7 +289,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getHomZ() {
-<span class="fc" id="L291">        return getZ();</span>
+<span class="fc" id="L292">        return getZ();</span>
     }
 
     /**
@@ -298,7 +299,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getHomW() {
-<span class="fc" id="L301">        return getW();</span>
+<span class="fc" id="L302">        return getW();</span>
     }
 
     /**
@@ -313,8 +314,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     @Override
     public void setHomogeneousCoordinates(final double homX, final double homY, final double homZ,
                                           final double homW) {
-<span class="fc" id="L316">        setCoordinates(homX, homY, homZ, homW);</span>
-<span class="fc" id="L317">    }</span>
+<span class="fc" id="L317">        setCoordinates(homX, homY, homZ, homW);</span>
+<span class="fc" id="L318">    }</span>
 
     /**
      * Returns X inhomogeneous coordinate of this 3D point.
@@ -323,7 +324,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getInhomX() {
-<span class="fc" id="L326">        return (mX / mW);</span>
+<span class="fc" id="L327">        return (mX / mW);</span>
     }
 
     /**
@@ -333,9 +334,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomX(final double inhomX) {
-<span class="fc" id="L336">        mX = inhomX * mW;</span>
-<span class="fc" id="L337">        mNormalized = false;</span>
-<span class="fc" id="L338">    }</span>
+<span class="fc" id="L337">        mX = inhomX * mW;</span>
+<span class="fc" id="L338">        mNormalized = false;</span>
+<span class="fc" id="L339">    }</span>
 
     /**
      * Returns Y inhomogeneous coordinate of this 3D point.
@@ -344,7 +345,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getInhomY() {
-<span class="fc" id="L347">        return (mY / mW);</span>
+<span class="fc" id="L348">        return (mY / mW);</span>
     }
 
     /**
@@ -354,9 +355,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomY(final double inhomY) {
-<span class="fc" id="L357">        mY = inhomY * mW;</span>
-<span class="fc" id="L358">        mNormalized = false;</span>
-<span class="fc" id="L359">    }</span>
+<span class="fc" id="L358">        mY = inhomY * mW;</span>
+<span class="fc" id="L359">        mNormalized = false;</span>
+<span class="fc" id="L360">    }</span>
 
     /**
      * Returns Z inhomogeneous coordinate of this 3D point.
@@ -365,7 +366,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getInhomZ() {
-<span class="fc" id="L368">        return (mZ / mW);</span>
+<span class="fc" id="L369">        return (mZ / mW);</span>
     }
 
     /**
@@ -374,9 +375,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param inhomZ Z inhomogeneous coordinate.
      */
     public void setInhomZ(final double inhomZ) {
-<span class="fc" id="L377">        mZ = inhomZ * mW;</span>
-<span class="fc" id="L378">        mNormalized = false;</span>
-<span class="fc" id="L379">    }</span>
+<span class="fc" id="L378">        mZ = inhomZ * mW;</span>
+<span class="fc" id="L379">        mNormalized = false;</span>
+<span class="fc" id="L380">    }</span>
 
     /**
      * Sets coordinates of this 3D point instance using provided inhomogeneous
@@ -389,12 +390,12 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     @Override
     public void setInhomogeneousCoordinates(final double inhomX, final double inhomY,
                                             final double inhomZ) {
-<span class="fc" id="L392">        mX = inhomX;</span>
-<span class="fc" id="L393">        mY = inhomY;</span>
-<span class="fc" id="L394">        mZ = inhomZ;</span>
-<span class="fc" id="L395">        mW = 1.0;</span>
-<span class="fc" id="L396">        mNormalized = false;</span>
-<span class="fc" id="L397">    }</span>
+<span class="fc" id="L393">        mX = inhomX;</span>
+<span class="fc" id="L394">        mY = inhomY;</span>
+<span class="fc" id="L395">        mZ = inhomZ;</span>
+<span class="fc" id="L396">        mW = 1.0;</span>
+<span class="fc" id="L397">        mNormalized = false;</span>
+<span class="fc" id="L398">    }</span>
 
     /**
      * Checks if provided object equals current 2D point.
@@ -404,15 +405,15 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-<span class="pc bpc" id="L407" title="1 of 2 branches missed.">        if (!(obj instanceof Point3D)) {</span>
-<span class="nc" id="L408">            return false;</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">        if (!(obj instanceof Point3D)) {</span>
+<span class="nc" id="L409">            return false;</span>
         }
-<span class="pc bpc" id="L410" title="1 of 2 branches missed.">        if (obj == this) {</span>
-<span class="nc" id="L411">            return true;</span>
+<span class="pc bpc" id="L411" title="1 of 2 branches missed.">        if (obj == this) {</span>
+<span class="nc" id="L412">            return true;</span>
         }
 
-<span class="fc" id="L414">        final Point3D point = (Point3D) obj;</span>
-<span class="fc" id="L415">        return equals(point);</span>
+<span class="fc" id="L415">        final Point3D point = (Point3D) obj;</span>
+<span class="fc" id="L416">        return equals(point);</span>
     }
 
     /**
@@ -422,16 +423,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L425">        int hash = 7;</span>
-<span class="nc" id="L426">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mX) ^</span>
-<span class="nc" id="L427">                (Double.doubleToLongBits(this.mX) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L428">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mY) ^</span>
-<span class="nc" id="L429">                (Double.doubleToLongBits(this.mY) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L430">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mZ) ^</span>
-<span class="nc" id="L431">                (Double.doubleToLongBits(this.mZ) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L432">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mW) ^</span>
-<span class="nc" id="L433">                (Double.doubleToLongBits(this.mW) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L434">        return hash;</span>
+<span class="fc" id="L426">        return Objects.hash(mX, mY, mZ, mW);</span>
     }
 
     /**
@@ -449,12 +441,12 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean equals(final Point3D point, final double threshold) {
-<span class="fc bfc" id="L452" title="All 2 branches covered.">        switch (point.getType()) {</span>
+<span class="fc bfc" id="L444" title="All 2 branches covered.">        switch (point.getType()) {</span>
             case INHOMOGENEOUS_COORDINATES:
-<span class="fc" id="L454">                return equals((InhomogeneousPoint3D) point, threshold);</span>
+<span class="fc" id="L446">                return equals((InhomogeneousPoint3D) point, threshold);</span>
             case HOMOGENEOUS_COORDINATES:
             default:
-<span class="fc" id="L457">                return equals((HomogeneousPoint3D) point, threshold);</span>
+<span class="fc" id="L449">                return equals((HomogeneousPoint3D) point, threshold);</span>
         }
     }
 
@@ -473,32 +465,32 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     public boolean equals(final HomogeneousPoint3D point, final double threshold) {
 
-<span class="fc bfc" id="L476" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L477">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L468" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L469">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L480">        normalize();</span>
-<span class="fc" id="L481">        point.normalize();</span>
+<span class="fc" id="L472">        normalize();</span>
+<span class="fc" id="L473">        point.normalize();</span>
 
         // compute sign for the case when points have different sign
-<span class="fc bfc" id="L484" title="All 2 branches covered.">        final double signThis = (mW &gt; 0.0) ? 1.0 : -1.0;</span>
-<span class="fc bfc" id="L485" title="All 2 branches covered.">        final double signPoint = (point.mW &gt; 0.0) ? 1.0 : -1.0;</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">        final double signThis = (mW &gt; 0.0) ? 1.0 : -1.0;</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        final double signPoint = (point.mW &gt; 0.0) ? 1.0 : -1.0;</span>
 
-<span class="fc" id="L487">        final double normThis = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW) *</span>
+<span class="fc" id="L479">        final double normThis = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW) *</span>
                 signThis;
-<span class="fc" id="L489">        final double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +</span>
+<span class="fc" id="L481">        final double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +</span>
                 point.mZ * point.mZ + point.mW * point.mW) * signPoint;
 
-<span class="fc bfc" id="L492" title="All 2 branches covered.">        final boolean validX = Math.abs(mX / normThis - point.mX / normPoint)</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">        final boolean validX = Math.abs(mX / normThis - point.mX / normPoint)</span>
                 &lt;= threshold;
-<span class="fc bfc" id="L494" title="All 2 branches covered.">        final boolean validY = Math.abs(mY / normThis - point.mY / normPoint)</span>
+<span class="fc bfc" id="L486" title="All 2 branches covered.">        final boolean validY = Math.abs(mY / normThis - point.mY / normPoint)</span>
                 &lt;= threshold;
-<span class="fc bfc" id="L496" title="All 2 branches covered.">        final boolean validZ = Math.abs(mZ / normThis - point.mZ / normPoint)</span>
+<span class="fc bfc" id="L488" title="All 2 branches covered.">        final boolean validZ = Math.abs(mZ / normThis - point.mZ / normPoint)</span>
                 &lt;= threshold;
-<span class="fc bfc" id="L498" title="All 2 branches covered.">        final boolean validW = Math.abs(mW / normThis - point.mW / normPoint)</span>
+<span class="fc bfc" id="L490" title="All 2 branches covered.">        final boolean validW = Math.abs(mW / normThis - point.mW / normPoint)</span>
                 &lt;= threshold;
 
-<span class="pc bpc" id="L501" title="3 of 8 branches missed.">        return (validX &amp;&amp; validY &amp;&amp; validZ &amp;&amp; validW);</span>
+<span class="pc bpc" id="L493" title="3 of 8 branches missed.">        return (validX &amp;&amp; validY &amp;&amp; validZ &amp;&amp; validW);</span>
     }
 
     /**
@@ -510,7 +502,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      */
     public boolean equals(final HomogeneousPoint3D point) {
-<span class="fc" id="L513">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L505">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -528,14 +520,14 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     public boolean equals(final InhomogeneousPoint3D point, final double threshold) {
 
-<span class="fc bfc" id="L531" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L532">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L524">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L535" title="All 2 branches covered.">        final boolean dX = Math.abs(point.getX() - (mX / mW)) &lt;= threshold;</span>
-<span class="fc bfc" id="L536" title="All 2 branches covered.">        final boolean dY = Math.abs(point.getY() - (mY / mW)) &lt;= threshold;</span>
-<span class="fc bfc" id="L537" title="All 2 branches covered.">        final boolean dZ = Math.abs(point.getZ() - (mZ / mW)) &lt;= threshold;</span>
-<span class="pc bpc" id="L538" title="2 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        final boolean dX = Math.abs(point.getX() - (mX / mW)) &lt;= threshold;</span>
+<span class="fc bfc" id="L528" title="All 2 branches covered.">        final boolean dY = Math.abs(point.getY() - (mY / mW)) &lt;= threshold;</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">        final boolean dZ = Math.abs(point.getZ() - (mZ / mW)) &lt;= threshold;</span>
+<span class="pc bpc" id="L530" title="2 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
     }
 
     /**
@@ -547,7 +539,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      */
     public boolean equals(final InhomogeneousPoint3D point) {
-<span class="fc" id="L550">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L542">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -557,7 +549,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean isAtInfinity() {
-<span class="fc" id="L560">        return isAtInfinity(DEFAULT_INFINITY_THRESHOLD);</span>
+<span class="fc" id="L552">        return isAtInfinity(DEFAULT_INFINITY_THRESHOLD);</span>
     }
 
     /**
@@ -572,11 +564,11 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isAtInfinity(final double threshold) {
-<span class="fc bfc" id="L575" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L576">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L568">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L579" title="All 2 branches covered.">        return (Math.abs(mW) &lt;= threshold);</span>
+<span class="fc bfc" id="L571" title="All 2 branches covered.">        return (Math.abs(mW) &lt;= threshold);</span>
     }
 
     /**
@@ -586,7 +578,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public CoordinatesType getType() {
-<span class="fc" id="L589">        return CoordinatesType.HOMOGENEOUS_COORDINATES;</span>
+<span class="fc" id="L581">        return CoordinatesType.HOMOGENEOUS_COORDINATES;</span>
     }
 
     /**
@@ -596,17 +588,17 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void normalize() {
-<span class="fc bfc" id="L599" title="All 2 branches covered.">        if (!mNormalized) {</span>
-<span class="fc" id="L600">            double norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);</span>
-<span class="fc bfc" id="L601" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
-<span class="fc" id="L602">                mX /= norm;</span>
-<span class="fc" id="L603">                mY /= norm;</span>
-<span class="fc" id="L604">                mZ /= norm;</span>
-<span class="fc" id="L605">                mW /= norm;</span>
-<span class="fc" id="L606">                mNormalized = true;</span>
+<span class="fc bfc" id="L591" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L592">            double norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);</span>
+<span class="fc bfc" id="L593" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L594">                mX /= norm;</span>
+<span class="fc" id="L595">                mY /= norm;</span>
+<span class="fc" id="L596">                mZ /= norm;</span>
+<span class="fc" id="L597">                mW /= norm;</span>
+<span class="fc" id="L598">                mNormalized = true;</span>
             }
         }
-<span class="fc" id="L609">    }</span>
+<span class="fc" id="L601">    }</span>
 
     /**
      * Returns boolean indicating whether this point has already been normalized.
@@ -615,7 +607,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean isNormalized() {
-<span class="fc" id="L618">        return mNormalized;</span>
+<span class="fc" id="L610">        return mNormalized;</span>
     }
 
     /**
@@ -625,7 +617,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Converts and returns this point as an inhomogeneous 3D point.
      */
     public InhomogeneousPoint3D toInhomogeneous() {
-<span class="fc" id="L628">        return new InhomogeneousPoint3D(mX / mW, mY / mW, mZ / mW);</span>
+<span class="fc" id="L620">        return new InhomogeneousPoint3D(mX / mW, mY / mW, mZ / mW);</span>
     }
 
     /**
@@ -635,9 +627,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double[] asArray() {
-<span class="fc" id="L638">        final double[] out = new double[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
-<span class="fc" id="L639">        asArray(out);</span>
-<span class="fc" id="L640">        return out;</span>
+<span class="fc" id="L630">        final double[] out = new double[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L631">        asArray(out);</span>
+<span class="fc" id="L632">        return out;</span>
     }
 
     /**
@@ -648,13 +640,13 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void asArray(final double[] array) {
-<span class="pc bpc" id="L651" title="1 of 2 branches missed.">        if (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
-<span class="nc" id="L652">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L643" title="1 of 2 branches missed.">        if (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L644">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L654">        array[0] = mX;</span>
-<span class="fc" id="L655">        array[1] = mY;</span>
-<span class="fc" id="L656">        array[2] = mZ;</span>
-<span class="fc" id="L657">        array[3] = mW;</span>
-<span class="fc" id="L658">    }</span>
+<span class="fc" id="L646">        array[0] = mX;</span>
+<span class="fc" id="L647">        array[1] = mY;</span>
+<span class="fc" id="L648">        array[2] = mZ;</span>
+<span class="fc" id="L649">        array[3] = mW;</span>
+<span class="fc" id="L650">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

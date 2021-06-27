@@ -17,6 +17,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Subclass of Point2D defining an homogeneous 2D point.
@@ -65,11 +66,11 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * Empty constructor.
      */
     public HomogeneousPoint2D() {
-<span class="fc" id="L68">        super();</span>
-<span class="fc" id="L69">        mX = mY = 0.0;</span>
-<span class="fc" id="L70">        mW = 1.0;</span>
-<span class="fc" id="L71">        mNormalized = false;</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L69">        super();</span>
+<span class="fc" id="L70">        mX = mY = 0.0;</span>
+<span class="fc" id="L71">        mW = 1.0;</span>
+<span class="fc" id="L72">        mNormalized = false;</span>
+<span class="fc" id="L73">    }</span>
 
     /**
      * Constructor of this class. This constructor sets a new homogeneous
@@ -81,9 +82,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      *                                  different of 3.
      */
     public HomogeneousPoint2D(final double[] v) {
-<span class="fc" id="L84">        super();</span>
-<span class="fc" id="L85">        setCoordinates(v);</span>
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L85">        super();</span>
+<span class="fc" id="L86">        setCoordinates(v);</span>
+<span class="fc" id="L87">    }</span>
 
     /**
      * Constructor of this class. This constructor sets a new homogeneous 2D
@@ -93,12 +94,12 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param y Y coordinate of the given 2D point.
      * @param w W coordinate of the given 2D point.
      */
-<span class="fc" id="L96">    public HomogeneousPoint2D(final double x, final double y, final double w) {</span>
-<span class="fc" id="L97">        mX = x;</span>
-<span class="fc" id="L98">        mY = y;</span>
-<span class="fc" id="L99">        mW = w;</span>
-<span class="fc" id="L100">        mNormalized = false;</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L97">    public HomogeneousPoint2D(final double x, final double y, final double w) {</span>
+<span class="fc" id="L98">        mX = x;</span>
+<span class="fc" id="L99">        mY = y;</span>
+<span class="fc" id="L100">        mW = w;</span>
+<span class="fc" id="L101">        mNormalized = false;</span>
+<span class="fc" id="L102">    }</span>
 
     /**
      * This constructor sets a new homogeneous 2D point using as initialization
@@ -106,9 +107,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      *
      * @param point Point to initialize new instance to.
      */
-<span class="fc" id="L109">    public HomogeneousPoint2D(final Point2D point) {</span>
-<span class="fc" id="L110">        setCoordinates(point);</span>
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L110">    public HomogeneousPoint2D(final Point2D point) {</span>
+<span class="fc" id="L111">        setCoordinates(point);</span>
+<span class="fc" id="L112">    }</span>
 
     /**
      * Returns the X coordinate of the given homogeneous 2D point instance.
@@ -116,7 +117,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return X coordinate.
      */
     public double getX() {
-<span class="fc" id="L119">        return mX;</span>
+<span class="fc" id="L120">        return mX;</span>
     }
 
     /**
@@ -125,9 +126,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param x X coordinate.
      */
     public void setX(final double x) {
-<span class="fc" id="L128">        mX = x;</span>
-<span class="fc" id="L129">        mNormalized = false;</span>
-<span class="fc" id="L130">    }</span>
+<span class="fc" id="L129">        mX = x;</span>
+<span class="fc" id="L130">        mNormalized = false;</span>
+<span class="fc" id="L131">    }</span>
 
     /**
      * Returns the Y coordinate of the given homogeneous 2D point instance.
@@ -135,7 +136,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return Y coordinate.
      */
     public double getY() {
-<span class="fc" id="L138">        return mY;</span>
+<span class="fc" id="L139">        return mY;</span>
     }
 
     /**
@@ -144,9 +145,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param y Y coordinate.
      */
     public void setY(final double y) {
-<span class="fc" id="L147">        mY = y;</span>
-<span class="fc" id="L148">        mNormalized = false;</span>
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L148">        mY = y;</span>
+<span class="fc" id="L149">        mNormalized = false;</span>
+<span class="fc" id="L150">    }</span>
 
     /**
      * Returns the W coordinate of the given homogeneous 2D point instance.
@@ -154,7 +155,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return W coordinate.
      */
     public double getW() {
-<span class="fc" id="L157">        return mW;</span>
+<span class="fc" id="L158">        return mW;</span>
     }
 
     /**
@@ -163,9 +164,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param w W coordinate.
      */
     public void setW(final double w) {
-<span class="fc" id="L166">        mW = w;</span>
-<span class="fc" id="L167">        mNormalized = false;</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L167">        mW = w;</span>
+<span class="fc" id="L168">        mNormalized = false;</span>
+<span class="fc" id="L169">    }</span>
 
     /**
      * Sets the coordinates of this homogeneous 2D point by using provided X,
@@ -176,11 +177,11 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param w W coordinate.
      */
     public void setCoordinates(final double x, final double y, final double w) {
-<span class="fc" id="L179">        mX = x;</span>
-<span class="fc" id="L180">        mY = y;</span>
-<span class="fc" id="L181">        mW = w;</span>
-<span class="fc" id="L182">        mNormalized = false;</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L180">        mX = x;</span>
+<span class="fc" id="L181">        mY = y;</span>
+<span class="fc" id="L182">        mW = w;</span>
+<span class="fc" id="L183">        mNormalized = false;</span>
+<span class="fc" id="L184">    }</span>
 
     /**
      * Sets the coordinates of a 2d point using an array containing its
@@ -192,15 +193,15 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public final void setCoordinates(final double[] v) {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (v.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
-<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (v.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="fc" id="L197">            throw new IllegalArgumentException();</span>
         } else {
-<span class="fc" id="L198">            mX = v[0];</span>
-<span class="fc" id="L199">            mY = v[1];</span>
-<span class="fc" id="L200">            mW = v[2];</span>
-<span class="fc" id="L201">            mNormalized = false;</span>
+<span class="fc" id="L199">            mX = v[0];</span>
+<span class="fc" id="L200">            mY = v[1];</span>
+<span class="fc" id="L201">            mW = v[2];</span>
+<span class="fc" id="L202">            mNormalized = false;</span>
         }
-<span class="fc" id="L203">    }</span>
+<span class="fc" id="L204">    }</span>
 
     /**
      * Sets coordinates of this instance using the coordinates of provided 2D
@@ -210,25 +211,25 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public final void setCoordinates(final Point2D point) {
-<span class="fc bfc" id="L213" title="All 2 branches covered.">        switch (point.getType()) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        switch (point.getType()) {</span>
             case INHOMOGENEOUS_COORDINATES:
-<span class="fc" id="L215">                final InhomogeneousPoint2D inhomPoint = (InhomogeneousPoint2D) point;</span>
-<span class="fc" id="L216">                mX = inhomPoint.getX();</span>
-<span class="fc" id="L217">                mY = inhomPoint.getY();</span>
-<span class="fc" id="L218">                mW = 1.0;</span>
-<span class="fc" id="L219">                mNormalized = false;</span>
-<span class="fc" id="L220">                break;</span>
+<span class="fc" id="L216">                final InhomogeneousPoint2D inhomPoint = (InhomogeneousPoint2D) point;</span>
+<span class="fc" id="L217">                mX = inhomPoint.getX();</span>
+<span class="fc" id="L218">                mY = inhomPoint.getY();</span>
+<span class="fc" id="L219">                mW = 1.0;</span>
+<span class="fc" id="L220">                mNormalized = false;</span>
+<span class="fc" id="L221">                break;</span>
 
             case HOMOGENEOUS_COORDINATES:
             default:
-<span class="fc" id="L224">                final HomogeneousPoint2D homPoint = (HomogeneousPoint2D) point;</span>
-<span class="fc" id="L225">                mX = homPoint.getX();</span>
-<span class="fc" id="L226">                mY = homPoint.getY();</span>
-<span class="fc" id="L227">                mW = homPoint.getW();</span>
-<span class="fc" id="L228">                mNormalized = false;</span>
+<span class="fc" id="L225">                final HomogeneousPoint2D homPoint = (HomogeneousPoint2D) point;</span>
+<span class="fc" id="L226">                mX = homPoint.getX();</span>
+<span class="fc" id="L227">                mY = homPoint.getY();</span>
+<span class="fc" id="L228">                mW = homPoint.getW();</span>
+<span class="fc" id="L229">                mNormalized = false;</span>
                 break;
         }
-<span class="fc" id="L231">    }</span>
+<span class="fc" id="L232">    }</span>
 
     /**
      * Returns X homogeneous coordinate of this 2d point.
@@ -237,7 +238,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getHomX() {
-<span class="fc" id="L240">        return getX();</span>
+<span class="fc" id="L241">        return getX();</span>
     }
 
     /**
@@ -247,7 +248,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getHomY() {
-<span class="fc" id="L250">        return getY();</span>
+<span class="fc" id="L251">        return getY();</span>
     }
 
     /**
@@ -257,7 +258,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getHomW() {
-<span class="fc" id="L260">        return getW();</span>
+<span class="fc" id="L261">        return getW();</span>
     }
 
     /**
@@ -271,8 +272,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
     @Override
     public void setHomogeneousCoordinates(final double homX, final double homY,
                                           final double homW) {
-<span class="fc" id="L274">        setCoordinates(homX, homY, homW);</span>
-<span class="fc" id="L275">    }</span>
+<span class="fc" id="L275">        setCoordinates(homX, homY, homW);</span>
+<span class="fc" id="L276">    }</span>
 
     /**
      * Returns X inhomogeneous coordinate of this 2d point.
@@ -281,7 +282,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getInhomX() {
-<span class="fc" id="L284">        return (mX / mW);</span>
+<span class="fc" id="L285">        return (mX / mW);</span>
     }
 
     /**
@@ -291,9 +292,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void setInhomX(final double inhomX) {
-<span class="fc" id="L294">        mX = inhomX * mW;</span>
-<span class="fc" id="L295">        mNormalized = false;</span>
-<span class="fc" id="L296">    }</span>
+<span class="fc" id="L295">        mX = inhomX * mW;</span>
+<span class="fc" id="L296">        mNormalized = false;</span>
+<span class="fc" id="L297">    }</span>
 
     /**
      * Returns Y inhomogeneous coordinate of this 2d point.
@@ -302,7 +303,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getInhomY() {
-<span class="fc" id="L305">        return (mY / mW);</span>
+<span class="fc" id="L306">        return (mY / mW);</span>
     }
 
     /**
@@ -312,9 +313,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void setInhomY(final double inhomY) {
-<span class="fc" id="L315">        mY = inhomY * mW;</span>
-<span class="fc" id="L316">        mNormalized = false;</span>
-<span class="fc" id="L317">    }</span>
+<span class="fc" id="L316">        mY = inhomY * mW;</span>
+<span class="fc" id="L317">        mNormalized = false;</span>
+<span class="fc" id="L318">    }</span>
 
     /**
      * Sets coordinates of this 2d point instance using provided inhomogeneous
@@ -325,11 +326,11 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void setInhomogeneousCoordinates(final double inhomX, final double inhomY) {
-<span class="fc" id="L328">        mX = inhomX;</span>
-<span class="fc" id="L329">        mY = inhomY;</span>
-<span class="fc" id="L330">        mW = 1.0;</span>
-<span class="fc" id="L331">        mNormalized = false;</span>
-<span class="fc" id="L332">    }</span>
+<span class="fc" id="L329">        mX = inhomX;</span>
+<span class="fc" id="L330">        mY = inhomY;</span>
+<span class="fc" id="L331">        mW = 1.0;</span>
+<span class="fc" id="L332">        mNormalized = false;</span>
+<span class="fc" id="L333">    }</span>
 
     /**
      * Checks if provided object equals current 2D point.
@@ -339,15 +340,15 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (!(obj instanceof Point2D)) {</span>
-<span class="nc" id="L343">            return false;</span>
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">        if (!(obj instanceof Point2D)) {</span>
+<span class="nc" id="L344">            return false;</span>
         }
-<span class="pc bpc" id="L345" title="1 of 2 branches missed.">        if (obj == this) {</span>
-<span class="nc" id="L346">            return true;</span>
+<span class="pc bpc" id="L346" title="1 of 2 branches missed.">        if (obj == this) {</span>
+<span class="nc" id="L347">            return true;</span>
         }
 
-<span class="fc" id="L349">        final Point2D point = (Point2D) obj;</span>
-<span class="fc" id="L350">        return equals(point);</span>
+<span class="fc" id="L350">        final Point2D point = (Point2D) obj;</span>
+<span class="fc" id="L351">        return equals(point);</span>
     }
 
     /**
@@ -357,14 +358,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L360">        int hash = 3;</span>
-<span class="nc" id="L361">        hash = 59 * hash + (int) (Double.doubleToLongBits(this.mX) ^</span>
-<span class="nc" id="L362">                (Double.doubleToLongBits(this.mX) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L363">        hash = 59 * hash + (int) (Double.doubleToLongBits(this.mY) ^</span>
-<span class="nc" id="L364">                (Double.doubleToLongBits(this.mY) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L365">        hash = 59 * hash + (int) (Double.doubleToLongBits(this.mW) ^</span>
-<span class="nc" id="L366">                (Double.doubleToLongBits(this.mW) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L367">        return hash;</span>
+<span class="fc" id="L361">        return Objects.hash(mX, mY, mW);</span>
     }
 
     /**
@@ -382,12 +376,12 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean equals(final Point2D point, final double threshold) {
-<span class="fc bfc" id="L385" title="All 2 branches covered.">        switch (point.getType()) {</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        switch (point.getType()) {</span>
             case INHOMOGENEOUS_COORDINATES:
-<span class="fc" id="L387">                return equals((InhomogeneousPoint2D) point, threshold);</span>
+<span class="fc" id="L381">                return equals((InhomogeneousPoint2D) point, threshold);</span>
             case HOMOGENEOUS_COORDINATES:
             default:
-<span class="fc" id="L390">                return equals((HomogeneousPoint2D) point, threshold);</span>
+<span class="fc" id="L384">                return equals((HomogeneousPoint2D) point, threshold);</span>
         }
     }
 
@@ -406,29 +400,29 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     public boolean equals(final HomogeneousPoint2D point, final double threshold) {
 
-<span class="fc bfc" id="L409" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L410">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L404">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L413">        normalize();</span>
-<span class="fc" id="L414">        point.normalize();</span>
+<span class="fc" id="L407">        normalize();</span>
+<span class="fc" id="L408">        point.normalize();</span>
 
         // compute sign for the case when points have different sign
-<span class="fc bfc" id="L417" title="All 2 branches covered.">        final double signThis = (mW &gt; 0.0) ? 1.0 : -1.0;</span>
-<span class="fc bfc" id="L418" title="All 2 branches covered.">        final double signPoint = (point.mW &gt; 0.0) ? 1.0 : -1.0;</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        final double signThis = (mW &gt; 0.0) ? 1.0 : -1.0;</span>
+<span class="fc bfc" id="L412" title="All 2 branches covered.">        final double signPoint = (point.mW &gt; 0.0) ? 1.0 : -1.0;</span>
 
-<span class="fc" id="L420">        final double normThis = Math.sqrt(mX * mX + mY * mY + mW * mW) * signThis;</span>
-<span class="fc" id="L421">        final double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +</span>
+<span class="fc" id="L414">        final double normThis = Math.sqrt(mX * mX + mY * mY + mW * mW) * signThis;</span>
+<span class="fc" id="L415">        final double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +</span>
                 point.mW * point.mW) * signPoint;
 
-<span class="fc bfc" id="L424" title="All 2 branches covered.">        final boolean validX = Math.abs(mX / normThis - point.mX / normPoint)</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">        final boolean validX = Math.abs(mX / normThis - point.mX / normPoint)</span>
                 &lt;= threshold;
-<span class="fc bfc" id="L426" title="All 2 branches covered.">        final boolean validY = Math.abs(mY / normThis - point.mY / normPoint)</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        final boolean validY = Math.abs(mY / normThis - point.mY / normPoint)</span>
                 &lt;= threshold;
-<span class="fc bfc" id="L428" title="All 2 branches covered.">        final boolean validW = Math.abs(mW / normThis - point.mW / normPoint)</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        final boolean validW = Math.abs(mW / normThis - point.mW / normPoint)</span>
                 &lt;= threshold;
 
-<span class="pc bpc" id="L431" title="2 of 6 branches missed.">        return (validX &amp;&amp; validY &amp;&amp; validW);</span>
+<span class="pc bpc" id="L425" title="2 of 6 branches missed.">        return (validX &amp;&amp; validY &amp;&amp; validW);</span>
     }
 
     /**
@@ -440,7 +434,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * otherwise.
      */
     public boolean equals(final HomogeneousPoint2D point) {
-<span class="fc" id="L443">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L437">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -458,13 +452,13 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     public boolean equals(final InhomogeneousPoint2D point, final double threshold) {
 
-<span class="fc bfc" id="L461" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L462">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L455" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L456">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L465" title="All 2 branches covered.">        final boolean dX = Math.abs(point.getX() - (mX / mW)) &lt;= threshold;</span>
-<span class="fc bfc" id="L466" title="All 2 branches covered.">        final boolean dY = Math.abs(point.getY() - (mY / mW)) &lt;= threshold;</span>
-<span class="pc bpc" id="L467" title="1 of 4 branches missed.">        return (dX &amp;&amp; dY);</span>
+<span class="fc bfc" id="L459" title="All 2 branches covered.">        final boolean dX = Math.abs(point.getX() - (mX / mW)) &lt;= threshold;</span>
+<span class="fc bfc" id="L460" title="All 2 branches covered.">        final boolean dY = Math.abs(point.getY() - (mY / mW)) &lt;= threshold;</span>
+<span class="pc bpc" id="L461" title="1 of 4 branches missed.">        return (dX &amp;&amp; dY);</span>
     }
 
     /**
@@ -476,7 +470,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * otherwise.
      */
     public boolean equals(final InhomogeneousPoint2D point) {
-<span class="fc" id="L479">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L473">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -486,7 +480,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean isAtInfinity() {
-<span class="fc" id="L489">        return isAtInfinity(DEFAULT_INFINITY_THRESHOLD);</span>
+<span class="fc" id="L483">        return isAtInfinity(DEFAULT_INFINITY_THRESHOLD);</span>
     }
 
     /**
@@ -501,11 +495,11 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isAtInfinity(final double threshold) {
-<span class="fc bfc" id="L504" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L505">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L499">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L508" title="All 2 branches covered.">        return (Math.abs(mW) &lt;= threshold);</span>
+<span class="fc bfc" id="L502" title="All 2 branches covered.">        return (Math.abs(mW) &lt;= threshold);</span>
     }
 
     /**
@@ -515,7 +509,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public CoordinatesType getType() {
-<span class="fc" id="L518">        return CoordinatesType.HOMOGENEOUS_COORDINATES;</span>
+<span class="fc" id="L512">        return CoordinatesType.HOMOGENEOUS_COORDINATES;</span>
     }
 
     /**
@@ -526,16 +520,16 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
     @SuppressWarnings(&quot;DuplicatedCode&quot;)
     @Override
     public void normalize() {
-<span class="fc bfc" id="L529" title="All 2 branches covered.">        if (!mNormalized) {</span>
-<span class="fc" id="L530">            double norm = Math.sqrt(mX * mX + mY * mY + mW * mW);</span>
-<span class="fc bfc" id="L531" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
-<span class="fc" id="L532">                mX /= norm;</span>
-<span class="fc" id="L533">                mY /= norm;</span>
-<span class="fc" id="L534">                mW /= norm;</span>
-<span class="fc" id="L535">                mNormalized = true;</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L524">            double norm = Math.sqrt(mX * mX + mY * mY + mW * mW);</span>
+<span class="fc bfc" id="L525" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L526">                mX /= norm;</span>
+<span class="fc" id="L527">                mY /= norm;</span>
+<span class="fc" id="L528">                mW /= norm;</span>
+<span class="fc" id="L529">                mNormalized = true;</span>
             }
         }
-<span class="fc" id="L538">    }</span>
+<span class="fc" id="L532">    }</span>
 
     /**
      * Returns boolean indicating whether this point has already been mNormalized
@@ -544,7 +538,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean isNormalized() {
-<span class="fc" id="L547">        return mNormalized;</span>
+<span class="fc" id="L541">        return mNormalized;</span>
     }
 
     /**
@@ -554,7 +548,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return Converts and returns this point as an inhomogeneous 2D point.
      */
     public InhomogeneousPoint2D toInhomogeneous() {
-<span class="fc" id="L557">        return new InhomogeneousPoint2D(mX / mW, mY / mW);</span>
+<span class="fc" id="L551">        return new InhomogeneousPoint2D(mX / mW, mY / mW);</span>
     }
 
     /**
@@ -564,9 +558,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double[] asArray() {
-<span class="fc" id="L567">        double[] out = new double[POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
-<span class="fc" id="L568">        asArray(out);</span>
-<span class="fc" id="L569">        return out;</span>
+<span class="fc" id="L561">        double[] out = new double[POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L562">        asArray(out);</span>
+<span class="fc" id="L563">        return out;</span>
     }
 
     /**
@@ -577,12 +571,12 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void asArray(double[] array) {
-<span class="pc bpc" id="L580" title="1 of 2 branches missed.">        if (array.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
-<span class="nc" id="L581">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L574" title="1 of 2 branches missed.">        if (array.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L575">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L583">        array[0] = mX;</span>
-<span class="fc" id="L584">        array[1] = mY;</span>
-<span class="fc" id="L585">        array[2] = mW;</span>
-<span class="fc" id="L586">    }</span>
+<span class="fc" id="L577">        array[0] = mX;</span>
+<span class="fc" id="L578">        array[1] = mY;</span>
+<span class="fc" id="L579">        array[2] = mW;</span>
+<span class="fc" id="L580">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

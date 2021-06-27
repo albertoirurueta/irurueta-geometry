@@ -20,6 +20,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Line2D in R2. Lines can be expressed using the following expression:
@@ -86,10 +87,10 @@ public class Line2D implements Serializable {
     /**
      * Constructor.
      */
-<span class="fc" id="L89">    public Line2D() {</span>
-<span class="fc" id="L90">        mA = mB = mC = 0.0;</span>
-<span class="fc" id="L91">        mNormalized = false;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L90">    public Line2D() {</span>
+<span class="fc" id="L91">        mA = mB = mC = 0.0;</span>
+<span class="fc" id="L92">        mNormalized = false;</span>
+<span class="fc" id="L93">    }</span>
 
     /**
      * Constructor with parameters. Parameters of a line are provided in the
@@ -100,9 +101,9 @@ public class Line2D implements Serializable {
      * @param b Parameter B of a line.
      * @param c Parameter C of a line.
      */
-<span class="fc" id="L103">    public Line2D(final double a, final double b, final double c) {</span>
-<span class="fc" id="L104">        setParameters(a, b, c);</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L104">    public Line2D(final double a, final double b, final double c) {</span>
+<span class="fc" id="L105">        setParameters(a, b, c);</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Constructor. This constructor takes two 2D points to build a line passing
@@ -115,9 +116,9 @@ public class Line2D implements Serializable {
      * @throws CoincidentPointsException Raised if points are equal.
      */
     public Line2D(final Point2D pointA, final Point2D pointB, final boolean noThrow)
-<span class="fc" id="L118">            throws CoincidentPointsException {</span>
-<span class="fc" id="L119">        setParametersFromPairOfPoints(pointA, pointB, noThrow);</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L119">            throws CoincidentPointsException {</span>
+<span class="fc" id="L120">        setParametersFromPairOfPoints(pointA, pointB, noThrow);</span>
+<span class="fc" id="L121">    }</span>
 
     /**
      * Constructor. This constructor takes two 2D points to build a line passing
@@ -126,9 +127,9 @@ public class Line2D implements Serializable {
      * @param pointA First point used to compute the line.
      * @param pointB Second point used to compute the line.
      */
-<span class="fc" id="L129">    public Line2D(final Point2D pointA, final Point2D pointB) {</span>
-<span class="fc" id="L130">        setParametersFromPairOfPoints(pointA, pointB);</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L130">    public Line2D(final Point2D pointA, final Point2D pointB) {</span>
+<span class="fc" id="L131">        setParametersFromPairOfPoints(pointA, pointB);</span>
+<span class="fc" id="L132">    }</span>
 
     /**
      * Constructor.
@@ -137,9 +138,9 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if length of provided array is
      *                                  not three.
      */
-<span class="fc" id="L140">    public Line2D(final double[] array) {</span>
-<span class="fc" id="L141">        setParameters(array);</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L141">    public Line2D(final double[] array) {</span>
+<span class="fc" id="L142">        setParameters(array);</span>
+<span class="fc" id="L143">    }</span>
 
     /**
      * Constructor of a line from one point and its director vector.
@@ -148,9 +149,9 @@ public class Line2D implements Serializable {
      * @param vector director vector.
      * @throws IllegalArgumentException raised if vector length is not 2.
      */
-<span class="fc" id="L151">    public Line2D(final Point2D point, final double[] vector) {</span>
-<span class="fc" id="L152">        setParametersFromPointAndDirectorVector(point, vector);</span>
-<span class="fc" id="L153">    }</span>
+<span class="fc" id="L152">    public Line2D(final Point2D point, final double[] vector) {</span>
+<span class="fc" id="L153">        setParametersFromPointAndDirectorVector(point, vector);</span>
+<span class="fc" id="L154">    }</span>
 
     /**
      * Returns parameter A of this line.
@@ -158,7 +159,7 @@ public class Line2D implements Serializable {
      * @return Parameter A of this line.
      */
     public double getA() {
-<span class="fc" id="L161">        return mA;</span>
+<span class="fc" id="L162">        return mA;</span>
     }
 
     /**
@@ -167,7 +168,7 @@ public class Line2D implements Serializable {
      * @return Parameter B of this line.
      */
     public double getB() {
-<span class="fc" id="L170">        return mB;</span>
+<span class="fc" id="L171">        return mB;</span>
     }
 
     /**
@@ -176,7 +177,7 @@ public class Line2D implements Serializable {
      * @return Parameter C of this line.
      */
     public double getC() {
-<span class="fc" id="L179">        return mC;</span>
+<span class="fc" id="L180">        return mC;</span>
     }
 
     /**
@@ -187,11 +188,11 @@ public class Line2D implements Serializable {
      * @param c Parameter C of this line.
      */
     public final void setParameters(final double a, final double b, final double c) {
-<span class="fc" id="L190">        mA = a;</span>
-<span class="fc" id="L191">        mB = b;</span>
-<span class="fc" id="L192">        mC = c;</span>
-<span class="fc" id="L193">        mNormalized = false;</span>
-<span class="fc" id="L194">    }</span>
+<span class="fc" id="L191">        mA = a;</span>
+<span class="fc" id="L192">        mB = b;</span>
+<span class="fc" id="L193">        mC = c;</span>
+<span class="fc" id="L194">        mNormalized = false;</span>
+<span class="fc" id="L195">    }</span>
 
     /**
      * Sets parameters of this line.
@@ -201,15 +202,15 @@ public class Line2D implements Serializable {
      *                                  have length equal to 3.
      */
     public final void setParameters(final double[] array) {
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (array.length != LINE_NUMBER_PARAMS) {</span>
-<span class="fc" id="L205">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (array.length != LINE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L206">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L208">        mA = array[0];</span>
-<span class="fc" id="L209">        mB = array[1];</span>
-<span class="fc" id="L210">        mC = array[2];</span>
-<span class="fc" id="L211">        mNormalized = false;</span>
-<span class="fc" id="L212">    }</span>
+<span class="fc" id="L209">        mA = array[0];</span>
+<span class="fc" id="L210">        mB = array[1];</span>
+<span class="fc" id="L211">        mC = array[2];</span>
+<span class="fc" id="L212">        mNormalized = false;</span>
+<span class="fc" id="L213">    }</span>
 
     /**
      * Sets parameter A of this line.
@@ -217,9 +218,9 @@ public class Line2D implements Serializable {
      * @param a Parameter A of this line.
      */
     public void setA(final double a) {
-<span class="fc" id="L220">        mA = a;</span>
-<span class="fc" id="L221">        mNormalized = false;</span>
-<span class="fc" id="L222">    }</span>
+<span class="fc" id="L221">        mA = a;</span>
+<span class="fc" id="L222">        mNormalized = false;</span>
+<span class="fc" id="L223">    }</span>
 
     /**
      * Sets parameter B of this line.
@@ -227,9 +228,9 @@ public class Line2D implements Serializable {
      * @param b Parameter B of this line.
      */
     public void setB(final double b) {
-<span class="fc" id="L230">        mB = b;</span>
-<span class="fc" id="L231">        mNormalized = false;</span>
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L231">        mB = b;</span>
+<span class="fc" id="L232">        mNormalized = false;</span>
+<span class="fc" id="L233">    }</span>
 
     /**
      * Sets parameter C of this line.
@@ -237,9 +238,9 @@ public class Line2D implements Serializable {
      * @param c Parameter C of this line.
      */
     public void setC(final double c) {
-<span class="fc" id="L240">        mC = c;</span>
-<span class="fc" id="L241">        mNormalized = false;</span>
-<span class="fc" id="L242">    }</span>
+<span class="fc" id="L241">        mC = c;</span>
+<span class="fc" id="L242">        mNormalized = false;</span>
+<span class="fc" id="L243">    }</span>
 
     /**
      * Returns the slope of this line.
@@ -247,7 +248,7 @@ public class Line2D implements Serializable {
      * @return Slope of this line.
      */
     public double getSlope() {
-<span class="fc" id="L250">        return (-mA / mB);</span>
+<span class="fc" id="L251">        return (-mA / mB);</span>
     }
 
     /**
@@ -256,16 +257,16 @@ public class Line2D implements Serializable {
      * @param slope Slope of this line.
      */
     public void setSlope(final double slope) {
-<span class="fc" id="L259">        normalize();</span>
-<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (Math.abs(slope) &gt; 1.0) {</span>
-<span class="fc" id="L261">            mA = 1.0;</span>
-<span class="fc" id="L262">            mB = -mA / slope;</span>
+<span class="fc" id="L260">        normalize();</span>
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        if (Math.abs(slope) &gt; 1.0) {</span>
+<span class="fc" id="L262">            mA = 1.0;</span>
+<span class="fc" id="L263">            mB = -mA / slope;</span>
         } else {
-<span class="fc" id="L264">            mB = 1.0;</span>
-<span class="fc" id="L265">            mA = -mB * slope;</span>
+<span class="fc" id="L265">            mB = 1.0;</span>
+<span class="fc" id="L266">            mA = -mB * slope;</span>
         }
-<span class="fc" id="L267">        mNormalized = false;</span>
-<span class="fc" id="L268">    }</span>
+<span class="fc" id="L268">        mNormalized = false;</span>
+<span class="fc" id="L269">    }</span>
 
     /**
      * Returns the angle of this line in radians.
@@ -273,15 +274,15 @@ public class Line2D implements Serializable {
      * @return Angle of this line in radians.
      */
     public double getAngle() {
-<span class="fc" id="L276">        double alpha = Math.atan2(-mA, mB);</span>
+<span class="fc" id="L277">        double alpha = Math.atan2(-mA, mB);</span>
         // if alpha is not between -90 and 90 degrees, then fix angle
-<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (alpha &gt; Math.PI / 2.0) {</span>
-<span class="fc" id="L279">            alpha = alpha - Math.PI;</span>
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        } else if (alpha &lt; -Math.PI / 2.0) {</span>
-<span class="fc" id="L281">            alpha = alpha + Math.PI;</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (alpha &gt; Math.PI / 2.0) {</span>
+<span class="fc" id="L280">            alpha = alpha - Math.PI;</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        } else if (alpha &lt; -Math.PI / 2.0) {</span>
+<span class="fc" id="L282">            alpha = alpha + Math.PI;</span>
         }
 
-<span class="fc" id="L284">        return alpha;</span>
+<span class="fc" id="L285">        return alpha;</span>
     }
 
     /**
@@ -290,9 +291,9 @@ public class Line2D implements Serializable {
      * @param angle Angle of this line in radians.
      */
     public void setAngle(final double angle) {
-<span class="fc" id="L293">        final double slope = Math.tan(angle);</span>
-<span class="fc" id="L294">        setSlope(slope);</span>
-<span class="fc" id="L295">    }</span>
+<span class="fc" id="L294">        final double slope = Math.tan(angle);</span>
+<span class="fc" id="L295">        setSlope(slope);</span>
+<span class="fc" id="L296">    }</span>
 
     /**
      * Returns the y-coordinate intercept point of this line.
@@ -302,7 +303,7 @@ public class Line2D implements Serializable {
      * @return Vertical coordinate where the line intercepts with the Y axis.
      */
     public double getYIntercept() {
-<span class="fc" id="L305">        return -(mC / mB);</span>
+<span class="fc" id="L306">        return -(mC / mB);</span>
     }
 
     /**
@@ -314,9 +315,9 @@ public class Line2D implements Serializable {
      *                   Y axis.
      */
     public void setYIntercept(final double yIntercept) {
-<span class="fc" id="L317">        mC = -mB * yIntercept;</span>
-<span class="fc" id="L318">        mNormalized = false;</span>
-<span class="fc" id="L319">    }</span>
+<span class="fc" id="L318">        mC = -mB * yIntercept;</span>
+<span class="fc" id="L319">        mNormalized = false;</span>
+<span class="fc" id="L320">    }</span>
 
     /**
      * Sets parameters of this line from a pair of 2D points. The line will pass
@@ -332,29 +333,29 @@ public class Line2D implements Serializable {
             final boolean noThrow) throws CoincidentPointsException {
 
         try {
-<span class="fc" id="L335">            pointA.normalize();</span>
-<span class="fc" id="L336">            pointB.normalize();</span>
+<span class="fc" id="L336">            pointA.normalize();</span>
+<span class="fc" id="L337">            pointB.normalize();</span>
 
-<span class="fc" id="L338">            final Matrix m = new Matrix(2,</span>
+<span class="fc" id="L339">            final Matrix m = new Matrix(2,</span>
                     Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
 
-<span class="fc" id="L341">            m.setElementAt(0, 0, pointA.getHomX());</span>
-<span class="fc" id="L342">            m.setElementAt(0, 1, pointA.getHomY());</span>
-<span class="fc" id="L343">            m.setElementAt(0, 2, pointA.getHomW());</span>
+<span class="fc" id="L342">            m.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L343">            m.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L344">            m.setElementAt(0, 2, pointA.getHomW());</span>
 
-<span class="fc" id="L345">            m.setElementAt(1, 0, pointB.getHomX());</span>
-<span class="fc" id="L346">            m.setElementAt(1, 1, pointB.getHomY());</span>
-<span class="fc" id="L347">            m.setElementAt(1, 2, pointB.getHomW());</span>
+<span class="fc" id="L346">            m.setElementAt(1, 0, pointB.getHomX());</span>
+<span class="fc" id="L347">            m.setElementAt(1, 1, pointB.getHomY());</span>
+<span class="fc" id="L348">            m.setElementAt(1, 2, pointB.getHomW());</span>
 
             // m = U * S * V', where m is 2x3, U is 2x3, S is 3x3 and V is 3x3
-<span class="fc" id="L350">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L351">            decomposer.decompose();</span>
+<span class="fc" id="L351">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L352">            decomposer.decompose();</span>
 
             // because we have only 2 points, matrix will be rank 2 only if
             // points are not linearly dependent, if they are, then they are
             // coincident because homogeneous points are defined up to scale
-<span class="fc bfc" id="L356" title="All 4 branches covered.">            if (decomposer.getRank() &lt; 2 &amp;&amp; !noThrow) {</span>
-<span class="fc" id="L357">                throw new CoincidentPointsException();</span>
+<span class="fc bfc" id="L357" title="All 4 branches covered.">            if (decomposer.getRank() &lt; 2 &amp;&amp; !noThrow) {</span>
+<span class="fc" id="L358">                throw new CoincidentPointsException();</span>
             }
 
             // Because m is rank 2, the last column of V, from now on l, will be
@@ -363,16 +364,16 @@ public class Line2D implements Serializable {
             // Hence l is the null space for both pointA and pointB, or in other
             // words, pointA and pointB are the locus of l, or l is the line
             // passing through both pointA and pointB
-<span class="fc" id="L366">            final Matrix v = decomposer.getV();</span>
+<span class="fc" id="L367">            final Matrix v = decomposer.getV();</span>
 
-<span class="fc" id="L368">            mA = v.getElementAt(0, 2);</span>
-<span class="fc" id="L369">            mB = v.getElementAt(1, 2);</span>
-<span class="fc" id="L370">            mC = v.getElementAt(2, 2);</span>
-<span class="fc" id="L371">            mNormalized = false;</span>
-<span class="nc" id="L372">        } catch (final AlgebraException ignore) {</span>
+<span class="fc" id="L369">            mA = v.getElementAt(0, 2);</span>
+<span class="fc" id="L370">            mB = v.getElementAt(1, 2);</span>
+<span class="fc" id="L371">            mC = v.getElementAt(2, 2);</span>
+<span class="fc" id="L372">            mNormalized = false;</span>
+<span class="nc" id="L373">        } catch (final AlgebraException ignore) {</span>
             // never happens
-<span class="fc" id="L374">        }</span>
-<span class="fc" id="L375">    }</span>
+<span class="fc" id="L375">        }</span>
+<span class="fc" id="L376">    }</span>
 
     /**
      * Sets parameters of this line from a pair of 2D points. The line will pass
@@ -384,12 +385,12 @@ public class Line2D implements Serializable {
     public final void setParametersFromPairOfPoints(
             final Point2D pointA, final Point2D pointB) {
         try {
-<span class="fc" id="L387">            setParametersFromPairOfPoints(pointA, pointB, true);</span>
-<span class="nc" id="L388">        } catch (final CoincidentPointsException ignore) {</span>
+<span class="fc" id="L388">            setParametersFromPairOfPoints(pointA, pointB, true);</span>
+<span class="nc" id="L389">        } catch (final CoincidentPointsException ignore) {</span>
             // exception never raised
             // because of last true parameter
-<span class="fc" id="L391">        }</span>
-<span class="fc" id="L392">    }</span>
+<span class="fc" id="L392">        }</span>
+<span class="fc" id="L393">    }</span>
 
     /**
      * Sets parameters of a 2D line from one point and its director vector.
@@ -401,20 +402,20 @@ public class Line2D implements Serializable {
     public final void setParametersFromPointAndDirectorVector(
             final Point2D point, final double[] vector) {
 
-<span class="fc bfc" id="L404" title="All 2 branches covered.">        if (vector.length != INHOM_VECTOR_SIZE) {</span>
-<span class="fc" id="L405">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (vector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="fc" id="L406">            throw new IllegalArgumentException();</span>
         }
 
         // normalize point to increase accuracy
-<span class="fc" id="L409">        point.normalize();</span>
+<span class="fc" id="L410">        point.normalize();</span>
 
-<span class="fc" id="L411">        mA = vector[0];</span>
-<span class="fc" id="L412">        mB = vector[1];</span>
+<span class="fc" id="L412">        mA = vector[0];</span>
+<span class="fc" id="L413">        mB = vector[1];</span>
 
-<span class="fc" id="L414">        mC = -(mA * point.getHomX() + mB * point.getHomY()) / point.getHomW();</span>
+<span class="fc" id="L415">        mC = -(mA * point.getHomX() + mB * point.getHomY()) / point.getHomW();</span>
 
-<span class="fc" id="L416">        mNormalized = false;</span>
-<span class="fc" id="L417">    }</span>
+<span class="fc" id="L417">        mNormalized = false;</span>
+<span class="fc" id="L418">    }</span>
 
     /**
      * Returns boolean indicating whether provided point lies within this line
@@ -427,21 +428,21 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(final Point2D point, final double threshold) {
-<span class="pc bpc" id="L430" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L431">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L432">            throw new IllegalArgumentException();</span>
         }
 
         // make dot product of homogeneous coordinates with line
         // m = [x, y, w], l = [a, b, c], then
         // x * a + y * b + w * c must be very small to be locus
 
-<span class="fc" id="L438">        point.normalize();</span>
-<span class="fc" id="L439">        normalize();</span>
+<span class="fc" id="L439">        point.normalize();</span>
+<span class="fc" id="L440">        normalize();</span>
 
-<span class="fc" id="L441">        final double dotProd = point.getHomX() * mA + point.getHomY() * mB +</span>
-<span class="fc" id="L442">                point.getHomW() * mC;</span>
+<span class="fc" id="L442">        final double dotProd = point.getHomX() * mA + point.getHomY() * mB +</span>
+<span class="fc" id="L443">                point.getHomW() * mC;</span>
 
-<span class="fc bfc" id="L444" title="All 2 branches covered.">        return Math.abs(dotProd) &lt; threshold;</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">        return Math.abs(dotProd) &lt; threshold;</span>
     }
 
     /**
@@ -452,7 +453,7 @@ public class Line2D implements Serializable {
      * @return True if point lies inside the line (is locus), false otherwise.
      */
     public boolean isLocus(final Point2D point) {
-<span class="fc" id="L455">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L456">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
 
     /**
@@ -464,16 +465,16 @@ public class Line2D implements Serializable {
      * @return Distance between this line and provided point.
      */
     public double signedDistance(final Point2D point) {
-<span class="fc" id="L467">        point.normalize();</span>
-<span class="fc" id="L468">        normalize();</span>
+<span class="fc" id="L468">        point.normalize();</span>
+<span class="fc" id="L469">        normalize();</span>
 
         // numerator is the dot product of point and line
-<span class="fc" id="L471">        final double num = point.getHomX() * mA + point.getHomY() * mB +</span>
-<span class="fc" id="L472">                point.getHomW() * mC;</span>
+<span class="fc" id="L472">        final double num = point.getHomX() * mA + point.getHomY() * mB +</span>
+<span class="fc" id="L473">                point.getHomW() * mC;</span>
 
-<span class="fc" id="L474">        final double den = Math.sqrt(mA * mA + mB * mB) * point.getHomW();</span>
+<span class="fc" id="L475">        final double den = Math.sqrt(mA * mA + mB * mB) * point.getHomW();</span>
 
-<span class="fc" id="L476">        return num / den;</span>
+<span class="fc" id="L477">        return num / den;</span>
     }
 
     /**
@@ -486,7 +487,7 @@ public class Line2D implements Serializable {
      * @return Closest point.
      */
     public Point2D getClosestPoint(final Point2D point) {
-<span class="fc" id="L489">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L490">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
 
     /**
@@ -502,9 +503,9 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public Point2D getClosestPoint(final Point2D point, final double threshold) {
-<span class="fc" id="L505">        final Point2D result = Point2D.create();</span>
-<span class="fc" id="L506">        closestPoint(point, result, threshold);</span>
-<span class="fc" id="L507">        return result;</span>
+<span class="fc" id="L506">        final Point2D result = Point2D.create();</span>
+<span class="fc" id="L507">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L508">        return result;</span>
     }
 
     /**
@@ -517,8 +518,8 @@ public class Line2D implements Serializable {
      * @param result Instance where the closest point will be stored.
      */
     public void closestPoint(final Point2D point, final Point2D result) {
-<span class="fc" id="L520">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
-<span class="fc" id="L521">    }</span>
+<span class="fc" id="L521">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L522">    }</span>
 
     /**
      * Computes the point belonging to this line closest to provided point,
@@ -534,32 +535,32 @@ public class Line2D implements Serializable {
      */
     public void closestPoint(final Point2D point, final Point2D result,
                              final double threshold) {
-<span class="fc bfc" id="L537" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L538">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L538" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L539">            throw new IllegalArgumentException();</span>
         }
 
         // normalize point to increase accuracy
-<span class="fc" id="L542">        point.normalize();</span>
+<span class="fc" id="L543">        point.normalize();</span>
 
-<span class="fc bfc" id="L544" title="All 2 branches covered.">        if (isLocus(point, threshold)) {</span>
+<span class="fc bfc" id="L545" title="All 2 branches covered.">        if (isLocus(point, threshold)) {</span>
             // if point belongs to line, then it is returned as result
-<span class="fc" id="L546">            result.setCoordinates(point);</span>
-<span class="fc" id="L547">            return;</span>
+<span class="fc" id="L547">            result.setCoordinates(point);</span>
+<span class="fc" id="L548">            return;</span>
         }
 
         // move point in director vector direction until it belong to this line
         // (point.getInhomX() + mA * amount) * mA + (point.getInhomY() +
         // mB * amount) * mB + mC = 0
 
-<span class="fc" id="L554">        final double amount = -(point.getHomX() * mA + point.getHomY() * mB +</span>
-<span class="fc" id="L555">                point.getHomW() * mC) /</span>
-<span class="fc" id="L556">                (point.getHomW() * (mA * mA + mB * mB));</span>
-<span class="fc" id="L557">        result.setHomogeneousCoordinates(point.getHomX() +</span>
-<span class="fc" id="L558">                        mA * amount * point.getHomW(),</span>
-<span class="fc" id="L559">                point.getHomY() + mB * amount * point.getHomW(),</span>
-<span class="fc" id="L560">                point.getHomW());</span>
-<span class="fc" id="L561">        result.normalize();</span>
-<span class="fc" id="L562">    }</span>
+<span class="fc" id="L555">        final double amount = -(point.getHomX() * mA + point.getHomY() * mB +</span>
+<span class="fc" id="L556">                point.getHomW() * mC) /</span>
+<span class="fc" id="L557">                (point.getHomW() * (mA * mA + mB * mB));</span>
+<span class="fc" id="L558">        result.setHomogeneousCoordinates(point.getHomX() +</span>
+<span class="fc" id="L559">                        mA * amount * point.getHomW(),</span>
+<span class="fc" id="L560">                point.getHomY() + mB * amount * point.getHomW(),</span>
+<span class="fc" id="L561">                point.getHomW());</span>
+<span class="fc" id="L562">        result.normalize();</span>
+<span class="fc" id="L563">    }</span>
 
     /**
      * Returns parameters of this line as an array containing [a, b, c].
@@ -567,9 +568,9 @@ public class Line2D implements Serializable {
      * @return Array containing all the parameters that describe this line.
      */
     public double[] asArray() {
-<span class="fc" id="L570">        final double[] array = new double[LINE_NUMBER_PARAMS];</span>
-<span class="fc" id="L571">        asArray(array);</span>
-<span class="fc" id="L572">        return array;</span>
+<span class="fc" id="L571">        final double[] array = new double[LINE_NUMBER_PARAMS];</span>
+<span class="fc" id="L572">        asArray(array);</span>
+<span class="fc" id="L573">        return array;</span>
     }
 
     /**
@@ -580,14 +581,14 @@ public class Line2D implements Serializable {
      *                                  length 3.
      */
     public void asArray(final double[] array) {
-<span class="fc bfc" id="L583" title="All 2 branches covered.">        if (array.length != LINE_NUMBER_PARAMS) {</span>
-<span class="fc" id="L584">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L584" title="All 2 branches covered.">        if (array.length != LINE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L585">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L587">        array[0] = mA;</span>
-<span class="fc" id="L588">        array[1] = mB;</span>
-<span class="fc" id="L589">        array[2] = mC;</span>
-<span class="fc" id="L590">    }</span>
+<span class="fc" id="L588">        array[0] = mA;</span>
+<span class="fc" id="L589">        array[1] = mB;</span>
+<span class="fc" id="L590">        array[2] = mC;</span>
+<span class="fc" id="L591">    }</span>
 
     /**
      * Normalizes the parameters of this line to increase the accuracy of some
@@ -595,18 +596,18 @@ public class Line2D implements Serializable {
      */
     @SuppressWarnings(&quot;DuplicatedCode&quot;)
     public void normalize() {
-<span class="fc bfc" id="L598" title="All 2 branches covered.">        if (!mNormalized) {</span>
-<span class="fc" id="L599">            double norm = Math.sqrt(mA * mA + mB * mB + mC * mC);</span>
+<span class="fc bfc" id="L599" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L600">            double norm = Math.sqrt(mA * mA + mB * mB + mC * mC);</span>
 
-<span class="fc bfc" id="L601" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
-<span class="fc" id="L602">                mA /= norm;</span>
-<span class="fc" id="L603">                mB /= norm;</span>
-<span class="fc" id="L604">                mC /= norm;</span>
+<span class="fc bfc" id="L602" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L603">                mA /= norm;</span>
+<span class="fc" id="L604">                mB /= norm;</span>
+<span class="fc" id="L605">                mC /= norm;</span>
 
-<span class="fc" id="L606">                mNormalized = true;</span>
+<span class="fc" id="L607">                mNormalized = true;</span>
             }
         }
-<span class="fc" id="L609">    }</span>
+<span class="fc" id="L610">    }</span>
 
     /**
      * Returns boolean indicating whether this line has already been normalized.
@@ -614,7 +615,7 @@ public class Line2D implements Serializable {
      * @return True if this line is normalized, false otherwise.
      */
     public boolean isNormalized() {
-<span class="fc" id="L617">        return mNormalized;</span>
+<span class="fc" id="L618">        return mNormalized;</span>
     }
 
     /**
@@ -623,9 +624,9 @@ public class Line2D implements Serializable {
      * @return Director vector of this line.
      */
     public double[] getDirectorVector() {
-<span class="fc" id="L626">        final double[] out = new double[INHOM_VECTOR_SIZE];</span>
-<span class="fc" id="L627">        directorVector(out);</span>
-<span class="fc" id="L628">        return out;</span>
+<span class="fc" id="L627">        final double[] out = new double[INHOM_VECTOR_SIZE];</span>
+<span class="fc" id="L628">        directorVector(out);</span>
+<span class="fc" id="L629">        return out;</span>
     }
 
     /**
@@ -637,13 +638,13 @@ public class Line2D implements Serializable {
      *                                  length 2.
      */
     public void directorVector(final double[] directorVector) {
-<span class="pc bpc" id="L640" title="1 of 2 branches missed.">        if (directorVector.length != INHOM_VECTOR_SIZE) {</span>
-<span class="nc" id="L641">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L641" title="1 of 2 branches missed.">        if (directorVector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="nc" id="L642">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L644">        directorVector[0] = mA;</span>
-<span class="fc" id="L645">        directorVector[1] = mB;</span>
-<span class="fc" id="L646">    }</span>
+<span class="fc" id="L645">        directorVector[0] = mA;</span>
+<span class="fc" id="L646">        directorVector[1] = mB;</span>
+<span class="fc" id="L647">    }</span>
 
     /**
      * Computes the intersection of this line with provided line.
@@ -656,9 +657,9 @@ public class Line2D implements Serializable {
      */
     public Point2D getIntersection(final Line2D otherLine)
             throws NoIntersectionException {
-<span class="fc" id="L659">        final Point2D result = Point2D.create();</span>
-<span class="fc" id="L660">        intersection(otherLine, result);</span>
-<span class="fc" id="L661">        return result;</span>
+<span class="fc" id="L660">        final Point2D result = Point2D.create();</span>
+<span class="fc" id="L661">        intersection(otherLine, result);</span>
+<span class="fc" id="L662">        return result;</span>
     }
 
     /**
@@ -675,43 +676,43 @@ public class Line2D implements Serializable {
             throws NoIntersectionException {
 
         // normalize lines to increase accuracy
-<span class="fc" id="L678">        normalize();</span>
-<span class="fc" id="L679">        otherLine.normalize();</span>
+<span class="fc" id="L679">        normalize();</span>
+<span class="fc" id="L680">        otherLine.normalize();</span>
 
         // set matrix where each row contains the parameters of the line
         try {
-<span class="fc" id="L683">            final Matrix m = new Matrix(2, 3);</span>
-<span class="fc" id="L684">            m.setElementAt(0, 0, mA);</span>
-<span class="fc" id="L685">            m.setElementAt(0, 1, mB);</span>
-<span class="fc" id="L686">            m.setElementAt(0, 2, mC);</span>
+<span class="fc" id="L684">            final Matrix m = new Matrix(2, 3);</span>
+<span class="fc" id="L685">            m.setElementAt(0, 0, mA);</span>
+<span class="fc" id="L686">            m.setElementAt(0, 1, mB);</span>
+<span class="fc" id="L687">            m.setElementAt(0, 2, mC);</span>
 
-<span class="fc" id="L688">            m.setElementAt(1, 0, otherLine.getA());</span>
-<span class="fc" id="L689">            m.setElementAt(1, 1, otherLine.getB());</span>
-<span class="fc" id="L690">            m.setElementAt(1, 2, otherLine.getC());</span>
+<span class="fc" id="L689">            m.setElementAt(1, 0, otherLine.getA());</span>
+<span class="fc" id="L690">            m.setElementAt(1, 1, otherLine.getB());</span>
+<span class="fc" id="L691">            m.setElementAt(1, 2, otherLine.getC());</span>
 
             // If lines are not parallel, then matrix has rank 2, and its right
             // null-space is equal to their intersection.
-<span class="fc" id="L694">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L695">            decomposer.decompose();</span>
+<span class="fc" id="L695">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L696">            decomposer.decompose();</span>
 
             // lines are parallel
-<span class="fc bfc" id="L698" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 2) {</span>
-<span class="fc" id="L699">                throw new NoIntersectionException();</span>
+<span class="fc bfc" id="L699" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 2) {</span>
+<span class="fc" id="L700">                throw new NoIntersectionException();</span>
             }
 
-<span class="fc" id="L702">            final Matrix v = decomposer.getV();</span>
+<span class="fc" id="L703">            final Matrix v = decomposer.getV();</span>
 
             // last column of V contains the right null-space of m, which is the
             // intersection of lines expressed in homogeneous coordinates.
             // because column is already normalized by SVD decomposition, point
             // will also be normalized
-<span class="fc" id="L708">            result.setHomogeneousCoordinates(v.getElementAt(0, 2),</span>
-<span class="fc" id="L709">                    v.getElementAt(1, 2), v.getElementAt(2, 2));</span>
-<span class="nc" id="L710">        } catch (final AlgebraException e) {</span>
+<span class="fc" id="L709">            result.setHomogeneousCoordinates(v.getElementAt(0, 2),</span>
+<span class="fc" id="L710">                    v.getElementAt(1, 2), v.getElementAt(2, 2));</span>
+<span class="nc" id="L711">        } catch (final AlgebraException e) {</span>
             // lines are numerically unstable
-<span class="nc" id="L712">            throw new NoIntersectionException(e);</span>
-<span class="fc" id="L713">        }</span>
-<span class="fc" id="L714">    }</span>
+<span class="nc" id="L713">            throw new NoIntersectionException(e);</span>
+<span class="fc" id="L714">        }</span>
+<span class="fc" id="L715">    }</span>
 
     /**
      * Computes the dot product between the parameters A, B,C of this line and
@@ -722,9 +723,9 @@ public class Line2D implements Serializable {
      * @return dot product value.
      */
     public double dotProduct(final Line2D line) {
-<span class="fc" id="L725">        normalize();</span>
-<span class="fc" id="L726">        line.normalize();</span>
-<span class="fc" id="L727">        return mA * line.mA + mB * line.mB + mC * line.mC;</span>
+<span class="fc" id="L726">        normalize();</span>
+<span class="fc" id="L727">        line.normalize();</span>
+<span class="fc" id="L728">        return mA * line.mA + mB * line.mB + mC * line.mC;</span>
     }
 
     /**
@@ -742,14 +743,14 @@ public class Line2D implements Serializable {
      */
     public boolean equals(final Line2D line, final double threshold) {
 
-<span class="fc bfc" id="L745" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L746">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L746" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L747">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc" id="L749">        normalize();</span>
-<span class="fc" id="L750">        line.normalize();</span>
+<span class="fc" id="L750">        normalize();</span>
+<span class="fc" id="L751">        line.normalize();</span>
 
-<span class="fc bfc" id="L752" title="All 2 branches covered.">        return (1.0 - Math.abs(dotProduct(line))) &lt;= threshold;</span>
+<span class="fc bfc" id="L753" title="All 2 branches covered.">        return (1.0 - Math.abs(dotProduct(line))) &lt;= threshold;</span>
     }
 
     /**
@@ -761,7 +762,7 @@ public class Line2D implements Serializable {
      * otherwise.
      */
     public boolean equals(final Line2D line) {
-<span class="fc" id="L764">        return equals(line, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L765">        return equals(line, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -772,15 +773,15 @@ public class Line2D implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-<span class="pc bpc" id="L775" title="1 of 2 branches missed.">        if (!(obj instanceof Line2D)) {</span>
-<span class="nc" id="L776">            return false;</span>
+<span class="pc bpc" id="L776" title="1 of 2 branches missed.">        if (!(obj instanceof Line2D)) {</span>
+<span class="nc" id="L777">            return false;</span>
         }
-<span class="pc bpc" id="L778" title="1 of 2 branches missed.">        if (obj == this) {</span>
-<span class="nc" id="L779">            return true;</span>
+<span class="pc bpc" id="L779" title="1 of 2 branches missed.">        if (obj == this) {</span>
+<span class="nc" id="L780">            return true;</span>
         }
 
-<span class="fc" id="L782">        final Line2D line = (Line2D) obj;</span>
-<span class="fc" id="L783">        return equals(line);</span>
+<span class="fc" id="L783">        final Line2D line = (Line2D) obj;</span>
+<span class="fc" id="L784">        return equals(line);</span>
     }
 
     /**
@@ -791,15 +792,7 @@ public class Line2D implements Serializable {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L794">        int hash = 7;</span>
-<span class="nc" id="L795">        hash = 73 * hash + (int) (Double.doubleToLongBits(this.mA) ^</span>
-<span class="nc" id="L796">                (Double.doubleToLongBits(this.mA) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L797">        hash = 73 * hash + (int) (Double.doubleToLongBits(this.mB) ^</span>
-<span class="nc" id="L798">                (Double.doubleToLongBits(this.mB) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L799">        hash = 73 * hash + (int) (Double.doubleToLongBits(this.mC) ^</span>
-<span class="nc" id="L800">                (Double.doubleToLongBits(this.mC) &gt;&gt;&gt; 32));</span>
-<span class="nc bnc" id="L801" title="All 2 branches missed.">        hash = 73 * hash + (this.mNormalized ? 1 : 0);</span>
-<span class="nc" id="L802">        return hash;</span>
+<span class="fc" id="L795">        return Objects.hash(mA, mB, mC);</span>
     }
 
     /**
@@ -810,9 +803,9 @@ public class Line2D implements Serializable {
      * @return a new instance of a 2D line located at the canonical infinity.
      */
     public static Line2D createCanonicalLineAtInfinity() {
-<span class="fc" id="L813">        final Line2D l = new Line2D();</span>
-<span class="fc" id="L814">        setAsCanonicalLineAtInfinity(l);</span>
-<span class="fc" id="L815">        return l;</span>
+<span class="fc" id="L806">        final Line2D l = new Line2D();</span>
+<span class="fc" id="L807">        setAsCanonicalLineAtInfinity(l);</span>
+<span class="fc" id="L808">        return l;</span>
     }
 
     /**
@@ -823,9 +816,9 @@ public class Line2D implements Serializable {
      * @param line 2D line to be set at infinity.
      */
     public static void setAsCanonicalLineAtInfinity(final Line2D line) {
-<span class="fc" id="L826">        line.mA = line.mB = 0.0;</span>
-<span class="fc" id="L827">        line.mC = 1.0;</span>
-<span class="fc" id="L828">        line.mNormalized = true;</span>
-<span class="fc" id="L829">    }</span>
+<span class="fc" id="L819">        line.mA = line.mB = 0.0;</span>
+<span class="fc" id="L820">        line.mC = 1.0;</span>
+<span class="fc" id="L821">        line.mNormalized = true;</span>
+<span class="fc" id="L822">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
