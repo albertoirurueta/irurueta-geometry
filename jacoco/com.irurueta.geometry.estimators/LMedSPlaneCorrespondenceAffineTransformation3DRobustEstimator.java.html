@@ -318,12 +318,12 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
                             public void onEstimateProgressChange(
                                     final RobustEstimator&lt;AffineTransformation3D&gt; estimator,
                                     final float progress) {
-<span class="nc bnc" id="L321" title="All 2 branches missed.">                                if (mListener != null) {</span>
-<span class="nc" id="L322">                                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L322">                                    mListener.onEstimateProgressChange(</span>
                                             LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
                                             progress);
                                 }
-<span class="nc" id="L326">                            }</span>
+<span class="fc" id="L326">                            }</span>
                         });
 
         try {

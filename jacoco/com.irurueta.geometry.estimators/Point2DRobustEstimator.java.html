@@ -991,7 +991,7 @@ public abstract class Point2DRobustEstimator {
 <span class="fc" id="L991">                    mCovariance = refiner.getCovariance();</span>
                 }
 
-<span class="pc bpc" id="L994" title="1 of 2 branches missed.">                return improved ? result : point;</span>
+<span class="fc bfc" id="L994" title="All 2 branches covered.">                return improved ? result : point;</span>
 <span class="nc" id="L995">            } catch (final Exception e) {</span>
                 // refinement failed, so we return input value
 <span class="nc" id="L997">                return point;</span>

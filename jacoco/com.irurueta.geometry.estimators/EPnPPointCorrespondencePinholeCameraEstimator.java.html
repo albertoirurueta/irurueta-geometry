@@ -543,20 +543,20 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // general case
         try {
 <span class="fc" id="L545">            generalSolution1();</span>
-<span class="fc" id="L546">        } catch (final GeometryException ignore) {</span>
+<span class="nc" id="L546">        } catch (final GeometryException ignore) {</span>
             // continue attempting 2nd solution if 1st one fails
 <span class="fc" id="L548">        }</span>
 <span class="pc bpc" id="L549" title="1 of 2 branches missed.">        if (mNullspaceDimension2Allowed) {</span>
             try {
 <span class="fc" id="L551">                generalSolution2();</span>
-<span class="fc" id="L552">            } catch (final GeometryException | AlgebraException ignore) {</span>
+<span class="nc" id="L552">            } catch (final GeometryException | AlgebraException ignore) {</span>
                 // continue attempting 3rd solution if 2nd one fails
 <span class="fc" id="L554">            }</span>
         }
 <span class="pc bpc" id="L556" title="1 of 4 branches missed.">        if (mNullspaceDimension3Allowed &amp;&amp; !mIsPlanar) {</span>
             try {
 <span class="fc" id="L558">                generalSolution3();</span>
-<span class="fc" id="L559">            } catch (final GeometryException | AlgebraException ignore) {</span>
+<span class="nc" id="L559">            } catch (final GeometryException | AlgebraException ignore) {</span>
                 // 3rd solution could not be found
 <span class="fc" id="L561">            }</span>
         }
@@ -568,8 +568,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L568">            mListener.onEstimateEnd(this);</span>
         }
 
-<span class="fc bfc" id="L571" title="All 2 branches covered.">        if (bestSolution == null) {</span>
-<span class="fc" id="L572">            throw new PinholeCameraEstimatorException();</span>
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">        if (bestSolution == null) {</span>
+<span class="nc" id="L572">            throw new PinholeCameraEstimatorException();</span>
         }
 <span class="fc" id="L574">        mLocked = false;</span>
 <span class="fc" id="L575">        return attemptRefine(bestSolution.camera);</span>

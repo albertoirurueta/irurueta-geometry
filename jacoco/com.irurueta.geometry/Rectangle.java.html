@@ -3952,7 +3952,7 @@ public class Rectangle implements Serializable {
 <span class="pc bpc" id="L3952" title="1 of 2 branches missed.">            if (leftDist &gt; largest) {</span>
 <span class="fc" id="L3953">                largest = leftDist;</span>
             }
-<span class="pc bpc" id="L3955" title="1 of 2 branches missed.">            if (topDist &gt; largest) {</span>
+<span class="fc bfc" id="L3955" title="All 2 branches covered.">            if (topDist &gt; largest) {</span>
 <span class="fc" id="L3956">                largest = topDist;</span>
             }
 <span class="pc bpc" id="L3958" title="1 of 2 branches missed.">            if (rightDist &gt; largest) {</span>
@@ -4749,21 +4749,21 @@ public class Rectangle implements Serializable {
 <span class="pc bpc" id="L4749" title="3 of 6 branches missed.">            if (leftDist &lt; topDist &amp;&amp; leftDist &lt; rightDist &amp;&amp;</span>
                     leftDist &lt; bottomDist) {
                 // pick left side
-<span class="nc" id="L4752">                result.setInhomogeneousCoordinates(left2, y);</span>
+<span class="fc" id="L4752">                result.setInhomogeneousCoordinates(left2, y);</span>
 
-<span class="pc bpc" id="L4754" title="3 of 6 branches missed.">            } else if (topDist &lt; leftDist &amp;&amp; topDist &lt; rightDist &amp;&amp;</span>
+<span class="nc bnc" id="L4754" title="All 6 branches missed.">            } else if (topDist &lt; leftDist &amp;&amp; topDist &lt; rightDist &amp;&amp;</span>
                     topDist &lt; bottomDist) {
                 // pick top side
 <span class="nc" id="L4757">                result.setInhomogeneousCoordinates(x, top2);</span>
 
-<span class="pc bpc" id="L4759" title="2 of 6 branches missed.">            } else if (rightDist &lt; leftDist &amp;&amp; rightDist &lt; topDist &amp;&amp;</span>
+<span class="nc bnc" id="L4759" title="All 6 branches missed.">            } else if (rightDist &lt; leftDist &amp;&amp; rightDist &lt; topDist &amp;&amp;</span>
                     rightDist &lt; bottomDist) {
                 // pick right side
-<span class="fc" id="L4762">                result.setInhomogeneousCoordinates(right2, y);</span>
+<span class="nc" id="L4762">                result.setInhomogeneousCoordinates(right2, y);</span>
 
             } else {
                 // pick bottom side
-<span class="fc" id="L4766">                result.setInhomogeneousCoordinates(x, bottom2);</span>
+<span class="nc" id="L4766">                result.setInhomogeneousCoordinates(x, bottom2);</span>
             }
         }
 <span class="fc" id="L4769">    }</span>

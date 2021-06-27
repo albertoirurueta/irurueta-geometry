@@ -430,8 +430,8 @@ public class MetricTransformation3DEstimator {
 <span class="fc" id="L430">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
 <span class="fc" id="L431">            decomposer.decompose();</span>
 
-<span class="fc bfc" id="L433" title="All 4 branches covered.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
-<span class="fc" id="L434">                throw new CoincidentPointsException();</span>
+<span class="pc bpc" id="L433" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L434">                throw new CoincidentPointsException();</span>
             }
 
 <span class="fc" id="L437">            final Matrix u = decomposer.getU();</span>
