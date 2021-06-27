@@ -1,7 +1,7 @@
 # irurueta-geometry
 Geometry structures and utilities
 
-[![Build Status](https://travis-ci.org/albertoirurueta/irurueta-geometry.svg?branch=master)](https://travis-ci.org/albertoirurueta/irurueta-geometry)
+[![Build Status](https://travis-ci.com/albertoirurueta/irurueta-geometry.svg?branch=master)](https://travis-ci.com/albertoirurueta/irurueta-geometry)
 
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-geometry&metric=bugs)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-geometry)
