@@ -509,8 +509,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
         }
 
         final double focalLength = (imageWidth + imageHeight) / 2.0;
-        final double horizontalPrincipalPoint = (double) imageWidth / 2.0;
-        final double verticalPrincipalPoint = (double) imageHeight / 2.0;
+        final double horizontalPrincipalPoint = imageWidth / 2.0;
+        final double verticalPrincipalPoint = imageHeight / 2.0;
         final double skewness = 0.0;
 
         return new PinholeCameraIntrinsicParameters(focalLength, focalLength,
@@ -612,8 +612,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
             final int imageHeight) {
 
         // compute the size of a pixel taking into account sensor and image sizes
-        final double pixelWidth = sensorWidth / (double) imageWidth; // mm/px
-        final double pixelHeight = sensorHeight / (double) imageHeight; // mm/px
+        final double pixelWidth = sensorWidth / imageWidth; // mm/px
+        final double pixelHeight = sensorHeight / imageHeight; // mm/px
 
         // compute focal lengths expressed in pixels
         final double horizontalFocalLength = focalLength / pixelWidth;
