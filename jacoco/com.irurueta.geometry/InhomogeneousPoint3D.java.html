@@ -418,7 +418,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
 <span class="fc bfc" id="L418" title="All 2 branches covered.">        final boolean dY = Math.abs((point.getY() / point.getW()) - mY) &lt;= threshold;</span>
 <span class="fc bfc" id="L419" title="All 2 branches covered.">        final boolean dZ = Math.abs((point.getZ() / point.getW()) - mZ) &lt;= threshold;</span>
 
-<span class="pc bpc" id="L421" title="1 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+<span class="pc bpc" id="L421" title="2 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
     }
 
     /**

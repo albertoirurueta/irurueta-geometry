@@ -224,7 +224,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
                                 try {
 <span class="fc" id="L225">                                    final Sphere sphere = new Sphere(point1, point2, point3, point4);</span>
 <span class="fc" id="L226">                                    solutions.add(sphere);</span>
-<span class="fc" id="L227">                                } catch (final CoplanarPointsException e) {</span>
+<span class="nc" id="L227">                                } catch (final CoplanarPointsException e) {</span>
                                     // if points are coincident, no solution is added
 <span class="fc" id="L229">                                }</span>
 <span class="fc" id="L230">                            }</span>

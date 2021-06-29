@@ -517,8 +517,8 @@
 <a class="jxr_linenumber" name="L509" href="#L509">509</a>         }
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 
 <a class="jxr_linenumber" name="L511" href="#L511">511</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> focalLength = (imageWidth + imageHeight) / 2.0;
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> horizontalPrincipalPoint = (<strong class="jxr_keyword">double</strong>) imageWidth / 2.0;
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> verticalPrincipalPoint = (<strong class="jxr_keyword">double</strong>) imageHeight / 2.0;
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> horizontalPrincipalPoint = imageWidth / 2.0;
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> verticalPrincipalPoint = imageHeight / 2.0;
 <a class="jxr_linenumber" name="L514" href="#L514">514</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> skewness = 0.0;
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 
 <a class="jxr_linenumber" name="L516" href="#L516">516</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/PinholeCameraIntrinsicParameters.html">PinholeCameraIntrinsicParameters</a>(focalLength, focalLength,
@@ -620,8 +620,8 @@
 <a class="jxr_linenumber" name="L612" href="#L612">612</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> imageHeight) {
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 
 <a class="jxr_linenumber" name="L614" href="#L614">614</a>         <em class="jxr_comment">// compute the size of a pixel taking into account sensor and image sizes</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> pixelWidth = sensorWidth / (<strong class="jxr_keyword">double</strong>) imageWidth; <em class="jxr_comment">// mm/px</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> pixelHeight = sensorHeight / (<strong class="jxr_keyword">double</strong>) imageHeight; <em class="jxr_comment">// mm/px</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> pixelWidth = sensorWidth / imageWidth; <em class="jxr_comment">// mm/px</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> pixelHeight = sensorHeight / imageHeight; <em class="jxr_comment">// mm/px</em>
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 
 <a class="jxr_linenumber" name="L618" href="#L618">618</a>         <em class="jxr_comment">// compute focal lengths expressed in pixels</em>
 <a class="jxr_linenumber" name="L619" href="#L619">619</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> horizontalFocalLength = focalLength / pixelWidth;
