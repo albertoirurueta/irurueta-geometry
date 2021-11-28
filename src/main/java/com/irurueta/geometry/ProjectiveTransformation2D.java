@@ -1299,6 +1299,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         try {
             outputTransformation.t = this.t.multiplyAndReturnNew(
                     inputTransformation.t);
+            outputTransformation.normalized = false;
 
         } catch (final WrongSizeException ignore) {
             // never happens

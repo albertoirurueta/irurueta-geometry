@@ -1403,6 +1403,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         try {
             outputTransformation.t = this.t.multiplyAndReturnNew(
                     inputTransformation.t);
+            outputTransformation.normalized = false;
 
         } catch (final WrongSizeException ignore) {
             // never happens
