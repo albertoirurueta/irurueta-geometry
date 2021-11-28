@@ -649,6 +649,7 @@ public class ProjectiveTransformation3D extends Transformation3D
                 INHOM_COORDS - 1,
                 a.multiplyByScalarAndReturnNew(t.getElementAt(
                         HOM_COORDS - 1, HOM_COORDS - 1)));
+        normalized = false;
     }
 
     /**
@@ -1350,6 +1351,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             throws AlgebraException {
 
         result.t = Utils.inverse(t);
+        result.normalized = false;
     }
 
     /**

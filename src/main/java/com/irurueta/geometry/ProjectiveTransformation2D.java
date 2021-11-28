@@ -622,6 +622,7 @@ public class ProjectiveTransformation2D extends Transformation2D
                 INHOM_COORDS - 1,
                 a.multiplyByScalarAndReturnNew(t.getElementAt(
                         HOM_COORDS - 1, HOM_COORDS - 1)));
+        normalized = false;
     }
 
     /**
@@ -1246,6 +1247,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             throws AlgebraException {
 
         result.t = Utils.inverse(t);
+        result.normalized = false;
     }
 
     /**
