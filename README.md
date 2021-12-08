@@ -20,3 +20,13 @@ Geometry structures and utilities
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-geometry&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-geometry)
 
 [Maven Site Report](http://albertoirurueta.github.io/irurueta-geometry)
+
+Latest release:
+```
+<dependency>
+    <groupId>com.irurueta</groupId>
+    <artifactId>irurueta-geometry</artifactId>
+    <version>1.0.0</version>
+    <scope>compile</scope>
+</dependency>
+```
