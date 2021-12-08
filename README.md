@@ -21,12 +21,26 @@ Geometry structures and utilities
 
 [Maven Site Report](http://albertoirurueta.github.io/irurueta-geometry)
 
+## Usage
+
+Add the following dependency to your project:
+
 Latest release:
 ```
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry</artifactId>
     <version>1.0.0</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+Latest snapshot:
+```
+<dependency>
+    <groupId>com.irurueta</groupId>
+    <artifactId>irurueta-geometry</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
