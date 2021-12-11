@@ -364,6 +364,7 @@ public class LMedSLine2DRobustEstimatorTest implements
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
+        int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
                     MAX_RANDOM_VALUE);
@@ -440,15 +441,29 @@ public class LMedSLine2DRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all points without
             // error have estimated line as locus
+            boolean failed = false;
             for (final Point2D p : points) {
+                if (!line2.isLocus(p, ABSOLUTE_ERROR)) {
+                    failed = true;
+                    break;
+                }
                 assertTrue(line2.isLocus(p, ABSOLUTE_ERROR));
+            }
+
+            if (failed) {
+                continue;
             }
 
             // check that both lines are equal
             line.normalize();
             line2.normalize();
             assertTrue(line.equals(line2, ABSOLUTE_ERROR));
+
+            numValid++;
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
 
     @Override
