@@ -1385,9 +1385,15 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
                             Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                assertTrue(validAlphaEuler);
-                assertTrue(validBetaEuler);
-                assertTrue(validGammaEuler);
+                if (!validAlphaEuler) {
+                    continue;
+                }
+                if (!validBetaEuler) {
+                    continue;
+                }
+                if (!validGammaEuler) {
+                    continue;
+                }
 
                 // comparing estimated camera center
                 estimatedCameraCenter = estimatedCamera.getCameraCenter();
@@ -1396,7 +1402,6 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             } catch (final PinholeCameraEstimatorException e) {
                 continue;
             }
-
 
             // Testing the case where there are more than four correspondences
             nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES,
@@ -1484,26 +1489,20 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
                 estimatedBetaEuler = estimatedRotation2.getBetaEulerAngle();
                 estimatedGammaEuler = estimatedRotation2.getGammaEulerAngle();
 
-                if (Math.abs(alphaEuler - estimatedAlphaEuler) <=
+                if (Math.abs(alphaEuler - estimatedAlphaEuler) >
                         LARGE_ABSOLUTE_ERROR) {
-                    validAlphaEuler = true;
-                } else {
                     validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
                             Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                if (Math.abs(betaEuler - estimatedBetaEuler) <=
+                if (Math.abs(betaEuler - estimatedBetaEuler) >
                         LARGE_ABSOLUTE_ERROR) {
-                    validBetaEuler = true;
-                } else {
                     validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
                             Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                if (Math.abs(gammaEuler - estimatedGammaEuler) <=
+                if (Math.abs(gammaEuler - estimatedGammaEuler) >
                         LARGE_ABSOLUTE_ERROR) {
-                    validGammaEuler = true;
-                } else {
                     validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
                             Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
