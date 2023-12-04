@@ -40,10 +40,12 @@ import java.util.List;
  * length assuming unitary aspect ratio (equal horizontal and vertical focal
  * lengths) and that the resulting focal length is positive.
  * This class is an implementation following the one proposed by Adrian
- * Penate-Senchez et al on "Exhaustive Linearization for Robust Camera Pose and
+ * Penate-Senchez et al. on "Exhaustive Linearization for Robust Camera Pose and
  * Focal Length Estimation".
  * Paper can be found at:
- * http://www.iri.upc.edu/files/scidoc/1404-Exhaustive-linearization-for-robust-camera-pose-and-focal-length-estimation.pdf
+ * <a href="http://www.iri.upc.edu/files/scidoc/1404-Exhaustive-linearization-for-robust-camera-pose-and-focal-length-estimation.pdf">
+ *     http://www.iri.upc.edu/files/scidoc/1404-Exhaustive-linearization-for-robust-camera-pose-and-focal-length-estimation.pdf
+ * </a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class UPnPPointCorrespondencePinholeCameraEstimator extends
@@ -158,7 +160,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * has size nx4, where n is the number of provided 3D world points.
      * For planar configuration, each row contains 3 coordinates and alphas
      * has size nx3, where n is the number of provided 3D world points.
-     * both reference frames are centered in the centroid), alphas can be used
+     * Both reference frames are centered in the centroid, alphas can be used
      * in both world and camera coordinates.
      */
     private Matrix mAlphas;
@@ -219,7 +221,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             final List<Point3D> points3D, final List<Point2D> points2D)
             throws WrongListSizesException {
         super();
-        internalSetLists(points3D, points2D);
+        internalSetListsUPnP(points3D, points2D);
     }
 
     /**
@@ -238,7 +240,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(listener);
-        internalSetLists(points3D, points2D);
+        internalSetListsUPnP(points3D, points2D);
     }
 
     /**
@@ -258,7 +260,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             throw new LockedException();
         }
 
-        internalSetLists(points3D, points2D);
+        internalSetListsUPnP(points3D, points2D);
     }
 
     /**
@@ -297,7 +299,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @return true to allow 2 dimensional nullspace, false otherwise.
+     * @return true to allow 2-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
         return mNullspaceDimension2Allowed;
@@ -309,7 +311,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @param nullspaceDimension2Allowed true to allow 2 dimensional null-space,
+     * @param nullspaceDimension2Allowed true to allow 2-dimensional null-space,
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
@@ -458,7 +460,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public PinholeCameraEstimatorType getType() {
-        return PinholeCameraEstimatorType.UPnP_PINHOLE_CAMERA_ESTIMATOR;
+        return PinholeCameraEstimatorType.UPNP_PINHOLE_CAMERA_ESTIMATOR;
     }
 
     /**
@@ -592,8 +594,8 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    private void internalSetLists(final List<Point3D> points3D,
-                                  final List<Point2D> points2D) throws WrongListSizesException {
+    private void internalSetListsUPnP(final List<Point3D> points3D,
+                                      final List<Point2D> points2D) throws WrongListSizesException {
 
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -1032,7 +1034,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * Constraint:
      * ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4
      * we need to find beta to scale control camera points, but since we are
-     * using 2 columns of the nullspace v, then v is a linear combination
+     * using 2 columns of the null-space v, then v is a linear combination
      * v = beta1*vA + beta2*vB and the previous constraint becomes:
      * ||(beta1*vAi + beta2*vBi) - (beta1*vAj + beta2*vBj)||^2 = ||ci - cj||^2, i,j 1...4
      * This results in a linear system of 6 equations (when we have 4 control
@@ -1181,7 +1183,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
                     finalControlCameraPoints, focalLength);
             mSolutions.add(solution);
         } catch (final GeometryException ignore) {
-            // it it fails, solution is not added
+            // if it fails, solution is not added
         }
 
         // add solution with opposite beta sign
@@ -1195,7 +1197,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
                     finalControlCameraPoints, focalLength);
             mSolutions.add(solution);
         } catch (final GeometryException ignore) {
-            // it it fails, solution is not added
+            // if it fails, solution is not added
         }
     }
 
@@ -1273,7 +1275,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * @param row row to be filled.
      * @param c   matrix to be filled.
      * @param vi  i-th control point in camera coordinates of last column of v
-     *            (i.e. the nullspace of m) where z coordinate is normalized by some
+     *            (i.e. the null-space of m) where z coordinate is normalized by some
      *            unknown focal length.
      * @param vj  j-th control point in camera coordinates of last column of v
      *            (i.e. the nullspace of m) where z coordinate is normalized by some
@@ -1713,7 +1715,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * If a planar configuration is allowed, then only 3 control points are
      * computed along the plane using the centroid and two points on the
      * principal directions of such plane.
-     * Otherwise in general configuration, 4 control points are computed as
+     * Otherwise, in general configuration, 4 control points are computed as
      * the centroid and 3 points along the principal axes of the cloud of 3D
      * points.
      *
@@ -1830,7 +1832,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
          * Points in camera coordinates are expressed as:
          * Xc = Tw-&lt;c * Xw, where Tw-&lt;c is the transformation from world to
          * camera.
-         * The euclidean transformation Tw-&lt;c is expressed as:
+         * The Euclidean transformation Tw-&lt;c is expressed as:
          * Tw-&lt;c = [R  t]
          * [0' 1]
          * Projection of a point in camera coordinates can also be expressed
@@ -1843,7 +1845,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
          * where R is a rotation and C is the camera center in world
          * coordinates.
          * Assuming that control points are obtained up to scale, then instead
-         * of an euclidean transformation we will assume that Tw-&lt;c is a metric
+         * of an Euclidean transformation we will assume that Tw-&lt;c is a metric
          * transformation, hence:
          * Tw-&lt;c = [s*R t2]
          * [0'  1 ]

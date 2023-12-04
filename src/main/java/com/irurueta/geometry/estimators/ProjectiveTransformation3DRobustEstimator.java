@@ -41,7 +41,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -421,7 +421,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public abstract RobustEstimatorMethod getMethod();
 
     /**
-     * Creates an projective 3D transformation estimator based on 3D point
+     * Creates a projective 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
      *
      * @param inputPoints  list of input points to be used to estimate a
@@ -429,7 +429,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * @param outputPoints list of output points to be used to estimate a
      *                     projective 3D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 3D transformation.
+     *                     the best affine 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -783,7 +783,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *

@@ -42,25 +42,25 @@ public interface Point<P extends Point<P>> extends Serializable {
     /**
      * Sets value of inhomogeneous coordinate for provided dimension.
      *
-     * @param dim   dimension to set coordinate for (i.e. 0 means x, 1 means y, 2 means z, etc).
+     * @param dim   dimension to set coordinate for (i.e. 0 means x, 1 means y, 2 means z, etc.).
      * @param value value to be set.
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
     void setInhomogeneousCoordinate(final int dim, final double value);
 
     /**
-     * Returns euclidean distance between this point and provided point.
+     * Returns Euclidean distance between this point and provided point.
      *
      * @param point point to compare.
-     * @return euclidean distance between this point and provided point.
+     * @return Euclidean distance between this point and provided point.
      */
     double distanceTo(final P point);
 
     /**
-     * Returns squared euclidean distance between this point and provided point.
+     * Returns squared Euclidean distance between this point and provided point.
      *
      * @param point point to compare.
-     * @return euclidean distance between this point and provided point.
+     * @return Euclidean distance between this point and provided point.
      */
     double sqrDistanceTo(final P point);
 }

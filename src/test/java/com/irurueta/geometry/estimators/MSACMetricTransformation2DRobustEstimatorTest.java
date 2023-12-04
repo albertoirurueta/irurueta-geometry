@@ -81,32 +81,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         MSACMetricTransformation2DRobustEstimator estimator =
                 new MSACMetricTransformation2DRobustEstimator();
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -122,32 +118,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator = new MSACMetricTransformation2DRobustEstimator(
                 inputPoints, outputPoints);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -173,32 +165,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         // test constructor with listener
         estimator = new MSACMetricTransformation2DRobustEstimator(this);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -207,32 +195,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator = new MSACMetricTransformation2DRobustEstimator(
                 this, inputPoints, outputPoints);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -258,32 +242,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         // test constructor without arguments and weak minimum points
         estimator = new MSACMetricTransformation2DRobustEstimator(true);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -299,32 +279,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator = new MSACMetricTransformation2DRobustEstimator(
                 inputPoints, outputPoints, true);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -349,32 +325,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         // test constructor with listener
         estimator = new MSACMetricTransformation2DRobustEstimator(this, true);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -383,32 +355,28 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator = new MSACMetricTransformation2DRobustEstimator(
                 this, inputPoints, outputPoints, true);
 
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.MSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -437,15 +405,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                 new MSACMetricTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -461,15 +428,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                 new MSACMetricTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -491,15 +457,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                 new MSACMetricTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                MSACMetricTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(MSACMetricTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -530,8 +495,8 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator.setPoints(inputPoints, outputPoints);
 
         // check correctness
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
@@ -564,7 +529,7 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -575,16 +540,16 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
 
         // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // set new value
         estimator.setWeakMinimumSizeAllowed(true);
 
         // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
     }
 
     @Test
@@ -593,15 +558,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                 new MSACMetricTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -705,17 +669,17 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         estimator.setResultRefined(false);
         estimator.setCovarianceKept(false);
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
-        assertEquals(estimateNextIteration, 0);
-        assertEquals(estimateProgressChange, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
+        assertEquals(0, estimateNextIteration);
+        assertEquals(0, estimateProgressChange);
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
         final MetricTransformation2D transformation2 = estimator.estimate();
 
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
         assertTrue(estimateNextIteration > 0);
         assertTrue(estimateProgressChange >= 0);
         reset();
@@ -728,16 +692,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
         for (int i = 0; i < nPoints; i++) {
             p1 = outputPoints.get(i);
             p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
-            assertEquals(p1.distanceTo(p2), 0.0,
-                    ABSOLUTE_ERROR);
+            assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
         }
 
         // check parameters of estimated transformation
         final Rotation2D rotation2 = transformation2.getRotation();
         final double[] translation2 = transformation2.getTranslation();
 
-        assertEquals(rotation2.getTheta(), rotation.getTheta(),
-                ABSOLUTE_ERROR);
+        assertEquals(rotation.getTheta(), rotation2.getTheta(), ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
     }
 
@@ -825,17 +787,17 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -853,8 +815,7 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                     isValid = false;
                     break;
                 }
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             if (!isValid) {
@@ -865,8 +826,7 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
             final Rotation2D rotation2 = transformation2.getRotation();
             final double[] translation2 = transformation2.getTranslation();
 
-            assertEquals(rotation2.getTheta(), rotation.getTheta(),
-                    ABSOLUTE_ERROR);
+            assertEquals(rotation.getTheta(), rotation2.getTheta(), ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
 
             numValid++;
@@ -938,10 +898,10 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -958,8 +918,8 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                         2 + MetricTransformation2D.NUM_TRANSLATION_COORDS);
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -972,16 +932,14 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
                 p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             // check parameters of estimated transformation
             final Rotation2D rotation2 = transformation2.getRotation();
             final double[] translation2 = transformation2.getTranslation();
 
-            assertEquals(rotation2.getTheta(), rotation.getTheta(),
-                    ABSOLUTE_ERROR);
+            assertEquals(rotation.getTheta(), rotation2.getTheta(), ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
         }
     }
@@ -1070,10 +1028,10 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -1090,8 +1048,8 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                         2 + MetricTransformation2D.NUM_TRANSLATION_COORDS);
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -1109,8 +1067,7 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
                     isValid = false;
                     break;
                 }
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             if (!isValid) {
@@ -1121,8 +1078,7 @@ public class MSACMetricTransformation2DRobustEstimatorTest implements
             final Rotation2D rotation2 = transformation2.getRotation();
             final double[] translation2 = transformation2.getTranslation();
 
-            assertEquals(rotation2.getTheta(), rotation.getTheta(),
-                    ABSOLUTE_ERROR);
+            assertEquals(rotation.getTheta(), rotation2.getTheta(), ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
 
             numValid++;

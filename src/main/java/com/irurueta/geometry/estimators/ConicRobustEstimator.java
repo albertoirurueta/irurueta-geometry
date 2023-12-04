@@ -40,7 +40,7 @@ public abstract class ConicRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -85,7 +85,7 @@ public abstract class ConicRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -404,19 +404,19 @@ public abstract class ConicRobustEstimator {
      * Creates a conic robust estimator based on 2D point samples and using
      * provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               conic.
      * @return an instance of a conic robust estimator.
      */
     public static ConicRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator();
             case MSAC:
                 return new MSACConicRobustEstimator();
             case PROSAC:
                 return new PROSACConicRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator();
             case RANSAC:
             default:
@@ -429,7 +429,7 @@ public abstract class ConicRobustEstimator {
      * provided points and robust estimator method.
      *
      * @param points 2D points to estimate a conic.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               conic.
      * @return an instance of a conic robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have a
@@ -438,13 +438,13 @@ public abstract class ConicRobustEstimator {
     public static ConicRobustEstimator create(
             final List<Point2D> points, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator(points);
             case MSAC:
                 return new MSACConicRobustEstimator(points);
             case PROSAC:
                 return new PROSACConicRobustEstimator(points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(points);
             case RANSAC:
             default:
@@ -458,20 +458,20 @@ public abstract class ConicRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 conic.
      * @return an instance of a conic robust estimator.
      */
     public static ConicRobustEstimator create(
             final ConicRobustEstimatorListener listener, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator(listener);
             case MSAC:
                 return new MSACConicRobustEstimator(listener);
             case PROSAC:
                 return new PROSACConicRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(listener);
             case RANSAC:
             default:
@@ -486,7 +486,7 @@ public abstract class ConicRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param points   2D points to estimate a conic.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 conic.
      * @return an instance of a conic robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have a
@@ -496,13 +496,13 @@ public abstract class ConicRobustEstimator {
             final ConicRobustEstimatorListener listener, final List<Point2D> points,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator(listener, points);
             case MSAC:
                 return new MSACConicRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACConicRobustEstimator(listener, points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(listener, points);
             case RANSAC:
             default:
@@ -515,7 +515,7 @@ public abstract class ConicRobustEstimator {
      * provided robust estimator method.
      *
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      conic.
      * @return an instance of a conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -524,13 +524,13 @@ public abstract class ConicRobustEstimator {
     public static ConicRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator();
             case MSAC:
                 return new MSACConicRobustEstimator();
             case PROSAC:
                 return new PROSACConicRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -544,7 +544,7 @@ public abstract class ConicRobustEstimator {
      *
      * @param points        2D points to estimate a conic.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      conic.
      * @return an instance of a conic robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have
@@ -555,13 +555,13 @@ public abstract class ConicRobustEstimator {
             final List<Point2D> points, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator(points);
             case MSAC:
                 return new MSACConicRobustEstimator(points);
             case PROSAC:
                 return new PROSACConicRobustEstimator(points, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(points, qualityScores);
             case RANSAC:
             default:
@@ -576,7 +576,7 @@ public abstract class ConicRobustEstimator {
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      conic.
      * @return an instance of a conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -586,13 +586,13 @@ public abstract class ConicRobustEstimator {
             final ConicRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator(listener);
             case MSAC:
                 return new MSACConicRobustEstimator(listener);
             case PROSAC:
                 return new PROSACConicRobustEstimator(listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(listener, qualityScores);
             case RANSAC:
             default:
@@ -608,7 +608,7 @@ public abstract class ConicRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param points        2D points to estimate a conic.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      conic.
      * @return an instance of a conic robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have
@@ -619,14 +619,14 @@ public abstract class ConicRobustEstimator {
             final ConicRobustEstimatorListener listener, final List<Point2D> points,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSConicRobustEstimator(listener, points);
             case MSAC:
                 return new MSACConicRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACConicRobustEstimator(listener, points,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSConicRobustEstimator(listener, points,
                         qualityScores);
             case RANSAC:

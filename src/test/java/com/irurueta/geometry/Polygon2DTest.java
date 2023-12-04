@@ -64,8 +64,8 @@ public class Polygon2DTest {
         // check correctness
         assertFalse(polygon.isTriangulated());
         assertEquals(polygon.getVertices(), vertices);
-        assertEquals(polygon.getTriangulatorMethod(),
-                Polygon2D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Polygon2D.DEFAULT_TRIANGULATOR_METHOD,
+                polygon.getTriangulatorMethod());
 
         final Iterator<Point2D> iterator1 = polygon.getVertices().iterator();
         final Iterator<Point2D> iterator2 = vertices.iterator();
@@ -106,14 +106,14 @@ public class Polygon2DTest {
         final Polygon2D polygon = new Polygon2D(vertices);
 
         // check correctness
-        assertEquals(polygon.getTriangulatorMethod(),
-                Polygon2D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Polygon2D.DEFAULT_TRIANGULATOR_METHOD,
+                polygon.getTriangulatorMethod());
 
         // set new method
         polygon.setTriangulatorMethod(TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
         // check correctness
-        assertEquals(polygon.getTriangulatorMethod(),
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
+                polygon.getTriangulatorMethod());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class Polygon2DTest {
 
         // build polygon vertices
         final Polygon2D polygon = new Polygon2D(vertices);
-        assertEquals(polygon.getVertices(), vertices);
+        assertEquals(vertices, polygon.getVertices());
 
         // build new vertices
         sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -136,7 +136,7 @@ public class Polygon2DTest {
         final List<Point2D> vertices2 = buildPolygonVertices(sides, radius);
 
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getVertices(), vertices2);
+        assertEquals(vertices2, polygon.getVertices());
     }
 
     @Test
@@ -159,7 +159,7 @@ public class Polygon2DTest {
         final List<Point2D> vertices2 = new LinkedList<>(buildPolygonVertices(sides, radius));
 
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getVertices(), vertices2);
+        assertEquals(vertices2, polygon.getVertices());
     }
 
 
@@ -190,10 +190,9 @@ public class Polygon2DTest {
         }
         areaTriangles = Math.abs(signedAreaTriangles);
 
-        assertEquals(polygon.getArea(), area, ABSOLUTE_ERROR);
-        assertEquals(polygon.getArea(), areaTriangles, ABSOLUTE_ERROR);
-        assertEquals(polygon.getSignedArea(), signedAreaTriangles,
-                ABSOLUTE_ERROR);
+        assertEquals(area, polygon.getArea(), ABSOLUTE_ERROR);
+        assertEquals(areaTriangles, polygon.getArea(), ABSOLUTE_ERROR);
+        assertEquals(signedAreaTriangles, polygon.getSignedArea(), ABSOLUTE_ERROR);
 
         // triangulate again
         polygon.triangulate();
@@ -218,8 +217,8 @@ public class Polygon2DTest {
                 2.0 * Math.PI / (double) sides);
         // because vertices are defined counterclockwise, signed area will be
         // positive
-        assertEquals(polygon.getSignedArea(), area, ABSOLUTE_ERROR);
-        assertEquals(polygon.getArea(), area, ABSOLUTE_ERROR);
+        assertEquals(area, polygon.getSignedArea(), ABSOLUTE_ERROR);
+        assertEquals(area, polygon.getArea(), ABSOLUTE_ERROR);
         assertFalse(polygon.areVerticesClockwise());
         assertFalse(polygon.areVerticesClockwise(0.0));
 
@@ -228,30 +227,28 @@ public class Polygon2DTest {
 
         polygon.setVertices(vertices);
         // now vertices are defined clockwise, and signed area will be negative
-        assertEquals(polygon.getSignedArea(), -area, ABSOLUTE_ERROR);
-        assertEquals(polygon.getArea(), area, ABSOLUTE_ERROR);
+        assertEquals(-area, polygon.getSignedArea(), ABSOLUTE_ERROR);
+        assertEquals(area, polygon.getArea(), ABSOLUTE_ERROR);
         assertTrue(polygon.areVerticesClockwise());
         assertTrue(polygon.areVerticesClockwise(0.0));
 
         // Test for a triangle
         sides = 3;
         final List<Point2D> vertices2 = buildPolygonVertices(sides, radius);
-        final Triangle2D triangle = new Triangle2D(vertices2.get(0), vertices2.get(1),
-                vertices2.get(2));
+        final Triangle2D triangle = new Triangle2D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
         polygon.setVertices(vertices2);
-        area = 0.5 * sides * radius * radius * Math.sin(
-                2.0 * Math.PI / (double) sides);
+        area = 0.5 * sides * radius * radius * Math.sin(2.0 * Math.PI / (double) sides);
 
         // check correctness
-        assertEquals(triangle.getSignedArea(), area, ABSOLUTE_ERROR);
-        assertEquals(polygon.getSignedArea(), area, ABSOLUTE_ERROR);
+        assertEquals(area, triangle.getSignedArea(), ABSOLUTE_ERROR);
+        assertEquals(area, polygon.getSignedArea(), ABSOLUTE_ERROR);
         assertFalse(polygon.areVerticesClockwise());
         assertFalse(polygon.areVerticesClockwise(0.0));
 
         // and if we revere order of vertices...
         Collections.reverse(vertices2);
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getSignedArea(), -area, ABSOLUTE_ERROR);
+        assertEquals(-area, polygon.getSignedArea(), ABSOLUTE_ERROR);
         assertTrue(polygon.areVerticesClockwise());
         assertTrue(polygon.areVerticesClockwise(0.0));
     }
@@ -280,16 +277,14 @@ public class Polygon2DTest {
         // compare distance of last vertex with first one
         perimeter += prevVertex.distanceTo(vertices.get(0));
 
-        assertEquals(polygon.getPerimeter(), perimeter, ABSOLUTE_ERROR);
+        assertEquals(perimeter, polygon.getPerimeter(), ABSOLUTE_ERROR);
 
         // Test for a triangle
         sides = 3;
         final List<Point2D> vertices2 = buildPolygonVertices(sides, radius);
-        final Triangle2D triangle = new Triangle2D(vertices2.get(0), vertices2.get(1),
-                vertices2.get(2));
+        final Triangle2D triangle = new Triangle2D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getPerimeter(), triangle.getPerimeter(),
-                ABSOLUTE_ERROR);
+        assertEquals(triangle.getPerimeter(), polygon.getPerimeter(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -372,8 +367,7 @@ public class Polygon2DTest {
             final UniformRandomizer randomizer = new UniformRandomizer(new Random());
             final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
             final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-            double dist = randomizer.nextDouble(2.0 * ABSOLUTE_ERROR, radius /
-                    2.0);
+            double dist = randomizer.nextDouble(2.0 * ABSOLUTE_ERROR, radius / 2.0);
 
             final double theta = randomizer.nextDouble(0.0,
                     2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -394,7 +388,7 @@ public class Polygon2DTest {
             ArrayUtils.multiplyByScalar(directorVector, 1.0 / norm,
                     directorVector);
 
-            // find point laying on line between polygon vertices
+            // find point laying on the line between polygon vertices
             final Point2D testPoint = new InhomogeneousPoint2D(
                     radius * Math.cos(theta), radius * Math.sin(theta));
             // point below is locus of polygon
@@ -419,18 +413,15 @@ public class Polygon2DTest {
             assertFalse(polygon.isInside(notLocusPoint));
 
             // check that notLocusPoint is at distance dist from line
-            assertEquals(Math.abs(line.signedDistance(notLocusPoint)),
-                    Math.abs(dist), ABSOLUTE_ERROR);
+            assertEquals(Math.abs(dist), Math.abs(line.signedDistance(notLocusPoint)), ABSOLUTE_ERROR);
 
             assertTrue(polygon.isLocus(locusPoint));
             assertTrue(polygon.isLocus(locusPoint, ABSOLUTE_ERROR));
 
             // because point is locus, the shortest distance is zero and it is
             // the closest point
-            assertEquals(polygon.getShortestDistance(locusPoint), 0.0,
-                    ABSOLUTE_ERROR);
-            assertTrue(polygon.getClosestPoint(locusPoint).equals(locusPoint,
-                    ABSOLUTE_ERROR));
+            assertEquals(0.0, polygon.getShortestDistance(locusPoint), ABSOLUTE_ERROR);
+            assertTrue(polygon.getClosestPoint(locusPoint).equals(locusPoint, ABSOLUTE_ERROR));
             final Point2D closestPoint = Point2D.create();
             polygon.closestPoint(locusPoint, closestPoint);
             assertTrue(closestPoint.equals(locusPoint, ABSOLUTE_ERROR));
@@ -443,11 +434,9 @@ public class Polygon2DTest {
             assertFalse(polygon.isLocus(notLocusPoint, ABSOLUTE_ERROR));
 
             // not locus point is at distance dist from polygon
-            assertEquals(polygon.getShortestDistance(notLocusPoint),
-                    Math.abs(dist), ABSOLUTE_ERROR);
+            assertEquals(polygon.getShortestDistance(notLocusPoint), Math.abs(dist), ABSOLUTE_ERROR);
             // and the closest point to polygon is locusPoint
-            assertTrue(polygon.getClosestPoint(notLocusPoint).equals(locusPoint,
-                    ABSOLUTE_ERROR));
+            assertTrue(polygon.getClosestPoint(notLocusPoint).equals(locusPoint, ABSOLUTE_ERROR));
             polygon.closestPoint(notLocusPoint, closestPoint);
             assertTrue(closestPoint.equals(locusPoint, ABSOLUTE_ERROR));
             assertTrue(closestPoint.equals(locusPoint, ABSOLUTE_ERROR));
@@ -461,11 +450,9 @@ public class Polygon2DTest {
                 assertTrue(polygon.isLocus(vertex));
                 assertTrue(polygon.isLocus(vertex, ABSOLUTE_ERROR));
                 // because vertices are locus, shortest distance is 0.0 and it is
-                // a closest point
-                assertEquals(polygon.getShortestDistance(vertex), 0.0,
-                        ABSOLUTE_ERROR);
-                assertTrue(polygon.getClosestPoint(vertex).equals(vertex,
-                        ABSOLUTE_ERROR));
+                // the closest point
+                assertEquals(0.0, polygon.getShortestDistance(vertex), ABSOLUTE_ERROR);
+                assertTrue(polygon.getClosestPoint(vertex).equals(vertex, ABSOLUTE_ERROR));
                 polygon.closestPoint(vertex, closestPoint);
                 assertTrue(closestPoint.equals(vertex, ABSOLUTE_ERROR));
                 assertTrue(closestPoint.equals(vertex, ABSOLUTE_ERROR));

@@ -79,8 +79,8 @@ public class Line3DTest {
         // test constructor from 2 planes
         Line3D line = new Line3D(plane1, plane2);
 
-        assertEquals(line.getPlane1(), plane1);
-        assertEquals(line.getPlane2(), plane2);
+        assertEquals(plane1, line.getPlane1());
+        assertEquals(plane2, line.getPlane2());
 
         assertTrue(line.isLocus(point));
 
@@ -113,7 +113,7 @@ public class Line3DTest {
         assertTrue(line.isLocus(point1));
         assertTrue(line.isLocus(point2));
 
-        // planes get defined but we don't know their value, just that point1
+        // planes get defined, but we don't know their value, just that point1
         // and point2 belong to those planes too
         assertNotNull(line.getPlane1());
         assertNotNull(line.getPlane2());
@@ -202,13 +202,13 @@ public class Line3DTest {
                 3, 3));
 
         final Line3D line = new Line3D(plane1, plane2);
-        assertEquals(line.getPlane1(), plane1);
-        assertEquals(line.getPlane2(), plane2);
+        assertEquals(plane1, line.getPlane1());
+        assertEquals(plane2, line.getPlane2());
 
         // set new planes
         line.setPlanes(plane2, plane3);
-        assertEquals(line.getPlane1(), plane2);
-        assertEquals(line.getPlane2(), plane3);
+        assertEquals(plane2, line.getPlane1());
+        assertEquals(plane3, line.getPlane2());
 
         // Force ParallelPlanesException
         try {
@@ -240,7 +240,7 @@ public class Line3DTest {
         assertTrue(line.isLocus(point1));
         assertTrue(line.isLocus(point2));
 
-        // planes get defined but we don't know their value, just that point1
+        // planes get defined, but we don't know their value, just that point1
         // and point2 belong to those planes too
         assertNotNull(line.getPlane1());
         assertNotNull(line.getPlane2());
@@ -267,7 +267,7 @@ public class Line3DTest {
         assertTrue(line.isLocus(point3));
         assertTrue(line.isLocus(point4));
 
-        // planes get defined but we don't know their value, just that point1
+        // planes get defined, but we don't know their value, just that point1
         // and point2 belong to those planes too
         assertNotNull(line.getPlane1());
         assertNotNull(line.getPlane2());
@@ -527,8 +527,8 @@ public class Line3DTest {
         // create line from 2 planes
         final Line3D line1 = new Line3D(plane1, plane2);
 
-        assertEquals(line1.getPlane1(), plane1);
-        assertEquals(line1.getPlane2(), plane2);
+        assertEquals(plane1, line1.getPlane1());
+        assertEquals(plane2, line1.getPlane2());
 
         // serialize and deserialize
         final byte[] bytes = SerializationHelper.serialize(line1);

@@ -1692,14 +1692,14 @@ public class AffineTransformation3D extends Transformation3D
 
             final Matrix invTransA = new Matrix(AffineParameters3D.INHOM_COORDS,
                     AffineParameters3D.INHOM_COORDS);
-            // copy former 9 elements of 13th column of V into a in row order
+            // copy former 9 elements of 13th column of V into "a" in row order
             invTransA.setSubmatrix(0, 0, 2, 2,
                     v.getSubmatrixAsArray(0, 12, 8, 12),
                     false);
             // normalize by scale value
             invTransA.multiplyByScalar(1.0 / value);
 
-            // initially a contains the inverse of its transpose, so to obtain a we need
+            // initially "a contains the inverse of its transpose, so to obtain "a", we need
             // to transpose it and invert it
             invTransA.transpose();
             final Matrix a1 = Utils.inverse(invTransA);

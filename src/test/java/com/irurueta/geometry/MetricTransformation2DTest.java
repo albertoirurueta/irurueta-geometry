@@ -59,15 +59,14 @@ public class MetricTransformation2DTest {
         MetricTransformation2D transformation = new MetricTransformation2D();
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Test constructor with rotation
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -78,15 +77,14 @@ public class MetricTransformation2DTest {
         transformation = new MetricTransformation2D(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta, 0.0);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(theta, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -97,7 +95,6 @@ public class MetricTransformation2DTest {
         }
         assertNull(transformation);
 
-
         // Test constructor with translation
         double[] translation =
                 new double[MetricTransformation2D.NUM_TRANSLATION_COORDS];
@@ -106,14 +103,13 @@ public class MetricTransformation2DTest {
         transformation = new MetricTransformation2D(translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
-        assertEquals(transformation.getTranslation().length, translation.length);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(translation.length, transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -139,27 +135,27 @@ public class MetricTransformation2DTest {
         transformation = new MetricTransformation2D(scale);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getScale(), scale, 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getScale(), 0.0);
 
         // Test constructor with rotation, translation and scale
         transformation = new MetricTransformation2D(rotation, translation,
                 scale);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta, 0.0);
-        assertEquals(transformation.getTranslation().length, translation.length);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getScale(), scale, 0.0);
+        assertEquals(theta, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(translation.length, transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getScale(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -177,7 +173,6 @@ public class MetricTransformation2DTest {
         assertNull(transformation);
 
         // Force IllegalArgumentException
-        transformation = null;
         try {
             transformation = new MetricTransformation2D(rotation,
                     badTranslation, scale);
@@ -205,8 +200,7 @@ public class MetricTransformation2DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        transformation = new MetricTransformation2D(rotation, translation,
-                scale);
+        transformation = new MetricTransformation2D(rotation, translation, scale);
 
         final Point2D outputPoint1 = transformation.transformAndReturnNew(
                 inputPoint1);
@@ -224,10 +218,9 @@ public class MetricTransformation2DTest {
         final Rotation2D rotation2 = transformation2.getRotation();
         final double[] translation2 = transformation2.getTranslation();
 
-        assertEquals(rotation2.getTheta(), rotation.getTheta(),
-                ABSOLUTE_ERROR);
+        assertEquals(rotation.getTheta(), rotation2.getTheta(), ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
-        assertEquals(transformation2.getScale(), scale, ABSOLUTE_ERROR);
+        assertEquals(scale, transformation2.getScale(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -241,13 +234,13 @@ public class MetricTransformation2DTest {
         final Rotation2D rotation = new Rotation2D(theta);
 
         // test default values
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
 
         // set new value
         transformation.setRotation(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta, 0.0);
+        assertEquals(theta, transformation.getRotation().getTheta(), 0.0);
 
         // Force NullPointerException
         try {
@@ -275,14 +268,13 @@ public class MetricTransformation2DTest {
         transformation.setRotation(rotation1);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta1, 0.0);
+        assertEquals(theta1, transformation.getRotation().getTheta(), 0.0);
 
         // add second rotation
         transformation.addRotation(rotation2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), combinedTheta,
-                0.0);
+        assertEquals(combinedTheta, transformation.getRotation().getTheta(), 0.0);
     }
 
     @Test
@@ -295,23 +287,23 @@ public class MetricTransformation2DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -337,12 +329,12 @@ public class MetricTransformation2DTest {
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -350,27 +342,27 @@ public class MetricTransformation2DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation1[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation1[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation1[1], 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation1[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation1[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation1[1], transformation.getTranslationY(), 0.0);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], 0.0);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0],  0.0);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1],  0.0);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(),  0.0);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(),  0.0);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -391,7 +383,7 @@ public class MetricTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set new value
         transformation.setTranslationX(translationX);
@@ -409,13 +401,13 @@ public class MetricTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslationY(translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY, 0.0);
+        assertEquals(translationY, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -429,27 +421,23 @@ public class MetricTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translationX, translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -465,27 +453,23 @@ public class MetricTransformation2DTest {
                 translationX, translationY);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         final Point2D translation2 = transformation.getTranslationPoint();
         final Point2D translation3 = Point2D.create();
@@ -507,20 +491,19 @@ public class MetricTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set value
         transformation.setTranslationX(translationX1);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX1, 0.0);
+        assertEquals(translationX1, transformation.getTranslationX(), 0.0);
 
         // add translation x
         transformation.addTranslationX(translationX2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -528,26 +511,23 @@ public class MetricTransformation2DTest {
         final MetricTransformation2D transformation = new MetricTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set value
         transformation.setTranslationY(translationY1);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY1, 0.0);
+        assertEquals(translationY1, transformation.getTranslationY(), 0.0);
 
         // add translation y
         transformation.addTranslationY(translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -555,18 +535,14 @@ public class MetricTransformation2DTest {
         final MetricTransformation2D transformation = new MetricTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set values
         transformation.setTranslation(translationX1, translationY1);
@@ -575,10 +551,8 @@ public class MetricTransformation2DTest {
         transformation.addTranslation(translationX2, translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -586,32 +560,25 @@ public class MetricTransformation2DTest {
         final MetricTransformation2D transformation = new MetricTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set values
         transformation.setTranslation(translationX1, translationY1);
 
         // add translation
-        final Point2D translation2 = new InhomogeneousPoint2D(translationX2,
-                translationY2);
+        final Point2D translation2 = new InhomogeneousPoint2D(translationX2, translationY2);
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -619,12 +586,11 @@ public class MetricTransformation2DTest {
         final MetricTransformation2D transformation = new MetricTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE,
+                transformation.getScale(), 0.0);
 
         // set value
         transformation.setScale(scale);
@@ -1015,49 +981,31 @@ public class MetricTransformation2DTest {
         outDualConic1.normalize();
         outDualConic2.normalize();
 
-        assertEquals(expectedDualConic.getA(), outDualConic1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic1.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic1.getF(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedDualConic.getA(), outDualConic2.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic2.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic2.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic2.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic2.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic2.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic2.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic2.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic2.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic2.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic2.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic2.getF(), ABSOLUTE_ERROR);
 
         transformation.transform(dualConic);
 
         // check correctness
         dualConic.normalize();
 
-        assertEquals(expectedDualConic.getA(), dualConic.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), dualConic.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), dualConic.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), dualConic.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), dualConic.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), dualConic.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), dualConic.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), dualConic.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), dualConic.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), dualConic.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), dualConic.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), dualConic.getF(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1216,7 +1164,7 @@ public class MetricTransformation2DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 2 non linear dependent rows
+        // ensure we create a matrix with 2 non-linear dependent rows
         while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1703,22 +1651,19 @@ public class MetricTransformation2DTest {
         assertTrue(m3.equals(expectedMatrix, ABSOLUTE_ERROR));
 
         // check also correctness of rotation and translation
-        assertEquals(transformation1.getRotation().getTheta(),
-                expectedRotation.getTheta(), ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getTheta(),
-                expectedRotation.getTheta(), ABSOLUTE_ERROR);
-
-        assertArrayEquals(transformation1.getTranslation(), expectedTranslation,
+        assertEquals(expectedRotation.getTheta(), transformation1.getRotation().getTheta(),
                 ABSOLUTE_ERROR);
-        assertArrayEquals(transformation3.getTranslation(), expectedTranslation,
+        assertEquals(expectedRotation.getTheta(), transformation3.getRotation().getTheta(),
                 ABSOLUTE_ERROR);
 
-        assertEquals(transformation1.getScale(), expectedScale, ABSOLUTE_ERROR);
-        assertEquals(transformation3.getScale(), expectedScale, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
 
-        // now try combining with euclidean transformations
-        transformation1 =
-                new MetricTransformation2D(rotation1, translation1, scale1);
+        assertEquals(expectedScale, transformation1.getScale(), ABSOLUTE_ERROR);
+        assertEquals(expectedScale, transformation3.getScale(), ABSOLUTE_ERROR);
+
+        // now try combining with Euclidean transformations
+        transformation1 = new MetricTransformation2D(rotation1, translation1, scale1);
         EuclideanTransformation2D euclideanTransformation =
                 new EuclideanTransformation2D(rotation2, translation2);
 
@@ -1732,7 +1677,7 @@ public class MetricTransformation2DTest {
         expectedTranslation = rotM1.toArray();
         ArrayUtils.sum(expectedTranslation, translation1, expectedTranslation);
         // scale2 is assumed to be 1 because
-        // transformation is euclidean
+        // transformation is Euclidean
         expectedScale = scale1;
 
         // combine and return result as a new transformation
@@ -1754,18 +1699,18 @@ public class MetricTransformation2DTest {
         assertTrue(m3.equals(expectedMatrix, ABSOLUTE_ERROR));
 
         // check also correctness of rotation and translation
-        assertEquals(transformation1.getRotation().getTheta(),
-                expectedRotation.getTheta(), ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getTheta(),
-                expectedRotation.getTheta(), ABSOLUTE_ERROR);
-
-        assertArrayEquals(transformation1.getTranslation(), expectedTranslation,
+        assertEquals(expectedRotation.getTheta(), transformation1.getRotation().getTheta(),
                 ABSOLUTE_ERROR);
-        assertArrayEquals(transformation3.getTranslation(), expectedTranslation,
+        assertEquals(expectedRotation.getTheta(), transformation3.getRotation().getTheta(),
                 ABSOLUTE_ERROR);
 
-        assertEquals(transformation1.getScale(), expectedScale, ABSOLUTE_ERROR);
-        assertEquals(transformation3.getScale(), expectedScale, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation1.getTranslation(),
+                ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation3.getTranslation(),
+                ABSOLUTE_ERROR);
+
+        assertEquals(expectedScale, transformation1.getScale(), ABSOLUTE_ERROR);
+        assertEquals(expectedScale, transformation3.getScale(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1794,12 +1739,9 @@ public class MetricTransformation2DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Point2D outputPoint1 = transformation.transformAndReturnNew(
-                inputPoint1);
-        final Point2D outputPoint2 = transformation.transformAndReturnNew(
-                inputPoint2);
-        final Point2D outputPoint3 = transformation.transformAndReturnNew(
-                inputPoint3);
+        final Point2D outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
+        final Point2D outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
+        final Point2D outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
 
         final MetricTransformation2D transformation2 =
                 new MetricTransformation2D();
@@ -1811,10 +1753,9 @@ public class MetricTransformation2DTest {
         final Rotation2D rotation2 = transformation2.getRotation();
         final double[] translation2 = transformation2.getTranslation();
 
-        assertEquals(rotation2.getTheta(), rotation.getTheta(),
-                ABSOLUTE_ERROR);
+        assertEquals(rotation.getTheta(), rotation2.getTheta(), ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
-        assertEquals(transformation2.getScale(), scale, ABSOLUTE_ERROR);
+        assertEquals(scale, transformation2.getScale(), ABSOLUTE_ERROR);
     }
 
     @Test

@@ -508,7 +508,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided (x,y) coordinates are located inside of the
+     * Indicates if provided (x,y) coordinates are located inside the
      * rectangle defined by top-left and bottom-right coordinates up to a
      * certain threshold.
      * A positive threshold makes inside area smaller, a negative threshold
@@ -539,7 +539,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided (x,y) coordinates are located inside of the
+     * Indicates if provided (x,y) coordinates are located inside the
      * rectangle defined by top-left and bottom-right coordinates.
      *
      * @param x      x coordinate of point to be checked.
@@ -557,7 +557,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * top-left and bottom-right coordinates up to a certain threshold.
      * A positive threshold makes inside area smaller, a negative threshold
      * increases the inside area.
@@ -579,7 +579,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * top-left and bottom-right coordinates.
      *
      * @param point  point to be checked.
@@ -596,7 +596,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * provided center and size up to a certain threshold.
      * A positive threshold makes inside area smaller, a negative threshold
      * increases the inside area.
@@ -621,7 +621,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * provided center and size.
      *
      * @param point  point to be checked.
@@ -637,7 +637,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * provided top-left and bottom-right corners up to a certain threshold.
      * A positive threshold makes inside area smaller, a negative threshold
      * increases the inside area.
@@ -658,7 +658,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * provided top-left and bottom-right corners.
      *
      * @param x           x coordinate of point to be checked.
@@ -674,7 +674,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * provided top-left and bottom-right corners up to a certain threshold.
      * A positive threshold makes inside area smaller, a negative threshold
      * increases the inside area.
@@ -694,7 +694,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Indicates if provided point is located inside of the rectangle defined by
+     * Indicates if provided point is located inside the rectangle defined by
      * provided top-left and bottom-right corners.
      *
      * @param point       point to be checked.
@@ -3181,7 +3181,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of the
+     * Gets signed distance to the closest point in the left border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3192,7 +3192,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(
             final double x, final double y,
@@ -3226,7 +3226,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of the
+     * Gets signed distance to the closest point in the left border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3236,7 +3236,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(
             final Point2D point, final double left,
@@ -3246,7 +3246,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of the
+     * Gets signed distance to the closest point in the left border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3255,7 +3255,7 @@ public class Rectangle implements Serializable {
      * @param y           y coordinate of point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(
             final double x, final double y,
@@ -3266,7 +3266,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of the
+     * Gets signed distance to the closest point in the left border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3274,7 +3274,7 @@ public class Rectangle implements Serializable {
      * @param point       point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(
             final Point2D point, final Point2D topLeft, final Point2D bottomRight) {
@@ -3283,7 +3283,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of the
+     * Gets signed distance to the closest point in the left border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3293,7 +3293,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(
             final double x, final double y,
@@ -3308,7 +3308,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of the
+     * Gets signed distance to the closest point in the left border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3317,7 +3317,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(
             final Point2D point, final Point2D center,
@@ -3327,14 +3327,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of this
+     * Gets signed distance to the closest point in the left border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param x x coordinate of point to obtain signed distance for.
      * @param y y coordinate of point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public double getSignedDistanceToLeftSide(
             final double x, final double y) {
@@ -3342,13 +3342,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the left border of this
+     * Gets signed distance to the closest point in the left border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param point point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle left border.
+     * @return signed distance to the closest point in the rectangle left border.
      */
     public double getSignedDistanceToLeftSide(final Point2D point) {
         return getSignedDistanceToLeftSide(point.getInhomX(),
@@ -3356,7 +3356,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of the rectangle.
+     * Gets signed distance to the closest point in the top border of the rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
@@ -3366,7 +3366,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(
             final double x, final double y,
@@ -3400,7 +3400,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of the
+     * Gets signed distance to the closest point in the top border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3410,7 +3410,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(
             final Point2D point, final double left, final double top,
@@ -3420,7 +3420,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of the
+     * Gets signed distance to the closest point in the top border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3429,7 +3429,7 @@ public class Rectangle implements Serializable {
      * @param y           y coordinate of point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(
             final double x, final double y,
@@ -3440,7 +3440,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of the
+     * Gets signed distance to the closest point in the top border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3448,7 +3448,7 @@ public class Rectangle implements Serializable {
      * @param point       point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(
             final Point2D point, final Point2D topLeft, final Point2D bottomRight) {
@@ -3457,7 +3457,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of the
+     * Gets signed distance to the closest point in the top border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3467,7 +3467,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(
             final double x, final double y,
@@ -3482,7 +3482,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of the
+     * Gets signed distance to the closest point in the top border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3491,7 +3491,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(
             final Point2D point, final Point2D center,
@@ -3501,34 +3501,34 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the top border of this
+     * Gets signed distance to the closest point in the top border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param x x coordinate of point to obtain signed distance for.
      * @param y y coordinate of point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public double getSignedDistanceToTopSide(final double x, final double y) {
         return getSignedDistanceToTopSide(x, y, mTopLeft, mBottomRight);
     }
 
     /**
-     * Gets signed distance to closest point in the top border of this
+     * Gets signed distance to the closest point in the top border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param point point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle top border.
+     * @return signed distance to the closest point in the rectangle top border.
      */
     public double getSignedDistanceToTopSide(final Point2D point) {
         return getSignedDistanceToTopSide(point.getInhomX(), point.getInhomY());
     }
 
     /**
-     * Gets signed distance to closest point in the right border of the
+     * Gets signed distance to the closest point in the right border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3539,7 +3539,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(
             final double x, final double y,
@@ -3573,7 +3573,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the right border of the
+     * Gets signed distance to the closest point in the right border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3583,7 +3583,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(
             final Point2D point, final double left, final double top,
@@ -3593,7 +3593,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the right border of the
+     * Gets signed distance to the closest point in the right border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3602,7 +3602,7 @@ public class Rectangle implements Serializable {
      * @param y           y coordinate of point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(
             final double x, final double y,
@@ -3613,7 +3613,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the right border of the
+     * Gets signed distance to the closest point in the right border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3621,7 +3621,7 @@ public class Rectangle implements Serializable {
      * @param point       point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(
             final Point2D point, final Point2D topLeft, final Point2D bottomRight) {
@@ -3630,7 +3630,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the right border of the
+     * Gets signed distance to the closest point in the right border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3640,7 +3640,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(
             final double x, final double y,
@@ -3655,7 +3655,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the right border of the
+     * Gets signed distance to the closest point in the right border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3664,7 +3664,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(
             final Point2D point, final Point2D center,
@@ -3674,27 +3674,27 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the right border of this
+     * Gets signed distance to the closest point in the right border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param x x coordinate of point to obtain signed distance for.
      * @param y y coordinate of point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public double getSignedDistanceToRightSide(final double x, final double y) {
         return getSignedDistanceToRightSide(x, y, mTopLeft, mBottomRight);
     }
 
     /**
-     * Gets signed distance to closest point in the right border of this
+     * Gets signed distance to the closest point in the right border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param point point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle right border.
+     * @return signed distance to the closest point in the rectangle right border.
      */
     public double getSignedDistanceToRightSide(final Point2D point) {
         return getSignedDistanceToRightSide(point.getInhomX(),
@@ -3702,7 +3702,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of the
+     * Gets signed distance to the closest point in the bottom border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3713,7 +3713,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(
             final double x, final double y,
@@ -3748,7 +3748,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of the
+     * Gets signed distance to the closest point in the bottom border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3758,7 +3758,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(
             final Point2D point, final double left, final double top,
@@ -3768,7 +3768,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of the
+     * Gets signed distance to the closest point in the bottom border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3777,7 +3777,7 @@ public class Rectangle implements Serializable {
      * @param y           y coordinate of point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(
             final double x, final double y,
@@ -3788,7 +3788,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of the
+     * Gets signed distance to the closest point in the bottom border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3796,7 +3796,7 @@ public class Rectangle implements Serializable {
      * @param point       point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(
             final Point2D point, final Point2D topLeft, final Point2D bottomRight) {
@@ -3805,7 +3805,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of the
+     * Gets signed distance to the closest point in the bottom border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3815,7 +3815,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(
             final double x, final double y,
@@ -3830,7 +3830,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of the
+     * Gets signed distance to the closest point in the bottom border of the
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
@@ -3839,7 +3839,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(
             final Point2D point, final Point2D center,
@@ -3849,27 +3849,27 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of this
+     * Gets signed distance to the closest point in the bottom border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param x x coordinate of point to obtain signed distance for.
      * @param y y coordinate of point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public double getSignedDistanceToBottomSide(final double x, final double y) {
         return getSignedDistanceToBottomSide(x, y, mTopLeft, mBottomRight);
     }
 
     /**
-     * Gets signed distance to closest point in the bottom border of this
+     * Gets signed distance to the closest point in the bottom border of this
      * rectangle.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param point point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle bottom border.
+     * @return signed distance to the closest point in the rectangle bottom border.
      */
     public double getSignedDistanceToBottomSide(final Point2D point) {
         return getSignedDistanceToBottomSide(point.getInhomX(),
@@ -3877,7 +3877,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
@@ -3887,7 +3887,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public static double getSignedDistance(
             final double x, final double y, final double left,
@@ -3967,7 +3967,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
@@ -3976,7 +3976,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public static double getSignedDistance(
             final Point2D point, final double left,
@@ -3986,7 +3986,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
@@ -3994,7 +3994,7 @@ public class Rectangle implements Serializable {
      * @param y           y coordinate of point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public static double getSignedDistance(
             final double x, final double y, final Point2D topLeft,
@@ -4004,14 +4004,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param point       point to obtain signed distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public static double getSignedDistance(
             final Point2D point, final Point2D topLeft,
@@ -4021,7 +4021,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
@@ -4030,7 +4030,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public static double getSignedDistance(
             final double x, final double y, final Point2D center,
@@ -4045,7 +4045,7 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
@@ -4053,7 +4053,7 @@ public class Rectangle implements Serializable {
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public static double getSignedDistance(
             final Point2D point, final Point2D center,
@@ -4063,32 +4063,32 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param x x coordinate of point to obtain signed distance for.
      * @param y y coordinate of point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public double getSignedDistance(final double x, final double y) {
         return getSignedDistance(x, y, mTopLeft, mBottomRight);
     }
 
     /**
-     * Gets signed distance to closest point in the rectangle locus.
+     * Gets signed distance to the closest point in the rectangle locus.
      * A negative distance indicates that point is placed inside the rectangle,
      * a positive distance indicates that point is placed outside the rectangle.
      *
      * @param point point to obtain signed distance for.
-     * @return signed distance to closest point in the rectangle locus.
+     * @return signed distance to the closest point in the rectangle locus.
      */
     public double getSignedDistance(final Point2D point) {
         return getSignedDistance(point.getInhomX(), point.getInhomY());
     }
 
     /**
-     * Gets distance to closest point in the left border of the rectangle.
+     * Gets distance to the closest point in the left border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
@@ -4096,7 +4096,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(
             final double x, final double y,
@@ -4106,14 +4106,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the left border of the rectangle.
+     * Gets distance to the closest point in the left border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(
             final Point2D point,
@@ -4123,13 +4123,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the left border of the rectangle.
+     * Gets distance to the closest point in the left border of the rectangle.
      *
      * @param x           x coordinate of point to obtain distance for.
      * @param y           y coordinate of point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(
             final double x, final double y,
@@ -4139,12 +4139,12 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the left border of the rectangle.
+     * Gets distance to the closest point in the left border of the rectangle.
      *
      * @param point       point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(
             final Point2D point, final Point2D topLeft,
@@ -4154,14 +4154,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the left border of the rectangle.
+     * Gets distance to the closest point in the left border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(
             final double x, final double y,
@@ -4171,13 +4171,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the left border of the rectangle.
+     * Gets distance to the closest point in the left border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(
             final Point2D point, final Point2D center,
@@ -4187,28 +4187,28 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the left border of this rectangle.
+     * Gets distance to the closest point in the left border of this rectangle.
      *
      * @param x x coordinate of point to obtain distance for.
      * @param y y coordinate of point to obtain distance for.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public double getDistanceToLeftSide(final double x, final double y) {
         return Math.abs(getSignedDistanceToLeftSide(x, y));
     }
 
     /**
-     * Gets distance to closest point in the left border of this rectangle.
+     * Gets distance to the closest point in the left border of this rectangle.
      *
      * @param point point to obtain distance for.
-     * @return distance to closest point in the rectangle left border.
+     * @return distance to the closest point in the rectangle left border.
      */
     public double getDistanceToLeftSide(final Point2D point) {
         return Math.abs(getSignedDistanceToLeftSide(point));
     }
 
     /**
-     * Gets distance to closest point in the top border of the rectangle.
+     * Gets distance to the closest point in the top border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
@@ -4216,7 +4216,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(
             final double x, final double y, final double left,
@@ -4226,14 +4226,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the top border of the rectangle.
+     * Gets distance to the closest point in the top border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(
             final Point2D point, final double left,
@@ -4243,13 +4243,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the top border of the rectangle.
+     * Gets distance to the closest point in the top border of the rectangle.
      *
      * @param x           x coordinate of point to obtain distance for.
      * @param y           y coordinate of point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(
             final double x, final double y,
@@ -4258,12 +4258,12 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the top border of the rectangle.
+     * Gets distance to the closest point in the top border of the rectangle.
      *
      * @param point       point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(
             final Point2D point, final Point2D topLeft,
@@ -4273,14 +4273,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the top border of the rectangle.
+     * Gets distance to the closest point in the top border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(
             final double x, final double y,
@@ -4290,13 +4290,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the top border of the rectangle.
+     * Gets distance to the closest point in the top border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(
             final Point2D point, final Point2D center,
@@ -4306,28 +4306,28 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the top border of this rectangle.
+     * Gets distance to the closest point in the top border of this rectangle.
      *
      * @param x x coordinate of point to obtain distance for.
      * @param y y coordinate of point to obtain distance for.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public double getDistanceToTopSide(final double x, final double y) {
         return Math.abs(getSignedDistanceToTopSide(x, y));
     }
 
     /**
-     * Gets distance to closest point in the top border of this rectangle.
+     * Gets distance to the closest point in the top border of this rectangle.
      *
      * @param point point to obtain distance for.
-     * @return distance to closest point in the rectangle top border.
+     * @return distance to the closest point in the rectangle top border.
      */
     public double getDistanceToTopSide(final Point2D point) {
         return Math.abs(getSignedDistanceToTopSide(point));
     }
 
     /**
-     * Gets distance to closest point in the right border of the rectangle.
+     * Gets distance to the closest point in the right border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
@@ -4335,7 +4335,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(
             final double x, final double y, final double left,
@@ -4345,14 +4345,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the right border of the rectangle.
+     * Gets distance to the closest point in the right border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(
             final Point2D point, final double left,
@@ -4362,13 +4362,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the right border of the rectangle.
+     * Gets distance to the closest point in the right border of the rectangle.
      *
      * @param x           x coordinate of point to obtain distance for.
      * @param y           y coordinate of point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle right border
+     * @return distance to the closest point in the rectangle right border
      */
     public static double getDistanceToRightSide(
             final double x, final double y,
@@ -4378,12 +4378,12 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the right border of the rectangle.
+     * Gets distance to the closest point in the right border of the rectangle.
      *
      * @param point       point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(
             final Point2D point, final Point2D topLeft,
@@ -4393,14 +4393,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the right border of the rectangle.
+     * Gets distance to the closest point in the right border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(
             final double x, final double y,
@@ -4410,13 +4410,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the right border of the rectangle.
+     * Gets distance to the closest point in the right border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(
             final Point2D point, final Point2D center,
@@ -4426,28 +4426,28 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the right border of this rectangle.
+     * Gets distance to the closest point in the right border of this rectangle.
      *
      * @param x x coordinate of point to obtain distance for.
      * @param y y coordinate of point to obtain distance for.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public double getDistanceToRightSide(final double x, final double y) {
         return Math.abs(getSignedDistanceToRightSide(x, y));
     }
 
     /**
-     * Gets distance to closest point in the right border of this rectangle.
+     * Gets distance to the closest point in the right border of this rectangle.
      *
      * @param point point to obtain distance for.
-     * @return distance to closest point in the rectangle right border.
+     * @return distance to the closest point in the rectangle right border.
      */
     public double getDistanceToRightSide(final Point2D point) {
         return Math.abs(getSignedDistanceToRightSide(point));
     }
 
     /**
-     * Gets distance to closest point in the bottom border of the rectangle.
+     * Gets distance to the closest point in the bottom border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
@@ -4455,7 +4455,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(
             final double x, final double y,
@@ -4465,14 +4465,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the bottom border of the rectangle.
+     * Gets distance to the closest point in the bottom border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(
             final Point2D point, final double left,
@@ -4482,13 +4482,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the bottom border of the rectangle.
+     * Gets distance to the closest point in the bottom border of the rectangle.
      *
      * @param x           x coordinate of point to obtain distance for.
      * @param y           y coordinate of point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(
             final double x, final double y,
@@ -4498,12 +4498,12 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the bottom border of the rectangle.
+     * Gets distance to the closest point in the bottom border of the rectangle.
      *
      * @param point       point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(
             final Point2D point, final Point2D topLeft,
@@ -4513,14 +4513,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the bottom border of the rectangle.
+     * Gets distance to the closest point in the bottom border of the rectangle.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(
             final double x, final double y,
@@ -4530,13 +4530,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the bottom border of the rectangle.
+     * Gets distance to the closest point in the bottom border of the rectangle.
      *
      * @param point  point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(
             final Point2D point, final Point2D center,
@@ -4546,28 +4546,28 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the bottom border of this rectangle.
+     * Gets distance to the closest point in the bottom border of this rectangle.
      *
      * @param x x coordinate of point to obtain distance for.
      * @param y y coordinate of point to obtain distance for.
-     * @return distance to closest point in the rectangle bottom border.
+     * @return distance to the closest point in the rectangle bottom border.
      */
     public double getDistanceToBottomSide(final double x, final double y) {
         return Math.abs(getSignedDistanceToBottomSide(x, y));
     }
 
     /**
-     * Gets distance to closest point in the bottom border of this rectangle.
+     * Gets distance to the closest point in the bottom border of this rectangle.
      *
      * @param point point to obtain distance for.
-     * @return distance to closest point in the rectangle bottom.
+     * @return distance to the closest point in the rectangle bottom.
      */
     public double getDistanceToBottomSide(final Point2D point) {
         return Math.abs(getSignedDistanceToBottomSide(point));
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
@@ -4575,7 +4575,7 @@ public class Rectangle implements Serializable {
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public static double getDistance(
             final double x, final double y, final double left,
@@ -4584,14 +4584,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param point  point to obtain distance for.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public static double getDistance(
             final Point2D point, final double left, final double top,
@@ -4600,13 +4600,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param x           x coordinate of point to obtain distance for.
      * @param y           y coordinate of point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public static double getDistance(
             final double x, final double y, final Point2D topLeft,
@@ -4615,12 +4615,12 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param point       point to obtain distance for.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public static double getDistance(
             final Point2D point, final Point2D topLeft,
@@ -4629,14 +4629,14 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param x      x coordinate of point to obtain distance for.
      * @param y      y coordinate of point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public static double getDistance(
             final double x, final double y, final Point2D center,
@@ -4645,13 +4645,13 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param point  point to obtain distance for.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public static double getDistance(
             final Point2D point, final Point2D center,
@@ -4660,21 +4660,21 @@ public class Rectangle implements Serializable {
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param x x coordinate of point to obtain distance for.
      * @param y y coordinate of point to obtain distance for.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public double getDistance(final double x, final double y) {
         return Math.abs(getSignedDistance(x, y));
     }
 
     /**
-     * Gets distance to closest point in the rectangle locus.
+     * Gets distance to the closest point in the rectangle locus.
      *
      * @param point point to obtain distance for.
-     * @return distance to closest point in the rectangle locus.
+     * @return distance to the closest point in the rectangle locus.
      */
     public double getDistance(final Point2D point) {
         return Math.abs(getSignedDistance(point));
@@ -4684,8 +4684,8 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point coordinates.
      *
-     * @param x      x point coordinate to find closest point to.
-     * @param y      y point coordinate to find closest point to.
+     * @param x      x point coordinate to find the closest point to.
+     * @param y      y point coordinate to find the closest point to.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
@@ -4772,7 +4772,7 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point coordinates.
      *
-     * @param point  point to find closest point to.
+     * @param point  point to find the closest point to.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
@@ -4791,8 +4791,8 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point coordinates.
      *
-     * @param x           x point coordinate to find closest point to.
-     * @param y           y point coordinate to find closest point to.
+     * @param x           x point coordinate to find the closest point to.
+     * @param y           y point coordinate to find the closest point to.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
      * @param result      instance where coordinates of resulting closest point will
@@ -4809,7 +4809,7 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point.
      *
-     * @param point       point to find closest point to.
+     * @param point       point to find the closest point to.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
      * @param result      instance where coordinates of resulting closest point will
@@ -4826,8 +4826,8 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided center and
      * rectangle size.
      *
-     * @param x      x point coordinate to find closest point to.
-     * @param y      y point coordinate to find closest point to.
+     * @param x      x point coordinate to find the closest point to.
+     * @param y      y point coordinate to find the closest point to.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
@@ -4849,7 +4849,7 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided center
      * rectangle size.
      *
-     * @param point  point to find closest point to.
+     * @param point  point to find the closest point to.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
@@ -4866,8 +4866,8 @@ public class Rectangle implements Serializable {
     /**
      * Gets closest point in this rectangle locus.
      *
-     * @param x      x point coordinate to find closest point to.
-     * @param y      y point coordinate to find closest point to.
+     * @param x      x point coordinate to find the closest point to.
+     * @param y      y point coordinate to find the closest point to.
      * @param result instance where coordinates of resulting closest point will
      *               be stored.
      */
@@ -4878,7 +4878,7 @@ public class Rectangle implements Serializable {
     /**
      * Gets closest point in this rectangle locus.
      *
-     * @param point  point to find closest point to.
+     * @param point  point to find the closest point to.
      * @param result instance where coordinates of resulting closest point will
      *               be stored.
      */
@@ -4890,8 +4890,8 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point coordinates.
      *
-     * @param x      x point coordinate to find closest point to.
-     * @param y      y point coordinate to find closest point to.
+     * @param x      x point coordinate to find the closest point to.
+     * @param y      y point coordinate to find the closest point to.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
@@ -4910,7 +4910,7 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point.
      *
-     * @param point  point to find closest point to.
+     * @param point  point to find the closest point to.
      * @param left   left coordinate of rectangle.
      * @param top    top coordinate of rectangle.
      * @param right  right coordinate of rectangle.
@@ -4929,8 +4929,8 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point coordinates.
      *
-     * @param x           x point coordinate to find closest point to.
-     * @param y           y point coordinate to find closest point to.
+     * @param x           x point coordinate to find the closest point to.
+     * @param y           y point coordinate to find the closest point to.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
      * @return closest point in the rectangle locus.
@@ -4947,7 +4947,7 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided top-left
      * and bottom-right corners to provided point.
      *
-     * @param point       point to find closest point to.
+     * @param point       point to find the closest point to.
      * @param topLeft     top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
      * @return closest point in the rectangle locus.
@@ -4964,8 +4964,8 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided center
      * and rectangle size to provided point.
      *
-     * @param x      x point coordinate to find closest point to.
-     * @param y      y point coordinate to find closest point to.
+     * @param x      x point coordinate to find the closest point to.
+     * @param y      y point coordinate to find the closest point to.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
@@ -4983,7 +4983,7 @@ public class Rectangle implements Serializable {
      * Gets closest point in the rectangle locus defined by provided center
      * and rectangle size to provided point.
      *
-     * @param point  point to find closest point to.
+     * @param point  point to find the closest point to.
      * @param center center of rectangle.
      * @param width  width of rectangle.
      * @param height height of rectangle.
@@ -5000,8 +5000,8 @@ public class Rectangle implements Serializable {
     /**
      * Gets closest point in this rectangle locus to provided point coordinates.
      *
-     * @param x x coordinate to find closest point to.
-     * @param y y coordinate to find closest point to.
+     * @param x x coordinate to find the closest point to.
+     * @param y y coordinate to find the closest point to.
      * @return closest point in the rectangle locus.
      */
     public Point2D getClosestPoint(final double x, final double y) {
@@ -5013,7 +5013,7 @@ public class Rectangle implements Serializable {
     /**
      * Gets closest point in this rectangle locus to provided point.
      *
-     * @param point point to find closest point to.
+     * @param point point to find the closest point to.
      * @return closest point in the rectangle locus.
      */
     public Point2D getClosestPoint(final Point2D point) {

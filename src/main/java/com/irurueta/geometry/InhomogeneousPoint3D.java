@@ -31,7 +31,7 @@ import java.util.Objects;
  * Because of this, and because of machine precision, usually Homogeneous points
  * are better suited when working at far distances or for numerical purposes,
  * and their inhomogeneous counterparts are better suited when computing
- * euclidean distances, etc.
+ * Euclidean distances, etc.
  */
 public class InhomogeneousPoint3D extends Point3D implements Serializable {
 

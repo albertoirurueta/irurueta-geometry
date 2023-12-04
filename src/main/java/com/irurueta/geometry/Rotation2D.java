@@ -109,7 +109,7 @@ public class Rotation2D implements Serializable {
      *
      * @param m Matrix to create rotation from.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (its size is wrong or it is not orthonormal).
+     *                                        valid (its size is wrong, or it is not orthonormal).
      * @see #isValidRotationMatrix(Matrix)
      */
     public Rotation2D(final Matrix m) throws InvalidRotationMatrixException {
@@ -126,7 +126,7 @@ public class Rotation2D implements Serializable {
      * @param m         Matrix to create rotation from.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (its size is wrong or it is not orthonormal).
+     *                                        valid (its size is wrong, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is negative
      * @see #isValidRotationMatrix(Matrix)
      */
@@ -275,14 +275,14 @@ public class Rotation2D implements Serializable {
     /**
      * Sets amount of rotation from provided rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix can be expressed in either inhomogeneous (2x2) or
      * homogeneous (3x3) coordinates.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is negative
      * @see #isValidRotationMatrix(Matrix)
      */
@@ -304,7 +304,7 @@ public class Rotation2D implements Serializable {
     /**
      * Sets amount of rotation from provided rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix can be expressed in either inhomogeneous (2x2) or
      * homogeneous (3x3) coordinates.
      * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD
@@ -312,7 +312,7 @@ public class Rotation2D implements Serializable {
      *
      * @param m Provided rotation matrix.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @see #isValidRotationMatrix(Matrix)
      */
     public final void fromMatrix(final Matrix m) throws InvalidRotationMatrixException {
@@ -322,13 +322,13 @@ public class Rotation2D implements Serializable {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 2x2.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is negative.
      * @see #isValidRotationMatrix(Matrix)
      */
@@ -352,14 +352,14 @@ public class Rotation2D implements Serializable {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 2x2.
      * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD
      * instead.
      *
      * @param m Provided rotation matrix.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @see #isValidRotationMatrix(Matrix)
      */
     public void fromInhomogeneousMatrix(final Matrix m)
@@ -370,14 +370,14 @@ public class Rotation2D implements Serializable {
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is negative.
      * @see #isValidRotationMatrix(Matrix)
      */
@@ -407,8 +407,8 @@ public class Rotation2D implements Serializable {
 
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
-     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse and must have determinant equal to 1.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular), its
+     * transpose must be its inverse and must have determinant equal to 1.
      * Provided matrix must also have size 3x3, and its last row and column must
      * be zero, except for element in last row and column which must be 1
      * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD
@@ -416,7 +416,7 @@ public class Rotation2D implements Serializable {
      *
      * @param m Provided rotation matrix.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @see #isValidRotationMatrix(Matrix)
      */
     public void fromHomogeneousMatrix(final Matrix m)

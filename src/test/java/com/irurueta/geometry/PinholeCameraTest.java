@@ -109,20 +109,20 @@ public class PinholeCameraTest {
         PinholeCamera camera = new PinholeCamera();
 
         // test type
-        assertEquals(camera.getType(), CameraType.PINHOLE_CAMERA);
+        assertEquals(CameraType.PINHOLE_CAMERA, camera.getType());
 
         // test that internal matrix is the 3x4 identity, which corresponds to
         // canonical camera located at origin of coordinates, pointing towards
         // z-axis and with retinal plane located at Z = 1 (unitary focal length)
-        assertEquals(camera.getInternalMatrix(), Matrix.identity(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS));
+        assertEquals(Matrix.identity(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS),
+                camera.getInternalMatrix());
 
         // test constructor by providing internal matrix
         Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
         camera = new PinholeCamera(cameraMatrix);
-        assertEquals(camera.getInternalMatrix(), cameraMatrix);
+        assertEquals(cameraMatrix, camera.getInternalMatrix());
 
         // Force WrongSizeException
         cameraMatrix = Matrix.createWithUniformRandomValues(
@@ -191,11 +191,10 @@ public class PinholeCameraTest {
         assertTrue(camera.areIntrinsicParametersAvailable());
 
         // test type
-        assertEquals(camera.getType(), CameraType.PINHOLE_CAMERA);
+        assertEquals(CameraType.PINHOLE_CAMERA, camera.getType());
 
         // build internal matrix
-        Matrix cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS,
-                PINHOLE_CAMERA_COLS);
+        Matrix cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
         Matrix mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
         for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
             for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
@@ -245,21 +244,21 @@ public class PinholeCameraTest {
         // if sign of rotation axis is the opposite (-1.0), then theta will be
         // -theta (opposite sign)
         if (scaleAxisX > 0.0) {
-            assertEquals(theta, theta2, ABSOLUTE_ERROR);
+            assertEquals(theta2, theta, ABSOLUTE_ERROR);
         } else {
-            assertEquals(theta, -theta2, ABSOLUTE_ERROR);
+            assertEquals(-theta2, theta, ABSOLUTE_ERROR);
         }
 
         // compare intrinsic parameters
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                horizontalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(), verticalFocalLength,
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
                 ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint, ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
+                ABSOLUTE_ERROR);
 
         // compare images of origin
         assertTrue(originImage.equals(originImage2, ABSOLUTE_ERROR));
@@ -271,7 +270,7 @@ public class PinholeCameraTest {
         assertTrue(camera.areIntrinsicParametersAvailable());
 
         // test type
-        assertEquals(camera.getType(), CameraType.PINHOLE_CAMERA);
+        assertEquals(CameraType.PINHOLE_CAMERA, camera.getType());
 
         // build internal matrix
         cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
@@ -307,9 +306,9 @@ public class PinholeCameraTest {
         homCenter.setElementAtIndex(2, homCameraCenter.getHomZ());
         homCenter.setElementAtIndex(3, homCameraCenter.getHomW());
         Matrix nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
-        assertEquals(nullMatrix.getElementAtIndex(0), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(1), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(2), ABSOLUTE_ERROR);
 
         // compare matrix cameraMatrix and cameraMatrix2
         assertTrue(cameraMatrix.equals(cameraMatrix2, ABSOLUTE_ERROR));
@@ -333,9 +332,9 @@ public class PinholeCameraTest {
         homCenter.setElementAtIndex(2, homCameraCenter.getHomZ());
         homCenter.setElementAtIndex(3, homCameraCenter.getHomW());
         nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
-        assertEquals(nullMatrix.getElementAtIndex(0), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(1), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(2), ABSOLUTE_ERROR);
 
         // Obtain rotation axis and angle from 2nd rotation
         axis2 = rotation2.getRotationAxis();
@@ -361,15 +360,15 @@ public class PinholeCameraTest {
         }
 
         // compare intrinsic parameters
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                horizontalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                verticalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint, ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
+                ABSOLUTE_ERROR);
 
         // compare camera centers
         assertTrue(cameraCenter.equals(cameraCenter2, LARGE_ABSOLUTE_ERROR));
@@ -495,8 +494,7 @@ public class PinholeCameraTest {
                 intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalFocalLength(),
                 intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
                 intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalPrincipalPoint(),
@@ -525,7 +523,6 @@ public class PinholeCameraTest {
         } catch (final CameraException ignore) {
         }
         assertNull(camera);
-
 
         // constructor with line/plane correspondence
 
@@ -574,8 +571,7 @@ public class PinholeCameraTest {
         camera = new PinholeCamera(plane1, plane2, plane3, plane4,
                 line2D1, line2D2, line2D3, line2D4);
         final DLTLinePlaneCorrespondencePinholeCameraEstimator estimator2 =
-                new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes,
-                        lines2D);
+                new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, lines2D);
         estimator2.setLMSESolutionAllowed(false);
         estimatedCamera = estimator2.estimate();
 
@@ -590,8 +586,7 @@ public class PinholeCameraTest {
                 intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalFocalLength(),
                 intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
                 intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalPrincipalPoint(),
@@ -664,8 +659,8 @@ public class PinholeCameraTest {
 
         final Matrix internalMatrix = camera.getInternalMatrix();
 
-        assertEquals(internalMatrix.getRows(), PINHOLE_CAMERA_ROWS);
-        assertEquals(internalMatrix.getColumns(), PINHOLE_CAMERA_COLS);
+        assertEquals(PINHOLE_CAMERA_ROWS, internalMatrix.getRows());
+        assertEquals(PINHOLE_CAMERA_COLS, internalMatrix.getColumns());
 
         // project list of world points
         final int nPoints = randomizer.nextInt(MIN_NUMBER_POINTS, MAX_NUMBER_POINTS);
@@ -756,7 +751,6 @@ public class PinholeCameraTest {
         randomizer.fill(homWorldPointArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         homWorldPoint = new HomogeneousPoint3D(homWorldPointArray);
 
-
         imagePoint = new HomogeneousPoint2D();
         camera.project(homWorldPoint, imagePoint);
 
@@ -782,10 +776,8 @@ public class PinholeCameraTest {
 
         // create intrinsic parameters
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
         final double horizontalPrincipalPoint = randomizer.nextDouble(
@@ -873,10 +865,10 @@ public class PinholeCameraTest {
 
         // a row matrix 1x4 will have rank 1 and nullity 3 (1 + 3 = 4)
         final Matrix v = decomposer.getV();
-        assertEquals(decomposer.getRank(), 1);
-        assertEquals(decomposer.getNullity(), 3);
+        assertEquals(1, decomposer.getRank());
+        assertEquals(3, decomposer.getNullity());
 
-        // the last three columns of V contain the null-space of a.
+        // the last three columns of V contain the null-space of "a".
         // These three columns correspond to homogeneous 3D point coordinates
         // that belong to back-projected plane. Any linear-combination of such
         // three 3D points will also belong to such plane
@@ -910,10 +902,8 @@ public class PinholeCameraTest {
     public void testBackprojectPoints() throws CameraException {
         // create intrinsic parameters
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
         final double horizontalPrincipalPoint = randomizer.nextDouble(
@@ -1016,10 +1006,8 @@ public class PinholeCameraTest {
 
         // create intrinsic parameters
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
         final double horizontalPrincipalPoint = randomizer.nextDouble(
@@ -1042,8 +1030,7 @@ public class PinholeCameraTest {
 
         final Matrix intrinsicMatrix = intrinsic.getInternalMatrix();
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
         final Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
 
         final double[] axis = rotation.getRotationAxis();
@@ -1052,18 +1039,15 @@ public class PinholeCameraTest {
         // image of world origin
         final double[] originImageArray = new double[INHOM_2D_COORDS];
         randomizer.fill(originImageArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint2D originImage = new InhomogeneousPoint2D(
-                originImageArray);
+        final InhomogeneousPoint2D originImage = new InhomogeneousPoint2D(originImageArray);
 
         // camera center
         final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // test constructor with intrinsic parameters, rotation and image of
         // origin
-        PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                originImage);
+        PinholeCamera camera = new PinholeCamera(intrinsic, rotation, originImage);
         assertFalse(camera.isCameraCenterAvailable());
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
@@ -1120,21 +1104,21 @@ public class PinholeCameraTest {
         // if sign of rotation axis is the opposite (-1.0), then theta will be
         // -theta (opposite sign)
         if (scaleAxisX > 0.0) {
-            assertEquals(theta, theta2, ABSOLUTE_ERROR);
+            assertEquals(theta2, theta, ABSOLUTE_ERROR);
         } else {
-            assertEquals(theta, -theta2, ABSOLUTE_ERROR);
+            assertEquals(-theta2, theta, ABSOLUTE_ERROR);
         }
 
         // compare intrinsic parameters
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                horizontalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                verticalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint, ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
+                ABSOLUTE_ERROR);
 
         // Compare images of origin
         assertTrue(originImage.equals(originImage2, ABSOLUTE_ERROR));
@@ -1179,9 +1163,9 @@ public class PinholeCameraTest {
         homCenter.setElementAtIndex(2, homCameraCenter.getHomZ());
         homCenter.setElementAtIndex(3, homCameraCenter.getHomW());
         Matrix nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
-        assertEquals(nullMatrix.getElementAtIndex(0), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(1), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(2), ABSOLUTE_ERROR);
 
         // compare matrices cameraMatrix and cameraMatrix2
         assertTrue(cameraMatrix.equals(cameraMatrix2, ABSOLUTE_ERROR));
@@ -1205,9 +1189,9 @@ public class PinholeCameraTest {
         homCenter.setElementAtIndex(2, homCameraCenter.getHomZ());
         homCenter.setElementAtIndex(3, homCameraCenter.getHomW());
         nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
-        assertEquals(nullMatrix.getElementAtIndex(0), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(1), 0.0, ABSOLUTE_ERROR);
-        assertEquals(nullMatrix.getElementAtIndex(2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(0.0, nullMatrix.getElementAtIndex(2), ABSOLUTE_ERROR);
 
         // obtain rotation axis and angle from 2nd rotation
         axis2 = rotation2.getRotationAxis();
@@ -1227,21 +1211,21 @@ public class PinholeCameraTest {
         // if sign of rotation axis is the opposite (-1.0), then theta will be
         // -theta (opposite sign)
         if (scaleAxisX > 0.0) {
-            assertEquals(theta, theta2, ABSOLUTE_ERROR);
+            assertEquals(theta2, theta, ABSOLUTE_ERROR);
         } else {
-            assertEquals(theta, -theta2, ABSOLUTE_ERROR);
+            assertEquals(-theta2, theta, ABSOLUTE_ERROR);
         }
 
         // compare intrinsic parameters
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                horizontalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                verticalFocalLength, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint, ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint, ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
+                ABSOLUTE_ERROR);
+        assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
+                ABSOLUTE_ERROR);
 
         // compare camera centers
         assertTrue(cameraCenter.equals(cameraCenter2, ABSOLUTE_ERROR));
@@ -1469,15 +1453,11 @@ public class PinholeCameraTest {
         final PinholeCameraIntrinsicParameters k2 = camera.getIntrinsicParameters();
 
         // compare intrinsic parameters
-        assertEquals(k2.getHorizontalFocalLength(), horizontalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k2.getVerticalFocalLength(), verticalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k2.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(k2.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint, ABSOLUTE_ERROR);
-        assertEquals(k2.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint, ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, k2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, k2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(skewness, k2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, k2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, k2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1528,10 +1508,10 @@ public class PinholeCameraTest {
 
         if (scaleX > 0.0) {
             // rotation angle remains equal
-            assertEquals(theta3, theta1 + theta2, ABSOLUTE_ERROR);
+            assertEquals(theta1 + theta2, theta3, ABSOLUTE_ERROR);
         } else {
             // rotation axis has opposite sign, and so does rotation angle
-            assertEquals(theta3, -(theta1 + theta2), ABSOLUTE_ERROR);
+            assertEquals(-(theta1 + theta2), theta3, ABSOLUTE_ERROR);
         }
     }
 
@@ -1576,8 +1556,7 @@ public class PinholeCameraTest {
                             verticalPrincipalPoint, skewness);
 
             // random camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // point to a new random location
             final Matrix pointAtMatrix = Matrix.createWithUniformRandomValues(
@@ -1604,8 +1583,7 @@ public class PinholeCameraTest {
                     intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
             assertEquals(intrinsic.getVerticalFocalLength(),
                     intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(),
-                    ABSOLUTE_ERROR);
+            assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
             assertEquals(intrinsic.getHorizontalPrincipalPoint(),
                     intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
             assertEquals(intrinsic.getVerticalPrincipalPoint(),
@@ -1695,16 +1673,14 @@ public class PinholeCameraTest {
         final double verticalPrincipalPoint = randomizer.nextDouble(
                 MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
         final PinholeCameraIntrinsicParameters intrinsic =
                 new PinholeCameraIntrinsicParameters(horizontalFocalLength,
                         verticalFocalLength, horizontalPrincipalPoint,
                         verticalPrincipalPoint, skewness);
 
         // instantiate new pinhole camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // set new camera center
         final Matrix cameraCenterMatrix2 = Matrix.createWithUniformRandomValues(
@@ -1763,8 +1739,7 @@ public class PinholeCameraTest {
                 intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getVerticalFocalLength(),
                 intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getHorizontalPrincipalPoint(),
                 intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getVerticalPrincipalPoint(),
@@ -1822,9 +1797,9 @@ public class PinholeCameraTest {
                 camera.getIntrinsicParameters();
 
         // check camera center remains at origin
-        assertEquals(cameraCenter2.getInhomX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(cameraCenter2.getInhomY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(cameraCenter2.getInhomZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, cameraCenter2.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, cameraCenter2.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, cameraCenter2.getInhomZ(), ABSOLUTE_ERROR);
 
         // check camera rotation correctness
         // are different instances
@@ -1839,8 +1814,7 @@ public class PinholeCameraTest {
                 intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getVerticalFocalLength(),
                 intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getHorizontalPrincipalPoint(),
                 intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getVerticalPrincipalPoint(),
@@ -1935,18 +1909,15 @@ public class PinholeCameraTest {
 
         // check correctness of image of world origin
         final Point2D imageOfWorldOrigin2 = camera.getImageOfWorldOrigin();
-        assertTrue(imageOfWorldOrigin.equals(imageOfWorldOrigin2,
-                ABSOLUTE_ERROR));
+        assertTrue(imageOfWorldOrigin.equals(imageOfWorldOrigin2, ABSOLUTE_ERROR));
 
         // check correctness of intrinsic parameters
-        final PinholeCameraIntrinsicParameters intrinsic3 =
-                camera.getIntrinsicParameters();
+        final PinholeCameraIntrinsicParameters intrinsic3 = camera.getIntrinsicParameters();
         assertEquals(intrinsic3.getHorizontalFocalLength(),
                 intrinsic1.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic3.getVerticalFocalLength(),
                 intrinsic1.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic3.getSkewness(), intrinsic1.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic3.getSkewness(), intrinsic1.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic3.getHorizontalPrincipalPoint(),
                 intrinsic1.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic3.getVerticalPrincipalPoint(),
@@ -1975,14 +1946,12 @@ public class PinholeCameraTest {
         assertTrue(cameraCenter.equals(cameraCenter2, LARGE_ABSOLUTE_ERROR));
 
         // check correctness of intrinsic parameters
-        final PinholeCameraIntrinsicParameters intrinsic4 =
-                camera.getIntrinsicParameters();
+        final PinholeCameraIntrinsicParameters intrinsic4 = camera.getIntrinsicParameters();
         assertEquals(intrinsic4.getHorizontalFocalLength(),
                 intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic4.getVerticalFocalLength(),
                 intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic4.getSkewness(), intrinsic2.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic4.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic4.getHorizontalPrincipalPoint(),
                 intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic4.getVerticalPrincipalPoint(),
@@ -1997,7 +1966,6 @@ public class PinholeCameraTest {
     @Test
     public void testGetSetVanishingPointsAndImageOfWorldOrigin()
             throws WrongSizeException {
-
         Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -2142,7 +2110,6 @@ public class PinholeCameraTest {
     @Test
     public void testGetSetHorizontalVerticalAndPrincipalPlanesAndAxis()
             throws WrongSizeException, CameraException {
-
         Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -2310,8 +2277,7 @@ public class PinholeCameraTest {
                         verticalFocalLength, horizontalPrincipalPoint,
                         verticalPrincipalPoint, skewness);
 
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // get principal point
         final Point2D principalPoint = camera.getPrincipalPoint();
@@ -2319,22 +2285,20 @@ public class PinholeCameraTest {
         camera.principalPoint(principalPoint2);
 
         // and check correctness
-        assertEquals(principalPoint.getInhomX(), horizontalPrincipalPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(principalPoint.getInhomY(), verticalPrincipalPoint,
-                ABSOLUTE_ERROR);
+        assertEquals(principalPoint.getInhomX(), horizontalPrincipalPoint, ABSOLUTE_ERROR);
+        assertEquals(principalPoint.getInhomY(), verticalPrincipalPoint, ABSOLUTE_ERROR);
         assertEquals(principalPoint, principalPoint2);
     }
 
     @Test
     public void testGetAndFixCameraSign() throws WrongSizeException,
             DecomposerException, CameraException {
-
         final Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
 
-        final Matrix Mp = internalMatrix.getSubmatrix(0, 0, 2, 2);
+        final Matrix Mp = internalMatrix
+                .getSubmatrix(0, 0, 2, 2);
         final double detMp = com.irurueta.algebra.Utils.det(Mp);
         final double cameraSign = (detMp > 0.0) ? 1.0 : -1.0;
 
@@ -2374,10 +2338,8 @@ public class PinholeCameraTest {
         final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
@@ -2389,15 +2351,13 @@ public class PinholeCameraTest {
         final double positiveDepth = randomizer.nextDouble(MIN_DEPTH, MAX_DEPTH);
         final double negativeDepth = randomizer.nextDouble(-MAX_DEPTH, -MIN_DEPTH);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
         final PinholeCameraIntrinsicParameters intrinsic =
                 new PinholeCameraIntrinsicParameters(horizontalFocalLength,
                         verticalFocalLength, horizontalPrincipalPoint,
                         verticalPrincipalPoint, skewness);
 
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         final double[] principalAxisArray = camera.getPrincipalAxisArray();
 
@@ -2463,14 +2423,11 @@ public class PinholeCameraTest {
                 planePoint3.getInhomZ() + (negativeDepth * principalAxisArray[2]));
 
         // now check correctness of depth for front points
-        assertEquals(camera.getDepth(frontPoint1), positiveDepth,
-                ABSOLUTE_ERROR);
-        assertEquals(camera.getDepth(frontPoint2), positiveDepth,
-                ABSOLUTE_ERROR);
-        assertEquals(camera.getDepth(frontPoint3), positiveDepth,
-                ABSOLUTE_ERROR);
+        assertEquals(camera.getDepth(frontPoint1), positiveDepth, ABSOLUTE_ERROR);
+        assertEquals(camera.getDepth(frontPoint2), positiveDepth, ABSOLUTE_ERROR);
+        assertEquals(camera.getDepth(frontPoint3), positiveDepth, ABSOLUTE_ERROR);
 
-        // check that points are indeed in front by checking also that their
+        // check that points are indeed in front of the camrea by also checking that their
         // cheirality is positive
         assertTrue(camera.getCheirality(frontPoint1) > 0.0);
         assertTrue(camera.getCheirality(frontPoint2) > 0.0);
@@ -2482,12 +2439,9 @@ public class PinholeCameraTest {
         assertTrue(camera.isPointInFrontOfCamera(frontPoint1, 0.0));
 
         // now for back points
-        assertEquals(camera.getDepth(backPoint1), negativeDepth,
-                ABSOLUTE_ERROR);
-        assertEquals(camera.getDepth(backPoint2), negativeDepth,
-                ABSOLUTE_ERROR);
-        assertEquals(camera.getDepth(backPoint3), negativeDepth,
-                ABSOLUTE_ERROR);
+        assertEquals(camera.getDepth(backPoint1), negativeDepth, ABSOLUTE_ERROR);
+        assertEquals(camera.getDepth(backPoint2), negativeDepth, ABSOLUTE_ERROR);
+        assertEquals(camera.getDepth(backPoint3), negativeDepth, ABSOLUTE_ERROR);
 
         // check that points are indeed behind by checking also that their
         // cheirality is negative
@@ -2538,10 +2492,8 @@ public class PinholeCameraTest {
         final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
@@ -2550,15 +2502,13 @@ public class PinholeCameraTest {
         final double verticalPrincipalPoint = randomizer.nextDouble(
                 MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
         final PinholeCameraIntrinsicParameters intrinsic =
                 new PinholeCameraIntrinsicParameters(horizontalFocalLength,
                         verticalFocalLength, horizontalPrincipalPoint,
                         verticalPrincipalPoint, skewness);
 
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // get depths of all points in the list
         final List<Double> depths = camera.getDepths(worldPointList);
@@ -2606,8 +2556,7 @@ public class PinholeCameraTest {
             camFront = camera.isPointInFrontOfCamera(point);
 
             assertEquals(depth, camDepth, ABSOLUTE_ERROR);
-            assertEquals(cheirality, camCheirality,
-                    ABSOLUTE_ERROR);
+            assertEquals(cheirality, camCheirality, ABSOLUTE_ERROR);
             assertEquals(front, camFront);
             assertEquals(front2, camFront);
         }
@@ -2655,8 +2604,7 @@ public class PinholeCameraTest {
         final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
         assertFalse(camera.isNormalized());
         camera.setCameraRotation(rotation);
         assertFalse(camera.isNormalized());
@@ -2666,10 +2614,8 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after setCameraIntrinsicParameters
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
         final double horizontalPrincipalPoint = randomizer.nextDouble(
                 MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
@@ -2692,8 +2638,7 @@ public class PinholeCameraTest {
         // testing isNormalized after setCameraCenter
         final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         assertFalse(camera.isNormalized());
         camera.setCameraCenter(cameraCenter);
@@ -2715,17 +2660,14 @@ public class PinholeCameraTest {
         // testing isNormalized after setIntrinsicAndExtrinsicParameters
         final double[] worldOriginArray = new double[HOM_2D_COORDS];
         randomizer.fill(worldOriginArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final HomogeneousPoint2D imageOfWorldOrigin = new HomogeneousPoint2D(
-                worldOriginArray);
+        final HomogeneousPoint2D imageOfWorldOrigin = new HomogeneousPoint2D(worldOriginArray);
 
         assertFalse(camera.isNormalized());
-        camera.setIntrinsicAndExtrinsicParameters(k, rotation,
-                imageOfWorldOrigin);
+        camera.setIntrinsicAndExtrinsicParameters(k, rotation, imageOfWorldOrigin);
         assertFalse(camera.isNormalized());
         camera.normalize();
         assertTrue(camera.isNormalized());
-        camera.setIntrinsicAndExtrinsicParameters(k, rotation,
-                imageOfWorldOrigin);
+        camera.setIntrinsicAndExtrinsicParameters(k, rotation, imageOfWorldOrigin);
         assertFalse(camera.isNormalized());
 
         // testing setImageOfWorldOrigin
@@ -2870,7 +2812,7 @@ public class PinholeCameraTest {
             line4.normalize();
             line5.normalize();
 
-            // estimate dual conic that lies inside of provided 5 lines (we need to
+            // estimate dual conic that lies inside provided 5 lines (we need to
             // ensure that line configuration is not degenerate)
             final Matrix m2 = new Matrix(5, 6);
 
@@ -3062,7 +3004,6 @@ public class PinholeCameraTest {
     public void testProjectBackProjectQuadricAndConic()
             throws WrongSizeException, DecomposerException,
             CoincidentPointsException, CameraException {
-
         // create conic
         Matrix m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -3083,7 +3024,7 @@ public class PinholeCameraTest {
                 m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2));
 
-        // estimate conic that lies inside of provided 5 homogeneous 2D
+        // estimate conic that lies inside provided 5 homogeneous 2D
         // points
         Matrix conicMatrix = new Matrix(5, 6);
         double x = point1.getHomX();
@@ -3211,8 +3152,7 @@ public class PinholeCameraTest {
 
         // instantiate random camera
         final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final PinholeCamera camera = new PinholeCamera(cameraMatrix);
 
         // back-project conic into quadric
@@ -3258,19 +3198,17 @@ public class PinholeCameraTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
         // create intrinsic parameters
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2,
-                MAX_FOCAL_LENGTH2);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2,
-                MAX_FOCAL_LENGTH2);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS2, MAX_SKEWNESS2);
         final double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
                 MAX_PRINCIPAL_POINT);
         final double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
                 MAX_PRINCIPAL_POINT);
 
-        final PinholeCameraIntrinsicParameters intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                verticalFocalLength, horizontalPrincipalPoint,
-                verticalPrincipalPoint, skewness);
+        final PinholeCameraIntrinsicParameters intrinsic = new PinholeCameraIntrinsicParameters(
+                horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // create rotation parameters
         final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
@@ -3362,8 +3300,7 @@ public class PinholeCameraTest {
         camera2.decompose();
 
         final DLTPointCorrespondencePinholeCameraEstimator estimator =
-                new DLTPointCorrespondencePinholeCameraEstimator(points3D,
-                        points2D);
+                new DLTPointCorrespondencePinholeCameraEstimator(points3D, points2D);
         estimator.setLMSESolutionAllowed(false);
         final PinholeCamera camera3 = estimator.estimate();
         camera3.decompose();
@@ -3371,16 +3308,15 @@ public class PinholeCameraTest {
         final PinholeCameraIntrinsicParameters intrinsic2 = camera2.getIntrinsicParameters();
         final PinholeCameraIntrinsicParameters intrinsic3 = camera3.getIntrinsicParameters();
 
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), intrinsic.getSkewness(),
-                ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalFocalLength(),
+                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalFocalLength(),
+                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalPrincipalPoint(),
+                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalPrincipalPoint(),
+                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         assertEquals(intrinsic2.getHorizontalFocalLength(),
                 intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -3437,9 +3373,9 @@ public class PinholeCameraTest {
         final double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
                 MAX_PRINCIPAL_POINT);
 
-        final PinholeCameraIntrinsicParameters intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                verticalFocalLength, horizontalPrincipalPoint,
-                verticalPrincipalPoint, skewness);
+        final PinholeCameraIntrinsicParameters intrinsic = new PinholeCameraIntrinsicParameters(
+                horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // create rotation parameters
         final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
@@ -3453,8 +3389,7 @@ public class PinholeCameraTest {
 
         // create camera center
         final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
-        randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE,
-                MAX_RANDOM_POINT_VALUE);
+        randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE);
         final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
@@ -3466,28 +3401,19 @@ public class PinholeCameraTest {
         // create 4 2D lines
         final Line2D line2D1 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
                 MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
-        Line2D line2D2 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
+        Line2D line2D2 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
         final Line2D line2D3 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
                 MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
         final Line2D line2D4 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
                 MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
 
         final Plane plane1 = camera1.backProject(line2D1);
         Plane plane2 = camera1.backProject(line2D2);
@@ -3512,8 +3438,7 @@ public class PinholeCameraTest {
         camera2.decompose();
 
         final DLTLinePlaneCorrespondencePinholeCameraEstimator estimator =
-                new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes,
-                        lines2D);
+                new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, lines2D);
         estimator.setLMSESolutionAllowed(false);
         final PinholeCamera camera3 = estimator.estimate();
         camera3.decompose();
@@ -3525,8 +3450,7 @@ public class PinholeCameraTest {
                 intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalFocalLength(),
                 intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(),
-                ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
                 intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalPrincipalPoint(),
@@ -3558,15 +3482,11 @@ public class PinholeCameraTest {
     public void testSerializeDeserialize() throws CameraException, IOException, ClassNotFoundException {
         // create camera
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
         double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
         // rotation
         double alphaEuler = randomizer.nextDouble(
                 MIN_ANGLE_DEGREES * Math.PI / 180.0,
@@ -3579,18 +3499,15 @@ public class PinholeCameraTest {
                 MAX_ANGLE_DEGREES * Math.PI / 180.0);
 
         final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+                new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                        horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // camera center
         double[] cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // test constructor with intrinsic parameters, rotation and image or
         // origin

@@ -27,7 +27,7 @@ import java.io.Serializable;
  * related to the inner workings of a camera.
  * Intrinsic parameters are those such as horizontal/vertical focal length,
  * skewness of axes or principal point of an image (which is usually related
- * to lens/sensor slanting.
+ * to lens/sensor slanting).
  */
 public class PinholeCameraIntrinsicParameters implements Serializable {
 

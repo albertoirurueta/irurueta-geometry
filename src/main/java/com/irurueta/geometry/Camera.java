@@ -166,7 +166,7 @@ public abstract class Camera {
      * ray of light.
      * This method only computes one possible solution. Any other solution can
      * be computed as a linear combination between the camera center and the
-     * estimated back-projeted point.
+     * estimated back-projected point.
      *
      * @param point  2D point to be back-projected.
      * @param result Instance where back-projected 3D point data will be stored
@@ -280,7 +280,7 @@ public abstract class Camera {
      * The internal implementation of this method needs to compute the dual
      * quadric of provided quadric, and also needs to compute the resulting
      * conic from an internal dual conic, for that reason a
-     * CameraException might be raised if provided quadric is degenerate or a
+     * CameraException might be raised if provided quadric is degenerate or
      * if internal estimated dual conic is degenerate and cannot be converted
      * into a conic.
      *
@@ -305,7 +305,7 @@ public abstract class Camera {
      * The internal implementation of this method needs to compute a conic from
      * provided dual conic, and also needs to compute the resulting dual quadric
      * from an internal quadric. For that reason a CameraException might be
-     * raised if provided dual conic is degenerate or a if internal estimated
+     * raised if provided dual conic is degenerate or if internal estimated
      * quadric is degenerate and cannot be converted into a dual quadric.
      *
      * @param dualConic 2D dual conic to be back-projected.
@@ -324,7 +324,7 @@ public abstract class Camera {
      * The internal implementation of this method needs to compute a conic from
      * provided dual conic, and also needs to compute the resulting dual quadric
      * from an internal quadric. For that reason a CameraException might be
-     * raised if provided dual conic is degenerate or a if internal estimated
+     * raised if provided dual conic is degenerate or if internal estimated
      * quadric is degenerate and cannot be converted into a dual quadric.
      *
      * @param dualConic 2D dual conic to be back-projected.

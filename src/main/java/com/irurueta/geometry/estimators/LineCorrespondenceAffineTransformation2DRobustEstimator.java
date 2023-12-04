@@ -35,7 +35,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of lines to be used to estimate an affine 2D transformation.
@@ -213,22 +213,22 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
 
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences an using provided robust estimator method.
+     * correspondences and using provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate
+     * @param method method of a robust estimator algorithm to estimate the
      *               best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
             case RANSAC:
             default:
@@ -244,7 +244,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                    affine 2D transformation.
      * @param outputLines list of output lines to be used to estimate an
      *                    affine 2D transformation.
-     * @param method      method of a robust estimator algorithm to estimate
+     * @param method      method of a robust estimator algorithm to estimate the
      *                    best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
@@ -254,7 +254,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines);
             case MSAC:
@@ -263,7 +263,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines);
             case RANSAC:
@@ -279,7 +279,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
@@ -287,7 +287,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             final AffineTransformation2DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -296,7 +296,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
             case RANSAC:
@@ -316,7 +316,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                    2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
      *                    2D transformation.
-     * @param method      method of a robust estimator algorithm to estimate best
+     * @param method      method of a robust estimator algorithm to estimate the best
      *                    affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
@@ -327,7 +327,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
             case MSAC:
@@ -336,7 +336,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
             case RANSAC:
@@ -352,21 +352,21 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -385,7 +385,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                      affine 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
@@ -395,7 +395,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines);
             case MSAC:
@@ -404,7 +404,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines, qualityScores);
             case RANSAC:
@@ -422,7 +422,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
@@ -430,7 +430,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             final AffineTransformation2DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -439,7 +439,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -461,7 +461,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                      2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
@@ -472,7 +472,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
             case MSAC:
@@ -481,7 +481,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             case PROSAC:
                 return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines, qualityScores);
             case RANSAC:
@@ -660,7 +660,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * If dot product was -1, then although their director vectors are opposed,
      * lines are considered equal, since sign changes are not taken into account.
      *
-     * @param line            originally sampled output line line.
+     * @param line            originally sampled output line.
      * @param transformedLine estimated output line obtained after using
      *                        estimated transformation.
      * @return computed residual.
@@ -679,7 +679,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

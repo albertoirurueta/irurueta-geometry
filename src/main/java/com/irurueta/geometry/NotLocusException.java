@@ -19,7 +19,7 @@ package com.irurueta.geometry;
  * Raised when using objects (e.g. points) that are not locus of another 
  * geometric structure.
  */
-class NotLocusException extends GeometryException {
+public class NotLocusException extends GeometryException {
     
     /**
      * Constructor.

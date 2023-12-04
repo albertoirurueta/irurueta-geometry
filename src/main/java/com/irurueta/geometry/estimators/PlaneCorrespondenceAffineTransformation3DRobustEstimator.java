@@ -35,7 +35,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of planes to be used to estimate an affine 3D transformation.
@@ -213,22 +213,22 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
 
     /**
      * Creates an affine 3D transformation estimator based on 3D plane
-     * correspondences an using provided robust estimator method.
+     * correspondences and using provided robust estimator method.
      *
      * @param method method of a robust estimator algorithm to estimate
-     *               best affine 3D transformation.
+     *               the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
             case RANSAC:
             default:
@@ -245,7 +245,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @param outputPlanes list of output planes to be used to estimate an
      *                     affine 3D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 3D transformation.
+     *                     the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -254,7 +254,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
             case MSAC:
@@ -263,7 +263,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
             case RANSAC:
@@ -279,7 +279,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
@@ -287,7 +287,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final AffineTransformation3DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -296,7 +296,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
             case RANSAC:
@@ -327,7 +327,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
             case MSAC:
@@ -336,7 +336,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
             case RANSAC:
@@ -352,21 +352,21 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -385,7 +385,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                      affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
@@ -395,7 +395,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
             case MSAC:
@@ -404,7 +404,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
@@ -422,7 +422,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
@@ -430,7 +430,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final AffineTransformation3DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -439,7 +439,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -461,7 +461,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                      3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
@@ -472,7 +472,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
             case MSAC:
@@ -481,7 +481,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
@@ -681,7 +681,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

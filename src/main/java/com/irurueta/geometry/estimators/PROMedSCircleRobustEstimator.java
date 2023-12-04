@@ -427,7 +427,7 @@ public class PROMedSCircleRobustEstimator extends CircleRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

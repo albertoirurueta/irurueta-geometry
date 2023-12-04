@@ -118,14 +118,14 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // check default value
-        assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
         assertNull(refiner.getSamples1());
         assertNull(refiner.getSamples2());
         assertFalse(refiner.isReady());
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
-        assertEquals(refiner.getNumInliers(), 0);
-        assertEquals(refiner.getTotalSamples(), 0);
+        assertEquals(0, refiner.getNumInliers());
+        assertEquals(0, refiner.getTotalSamples());
         assertNull(refiner.getInitialEstimation());
         assertFalse(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
@@ -133,14 +133,14 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         assertNull(refiner.getListener());
 
         assertFalse(refiner.isSuggestSkewnessValueEnabled());
-        assertEquals(refiner.getSuggestedSkewnessValue(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getSuggestedSkewnessValue(), 0.0);
         assertFalse(refiner.isSuggestHorizontalFocalLengthEnabled());
-        assertEquals(refiner.getSuggestedHorizontalFocalLengthValue(), 0.0,
+        assertEquals(0.0, refiner.getSuggestedHorizontalFocalLengthValue(),
                 0.0);
         assertFalse(refiner.isSuggestVerticalFocalLengthEnabled());
-        assertEquals(refiner.getSuggestedVerticalFocalLengthValue(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getSuggestedVerticalFocalLengthValue(), 0.0);
         assertFalse(refiner.isSuggestAspectRatioEnabled());
-        assertEquals(refiner.getSuggestedAspectRatioValue(), 1.0, 0.0);
+        assertEquals(1.0, refiner.getSuggestedAspectRatioValue(), 0.0);
         assertFalse(refiner.isSuggestPrincipalPointEnabled());
         assertNull(refiner.getSuggestedPrincipalPointValue());
         assertFalse(refiner.isSuggestRotationEnabled());
@@ -148,15 +148,12 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         assertFalse(refiner.isSuggestCenterEnabled());
         assertNull(refiner.getSuggestedCenterValue());
 
-        assertEquals(refiner.getMinSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(refiner.getMaxSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(refiner.getSuggestionWeightStep(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                refiner.getMinSuggestionWeight(), 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                refiner.getMaxSuggestionWeight(), 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                refiner.getSuggestionWeightStep(), 0.0);
 
         // test non-empty constructor
         refiner = new DecomposedPointCorrespondencePinholeCameraRefiner(
@@ -164,30 +161,28 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 samples2, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
-        assertSame(refiner.getSamples1(), samples1);
-        assertSame(refiner.getSamples2(), samples2);
+        assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
+        assertSame(samples1, refiner.getSamples1());
+        assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
-        assertSame(refiner.getInliers(), inliers);
-        assertSame(refiner.getResiduals(), residuals);
-        assertEquals(refiner.getNumInliers(), numInliers);
-        assertEquals(refiner.getTotalSamples(), samples1.size());
-        assertSame(refiner.getInitialEstimation(), camera);
+        assertSame(inliers, refiner.getInliers());
+        assertSame(residuals, refiner.getResiduals());
+        assertEquals(numInliers, refiner.getNumInliers());
+        assertEquals(samples1.size(), refiner.getTotalSamples());
+        assertSame(camera, refiner.getInitialEstimation());
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
 
         assertFalse(refiner.isSuggestSkewnessValueEnabled());
-        assertEquals(refiner.getSuggestedSkewnessValue(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getSuggestedSkewnessValue(), 0.0);
         assertFalse(refiner.isSuggestHorizontalFocalLengthEnabled());
-        assertEquals(refiner.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
+        assertEquals(0.0, refiner.getSuggestedHorizontalFocalLengthValue(), 0.0);
         assertFalse(refiner.isSuggestVerticalFocalLengthEnabled());
-        assertEquals(refiner.getSuggestedVerticalFocalLengthValue(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getSuggestedVerticalFocalLengthValue(), 0.0);
         assertFalse(refiner.isSuggestAspectRatioEnabled());
-        assertEquals(refiner.getSuggestedAspectRatioValue(), 1.0, 0.0);
+        assertEquals(1.0, refiner.getSuggestedAspectRatioValue(), 0.0);
         assertFalse(refiner.isSuggestPrincipalPointEnabled());
         assertNull(refiner.getSuggestedPrincipalPointValue());
         assertFalse(refiner.isSuggestRotationEnabled());
@@ -195,15 +190,12 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         assertFalse(refiner.isSuggestCenterEnabled());
         assertNull(refiner.getSuggestedCenterValue());
 
-        assertEquals(refiner.getMinSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(refiner.getMaxSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(refiner.getSuggestionWeightStep(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                refiner.getMinSuggestionWeight(), 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                refiner.getMaxSuggestionWeight(), 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                refiner.getSuggestionWeightStep(), 0.0);
     }
 
     @Test
@@ -212,18 +204,16 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // default value
-        assertEquals(refiner.getMinSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                refiner.getMinSuggestionWeight(), 0.0);
 
         // new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double weight = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double weight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setMinSuggestionWeight(weight);
 
         // check correctness
-        assertEquals(refiner.getMinSuggestionWeight(), weight, 0.0);
+        assertEquals(weight, refiner.getMinSuggestionWeight(), 0.0);
     }
 
     @Test
@@ -232,18 +222,16 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // default value
-        assertEquals(refiner.getMaxSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                refiner.getMaxSuggestionWeight(), 0.0);
 
         // new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double weight = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double weight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setMaxSuggestionWeight(weight);
 
         // check correctness
-        assertEquals(refiner.getMaxSuggestionWeight(), weight, 0.0);
+        assertEquals(weight, refiner.getMaxSuggestionWeight(), 0.0);
     }
 
     @Test
@@ -252,17 +240,14 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // default values
-        assertEquals(refiner.getMinSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(refiner.getMaxSuggestionWeight(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                refiner.getMinSuggestionWeight(), 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                refiner.getMaxSuggestionWeight(), 0.0);
 
         // set new values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minWeight = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double minWeight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final double maxWeight = randomizer.nextDouble(minWeight, MAX_RANDOM_VALUE);
         refiner.setMinMaxSuggestionWeight(minWeight, maxWeight);
 
@@ -277,9 +262,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // default value
-        assertEquals(refiner.getSuggestionWeightStep(),
-                DecomposedPointCorrespondencePinholeCameraRefiner.
-                        DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(DecomposedPointCorrespondencePinholeCameraRefiner.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                refiner.getSuggestionWeightStep(), 0.0);
 
         // set new values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -287,7 +271,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestionWeightStep(step);
 
         // check correctness
-        assertEquals(refiner.getSuggestionWeightStep(), step, 0.0);
+        assertEquals(step, refiner.getSuggestionWeightStep(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -303,7 +287,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // initial value
-        assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -338,7 +322,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // initial value
-        assertEquals(refiner.getSuggestedSkewnessValue(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getSuggestedSkewnessValue(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -347,7 +331,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestedSkewnessValue(skewness);
 
         // check correctness
-        assertEquals(refiner.getSuggestedSkewnessValue(), skewness, 0.0);
+        assertEquals(skewness, refiner.getSuggestedSkewnessValue(), 0.0);
     }
 
     @Test
@@ -373,18 +357,15 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // initial value
-        assertEquals(refiner.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
+        assertEquals(0.0, refiner.getSuggestedHorizontalFocalLengthValue(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double focalLength = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double focalLength = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setSuggestedHorizontalFocalLengthValue(focalLength);
 
         // check correctness
-        assertEquals(refiner.getSuggestedHorizontalFocalLengthValue(),
-                focalLength, 0.0);
+        assertEquals(focalLength, refiner.getSuggestedHorizontalFocalLengthValue(), 0.0);
     }
 
     @Test
@@ -410,7 +391,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // initial value
-        assertEquals(refiner.getSuggestedVerticalFocalLengthValue(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getSuggestedVerticalFocalLengthValue(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -419,8 +400,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestedVerticalFocalLengthValue(focalLength);
 
         // check correctness
-        assertEquals(refiner.getSuggestedVerticalFocalLengthValue(),
-                focalLength, 0.0);
+        assertEquals(focalLength, refiner.getSuggestedVerticalFocalLengthValue(), 0.0);
     }
 
     @Test
@@ -444,7 +424,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // initial value
-        assertEquals(refiner.getSuggestedAspectRatioValue(), 1.0, 0.0);
+        assertEquals(1.0, refiner.getSuggestedAspectRatioValue(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -452,7 +432,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestedAspectRatioValue(aspectRatio);
 
         // check correctness
-        assertEquals(refiner.getSuggestedAspectRatioValue(), aspectRatio, 0.0);
+        assertEquals(aspectRatio, refiner.getSuggestedAspectRatioValue(), 0.0);
     }
 
     @Test
@@ -484,7 +464,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestedPrincipalPointValue(point);
 
         // check correctness
-        assertSame(refiner.getSuggestedPrincipalPointValue(), point);
+        assertSame(point, refiner.getSuggestedPrincipalPointValue());
     }
 
     @Test
@@ -515,7 +495,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestedRotationValue(q);
 
         // check correctness
-        assertSame(refiner.getSuggestedRotationValue(), q);
+        assertSame(q, refiner.getSuggestedRotationValue());
     }
 
     @Test
@@ -546,7 +526,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSuggestedCenterValue(value);
 
         // check correctness
-        assertSame(refiner.getSuggestedCenterValue(), value);
+        assertSame(value, refiner.getSuggestedCenterValue());
     }
 
     @Test
@@ -562,7 +542,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSamples1(samples1);
 
         // check correctness
-        assertSame(refiner.getSamples1(), samples1);
+        assertSame(samples1, refiner.getSamples1());
     }
 
     @Test
@@ -578,7 +558,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setSamples2(samples2);
 
         // check correctness
-        assertSame(refiner.getSamples2(), samples2);
+        assertSame(samples2, refiner.getSamples2());
     }
 
     @Test
@@ -601,7 +581,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setInliers(inliers);
 
         // check correctness
-        assertSame(refiner.getInliers(), inliers);
+        assertSame(inliers, refiner.getInliers());
     }
 
     @Test
@@ -624,7 +604,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setResiduals(residuals);
 
         // check correctness
-        assertSame(refiner.getResiduals(), residuals);
+        assertSame(residuals, refiner.getResiduals());
     }
 
     @Test
@@ -641,13 +621,13 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 new DecomposedPointCorrespondencePinholeCameraRefiner();
 
         // check default value
-        assertEquals(refiner.getNumInliers(), 0);
+        assertEquals(0, refiner.getNumInliers());
 
         // set new value
         refiner.setNumInliers(numInliers);
 
         // check correctness
-        assertEquals(refiner.getNumInliers(), numInliers);
+        assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
         try {
@@ -672,15 +652,15 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         // check default values
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
-        assertEquals(refiner.getNumInliers(), 0);
+        assertEquals(0, refiner.getNumInliers());
 
         // set new value
         refiner.setInliersData(inliersData);
 
         // check correctness
-        assertSame(refiner.getInliers(), inliersData.getInliers());
-        assertSame(refiner.getResiduals(), inliersData.getResiduals());
-        assertEquals(refiner.getNumInliers(), inliersData.getNumInliers());
+        assertSame(inliersData.getInliers(), refiner.getInliers());
+        assertSame(inliersData.getResiduals(), refiner.getResiduals());
+        assertEquals(inliersData.getNumInliers(), refiner.getNumInliers());
     }
 
     @Test
@@ -695,7 +675,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setListener(this);
 
         // check correctness
-        assertSame(refiner.getListener(), this);
+        assertSame(this, refiner.getListener());
     }
 
     @Test
@@ -711,7 +691,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         refiner.setInitialEstimation(camera);
 
         // check correctness
-        assertSame(refiner.getInitialEstimation(), camera);
+        assertSame(camera, refiner.getInitialEstimation());
     }
 
     @Test
@@ -750,14 +730,14 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
         final PinholeCamera result1 = new PinholeCamera();
 
         reset();
-        assertEquals(mRefineStart, 0);
-        assertEquals(mRefineEnd, 0);
+        assertEquals(0, mRefineStart);
+        assertEquals(0, mRefineEnd);
 
         assertFalse(refiner.refine(result1));
         final PinholeCamera result2 = refiner.refine();
 
-        assertEquals(mRefineStart, 2);
-        assertEquals(mRefineEnd, 2);
+        assertEquals(2, mRefineStart);
+        assertEquals(2, mRefineEnd);
 
         result1.normalize();
         result2.normalize();
@@ -793,8 +773,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -802,8 +782,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -847,8 +827,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -856,8 +836,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -901,8 +881,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -910,8 +890,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -954,8 +934,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -963,8 +943,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -1007,8 +987,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -1016,8 +996,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -1060,8 +1040,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -1069,8 +1049,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -1113,8 +1093,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -1122,8 +1102,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -1170,8 +1150,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             final PinholeCamera result1 = new PinholeCamera();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -1179,8 +1159,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
 
             final PinholeCamera result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             result1.normalize();
             result2.normalize();

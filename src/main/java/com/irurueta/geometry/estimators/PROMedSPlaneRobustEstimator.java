@@ -425,7 +425,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

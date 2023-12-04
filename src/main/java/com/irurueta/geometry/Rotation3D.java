@@ -21,12 +21,14 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 
+import java.io.Serializable;
+
 /**
  * Abstract class representing a rotation in 3D space.
  * Subclasses of this class will implement the interface of this class.
  */
 @SuppressWarnings("DuplicatedCode")
-public abstract class Rotation3D {
+public abstract class Rotation3D implements Serializable {
 
     /**
      * Constant defining threshold to determine whether a matrix is orthogonal
@@ -144,7 +146,7 @@ public abstract class Rotation3D {
      *
      * @return Rotation angle in radians.
      * @throws RotationException Raised if numerical instabilities happen.
-     *                           Because internal matrix will always be well defined (orthogonal and
+     *                           Because internal matrix will always be well-defined (orthogonal and
      *                           determinant equal to 1), this exception will rarely happen.
      */
     public abstract double getRotationAngle() throws RotationException;
@@ -211,14 +213,14 @@ public abstract class Rotation3D {
     /**
      * Sets amount of rotation from provided rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix can be expressed in either inhomogeneous (3x3) or
      * homogeneous (4x4) coordinates.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}
@@ -241,7 +243,7 @@ public abstract class Rotation3D {
     /**
      * Sets amount of rotation from provided rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix can be expressed in either inhomogeneous (3x3) or
      * homogeneous (4x4) coordinates.
      * Because threshold is not provided it is used DEFAULT_VALID_THRESHOLD
@@ -249,7 +251,7 @@ public abstract class Rotation3D {
      *
      * @param m Provided rotation matrix.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
     public final void fromMatrix(final Matrix m)
@@ -260,13 +262,13 @@ public abstract class Rotation3D {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}
@@ -277,14 +279,14 @@ public abstract class Rotation3D {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
      * Because threshold is not provided it is used DEFAULT_VALID_THRESHOLD
      * instead.
      *
      * @param m Provided rotation matrix.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
     public void fromInhomogeneousMatrix(final Matrix m)
@@ -295,14 +297,14 @@ public abstract class Rotation3D {
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 4x4, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}
@@ -312,8 +314,8 @@ public abstract class Rotation3D {
 
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
-     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse and must have determinant equal to 1.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular), its
+     * transpose must be its inverse and must have determinant equal to 1.
      * Provided matrix must also have size exe, and its last row and column must
      * be zero, except for element in last row and column which must be 1
      * Because threshold is not provided it is used DEFAULT_VALID_THRESHOLD
@@ -321,7 +323,7 @@ public abstract class Rotation3D {
      *
      * @param m Provided rotation matrix.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
     public void fromHomogeneousMatrix(final Matrix m)
@@ -753,7 +755,7 @@ public abstract class Rotation3D {
     }
 
     /**
-     * Converts this 3D rotation into a matrix rotation an returns the result
+     * Converts this 3D rotation into a matrix rotation and returns the result
      * as a new instance.
      *
      * @return a new 3D matrix rotation equivalent to this rotation.

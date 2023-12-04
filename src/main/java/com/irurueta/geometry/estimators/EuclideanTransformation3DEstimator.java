@@ -28,7 +28,7 @@ import com.irurueta.geometry.Point3D;
 import java.util.List;
 
 /**
- * Estimator of a 3D euclidean transformation based on point correspondences.
+ * Estimator of a 3D Euclidean transformation based on point correspondences.
  * This estimator uses Kabsch algorithm.
  * A minimum of 4 non-coincident matched 3D input/output points is required for
  * estimation.
@@ -36,8 +36,8 @@ import java.util.List;
  * If more points are provided an LMSE (Least Mean Squared Error) solution will
  * be found.
  * Based on:
- * https://en.wikipedia.org/wiki/Kabsch_algorithm
- * http://nghiaho.com/?page_id=671
+ * <a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">https://en.wikipedia.org/wiki/Kabsch_algorithm</a>
+ * <a href="http://nghiaho.com/?page_id=671">http://nghiaho.com/?page_id=671</a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class EuclideanTransformation3DEstimator {
@@ -186,14 +186,14 @@ public class EuclideanTransformation3DEstimator {
     }
 
     /**
-     * Returns list of input points to be used to estimate an euclidean 3D
+     * Returns list of input points to be used to estimate an Euclidean 3D
      * transformation.
      * Each point in the list of input points must be matched with the
      * corresponding point in the list of output points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than #getMinimumPoints.
      *
-     * @return list of input points to be used to estimate an euclidean 3D
+     * @return list of input points to be used to estimate an Euclidean 3D
      * transformation.
      */
     public List<Point3D> getInputPoints() {
@@ -201,14 +201,14 @@ public class EuclideanTransformation3DEstimator {
     }
 
     /**
-     * Returns list of output points ot be used to estimate an euclidean 3D
+     * Returns list of output points ot be used to estimate an Euclidean 3D
      * transformation.
      * Each point in the list of output points must be matched with the
      * corresponding point in the list of input points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than #getMinimumPoints.
      *
-     * @return list of output points to be used to estimate an euclidean 3D
+     * @return list of output points to be used to estimate an Euclidean 3D
      * transformation.
      */
     public List<Point3D> getOutputPoints() {
@@ -216,16 +216,16 @@ public class EuclideanTransformation3DEstimator {
     }
 
     /**
-     * Sets list of points to be used to estimate an euclidean 3D
+     * Sets list of points to be used to estimate an Euclidean 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than #getMinimumPoints.
      *
      * @param inputPoints  list of input points to be used to estimate an
-     *                     euclidean 3D transformation.
+     *                     Euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     *                     euclidean 3D transformation.
+     *                     Euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than #getMinimumPoints.
      * @throws LockedException          if estimator is locked because a computation is
@@ -318,7 +318,7 @@ public class EuclideanTransformation3DEstimator {
     }
 
     /**
-     * Indicates if estimator is ready to start the euclidean 3D transformation
+     * Indicates if estimator is ready to start the Euclidean 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points) are provided
      * and a minimum of MINIMUM_SIZE points are available.
@@ -332,7 +332,7 @@ public class EuclideanTransformation3DEstimator {
     }
 
     /**
-     * Estimates an euclidean 3D transformation using the list of matched input
+     * Estimates an Euclidean 3D transformation using the list of matched input
      * and output 3D points.
      * A minimum of 4 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.
@@ -352,7 +352,7 @@ public class EuclideanTransformation3DEstimator {
     }
 
     /**
-     * Estimates an euclidean 3D transformation using the list of matched input
+     * Estimates an Euclidean 3D transformation using the list of matched input
      * and output 3D points.
      * A minimum of 4 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.
@@ -491,13 +491,13 @@ public class EuclideanTransformation3DEstimator {
 
     /**
      * Internal method to set lists of points to be used to estimate an
-     * euclidean 3D transformation.
+     * Euclidean 3D transformation.
      * This method does not check whether estimator is locked or not.
      *
      * @param inputPoints  list of input points to be used to estimate an
-     *                     euclidean 3D transformation.
+     *                     Euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     *                     euclidean 3D transformation.
+     *                     Euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than #getMinimumPoints.
      */

@@ -66,17 +66,17 @@ public class Point3DNormalizerTest {
         assertSame(normalizer.getPoints(), points);
         assertTrue(normalizer.isReady());
         assertFalse(normalizer.isLocked());
-        assertEquals(normalizer.getMinInhomX(), Double.MAX_VALUE, 0.0);
-        assertEquals(normalizer.getMinInhomY(), Double.MAX_VALUE, 0.0);
-        assertEquals(normalizer.getMinInhomZ(), Double.MAX_VALUE, 0.0);
-        assertEquals(normalizer.getMaxInhomX(), -Double.MAX_VALUE, 0.0);
-        assertEquals(normalizer.getMaxInhomY(), -Double.MAX_VALUE, 0.0);
-        assertEquals(normalizer.getMaxInhomZ(), -Double.MAX_VALUE, 0.0);
-        assertEquals(normalizer.getScaleX(), 1.0, 0.0);
-        assertEquals(normalizer.getScaleY(), 1.0, 0.0);
-        assertEquals(normalizer.getScaleZ(), 1.0, 0.0);
-        assertEquals(normalizer.getCentroidX(), 0.0, 0.0);
-        assertEquals(normalizer.getCentroidY(), 0.0, 0.0);
+        assertEquals(Double.MAX_VALUE, normalizer.getMinInhomX(), 0.0);
+        assertEquals(Double.MAX_VALUE, normalizer.getMinInhomY(), 0.0);
+        assertEquals(Double.MAX_VALUE, normalizer.getMinInhomZ(), 0.0);
+        assertEquals(-Double.MAX_VALUE, normalizer.getMaxInhomX(), 0.0);
+        assertEquals(-Double.MAX_VALUE, normalizer.getMaxInhomY(), 0.0);
+        assertEquals(-Double.MAX_VALUE, normalizer.getMaxInhomZ(), 0.0);
+        assertEquals(1.0, normalizer.getScaleX(), 0.0);
+        assertEquals(1.0, normalizer.getScaleY(), 0.0);
+        assertEquals(1.0, normalizer.getScaleZ(), 0.0);
+        assertEquals(0.0, normalizer.getCentroidX(), 0.0);
+        assertEquals(0.0, normalizer.getCentroidY(), 0.0);
         assertNull(normalizer.getTransformation());
         assertNull(normalizer.getInverseTransformation());
         assertFalse(normalizer.isResultAvailable());
@@ -122,13 +122,13 @@ public class Point3DNormalizerTest {
         final Point3DNormalizer normalizer = new Point3DNormalizer(points1);
 
         // check default value
-        assertSame(normalizer.getPoints(), points1);
+        assertSame(points1, normalizer.getPoints());
 
         // set new value
         normalizer.setPoints(points2);
 
         // check correctness
-        assertSame(normalizer.getPoints(), points2);
+        assertSame(points2, normalizer.getPoints());
     }
 
     @Test
@@ -189,18 +189,18 @@ public class Point3DNormalizerTest {
 
             assertFalse(normalizer.isLocked());
 
-            assertEquals(normalizer.getMinInhomX(), minX, 0.0);
-            assertEquals(normalizer.getMinInhomY(), minY, 0.0);
-            assertEquals(normalizer.getMinInhomZ(), minZ, 0.0);
-            assertEquals(normalizer.getMaxInhomX(), maxX, 0.0);
-            assertEquals(normalizer.getMaxInhomY(), maxY, 0.0);
-            assertEquals(normalizer.getMaxInhomZ(), maxZ, 0.0);
-            assertEquals(normalizer.getScaleX(), scaleX, 0.0);
-            assertEquals(normalizer.getScaleY(), scaleY, 0.0);
-            assertEquals(normalizer.getScaleZ(), scaleZ, 0.0);
-            assertEquals(normalizer.getCentroidX(), centroidX, 0.0);
-            assertEquals(normalizer.getCentroidY(), centroidY, 0.0);
-            assertEquals(normalizer.getCentroidZ(), centroidZ, 0.0);
+            assertEquals(minX, normalizer.getMinInhomX(), 0.0);
+            assertEquals(minY, normalizer.getMinInhomY(), 0.0);
+            assertEquals(minZ, normalizer.getMinInhomZ(), 0.0);
+            assertEquals(maxX, normalizer.getMaxInhomX(), 0.0);
+            assertEquals(maxY, normalizer.getMaxInhomY(),0.0);
+            assertEquals(maxZ, normalizer.getMaxInhomZ(), 0.0);
+            assertEquals(scaleX, normalizer.getScaleX(), 0.0);
+            assertEquals(scaleY, normalizer.getScaleY(), 0.0);
+            assertEquals(scaleZ, normalizer.getScaleZ(), 0.0);
+            assertEquals(centroidX, normalizer.getCentroidX(), 0.0);
+            assertEquals(centroidY, normalizer.getCentroidY(), 0.0);
+            assertEquals(centroidZ, normalizer.getCentroidZ(), 0.0);
 
             final ProjectiveTransformation3D transformation =
                     normalizer.getTransformation();
@@ -265,22 +265,22 @@ public class Point3DNormalizerTest {
 
             // check that points have been correctly normalized (scales = 1 and
             // centroid = [0,0,0])
-            assertEquals(width, 1.0, ABSOLUTE_ERROR);
-            assertEquals(height, 1.0, ABSOLUTE_ERROR);
-            assertEquals(depth, 1.0, ABSOLUTE_ERROR);
-            assertEquals(scaleX, 1.0, ABSOLUTE_ERROR);
-            assertEquals(scaleY, 1.0, ABSOLUTE_ERROR);
-            assertEquals(scaleZ, 1.0, ABSOLUTE_ERROR);
-            assertEquals(centroidX, 0.0, ABSOLUTE_ERROR);
-            assertEquals(centroidY, 0.0, ABSOLUTE_ERROR);
-            assertEquals(centroidZ, 0.0, ABSOLUTE_ERROR);
+            assertEquals(1.0, width, ABSOLUTE_ERROR);
+            assertEquals(1.0, height, ABSOLUTE_ERROR);
+            assertEquals(1.0, depth, ABSOLUTE_ERROR);
+            assertEquals(1.0, scaleX, ABSOLUTE_ERROR);
+            assertEquals(1.0, scaleY, ABSOLUTE_ERROR);
+            assertEquals(1.0, scaleZ, ABSOLUTE_ERROR);
+            assertEquals(0.0, centroidX, ABSOLUTE_ERROR);
+            assertEquals(0.0, centroidY, ABSOLUTE_ERROR);
+            assertEquals(0.0, centroidZ, ABSOLUTE_ERROR);
 
             // denormalize points and check that are equal to the original ones
             final List<Point3D> denomPoints = invTransformation.transformPointsAndReturnNew(
                     normPoints);
 
             for (int i = 0; i < nPoints; i++) {
-                assertEquals(points.get(i).distanceTo(denomPoints.get(i)), 0.0,
+                assertEquals(0.0, points.get(i).distanceTo(denomPoints.get(i)),
                         ABSOLUTE_ERROR);
             }
         }

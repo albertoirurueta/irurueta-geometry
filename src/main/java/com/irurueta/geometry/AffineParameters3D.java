@@ -118,12 +118,12 @@ public class AffineParameters3D implements Serializable {
     /**
      * Constructor with scale and skewness on each axis.
      *
-     * @param scaleX     Scale to be set on x axis. A value between 0.0 and 1.0
+     * @param scaleX     Scale to be set on x-axis. A value between 0.0 and 1.0
      *                   will reduce objects size, a value larger than 1.0 will enlarge objects
      *                   size, and negative values will reverse objects.
-     * @param scaleY     Scale to be set on y axis. A value between 0.0 and 1.0
+     * @param scaleY     Scale to be set on y-axis. A value between 0.0 and 1.0
      *                   will reduce objects size, a value larger than 1.0 will enlarge objects.
-     * @param scaleZ     Scale to be set on z axis. A value between 0.0 and 1.0
+     * @param scaleZ     Scale to be set on z-axis. A value between 0.0 and 1.0
      *                   will reduce objects size, a value larger than 1.0 will enlarge objects.
      * @param skewnessXY Skewness to be set for axes x-y.
      * @param skewnessXZ Skewness to be set for axes x-z.
@@ -142,7 +142,7 @@ public class AffineParameters3D implements Serializable {
     /**
      * Constructor with matrix and threshold.
      *
-     * @param m         Upper triangular matrix to extract affine parameters from..
+     * @param m         Upper triangular matrix to extract affine parameters from.
      * @param threshold Threshold to determine whether provided matrix is a
      *                  valid upper triangular one.
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
@@ -155,7 +155,7 @@ public class AffineParameters3D implements Serializable {
     /**
      * Constructor with matrix.
      *
-     * @param m Upper triangular matrix to extract affine parameters from..
+     * @param m Upper triangular matrix to extract affine parameters from.
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
      *                                  if it is not upper triangular, or if threshold is negative.
      */
@@ -164,7 +164,7 @@ public class AffineParameters3D implements Serializable {
     }
 
     /**
-     * Returns scale for x axis.
+     * Returns scale for x-axis.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
      *
@@ -175,18 +175,18 @@ public class AffineParameters3D implements Serializable {
     }
 
     /**
-     * Sets scale for x axis.
+     * Sets scale for x-axis.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
      *
-     * @param scaleX scale to be set on x axis.
+     * @param scaleX scale to be set on x-axis.
      */
     public void setScaleX(final double scaleX) {
         this.scaleX = scaleX;
     }
 
     /**
-     * Returns scale for y axis.
+     * Returns scale for y-axis.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
      *
@@ -197,11 +197,11 @@ public class AffineParameters3D implements Serializable {
     }
 
     /**
-     * Sets scale for y axis.
+     * Sets scale for y-axis.
      * A value between 0.0 and 1.0 will reduce objects size, a value larger than
      * 1.0 will enlarge objects size, and negative values will reverse objects.
      *
-     * @param scaleY scale to be set on y axis.
+     * @param scaleY scale to be set on y-axis.
      */
     public void setScaleY(final double scaleY) {
         this.scaleY = scaleY;
@@ -368,7 +368,7 @@ public class AffineParameters3D implements Serializable {
      *                  triangular. Matrix will be considered upper triangular if its lower
      *                  triangular elements are smaller or equal than provided threshold.
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
-     *                                  it it is not upper triangular or if threshold is negative.
+     *                                  if it is not upper triangular or if threshold is negative.
      */
     public final void fromMatrix(final Matrix m, final double threshold) {
         if (!isValidMatrix(m, threshold)) {

@@ -50,21 +50,18 @@ public class Triangulator2DTest {
         assertNotNull(triangulator);
 
         // check method correctness
-        assertEquals(triangulator.getMethod(),
-                Triangulator2D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Triangulator2D.DEFAULT_TRIANGULATOR_METHOD,
+                triangulator.getMethod());
 
         // create with method
-        triangulator = Triangulator2D.create(
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        triangulator = Triangulator2D.create(TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
 
         // check method correctness
-        assertEquals(triangulator.getMethod(),
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, triangulator.getMethod());
     }
 
     @Test
-    public void testTriangulate() throws NotEnoughVerticesException,
-            TriangulatorException {
+    public void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -76,8 +73,7 @@ public class Triangulator2DTest {
         // build polygon
         final Polygon2D polygon = new Polygon2D(vertices);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
         // create point inside of vertex
         final Point2D point1 = new InhomogeneousPoint2D(
                 radius / 2.0 * Math.cos(theta),
@@ -119,7 +115,7 @@ public class Triangulator2DTest {
 
         double signedArea2 = 0.0;
         double area2 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (Triangle2D triangle : triangles2) {
             signedArea2 += triangle.getSignedArea();
             area2 += triangle.getArea();

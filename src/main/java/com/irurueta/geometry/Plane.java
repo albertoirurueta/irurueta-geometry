@@ -324,7 +324,7 @@ public class Plane implements Serializable {
      * @param pointA 1st plane.
      * @param pointB 2nd plane.
      * @param pointC 3rd plane.
-     * @return true if provided points colinear, false otherwise.
+     * @return true if provided points co-linear, false otherwise.
      */
     public static boolean areColinearPoints(
             final Point3D pointA, final Point3D pointB, final Point3D pointC) {
@@ -524,7 +524,7 @@ public class Plane implements Serializable {
 
     /**
      * Distance between a plane and a 3D point. Returned distance equals to the
-     * euclidean distance between this plane and provided point but having sign.
+     * Euclidean distance between this plane and provided point but having sign.
      * Sign indicates whether point is at one side or the other of the plane.
      *
      * @param point Point whose distance to this line will be computed.
@@ -724,7 +724,7 @@ public class Plane implements Serializable {
      * @param otherPlane2 other plane 2.
      * @return point where the three planes intersect.
      * @throws NoIntersectionException if the three planes do not intersect in
-     *                                 a single point..
+     *                                 a single point.
      */
     public Point3D getIntersection(final Plane otherPlane1, final Plane otherPlane2)
             throws NoIntersectionException {

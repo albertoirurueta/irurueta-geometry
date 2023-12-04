@@ -29,8 +29,10 @@ import java.util.List;
  * on "EPnP: An Accurate O(n) Solution to the PnP Problem" with some minor
  * changes and improvements.
  * Paper and source code can be found at:
- * http://cvlabwww.epfl.ch/~lepetit/papers/lepetit_ijcv08.pdf
- * http://cvlab.epfl.ch/EPnP/index.php
+ * <a href="http://cvlabwww.epfl.ch/~lepetit/papers/lepetit_ijcv08.pdf">
+ *     http://cvlabwww.epfl.ch/~lepetit/papers/lepetit_ijcv08.pdf
+ * </a>
+ * <a href="http://cvlab.epfl.ch/EPnP/index.php">http://cvlab.epfl.ch/EPnP/index.php</a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class EPnPPointCorrespondencePinholeCameraEstimator extends
@@ -94,7 +96,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
-     * when a nullspace of dimension 2 is used.
+     * when a null-space of dimension 2 is used.
      */
     private boolean mNullspaceDimension3Allowed =
             DEFAULT_NULLSPACE_DIMENSION3_ALLOWED;
@@ -131,7 +133,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * has size nx4, where n is the number of provided 3D world points.
      * For planar configuration, each row contains 3 coordinates and alphas
      * has size nx3, where n is the number of provided 3D world points.
-     * both reference frames are centered in the centroid), alphas can be used
+     * both reference frames are centered in the centroid, alphas can be used
      * in both world and camera coordinates.
      */
     private Matrix mAlphas;
@@ -191,7 +193,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             final List<Point3D> points3D, final List<Point2D> points2D)
             throws WrongListSizesException {
         super();
-        internalSetLists(points3D, points2D);
+        internalSetListsEpnP(points3D, points2D);
     }
 
     /**
@@ -210,7 +212,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(listener);
-        internalSetLists(points3D, points2D);
+        internalSetListsEpnP(points3D, points2D);
     }
 
     /**
@@ -298,7 +300,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             throw new LockedException();
         }
 
-        internalSetLists(points3D, points2D);
+        internalSetListsEpnP(points3D, points2D);
     }
 
     /**
@@ -337,7 +339,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @return true to allow 2 dimensional nullspace, false otherwise.
+     * @return true to allow 2-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
         return mNullspaceDimension2Allowed;
@@ -349,7 +351,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @param nullspaceDimension2Allowed true to allow 2 dimensional null-space,
+     * @param nullspaceDimension2Allowed true to allow 2-dimensional null-space,
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
@@ -366,9 +368,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
-     * when a nullspace of dimension 2 is used.
+     * when a null-space of dimension 2 is used.
      *
-     * @return true to allow 3 dimensional null-space, false otherwise.
+     * @return true to allow 3-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension3Allowed() {
         return mNullspaceDimension3Allowed;
@@ -379,9 +381,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * When allowed, additional constraints are taken into account to ensure
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok although less precise than
-     * when a nullspace of dimension 2 is used.
+     * when a null-space of dimension 2 is used.
      *
-     * @param nullspaceDimension3Allowed true to allow 3 dimensional null-space,
+     * @param nullspaceDimension3Allowed true to allow 3-dimensional null-space,
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
@@ -471,7 +473,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public PinholeCameraEstimatorType getType() {
-        return PinholeCameraEstimatorType.EPnP_PINHOLE_CAMERA_ESTIMATOR;
+        return PinholeCameraEstimatorType.EPNP_PINHOLE_CAMERA_ESTIMATOR;
     }
 
     /**
@@ -614,8 +616,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    private void internalSetLists(final List<Point3D> points3D,
-                                  final List<Point2D> points2D) throws WrongListSizesException {
+    private void internalSetListsEpnP(final List<Point3D> points3D,
+                                      final List<Point2D> points2D) throws WrongListSizesException {
 
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -1388,7 +1390,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     /**
      * Total re-projection error for provided camera.
      *
-     * @param camera camera to estimate reprojection error.
+     * @param camera camera to estimate re-projection error.
      * @return reprojection error.
      */
     private double reprojectionError(final PinholeCamera camera) {
@@ -1694,7 +1696,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * If a planar configuration is allowed, then only 3 control points are
      * computed along the plane using the centroid and two points on the
      * principal directions of such plane.
-     * Otherwise in general configuration, 4 control points are computed as
+     * Otherwise, in general configuration, 4 control points are computed as
      * the centroid and 3 points along the principal axes of the cloud of 3D
      * points.
      *
@@ -1811,7 +1813,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
          * Points in camera coordinates are expressed as:
          * Xc = Tw-&lt;c * Xw, where Tw-&lt;c is the transformation from world to
          * camera.
-         * The euclidean transformation Tw-&lt;c is expressed as:
+         * The Euclidean transformation Tw-&lt;c is expressed as:
          * Tw-&lt;c = [R  t]
          * [0' 1]
          * Projection of a point in camera coordinates can also be expressed
@@ -1824,7 +1826,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
          * where R is a rotation and C is the camera center in world
          * coordinates.
          * Assuming that control points are obtained up to scale, then instead
-         * of an euclidean transformation we will assume that Tw-&lt;c is a metric
+         * of an Euclidean transformation we will assume that Tw-&lt;c is a metric
          * transformation, hence:
          * Tw-&lt;c = [s*R t2]
          * [0'  1 ]

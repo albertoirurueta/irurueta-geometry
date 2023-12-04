@@ -71,7 +71,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     /**
      * Empty Constructor.
      * Initializes rotation so that no rotation exists (i.e. internal matrix is
-     * the identity.
+     * the identity).
      */
     public MatrixRotation3D() {
         try {
@@ -113,7 +113,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      *
      * @param m Matrix to create rotation from.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (its size is wrong or it is not orthonormal).
+     *                                        valid (its size is wrong, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}.
      */
     public MatrixRotation3D(final Matrix m) throws InvalidRotationMatrixException {
@@ -130,7 +130,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @param m         Matrix to create rotation from.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (its size is wrong or it is not orthonormal).
+     *                                        valid (its size is wrong, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}.
@@ -214,7 +214,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      *
      * @param internalMatrix Internal matrix to be set.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        3x3 or it is not orthonormal.
+     *                                        3x3, or it is not orthonormal.
      */
     public final void setInternalMatrix(final Matrix internalMatrix)
             throws InvalidRotationMatrixException {
@@ -230,7 +230,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @param threshold Threshold to determine whether matrix is orthonormal or
      *                  not.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        3x3 or it is not orthonormal.
+     *                                        3x3, or it is not orthonormal.
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      */
@@ -323,14 +323,14 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns roll angle around x axis expressed in radians for the 1st
+     * Returns roll angle around x-axis expressed in radians for the 1st
      * possible set of solutions.
      * When obtaining roll, pitch and yaw angles from a rotation matrix, there
      * might be two possible sets of solutions (#getRollAngle(),
      * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
      * #getPitchAngle2(), #getYawAngle2()).
      *
-     * @return roll angle around x axis.
+     * @return roll angle around x-axis.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
      * @see <a href="https://github.com/joansola/slamtb">R2e.m at https://github.com/joansola/slamtb</a>
      */
@@ -339,14 +339,14 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns roll angle around x axis expressed in radians for the 2nd
+     * Returns roll angle around x-axis expressed in radians for the 2nd
      * possible set of solutions.
      * When obtaining roll, pitch and yaw angles from a rotation matrix, there
      * might be two possible sets of solutions (#getRollAngle(),
      * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
      * #getPitchAngle2(), #getYawAngle2()).
      *
-     * @return roll angle around x axis.
+     * @return roll angle around x-axis.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
      * @see <a href="https://github.com/joansola/slamtb">R2e.m at https://github.com/joansola/slamtb</a>
      */
@@ -355,12 +355,12 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns roll angle around x axis expressed in radians corresponding to
+     * Returns roll angle around x-axis expressed in radians corresponding to
      * provided pitch value.
      * This method is used internally.
      *
      * @param pitch pitch angle expressed in radians.
-     * @return roll angle around x axis.
+     * @return roll angle around x-axis.
      */
     private double getRollAngle(final double pitch) {
         if (!hasGimbalLock()) {
@@ -382,14 +382,14 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns pitch angle around y axis expressed in radians for the 1st
+     * Returns pitch angle around y-axis expressed in radians for the 1st
      * possible set of solutions.
      * When obtaining roll, pitch and yaw angles from a rotation matrix, there
      * might be two possible sets of solutions (#getRollAngle(),
      * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
      * #getPitchAngle2(), #getYawAngle2()).
      *
-     * @return pitch angle around y axis.
+     * @return pitch angle around y-axis.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
      * @see <a href="https://github.com/joansola/slamtb">R2e.m at https://github.com/joansola/slamtb</a>
      */
@@ -398,7 +398,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns pitch angle around y axis expressed in radians for the 2nd
+     * Returns pitch angle around y-axis expressed in radians for the 2nd
      * possible set of solutions.
      * When obtaining roll, pitch and yaw angles from a rotation matrix, there
      * might be two possible sets of solutions (#getRollAngle(),
@@ -407,7 +407,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * When a gimbal lock occurs, both pitch angles are equal because only
      * yaw is undefined, but pitch and roll are unique.
      *
-     * @return pitch angle around y axis.
+     * @return pitch angle around y-axis.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
      * @see <a href="https://github.com/joansola/slamtb">R2e.m at https://github.com/joansola/slamtb</a>
      */
@@ -458,12 +458,12 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Returns yaw angle around x axis expressed in radians corresponding to
+     * Returns yaw angle around x-axis expressed in radians corresponding to
      * provided pitch value.
      * This method is used internally.
      *
      * @param pitch pitch angle expressed in radians.
-     * @return yaw angle around x axis.
+     * @return yaw angle around x-axis.
      */
     private double getYawAngle(final double pitch) {
         if (!hasGimbalLock()) {
@@ -478,8 +478,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     }
 
     /**
-     * Indicates whether current rotation contains ambiguities (a.k.a gimbal
-     * lock). This situation happens when pitch angle is close to +-90 degrees).
+     * Indicates whether current rotation contains ambiguities (a.k.a. gimbal
+     * lock). This situation happens when pitch angle is close to +-90 degrees.
      *
      * @return true if current rotation contains a gimbal lock, false otherwise.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
@@ -493,9 +493,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     /**
      * Sets rotation angles, expressed in radians.
      *
-     * @param roll  roll angle in radians around x axis.
-     * @param pitch pitch angle in radians around y axis.
-     * @param yaw   yaw angle in radians around z axis.
+     * @param roll  roll angle in radians around x-axis.
+     * @param pitch pitch angle in radians around y-axis.
+     * @param yaw   yaw angle in radians around z-axis.
      * @see <a href="http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf">http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf</a>
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
@@ -596,7 +596,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not have
      *                                  length 3.
      * @throws RotationException        Raised if numerical instabilities happen.
-     *                                  Because internal matrix will always be well defined (orthogonal and
+     *                                  Because internal matrix will always be well-defined (orthogonal and
      *                                  determinant equal to 1), this exception will rarely happen.
      */
     @Override
@@ -638,7 +638,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      *
      * @return Rotation angle in radians.
      * @throws RotationException Raised if numerical instabilities happen.
-     *                           Because internal matrix will always be well defined (orthogonal and
+     *                           Because internal matrix will always be well-defined (orthogonal and
      *                           determinant equal to 1), this exception will rarely happen.
      */
     @Override
@@ -859,13 +859,13 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}.
@@ -879,14 +879,14 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 4x4, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}.

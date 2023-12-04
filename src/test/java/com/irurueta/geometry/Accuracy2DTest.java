@@ -41,14 +41,14 @@ public class Accuracy2DTest {
 
         // check default values
         assertNull(accuracy.getCovarianceMatrix());
-        assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
-        assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
-        assertEquals(accuracy.getConfidence(),
-                2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
-        assertEquals(accuracy.getSmallestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-        assertEquals(accuracy.getLargestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-        assertEquals(accuracy.getAverageAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-        assertEquals(accuracy.getNumberOfDimensions(), 2);
+        assertEquals(2.0, accuracy.getStandardDeviationFactor(), 0.0);
+        assertEquals(0.9544, accuracy.getConfidence(), 1e-2);
+        assertEquals(2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0,
+                accuracy.getConfidence(), 0.0);
+        assertEquals(Double.POSITIVE_INFINITY, accuracy.getSmallestAccuracy(), 0.0);
+        assertEquals(Double.POSITIVE_INFINITY, accuracy.getLargestAccuracy(), 0.0);
+        assertEquals(Double.POSITIVE_INFINITY, accuracy.getAverageAccuracy(), 0.0);
+        assertEquals(2, accuracy.getNumberOfDimensions());
 
 
         // constructor with covariance matrix
@@ -72,27 +72,26 @@ public class Accuracy2DTest {
 
         // check
         assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
-        assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
-        assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
-        assertEquals(accuracy.getConfidence(),
-                2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
-        assertEquals(accuracy.getSmallestAccuracy(),
-                accuracy.getStandardDeviationFactor() * semiMinorAxis, ABSOLUTE_ERROR);
-        assertEquals(accuracy.getLargestAccuracy(),
-                accuracy.getStandardDeviationFactor() * semiMajorAxis, ABSOLUTE_ERROR);
-        assertEquals(accuracy.getAverageAccuracy(),
-                0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
-                ABSOLUTE_ERROR);
-        assertEquals(accuracy.getNumberOfDimensions(), 2);
+        assertEquals(2.0, accuracy.getStandardDeviationFactor(), 0.0);
+        assertEquals(0.9544, accuracy.getConfidence(), 1e-2);
+        assertEquals(2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0,
+                accuracy.getConfidence(), 0.0);
+        assertEquals(accuracy.getStandardDeviationFactor() * semiMinorAxis,
+                accuracy.getSmallestAccuracy(), ABSOLUTE_ERROR);
+        assertEquals(accuracy.getStandardDeviationFactor() * semiMajorAxis,
+                accuracy.getLargestAccuracy(), ABSOLUTE_ERROR);
+        assertEquals(0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
+                accuracy.getAverageAccuracy(), ABSOLUTE_ERROR);
+        assertEquals(2, accuracy.getNumberOfDimensions());
 
         Ellipse ellipse2 = accuracy.toEllipse();
         assertEquals(ellipse.getCenter(), ellipse2.getCenter());
         assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(ellipse2.getSemiMajorAxis(),
-                semiMajorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-        assertEquals(ellipse2.getSemiMinorAxis(),
-                semiMinorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-        assertEquals(ellipse2.getRotationAngle(), rotationAngle, ABSOLUTE_ERROR);
+        assertEquals(semiMajorAxis * accuracy.getStandardDeviationFactor(),
+                ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
+        assertEquals(semiMinorAxis * accuracy.getStandardDeviationFactor(),
+                ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
+        assertEquals(rotationAngle, ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
 
 
         // force IllegalArgumentException
@@ -122,13 +121,13 @@ public class Accuracy2DTest {
         // check default values
         assertNull(accuracy.getCovarianceMatrix());
         assertTrue(accuracy.getStandardDeviationFactor() > 0.0);
-        assertEquals(accuracy.getStandardDeviationFactor(),
-                NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
+        assertEquals(NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0),
+                accuracy.getStandardDeviationFactor(), 0.0);
         assertEquals(accuracy.getConfidence(), conf, 0.0);
-        assertEquals(accuracy.getSmallestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-        assertEquals(accuracy.getLargestAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-        assertEquals(accuracy.getAverageAccuracy(), Double.POSITIVE_INFINITY, 0.0);
-        assertEquals(accuracy.getNumberOfDimensions(), 2);
+        assertEquals(Double.POSITIVE_INFINITY, accuracy.getSmallestAccuracy(), 0.0);
+        assertEquals(Double.POSITIVE_INFINITY, accuracy.getLargestAccuracy(), 0.0);
+        assertEquals(Double.POSITIVE_INFINITY, accuracy.getAverageAccuracy(), 0.0);
+        assertEquals(2, accuracy.getNumberOfDimensions());
 
         // force IllegalArgumentException
         accuracy = null;
@@ -149,28 +148,27 @@ public class Accuracy2DTest {
         accuracy = new Accuracy2D(covarianceMatrix, conf);
 
         // check
-        assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
+        assertSame(covarianceMatrix, accuracy.getCovarianceMatrix());
         assertTrue(accuracy.getStandardDeviationFactor() > 0.0);
         assertEquals(accuracy.getStandardDeviationFactor(),
                 NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
         assertEquals(accuracy.getConfidence(), conf, 0.0);
-        assertEquals(accuracy.getSmallestAccuracy(),
-                accuracy.getStandardDeviationFactor() * semiMinorAxis, ABSOLUTE_ERROR);
-        assertEquals(accuracy.getLargestAccuracy(),
-                accuracy.getStandardDeviationFactor() * semiMajorAxis, ABSOLUTE_ERROR);
-        assertEquals(accuracy.getAverageAccuracy(),
-                0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
-                ABSOLUTE_ERROR);
-        assertEquals(accuracy.getNumberOfDimensions(), 2);
+        assertEquals(accuracy.getStandardDeviationFactor() * semiMinorAxis,
+                accuracy.getSmallestAccuracy(), ABSOLUTE_ERROR);
+        assertEquals(accuracy.getStandardDeviationFactor() * semiMajorAxis,
+                accuracy.getLargestAccuracy(), ABSOLUTE_ERROR);
+        assertEquals(0.5 * (accuracy.getSmallestAccuracy() + accuracy.getLargestAccuracy()),
+                accuracy.getAverageAccuracy(), ABSOLUTE_ERROR);
+        assertEquals(2, accuracy.getNumberOfDimensions());
 
         ellipse2 = accuracy.toEllipse();
         assertEquals(ellipse.getCenter(), ellipse2.getCenter());
         assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(ellipse2.getSemiMajorAxis(),
-                semiMajorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-        assertEquals(ellipse2.getSemiMinorAxis(),
-                semiMinorAxis * accuracy.getStandardDeviationFactor(), ABSOLUTE_ERROR);
-        assertEquals(ellipse2.getRotationAngle(), rotationAngle, ABSOLUTE_ERROR);
+        assertEquals(semiMajorAxis * accuracy.getStandardDeviationFactor(),
+                ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
+        assertEquals(semiMinorAxis * accuracy.getStandardDeviationFactor(),
+                ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
+        assertEquals(rotationAngle, ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
 
 
         // force IllegalArgumentException
@@ -213,7 +211,7 @@ public class Accuracy2DTest {
         accuracy.setCovarianceMatrix(covarianceMatrix);
 
         // check
-        assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
+        assertSame(covarianceMatrix, accuracy.getCovarianceMatrix());
 
         // force IllegalArgumentException
         try {
@@ -236,7 +234,7 @@ public class Accuracy2DTest {
         final Accuracy2D accuracy = new Accuracy2D();
 
         // check default value
-        assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
+        assertEquals(2.0, accuracy.getStandardDeviationFactor(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -244,9 +242,9 @@ public class Accuracy2DTest {
         accuracy.setStandardDeviationFactor(factor);
 
         // check
-        assertEquals(accuracy.getStandardDeviationFactor(), factor, 0.0);
-        assertEquals(accuracy.getConfidence(),
-                2.0 * NormalDist.cdf(factor, 0.0, 1.0) - 1.0, 0.0);
+        assertEquals(factor, accuracy.getStandardDeviationFactor(), 0.0);
+        assertEquals(2.0 * NormalDist.cdf(factor, 0.0, 1.0) - 1.0,
+                accuracy.getConfidence(), 0.0);
 
         // force IllegalArgumentException
         try {
@@ -261,9 +259,9 @@ public class Accuracy2DTest {
         final Accuracy2D accuracy = new Accuracy2D();
 
         // check default value
-        assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);
-        assertEquals(accuracy.getConfidence(),
-                2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0, 0.0);
+        assertEquals(0.9544, accuracy.getConfidence(), 1e-2);
+        assertEquals(2.0 * NormalDist.cdf(2.0, 0.0, 1.0) - 1.0,
+                accuracy.getConfidence(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -272,8 +270,8 @@ public class Accuracy2DTest {
 
         // check
         assertEquals(accuracy.getConfidence(), conf, 0.0);
-        assertEquals(accuracy.getStandardDeviationFactor(),
-                NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0), 0.0);
+        assertEquals(NormalDist.invcdf((conf + 1.0) / 2.0, 0.0, 1.0),
+                accuracy.getStandardDeviationFactor(), 0.0);
 
         // force IllegalArgumentException
         try {

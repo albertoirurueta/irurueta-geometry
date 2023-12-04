@@ -65,7 +65,7 @@ public class PROSACDualConicRobustEstimatorTest implements
         assertEquals(0.0, DualConicRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, DualConicRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, DualConicRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, DualConicRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, DualConicRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1e-7, PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, PROSACDualConicRobustEstimator.MIN_THRESHOLD, 0.0);
     }
@@ -76,18 +76,18 @@ public class PROSACDualConicRobustEstimatorTest implements
         PROSACDualConicRobustEstimator estimator = new PROSACDualConicRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -101,19 +101,19 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator = new PROSACDualConicRobustEstimator(lines);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
@@ -152,18 +152,18 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator = new PROSACDualConicRobustEstimator(listener);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -172,19 +172,19 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator = new PROSACDualConicRobustEstimator(listener, lines);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -203,21 +203,21 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator = new PROSACDualConicRobustEstimator(qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         final double[] emptyScores = new double[0];
@@ -233,21 +233,21 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator = new PROSACDualConicRobustEstimator(lines, qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -268,21 +268,21 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator = new PROSACDualConicRobustEstimator(listener, qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -299,21 +299,21 @@ public class PROSACDualConicRobustEstimatorTest implements
                 qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -338,14 +338,14 @@ public class PROSACDualConicRobustEstimatorTest implements
                 new PROSACDualConicRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(PROSACDualConicRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -368,7 +368,7 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -378,14 +378,14 @@ public class PROSACDualConicRobustEstimatorTest implements
                 new PROSACDualConicRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -406,14 +406,14 @@ public class PROSACDualConicRobustEstimatorTest implements
                 new PROSACDualConicRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -434,14 +434,14 @@ public class PROSACDualConicRobustEstimatorTest implements
                 new PROSACDualConicRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 1);
+        assertEquals(1, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -468,7 +468,7 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator.setLines(lines);
 
         // check correctness
-        assertSame(estimator.getLines(), lines);
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
 
         // if we set quality scores, then estimator becomes ready
@@ -503,7 +503,7 @@ public class PROSACDualConicRobustEstimatorTest implements
         estimator.setQualityScores(qualityScores);
 
         // check correctness
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         qualityScores = new double[1];
@@ -586,17 +586,17 @@ public class PROSACDualConicRobustEstimatorTest implements
 
             estimator.setThreshold(THRESHOLD);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final DualConic dualConic2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();

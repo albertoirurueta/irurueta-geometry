@@ -37,10 +37,10 @@ public class HomogeneousPoint3DTest {
     @Test
     public void testConstructor() {
         HomogeneousPoint3D hPoint = new HomogeneousPoint3D();
-        assertEquals(hPoint.getHomX(), 0.0, 0.0);
-        assertEquals(hPoint.getHomY(), 0.0, 0.0);
-        assertEquals(hPoint.getHomZ(), 0.0, 0.0);
-        assertEquals(hPoint.getHomW(), 0.0, 1.0);
+        assertEquals(0.0, hPoint.getHomX(), 0.0);
+        assertEquals(0.0, hPoint.getHomY(), 0.0);
+        assertEquals(0.0, hPoint.getHomZ(), 0.0);
+        assertEquals(0.0, hPoint.getHomW(), 1.0);
         assertFalse(hPoint.isNormalized());
 
         double[] array = new double[HOM_COORDS];
@@ -67,17 +67,14 @@ public class HomogeneousPoint3DTest {
         assertEquals(d, array[3], 0.0);
         assertFalse(hPoint.isNormalized());
 
-        Point3D point = Point3D.create(
-                CoordinatesType.HOMOGENEOUS_COORDINATES);
+        Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         hPoint = new HomogeneousPoint3D(point);
-        assertEquals(hPoint.getType(),
-                CoordinatesType.HOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, hPoint.getType());
         assertFalse(hPoint.isNormalized());
 
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
         hPoint = new HomogeneousPoint3D(point);
-        assertEquals(hPoint.getType(),
-                CoordinatesType.HOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, hPoint.getType());
         assertFalse(hPoint.isNormalized());
     }
 
@@ -102,24 +99,24 @@ public class HomogeneousPoint3DTest {
         hPoint.setY(y);
         hPoint.setZ(z);
         hPoint.setW(w);
-        assertEquals(hPoint.getX(), x, 0.0);
-        assertEquals(hPoint.getY(), y, 0.0);
-        assertEquals(hPoint.getZ(), z, 0.0);
-        assertEquals(hPoint.getW(), w, 0.0);
+        assertEquals(x, hPoint.getX(), 0.0);
+        assertEquals(y, hPoint.getY(), 0.0);
+        assertEquals(z, hPoint.getZ(), 0.0);
+        assertEquals(w, hPoint.getW(), 0.0);
 
         hPoint.setHomogeneousCoordinates(homX, homY, homZ, homW);
-        assertEquals(hPoint.getHomX(), homX, 0.0);
-        assertEquals(hPoint.getHomY(), homY, 0.0);
-        assertEquals(hPoint.getHomZ(), homZ, 0.0);
-        assertEquals(hPoint.getHomW(), homW, 0.0);
-        assertEquals(hPoint.getX(), homX, 0.0);
-        assertEquals(hPoint.getY(), homY, 0.0);
-        assertEquals(hPoint.getW(), homW, 0.0);
+        assertEquals(homX, hPoint.getHomX(), 0.0);
+        assertEquals(homY, hPoint.getHomY(), 0.0);
+        assertEquals(homZ, hPoint.getHomZ(), 0.0);
+        assertEquals(homW, hPoint.getHomW(), 0.0);
+        assertEquals(homX, hPoint.getX(), 0.0);
+        assertEquals(homY, hPoint.getY(), 0.0);
+        assertEquals(homW, hPoint.getW(), 0.0);
 
         hPoint.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
-        assertEquals(hPoint.getInhomX(), inhomX, 0.0);
-        assertEquals(hPoint.getInhomY(), inhomY, 0.0);
-        assertEquals(hPoint.getInhomZ(), inhomZ, 0.0);
+        assertEquals(inhomX, hPoint.getInhomX(), 0.0);
+        assertEquals(inhomY, hPoint.getInhomY(), 0.0);
+        assertEquals(inhomZ, hPoint.getInhomZ(), 0.0);
         assertEquals(hPoint.getX() / hPoint.getW(), inhomX, 0.0);
         assertEquals(hPoint.getY() / hPoint.getW(), inhomY, 0.0);
         assertEquals(hPoint.getZ() / hPoint.getW(), inhomZ, 0.0);
@@ -135,12 +132,9 @@ public class HomogeneousPoint3DTest {
 
         final InhomogeneousPoint3D iPoint = hPoint.toInhomogeneous();
 
-        assertEquals(iPoint.getX(), hPoint.getX() / hPoint.getW(),
-                ABSOLUTE_ERROR);
-        assertEquals(iPoint.getY(), hPoint.getY() / hPoint.getW(),
-                ABSOLUTE_ERROR);
-        assertEquals(iPoint.getZ(), hPoint.getZ() / hPoint.getW(),
-                ABSOLUTE_ERROR);
+        assertEquals(hPoint.getX() / hPoint.getW(), iPoint.getX(), ABSOLUTE_ERROR);
+        assertEquals(hPoint.getY() / hPoint.getW(), iPoint.getY(), ABSOLUTE_ERROR);
+        assertEquals(hPoint.getZ() / hPoint.getW(), iPoint.getZ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -178,19 +172,19 @@ public class HomogeneousPoint3DTest {
         final double w = randomizer.nextDouble();
         hPoint = new HomogeneousPoint3D();
         hPoint.setCoordinates(x, y, z, w);
-        assertEquals(hPoint.getX(), x, 0.0);
-        assertEquals(hPoint.getY(), y, 0.0);
-        assertEquals(hPoint.getZ(), z, 0.0);
-        assertEquals(hPoint.getW(), w, 0.0);
+        assertEquals(x, hPoint.getX(), 0.0);
+        assertEquals(y, hPoint.getY(), 0.0);
+        assertEquals(z, hPoint.getZ(), 0.0);
+        assertEquals(w, hPoint.getW(), 0.0);
 
         final double inhomX = randomizer.nextDouble();
         final double inhomY = randomizer.nextDouble();
         final double inhomZ = randomizer.nextDouble();
         hPoint = new HomogeneousPoint3D();
         hPoint.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
-        assertEquals(hPoint.getInhomX(), inhomX, 0.0);
-        assertEquals(hPoint.getInhomY(), inhomY, 0.0);
-        assertEquals(hPoint.getInhomZ(), inhomZ, 0.0);
+        assertEquals(inhomX, hPoint.getInhomX(), 0.0);
+        assertEquals(inhomY, hPoint.getInhomY(), 0.0);
+        assertEquals(inhomZ, hPoint.getInhomZ(), 0.0);
         assertEquals(hPoint.getX() / hPoint.getW(), inhomX, 0.0);
         assertEquals(hPoint.getY() / hPoint.getW(), inhomY, 0.0);
         assertEquals(hPoint.getZ() / hPoint.getW(), inhomZ, 0.0);
@@ -394,8 +388,7 @@ public class HomogeneousPoint3DTest {
         point.normalize();
         assertTrue(point.isNormalized());
 
-        point.setInhomogeneousCoordinates(homX / homW, homY / homW,
-                homZ / homW);
+        point.setInhomogeneousCoordinates(homX / homW, homY / homW, homZ / homW);
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());

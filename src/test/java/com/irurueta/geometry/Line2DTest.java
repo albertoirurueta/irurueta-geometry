@@ -61,9 +61,9 @@ public class Line2DTest {
         final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         Line2D line = new Line2D();
-        assertEquals(line.getA(), 0.0, 0.0);
-        assertEquals(line.getB(), 0.0, 0.0);
-        assertEquals(line.getC(), 0.0, 0.0);
+        assertEquals(0.0, line.getA(), 0.0);
+        assertEquals(0.0, line.getB(), 0.0);
+        assertEquals(0.0, line.getC(), 0.0);
         assertFalse(line.isNormalized());
 
         line = new Line2D(a, b, c);
@@ -77,9 +77,9 @@ public class Line2DTest {
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         line = new Line2D(array);
-        assertEquals(line.getA(), array[0], 0.0);
-        assertEquals(line.getB(), array[1], 0.0);
-        assertEquals(line.getC(), array[2], 0.0);
+        assertEquals(array[0], line.getA(), 0.0);
+        assertEquals(array[1], line.getB(), 0.0);
+        assertEquals(array[2], line.getC(), 0.0);
 
         // Force IllegalArgumentException
         line = null;
@@ -100,13 +100,10 @@ public class Line2DTest {
         final double[] array2 = new double[HOM_COORDS];
         ArrayUtils.multiplyByScalar(array1, lambda, array2);
 
-        Point2D point1 = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array1);
-        Point2D point2 = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array2);
+        Point2D point1 = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array1);
+        Point2D point2 = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array2);
 
         // Force CoincidentPointsException
-        line = null;
         try {
             line = new Line2D(point1, point2, false);
             fail("CoincidentPointsException expected but not thrown");
@@ -120,7 +117,7 @@ public class Line2DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 2 non linear dependent rows
+        // ensure we create a matrix with 2 non-linear dependent rows
         while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -217,18 +214,18 @@ public class Line2DTest {
             line.setB(b);
             line.setC(c);
 
-            assertEquals(line.getA(), a, 0.0);
-            assertEquals(line.getB(), b, 0.0);
-            assertEquals(line.getC(), c, 0.0);
+            assertEquals(a, line.getA(), 0.0);
+            assertEquals(b, line.getB(), 0.0);
+            assertEquals(c, line.getC(), 0.0);
 
             a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             line.setParameters(a, b, c);
-            assertEquals(line.getA(), a, 0.0);
-            assertEquals(line.getB(), b, 0.0);
-            assertEquals(line.getC(), c, 0.0);
+            assertEquals(a, line.getA(), 0.0);
+            assertEquals(b, line.getB(), 0.0);
+            assertEquals(c, line.getC(), 0.0);
 
             assertEquals(line.getAngle(), Math.atan(-a / b), PRECISION_ERROR);
             assertEquals(line.getSlope(), -a / b, PRECISION_ERROR);
@@ -238,31 +235,27 @@ public class Line2DTest {
                     Math.PI / 180.0;
             line.setAngle(angle);
 
-            assertEquals(line.getAngle(), angle, PRECISION_ERROR);
-            assertEquals(line.getAngle(), Math.atan(-line.getA() / line.getB()),
-                    PRECISION_ERROR);
-            assertEquals(line.getSlope(), Math.tan(angle), PRECISION_ERROR);
+            assertEquals(angle, line.getAngle(), PRECISION_ERROR);
+            assertEquals(Math.atan(-line.getA() / line.getB()), line.getAngle(), PRECISION_ERROR);
+            assertEquals(Math.tan(angle), line.getSlope(), PRECISION_ERROR);
 
-            final double slope = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            final double slope = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             line.setSlope(slope);
-            assertEquals(line.getSlope(), -line.getA() / line.getB(),
-                    PRECISION_ERROR);
-            assertEquals(line.getSlope(), slope, PRECISION_ERROR);
+            assertEquals(-line.getA() / line.getB(), line.getSlope(), PRECISION_ERROR);
+            assertEquals(slope, line.getSlope(), PRECISION_ERROR);
 
             array = new double[HOM_COORDS];
             randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             line = new Line2D(array);
             c = line.getC();
             b = line.getB();
-            assertEquals(line.getYIntercept(), -c / b, PRECISION_ERROR);
+            assertEquals(-c / b, line.getYIntercept(), PRECISION_ERROR);
 
             randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             line = new Line2D(array);
-            final double yIntercept = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            final double yIntercept = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             line.setYIntercept(yIntercept);
-            assertEquals(line.getYIntercept(), yIntercept, PRECISION_ERROR);
+            assertEquals(yIntercept, line.getYIntercept(), PRECISION_ERROR);
         }
     }
 
@@ -304,8 +297,7 @@ public class Line2DTest {
         // find co-linear point using a third point up to scale of the 1st one
         //using homogeneous coordinates
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scaleValue = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scaleValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final Point2D coincidentPoint = new HomogeneousPoint2D(
                 scaleValue * point1.getHomX(),
@@ -426,8 +418,7 @@ public class Line2DTest {
         assertFalse(line.isLocus(point3, PRECISION_ERROR));
 
         // indeed point3 is at normDirectorVector distance from line
-        assertEquals(line.signedDistance(point3),
-                normDirectorVector, PRECISION_ERROR);
+        assertEquals(normDirectorVector, line.signedDistance(point3), PRECISION_ERROR);
     }
 
     @Test
@@ -468,10 +459,8 @@ public class Line2DTest {
 
         // point1 and point2 belong to line, hence their distance is zero up to
         // machine precision
-        assertEquals(line.signedDistance(point1), 0.0,
-                PRECISION_ERROR);
-        assertEquals(line.signedDistance(point2), 0.0,
-                PRECISION_ERROR);
+        assertEquals(0.0, line.signedDistance(point1), PRECISION_ERROR);
+        assertEquals(0.0, line.signedDistance(point2), PRECISION_ERROR);
 
         // use line director vector to find another point at desired signed
         // distance
@@ -488,8 +477,7 @@ public class Line2DTest {
                 point3.getInhomY() + signedDistance * line.getB() /
                         normDirectorVector);
 
-        assertEquals(line.signedDistance(point3),
-                signedDistance, PRECISION_ERROR);
+        assertEquals(signedDistance, line.signedDistance(point3), PRECISION_ERROR);
     }
 
     @Test
@@ -503,9 +491,9 @@ public class Line2DTest {
         final Line2D line = new Line2D(a, b, c);
         final double[] array = line.asArray();
 
-        assertEquals(array[0], a, 0.0);
-        assertEquals(array[1], b, 0.0);
-        assertEquals(array[2], c, 0.0);
+        assertEquals(a, array[0], 0.0);
+        assertEquals(b, array[1], 0.0);
+        assertEquals(c, array[2], 0.0);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -514,9 +502,9 @@ public class Line2DTest {
         line.setParameters(a, b, c);
         line.asArray(array);
 
-        assertEquals(array[0], a, 0.0);
-        assertEquals(array[1], b, 0.0);
-        assertEquals(array[2], c, 0.0);
+        assertEquals(a, array[0], 0.0);
+        assertEquals(b, array[1], 0.0);
+        assertEquals(c, array[2], 0.0);
 
 
         // Force IllegalArgumentException
@@ -562,7 +550,6 @@ public class Line2DTest {
         line.normalize();
 
         assertFalse(line.isNormalized());
-
     }
 
     @Test
@@ -575,9 +562,9 @@ public class Line2DTest {
 
         final double[] n = line.getDirectorVector();
 
-        assertEquals(n.length, 2);
-        assertEquals(n[0], array[0], 0.0);
-        assertEquals(n[1], array[1], 0.0);
+        assertEquals(2, n.length);
+        assertEquals(array[0], n[0], 0.0);
+        assertEquals(array[1], n[1], 0.0);
 
         // try again
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -585,9 +572,9 @@ public class Line2DTest {
 
         line.directorVector(n);
 
-        assertEquals(n.length, 2);
-        assertEquals(n[0], array[0], 0.0);
-        assertEquals(n[1], array[1], 0.0);
+        assertEquals(2, n.length);
+        assertEquals(array[0], n[0], 0.0);
+        assertEquals(array[1], n[1], 0.0);
     }
 
     @Test
@@ -697,10 +684,8 @@ public class Line2DTest {
 
         // point1 and point2 belong to line, hence their distance is zero up to
         // machine precision
-        assertEquals(line.signedDistance(point1), 0.0,
-                PRECISION_ERROR);
-        assertEquals(line.signedDistance(point2), 0.0,
-                PRECISION_ERROR);
+        assertEquals(0.0, line.signedDistance(point1), PRECISION_ERROR);
+        assertEquals(0.0, line.signedDistance(point2), PRECISION_ERROR);
         // because they belong to line, their closest point to line are
         // themselves
         final Point2D closestPoint1 = line.getClosestPoint(point1);
@@ -787,14 +772,18 @@ public class Line2DTest {
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final Line2D line3 = new Line2D(array);
 
+        line1.normalize();
+        line2.normalize();
+        line3.normalize();
+
         // test for equal lines
-        assertEquals(line1.dotProduct(line1), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, line1.dotProduct(line1), ABSOLUTE_ERROR);
         // test for opposed sign lines
-        assertEquals(line1.dotProduct(line2), -1.0, ABSOLUTE_ERROR);
+        assertEquals(-1.0, line1.dotProduct(line2), ABSOLUTE_ERROR);
         // test for 2 random lines
-        assertEquals(line1.dotProduct(line3), line1.getA() * line3.getA() +
-                        line1.getB() * line3.getB() + line1.getC() * line3.getC(),
-                ABSOLUTE_ERROR);
+        assertEquals(line1.getA() * line3.getA() + line1.getB() * line3.getB()
+                        + line1.getC() * line3.getC(),
+                line1.dotProduct(line3), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -807,7 +796,7 @@ public class Line2DTest {
         Line2D line2 = new Line2D(array);
         assertTrue(line1.equals(line2, ABSOLUTE_ERROR));
         assertTrue(line1.equals(line2));
-        //noinspection all
+        //noinspection SimplifiableAssertion
         assertTrue(line1.equals((Object) line2));
         assertEquals(line1.hashCode(), line2.hashCode());
 
@@ -841,9 +830,9 @@ public class Line2DTest {
     public void testCreateCanonicalLineAtInfinity() {
         final Line2D line = Line2D.createCanonicalLineAtInfinity();
 
-        assertEquals(line.getA(), 0.0, 0.0);
-        assertEquals(line.getB(), 0.0, 0.0);
-        assertEquals(line.getC(), 1.0, 0.0);
+        assertEquals(0.0, line.getA(), 0.0);
+        assertEquals(0.0, line.getB(), 0.0);
+        assertEquals(1.0, line.getC(), 0.0);
 
         // create a point at infinity
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -872,9 +861,9 @@ public class Line2DTest {
         Line2D.setAsCanonicalLineAtInfinity(line);
 
         // check correctness
-        assertEquals(line.getA(), 0.0, 0.0);
-        assertEquals(line.getB(), 0.0, 0.0);
-        assertEquals(line.getC(), 1.0, 0.0);
+        assertEquals(0.0, line.getA(), 0.0);
+        assertEquals(0.0, line.getB(), 0.0);
+        assertEquals(1.0, line.getC(), 0.0);
 
         // check that point at infinity is locus of line
         assertTrue(line.isLocus(point));
@@ -891,9 +880,9 @@ public class Line2DTest {
         final Line2D line1 = new Line2D(a, b, c);
 
         // check
-        assertEquals(line1.getA(), a, 0.0);
-        assertEquals(line1.getB(), b, 0.0);
-        assertEquals(line1.getC(), c, 0.0);
+        assertEquals(a, line1.getA(), 0.0);
+        assertEquals(b, line1.getB(), 0.0);
+        assertEquals(c, line1.getC(), 0.0);
         assertFalse(line1.isNormalized());
 
         // serialize and deserialize

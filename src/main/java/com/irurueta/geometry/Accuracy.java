@@ -33,7 +33,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Default standard deviation factor to account for a given accuracy confidence.
-     * Typically a factor of 2.0 will be used, which means that accuracy of position will
+     * Typically, a factor of 2.0 will be used, which means that accuracy of position will
      * be drawn as an ellipse of size equal to one time the standard deviation. Assuming a
      * Gaussian distribution this is equivalent to providing a 95.44% of confidence on provided
      * accuracy.
@@ -47,7 +47,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Standard deviation factor to account for a given accuracy confidence.
-     * Typically a factor of 2.0 will be used, which means that accuracy of a point or
+     * Typically, a factor of 2.0 will be used, which means that accuracy of a point or
      * measure will be drawn as a geometric figure (either an ellipse in 2D or an
      * ellipsoid in 3D) equal to two times the standard deviation. Assuming a
      * Gaussian distribution this is equivalent to providing a 95.44% of confidence on
@@ -217,7 +217,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Gets standard deviation factor to account for a given accuracy confidence.
-     * Typically a factor of 2.0 will be used, which means that accuracy can be drawn as
+     * Typically, a factor of 2.0 will be used, which means that accuracy can be drawn as
      * a geometric figure of size equal to 2 times the standard deviation. Assuming a
      * Gaussian distribution this is equivalent to providing a 95.44% confidence on provided
      * accuracy.
@@ -230,7 +230,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Sets standard deviation factor to account for a given accuracy confidence.
-     * Typically a factor of 2.0 will be used, which means that accuracy can be drawn as
+     * Typically, a factor of 2.0 will be used, which means that accuracy can be drawn as
      * a geometric figure of size equal to 2 times the standard deviation. Assuming a
      * Gaussian distribution this is equivalent to providing a 95.44% confidence on provided
      * accuracy.

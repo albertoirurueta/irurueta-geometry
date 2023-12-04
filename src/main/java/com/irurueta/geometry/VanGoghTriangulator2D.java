@@ -49,7 +49,7 @@ public class VanGoghTriangulator2D extends Triangulator2D {
     @Override
     public List<Triangle2D> triangulate(final Polygon2D polygon)
             throws TriangulatorException {
-        // triangulation will modify provided list of vertices so we make a copy
+        // triangulation will modify provided list of vertices, so we make a copy
         // of it
 
         // original vertices
@@ -74,7 +74,7 @@ public class VanGoghTriangulator2D extends Triangulator2D {
             throw new TriangulatorException();
         }
 
-        // triangulation will modify provided list of vertices so we make a copy
+        // triangulation will modify provided list of vertices, so we make a copy
         // of it
         final List<Point2D> verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, null, vertices);
@@ -100,7 +100,7 @@ public class VanGoghTriangulator2D extends Triangulator2D {
             throw new TriangulatorException();
         }
 
-        // triangulation will modify provided list of vertices so we make a copy
+        // triangulation will modify provided list of vertices, so we make a copy
         // of it
         final List<Point2D> verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, indices, vertices);

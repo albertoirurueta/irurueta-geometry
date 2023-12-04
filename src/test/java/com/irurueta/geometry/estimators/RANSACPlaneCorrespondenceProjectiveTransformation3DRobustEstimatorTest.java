@@ -67,7 +67,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertEquals(1, ProjectiveTransformation3DRobustEstimator.MIN_ITERATIONS);
         assertTrue(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(ProjectiveTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(RobustEstimatorMethod.PROMedS,
+        assertEquals(RobustEstimatorMethod.PROMEDS,
                 PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1e-6,
                 RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
@@ -85,28 +85,24 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
-        assertEquals(estimator.getThreshold(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -123,28 +119,24 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator = new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                 inputPlanes, outputPlanes);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputPlanes(), inputPlanes);
-        assertSame(estimator.getOutputPlanes(), outputPlanes);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputPlanes, estimator.getInputPlanes());
+        assertSame(outputPlanes, estimator.getOutputPlanes());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -174,28 +166,24 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator = new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                 this);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -205,28 +193,24 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator = new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                 this, inputPlanes, outputPlanes);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputPlanes(), inputPlanes);
-        assertSame(estimator.getOutputPlanes(), outputPlanes);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputPlanes, estimator.getInputPlanes());
+        assertSame(outputPlanes, estimator.getOutputPlanes());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -257,15 +241,14 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -281,15 +264,14 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -311,15 +293,14 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -350,8 +331,8 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator.setPlanes(inputLines, outputLines);
 
         // check correctness
-        assertSame(estimator.getInputPlanes(), inputLines);
-        assertSame(estimator.getOutputPlanes(), outputLines);
+        assertSame(inputLines, estimator.getInputPlanes());
+        assertSame(outputLines, estimator.getOutputPlanes());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
@@ -383,7 +364,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -393,15 +374,14 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -539,17 +519,17 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator.setResultRefined(false);
         estimator.setCovarianceKept(false);
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
-        assertEquals(estimateNextIteration, 0);
-        assertEquals(estimateProgressChange, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
+        assertEquals(0, estimateNextIteration);
+        assertEquals(0, estimateProgressChange);
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
         final ProjectiveTransformation3D transformation2 = estimator.estimate();
 
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
         assertTrue(estimateNextIteration > 0);
         assertTrue(estimateProgressChange >= 0);
         reset();
@@ -565,9 +545,9 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
             plane1.normalize();
             plane2.normalize();
-            assertEquals(
-                    PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                            getResidual(plane1, plane2), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0,
+                    PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.getResidual(plane1, plane2),
+                    ABSOLUTE_ERROR);
             assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
         }
     }
@@ -640,10 +620,10 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         estimator.setComputeAndKeepInliersEnabled(true);
         estimator.setComputeAndKeepResidualsEnabled(true);
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
-        assertEquals(estimateNextIteration, 0);
-        assertEquals(estimateProgressChange, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
+        assertEquals(0, estimateNextIteration);
+        assertEquals(0, estimateProgressChange);
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
@@ -662,8 +642,8 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                             ProjectiveTransformation3D.HOM_COORDS);
         }
 
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
         assertTrue(estimateNextIteration > 0);
         assertTrue(estimateProgressChange >= 0);
         reset();
@@ -679,9 +659,9 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
             plane1.normalize();
             plane2.normalize();
-            assertEquals(
-                    PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                            getResidual(plane1, plane2), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0,
+                    PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.getResidual(plane1, plane2),
+                    ABSOLUTE_ERROR);
             assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
         }
     }

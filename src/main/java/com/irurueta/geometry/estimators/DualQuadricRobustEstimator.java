@@ -39,7 +39,7 @@ public abstract class DualQuadricRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -84,7 +84,7 @@ public abstract class DualQuadricRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -408,13 +408,13 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator();
             case MSAC:
                 return new MSACDualQuadricRobustEstimator();
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator();
             case RANSAC:
             default:
@@ -427,7 +427,7 @@ public abstract class DualQuadricRobustEstimator {
      * provided planes and robust estimator method.
      *
      * @param planes 3D planes to estimate a dual quadric.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               dual quadric.
      * @return an instance of a dual quadric robust estimator.
      * @throws IllegalArgumentException if provided list of planes don't have a
@@ -436,13 +436,13 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             final List<Plane> planes, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator(planes);
             case MSAC:
                 return new MSACDualQuadricRobustEstimator(planes);
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(planes);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(planes);
             case RANSAC:
             default:
@@ -456,7 +456,7 @@ public abstract class DualQuadricRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 dual quadric.
      * @return an instance of a dual quadric robust estimator.
      */
@@ -464,13 +464,13 @@ public abstract class DualQuadricRobustEstimator {
             final DualQuadricRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator(listener);
             case MSAC:
                 return new MSACDualQuadricRobustEstimator(listener);
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(listener);
             case RANSAC:
             default:
@@ -485,7 +485,7 @@ public abstract class DualQuadricRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param planes   3D planes to estimate a dual quadric.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 dual quadric.
      * @return an instance of a dual quadric robust estimator.
      * @throws IllegalArgumentException if provided list of planes don't have a
@@ -495,13 +495,13 @@ public abstract class DualQuadricRobustEstimator {
             final DualQuadricRobustEstimatorListener listener, final List<Plane> planes,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator(listener, planes);
             case MSAC:
                 return new MSACDualQuadricRobustEstimator(listener, planes);
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(listener, planes);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(listener, planes);
             case RANSAC:
             default:
@@ -523,13 +523,13 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator();
             case MSAC:
                 return new MSACDualQuadricRobustEstimator();
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -543,7 +543,7 @@ public abstract class DualQuadricRobustEstimator {
      *
      * @param planes        3D planes to estimate a dual quadric.
      * @param qualityScores quality scores corresponding to each provided plane.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      dual quadric.
      * @return an instance of a dual quadric robust estimator.
      * @throws IllegalArgumentException if provided list of planes don't have
@@ -554,14 +554,14 @@ public abstract class DualQuadricRobustEstimator {
             final List<Plane> planes, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator(planes);
             case MSAC:
                 return new MSACDualQuadricRobustEstimator(planes);
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(planes,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(planes,
                         qualityScores);
             case RANSAC:
@@ -577,7 +577,7 @@ public abstract class DualQuadricRobustEstimator {
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided plane.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      dual quadric.
      * @return an instance of a dual quadric robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -587,14 +587,14 @@ public abstract class DualQuadricRobustEstimator {
             final DualQuadricRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator(listener);
             case MSAC:
                 return new MSACDualQuadricRobustEstimator(listener);
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(listener,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(listener,
                         qualityScores);
             case RANSAC:
@@ -611,7 +611,7 @@ public abstract class DualQuadricRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param planes        3D planes to estimate a dual quadric.
      * @param qualityScores quality scores corresponding to each provided plane.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      dual quadric.
      * @return an instance of a dual quadric robust estimator.
      * @throws IllegalArgumentException if provided list of planes don't have
@@ -622,14 +622,14 @@ public abstract class DualQuadricRobustEstimator {
             final DualQuadricRobustEstimatorListener listener, final List<Plane> planes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualQuadricRobustEstimator(listener, planes);
             case MSAC:
                 return new MSACDualQuadricRobustEstimator(listener, planes);
             case PROSAC:
                 return new PROSACDualQuadricRobustEstimator(listener, planes,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualQuadricRobustEstimator(listener, planes,
                         qualityScores);
             case RANSAC:

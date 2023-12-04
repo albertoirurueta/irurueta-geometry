@@ -63,7 +63,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
         assertEquals(0.0, Point3DRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, Point3DRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, Point3DRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, Point3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, Point3DRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertTrue(Point3DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(Point3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
         assertEquals(1.0, RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
@@ -78,26 +78,26 @@ public class RANSACPoint3DRobustEstimatorTest implements
         RANSACPoint3DRobustEstimator estimator = new RANSACPoint3DRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Point3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                Point3DRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.getRefinementCoordinatesType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -112,26 +112,26 @@ public class RANSACPoint3DRobustEstimatorTest implements
         estimator = new RANSACPoint3DRobustEstimator(planes);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Point3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPlanes(), planes);
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                Point3DRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.getRefinementCoordinatesType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -173,26 +173,26 @@ public class RANSACPoint3DRobustEstimatorTest implements
         estimator = new RANSACPoint3DRobustEstimator(listener);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Point3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                Point3DRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.getRefinementCoordinatesType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -202,26 +202,26 @@ public class RANSACPoint3DRobustEstimatorTest implements
         estimator = new RANSACPoint3DRobustEstimator(listener, planes);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Point3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPlanes(), planes);
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                Point3DRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.getRefinementCoordinatesType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -243,13 +243,13 @@ public class RANSACPoint3DRobustEstimatorTest implements
                 new RANSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -272,7 +272,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -282,14 +282,14 @@ public class RANSACPoint3DRobustEstimatorTest implements
                 new RANSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -310,14 +310,14 @@ public class RANSACPoint3DRobustEstimatorTest implements
                 new RANSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                Point3DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5f);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -338,14 +338,14 @@ public class RANSACPoint3DRobustEstimatorTest implements
                 new RANSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 1);
+        assertEquals(1, estimator.getMaxIterations());
 
         // Fail IllegalArgumentException
         try {
@@ -372,7 +372,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
         estimator.setPlanes(planes);
 
         // check correctness
-        assertSame(estimator.getPlanes(), planes);
+        assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
 
         // clearing list makes instance not ready
@@ -396,8 +396,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
 
         assertNull(estimator.getQualityScores());
 
-        final double[] qualityScores = new double[
-                Point3DRobustEstimator.MINIMUM_SIZE];
+        final double[] qualityScores = new double[Point3DRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
@@ -423,16 +422,16 @@ public class RANSACPoint3DRobustEstimatorTest implements
         final RANSACPoint3DRobustEstimator estimator =
                 new RANSACPoint3DRobustEstimator();
 
-        assertEquals(estimator.getRefinementCoordinatesType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                estimator.getRefinementCoordinatesType());
 
         // set new value
         estimator.setRefinementCoordinatesType(
                 CoordinatesType.HOMOGENEOUS_COORDINATES);
 
         // check correctness
-        assertEquals(estimator.getRefinementCoordinatesType(),
-                CoordinatesType.HOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES,
+                estimator.getRefinementCoordinatesType());
     }
 
     @Test
@@ -554,17 +553,17 @@ public class RANSACPoint3DRobustEstimatorTest implements
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final Point3D point2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -576,7 +575,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
             }
 
             // check that both points are equal
-            assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, point.distanceTo(point2), ABSOLUTE_ERROR);
         }
     }
 
@@ -660,10 +659,10 @@ public class RANSACPoint3DRobustEstimatorTest implements
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -674,13 +673,13 @@ public class RANSACPoint3DRobustEstimatorTest implements
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             assertNotNull(estimator.getCovariance());
-            assertEquals(estimator.getCovariance().getRows(),
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-            assertEquals(estimator.getCovariance().getColumns(),
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+            assertEquals(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    estimator.getCovariance().getRows());
+            assertEquals(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    estimator.getCovariance().getColumns());
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -692,7 +691,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
             }
 
             // check that both points are equal
-            assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, point.distanceTo(point2), ABSOLUTE_ERROR);
         }
     }
 
@@ -775,10 +774,10 @@ public class RANSACPoint3DRobustEstimatorTest implements
         estimator.setComputeAndKeepInliersEnabled(true);
         estimator.setComputeAndKeepResidualsEnabled(true);
 
-        assertEquals(estimateStart, 0);
-        assertEquals(estimateEnd, 0);
-        assertEquals(estimateNextIteration, 0);
-        assertEquals(estimateProgressChange, 0);
+        assertEquals(0, estimateStart);
+        assertEquals(0, estimateEnd);
+        assertEquals(0, estimateNextIteration);
+        assertEquals(0, estimateProgressChange);
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
@@ -789,13 +788,13 @@ public class RANSACPoint3DRobustEstimatorTest implements
         assertNotNull(estimator.getInliersData().getResiduals());
         assertTrue(estimator.getInliersData().getNumInliers() > 0);
         assertNotNull(estimator.getCovariance());
-        assertEquals(estimator.getCovariance().getRows(),
-                Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
-        assertEquals(estimator.getCovariance().getColumns(),
-                Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
+        assertEquals(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
+                estimator.getCovariance().getRows());
+        assertEquals(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
+                estimator.getCovariance().getColumns());
 
-        assertEquals(estimateStart, 1);
-        assertEquals(estimateEnd, 1);
+        assertEquals(1, estimateStart);
+        assertEquals(1, estimateEnd);
         assertTrue(estimateNextIteration > 0);
         assertTrue(estimateProgressChange >= 0);
         reset();
@@ -807,7 +806,7 @@ public class RANSACPoint3DRobustEstimatorTest implements
         }
 
         // check that both points are equal
-        assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, point.distanceTo(point2), ABSOLUTE_ERROR);
     }
 
     @Override

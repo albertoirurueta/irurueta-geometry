@@ -57,16 +57,16 @@ public class DualQuadricTest {
 
         // Constructor
         DualQuadric dualQuadric = new DualQuadric();
-        assertEquals(dualQuadric.getA(), 0.0, 0.0);
-        assertEquals(dualQuadric.getB(), 0.0, 0.0);
-        assertEquals(dualQuadric.getC(), 0.0, 0.0);
-        assertEquals(dualQuadric.getD(), 0.0, 0.0);
-        assertEquals(dualQuadric.getE(), 0.0, 0.0);
-        assertEquals(dualQuadric.getF(), 0.0, 0.0);
-        assertEquals(dualQuadric.getG(), 0.0, 0.0);
-        assertEquals(dualQuadric.getH(), 0.0, 0.0);
-        assertEquals(dualQuadric.getI(), 0.0, 0.0);
-        assertEquals(dualQuadric.getJ(), 0.0, 0.0);
+        assertEquals(0.0, dualQuadric.getA(), 0.0);
+        assertEquals(0.0, dualQuadric.getB(), 0.0);
+        assertEquals(0.0, dualQuadric.getC(), 0.0);
+        assertEquals(0.0, dualQuadric.getD(), 0.0);
+        assertEquals(0.0, dualQuadric.getE(), 0.0);
+        assertEquals(0.0, dualQuadric.getF(), 0.0);
+        assertEquals(0.0, dualQuadric.getG(), 0.0);
+        assertEquals(0.0, dualQuadric.getH(), 0.0);
+        assertEquals(0.0, dualQuadric.getI(), 0.0);
+        assertEquals(0.0, dualQuadric.getJ(), 0.0);
         assertFalse(dualQuadric.isNormalized());
 
         // Constructor with params
@@ -81,16 +81,16 @@ public class DualQuadricTest {
         double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualQuadric = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
-        assertEquals(dualQuadric.getA(), a, 0.0);
-        assertEquals(dualQuadric.getB(), b, 0.0);
-        assertEquals(dualQuadric.getC(), c, 0.0);
-        assertEquals(dualQuadric.getD(), d, 0.0);
-        assertEquals(dualQuadric.getE(), e, 0.0);
-        assertEquals(dualQuadric.getF(), f, 0.0);
-        assertEquals(dualQuadric.getG(), g, 0.0);
-        assertEquals(dualQuadric.getH(), h, 0.0);
-        assertEquals(dualQuadric.getI(), i, 0.0);
-        assertEquals(dualQuadric.getJ(), j, 0.0);
+        assertEquals(a, dualQuadric.getA(), 0.0);
+        assertEquals(b, dualQuadric.getB(), 0.0);
+        assertEquals(c, dualQuadric.getC(), 0.0);
+        assertEquals(d, dualQuadric.getD(), 0.0);
+        assertEquals(e, dualQuadric.getE(), 0.0);
+        assertEquals(f, dualQuadric.getF(), 0.0);
+        assertEquals(g, dualQuadric.getG(), 0.0);
+        assertEquals(h, dualQuadric.getH(), 0.0);
+        assertEquals(i, dualQuadric.getI(), 0.0);
+        assertEquals(j, dualQuadric.getJ(), 0.0);
         assertFalse(dualQuadric.isNormalized());
 
         // Constructor using matrix
@@ -123,16 +123,16 @@ public class DualQuadricTest {
         m.setElementAt(2, 3, i);
         dualQuadric = new DualQuadric(m);
 
-        assertEquals(dualQuadric.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(dualQuadric.getB(), m.getElementAt(1, 1), 0.0);
-        assertEquals(dualQuadric.getC(), m.getElementAt(2, 2), 0.0);
-        assertEquals(dualQuadric.getD(), m.getElementAt(1, 0), 0.0);
-        assertEquals(dualQuadric.getE(), m.getElementAt(2, 1), 0.0);
-        assertEquals(dualQuadric.getF(), m.getElementAt(2, 0), 0.0);
-        assertEquals(dualQuadric.getG(), m.getElementAt(3, 0), 0.0);
-        assertEquals(dualQuadric.getH(), m.getElementAt(1, 3), 0.0);
-        assertEquals(dualQuadric.getI(), m.getElementAt(3, 2), 0.0);
-        assertEquals(dualQuadric.getJ(), m.getElementAt(3, 3), 0.0);
+        assertEquals(m.getElementAt(0, 0), dualQuadric.getA(), 0.0);
+        assertEquals(m.getElementAt(1, 1), dualQuadric.getB(), 0.0);
+        assertEquals(m.getElementAt(2, 2), dualQuadric.getC(), 0.0);
+        assertEquals(m.getElementAt(1, 0), dualQuadric.getD(), 0.0);
+        assertEquals(m.getElementAt(2, 1), dualQuadric.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 0), dualQuadric.getF(), 0.0);
+        assertEquals(m.getElementAt(3, 0), dualQuadric.getG(), 0.0);
+        assertEquals(m.getElementAt(1, 3), dualQuadric.getH(), 0.0);
+        assertEquals(m.getElementAt(3, 2), dualQuadric.getI(), 0.0);
+        assertEquals(m.getElementAt(3, 3), dualQuadric.getJ(), 0.0);
 
         // Constructor using matrix with wrong size exception
         m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS + 1);
@@ -163,7 +163,6 @@ public class DualQuadricTest {
         m.setElementAt(3, 2, i);
         m.setElementAt(2, 3, i + 1.0);
 
-        dualQuadric = null;
         try {
             dualQuadric = new DualQuadric(m);
             fail("NonSymmetricMatrixException expected but not thrown");
@@ -548,16 +547,16 @@ public class DualQuadricTest {
         dualQuadric.setH(h);
         dualQuadric.setI(i);
         dualQuadric.setJ(j);
-        assertEquals(dualQuadric.getA(), a, 0.0);
-        assertEquals(dualQuadric.getB(), b, 0.0);
-        assertEquals(dualQuadric.getC(), c, 0.0);
-        assertEquals(dualQuadric.getD(), d, 0.0);
-        assertEquals(dualQuadric.getE(), e, 0.0);
-        assertEquals(dualQuadric.getF(), f, 0.0);
-        assertEquals(dualQuadric.getG(), g, 0.0);
-        assertEquals(dualQuadric.getH(), h, 0.0);
-        assertEquals(dualQuadric.getI(), i, 0.0);
-        assertEquals(dualQuadric.getJ(), j, 0.0);
+        assertEquals(a, dualQuadric.getA(), 0.0);
+        assertEquals(b, dualQuadric.getB(), 0.0);
+        assertEquals(c, dualQuadric.getC(), 0.0);
+        assertEquals(d, dualQuadric.getD(), 0.0);
+        assertEquals(e, dualQuadric.getE(), 0.0);
+        assertEquals(f, dualQuadric.getF(), 0.0);
+        assertEquals(g, dualQuadric.getG(), 0.0);
+        assertEquals(h, dualQuadric.getH(), 0.0);
+        assertEquals(i, dualQuadric.getI(), 0.0);
+        assertEquals(j, dualQuadric.getJ(), 0.0);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -570,16 +569,16 @@ public class DualQuadricTest {
         i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualQuadric.setParameters(a, b, c, d, e, f, g, h, i, j);
-        assertEquals(dualQuadric.getA(), a, 0.0);
-        assertEquals(dualQuadric.getB(), b, 0.0);
-        assertEquals(dualQuadric.getC(), c, 0.0);
-        assertEquals(dualQuadric.getD(), d, 0.0);
-        assertEquals(dualQuadric.getE(), e, 0.0);
-        assertEquals(dualQuadric.getF(), f, 0.0);
-        assertEquals(dualQuadric.getG(), g, 0.0);
-        assertEquals(dualQuadric.getH(), h, 0.0);
-        assertEquals(dualQuadric.getI(), i, 0.0);
-        assertEquals(dualQuadric.getJ(), j, 0.0);
+        assertEquals(a, dualQuadric.getA(), 0.0);
+        assertEquals(b, dualQuadric.getB(), 0.0);
+        assertEquals(c, dualQuadric.getC(), 0.0);
+        assertEquals(d, dualQuadric.getD(), 0.0);
+        assertEquals(e, dualQuadric.getE(), 0.0);
+        assertEquals(f, dualQuadric.getF(), 0.0);
+        assertEquals(g, dualQuadric.getG(), 0.0);
+        assertEquals(h, dualQuadric.getH(), 0.0);
+        assertEquals(i, dualQuadric.getI(), 0.0);
+        assertEquals(j, dualQuadric.getJ(), 0.0);
 
         dualQuadric = new DualQuadric();
         final Matrix m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
@@ -610,15 +609,15 @@ public class DualQuadricTest {
         m.setElementAt(3, 2, i);
         m.setElementAt(2, 3, i);
         dualQuadric.setParameters(m);
-        assertEquals(dualQuadric.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(dualQuadric.getB(), m.getElementAt(1, 1), 0.0);
-        assertEquals(dualQuadric.getC(), m.getElementAt(2, 2), 0.0);
-        assertEquals(dualQuadric.getD(), m.getElementAt(1, 0), 0.0);
-        assertEquals(dualQuadric.getE(), m.getElementAt(2, 1), 0.0);
-        assertEquals(dualQuadric.getF(), m.getElementAt(2, 0), 0.0);
-        assertEquals(dualQuadric.getG(), m.getElementAt(3, 0), 0.0);
-        assertEquals(dualQuadric.getH(), m.getElementAt(3, 1), 0.0);
-        assertEquals(dualQuadric.getI(), m.getElementAt(3, 2), 0.0);
+        assertEquals(m.getElementAt(0, 0), dualQuadric.getA(), 0.0);
+        assertEquals(m.getElementAt(1, 1), dualQuadric.getB(), 0.0);
+        assertEquals(m.getElementAt(2, 2), dualQuadric.getC(), 0.0);
+        assertEquals(m.getElementAt(1, 0), dualQuadric.getD(), 0.0);
+        assertEquals(m.getElementAt(2, 1), dualQuadric.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 0), dualQuadric.getF(), 0.0);
+        assertEquals(m.getElementAt(3, 0), dualQuadric.getG(), 0.0);
+        assertEquals(m.getElementAt(3, 1), dualQuadric.getH(), 0.0);
+        assertEquals(m.getElementAt(3, 2), dualQuadric.getI(), 0.0);
     }
 
     @Test
@@ -1070,12 +1069,12 @@ public class DualQuadricTest {
         Matrix quadricMatrix = com.irurueta.algebra.Utils.inverse(
                 dualQuadricMatrix);
 
-        // find plane vector outside of dual quadric as the product of quadric
+        // find plane vector outside dual quadric as the product of quadric
         // matrix and point outside of quadric
         final Matrix outsidePlaneMatrix = quadricMatrix.multiplyAndReturnNew(
                 homPointMatrix);
 
-        // instantiate plane outside of dual quadric using computed vector
+        // instantiate plane outside dual quadric using computed vector
         final Plane outsidePlane = new Plane(outsidePlaneMatrix.toArray());
 
         // instantiate new dual quadric instance
@@ -1300,7 +1299,7 @@ public class DualQuadricTest {
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
     }
 
     @Test
@@ -1688,7 +1687,7 @@ public class DualQuadricTest {
         // finally, ensure that the norm of the difference matrix is almost zero
         // up to machine precision
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
 
         // check that when setting new values quadric becomes non-normalized
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1765,16 +1764,16 @@ public class DualQuadricTest {
     public void testCreateCanonicalDualAbsoluteQuadric() throws WrongSizeException {
         final DualQuadric daq = DualQuadric.createCanonicalDualAbsoluteQuadric();
 
-        assertEquals(daq.getA(), 1.0, 0.0);
-        assertEquals(daq.getB(), 1.0, 0.0);
-        assertEquals(daq.getC(), 1.0, 0.0);
-        assertEquals(daq.getD(), 0.0, 0.0);
-        assertEquals(daq.getE(), 0.0, 0.0);
-        assertEquals(daq.getF(), 0.0, 0.0);
-        assertEquals(daq.getG(), 0.0, 0.0);
-        assertEquals(daq.getH(), 0.0, 0.0);
-        assertEquals(daq.getI(), 0.0, 0.0);
-        assertEquals(daq.getJ(), 0.0, 0.0);
+        assertEquals(1.0, daq.getA(), 0.0);
+        assertEquals(1.0, daq.getB(), 0.0);
+        assertEquals(1.0, daq.getC(), 0.0);
+        assertEquals(0.0, daq.getD(), 0.0);
+        assertEquals(0.0, daq.getE(), 0.0);
+        assertEquals(0.0, daq.getF(), 0.0);
+        assertEquals(0.0, daq.getG(), 0.0);
+        assertEquals(0.0, daq.getH(), 0.0);
+        assertEquals(0.0, daq.getI(), 0.0);
+        assertEquals(0.0, daq.getJ(), 0.0);
 
         final Matrix m = Matrix.identity(4, 4);
         m.setElementAt(3, 3, 0.0);

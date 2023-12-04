@@ -19,8 +19,5 @@
         <module name="irurueta-geometry" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="irurueta-geometry" target="1.7" />
-    </bytecodeTargetLevel>
   </component>
 </project>

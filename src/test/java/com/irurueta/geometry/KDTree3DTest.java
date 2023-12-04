@@ -93,7 +93,7 @@ public class KDTree3DTest {
 
         assertNotNull(tree);
 
-        assertEquals(KDTree3D.MIN_PTS, 3);
+        assertEquals(3, KDTree3D.MIN_PTS);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class KDTree3DTest {
 
                 if (i == j) {
                     // for equal indices distance is BIG
-                    assertEquals(tree.distance(i, j), KDTree.BIG, 0.0);
+                    assertEquals(KDTree.BIG, tree.distance(i, j), 0.0);
                 } else {
                     pj = points.get(j);
                     assertEquals(tree.distance(i, j), pi.distanceTo(pj), ABSOLUTE_ERROR);
@@ -151,7 +151,7 @@ public class KDTree3DTest {
             final KDTree3D.BoxNode<Point3D> box = tree.mBoxes[boxIndex];
 
             // point is inside box, so its distance is zero
-            assertEquals(box.getDistance(p), 0.0, 0.0);
+            assertEquals(0.0, box.getDistance(p), 0.0);
         }
     }
 
@@ -175,7 +175,7 @@ public class KDTree3DTest {
             final KDTree3D.BoxNode<Point3D> box = tree.locateBox(p);
 
             // point is inside box, so its distance is zero
-            assertEquals(box.getDistance(p), 0.0, 0.0);
+            assertEquals(0.0, box.getDistance(p), 0.0);
         }
     }
 
@@ -216,8 +216,8 @@ public class KDTree3DTest {
 
             final int nearestIndex = tree.nearestIndex(pi);
 
-            assertSame(points.get(nearestIndex), bestP);
-            assertEquals(nearestIndex, bestIndex);
+            assertSame(bestP, points.get(nearestIndex));
+            assertEquals(bestIndex, nearestIndex);
         }
     }
 
@@ -260,8 +260,8 @@ public class KDTree3DTest {
 
         final int nearestIndex = tree.nearestIndex(p);
 
-        assertSame(points.get(nearestIndex), bestP);
-        assertEquals(nearestIndex, bestIndex);
+        assertSame(bestP, points.get(nearestIndex));
+        assertEquals(bestIndex, nearestIndex);
     }
 
     @Test
@@ -298,7 +298,7 @@ public class KDTree3DTest {
 
             final Point3D nearestPoint = tree.nearestPoint(pi);
 
-            assertSame(nearestPoint, bestP);
+            assertSame(bestP, nearestPoint);
         }
     }
 
@@ -337,7 +337,7 @@ public class KDTree3DTest {
         }
 
         final Point3D nearestPoint = tree.nearestPoint(p);
-        assertSame(nearestPoint, bestP);
+        assertSame(bestP, nearestPoint);
     }
 
     @Test

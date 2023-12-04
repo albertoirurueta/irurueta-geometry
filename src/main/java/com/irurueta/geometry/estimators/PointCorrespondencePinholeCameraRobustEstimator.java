@@ -44,7 +44,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
 
     /**
      * Indicates if by default point correspondences for each picked subset of
-     * samples are normalized to increase the accuracy of the estimation.
+     * samples is normalized to increase the accuracy of the estimation.
      */
     public static final boolean DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES =
             true;
@@ -53,7 +53,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of matched 3D points.
@@ -266,7 +266,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * Creates a pinhole camera robust estimator based on point correspondences
      * and using provided robust estimator method + DLT.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -283,7 +283,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -304,7 +304,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -325,7 +325,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -346,7 +346,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -368,7 +368,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -391,7 +391,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -416,7 +416,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -436,7 +436,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * and using provided robust estimator method + EPnP.
      *
      * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param method    method of a robust estimator algorithm to estimate best
+     * @param method    method of a robust estimator algorithm to estimate the best
      *                  pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -455,7 +455,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param points3D  list of 3D points used to estimate a pinhole camera.
      * @param points2D  list of corresponding projected 2D points used to
      *                  estimate a pinhole camera.
-     * @param method    method of a robust estimator algorithm to estimate best
+     * @param method    method of a robust estimator algorithm to estimate the best
      *                  pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -477,7 +477,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param listener  listener to be notified of events such as when estimation
      *                  starts, ends or its progress significantly changes.
      * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param method    method of a robust estimator algorithm to estimate best
+     * @param method    method of a robust estimator algorithm to estimate the best
      *                  pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -500,7 +500,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param points3D  list of 3D points used to estimate a pinhole camera.
      * @param points2D  list of corresponding projected 2D points used to
      *                  estimate a pinhole camera.
-     * @param method    method of a robust estimator algorithm to estimate best
+     * @param method    method of a robust estimator algorithm to estimate the best
      *                  pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -523,7 +523,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param intrinsic     intrinsic parameters of camera to be estimated.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -547,7 +547,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -572,7 +572,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param intrinsic     intrinsic parameters of camera to be estimated.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -599,7 +599,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -625,7 +625,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -659,7 +659,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
      * @param points2D                 list of corresponding projected 2D points used to
      *                                 estimate a pinhole camera.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -695,7 +695,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                 intrinsic parameters of camera to be estimated.
      * @param verticalPrincipalPoint   vertical principal point value of
      *                                 intrinsic parameters of camera to be estimated.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -732,7 +732,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
      * @param points2D                 list of corresponding projected 2D points used to
      *                                 estimate a pinhole camera.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -769,7 +769,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                 intrinsic parameters of camera to be estimated.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -808,7 +808,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                 estimate a pinhole camera.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -848,7 +848,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                 intrinsic parameters of camera to be estimated.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -890,7 +890,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                 estimate a pinhole camera.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality

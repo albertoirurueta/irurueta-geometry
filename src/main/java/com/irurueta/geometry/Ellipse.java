@@ -24,7 +24,7 @@ import java.io.Serializable;
 /**
  * This class defines an ellipse.
  * This class uses formulas as defined at:
- * https://en.wikipedia.org/wiki/Ellipse
+ * <a href="https://en.wikipedia.org/wiki/Ellipse">https://en.wikipedia.org/wiki/Ellipse</a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class Ellipse implements Serializable {

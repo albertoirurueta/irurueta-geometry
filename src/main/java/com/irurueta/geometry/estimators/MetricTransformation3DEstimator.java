@@ -36,7 +36,9 @@ import java.util.List;
  * If more points are provided an LMSE (Least Mean Squared Error) solution will
  * be found.
  * Based on:
- * http://stackoverflow.com/questions/13432805/finding-translation-and-scale-on-two-sets-of-points-to-get-least-square-error-in
+ * <a href="http://stackoverflow.com/questions/13432805/finding-translation-and-scale-on-two-sets-of-points-to-get-least-square-error-in">
+ *     http://stackoverflow.com/questions/13432805/finding-translation-and-scale-on-two-sets-of-points-to-get-least-square-error-in
+ * </a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class MetricTransformation3DEstimator {
@@ -222,9 +224,9 @@ public class MetricTransformation3DEstimator {
      * be greater or equal than #getMinimumPoints.
      *
      * @param inputPoints  list of input points to be used to estimate an
-     *                     euclidean 3D transformation.
+     *                     Euclidean 3D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     *                     euclidean 3D transformation.
+     *                     Euclidean 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than #getMinimumPoints.
      * @throws LockedException          if estimator is locked because a computation is

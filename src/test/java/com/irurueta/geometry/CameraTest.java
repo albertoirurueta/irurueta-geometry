@@ -24,9 +24,9 @@ public class CameraTest {
     @Test
     public void testCreate() {
         Camera c = Camera.create();
-        assertEquals(c.getType(), Camera.DEFAULT_CAMERA_TYPE);
+        assertEquals(Camera.DEFAULT_CAMERA_TYPE, c.getType());
 
         c = Camera.create(CameraType.PINHOLE_CAMERA);
-        assertEquals(c.getType(), CameraType.PINHOLE_CAMERA);
+        assertEquals(CameraType.PINHOLE_CAMERA, c.getType());
     }
 }

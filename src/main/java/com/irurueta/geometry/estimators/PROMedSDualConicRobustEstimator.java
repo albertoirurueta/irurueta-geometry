@@ -435,7 +435,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

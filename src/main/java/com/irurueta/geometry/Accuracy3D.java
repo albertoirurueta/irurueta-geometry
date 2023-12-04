@@ -65,8 +65,8 @@ public class Accuracy3D extends Accuracy {
      *                         definite.
      * @param confidence       confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
-     *                                                     positive definite to be properly converted to an ellipsoid, or if provided
-     *                                                     confidence value is not within 0 and 1.
+     *                                                     positive definite to be properly converted to an ellipsoid),
+     *                                                     or if provided confidence value is not within 0 and 1.
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      *                                                     positive definite.
      */

@@ -40,7 +40,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertEquals(1, EuclideanTransformation3DRobustEstimator.MIN_ITERATIONS);
         assertTrue(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(EuclideanTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(RobustEstimatorMethod.PROMedS, EuclideanTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, EuclideanTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RANSACEuclideanTransformation3DRobustEstimator);
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
 
@@ -69,7 +69,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 PROSACEuclideanTransformation3DRobustEstimator);
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
 
@@ -89,21 +89,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, RobustEstimatorMethod.LMedS);
+                inputPoints, outputPoints, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -115,8 +115,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -128,21 +128,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, RobustEstimatorMethod.PROMedS);
+                inputPoints, outputPoints, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -152,13 +152,13 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         estimator = null;
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
-                    emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
+                    emptyPoints, outputPoints, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
-                    inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
+                    inputPoints, emptyPoints, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -195,31 +195,31 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                listener, RobustEstimatorMethod.LMedS);
+                listener, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                listener, RobustEstimatorMethod.PROMedS);
+                listener, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         // test with listener and points
         estimator = EuclideanTransformation3DRobustEstimator.create(
@@ -227,26 +227,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -255,12 +255,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -269,26 +269,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -302,7 +302,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.LMedS);
+                qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getQualityScores());
@@ -320,7 +320,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.PROMedS);
+                qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertSame(qualityScores, estimator.getQualityScores());
@@ -337,22 +337,22 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -365,8 +365,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -379,22 +379,22 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -403,21 +403,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     emptyPoints, outputPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     inputPoints, emptyPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     inputPoints, outputPoints, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -428,35 +428,35 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertNull(estimator.getQualityScores());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.LMedS);
+                listener, qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertNull(estimator.getQualityScores());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertNull(estimator.getQualityScores());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.PROMedS);
+                listener, qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertSame(qualityScores, estimator.getQualityScores());
 
         // test with listener, points, quality scores and method
@@ -465,26 +465,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -493,12 +493,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -507,26 +507,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -535,21 +535,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     listener, inputPoints, outputPoints, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -563,7 +563,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                true, RobustEstimatorMethod.LMedS);
+                true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
@@ -581,7 +581,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                true, RobustEstimatorMethod.PROMedS);
+                true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
@@ -595,7 +595,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                listener, true, RobustEstimatorMethod.LMedS);
+                listener, true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -616,7 +616,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                listener, true, RobustEstimatorMethod.PROMedS);
+                listener, true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -633,7 +633,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getQualityScores());
@@ -657,7 +657,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertSame(qualityScores, estimator.getQualityScores());
@@ -675,7 +675,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -702,7 +702,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -718,8 +718,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -744,12 +744,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -779,8 +779,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -790,12 +790,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -816,21 +816,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, true, RobustEstimatorMethod.LMedS);
+                inputPoints, outputPoints, true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -842,8 +842,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -855,21 +855,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, true, RobustEstimatorMethod.PROMedS);
+                inputPoints, outputPoints, true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -878,14 +878,14 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     emptyPoints, outputPoints, true,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     inputPoints, emptyPoints, true,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -897,26 +897,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -925,12 +925,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -939,26 +939,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -976,22 +976,22 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1004,8 +1004,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1018,22 +1018,22 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1042,21 +1042,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     emptyPoints, outputPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     inputPoints, emptyPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     inputPoints, outputPoints, wrongQualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -1069,26 +1069,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1097,12 +1097,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1111,26 +1111,26 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1139,21 +1139,21 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = EuclideanTransformation3DRobustEstimator.create(
                     listener, inputPoints, outputPoints, wrongQualityScores,
-                    true, RobustEstimatorMethod.PROMedS);
+                    true, RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -1169,8 +1169,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1196,12 +1196,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, true);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1231,8 +1231,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1242,12 +1242,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores, true);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
     }
@@ -1277,8 +1277,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1330,19 +1330,19 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         estimator = EuclideanTransformation3DRobustEstimator.create(listener);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         // test with listener and points
         estimator = EuclideanTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1366,8 +1366,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1398,7 +1398,7 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, qualityScores);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertSame(qualityScores, estimator.getQualityScores());
 
         // test with listener, points and quality scores
@@ -1406,12 +1406,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1460,8 +1460,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1494,12 +1494,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, true);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1539,8 +1539,8 @@ public class EuclideanTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1580,12 +1580,12 @@ public class EuclideanTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores, true);
         assertTrue(estimator instanceof
                 PROMedSEuclideanTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
     }

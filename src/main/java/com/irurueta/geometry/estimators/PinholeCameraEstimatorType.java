@@ -44,11 +44,11 @@ public enum PinholeCameraEstimatorType {
      * EPnP (Efficient Perspective-n-Point) method to estimate camera pose using
      * point correspondences and given intrinsic parameters.
      */
-    EPnP_PINHOLE_CAMERA_ESTIMATOR,
+    EPNP_PINHOLE_CAMERA_ESTIMATOR,
 
     /**
      * UPnP (Uncalibrated Perspective-n-Point) method to estimate camera pose
      * and focal length using point correspondences.
      */
-    UPnP_PINHOLE_CAMERA_ESTIMATOR,
+    UPNP_PINHOLE_CAMERA_ESTIMATOR,
 }

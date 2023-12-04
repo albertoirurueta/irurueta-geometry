@@ -36,7 +36,7 @@ import java.util.List;
  * This class takes into account an initial estimation, inlier point matches and
  * their residuals to find a solution that minimizes error of inliers in LMSE
  * terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")

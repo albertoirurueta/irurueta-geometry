@@ -34,11 +34,11 @@ import java.util.BitSet;
 import java.util.List;
 
 /**
- * Refine a 3D euclidean transformation by taking into account an initial
+ * Refine a 3D Euclidean transformation by taking into account an initial
  * estimation, inlier point matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")
@@ -62,7 +62,7 @@ public class EuclideanTransformation3DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
@@ -125,7 +125,7 @@ public class EuclideanTransformation3DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *
@@ -140,7 +140,7 @@ public class EuclideanTransformation3DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *
@@ -372,7 +372,7 @@ public class EuclideanTransformation3DRefiner extends
     }
 
     /**
-     * Computes the residual between the euclidean transformation and a pair or
+     * Computes the residual between the Euclidean transformation and a pair or
      * matched points.
      *
      * @param transformation a transformation.

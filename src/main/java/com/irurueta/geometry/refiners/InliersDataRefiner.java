@@ -25,7 +25,7 @@ import java.util.BitSet;
  * inlier matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  *
  * @param <T> type of instance to be refined.

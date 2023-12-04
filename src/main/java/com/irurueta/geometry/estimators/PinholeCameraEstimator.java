@@ -21,7 +21,7 @@ import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Quaternion;
 
 /**
- * This class defines the interface for an estimator for pinhole cameras..
+ * This class defines the interface for an estimator for pinhole cameras.
  */
 public abstract class PinholeCameraEstimator {
 
@@ -33,7 +33,7 @@ public abstract class PinholeCameraEstimator {
 
     /**
      * Default value indicating whether skewness value is suggested or not.
-     * By default this is disabled.
+     * By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED = false;
 
@@ -45,45 +45,45 @@ public abstract class PinholeCameraEstimator {
 
     /**
      * Default value indicating whether horizontal focal length value is
-     * suggested or not. By default this is disabled.
+     * suggested or not. By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
             false;
 
     /**
      * Default value indicating whether vertical focal length value is suggested
-     * or not. By default this is disabled.
+     * or not. By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
             false;
 
     /**
      * Default value indicating whether aspect ratio is suggested or not. By
-     * default this is disabled.
+     * default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED = false;
 
     /**
      * Default value of aspect ratio to be suggested when suggestion is enabled.
-     * By default suggested aspect ratio is 1.0, although also -1.0 is a typical
+     * By default, suggested aspect ratio is 1.0, although also -1.0 is a typical
      * value when vertical coordinates increase downwards.
      */
     public static final double DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE = 1.0;
 
     /**
      * Default value indicating whether principal point is suggested or not. By
-     * default this is disabled.
+     * default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED = false;
 
     /**
-     * Default value indicating whether rotation is suggested or not. By default
+     * Default value indicating whether rotation is suggested or not. By default,
      * this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_ROTATION_ENABLED = false;
 
     /**
-     * Default value indicating whether center is suggested or not. By default
+     * Default value indicating whether center is suggested or not. By default,
      * this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_CENTER_ENABLED = false;

@@ -309,6 +309,6 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 }

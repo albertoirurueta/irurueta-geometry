@@ -36,8 +36,8 @@ public class InhomogeneousPoint2DTest {
     @Test
     public void testConstructor() {
         InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D();
-        assertEquals(iPoint.getInhomX(), 0.0, 0.0);
-        assertEquals(iPoint.getInhomY(), 0.0, 0.0);
+        assertEquals(0.0, iPoint.getInhomX(), 0.0);
+        assertEquals(0.0, iPoint.getInhomY(), 0.0);
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] array = new double[INHOM_COORDS];
@@ -66,8 +66,7 @@ public class InhomogeneousPoint2DTest {
         iPoint = new InhomogeneousPoint2D(point);
         assertEquals(iPoint.getInhomX(), a, 0.0);
         assertEquals(iPoint.getInhomY(), b, 0.0);
-        assertEquals(iPoint.getType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, iPoint.getType());
     }
 
     @Test
@@ -78,10 +77,8 @@ public class InhomogeneousPoint2DTest {
         final double homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final double homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D();
 
@@ -99,10 +96,10 @@ public class InhomogeneousPoint2DTest {
         assertEquals(constantW, constantX, ABSOLUTE_ERROR);
 
         iPoint.setInhomogeneousCoordinates(inhomX, inhomY);
-        assertEquals(iPoint.getInhomX(), inhomX, 0.0);
-        assertEquals(iPoint.getInhomY(), inhomY, 0.0);
-        assertEquals(iPoint.getX(), inhomX, 0.0);
-        assertEquals(iPoint.getY(), inhomY, 0.0);
+        assertEquals(inhomX, iPoint.getInhomX(), 0.0);
+        assertEquals(inhomY, iPoint.getInhomY(), 0.0);
+        assertEquals(inhomX, iPoint.getX(), 0.0);
+        assertEquals(inhomY, iPoint.getY(), 0.0);
     }
 
     @Test
@@ -161,8 +158,8 @@ public class InhomogeneousPoint2DTest {
         final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         iPoint = new InhomogeneousPoint2D();
         iPoint.setCoordinates(x, y);
-        assertEquals(iPoint.getX(), x, 0.0);
-        assertEquals(iPoint.getY(), y, 0.0);
+        assertEquals(x, iPoint.getX(), 0.0);
+        assertEquals(y, iPoint.getY(), 0.0);
 
         final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -170,10 +167,10 @@ public class InhomogeneousPoint2DTest {
                 MAX_RANDOM_VALUE);
         iPoint = new InhomogeneousPoint2D();
         iPoint.setInhomogeneousCoordinates(inhomX, inhomY);
-        assertEquals(iPoint.getInhomX(), inhomX, 0.0);
-        assertEquals(iPoint.getInhomY(), inhomY, 0.0);
-        assertEquals(iPoint.getX(), inhomX, 0.0);
-        assertEquals(iPoint.getY(), inhomY, 0.0);
+        assertEquals(inhomX, iPoint.getInhomX(), 0.0);
+        assertEquals(inhomY, iPoint.getInhomY(), 0.0);
+        assertEquals(inhomX, iPoint.getX(), 0.0);
+        assertEquals(inhomY, iPoint.getY(), 0.0);
 
         array = new double[INHOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -190,8 +187,8 @@ public class InhomogeneousPoint2DTest {
         iPoint = new InhomogeneousPoint2D();
         iPoint.setCoordinates(hPoint);
         array2 = iPoint.asArray();
-        assertEquals(array.length, HOM_COORDS);
-        assertEquals(array2.length, INHOM_COORDS);
+        assertEquals(HOM_COORDS, array.length);
+        assertEquals(INHOM_COORDS, array2.length);
         assertEquals(array[0] / array[2], array2[0], 0.0);
         assertEquals(array[1] / array[2], array2[1], 0.0);
     }
@@ -342,7 +339,7 @@ public class InhomogeneousPoint2DTest {
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final InhomogeneousPoint2D iPoint1 = new InhomogeneousPoint2D(array);
 
-        // serialize and deserialice
+        // serialize and deserialize
         final byte[] bytes = SerializationHelper.serialize(iPoint1);
         final InhomogeneousPoint2D iPoint2 = SerializationHelper.deserialize(bytes);
 

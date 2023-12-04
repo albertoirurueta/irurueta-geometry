@@ -40,7 +40,7 @@ public abstract class QuadricRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -85,7 +85,7 @@ public abstract class QuadricRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -404,19 +404,19 @@ public abstract class QuadricRobustEstimator {
      * Creates a quadric robust estimator based on 3D point samples and using
      * provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               quadric.
      * @return an instance of a quadric robust estimator.
      */
     public static QuadricRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator();
             case MSAC:
                 return new MSACQuadricRobustEstimator();
             case PROSAC:
                 return new PROSACQuadricRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator();
             case RANSAC:
             default:
@@ -429,7 +429,7 @@ public abstract class QuadricRobustEstimator {
      * provided points and robust estimator method.
      *
      * @param points 3D points to estimate a quadric.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               quadric.
      * @return an instance of a quadric robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have a
@@ -438,13 +438,13 @@ public abstract class QuadricRobustEstimator {
     public static QuadricRobustEstimator create(final List<Point3D> points,
                                                 final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator(points);
             case MSAC:
                 return new MSACQuadricRobustEstimator(points);
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(points);
             case RANSAC:
             default:
@@ -458,7 +458,7 @@ public abstract class QuadricRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 quadric.
      * @return an instance of a quadric robust estimator.
      */
@@ -466,13 +466,13 @@ public abstract class QuadricRobustEstimator {
             final QuadricRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator(listener);
             case MSAC:
                 return new MSACQuadricRobustEstimator(listener);
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(listener);
             case RANSAC:
             default:
@@ -487,7 +487,7 @@ public abstract class QuadricRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param points   3D points to estimate a quadric.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 quadric.
      * @return an instance of a quadric robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have a
@@ -497,13 +497,13 @@ public abstract class QuadricRobustEstimator {
             final QuadricRobustEstimatorListener listener, final List<Point3D> points,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator(listener, points);
             case MSAC:
                 return new MSACQuadricRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(listener, points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(listener, points);
             case RANSAC:
             default:
@@ -516,7 +516,7 @@ public abstract class QuadricRobustEstimator {
      * provided robust estimator method.
      *
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      quadric.
      * @return an instance of a quadric robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -525,13 +525,13 @@ public abstract class QuadricRobustEstimator {
     public static QuadricRobustEstimator create(final double[] qualityScores,
                                                 final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator();
             case MSAC:
                 return new MSACQuadricRobustEstimator();
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -545,7 +545,7 @@ public abstract class QuadricRobustEstimator {
      *
      * @param points        3D points to estimate a quadric.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      quadric.
      * @return an instance of a quadric robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have
@@ -556,13 +556,13 @@ public abstract class QuadricRobustEstimator {
             final List<Point3D> points, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator(points);
             case MSAC:
                 return new MSACQuadricRobustEstimator(points);
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(points, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(points, qualityScores);
             case RANSAC:
             default:
@@ -577,7 +577,7 @@ public abstract class QuadricRobustEstimator {
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      quadric.
      * @return an instance of a quadric robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -587,13 +587,13 @@ public abstract class QuadricRobustEstimator {
             final QuadricRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator(listener);
             case MSAC:
                 return new MSACQuadricRobustEstimator(listener);
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(listener, qualityScores);
             case RANSAC:
             default:
@@ -609,7 +609,7 @@ public abstract class QuadricRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param points        3D points to estimate a quadric.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      quadric.
      * @return an instance of a quadric robust estimator.
      * @throws IllegalArgumentException if provided list of points don't have
@@ -620,14 +620,14 @@ public abstract class QuadricRobustEstimator {
             final QuadricRobustEstimatorListener listener, final List<Point3D> points,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSQuadricRobustEstimator(listener, points);
             case MSAC:
                 return new MSACQuadricRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACQuadricRobustEstimator(listener, points,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSQuadricRobustEstimator(listener, points,
                         qualityScores);
             case RANSAC:

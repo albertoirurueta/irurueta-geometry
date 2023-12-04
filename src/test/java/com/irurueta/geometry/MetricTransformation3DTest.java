@@ -78,24 +78,19 @@ public class MetricTransformation3DTest {
         MetricTransformation3D transformation = new MetricTransformation3D();
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Test constructor with rotation
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -114,24 +109,24 @@ public class MetricTransformation3DTest {
         // check correctness
         double sign = Math.signum(
                 transformation.getRotation().getRotationAngle() * theta);
-        assertEquals(transformation.getRotation().getRotationAngle(),
-                theta * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis[0] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis[1] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis[2] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE,
+                transformation.getScale(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -150,24 +145,19 @@ public class MetricTransformation3DTest {
         transformation = new MetricTransformation3D(translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getScale(),
-                MetricTransformation2D.DEFAULT_SCALE, 0.0);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -188,59 +178,51 @@ public class MetricTransformation3DTest {
         assertNull(transformation);
 
         // Test constructor with scale
-        double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         transformation = new MetricTransformation3D(scale);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getScale(), scale, 0.0);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getScale(), 0.0);
 
         // Test constructor with rotation and translation
-        transformation = new MetricTransformation3D(rotation, translation,
-                scale);
+        transformation = new MetricTransformation3D(rotation, translation, scale);
 
         // check correctness
-        sign = Math.signum(
-                transformation.getRotation().getRotationAngle() * theta);
-        assertEquals(transformation.getRotation().getRotationAngle(),
-                theta * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis[0] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis[1] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis[2] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getScale(), scale, 0.0);
+        sign = Math.signum(transformation.getRotation().getRotationAngle() * theta);
+        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(scale, transformation.getScale(), 0.0);
 
         // Force NullPointerException
         transformation = null;
         try {
-            transformation = new MetricTransformation3D(null, translation,
-                    scale);
+            transformation = new MetricTransformation3D(null, translation, scale);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
@@ -252,10 +234,8 @@ public class MetricTransformation3DTest {
         assertNull(transformation);
 
         // Force IllegalArgumentException
-        transformation = null;
         try {
-            transformation = new MetricTransformation3D(rotation,
-                    badTranslation, scale);
+            transformation = new MetricTransformation3D(rotation, badTranslation, scale);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -300,14 +280,10 @@ public class MetricTransformation3DTest {
         transformation = new MetricTransformation3D(q, translation,
                 scale);
 
-        final Point3D outputPoint1 = transformation.transformAndReturnNew(
-                inputPoint1);
-        final Point3D outputPoint2 = transformation.transformAndReturnNew(
-                inputPoint2);
-        final Point3D outputPoint3 = transformation.transformAndReturnNew(
-                inputPoint3);
-        final Point3D outputPoint4 = transformation.transformAndReturnNew(
-                inputPoint4);
+        final Point3D outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
+        final Point3D outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
+        final Point3D outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
+        final Point3D outputPoint4 = transformation.transformAndReturnNew(inputPoint4);
 
         final MetricTransformation3D transformation2 =
                 new MetricTransformation3D(inputPoint1, inputPoint2,
@@ -324,7 +300,7 @@ public class MetricTransformation3DTest {
         assertEquals(q.getC(), q2.getC(), ABSOLUTE_ERROR);
         assertEquals(q.getD(), q2.getD(), ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
-        assertEquals(transformation2.getScale(), scale, ABSOLUTE_ERROR);
+        assertEquals(scale, transformation2.getScale(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -344,14 +320,10 @@ public class MetricTransformation3DTest {
         final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
 
         // test default values
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
         // set new value
         transformation.setRotation(rotation);
@@ -359,14 +331,14 @@ public class MetricTransformation3DTest {
         // check correctness
         final double sign = Math.signum(
                 transformation.getRotation().getRotationAngle() * theta);
-        assertEquals(transformation.getRotation().getRotationAngle(),
-                theta * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis[0] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis[1] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis[2] * sign, ABSOLUTE_ERROR);
+        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
 
         // Force NullPointerException
         try {
@@ -407,27 +379,27 @@ public class MetricTransformation3DTest {
         // check correctness
         final double sign = Math.signum(
                 transformation.getRotation().getRotationAngle() * theta1);
-        assertEquals(transformation.getRotation().getRotationAngle(),
-                theta1 * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0],
-                rotAxis1[0] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1],
-                rotAxis1[1] * sign, ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2],
-                rotAxis1[2] * sign, ABSOLUTE_ERROR);
+        assertEquals(theta1 * sign, transformation.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis1[0] * sign, transformation.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis1[1] * sign, transformation.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(rotAxis1[2] * sign, transformation.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
 
         // add second rotation
         transformation.addRotation(rotation2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(),
-                combinedRotation.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0],
-                combinedRotation.getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1],
-                combinedRotation.getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2],
-                combinedRotation.getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAngle(),
+                transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAxis()[0],
+                transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAxis()[1],
+                transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAxis()[2],
+                transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
     }
 
     @Test
@@ -440,33 +412,27 @@ public class MetricTransformation3DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation[2],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translation[2],
-                ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation[2], transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -492,13 +458,13 @@ public class MetricTransformation3DTest {
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -506,39 +472,33 @@ public class MetricTransformation3DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation1[2],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translation1[2],
-                ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation1[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation1[2], transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation1[2] +
-                translation2[2], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translation1[2] +
-                translation2[2], ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[2] + translation2[2],
+                transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation1[2] + translation2[2],
+                transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -559,13 +519,13 @@ public class MetricTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set new value
         transformation.setTranslationX(translationX);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX, 0.0);
+        assertEquals(translationX, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -577,13 +537,13 @@ public class MetricTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslationY(translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY, 0.0);
+        assertEquals(translationY, transformation.getTranslationY(), 0.0);
     }
 
 
@@ -596,13 +556,13 @@ public class MetricTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set new value
         transformation.setTranslationZ(translationZ);
 
         // check correctness
-        assertEquals(transformation.getTranslationZ(), translationZ, 0.0);
+        assertEquals(translationZ, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -618,33 +578,27 @@ public class MetricTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translationX, translationY, translationZ);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translationZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translationZ,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslationZ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -652,43 +606,34 @@ public class MetricTransformation3DTest {
         final MetricTransformation3D transformation = new MetricTransformation3D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final InhomogeneousPoint3D translation = new InhomogeneousPoint3D(
                 translationX, translationY, translationZ);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translationZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translationZ,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         final Point3D translation2 = transformation.getTranslationPoint();
         final Point3D translation3 = Point3D.create();
@@ -704,26 +649,23 @@ public class MetricTransformation3DTest {
         final MetricTransformation3D transformation = new MetricTransformation3D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set value
         transformation.setTranslationX(translationX1);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX1, 0.0);
+        assertEquals(translationX1, transformation.getTranslationX(), 0.0);
 
         // add translation x
         transformation.addTranslationX(translationX2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -737,20 +679,19 @@ public class MetricTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set value
         transformation.setTranslationY(translationY1);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY1, 0.0);
+        assertEquals(translationY1, transformation.getTranslationY(), 0.0);
 
         // add translation y
         transformation.addTranslationY(translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -758,26 +699,23 @@ public class MetricTransformation3DTest {
         final MetricTransformation3D transformation = new MetricTransformation3D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set value
         transformation.setTranslationZ(translationZ1);
 
         // Check correctness
-        assertEquals(transformation.getTranslationZ(), translationZ1, 0.0);
+        assertEquals(translationZ1, transformation.getTranslationZ(), 0.0);
 
         // add translationZ
         transformation.addTranslationZ(translationZ2);
 
         // check correctness
-        assertEquals(transformation.getTranslationZ(),
-                translationZ1 + translationZ2, 0.0);
+        assertEquals(translationZ1 + translationZ2, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -785,39 +723,28 @@ public class MetricTransformation3DTest {
         final MetricTransformation3D transformation = new MetricTransformation3D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set values
-        transformation.setTranslation(translationX1, translationY1,
-                translationZ1);
+        transformation.setTranslation(translationX1, translationY1, translationZ1);
 
         // add translation
-        transformation.addTranslation(translationX2, translationY2,
-                translationZ2);
+        transformation.addTranslation(translationX2, translationY2, translationZ2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
-        assertEquals(transformation.getTranslationZ(),
-                translationZ1 + translationZ2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
+        assertEquals(translationZ1 + translationZ2, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -825,40 +752,29 @@ public class MetricTransformation3DTest {
         final MetricTransformation3D transformation = new MetricTransformation3D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set values
-        transformation.setTranslation(translationX1, translationY1,
-                translationZ1);
+        transformation.setTranslation(translationX1, translationY1, translationZ1);
 
         // add translation
-        final Point3D translation2 = new InhomogeneousPoint3D(translationX2,
-                translationY2, translationZ2);
+        final Point3D translation2 = new InhomogeneousPoint3D(translationX2, translationY2, translationZ2);
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
-        assertEquals(transformation.getTranslationZ(),
-                translationZ1 + translationZ2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
+        assertEquals(translationZ1 + translationZ2, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -866,18 +782,16 @@ public class MetricTransformation3DTest {
         final MetricTransformation3D transformation = new MetricTransformation3D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getScale(),
-                MetricTransformation3D.DEFAULT_SCALE, 0.0);
+        assertEquals(MetricTransformation3D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // set value
         transformation.setScale(scale);
 
         // check correctness
-        assertEquals(transformation.getScale(), scale, 0.0);
+        assertEquals(scale, transformation.getScale(), 0.0);
     }
 
     @Test
@@ -948,8 +862,7 @@ public class MetricTransformation3DTest {
         final double[] translation = new double[
                 MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final Point3D expectedPoint = Point3D.create();
         transformPoint(point, expectedPoint, rotation, translation, scale);
@@ -1139,73 +1052,43 @@ public class MetricTransformation3DTest {
         outQuadric1.normalize();
         outQuadric2.normalize();
 
-        assertEquals(expectedQuadric.getA(), outQuadric1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), outQuadric1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), outQuadric1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), outQuadric1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), outQuadric1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), outQuadric1.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), outQuadric1.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), outQuadric1.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), outQuadric1.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), outQuadric1.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), outQuadric1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric1.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric1.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric1.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric1.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric1.getJ(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedQuadric.getA(), outQuadric2.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), outQuadric2.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), outQuadric2.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), outQuadric2.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), outQuadric2.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), outQuadric2.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), outQuadric2.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), outQuadric2.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), outQuadric2.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), outQuadric2.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), outQuadric2.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric2.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric2.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric2.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric2.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric2.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric2.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric2.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric2.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric2.getJ(), ABSOLUTE_ERROR);
 
         transformation.transform(quadric);
 
         // check correctness
         quadric.normalize();
 
-        assertEquals(expectedQuadric.getA(), quadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), quadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), quadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), quadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), quadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), quadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), quadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), quadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), quadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), quadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), quadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), quadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), quadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), quadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), quadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), quadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), quadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), quadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), quadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), quadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1318,26 +1201,16 @@ public class MetricTransformation3DTest {
         // check quadric correctness
         outQuadric.normalize();
 
-        assertEquals(expectedQuadric.getA(), outQuadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), outQuadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), outQuadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), outQuadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), outQuadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), outQuadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), outQuadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), outQuadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), outQuadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), outQuadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), outQuadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1394,73 +1267,43 @@ public class MetricTransformation3DTest {
         outDualQuadric1.normalize();
         outDualQuadric2.normalize();
 
-        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(), ABSOLUTE_ERROR);
 
         transformation.transform(dualQuadric);
 
         // check correctness
         dualQuadric.normalize();
 
-        assertEquals(expectedDualQuadric.getA(), dualQuadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), dualQuadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), dualQuadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), dualQuadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), dualQuadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), dualQuadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), dualQuadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), dualQuadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), dualQuadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), dualQuadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), dualQuadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), dualQuadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), dualQuadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), dualQuadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), dualQuadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), dualQuadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), dualQuadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), dualQuadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), dualQuadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), dualQuadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1583,26 +1426,16 @@ public class MetricTransformation3DTest {
         // check dual quadric correctness
         outDualQuadric.normalize();
 
-        assertEquals(expectedDualQuadric.getA(), outDualQuadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), outDualQuadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), outDualQuadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), outDualQuadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), outDualQuadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), outDualQuadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), outDualQuadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), outDualQuadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), outDualQuadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), outDualQuadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1627,8 +1460,7 @@ public class MetricTransformation3DTest {
         final double[] translation = new double[
                 MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final MetricTransformation3D transformation =
                 new MetricTransformation3D(rotation, translation, scale);
@@ -1676,7 +1508,7 @@ public class MetricTransformation3DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 3 non linear dependent rows
+        // ensure we create a matrix with 3 non-linear dependent rows
         while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1772,8 +1604,7 @@ public class MetricTransformation3DTest {
         final double[] translation = new double[
                 MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final MetricTransformation3D transformation =
                 new MetricTransformation3D(rotation, translation, scale);
@@ -1811,23 +1642,15 @@ public class MetricTransformation3DTest {
             outPlane2.normalize();
 
             // check correctness
-            assertEquals(expectedPlane.getA(), outPlane1.getA(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getB(), outPlane1.getB(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getC(), outPlane1.getC(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getD(), outPlane1.getD(),
-                    ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getA(), outPlane1.getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getB(), outPlane1.getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getC(), outPlane1.getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getD(), outPlane1.getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedPlane.getA(), outPlane2.getA(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getB(), outPlane2.getB(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getC(), outPlane2.getC(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getD(), outPlane2.getD(),
-                    ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getA(), outPlane2.getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getB(), outPlane2.getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getC(), outPlane2.getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getD(), outPlane2.getD(), ABSOLUTE_ERROR);
         }
     }
 
@@ -1939,64 +1762,40 @@ public class MetricTransformation3DTest {
         outLine2.normalize();
 
         // check correctness
-        assertEquals(expectedLine.getPlane1().getA(),
-                outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getB(),
-                outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getC(),
-                outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getD(),
-                outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getA(), outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getB(), outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getC(), outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getD(), outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane2().getA(),
-                outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getB(),
-                outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getC(),
-                outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getD(),
-                outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getA(), outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getB(), outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getC(), outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getD(), outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane1().getA(),
-                outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getB(),
-                outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getC(),
-                outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getD(),
-                outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getA(), outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getB(), outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getC(), outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getD(), outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane2().getA(),
-                outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getB(),
-                outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getC(),
-                outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getD(),
-                outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getA(), outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getB(), outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getC(), outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getD(), outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
 
         transformation.transform(line);
 
         line.normalize();
 
         // check correctness
-        assertEquals(expectedLine.getPlane1().getA(),
-                line.getPlane1().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getB(),
-                line.getPlane1().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getC(),
-                line.getPlane1().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getD(),
-                line.getPlane1().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getA(), line.getPlane1().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getB(), line.getPlane1().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getC(), line.getPlane1().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getD(), line.getPlane1().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane2().getA(),
-                line.getPlane2().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getB(),
-                line.getPlane2().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getC(),
-                line.getPlane2().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getD(),
-                line.getPlane2().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getA(), line.getPlane2().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getB(), line.getPlane2().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getC(), line.getPlane2().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getD(), line.getPlane2().getD(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2066,41 +1865,25 @@ public class MetricTransformation3DTest {
             outLine2.normalize();
 
             // check correctness
-            assertEquals(expectedLine.getPlane1().getA(),
-                    outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getB(),
-                    outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getC(),
-                    outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getD(),
-                    outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getA(), outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getB(), outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getC(), outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getD(), outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane2().getA(),
-                    outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getB(),
-                    outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getC(),
-                    outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getD(),
-                    outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getA(), outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getB(), outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getC(), outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getD(), outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane1().getA(),
-                    outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getB(),
-                    outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getC(),
-                    outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getD(),
-                    outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getA(), outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getB(), outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getC(), outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getD(), outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane2().getA(),
-                    outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getB(),
-                    outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getC(),
-                    outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getD(),
-                    outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getA(), outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getB(), outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getC(), outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getD(), outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
         }
     }
 
@@ -2124,8 +1907,7 @@ public class MetricTransformation3DTest {
         final double[] translation = new double[
                 MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final MetricTransformation3D transformation =
                 new MetricTransformation3D(rotation, translation, scale);
@@ -2165,23 +1947,15 @@ public class MetricTransformation3DTest {
             line.normalize();
 
             // check correctness
-            assertEquals(expectedLine.getPlane1().getA(),
-                    line.getPlane1().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getB(),
-                    line.getPlane1().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getC(),
-                    line.getPlane1().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getD(),
-                    line.getPlane1().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getA(), line.getPlane1().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getB(), line.getPlane1().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getC(), line.getPlane1().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getD(), line.getPlane1().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane2().getA(),
-                    line.getPlane2().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getB(),
-                    line.getPlane2().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getC(),
-                    line.getPlane2().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getD(),
-                    line.getPlane2().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getA(), line.getPlane2().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getB(), line.getPlane2().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getC(), line.getPlane2().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getD(), line.getPlane2().getD(), ABSOLUTE_ERROR);
         }
     }
 
@@ -2229,7 +2003,6 @@ public class MetricTransformation3DTest {
 
         final Polygon3D inputPolygon = new Polygon3D(inputPoints);
         final Polygon3D expectedPolygon = new Polygon3D(expectedPoints);
-
 
         final Polygon3D outPolygon1 = transformation.transformAndReturnNew(inputPolygon);
         final Polygon3D outPolygon2 = new Polygon3D(inputPoints);
@@ -2736,35 +2509,32 @@ public class MetricTransformation3DTest {
         assertTrue(m3.equals(expectedMatrix, ABSOLUTE_ERROR));
 
         // check also correctness of rotation and translation
-        assertEquals(transformation1.getRotation().getRotationAngle(),
-                expectedRotation.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(transformation1.getRotation().getRotationAxis()[0],
-                expectedRotation.getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(transformation1.getRotation().getRotationAxis()[1],
-                expectedRotation.getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(transformation1.getRotation().getRotationAxis()[2],
-                expectedRotation.getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(),
+                transformation1.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0],
+                transformation1.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1],
+                transformation1.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2],
+                transformation1.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
-        assertEquals(transformation3.getRotation().getRotationAngle(),
-                expectedRotation.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getRotationAxis()[0],
-                expectedRotation.getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getRotationAxis()[1],
-                expectedRotation.getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getRotationAxis()[2],
-                expectedRotation.getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(),
+                transformation3.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0],
+                transformation3.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1],
+                transformation3.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2],
+                transformation3.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
-        assertArrayEquals(transformation1.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
-        assertArrayEquals(transformation3.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
 
-        assertEquals(transformation1.getScale(), expectedScale, ABSOLUTE_ERROR);
-        assertEquals(transformation3.getScale(), expectedScale, ABSOLUTE_ERROR);
+        assertEquals(expectedScale, transformation1.getScale(), ABSOLUTE_ERROR);
+        assertEquals(expectedScale, transformation3.getScale(), ABSOLUTE_ERROR);
 
-        // now try combining with euclidean transformations
-        transformation1 =
-                new MetricTransformation3D(rotation1, translation1, scale1);
+        // now try combining with Euclidean transformations
+        transformation1 = new MetricTransformation3D(rotation1, translation1, scale1);
         final EuclideanTransformation3D euclideanTransformation =
                 new EuclideanTransformation3D(rotation2, translation2);
 
@@ -2778,7 +2548,7 @@ public class MetricTransformation3DTest {
         expectedTranslation = rotM1.toArray();
         ArrayUtils.sum(expectedTranslation, translation1, expectedTranslation);
         // scale2 is assumed to be 1 because
-        // transformation is euclidean
+        // transformation is Euclidean
         expectedScale = scale1;
 
         // combine and return result as a new transformation
@@ -2800,31 +2570,29 @@ public class MetricTransformation3DTest {
         assertTrue(m3.equals(expectedMatrix, ABSOLUTE_ERROR));
 
         // check also correctness of rotation and translation
-        assertEquals(transformation1.getRotation().getRotationAngle(),
-                expectedRotation.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(transformation1.getRotation().getRotationAxis()[0],
-                expectedRotation.getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(transformation1.getRotation().getRotationAxis()[1],
-                expectedRotation.getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(transformation1.getRotation().getRotationAxis()[2],
-                expectedRotation.getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(),
+                transformation1.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0],
+                transformation1.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1],
+                transformation1.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2],
+                transformation1.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
-        assertEquals(transformation3.getRotation().getRotationAngle(),
-                expectedRotation.getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getRotationAxis()[0],
-                expectedRotation.getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getRotationAxis()[1],
-                expectedRotation.getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(transformation3.getRotation().getRotationAxis()[2],
-                expectedRotation.getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(),
+                transformation3.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0],
+                transformation3.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1],
+                transformation3.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2],
+                transformation3.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
-        assertArrayEquals(transformation1.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
-        assertArrayEquals(transformation3.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
 
-        assertEquals(transformation1.getScale(), expectedScale, ABSOLUTE_ERROR);
-        assertEquals(transformation3.getScale(), expectedScale, ABSOLUTE_ERROR);
+        assertEquals(expectedScale, transformation1.getScale(), ABSOLUTE_ERROR);
+        assertEquals(expectedScale, transformation3.getScale(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2832,14 +2600,11 @@ public class MetricTransformation3DTest {
             throws CoincidentPointsException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double roll = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                        MAX_ANGLE_DEGREES2));
+                randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
         final double pitch = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                        MAX_ANGLE_DEGREES2));
+                randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
         final double yaw = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                        MAX_ANGLE_DEGREES2));
+                randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
 
         final Quaternion q = new Quaternion(roll, pitch, yaw);
         q.normalize();
@@ -2870,17 +2635,12 @@ public class MetricTransformation3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Point3D outputPoint1 = transformation.transformAndReturnNew(
-                inputPoint1);
-        final Point3D outputPoint2 = transformation.transformAndReturnNew(
-                inputPoint2);
-        final Point3D outputPoint3 = transformation.transformAndReturnNew(
-                inputPoint3);
-        final Point3D outputPoint4 = transformation.transformAndReturnNew(
-                inputPoint4);
+        final Point3D outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
+        final Point3D outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
+        final Point3D outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
+        final Point3D outputPoint4 = transformation.transformAndReturnNew(inputPoint4);
 
-        final MetricTransformation3D transformation2 =
-                new MetricTransformation3D();
+        final MetricTransformation3D transformation2 = new MetricTransformation3D();
         transformation2.setTransformationFromPoints(inputPoint1,
                 inputPoint2, inputPoint3, inputPoint4, outputPoint1,
                 outputPoint2, outputPoint3, outputPoint4);
@@ -2895,7 +2655,7 @@ public class MetricTransformation3DTest {
         assertEquals(q.getC(), q2.getC(), ABSOLUTE_ERROR);
         assertEquals(q.getD(), q2.getD(), ABSOLUTE_ERROR);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
-        assertEquals(transformation2.getScale(), scale, ABSOLUTE_ERROR);
+        assertEquals(scale, transformation2.getScale(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2915,8 +2675,7 @@ public class MetricTransformation3DTest {
                 new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final MetricTransformation3D transformation1 = new MetricTransformation3D(
                 rotation, translation, scale);
@@ -2932,16 +2691,11 @@ public class MetricTransformation3DTest {
                 SerializationHelper.deserialize(bytes);
 
         // check
-        assertEquals(transformation1.getRotation(),
-                transformation2.getRotation());
-        assertNotSame(transformation1.getRotation(),
-                transformation2.getRotation());
-        assertArrayEquals(transformation1.getTranslation(),
-                transformation2.getTranslation(), 0.0);
-        assertNotSame(transformation1.getTranslation(),
-                transformation2.getTranslation());
-        assertEquals(transformation1.getScale(),
-                transformation2.getScale(), 0.0);
+        assertEquals(transformation1.getRotation(), transformation2.getRotation());
+        assertNotSame(transformation1.getRotation(), transformation2.getRotation());
+        assertArrayEquals(transformation1.getTranslation(), transformation2.getTranslation(), 0.0);
+        assertNotSame(transformation1.getTranslation(), transformation2.getTranslation());
+        assertEquals(transformation1.getScale(), transformation2.getScale(), 0.0);
     }
 
     private static void transformPoint(

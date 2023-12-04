@@ -40,7 +40,7 @@ public abstract class DualConicRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -85,7 +85,7 @@ public abstract class DualConicRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -408,13 +408,13 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator();
             case MSAC:
                 return new MSACDualConicRobustEstimator();
             case PROSAC:
                 return new PROSACDualConicRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator();
             case RANSAC:
             default:
@@ -427,7 +427,7 @@ public abstract class DualConicRobustEstimator {
      * provided lines and robust estimator method.
      *
      * @param lines  2D lines to estimate a dual conic.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have a
@@ -436,13 +436,13 @@ public abstract class DualConicRobustEstimator {
     public static DualConicRobustEstimator create(
             final List<Line2D> lines, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator(lines);
             case MSAC:
                 return new MSACDualConicRobustEstimator(lines);
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(lines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(lines);
             case RANSAC:
             default:
@@ -456,7 +456,7 @@ public abstract class DualConicRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 dual conic.
      * @return an instance of a dual conic robust estimator.
      */
@@ -464,13 +464,13 @@ public abstract class DualConicRobustEstimator {
             final DualConicRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator(listener);
             case MSAC:
                 return new MSACDualConicRobustEstimator(listener);
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(listener);
             case RANSAC:
             default:
@@ -485,7 +485,7 @@ public abstract class DualConicRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param lines    2D lines to estimate a dual conic.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have a
@@ -495,13 +495,13 @@ public abstract class DualConicRobustEstimator {
             final DualConicRobustEstimatorListener listener, final List<Line2D> lines,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator(listener, lines);
             case MSAC:
                 return new MSACDualConicRobustEstimator(listener, lines);
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(listener, lines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(listener, lines);
             case RANSAC:
             default:
@@ -523,13 +523,13 @@ public abstract class DualConicRobustEstimator {
     public static DualConicRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator();
             case MSAC:
                 return new MSACDualConicRobustEstimator();
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -543,7 +543,7 @@ public abstract class DualConicRobustEstimator {
      *
      * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have
@@ -554,14 +554,14 @@ public abstract class DualConicRobustEstimator {
             final List<Line2D> lines, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator(lines);
             case MSAC:
                 return new MSACDualConicRobustEstimator(lines);
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(lines,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(lines,
                         qualityScores);
             case RANSAC:
@@ -577,7 +577,7 @@ public abstract class DualConicRobustEstimator {
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -587,14 +587,14 @@ public abstract class DualConicRobustEstimator {
             final DualConicRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator(listener);
             case MSAC:
                 return new MSACDualConicRobustEstimator(listener);
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(listener,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(listener,
                         qualityScores);
             case RANSAC:
@@ -611,7 +611,7 @@ public abstract class DualConicRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param lines         2D lines to estimate a dual conic.
      * @param qualityScores quality scores corresponding to each provided line.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      dual conic.
      * @return an instance of a dual conic robust estimator.
      * @throws IllegalArgumentException if provided list of lines don't have
@@ -622,14 +622,14 @@ public abstract class DualConicRobustEstimator {
             final DualConicRobustEstimatorListener listener, final List<Line2D> lines,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDualConicRobustEstimator(listener, lines);
             case MSAC:
                 return new MSACDualConicRobustEstimator(listener, lines);
             case PROSAC:
                 return new PROSACDualConicRobustEstimator(listener, lines,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDualConicRobustEstimator(listener, lines,
                         qualityScores);
             case RANSAC:

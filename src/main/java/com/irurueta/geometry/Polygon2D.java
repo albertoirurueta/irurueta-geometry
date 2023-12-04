@@ -324,8 +324,8 @@ public class Polygon2D implements Serializable {
         final int total = mVertices.size();
 
         for (final Point2D point : mVertices) {
-            inhomX += point.getInhomX() / (double) total;
-            inhomY += point.getInhomY() / (double) total;
+            inhomX += point.getInhomX() / total;
+            inhomY += point.getInhomY() / total;
         }
         result.setInhomogeneousCoordinates(inhomX, inhomY);
     }
@@ -412,7 +412,7 @@ public class Polygon2D implements Serializable {
             // to increase accuracy
             line.normalize();
 
-            // find closest point to line
+            // find the closest point to line
             line.closestPoint(point, pointInLine);
             // to increase accuracy
             pointInLine.normalize();
@@ -442,7 +442,7 @@ public class Polygon2D implements Serializable {
         // to increase accuracy
         line.normalize();
 
-        // find closest point to line
+        // find the closest point to line
         line.closestPoint(point, pointInLine);
         // to increase accuracy
         pointInLine.normalize();
@@ -460,7 +460,7 @@ public class Polygon2D implements Serializable {
 
         if (!found) {
             // no closest point was found on a segment belonging to polygon
-            // boundary so we search for the closest vertex
+            // boundary, so we search for the closest vertex
             iterator = mVertices.iterator();
             while (iterator.hasNext()) {
                 // a better vertex has been found
@@ -524,7 +524,7 @@ public class Polygon2D implements Serializable {
             // to increase accuracy
             line.normalize();
 
-            // find closest point to line
+            // find the closest point to line
             line.closestPoint(point, pointInLine);
             // to increase accuracy
             pointInLine.normalize();
@@ -556,7 +556,7 @@ public class Polygon2D implements Serializable {
         // to increase accuracy
         line.normalize();
 
-        // find closest point to line
+        // find the closest point to line
         line.closestPoint(point, pointInLine);
         // to increase accuracy
         pointInLine.normalize();
@@ -576,7 +576,7 @@ public class Polygon2D implements Serializable {
 
         if (!found) {
             // no closest point was found on a segment belonging to polygon
-            // boundary so we search for the closest vertex
+            // boundary, so we search for the closest vertex
             iterator = mVertices.iterator();
             while (iterator.hasNext()) {
                 curPoint = iterator.next();

@@ -43,9 +43,9 @@ public class RotationUtils {
     /**
      * Skew symmetric matrix omega from angular rates vector w.
      *
-     * @param w1     angular rate from x axis.
-     * @param w2     angular rate from y axis.
-     * @param w3     angular rate from z axis.
+     * @param w1     angular rate from x-axis.
+     * @param w2     angular rate from y-axis.
+     * @param w3     angular rate from z-axis.
      * @param result instance where result will be stored.
      * @throws IllegalArgumentException if provided matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">w2omega.m at https://github.com/joansola/slamtb</a>
@@ -97,9 +97,9 @@ public class RotationUtils {
     /**
      * Skew symmetric matrix omega from angular rates vector w.
      *
-     * @param w1 angular rate from x axis.
-     * @param w2 angular rate from y axis.
-     * @param w3 angular rate from z axis.
+     * @param w1 angular rate from x-axis.
+     * @param w2 angular rate from y-axis.
+     * @param w3 angular rate from z-axis.
      * @return a new skew symmetric matrix omega.
      * @see <a href="https://github.com/joansola/slamtb">w2omega.m at https://github.com/joansola/slamtb</a>
      */

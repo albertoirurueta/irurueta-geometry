@@ -45,7 +45,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of matched planes.
@@ -177,7 +177,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     /**
      * Indicates if estimator is ready to start the pinhole camera estimation.
      * This is true when input data (i.e. lists of matched planes and lines) are
-     * provided an a minimum of MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES are
+     * provided as a minimum of MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES are
      * available.
      *
      * @return true if estimator is ready, false otherwise.
@@ -221,7 +221,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -239,7 +239,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * @param planes list of 3D planes to estimate a pinhole camera.
      * @param lines  list of corresponding projected 2D lines used to estimate
      *               a pinhole camera.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
@@ -259,7 +259,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -280,7 +280,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * @param planes   list of 3D planes to estimate a pinhole camera.
      * @param lines    list of corresponding projected 2D lines used to estimate
      *                 a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
@@ -302,7 +302,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -324,7 +324,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
@@ -347,7 +347,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -372,7 +372,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or

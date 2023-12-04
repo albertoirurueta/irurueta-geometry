@@ -65,7 +65,7 @@ public class RANSACSphereRobustEstimatorTest implements
         assertEquals(0.0, SphereRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, SphereRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, SphereRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, SphereRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, SphereRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1.0, RANSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, RANSACSphereRobustEstimator.MIN_THRESHOLD, 0.0);
     }
@@ -76,18 +76,18 @@ public class RANSACSphereRobustEstimatorTest implements
         RANSACSphereRobustEstimator estimator = new RANSACSphereRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACSphereRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -101,19 +101,19 @@ public class RANSACSphereRobustEstimatorTest implements
         estimator = new RANSACSphereRobustEstimator(points);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACSphereRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -153,18 +153,18 @@ public class RANSACSphereRobustEstimatorTest implements
         estimator = new RANSACSphereRobustEstimator(listener);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(RANSACSphereRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -173,19 +173,19 @@ public class RANSACSphereRobustEstimatorTest implements
         estimator = new RANSACSphereRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(RANSACSphereRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -205,14 +205,14 @@ public class RANSACSphereRobustEstimatorTest implements
                 new RANSACSphereRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                RANSACSphereRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(RANSACSphereRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -235,7 +235,7 @@ public class RANSACSphereRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -245,14 +245,14 @@ public class RANSACSphereRobustEstimatorTest implements
                 new RANSACSphereRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -273,14 +273,14 @@ public class RANSACSphereRobustEstimatorTest implements
                 new RANSACSphereRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -301,14 +301,14 @@ public class RANSACSphereRobustEstimatorTest implements
                 new RANSACSphereRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 1);
+        assertEquals(1, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -335,7 +335,7 @@ public class RANSACSphereRobustEstimatorTest implements
         estimator.setPoints(points);
 
         // check correctness
-        assertSame(estimator.getPoints(), points);
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
 
         // clearing list makes instance not ready
@@ -438,17 +438,17 @@ public class RANSACSphereRobustEstimatorTest implements
 
             estimator.setThreshold(THRESHOLD);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final Sphere sphere2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -469,8 +469,8 @@ public class RANSACSphereRobustEstimatorTest implements
             }
 
             // check that both spheres are equal
-            assertEquals(sphere.getCenter().distanceTo(sphere2.getCenter()),
-                    0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, sphere.getCenter().distanceTo(sphere2.getCenter()),
+                    ABSOLUTE_ERROR);
             assertEquals(sphere.getRadius(), sphere2.getRadius(),
                     ABSOLUTE_ERROR);
 

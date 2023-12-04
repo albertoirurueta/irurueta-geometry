@@ -25,7 +25,9 @@ import java.io.Serializable;
  * Rotation is defined internally as axis coordinates and rotation angle,
  * following Rodrigues formulas.
  * This class is based in:
- * http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/sfrotation_java.htm
+ * <a href="http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/sfrotation_java.htm">
+ *     http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/sfrotation_java.htm
+ * </a>
  */
 public class AxisRotation3D extends Rotation3D implements Serializable {
 
@@ -407,13 +409,13 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is negative
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
@@ -425,7 +427,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
                 m.getColumns() != INHOM_COORDS) {
             throw new InvalidRotationMatrixException();
         }
-        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {
+        if (!Rotation3D.isValidRotationMatrix(m, threshold)) {
             throw new InvalidRotationMatrixException();
         }
 
@@ -508,7 +510,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             return;
         }
 
-        // as we have reached here there are no singularities so we can handle
+        // as we have reached here there are no singularities, so we can handle
         // normally
         double s = Math.sqrt((m.getElementAt(2, 1) - m.getElementAt(1, 2)) *
                 (m.getElementAt(2, 1) - m.getElementAt(1, 2))
@@ -533,14 +535,14 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 4x4, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
      *
      * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws InvalidRotationMatrixException Raised if provided matrix is not
-     *                                        valid (has wrong size or it is not orthonormal).
+     *                                        valid (has wrong size, or it is not orthonormal).
      * @throws IllegalArgumentException       Raised if provided threshold is
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}.
@@ -553,7 +555,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
                 m.getColumns() != HOM_COORDS) {
             throw new InvalidRotationMatrixException();
         }
-        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {
+        if (!Rotation3D.isValidRotationMatrix(m, threshold)) {
             throw new InvalidRotationMatrixException();
         }
         if (Math.abs(m.getElementAt(3, 0)) > threshold ||
@@ -685,20 +687,6 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             result.fromMatrix(m1);
         } catch (final InvalidRotationMatrixException | WrongSizeException ignore) {
             // never happens
-        }
-    }
-
-    /**
-     * Sets values of this rotation from a 3D matrix rotation.
-     *
-     * @param rot 3D matrix rotation to set values from.
-     */
-    @Override
-    public void fromRotation(final MatrixRotation3D rot) {
-        try {
-            fromInhomogeneousMatrix(rot.internalMatrix);
-        } catch (InvalidRotationMatrixException ignore) {
-            // never thrown
         }
     }
 

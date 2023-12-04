@@ -47,10 +47,10 @@ public class EllipsoidTest {
 
         // test constructor with center, axes and rotation
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
         randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
                 MAX_RANDOM_VALUE);
@@ -64,9 +64,9 @@ public class EllipsoidTest {
         ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
 
         // check correctness
-        assertEquals(ellipsoid.getCenter(), center);
-        assertArrayEquals(ellipsoid.getSemiAxesLengths(), semiAxesLengths, 0.0);
-        assertEquals(ellipsoid.getRotation(), rotation);
+        assertEquals(center, ellipsoid.getCenter());
+        assertArrayEquals(semiAxesLengths, ellipsoid.getSemiAxesLengths(), 0.0);
+        assertEquals(rotation, ellipsoid.getRotation());
 
         // Force IllegalArgumentException
         ellipsoid = null;
@@ -83,8 +83,8 @@ public class EllipsoidTest {
         final Ellipsoid ellipsoid = new Ellipsoid();
 
         // check default value
-        assertTrue(ellipsoid.getCenter().equals(new InhomogeneousPoint3D(0.0,
-                0.0, 0.0), ABSOLUTE_ERROR));
+        assertTrue(ellipsoid.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0, 0.0),
+                ABSOLUTE_ERROR));
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -95,7 +95,7 @@ public class EllipsoidTest {
         ellipsoid.setCenter(center);
 
         // check correctness
-        assertEquals(ellipsoid.getCenter(), center);
+        assertEquals(center, ellipsoid.getCenter());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class EllipsoidTest {
         ellipsoid.setSemiAxesLengths(axes);
 
         // check correctness
-        assertSame(ellipsoid.getSemiAxesLengths(), axes);
+        assertSame(axes, ellipsoid.getSemiAxesLengths());
 
         // Force IllegalArgumentException
         try {
@@ -140,7 +140,7 @@ public class EllipsoidTest {
         ellipsoid.setRotation(rotation);
 
         // check correctness
-        assertEquals(ellipsoid.getRotation(), rotation);
+        assertEquals(rotation, ellipsoid.getRotation());
     }
 
     @Test
@@ -164,9 +164,9 @@ public class EllipsoidTest {
         ellipsoid.setCenterAxesAndRotation(center, semiAxesLengths, rotation);
 
         // check correctness
-        assertEquals(ellipsoid.getCenter(), center);
-        assertArrayEquals(ellipsoid.getSemiAxesLengths(), semiAxesLengths, 0.0);
-        assertEquals(ellipsoid.getRotation(), rotation);
+        assertEquals(center, ellipsoid.getCenter());
+        assertArrayEquals(semiAxesLengths, ellipsoid.getSemiAxesLengths(), 0.0);
+        assertEquals(rotation, ellipsoid.getRotation());
 
         // Force IllegalArgumentException
         try {
@@ -209,8 +209,7 @@ public class EllipsoidTest {
         final Sphere sphere = new Sphere(center, radius);
         ellipsoid.setFromSphere(sphere);
 
-        assertEquals(ellipsoid.getVolume(), sphere.getVolume(),
-                ABSOLUTE_ERROR);
+        assertEquals(sphere.getVolume(), ellipsoid.getVolume(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -238,9 +237,9 @@ public class EllipsoidTest {
         final double c = semiAxesLengths[2];
 
         final double p = 1.6075;
-        assertEquals(ellipsoid.getSurface(), 4.0 * Math.PI * Math.pow(
-                (Math.pow(a * b, p) + Math.pow(a * c, p) + Math.pow(b * c, p)) / 3.0,
-                1.0 / p), ABSOLUTE_ERROR);
+        assertEquals(4.0 * Math.PI * Math.pow(
+                (Math.pow(a * b, p) + Math.pow(a * c, p) + Math.pow(b * c, p)) / 3.0, 1.0 / p),
+                ellipsoid.getSurface(),  ABSOLUTE_ERROR);
 
         // test from circle
         final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
@@ -248,8 +247,7 @@ public class EllipsoidTest {
         final Sphere sphere = new Sphere(center, radius);
         ellipsoid.setFromSphere(sphere);
 
-        assertEquals(ellipsoid.getSurface(), sphere.getSurface(),
-                ABSOLUTE_ERROR);
+        assertEquals(sphere.getSurface(), ellipsoid.getSurface(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -273,26 +271,16 @@ public class EllipsoidTest {
         quadric1.normalize();
         quadric2.normalize();
 
-        assertEquals(Math.abs(quadric1.getA()), Math.abs(quadric2.getA()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getB()), Math.abs(quadric2.getB()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getC()), Math.abs(quadric2.getC()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getD()), Math.abs(quadric2.getD()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getE()), Math.abs(quadric2.getE()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getF()), Math.abs(quadric2.getF()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getG()), Math.abs(quadric2.getG()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getH()), Math.abs(quadric2.getH()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getI()), Math.abs(quadric2.getI()),
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(quadric1.getJ()), Math.abs(quadric2.getJ()),
-                ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getA()), Math.abs(quadric2.getA()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getB()), Math.abs(quadric2.getB()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getC()), Math.abs(quadric2.getC()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getD()), Math.abs(quadric2.getD()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getE()), Math.abs(quadric2.getE()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getF()), Math.abs(quadric2.getF()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getG()), Math.abs(quadric2.getG()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getH()), Math.abs(quadric2.getH()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getI()), Math.abs(quadric2.getI()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(quadric1.getJ()), Math.abs(quadric2.getJ()), ABSOLUTE_ERROR);
     }
 
     @Test

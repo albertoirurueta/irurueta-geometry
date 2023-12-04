@@ -30,7 +30,7 @@ import java.util.Objects;
  * inhomogeneous point will be at infinity by setting (x=inf,y=inf). Because of
  * this, and because of machine precision, usually Homogeneous points are better
  * suited when working at far distances or for numerical purposes, and their
- * inhomogeneous counterparts are better suited when computing euclidean
+ * inhomogeneous counterparts are better suited when computing Euclidean
  * distances, etc.
  */
 public class InhomogeneousPoint2D extends Point2D implements Serializable {
@@ -306,7 +306,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
 
     /**
      * Checks if the homogeneous 2d point described by this instance equals the
-     * input Point2d (using a comparison threshold).
+     * input {@link Point2D} (using a comparison threshold).
      *
      * @param point     Point that will be compared to.
      * @param threshold threshold grade of tolerance to determine whether the

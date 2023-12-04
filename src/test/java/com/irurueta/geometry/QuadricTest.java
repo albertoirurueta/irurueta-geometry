@@ -62,16 +62,16 @@ public class QuadricTest {
 
         // Constructor
         Quadric quadric = new Quadric();
-        assertEquals(quadric.getA(), 0.0, 0.0);
-        assertEquals(quadric.getB(), 0.0, 0.0);
-        assertEquals(quadric.getC(), 0.0, 0.0);
-        assertEquals(quadric.getD(), 0.0, 0.0);
-        assertEquals(quadric.getE(), 0.0, 0.0);
-        assertEquals(quadric.getF(), 0.0, 0.0);
-        assertEquals(quadric.getG(), 0.0, 0.0);
-        assertEquals(quadric.getH(), 0.0, 0.0);
-        assertEquals(quadric.getI(), 0.0, 0.0);
-        assertEquals(quadric.getJ(), 0.0, 0.0);
+        assertEquals(0.0, quadric.getA(), 0.0);
+        assertEquals(0.0, quadric.getB(), 0.0);
+        assertEquals(0.0, quadric.getC(), 0.0);
+        assertEquals(0.0, quadric.getD(), 0.0);
+        assertEquals(0.0, quadric.getE(), 0.0);
+        assertEquals(0.0, quadric.getF(), 0.0);
+        assertEquals(0.0, quadric.getG(), 0.0);
+        assertEquals(0.0, quadric.getH(), 0.0);
+        assertEquals(0.0, quadric.getI(), 0.0);
+        assertEquals(0.0, quadric.getJ(), 0.0);
 
         // Constructor with params
         double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -86,16 +86,16 @@ public class QuadricTest {
         double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         quadric = new Quadric(a, b, c, d, e, f, g, h, i, j);
-        assertEquals(quadric.getA(), a, 0.0);
-        assertEquals(quadric.getB(), b, 0.0);
-        assertEquals(quadric.getC(), c, 0.0);
-        assertEquals(quadric.getD(), d, 0.0);
-        assertEquals(quadric.getE(), e, 0.0);
-        assertEquals(quadric.getF(), f, 0.0);
-        assertEquals(quadric.getG(), g, 0.0);
-        assertEquals(quadric.getH(), h, 0.0);
-        assertEquals(quadric.getI(), i, 0.0);
-        assertEquals(quadric.getJ(), j, 0.0);
+        assertEquals(a, quadric.getA(), 0.0);
+        assertEquals(b, quadric.getB(), 0.0);
+        assertEquals(c, quadric.getC(), 0.0);
+        assertEquals(d, quadric.getD(), 0.0);
+        assertEquals(e, quadric.getE(), 0.0);
+        assertEquals(f, quadric.getF(), 0.0);
+        assertEquals(g, quadric.getG(), 0.0);
+        assertEquals(h, quadric.getH(), 0.0);
+        assertEquals(i, quadric.getI(), 0.0);
+        assertEquals(j, quadric.getJ(), 0.0);
         assertFalse(quadric.isNormalized());
 
         // Constructor using matrix
@@ -131,16 +131,16 @@ public class QuadricTest {
 
         quadric = new Quadric(m);
 
-        assertEquals(quadric.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(quadric.getB(), m.getElementAt(1, 1), 0.0);
-        assertEquals(quadric.getC(), m.getElementAt(2, 2), 0.0);
-        assertEquals(quadric.getD(), m.getElementAt(1, 0), 0.0);
-        assertEquals(quadric.getE(), m.getElementAt(2, 1), 0.0);
-        assertEquals(quadric.getF(), m.getElementAt(2, 0), 0.0);
-        assertEquals(quadric.getG(), m.getElementAt(3, 0), 0.0);
-        assertEquals(quadric.getH(), m.getElementAt(1, 3), 0.0);
-        assertEquals(quadric.getI(), m.getElementAt(3, 2), 0.0);
-        assertEquals(quadric.getJ(), m.getElementAt(3, 3), 0.0);
+        assertEquals(m.getElementAt(0, 0), quadric.getA(), 0.0);
+        assertEquals(m.getElementAt(1, 1), quadric.getB(), 0.0);
+        assertEquals(m.getElementAt(2, 2), quadric.getC(), 0.0);
+        assertEquals(m.getElementAt(1, 0), quadric.getD(), 0.0);
+        assertEquals(m.getElementAt(2, 1), quadric.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 0),quadric.getF(), 0.0);
+        assertEquals(m.getElementAt(3, 0), quadric.getG(), 0.0);
+        assertEquals(m.getElementAt(1, 3), quadric.getH(), 0.0);
+        assertEquals(m.getElementAt(3, 2), quadric.getI(), 0.0);
+        assertEquals(m.getElementAt(3, 3), quadric.getJ(), 0.0);
 
         // Constructor using matrix with wrong size exception
         m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS + 1);
@@ -171,7 +171,6 @@ public class QuadricTest {
         m.setElementAt(3, 2, i);
         m.setElementAt(2, 3, i + 1.0);
 
-        quadric = null;
         try {
             quadric = new Quadric(m);
             fail("NonSymmetricMatrixException expected but not thrown");
@@ -202,7 +201,7 @@ public class QuadricTest {
         HomogeneousPoint3D point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
                 m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
 
-        // estimate quadric that lies inside of provided 9 points
+        // estimate quadric that lies inside provided 9 points
         Matrix quadricMatrix = new Matrix(9, 10);
         double x = point1.getHomX();
         double y = point1.getHomY();
@@ -354,7 +353,7 @@ public class QuadricTest {
             point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
                     m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
 
-            // estimate quadric that lies inside of provided 9 points
+            // estimate quadric that lies inside provided 9 points
             quadricMatrix = new Matrix(9, 10);
             x = point1.getHomX();
             y = point1.getHomY();
@@ -484,8 +483,7 @@ public class QuadricTest {
             quadricMatrix.setElementAt(8, 9, w * w);
         }
 
-        quadric = new Quadric(point1, point2, point3, point4, point5, point6,
-                point7, point8, point9);
+        quadric = new Quadric(point1, point2, point3, point4, point5, point6, point7, point8, point9);
         assertTrue(quadric.isLocus(point1, PRECISION_ERROR));
         assertTrue(quadric.isLocus(point2, PRECISION_ERROR));
         assertTrue(quadric.isLocus(point3, PRECISION_ERROR));
@@ -534,16 +532,16 @@ public class QuadricTest {
         quadric.setH(h);
         quadric.setI(i);
         quadric.setJ(j);
-        assertEquals(quadric.getA(), a, 0.0);
-        assertEquals(quadric.getB(), b, 0.0);
-        assertEquals(quadric.getC(), c, 0.0);
-        assertEquals(quadric.getD(), d, 0.0);
-        assertEquals(quadric.getE(), e, 0.0);
-        assertEquals(quadric.getF(), f, 0.0);
-        assertEquals(quadric.getG(), g, 0.0);
-        assertEquals(quadric.getH(), h, 0.0);
-        assertEquals(quadric.getI(), i, 0.0);
-        assertEquals(quadric.getJ(), j, 0.0);
+        assertEquals(a, quadric.getA(), 0.0);
+        assertEquals(b, quadric.getB(), 0.0);
+        assertEquals(c, quadric.getC(), 0.0);
+        assertEquals(d, quadric.getD(), 0.0);
+        assertEquals(e, quadric.getE(), 0.0);
+        assertEquals(f, quadric.getF(), 0.0);
+        assertEquals(g, quadric.getG(), 0.0);
+        assertEquals(h, quadric.getH(), 0.0);
+        assertEquals(i, quadric.getI(), 0.0);
+        assertEquals(j, quadric.getJ(), 0.0);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -556,16 +554,16 @@ public class QuadricTest {
         i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         quadric.setParameters(a, b, c, d, e, f, g, h, i, j);
-        assertEquals(quadric.getA(), a, 0.0);
-        assertEquals(quadric.getB(), b, 0.0);
-        assertEquals(quadric.getC(), c, 0.0);
-        assertEquals(quadric.getD(), d, 0.0);
-        assertEquals(quadric.getE(), e, 0.0);
-        assertEquals(quadric.getF(), f, 0.0);
-        assertEquals(quadric.getG(), g, 0.0);
-        assertEquals(quadric.getH(), h, 0.0);
-        assertEquals(quadric.getI(), i, 0.0);
-        assertEquals(quadric.getJ(), j, 0.0);
+        assertEquals(a, quadric.getA(), 0.0);
+        assertEquals(b, quadric.getB(), 0.0);
+        assertEquals(c, quadric.getC(), 0.0);
+        assertEquals(d, quadric.getD(), 0.0);
+        assertEquals(e, quadric.getE(), 0.0);
+        assertEquals(f, quadric.getF(), 0.0);
+        assertEquals(g, quadric.getG(), 0.0);
+        assertEquals(h, quadric.getH(), 0.0);
+        assertEquals(i, quadric.getI(), 0.0);
+        assertEquals(j, quadric.getJ(), 0.0);
 
         Matrix m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -595,15 +593,15 @@ public class QuadricTest {
         m.setElementAt(3, 2, i);
         m.setElementAt(2, 3, i);
         quadric.setParameters(m);
-        assertEquals(quadric.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(quadric.getB(), m.getElementAt(1, 1), 0.0);
-        assertEquals(quadric.getC(), m.getElementAt(2, 2), 0.0);
-        assertEquals(quadric.getD(), m.getElementAt(1, 0), 0.0);
-        assertEquals(quadric.getE(), m.getElementAt(2, 1), 0.0);
-        assertEquals(quadric.getF(), m.getElementAt(2, 0), 0.0);
-        assertEquals(quadric.getG(), m.getElementAt(3, 0), 0.0);
-        assertEquals(quadric.getH(), m.getElementAt(3, 1), 0.0);
-        assertEquals(quadric.getI(), m.getElementAt(3, 2), 0.0);
+        assertEquals(m.getElementAt(0, 0), quadric.getA(), 0.0);
+        assertEquals(m.getElementAt(1, 1), quadric.getB(), 0.0);
+        assertEquals(m.getElementAt(2, 2), quadric.getC(), 0.0);
+        assertEquals(m.getElementAt(1, 0), quadric.getD(), 0.0);
+        assertEquals(m.getElementAt(2, 1), quadric.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 0), quadric.getF(), 0.0);
+        assertEquals(m.getElementAt(3, 0), quadric.getG(), 0.0);
+        assertEquals(m.getElementAt(3, 1), quadric.getH(), 0.0);
+        assertEquals(m.getElementAt(3, 2), quadric.getI(), 0.0);
 
         // Force IllegalArgumentException
         m = new Matrix(QUADRIC_ROWS + 1, QUADRIC_COLS + 1);
@@ -737,7 +735,7 @@ public class QuadricTest {
         point8.normalize();
         point9.normalize();
 
-        // estimate quadric that lies inside of provided 9 points
+        // estimate quadric that lies inside provided 9 points
         Matrix quadricMatrix = new Matrix(9, 10);
         double x = point1.getHomX();
         double y = point1.getHomY();
@@ -908,7 +906,7 @@ public class QuadricTest {
             point8.normalize();
             point9.normalize();
 
-            // estimate quadric that lies inside of provided 9 points
+            // estimate quadric that lies inside provided 9 points
             quadricMatrix = new Matrix(9, 10);
             x = point1.getHomX();
             y = point1.getHomY();
@@ -1190,14 +1188,13 @@ public class QuadricTest {
                 point2Matrix.getElementAt(2, 0),
                 point2Matrix.getElementAt(3, 0));
 
-        assertEquals(quadric.angleBetweenPoints(point1, point2), angle,
-                PRECISION_ERROR);
+        assertEquals(quadric.angleBetweenPoints(point1, point2), angle, PRECISION_ERROR);
     }
 
     @Test
     public void testArePerpendicularPoints() throws WrongSizeException,
-            DecomposerException, RankDeficientMatrixException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+            DecomposerException, RankDeficientMatrixException, IllegalArgumentException,
+            NonSymmetricMatrixException {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -1228,15 +1225,12 @@ public class QuadricTest {
 
             final Matrix invTransform = com.irurueta.algebra.Utils.inverse(transform);
 
-            Matrix transformPointMatrix1 = transform.multiplyAndReturnNew(
-                    matrixPoint1);
-            Matrix transformPointMatrix2 = transform.multiplyAndReturnNew(
-                    matrixPoint2);
+            Matrix transformPointMatrix1 = transform.multiplyAndReturnNew(matrixPoint1);
+            Matrix transformPointMatrix2 = transform.multiplyAndReturnNew(matrixPoint2);
 
             final Matrix transInvTransform = invTransform.transposeAndReturnNew();
 
-            final Matrix quadricMatrix = transInvTransform.multiplyAndReturnNew(
-                    invTransform);
+            final Matrix quadricMatrix = transInvTransform.multiplyAndReturnNew(invTransform);
             norm = com.irurueta.algebra.Utils.normF(quadricMatrix);
             quadricMatrix.multiplyByScalar(1.0 / norm);
 
@@ -1247,12 +1241,11 @@ public class QuadricTest {
 
             final Quadric quadric = new Quadric(quadricMatrix);
 
-            assertTrue(quadric.arePerpendicularPoints(transformPoint1,
-                    transformPoint2, PERPENDICULAR_THRESHOLD));
+            assertTrue(quadric.arePerpendicularPoints(transformPoint1, transformPoint2,
+                    PERPENDICULAR_THRESHOLD));
             assertEquals(quadric.arePerpendicularPoints(transformPoint1,
                     transformPoint2, Quadric.DEFAULT_PERPENDICULAR_THRESHOLD),
-                    quadric.arePerpendicularPoints(transformPoint1,
-                            transformPoint2));
+                    quadric.arePerpendicularPoints(transformPoint1, transformPoint2));
 
             // trying non-perpendicular points
             matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
@@ -1288,10 +1281,8 @@ public class QuadricTest {
             transformPointMatrix1 = transform.multiplyAndReturnNew(matrixPoint1);
             transformPointMatrix2 = transform.multiplyAndReturnNew(matrixPoint2);
 
-            transformPoint1 = new HomogeneousPoint3D(
-                    transformPointMatrix1.toArray());
-            transformPoint2 = new HomogeneousPoint3D(
-                    transformPointMatrix2.toArray());
+            transformPoint1 = new HomogeneousPoint3D(transformPointMatrix1.toArray());
+            transformPoint2 = new HomogeneousPoint3D(transformPointMatrix2.toArray());
 
             if (quadric.arePerpendicularPoints(transformPoint1, transformPoint2,
                     5.0 * PERPENDICULAR_THRESHOLD)) {
@@ -1320,14 +1311,11 @@ public class QuadricTest {
                     HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
 
-        final Matrix transformTransposedMatrix =
-                transformMatrix.transposeAndReturnNew();
+        final Matrix transformTransposedMatrix = transformMatrix.transposeAndReturnNew();
 
-        final Matrix quadricMatrix = transformTransposedMatrix.multiplyAndReturnNew(
-                transformMatrix);
+        final Matrix quadricMatrix = transformTransposedMatrix.multiplyAndReturnNew(transformMatrix);
 
-        final Matrix dualQuadricMatrix = com.irurueta.algebra.Utils.inverse(
-                quadricMatrix);
+        final Matrix dualQuadricMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);
 
         final Quadric quadric = new Quadric(quadricMatrix);
         final DualQuadric dualQuadric = quadric.getDualQuadric();
@@ -1341,12 +1329,11 @@ public class QuadricTest {
         dualQuadricMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute difference of normalized dual conic matrices
-        final Matrix diffMatrix = dualQuadricMatrix.subtractAndReturnNew(
-                dualQuadricMatrix2);
+        final Matrix diffMatrix = dualQuadricMatrix.subtractAndReturnNew(dualQuadricMatrix2);
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
     }
 
     @Test
@@ -1431,7 +1418,7 @@ public class QuadricTest {
         // finally, ensure that the norm of the difference matrix is almost zero
         // up to machine precision
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
 
         // check that when setting new values quadric becomes non-normalized
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1487,8 +1474,7 @@ public class QuadricTest {
 
         quadric.normalize();
         assertTrue(quadric.isNormalized());
-        quadric.setParameters(value, value, value, value, value, value, value,
-                value, value, value);
+        quadric.setParameters(value, value, value, value, value, value, value, value, value, value);
         assertFalse(quadric.isNormalized());
 
         quadric.normalize();
@@ -1522,10 +1508,8 @@ public class QuadricTest {
             final double angle2 = randomizer.nextDouble(MIN_RANDOM_DEGREES,
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             final Point3D point = new HomogeneousPoint3D(
-                    center.getInhomX() + radius * Math.cos(angle1) *
-                            Math.cos(angle2),
-                    center.getInhomY() + radius * Math.sin(angle1) *
-                            Math.cos(angle2),
+                    center.getInhomX() + radius * Math.cos(angle1) * Math.cos(angle2),
+                    center.getInhomY() + radius * Math.sin(angle1) * Math.cos(angle2),
                     center.getInhomZ() + radius * Math.sin(angle2),
                     1.0);
             point.normalize();
@@ -1582,8 +1566,7 @@ public class QuadricTest {
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         final Sphere sphere = new Sphere(center, radius);
         final Quadric quadric = sphere.toQuadric();
@@ -1607,18 +1590,16 @@ public class QuadricTest {
         assertEquals(conic1.getE(), conic2.getE(), ABSOLUTE_ERROR);
         assertEquals(conic1.getF(), conic2.getF(), ABSOLUTE_ERROR);
 
-        assertEquals(conic1.getConicType(), ConicType.CIRCLE_CONIC_TYPE);
-        assertEquals(conic2.getConicType(), ConicType.CIRCLE_CONIC_TYPE);
+        assertEquals(ConicType.CIRCLE_CONIC_TYPE, conic1.getConicType());
+        assertEquals(ConicType.CIRCLE_CONIC_TYPE, conic2.getConicType());
 
         final Circle circle = new Circle(conic1);
 
         final Point2D circleCenter = circle.getCenter();
         final double circleRadius = circle.getRadius();
 
-        assertEquals(circleCenter.getInhomX(), center.getInhomX(),
-                ABSOLUTE_ERROR);
-        assertEquals(circleCenter.getInhomY(), center.getInhomY(),
-                ABSOLUTE_ERROR);
+        assertEquals(circleCenter.getInhomX(), center.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(circleCenter.getInhomY(), center.getInhomY(), ABSOLUTE_ERROR);
         assertEquals(radius, circleRadius, ABSOLUTE_ERROR);
     }
 
@@ -1626,12 +1607,11 @@ public class QuadricTest {
     public void testIntersectWithSphereAndAnyPlane()
             throws AlgebraException, GeometryException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         final Sphere sphere = new Sphere(center, radius);
         final Quadric quadric = sphere.toQuadric();
@@ -1657,10 +1637,10 @@ public class QuadricTest {
 
         // conic is not a circle because it is expressed in terms of
         // quadric coordinates, not on plane coordinates
-        assertEquals(conic1.getConicType(), ConicType.ELLIPSE_CONIC_TYPE);
-        assertEquals(conic2.getConicType(), ConicType.ELLIPSE_CONIC_TYPE);
+        assertEquals(ConicType.ELLIPSE_CONIC_TYPE, conic1.getConicType());
+        assertEquals(ConicType.ELLIPSE_CONIC_TYPE, conic2.getConicType());
 
-        // Rotate plane and quadric to make it an xy plane
+        // Rotate plane and quadric to make it an xy-plane
         final double[] directorVector2 = new double[]{0.0, 0.0, 1.0};
         final double angle = ArrayUtils.angle(directorVector,
                 directorVector2);
@@ -1670,8 +1650,7 @@ public class QuadricTest {
         final AxisRotation3D rotation = new AxisRotation3D(axis, angle);
 
         // translate quadric and plane to origin
-        EuclideanTransformation3D transformation =
-                new EuclideanTransformation3D(new double[]{
+        EuclideanTransformation3D transformation = new EuclideanTransformation3D(new double[]{
                         -center.getInhomX(),
                         -center.getInhomY(),
                         -center.getInhomZ()});
@@ -1682,8 +1661,7 @@ public class QuadricTest {
         Point3D transformedCenter = transformation.transformAndReturnNew(center);
 
         // center is at the origin
-        assertTrue(transformedCenter.equals(new InhomogeneousPoint3D(),
-                ABSOLUTE_ERROR));
+        assertTrue(transformedCenter.equals(new InhomogeneousPoint3D(), ABSOLUTE_ERROR));
 
         // plane is at the origin
         assertTrue(transformedPlane.isLocus(transformedCenter, ABSOLUTE_ERROR));
@@ -1691,22 +1669,17 @@ public class QuadricTest {
         // sphere is at the origin and has same size
         final Sphere transformedSphere = new Sphere(transformedQuadric);
 
-        assertTrue(transformedSphere.getCenter().equals(
-                transformedCenter, ABSOLUTE_ERROR));
+        assertTrue(transformedSphere.getCenter().equals(transformedCenter, ABSOLUTE_ERROR));
         assertEquals(transformedSphere.getRadius(), radius, ABSOLUTE_ERROR);
 
         // rotate plane and quadric
         transformation = new EuclideanTransformation3D(rotation);
-        transformedQuadric = transformation.transformAndReturnNew(
-                transformedQuadric);
-        transformedPlane = transformation.transformAndReturnNew(
-                transformedPlane);
-        transformedCenter = transformation.transformAndReturnNew(
-                transformedCenter);
+        transformedQuadric = transformation.transformAndReturnNew(transformedQuadric);
+        transformedPlane = transformation.transformAndReturnNew(transformedPlane);
+        transformedCenter = transformation.transformAndReturnNew(transformedCenter);
 
         // center is at the origin
-        assertTrue(transformedCenter.equals(new InhomogeneousPoint3D(),
-                ABSOLUTE_ERROR));
+        assertTrue(transformedCenter.equals(new InhomogeneousPoint3D(), ABSOLUTE_ERROR));
 
         // plane is at the origin and rotated
         transformedPlane.normalize();
@@ -1729,10 +1702,8 @@ public class QuadricTest {
         double semiMinorAxis = ellipse.getSemiMinorAxis();
 
         // check that conic is centered at origin and keeps radius
-        assertEquals(ellipseCenter.getInhomX(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(ellipseCenter.getInhomY(), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, ellipseCenter.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, ellipseCenter.getInhomY(), ABSOLUTE_ERROR);
         assertEquals(radius, semiMajorAxis, ABSOLUTE_ERROR);
         assertEquals(radius, semiMinorAxis, ABSOLUTE_ERROR);
 
@@ -1746,12 +1717,9 @@ public class QuadricTest {
                 center.getInhomY(),
                 center.getInhomZ()});
 
-        transformedQuadric = transformation.transformAndReturnNew(
-                transformedQuadric);
-        transformedPlane = transformation.transformAndReturnNew(
-                transformedPlane);
-        transformedCenter = transformation.transformAndReturnNew(
-                transformedCenter);
+        transformedQuadric = transformation.transformAndReturnNew(transformedQuadric);
+        transformedPlane = transformation.transformAndReturnNew(transformedPlane);
+        transformedCenter = transformation.transformAndReturnNew(transformedCenter);
 
         // center is at the original position
         assertTrue(transformedCenter.equals(center, ABSOLUTE_ERROR));
@@ -1777,10 +1745,8 @@ public class QuadricTest {
         semiMinorAxis = ellipse.getSemiMinorAxis();
 
         // check that conic is centered at origin and keeps radius
-        assertEquals(ellipseCenter.getInhomX(), center.getInhomX(),
-                ABSOLUTE_ERROR);
-        assertEquals(ellipseCenter.getInhomY(), center.getInhomY(),
-                ABSOLUTE_ERROR);
+        assertEquals(ellipseCenter.getInhomX(), center.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(ellipseCenter.getInhomY(), center.getInhomY(), ABSOLUTE_ERROR);
         assertEquals(radius, semiMajorAxis, ABSOLUTE_ERROR);
         assertEquals(radius, semiMinorAxis, ABSOLUTE_ERROR);
 

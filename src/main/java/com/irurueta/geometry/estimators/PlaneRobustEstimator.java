@@ -37,7 +37,7 @@ public abstract class PlaneRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -82,7 +82,7 @@ public abstract class PlaneRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -388,19 +388,19 @@ public abstract class PlaneRobustEstimator {
      * Creates a 3D plane robust estimator based on 3D point samples and using
      * provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               3D plane.
      * @return an instance of a 3D plane robust estimator.
      */
     public static PlaneRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator();
             case MSAC:
                 return new MSACPlaneRobustEstimator();
             case PROSAC:
                 return new PROSACPlaneRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator();
             case RANSAC:
             default:
@@ -413,7 +413,7 @@ public abstract class PlaneRobustEstimator {
      * provided points and robust estimator method.
      *
      * @param points 3D points to estimate a 3D plane.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               3D plane.
      * @return an instance of a 3D plane robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -422,13 +422,13 @@ public abstract class PlaneRobustEstimator {
     public static PlaneRobustEstimator create(final List<Point3D> points,
                                               final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator(points);
             case MSAC:
                 return new MSACPlaneRobustEstimator(points);
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(points);
             case RANSAC:
             default:
@@ -442,7 +442,7 @@ public abstract class PlaneRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 3D plane.
      * @return an instance of a 3D plane robust estimator.
      */
@@ -450,13 +450,13 @@ public abstract class PlaneRobustEstimator {
             final PlaneRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator(listener);
             case MSAC:
                 return new MSACPlaneRobustEstimator(listener);
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(listener);
             case RANSAC:
             default:
@@ -471,7 +471,7 @@ public abstract class PlaneRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param points   3D points to estimate a 3D plane.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 3D plane.
      * @return an instance of a 3D plane robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -481,13 +481,13 @@ public abstract class PlaneRobustEstimator {
             final PlaneRobustEstimatorListener listener, final List<Point3D> points,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator(listener, points);
             case MSAC:
                 return new MSACPlaneRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(listener, points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(listener, points);
             case RANSAC:
             default:
@@ -500,7 +500,7 @@ public abstract class PlaneRobustEstimator {
      * provided robust estimator method.
      *
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      3D plane.
      * @return an instance of a 3D plane robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -509,13 +509,13 @@ public abstract class PlaneRobustEstimator {
     public static PlaneRobustEstimator create(final double[] qualityScores,
                                               final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator();
             case MSAC:
                 return new MSACPlaneRobustEstimator();
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -529,7 +529,7 @@ public abstract class PlaneRobustEstimator {
      *
      * @param points        3D points to estimate a 3D plane.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      3D plane.
      * @return an instance of a 3D plane robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -540,13 +540,13 @@ public abstract class PlaneRobustEstimator {
             final List<Point3D> points, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator(points);
             case MSAC:
                 return new MSACPlaneRobustEstimator(points);
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(points, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(points, qualityScores);
             case RANSAC:
             default:
@@ -561,7 +561,7 @@ public abstract class PlaneRobustEstimator {
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      3D plane.
      * @return an instance of a 3D plane robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -571,13 +571,13 @@ public abstract class PlaneRobustEstimator {
             final PlaneRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator(listener);
             case MSAC:
                 return new MSACPlaneRobustEstimator(listener);
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(listener, qualityScores);
             case RANSAC:
             default:
@@ -593,7 +593,7 @@ public abstract class PlaneRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param points        3D points to estimate a 3D plane.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      3D plane.
      * @return an instance of a 3D plane robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -604,14 +604,14 @@ public abstract class PlaneRobustEstimator {
             final PlaneRobustEstimatorListener listener, final List<Point3D> points,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneRobustEstimator(listener, points);
             case MSAC:
                 return new MSACPlaneRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACPlaneRobustEstimator(listener, points,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneRobustEstimator(listener, points,
                         qualityScores);
             case RANSAC:

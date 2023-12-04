@@ -49,8 +49,7 @@ public class Polygon3DTest {
         assertEquals(0.0, Polygon3D.MIN_THRESHOLD, 0.0);
         assertEquals(3, Polygon3D.MIN_VERTICES);
         assertEquals(3, Polygon3D.INHOM_COORDS);
-        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
-                Polygon3D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, Polygon3D.DEFAULT_TRIANGULATOR_METHOD);
     }
 
     @Test
@@ -58,8 +57,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
@@ -70,8 +68,7 @@ public class Polygon3DTest {
         // check correctness
         assertFalse(polygon.isTriangulated());
         assertEquals(polygon.getVertices(), vertices);
-        assertEquals(polygon.getTriangulatorMethod(),
-                Polygon3D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Polygon3D.DEFAULT_TRIANGULATOR_METHOD, polygon.getTriangulatorMethod());
 
         final Iterator<Point3D> iterator1 = polygon.getVertices().iterator();
         final Iterator<Point3D> iterator2 = vertices.iterator();
@@ -104,8 +101,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
@@ -114,14 +110,12 @@ public class Polygon3DTest {
         final Polygon3D polygon = new Polygon3D(vertices);
 
         // check correctness
-        assertEquals(polygon.getTriangulatorMethod(),
-                Polygon3D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Polygon3D.DEFAULT_TRIANGULATOR_METHOD, polygon.getTriangulatorMethod());
 
         // set new method
         polygon.setTriangulatorMethod(TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
         // check correctness
-        assertEquals(polygon.getTriangulatorMethod(),
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, polygon.getTriangulatorMethod());
     }
 
     @Test
@@ -137,7 +131,7 @@ public class Polygon3DTest {
 
         // build polygon vertices
         final Polygon3D polygon = new Polygon3D(vertices);
-        assertEquals(polygon.getVertices(), vertices);
+        assertEquals(vertices, polygon.getVertices());
 
         // build new vertices
         sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -146,7 +140,7 @@ public class Polygon3DTest {
         final List<Point3D> vertices2 = buildPolygonVertices(sides, radius, theta);
 
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getVertices(), vertices2);
+        assertEquals(vertices2, polygon.getVertices());
     }
 
     @Test
@@ -162,7 +156,7 @@ public class Polygon3DTest {
 
         // build polygon vertices
         final Polygon3D polygon = new Polygon3D(vertices);
-        assertEquals(polygon.getVertices(), vertices);
+        assertEquals(vertices, polygon.getVertices());
 
         // build new vertices
         sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -171,7 +165,7 @@ public class Polygon3DTest {
         final List<Point3D> vertices2 = new LinkedList<>(buildPolygonVertices(sides, radius, theta));
 
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getVertices(), vertices2);
+        assertEquals(vertices2, polygon.getVertices());
     }
 
     @Test
@@ -192,7 +186,7 @@ public class Polygon3DTest {
         vertices.add(v4);
 
         final Polygon3D polygon = new Polygon3D(vertices);
-        assertEquals(polygon.getArea(), 2.0, ABSOLUTE_ERROR);
+        assertEquals(2.0, polygon.getArea(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -201,8 +195,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
@@ -227,8 +220,8 @@ public class Polygon3DTest {
             areaTriangles += triangle.getArea();
         }
 
-        assertEquals(polygon.getArea(), area, ABSOLUTE_ERROR);
-        assertEquals(polygon.getArea(), areaTriangles, ABSOLUTE_ERROR);
+        assertEquals(area, polygon.getArea(), ABSOLUTE_ERROR);
+        assertEquals(areaTriangles, polygon.getArea(), ABSOLUTE_ERROR);
 
         // triangulate again
         polygon.triangulate();
@@ -241,8 +234,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
@@ -262,16 +254,14 @@ public class Polygon3DTest {
         // compare distance of last vertex with first one
         perimeter += prevVertex.distanceTo(vertices.get(0));
 
-        assertEquals(polygon.getPerimeter(), perimeter, ABSOLUTE_ERROR);
+        assertEquals(perimeter, polygon.getPerimeter(), ABSOLUTE_ERROR);
 
         // Test for a triangle
         sides = 3;
         final List<Point3D> vertices2 = buildPolygonVertices(sides, radius, theta);
-        final Triangle3D triangle = new Triangle3D(vertices2.get(0), vertices2.get(1),
-                vertices2.get(2));
+        final Triangle3D triangle = new Triangle3D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
         polygon.setVertices(vertices2);
-        assertEquals(polygon.getPerimeter(), triangle.getPerimeter(),
-                ABSOLUTE_ERROR);
+        assertEquals(triangle.getPerimeter(), polygon.getPerimeter(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -281,8 +271,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double phi = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double phi = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, phi);
@@ -329,8 +318,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
@@ -391,7 +379,7 @@ public class Polygon3DTest {
             final double norm = Utils.normF(direction);
             ArrayUtils.multiplyByScalar(direction, 1.0 / norm, direction);
 
-            // find point laying on line between polygon vertices
+            // find point laying on the line between polygon vertices
             final Point3D testPoint = new InhomogeneousPoint3D(
                     radius * Math.cos(theta) * Math.cos(phi),
                     radius * Math.sin(theta) * Math.cos(phi),
@@ -420,18 +408,15 @@ public class Polygon3DTest {
             assertFalse(polygon.isInside(notLocusPoint));
 
             // check that notLocusPoint is at distance dist from line
-            assertEquals(line.getDistance(notLocusPoint), Math.abs(dist),
-                    ABSOLUTE_ERROR);
+            assertEquals(line.getDistance(notLocusPoint), Math.abs(dist), ABSOLUTE_ERROR);
 
             assertTrue(polygon.isLocus(locusPoint));
             assertTrue(polygon.isLocus(locusPoint, ABSOLUTE_ERROR));
 
             // because point is locus, the shortest distance is zero and it is the
             // closest point
-            assertEquals(polygon.getShortestDistance(locusPoint), 0.0,
-                    ABSOLUTE_ERROR);
-            assertTrue(polygon.getClosestPoint(locusPoint).equals(locusPoint,
-                    ABSOLUTE_ERROR));
+            assertEquals(0.0, polygon.getShortestDistance(locusPoint), ABSOLUTE_ERROR);
+            assertTrue(polygon.getClosestPoint(locusPoint).equals(locusPoint, ABSOLUTE_ERROR));
             final Point3D closestPoint = Point3D.create();
             polygon.closestPoint(locusPoint, closestPoint);
             assertTrue(closestPoint.equals(locusPoint, ABSOLUTE_ERROR));
@@ -441,19 +426,15 @@ public class Polygon3DTest {
             assertFalse(polygon.isLocus(notLocusPoint, EPS));
 
             // not locus point is at distance dist from polygon
-            assertEquals(polygon.getShortestDistance(notLocusPoint), Math.abs(dist),
-                    ABSOLUTE_ERROR);
+            assertEquals(Math.abs(dist), polygon.getShortestDistance(notLocusPoint), ABSOLUTE_ERROR);
 
             // and the closest point to polygon is locusPoint
             assertTrue(polygon.getClosestPoint(notLocusPoint).equals(
-                    new InhomogeneousPoint3D(locusPoint),
-                    ABSOLUTE_ERROR));
+                    new InhomogeneousPoint3D(locusPoint), ABSOLUTE_ERROR));
 
             polygon.closestPoint(notLocusPoint, closestPoint);
-            assertTrue(closestPoint.equals(new InhomogeneousPoint3D(locusPoint),
-                    ABSOLUTE_ERROR));
-            assertTrue(closestPoint.equals(new InhomogeneousPoint3D(locusPoint),
-                    ABSOLUTE_ERROR));
+            assertTrue(closestPoint.equals(new InhomogeneousPoint3D(locusPoint), ABSOLUTE_ERROR));
+            assertTrue(closestPoint.equals(new InhomogeneousPoint3D(locusPoint), ABSOLUTE_ERROR));
 
             // with a large enough threshold, not locus point is considered as locus
             assertTrue(polygon.isLocus(notLocusPoint, radius * radius));
@@ -463,11 +444,9 @@ public class Polygon3DTest {
                 assertTrue(polygon.isLocus(vertex));
                 assertTrue(polygon.isLocus(vertex, ABSOLUTE_ERROR));
                 // because vertices are locus, shortest distance is 0.0 and it is
-                // a closest point
-                assertEquals(polygon.getShortestDistance(vertex), 0.0,
-                        ABSOLUTE_ERROR);
-                assertTrue(polygon.getClosestPoint(vertex).equals(vertex,
-                        ABSOLUTE_ERROR));
+                // the closest point
+                assertEquals(0.0, polygon.getShortestDistance(vertex), ABSOLUTE_ERROR);
+                assertTrue(polygon.getClosestPoint(vertex).equals(vertex, ABSOLUTE_ERROR));
                 polygon.closestPoint(vertex, closestPoint);
                 assertTrue(closestPoint.equals(vertex, ABSOLUTE_ERROR));
                 assertTrue(closestPoint.equals(vertex, ABSOLUTE_ERROR));
@@ -511,31 +490,31 @@ public class Polygon3DTest {
         expectedOrientation[2] = 1.0;
 
         double[] orientation = polygon.getOrientation();
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = polygon.getOrientation(ABSOLUTE_ERROR);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = new double[INHOM_COORDS];
         polygon.orientation(orientation);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         polygon.orientation(orientation, ABSOLUTE_ERROR);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(vertices);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(vertices, ABSOLUTE_ERROR);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(polygon);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(polygon, ABSOLUTE_ERROR);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         orientation = new double[INHOM_COORDS];
         Polygon3D.orientation(vertices, orientation);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         Polygon3D.orientation(vertices, orientation, ABSOLUTE_ERROR);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         Polygon3D.orientation(polygon, orientation);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
         Polygon3D.orientation(polygon, orientation, ABSOLUTE_ERROR);
-        assertArrayEquals(orientation, expectedOrientation, ABSOLUTE_ERROR);
+        assertArrayEquals(expectedOrientation, orientation, ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -682,60 +661,45 @@ public class Polygon3DTest {
         polygon = new Polygon3D(vertices);
 
         // build plane from 3 vertices
-        final Plane plane = new Plane(vertices.get(0), vertices.get(1),
-                vertices.get(2));
+        final Plane plane = new Plane(vertices.get(0), vertices.get(1), vertices.get(2));
         expectedOrientation = plane.getDirectorVector();
         // normalize it
         final double norm = Utils.normF(expectedOrientation);
-        ArrayUtils.multiplyByScalar(expectedOrientation, 1.0 / norm,
-                expectedOrientation);
+        ArrayUtils.multiplyByScalar(expectedOrientation, 1.0 / norm, expectedOrientation);
 
         // check correctness
         orientation = polygon.getOrientation();
 
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = polygon.getOrientation(ABSOLUTE_ERROR);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = new double[INHOM_COORDS];
         polygon.orientation(orientation);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         polygon.orientation(orientation, ABSOLUTE_ERROR);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(vertices);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(vertices, ABSOLUTE_ERROR);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(polygon);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = Polygon3D.orientation(polygon, ABSOLUTE_ERROR);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         orientation = new double[INHOM_COORDS];
         Polygon3D.orientation(vertices, orientation);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         Polygon3D.orientation(vertices, orientation, ABSOLUTE_ERROR);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         Polygon3D.orientation(polygon, orientation);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
         Polygon3D.orientation(polygon, orientation, ABSOLUTE_ERROR);
-        assertArrayEquals(absArray(orientation), absArray(expectedOrientation),
-                ABSOLUTE_ERROR);
+        assertArrayEquals(absArray(orientation), absArray(expectedOrientation), ABSOLUTE_ERROR);
     }
 
     @Test
     public void testAngleBetweenPolygons() throws NotEnoughVerticesException,
             CoincidentPointsException {
-
         // X: -1, Y: 0, Z: 5 (W: 1)
         final Point3D v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
         // X: 1, Y: 0, Z: 5 (W: 1)
@@ -764,40 +728,34 @@ public class Polygon3DTest {
         final Polygon3D polygon2 = new Polygon3D(vertices2);
 
         double angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
 
         angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon2);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon2,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon2, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
 
         // trying with same polygon will return an angle of zero
         angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices1);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices1,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices1, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
 
         angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon1);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon1,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon1, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
-            Polygon3D.getAngleBetweenPolygons(vertices1, vertices2,
-                    -ABSOLUTE_ERROR);
+            Polygon3D.getAngleBetweenPolygons(vertices1, vertices2, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            Polygon3D.getAngleBetweenPolygons(polygon1, polygon2,
-                    -ABSOLUTE_ERROR);
+            Polygon3D.getAngleBetweenPolygons(polygon1, polygon2, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -821,8 +779,7 @@ public class Polygon3DTest {
         } catch (final CoincidentPointsException ignore) {
         }
         try {
-            Polygon3D.getAngleBetweenPolygons(vertices1, vertices2,
-                    ABSOLUTE_ERROR);
+            Polygon3D.getAngleBetweenPolygons(vertices1, vertices2, ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
         } catch (final CoincidentPointsException ignore) {
         }
@@ -832,8 +789,7 @@ public class Polygon3DTest {
         } catch (final CoincidentPointsException ignore) {
         }
         try {
-            Polygon3D.getAngleBetweenPolygons(polygon1, polygon2,
-                    ABSOLUTE_ERROR);
+            Polygon3D.getAngleBetweenPolygons(polygon1, polygon2, ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
         } catch (final CoincidentPointsException ignore) {
         }
@@ -845,8 +801,7 @@ public class Polygon3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, theta);
@@ -865,8 +820,7 @@ public class Polygon3DTest {
         assertNotSame(polygon1, polygon2);
         assertEquals(polygon1.getVertices(), polygon2.getVertices());
         assertNotSame(polygon1.getVertices(), polygon2.getVertices());
-        assertEquals(polygon1.getTriangles().size(),
-                polygon2.getTriangles().size());
+        assertEquals(polygon1.getTriangles().size(), polygon2.getTriangles().size());
     }
 
     private List<Point3D> buildPolygonVertices(

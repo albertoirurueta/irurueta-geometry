@@ -26,64 +26,61 @@ public class PinholeCameraEstimatorTest {
         // create with type
         PinholeCameraEstimator estimator = PinholeCameraEstimator.create(
                 PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
 
         estimator = PinholeCameraEstimator.create(
                 PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
 
         estimator = PinholeCameraEstimator.create(
                 PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
 
         estimator = PinholeCameraEstimator.create(
                 PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
 
 
         estimator = PinholeCameraEstimator.create();
 
         // check correctness
         assertNull(estimator.getListener());
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
     }
 }
