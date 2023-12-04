@@ -70,28 +70,24 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
         LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -107,28 +103,24 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
         estimator = new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                 inputPlanes, outputPlanes);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getInputPlanes(), inputPlanes);
-        assertSame(estimator.getOutputPlanes(), outputPlanes);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(inputPlanes, estimator.getInputPlanes());
+        assertSame(outputPlanes, estimator.getOutputPlanes());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -156,28 +148,24 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
         estimator = new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                 this);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInputPlanes());
         assertNull(estimator.getOutputPlanes());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -186,28 +174,24 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
         estimator = new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                 this, inputPlanes, outputPlanes);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getInputPlanes(), inputPlanes);
-        assertSame(estimator.getOutputPlanes(), outputPlanes);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(inputPlanes, estimator.getInputPlanes());
+        assertSame(outputPlanes, estimator.getOutputPlanes());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -236,15 +220,14 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                 new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -260,15 +243,14 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                 new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -290,15 +272,14 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                 new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -362,7 +343,7 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -372,15 +353,15 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                 new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(),
                 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -491,17 +472,17 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final ProjectiveTransformation3D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -522,9 +503,9 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                     failed = true;
                     break;
                 }
-                assertEquals(
-                        PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                                getResidual(plane1, plane2), 0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0,
+                        PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.getResidual(plane1, plane2),
+                        ABSOLUTE_ERROR);
                 assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
             }
 
@@ -607,10 +588,10 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -629,8 +610,8 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                                 ProjectiveTransformation3D.HOM_COORDS);
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -652,9 +633,9 @@ public class LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTe
                     break;
                 }
 
-                assertEquals(
-                        PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                                getResidual(plane1, plane2), 0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0,
+                        PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.getResidual(plane1, plane2),
+                        ABSOLUTE_ERROR);
                 assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
             }
 

@@ -93,20 +93,20 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * Creates a pinhole camera robust estimator based on point correspondences
      * and using provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator();
             case MSAC:
                 return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator();
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator();
             case RANSAC:
             default:
@@ -121,7 +121,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -132,7 +132,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             final List<Point3D> points3D, final List<Point2D> points2D,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
             case MSAC:
@@ -141,7 +141,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
             case RANSAC:
@@ -157,7 +157,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -165,7 +165,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             final PinholeCameraRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case MSAC:
@@ -174,7 +174,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case RANSAC:
@@ -193,7 +193,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -205,7 +205,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             final List<Point3D> points3D, final List<Point2D> points2D,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
             case MSAC:
@@ -214,7 +214,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
             case RANSAC:
@@ -230,7 +230,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -239,14 +239,14 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator();
             case MSAC:
                 return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator();
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -265,7 +265,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -276,7 +276,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             final List<Point3D> points3D, final List<Point2D> points2D,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
             case MSAC:
@@ -285,7 +285,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D, qualityScores);
             case RANSAC:
@@ -303,7 +303,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -313,7 +313,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             final PinholeCameraRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case MSAC:
@@ -322,7 +322,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -344,7 +344,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -356,7 +356,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             final List<Point3D> points3D, final List<Point2D> points2D,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
             case MSAC:
@@ -365,7 +365,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D, qualityScores);
             case RANSAC:

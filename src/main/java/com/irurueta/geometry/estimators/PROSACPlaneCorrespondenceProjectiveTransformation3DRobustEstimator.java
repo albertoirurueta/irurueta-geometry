@@ -103,7 +103,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     }
 
     /**
-     * Constructor with lists of planes to be used to estimate an projective 3D
+     * Constructor with lists of planes to be used to estimate a projective 3D
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -496,8 +496,8 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
                                     return getResidual(outputPlane, mTestPlane);
                                 } catch (final AlgebraException e) {
                                     // this happens when internal matrix of affine transformation
-                                    // cannot be reverse (i.e. transformation is not well defined,
-                                    // numerical instabilities, etc)
+                                    // cannot be reverse (i.e. transformation is not well-defined,
+                                    // numerical instabilities, etc.)
                                     return Double.MAX_VALUE;
                                 }
                             }
@@ -592,7 +592,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *

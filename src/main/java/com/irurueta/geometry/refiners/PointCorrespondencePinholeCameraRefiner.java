@@ -30,7 +30,7 @@ import java.util.List;
  * an initial estimation, inlier point matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
 public abstract class PointCorrespondencePinholeCameraRefiner extends
@@ -94,7 +94,7 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
 
     /**
      * Total residual to be used during Powell refinement.
-     * Powell refinement uses Powell algorithm to minimize a cost function
+     * Powell's refinement uses Powell algorithm to minimize a cost function
      * consisting on the sum of squared projection residuals plus the
      * suggestion residual for any suggested terms.
      *

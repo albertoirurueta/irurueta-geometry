@@ -37,7 +37,7 @@ public abstract class CircleRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -82,7 +82,7 @@ public abstract class CircleRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -397,13 +397,13 @@ public abstract class CircleRobustEstimator {
      */
     public static CircleRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator();
             case MSAC:
                 return new MSACCircleRobustEstimator();
             case PROSAC:
                 return new PROSACCircleRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator();
             case RANSAC:
             default:
@@ -425,13 +425,13 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final List<Point2D> points, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator(points);
             case MSAC:
                 return new MSACCircleRobustEstimator(points);
             case PROSAC:
                 return new PROSACCircleRobustEstimator(points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(points);
             case RANSAC:
             default:
@@ -453,13 +453,13 @@ public abstract class CircleRobustEstimator {
             final CircleRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator(listener);
             case MSAC:
                 return new MSACCircleRobustEstimator(listener);
             case PROSAC:
                 return new PROSACCircleRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(listener);
             case RANSAC:
             default:
@@ -484,13 +484,13 @@ public abstract class CircleRobustEstimator {
             final CircleRobustEstimatorListener listener, final List<Point2D> points,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator(listener, points);
             case MSAC:
                 return new MSACCircleRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACCircleRobustEstimator(listener, points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(listener, points);
             case RANSAC:
             default:
@@ -512,13 +512,13 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator();
             case MSAC:
                 return new MSACCircleRobustEstimator();
             case PROSAC:
                 return new PROSACCircleRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -542,13 +542,13 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final List<Point2D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator(points);
             case MSAC:
                 return new MSACCircleRobustEstimator(points);
             case PROSAC:
                 return new PROSACCircleRobustEstimator(points, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(points, qualityScores);
             case RANSAC:
             default:
@@ -573,13 +573,13 @@ public abstract class CircleRobustEstimator {
             final CircleRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator(listener);
             case MSAC:
                 return new MSACCircleRobustEstimator(listener);
             case PROSAC:
                 return new PROSACCircleRobustEstimator(listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(listener, qualityScores);
             case RANSAC:
             default:
@@ -606,14 +606,14 @@ public abstract class CircleRobustEstimator {
             final CircleRobustEstimatorListener listener, final List<Point2D> points,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSCircleRobustEstimator(listener, points);
             case MSAC:
                 return new MSACCircleRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACCircleRobustEstimator(listener, points,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSCircleRobustEstimator(listener, points,
                         qualityScores);
             case RANSAC:

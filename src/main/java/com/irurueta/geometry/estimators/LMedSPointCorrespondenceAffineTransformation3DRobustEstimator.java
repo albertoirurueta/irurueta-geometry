@@ -345,7 +345,7 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 
     /**
@@ -353,7 +353,7 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *

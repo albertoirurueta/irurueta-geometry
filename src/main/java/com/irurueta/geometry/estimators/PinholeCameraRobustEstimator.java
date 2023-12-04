@@ -27,7 +27,7 @@ import java.util.List;
  * This is an abstract class for algorithms to robustly find the best
  * PinholeCamera for provided collections of matched 3D points and their
  * corresponding projected 2D points, or collections of matched 3D planes and
- * their corresponding projected 2D lines (depending whether point
+ * their corresponding projected 2D lines (depending on point
  * correspondence or plane/line correspondence is being used).
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
@@ -51,7 +51,7 @@ public abstract class PinholeCameraRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -94,7 +94,7 @@ public abstract class PinholeCameraRobustEstimator {
 
     /**
      * Default value indicating whether skewness value is suggested or not.
-     * By default this is disabled.
+     * By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED = false;
 
@@ -106,39 +106,39 @@ public abstract class PinholeCameraRobustEstimator {
 
     /**
      * Default value indicating whether horizontal focal length value is
-     * suggested or not. By default this is disabled.
+     * suggested or not. By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
             false;
 
     /**
      * Default value indicating whether vertical focal length value is suggested
-     * or not. By default this is disabled.
+     * or not. By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
             false;
 
     /**
      * Default value indicating whether aspect ratio is suggested or not. By
-     * default this is disabled.
+     * default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED = false;
 
     /**
      * Default value of aspect ratio to be suggested when suggestion is enabled.
-     * By default suggested aspect ratio is 1.0, although also -1.0 is a typical
+     * By default, suggested aspect ratio is 1.0, although also -1.0 is a typical
      * value when vertical coordinates increase downwards.
      */
     public static final double DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE = 1.0;
 
     /**
      * Default value indicating whether principal point is suggested or not. By
-     * default this is disabled.
+     * default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED = false;
 
     /**
-     * Default value indicating whether rotation is suggested or not. By default
+     * Default value indicating whether rotation is suggested or not. By default,
      * this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_ROTATION_ENABLED = false;
@@ -1035,7 +1035,7 @@ public abstract class PinholeCameraRobustEstimator {
      * When true Levenberg/Marquardt refinement will be used, when false
      * an initial Powell optimization is done and then Levenberg/Marquard is
      * used for covariance estimation if needed.
-     * Fast refinement requires less computing time but it is more likely to
+     * Fast refinement requires less computing time, but it is more likely to
      * fail than slow one.
      *
      * @return true to use fast refinement, false to use a slow but more
@@ -1050,7 +1050,7 @@ public abstract class PinholeCameraRobustEstimator {
      * When true Levenberg/Marquardt refinement will be used, when false
      * an initial Powell optimization is done and then Levenberg/Marquard is
      * used for covariance estimation if needed.
-     * Fast refinement requires less computing time but it is more likely to
+     * Fast refinement requires less computing time, but it is more likely to
      * fail than slow one.
      *
      * @param useFastRefinement true to use fast refinement, false to use a slow
@@ -1104,7 +1104,7 @@ public abstract class PinholeCameraRobustEstimator {
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *
@@ -1119,7 +1119,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1142,7 +1142,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1167,7 +1167,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -1193,7 +1193,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -1303,7 +1303,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D  list of 3D points used to estimate a pinhole camera.
      * @param points2D  list of corresponding projected 2D points used to
      *                  estimate a pinhole camera.
-     * @param method    method of a robust estimator algorithm to estimate best
+     * @param method    method of a robust estimator algorithm to estimate the best
      *                  pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1327,7 +1327,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D  list of 3D points used to estimate a pinhole camera.
      * @param points2D  list of corresponding projected 2D points used to
      *                  estimate a pinhole camera.
-     * @param method    method of a robust estimator algorithm to estimate best
+     * @param method    method of a robust estimator algorithm to estimate the best
      *                  pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1353,7 +1353,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -1381,7 +1381,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -1503,7 +1503,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
      * @param points2D                 list of corresponding projected 2D points used to
      *                                 estimate a pinhole camera.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1534,7 +1534,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param points3D                 list of 3D points used to estimate a pinhole camera.
      * @param points2D                 list of corresponding projected 2D points used to
      *                                 estimate a pinhole camera.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1567,7 +1567,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                                 estimate a pinhole camera.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -1602,7 +1602,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                                 estimate a pinhole camera.
      * @param qualityScores            quality scores corresponding to each pair of matched
      *                                 points.
-     * @param method                   method of a robust estimator algorithm to estimate best
+     * @param method                   method of a robust estimator algorithm to estimate the best
      *                                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -1748,7 +1748,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param planes list of 3D planes used to estimate a pinhole camera.
      * @param lines  list of corresponding projected 2D lines used to estimate
      *               a pinhole camera.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes/lines don't
@@ -1771,7 +1771,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @param planes   list of 3D planes used to estimate a pinhole camera.
      * @param lines    list of corresponding projected 2D lines used to estimate
      *                 a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes/lines don't
@@ -1796,7 +1796,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      samples.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes/lines and
@@ -1822,7 +1822,7 @@ public abstract class PinholeCameraRobustEstimator {
      *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      samples.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes/lines and

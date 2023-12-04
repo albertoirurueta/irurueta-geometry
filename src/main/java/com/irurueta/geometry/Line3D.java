@@ -114,7 +114,7 @@ public class Line3D implements Serializable {
             // 2 rows.
             // If rank is smaller than 2, then the 2 planes are parallel, and the
             // null-space has at least dimension 3, which is a perpendicular
-            // plane or the whole space (Depending if nullity is 3 or 4)
+            // plane or the whole space (Depending whether nullity is 3 or 4)
             return Utils.rank(m) < 2;
         } catch (final AlgebraException e) {
             // if for numerical reasons it cannot be determined whether planes
@@ -260,7 +260,7 @@ public class Line3D implements Serializable {
      * up to provided threshold.
      *
      * @param point     Point to be checked.
-     * @param threshold Threshold to determine closest point.
+     * @param threshold Threshold to determine the closest point.
      * @return Closest point belonging to this 3D line respect provided point.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
@@ -287,7 +287,7 @@ public class Line3D implements Serializable {
      *
      * @param point     Point to be checked.
      * @param result    Instance where computed point will be stored.
-     * @param threshold Threshold to determine closest point.
+     * @param threshold Threshold to determine the closest point.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public void closestPoint(final Point3D point, final Point3D result, final double threshold) {

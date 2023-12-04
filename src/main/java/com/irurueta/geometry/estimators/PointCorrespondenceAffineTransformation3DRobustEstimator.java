@@ -35,7 +35,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of points to be used to estimate an affine 3D transformation.
@@ -216,19 +216,19 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * correspondences and using provided robust estimator method.
      *
      * @param method method of a robust estimator algorithm to estimate
-     *               best affine 3D transformation.
+     *               the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
             case RANSAC:
             default:
@@ -245,7 +245,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param outputPoints list of output points to be used to estimate an
      *                     affine 3D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 3D transformation.
+     *                     the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -254,7 +254,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -263,7 +263,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
             case RANSAC:
@@ -280,14 +280,14 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param method   method of a robust estimator algorithm to estimate
-     *                 best affine 3D transformation.
+     *                 the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator create(
             final AffineTransformation3DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -296,7 +296,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
             case RANSAC:
@@ -317,7 +317,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param outputPoints list of output points to be used to estimate an
      *                     affine 3D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 3D transformation.
+     *                     the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -327,7 +327,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -336,7 +336,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case RANSAC:
@@ -353,20 +353,20 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 3D transformation.
+     *                      the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -386,7 +386,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 3D transformation.
+     *                      the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -395,7 +395,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -404,7 +404,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -423,14 +423,14 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 3D transformation.
+     *                      the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator create(
             final AffineTransformation3DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -439,7 +439,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -462,7 +462,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 3D transformation.
+     *                      the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -472,7 +472,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -481,7 +481,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -630,7 +630,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

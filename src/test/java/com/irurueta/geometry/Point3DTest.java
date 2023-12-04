@@ -51,38 +51,36 @@ public class Point3DTest {
     @Test
     public void testCreate() {
         Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
-        assertEquals(point.getHomX(), 0.0, 0.0);
-        assertEquals(point.getHomY(), 0.0, 0.0);
-        assertEquals(point.getHomZ(), 0.0, 0.0);
-        assertEquals(point.getHomW(), 1.0, 0.0);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
+        assertEquals(0.0, point.getHomX(), 0.0);
+        assertEquals(0.0, point.getHomY(), 0.0);
+        assertEquals(0.0, point.getHomZ(), 0.0);
+        assertEquals(1.0, point.getHomW(), 0.0);
 
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
-        assertEquals(point.getHomX(), 0.0, 0.0);
-        assertEquals(point.getHomY(), 0.0, 0.0);
-        assertEquals(point.getHomZ(), 0.0, 0.0);
-        assertEquals(point.getHomW(), 1.0, 0.0);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
+        assertEquals(0.0, point.getHomX(), 0.0);
+        assertEquals(0.0, point.getHomY(), 0.0);
+        assertEquals(0.0, point.getHomZ(), 0.0);
+        assertEquals(1.0, point.getHomW(), 0.0);
 
         final double[] array = new double[HOM_COORDS];
         final double[] iArray = new double[INHOM_COORDS];
 
         point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
-        assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
 
-        point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                iArray);
-        assertEquals(point.getType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, iArray);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, point.getType());
 
         // Force IllegalArgumentException
         try {
@@ -98,7 +96,7 @@ public class Point3DTest {
         }
 
         point = Point3D.create(array);
-        assertEquals(point.getType(), Point3D.DEFAULT_COORDINATES_TYPE);
+        assertEquals(Point3D.DEFAULT_COORDINATES_TYPE, point.getType());
 
         // Force IllegalArgumentException
         try {
@@ -108,18 +106,18 @@ public class Point3DTest {
         }
 
         point = Point3D.create();
-        assertEquals(point.getType(), Point3D.DEFAULT_COORDINATES_TYPE);
+        assertEquals(Point3D.DEFAULT_COORDINATES_TYPE, point.getType());
     }
 
     @Test
     public void testGetSetInhomX() {
         // check default values for homogeneous coordinates
         Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -127,36 +125,36 @@ public class Point3DTest {
         point.setInhomX(inhomX);
 
         // check
-        assertEquals(point.getInhomX(), inhomX, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(inhomX, point.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // check default values for inhomogeneous coordinates
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
         point.setInhomX(inhomX);
 
         // check
-        assertEquals(point.getInhomX(), inhomX, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(inhomX, point.getInhomX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
     }
 
     @Test
     public void testGetSetInhomY() {
         // check default values for homogeneous coordinates
         Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -164,36 +162,36 @@ public class Point3DTest {
         point.setInhomY(inhomY);
 
         // check
-        assertEquals(point.getInhomY(), inhomY, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(inhomY, point.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // check default values for inhomogeneous coordinates
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
         point.setInhomY(inhomY);
 
         // check
-        assertEquals(point.getInhomY(), inhomY, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(inhomY, point.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
     }
 
     @Test
     public void testGetSetInhomZ() {
         // check default values for homogeneous coordinates
         Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.HOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -201,37 +199,37 @@ public class Point3DTest {
         point.setInhomZ(inhomZ);
 
         // check
-        assertEquals(point.getInhomZ(), inhomZ, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
+        assertEquals(inhomZ, point.getInhomZ(), ABSOLUTE_ERROR);
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
 
         // check default values for inhomogeneous coordinates
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getType(), CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(point.getDimensions(), 3);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, point.getType());
+        assertEquals(3, point.getDimensions());
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
         point.setInhomZ(inhomZ);
 
         // check
-        assertEquals(point.getInhomZ(), inhomZ, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
+        assertEquals(inhomZ, point.getInhomZ(), ABSOLUTE_ERROR);
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
     }
 
     @Test
     public void testGetSetInhomogeneousCoordinate() {
         // check default values
         final Point3D point = Point3D.create();
-        assertEquals(point.getInhomX(), 0.0, 0.0);
-        assertEquals(point.getInhomY(), 0.0, 0.0);
-        assertEquals(point.getInhomZ(), 0.0, 0.0);
-        assertEquals(point.getInhomogeneousCoordinate(0), point.getInhomX(), 0.0);
-        assertEquals(point.getInhomogeneousCoordinate(1), point.getInhomY(), 0.0);
-        assertEquals(point.getInhomogeneousCoordinate(2), point.getInhomZ(), 0.0);
+        assertEquals(0.0, point.getInhomX(), 0.0);
+        assertEquals(0.0, point.getInhomY(), 0.0);
+        assertEquals(0.0, point.getInhomZ(), 0.0);
+        assertEquals(point.getInhomX(), point.getInhomogeneousCoordinate(0), 0.0);
+        assertEquals(point.getInhomY(), point.getInhomogeneousCoordinate(1), 0.0);
+        assertEquals(point.getInhomZ(), point.getInhomogeneousCoordinate(2), 0.0);
 
         // set new values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -242,20 +240,20 @@ public class Point3DTest {
         point.setInhomogeneousCoordinate(0, inhomX);
 
         // check
-        assertEquals(point.getInhomogeneousCoordinate(0), inhomX, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomX(), inhomX, ABSOLUTE_ERROR);
+        assertEquals(inhomX, point.getInhomogeneousCoordinate(0), ABSOLUTE_ERROR);
+        assertEquals(inhomX, point.getInhomX(), ABSOLUTE_ERROR);
 
         point.setInhomogeneousCoordinate(1, inhomY);
 
         // check
-        assertEquals(point.getInhomogeneousCoordinate(1), inhomY, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomY(), inhomY, ABSOLUTE_ERROR);
+        assertEquals(inhomY, point.getInhomogeneousCoordinate(1), ABSOLUTE_ERROR);
+        assertEquals(inhomY, point.getInhomY(), ABSOLUTE_ERROR);
 
         point.setInhomogeneousCoordinate(2, inhomZ);
 
         // check
-        assertEquals(point.getInhomogeneousCoordinate(2), inhomZ, ABSOLUTE_ERROR);
-        assertEquals(point.getInhomZ(), inhomZ, ABSOLUTE_ERROR);
+        assertEquals(inhomZ, point.getInhomogeneousCoordinate(2), ABSOLUTE_ERROR);
+        assertEquals(inhomZ, point.getInhomZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -298,16 +296,15 @@ public class Point3DTest {
         final double diffX = point1.getInhomX() - point2.getInhomX();
         final double diffY = point1.getInhomY() - point2.getInhomY();
         final double diffZ = point1.getInhomZ() - point2.getInhomZ();
-        final double distance = Math.sqrt(diffX * diffX + diffY * diffY +
-                diffZ * diffZ);
+        final double distance = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
 
         // check distance
         assertEquals(point1.distanceTo(point2), distance, ABSOLUTE_ERROR);
         assertEquals(point2.distanceTo(point1), distance, ABSOLUTE_ERROR);
 
         // check distance to themselves
-        assertEquals(point1.distanceTo(point1), 0.0, ABSOLUTE_ERROR);
-        assertEquals(point2.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, point1.distanceTo(point1), ABSOLUTE_ERROR);
+        assertEquals(0.0, point2.distanceTo(point2), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -331,12 +328,12 @@ public class Point3DTest {
         final double sqrDistance = diffX * diffX + diffY * diffY + diffZ * diffZ;
 
         // check distance
-        assertEquals(point1.sqrDistanceTo(point2), sqrDistance, ABSOLUTE_ERROR);
-        assertEquals(point2.sqrDistanceTo(point1), sqrDistance, ABSOLUTE_ERROR);
+        assertEquals(sqrDistance, point1.sqrDistanceTo(point2), ABSOLUTE_ERROR);
+        assertEquals(sqrDistance, point2.sqrDistanceTo(point1), ABSOLUTE_ERROR);
 
         // check distance to themselves
-        assertEquals(point1.sqrDistanceTo(point1), 0.0, ABSOLUTE_ERROR);
-        assertEquals(point2.sqrDistanceTo(point2), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, point1.sqrDistanceTo(point1), ABSOLUTE_ERROR);
+        assertEquals(0.0, point2.sqrDistanceTo(point2), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -360,9 +357,9 @@ public class Point3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         // dot product for same point
-        assertEquals(point1.dotProduct(point1), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, point1.dotProduct(point1), ABSOLUTE_ERROR);
         // dot product for opposite signs
-        assertEquals(point1.dotProduct(point2), -1.0, ABSOLUTE_ERROR);
+        assertEquals(-1.0, point1.dotProduct(point2), ABSOLUTE_ERROR);
         // dot product for random points
         point1.normalize();
         point3.normalize();

@@ -430,7 +430,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

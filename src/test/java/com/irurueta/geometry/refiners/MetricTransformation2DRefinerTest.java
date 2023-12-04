@@ -81,13 +81,13 @@ public class MetricTransformation2DRefinerTest implements
                 new MetricTransformation2DRefiner();
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
         assertNull(refiner.getSamples1());
         assertNull(refiner.getSamples2());
         assertFalse(refiner.isReady());
         assertNull(refiner.getInliers());
-        assertEquals(refiner.getNumInliers(), 0);
-        assertEquals(refiner.getTotalSamples(), 0);
+        assertEquals(0, refiner.getNumInliers());
+        assertEquals(0, refiner.getTotalSamples());
         assertNull(refiner.getInitialEstimation());
         assertFalse(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
@@ -102,14 +102,14 @@ public class MetricTransformation2DRefinerTest implements
         // check default values
         assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
-        assertSame(refiner.getSamples1(), samples1);
-        assertSame(refiner.getSamples2(), samples2);
+        assertSame(samples1, refiner.getSamples1());
+        assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
-        assertSame(refiner.getInliers(), inliers);
-        assertSame(refiner.getResiduals(), residuals);
-        assertEquals(refiner.getNumInliers(), numInliers);
-        assertEquals(refiner.getTotalSamples(), samples1.size());
-        assertSame(refiner.getInitialEstimation(), transformation);
+        assertSame(inliers, refiner.getInliers());
+        assertSame(residuals, refiner.getResiduals());
+        assertEquals(numInliers, refiner.getNumInliers());
+        assertEquals(samples1.size(), refiner.getTotalSamples());
+        assertSame(transformation, refiner.getInitialEstimation());
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
@@ -122,14 +122,14 @@ public class MetricTransformation2DRefinerTest implements
         // check default values
         assertEquals(refiner.getRefinementStandardDeviation(),
                 refinementStandardDeviation, 0.0);
-        assertSame(refiner.getSamples1(), samples1);
-        assertSame(refiner.getSamples2(), samples2);
+        assertSame(samples1, refiner.getSamples1());
+        assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
-        assertSame(refiner.getInliers(), inliers);
-        assertSame(refiner.getResiduals(), residuals);
-        assertEquals(refiner.getNumInliers(), numInliers);
-        assertEquals(refiner.getTotalSamples(), samples1.size());
-        assertSame(refiner.getInitialEstimation(), transformation);
+        assertSame(inliers, refiner.getInliers());
+        assertSame(residuals, refiner.getResiduals());
+        assertEquals(numInliers, refiner.getNumInliers());
+        assertEquals(samples1.size(), refiner.getTotalSamples());
+        assertSame(transformation, refiner.getInitialEstimation());
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
@@ -148,7 +148,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setListener(this);
 
         // check correctness
-        assertSame(refiner.getListener(), this);
+        assertSame(this, refiner.getListener());
     }
 
     @Test
@@ -157,7 +157,7 @@ public class MetricTransformation2DRefinerTest implements
                 new MetricTransformation2DRefiner();
 
         // check default value
-        assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -166,8 +166,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
         // check correctness
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
     }
 
     @Test
@@ -183,7 +182,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setSamples1(samples1);
 
         // check correctness
-        assertSame(refiner.getSamples1(), samples1);
+        assertSame(samples1, refiner.getSamples1());
     }
 
     @Test
@@ -199,7 +198,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setSamples2(samples2);
 
         // check correctness
-        assertSame(refiner.getSamples2(), samples2);
+        assertSame(samples2, refiner.getSamples2());
     }
 
     @Test
@@ -222,7 +221,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setInliers(inliers);
 
         // check correctness
-        assertSame(refiner.getInliers(), inliers);
+        assertSame(inliers, refiner.getInliers());
     }
 
     @Test
@@ -245,7 +244,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setResiduals(residuals);
 
         // check correctness
-        assertSame(refiner.getResiduals(), residuals);
+        assertSame(residuals, refiner.getResiduals());
     }
 
     @Test
@@ -262,13 +261,13 @@ public class MetricTransformation2DRefinerTest implements
                 new MetricTransformation2DRefiner();
 
         // check default value
-        assertEquals(refiner.getNumInliers(), 0);
+        assertEquals(0, refiner.getNumInliers());
 
         // set new value
         refiner.setNumInliers(numInliers);
 
         // check correctness
-        assertEquals(refiner.getNumInliers(), numInliers);
+        assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
         try {
@@ -293,15 +292,15 @@ public class MetricTransformation2DRefinerTest implements
         // check default values
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
-        assertEquals(refiner.getNumInliers(), 0);
+        assertEquals(0, refiner.getNumInliers());
 
         // set new value
         refiner.setInliersData(inliersData);
 
         // check correctness
-        assertSame(refiner.getInliers(), inliersData.getInliers());
-        assertSame(refiner.getResiduals(), inliersData.getResiduals());
-        assertEquals(refiner.getNumInliers(), inliersData.getNumInliers());
+        assertSame(inliersData.getInliers(), refiner.getInliers());
+        assertSame(inliersData.getResiduals(), refiner.getResiduals());
+        assertEquals(inliersData.getNumInliers(), refiner.getNumInliers());
     }
 
     @Test
@@ -318,7 +317,7 @@ public class MetricTransformation2DRefinerTest implements
         refiner.setInitialEstimation(transformation);
 
         // check correctness
-        assertSame(refiner.getInitialEstimation(), transformation);
+        assertSame(transformation, refiner.getInitialEstimation());
     }
 
     @Test
@@ -358,8 +357,8 @@ public class MetricTransformation2DRefinerTest implements
             final MetricTransformation2D result1 = new MetricTransformation2D();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -367,11 +366,10 @@ public class MetricTransformation2DRefinerTest implements
 
             final MetricTransformation2D result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
-            assertTrue(result1.asMatrix().equals(result2.asMatrix(),
-                    ABSOLUTE_ERROR));
+            assertTrue(result1.asMatrix().equals(result2.asMatrix(), ABSOLUTE_ERROR));
 
             numValid++;
             break;

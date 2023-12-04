@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class performs euclidean transformations on 2D space.
+ * This class performs Euclidean transformations on 2D space.
  * Euclidean transformations include transformations related to rotations and
  * translations.
- * Scale cannot be modified on euclidean scale.
+ * Scale cannot be modified on Euclidean scale.
  */
 @SuppressWarnings("DuplicatedCode")
 public class EuclideanTransformation2D extends Transformation2D

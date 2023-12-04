@@ -160,7 +160,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @param planeB Second plane to be tested.
      * @return Angle between the two provided planes in radians. This angle is
      * equal to the angle of their corresponding director vectors in an
-     * euclidean geometry, but it might not be the case for the geometry defined
+     * Euclidean geometry, but it might not be the case for the geometry defined
      * by this dual quadric.
      */
     public double angleBetweenPlanes(final Plane planeA, final Plane planeB) {

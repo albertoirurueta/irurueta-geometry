@@ -70,7 +70,7 @@ public abstract class BaseConic implements Serializable {
     private static final double PRECISION = 1e-12;
 
     /**
-     * A element of the matrix defining a conic.
+     * "A" element of the matrix defining a conic.
      */
     protected double mA;
 
@@ -223,8 +223,8 @@ public abstract class BaseConic implements Serializable {
      *
      * @param m                  3x3 Matrix describing a base conic.
      * @param symmetricThreshold Grade of tolerance to determine whether a
-     *                           matrix is symmetric or not. It is used because due the precision of the
-     *                           CPU, the values may not be exactly equal. (by default:
+     *                           matrix is symmetric or not. Because of machine precision,
+     *                           the values may not be exactly equal. (by default:
      *                           DEFAULT_SYMMETRIC_THRESHOLD is used).
      * @throws IllegalArgumentException    Raised when the size of the matrix is
      *                                     not 3x3.
@@ -375,7 +375,7 @@ public abstract class BaseConic implements Serializable {
             final Matrix m = asMatrix();
             final double norm = Utils.normF(m);
 
-            if (norm > PRECISION && !Double.isNaN(norm)) {
+            if (!Double.isNaN(norm) && norm > PRECISION) {
                 mA /= norm;
                 mB /= norm;
                 mC /= norm;

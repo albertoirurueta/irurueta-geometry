@@ -96,9 +96,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
-     * @param inputPoints  list of input points to be used to estimate an
+     * @param inputPoints  list of input points to be used to estimate a
      *                     metric 2D transformation.
-     * @param outputPoints list of output points to be used to estimate an
+     * @param outputPoints list of output points to be used to estimate a
      *                     metric 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -257,9 +257,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
-     * @param inputPoints            list of input points to be used to estimate an
+     * @param inputPoints            list of input points to be used to estimate a
      *                               metric 2D transformation.
-     * @param outputPoints           list of output points to be used to estimate an
+     * @param outputPoints           list of output points to be used to estimate a
      *                               metric 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -678,7 +678,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**
@@ -686,7 +686,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *

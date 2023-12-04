@@ -50,16 +50,14 @@ public class Triangulator3DTest {
         assertNotNull(triangulator);
 
         // check method correctness
-        assertEquals(triangulator.getMethod(),
-                Triangulator3D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(Triangulator3D.DEFAULT_TRIANGULATOR_METHOD,
+                triangulator.getMethod());
 
         // create with method
-        triangulator = Triangulator3D.create(
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        triangulator = Triangulator3D.create(TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
 
         // check method correctness
-        assertEquals(triangulator.getMethod(),
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, triangulator.getMethod());
     }
 
     @Test
@@ -69,8 +67,7 @@ public class Triangulator3DTest {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double phi = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+        final double phi = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
         final List<Point3D> vertices = buildPolygonVertices(sides, radius, phi);
@@ -96,8 +93,7 @@ public class Triangulator3DTest {
         final List<Triangle3D> triangles1 = triangulator.triangulate(polygon);
         final List<Triangle3D> triangles2 = triangulator.triangulate(vertices);
         final List<int[]> indices = new ArrayList<>();
-        final List<Triangle3D> triangles3 = triangulator.triangulate(vertices,
-                indices);
+        final List<Triangle3D> triangles3 = triangulator.triangulate(vertices, indices);
 
         double area1 = 0.0;
         boolean inside1 = false;
@@ -122,7 +118,7 @@ public class Triangulator3DTest {
         assertFalse(inside2);
 
         double area2 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (final Triangle3D triangle : triangles2) {
             area2 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -143,7 +139,7 @@ public class Triangulator3DTest {
         assertFalse(inside2);
 
         double area3 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (final Triangle3D triangle : triangles3) {
             area3 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -163,7 +159,7 @@ public class Triangulator3DTest {
         assertFalse(polygon.isInside(point2));
         assertFalse(inside2);
 
-        assertTrue(indices.size() > 0);
+        assertFalse(indices.isEmpty());
     }
 
     private List<Point3D> buildPolygonVertices(

@@ -37,7 +37,7 @@ public class SphereRobustEstimatorTest {
         assertEquals(0.0, SphereRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, SphereRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, SphereRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, SphereRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, SphereRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test
@@ -48,27 +48,27 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(RobustEstimatorMethod.LMedS);
+        estimator = SphereRobustEstimator.create(RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -78,12 +78,12 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -93,27 +93,27 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(RobustEstimatorMethod.PROMedS);
+        estimator = SphereRobustEstimator.create(RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -131,13 +131,13 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -152,18 +152,18 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator);
 
         estimator = SphereRobustEstimator.create(points,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -171,7 +171,7 @@ public class SphereRobustEstimatorTest {
         estimator = null;
         try {
             estimator = SphereRobustEstimator.create(emptyPoints,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -183,13 +183,13 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -209,13 +209,13 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -230,18 +230,18 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator);
 
         estimator = SphereRobustEstimator.create(points,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -249,7 +249,7 @@ public class SphereRobustEstimatorTest {
         estimator = null;
         try {
             estimator = SphereRobustEstimator.create(emptyPoints,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -277,172 +277,161 @@ public class SphereRobustEstimatorTest {
             }
         };
 
-        estimator = SphereRobustEstimator.create(listener,
-                RobustEstimatorMethod.RANSAC);
+        estimator = SphereRobustEstimator.create(listener, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener,
-                RobustEstimatorMethod.LMedS);
+        estimator = SphereRobustEstimator.create(listener, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener,
-                RobustEstimatorMethod.MSAC);
+        estimator = SphereRobustEstimator.create(listener, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener,
-                RobustEstimatorMethod.PROSAC);
+        estimator = SphereRobustEstimator.create(listener, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener,
-                RobustEstimatorMethod.PROMedS);
+        estimator = SphereRobustEstimator.create(listener, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // test with listener, points and method
-        estimator = SphereRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.RANSAC);
+        estimator = SphereRobustEstimator.create(listener, points, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.LMedS);
+        estimator = SphereRobustEstimator.create(listener, points, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.MSAC);
+        estimator = SphereRobustEstimator.create(listener, points, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.PROSAC);
+        estimator = SphereRobustEstimator.create(listener, points, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.PROMedS);
+        estimator = SphereRobustEstimator.create(listener, points, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
         try {
-            estimator = SphereRobustEstimator.create(listener, emptyPoints,
-                    RobustEstimatorMethod.RANSAC);
+            estimator = SphereRobustEstimator.create(listener, emptyPoints, RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -452,82 +441,77 @@ public class SphereRobustEstimatorTest {
         final double[] qualityScores = new double[SphereRobustEstimator.MINIMUM_SIZE];
         final double[] emptyScores = new double[0];
 
-        estimator = SphereRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.RANSAC);
+        estimator = SphereRobustEstimator.create(qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.LMedS);
+        estimator = SphereRobustEstimator.create(qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.MSAC);
+        estimator = SphereRobustEstimator.create(qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.PROSAC);
+        estimator = SphereRobustEstimator.create(qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.PROMedS);
+        estimator = SphereRobustEstimator.create(qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertSame(estimator.getQualityScores(), qualityScores);
@@ -535,93 +519,87 @@ public class SphereRobustEstimatorTest {
         // Force IllegalArgumentException
         estimator = null;
         try {
-            estimator = SphereRobustEstimator.create(emptyScores,
-                    RobustEstimatorMethod.PROSAC);
+            estimator = SphereRobustEstimator.create(emptyScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(estimator);
 
         // Test with points and quality scores
-        estimator = SphereRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.RANSAC);
+        estimator = SphereRobustEstimator.create(points, qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.LMedS);
+        estimator = SphereRobustEstimator.create(points, qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.MSAC);
+        estimator = SphereRobustEstimator.create(points, qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.PROSAC);
+        estimator = SphereRobustEstimator.create(points, qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+        estimator = SphereRobustEstimator.create(points, qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -640,85 +618,80 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator);
 
         // test with listener and quality scores
-        estimator = SphereRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.RANSAC);
+        estimator = SphereRobustEstimator.create(listener, qualityScores, RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.LMedS);
+        estimator = SphereRobustEstimator.create(listener, qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.MSAC);
+        estimator = SphereRobustEstimator.create(listener, qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.PROSAC);
+        estimator = SphereRobustEstimator.create(listener, qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
-        estimator = SphereRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+        estimator = SphereRobustEstimator.create(listener, qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -734,82 +707,82 @@ public class SphereRobustEstimatorTest {
         estimator = SphereRobustEstimator.create(listener, points, qualityScores,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = SphereRobustEstimator.create(listener, points, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = SphereRobustEstimator.create(listener, points, qualityScores,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = SphereRobustEstimator.create(listener, points, qualityScores,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = SphereRobustEstimator.create(listener, points, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = null;
         try {
@@ -832,12 +805,12 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -848,13 +821,13 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -870,15 +843,15 @@ public class SphereRobustEstimatorTest {
         // test with listener
         estimator = SphereRobustEstimator.create(listener);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -886,16 +859,16 @@ public class SphereRobustEstimatorTest {
         // test with listener and points
         estimator = SphereRobustEstimator.create(listener, points);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -914,15 +887,15 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -939,13 +912,13 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertSame(estimator.getQualityScores(), qualityScores);
 
@@ -966,18 +939,18 @@ public class SphereRobustEstimatorTest {
         //test with listener and quality scores
         estimator = SphereRobustEstimator.create(listener, qualityScores);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -989,21 +962,20 @@ public class SphereRobustEstimatorTest {
         assertNull(estimator);
 
         // test with listener, points and quality scores
-        estimator = SphereRobustEstimator.create(listener, points,
-                qualityScores);
+        estimator = SphereRobustEstimator.create(listener, points, qualityScores);
         assertTrue(estimator instanceof PROMedSSphereRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                SphereRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                SphereRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                SphereRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(SphereRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(SphereRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;

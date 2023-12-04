@@ -36,9 +36,9 @@ public class InhomogeneousPoint3DTest {
     @Test
     public void testConstructor() {
         InhomogeneousPoint3D iPoint = new InhomogeneousPoint3D();
-        assertEquals(iPoint.getInhomX(), 0.0, 0.0);
-        assertEquals(iPoint.getInhomY(), 0.0, 0.0);
-        assertEquals(iPoint.getInhomZ(), 0.0, 0.0);
+        assertEquals(0.0, iPoint.getInhomX(), 0.0);
+        assertEquals(0.0, iPoint.getInhomY(), 0.0);
+        assertEquals(0.0, iPoint.getInhomZ(), 0.0);
 
         double[] array = new double[INHOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -61,13 +61,11 @@ public class InhomogeneousPoint3DTest {
         Point3D point = Point3D.create(
                 CoordinatesType.INHOMOGENEOUS_COORDINATES);
         iPoint = new InhomogeneousPoint3D(point);
-        assertEquals(iPoint.getType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, iPoint.getType());
 
         point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         iPoint = new InhomogeneousPoint3D(point);
-        assertEquals(iPoint.getType(),
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, iPoint.getType());
     }
 
     @Test
@@ -103,12 +101,12 @@ public class InhomogeneousPoint3DTest {
         assertEquals(constantW, constantX, ABSOLUTE_ERROR);
 
         iPoint.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
-        assertEquals(iPoint.getInhomX(), inhomX, 0.0);
-        assertEquals(iPoint.getInhomY(), inhomY, 0.0);
-        assertEquals(iPoint.getInhomZ(), inhomZ, 0.0);
-        assertEquals(iPoint.getX(), inhomX, 0.0);
-        assertEquals(iPoint.getY(), inhomY, 0.0);
-        assertEquals(iPoint.getZ(), inhomZ, 0.0);
+        assertEquals(inhomX, iPoint.getInhomX(), 0.0);
+        assertEquals(inhomY, iPoint.getInhomY(), 0.0);
+        assertEquals(inhomZ, iPoint.getInhomZ(), 0.0);
+        assertEquals(inhomX, iPoint.getX(), 0.0);
+        assertEquals(inhomY, iPoint.getY(), 0.0);
+        assertEquals(inhomZ, iPoint.getZ(), 0.0);
     }
 
     @Test
@@ -171,9 +169,9 @@ public class InhomogeneousPoint3DTest {
         final double z = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         iPoint = new InhomogeneousPoint3D();
         iPoint.setCoordinates(x, y, z);
-        assertEquals(iPoint.getX(), x, 0.0);
-        assertEquals(iPoint.getY(), y, 0.0);
-        assertEquals(iPoint.getZ(), z, 0.0);
+        assertEquals(x, iPoint.getX(), 0.0);
+        assertEquals(y, iPoint.getY(), 0.0);
+        assertEquals(z, iPoint.getZ(), 0.0);
 
         final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
@@ -183,12 +181,12 @@ public class InhomogeneousPoint3DTest {
                 MAX_RANDOM_VALUE);
         iPoint = new InhomogeneousPoint3D();
         iPoint.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
-        assertEquals(iPoint.getInhomX(), inhomX, 0.0);
-        assertEquals(iPoint.getInhomY(), inhomY, 0.0);
-        assertEquals(iPoint.getInhomZ(), inhomZ, 0.0);
-        assertEquals(iPoint.getX(), inhomX, 0.0);
-        assertEquals(iPoint.getY(), inhomY, 0.0);
-        assertEquals(iPoint.getZ(), inhomZ, 0.0);
+        assertEquals(inhomX, iPoint.getInhomX(), 0.0);
+        assertEquals(inhomY, iPoint.getInhomY(), 0.0);
+        assertEquals(inhomZ, iPoint.getInhomZ(), 0.0);
+        assertEquals(inhomX, iPoint.getX(), 0.0);
+        assertEquals(inhomY, iPoint.getY(), 0.0);
+        assertEquals(inhomZ, iPoint.getZ(), 0.0);
 
         array = new double[INHOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);

@@ -235,7 +235,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * Computes the inverse of this transformation and stores the result in
      * provided instance.
      *
-     * @param result instance where inverse transformation will be stored..
+     * @param result instance where inverse transformation will be stored.
      */
     protected void inverse(final MetricTransformation2D result) {
         // Transformation is as follows: x' = s*R* x + t

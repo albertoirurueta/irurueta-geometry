@@ -93,20 +93,20 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * Creates a pinhole camera robust estimator based on plane/line
      * correspondences and using provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
             case MSAC:
                 return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
             case RANSAC:
             default:
@@ -122,7 +122,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @param planes list of 3D planes to estimate a pinhole camera.
      * @param lines  list of corresponding projected 2D lines used to estimate a
      *               pinhole camera.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
@@ -133,7 +133,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             final List<Plane> planes, final List<Line2D> lines,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines);
             case MSAC:
@@ -142,7 +142,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines);
             case RANSAC:
@@ -158,7 +158,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -166,7 +166,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             final PinholeCameraRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case MSAC:
@@ -175,7 +175,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case RANSAC:
@@ -195,7 +195,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @param planes   list of 3D planes to estimate a pinhole camera.
      * @param lines    list of corresponding projected 2D lines used to estimate a
      *                 pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines
@@ -206,7 +206,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
             final List<Line2D> lines, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, planes, lines);
             case MSAC:
@@ -215,7 +215,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, planes, lines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, planes, lines);
             case RANSAC:
@@ -232,7 +232,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -241,14 +241,14 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
             case MSAC:
                 return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -267,7 +267,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
@@ -278,7 +278,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines);
             case MSAC:
@@ -287,7 +287,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         planes, lines, qualityScores);
             case RANSAC:
@@ -306,7 +306,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -316,7 +316,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             final PinholeCameraRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case MSAC:
@@ -325,7 +325,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -347,7 +347,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                      a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      planes/lines.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of planes and lines or
@@ -359,7 +359,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             final List<Line2D> lines, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, planes, lines);
             case MSAC:
@@ -368,7 +368,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             case PROSAC:
                 return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, planes, lines, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                         listener, planes, lines, qualityScores);
             case RANSAC:

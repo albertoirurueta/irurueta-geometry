@@ -61,12 +61,12 @@ public class ConicTest {
 
         // Constructor
         Conic conic = new Conic();
-        assertEquals(conic.getA(), 0.0, 0.0);
-        assertEquals(conic.getB(), 0.0, 0.0);
-        assertEquals(conic.getC(), 0.0, 0.0);
-        assertEquals(conic.getD(), 0.0, 0.0);
-        assertEquals(conic.getE(), 0.0, 0.0);
-        assertEquals(conic.getF(), 0.0, 0.0);
+        assertEquals(0.0, conic.getA(), 0.0);
+        assertEquals(0.0, conic.getB(), 0.0);
+        assertEquals(0.0, conic.getC(), 0.0);
+        assertEquals(0.0, conic.getD(), 0.0);
+        assertEquals(0.0, conic.getE(), 0.0);
+        assertEquals(0.0, conic.getF(), 0.0);
         assertFalse(conic.isNormalized());
 
         // Constructor with params
@@ -78,12 +78,12 @@ public class ConicTest {
         double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         conic = new Conic(a, b, c, d, e, f);
-        assertEquals(conic.getA(), a, 0.0);
-        assertEquals(conic.getB(), b, 0.0);
-        assertEquals(conic.getC(), c, 0.0);
-        assertEquals(conic.getD(), d, 0.0);
-        assertEquals(conic.getE(), e, 0.0);
-        assertEquals(conic.getF(), f, 0.0);
+        assertEquals(a, conic.getA(), 0.0);
+        assertEquals(b, conic.getB(), 0.0);
+        assertEquals(c, conic.getC(), 0.0);
+        assertEquals(d, conic.getD(), 0.0);
+        assertEquals(e, conic.getE(), 0.0);
+        assertEquals(f, conic.getF(), 0.0);
         assertFalse(conic.isNormalized());
 
         // Constructor using matrix
@@ -108,12 +108,12 @@ public class ConicTest {
 
         conic = new Conic(m);
 
-        assertEquals(conic.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(conic.getB(), m.getElementAt(0, 1), 0.0);
-        assertEquals(conic.getC(), m.getElementAt(1, 1), 0.0);
-        assertEquals(conic.getD(), m.getElementAt(0, 2), 0.0);
-        assertEquals(conic.getE(), m.getElementAt(1, 2), 0.0);
-        assertEquals(conic.getF(), m.getElementAt(2, 2), 0.0);
+        assertEquals(m.getElementAt(0, 0), conic.getA(), 0.0);
+        assertEquals(m.getElementAt(0, 1), conic.getB(), 0.0);
+        assertEquals(m.getElementAt(1, 1), conic.getC(), 0.0);
+        assertEquals(m.getElementAt(0, 2), conic.getD(), 0.0);
+        assertEquals(m.getElementAt(1, 2), conic.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 2), conic.getF(), 0.0);
 
         // Constructor using matrix with wrong size exception
         m = new Matrix(CONIC_ROWS, CONIC_COLS + 1);
@@ -137,7 +137,6 @@ public class ConicTest {
         m.setElementAt(2, 1, e);
         m.setElementAt(2, 2, f);
 
-        conic = null;
         try {
             conic = new Conic(m);
             fail("NonSymmetricMatrixException expected but not thrown");
@@ -165,7 +164,7 @@ public class ConicTest {
                 m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2));
 
-        // estimate conic that lies inside of provided 5 homogeneous 2D
+        // estimate conic that lies inside provided 5 homogeneous 2D
         // points
         Matrix conicMatrix = new Matrix(5, 6);
         double x = point1.getHomX();
@@ -456,7 +455,7 @@ public class ConicTest {
         point4.normalize();
         point5.normalize();
 
-        // estimate conic that lies inside of provided 5 inhomogeneous image
+        // estimate conic that lies inside provided 5 inhomogeneous image
         // points
         Matrix conicMatrix = new Matrix(5, 6);
         double x = point1.getHomX();
@@ -850,7 +849,7 @@ public class ConicTest {
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
     }
 
     @Test
@@ -864,48 +863,31 @@ public class ConicTest {
         double f = 1.0;
         final Conic conic = new Conic();
         conic.setParameters(a, b, c, d, e, f);
-        assertEquals(conic.getConicType(), ConicType.CIRCLE_CONIC_TYPE);
+        assertEquals(ConicType.CIRCLE_CONIC_TYPE, conic.getConicType());
 
         // passing a circle conic
         a = 2.0;
         b = 1.0;
-        c = 3.0;
-        d = 3.0;
-        e = 2.0;
-        f = 1.0;
         conic.setParameters(a, b, c, d, e, f);
-        assertEquals(conic.getConicType(), ConicType.ELLIPSE_CONIC_TYPE);
+        assertEquals(ConicType.ELLIPSE_CONIC_TYPE, conic.getConicType());
 
         // passing a parabola conic
         a = 4.0;
         b = 2.0;
         c = 1.0;
-        d = 3.0;
-        e = 2.0;
-        f = 1.0;
         conic.setParameters(a, b, c, d, e, f);
-        assertEquals(conic.getConicType(), ConicType.PARABOLA_CONIC_TYPE);
+        assertEquals(ConicType.PARABOLA_CONIC_TYPE, conic.getConicType());
 
         // passing a hyperbola conic
         a = 2.0;
         b = 5.0;
-        c = 1.0;
-        d = 3.0;
-        e = 2.0;
-        f = 1.0;
         conic.setParameters(a, b, c, d, e, f);
-        assertEquals(conic.getConicType(), ConicType.HYPERBOLA_CONIC_TYPE);
+        assertEquals(ConicType.HYPERBOLA_CONIC_TYPE, conic.getConicType());
 
         // passing a rectangular hyperbola conic
         a = -1.0;
-        b = 5.0;
-        c = 1.0;
-        d = 3.0;
-        e = 2.0;
-        f = 1.0;
         conic.setParameters(a, b, c, d, e, f);
-        assertEquals(conic.getConicType(),
-                ConicType.RECTANGULAR_HYPERBOLA_CONIC_TYPE);
+        assertEquals(ConicType.RECTANGULAR_HYPERBOLA_CONIC_TYPE, conic.getConicType());
     }
 
     @Test
@@ -943,7 +925,7 @@ public class ConicTest {
         // finally, ensure that the norm of the difference matrix is almost zero
         // up to machine precision
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
 
         // check that when setting new values conic becomes non-normalized
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1056,18 +1038,19 @@ public class ConicTest {
     public void testCreateCanonicalAbsoluteConic() throws WrongSizeException {
         final Conic ac = Conic.createCanonicalAbsoluteConic();
 
-        assertEquals(ac.getA(), 1.0, 0.0);
-        assertEquals(ac.getB(), 0.0, 0.0);
-        assertEquals(ac.getC(), 1.0, 0.0);
-        assertEquals(ac.getD(), 0.0, 0.0);
-        assertEquals(ac.getE(), 0.0, 0.0);
-        assertEquals(ac.getF(), 1.0, 0.0);
+        assertEquals(1.0, ac.getA(), 0.0);
+        assertEquals(0.0, ac.getB(), 0.0);
+        assertEquals(1.0, ac.getC(), 0.0);
+        assertEquals(0.0, ac.getD(), 0.0);
+        assertEquals(0.0, ac.getE(), 0.0);
+        assertEquals(1.0, ac.getF(), 0.0);
 
-        assertEquals(ac.asMatrix(), Matrix.identity(3, 3));
+        assertEquals(Matrix.identity(3, 3), ac.asMatrix());
     }
 
     @Test
-    public void testSetParametersFromPoints() throws WrongSizeException, DecomposerException, CoincidentPointsException {
+    public void testSetParametersFromPoints() throws WrongSizeException, DecomposerException,
+            CoincidentPointsException {
         Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
@@ -1087,7 +1070,7 @@ public class ConicTest {
                 m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2));
 
-        // estimate conic that lies inside of provided 5 homogeneous 2D
+        // estimate conic that lies inside provided 5 homogeneous 2D
         // points
         Matrix conicMatrix = new Matrix(5, 6);
         double x = point1.getHomX();

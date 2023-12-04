@@ -37,7 +37,7 @@ public class DualConicRobustEstimatorTest {
         assertEquals(0.0, DualConicRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, DualConicRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, DualConicRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, DualConicRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, DualConicRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test
@@ -50,28 +50,28 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -81,12 +81,12 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -97,28 +97,28 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -136,13 +136,13 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -157,18 +157,18 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator);
 
         estimator = DualConicRobustEstimator.create(lines,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -176,7 +176,7 @@ public class DualConicRobustEstimatorTest {
         estimator = null;
         try {
             estimator = DualConicRobustEstimator.create(emptyLines,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -188,13 +188,13 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -214,13 +214,13 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -235,18 +235,18 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator);
 
         estimator = DualConicRobustEstimator.create(lines,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -254,7 +254,7 @@ public class DualConicRobustEstimatorTest {
         estimator = null;
         try {
             estimator = DualConicRobustEstimator.create(emptyLines,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -286,31 +286,31 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -318,15 +318,15 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -334,31 +334,31 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -367,80 +367,80 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener, lines,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -464,28 +464,28 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -496,12 +496,12 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                ConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                ConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -512,31 +512,31 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertSame(estimator.getQualityScores(), qualityScores);
 
         estimator = DualConicRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -555,29 +555,29 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(lines, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -587,13 +587,13 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -603,31 +603,31 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(lines, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -649,31 +649,31 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener, qualityScores,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -681,15 +681,15 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener, qualityScores,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -697,34 +697,34 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener, qualityScores,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -740,82 +740,82 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener, lines, qualityScores,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
-                qualityScores, RobustEstimatorMethod.LMedS);
+                qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
                 qualityScores, RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
                 qualityScores, RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = DualConicRobustEstimator.create(listener, lines,
-                qualityScores, RobustEstimatorMethod.PROMedS);
+                qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = null;
         try {
@@ -838,12 +838,12 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -854,13 +854,13 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -876,15 +876,15 @@ public class DualConicRobustEstimatorTest {
         // test with listener
         estimator = DualConicRobustEstimator.create(listener);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -892,16 +892,16 @@ public class DualConicRobustEstimatorTest {
         // test with listener and lines
         estimator = DualConicRobustEstimator.create(listener, lines);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -920,15 +920,15 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -945,15 +945,15 @@ public class DualConicRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -972,18 +972,18 @@ public class DualConicRobustEstimatorTest {
         // test with listener and quality scores
         estimator = DualConicRobustEstimator.create(listener, qualityScores);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -998,18 +998,18 @@ public class DualConicRobustEstimatorTest {
         estimator = DualConicRobustEstimator.create(listener, lines,
                 qualityScores);
         assertTrue(estimator instanceof PROMedSDualConicRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                DualConicRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getLines(), lines);
+        assertEquals(DualConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(DualConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(lines, estimator.getLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;

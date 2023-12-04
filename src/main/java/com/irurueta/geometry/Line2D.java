@@ -25,11 +25,11 @@ import java.util.Objects;
 /**
  * Line2D in R2. Lines can be expressed using the following expression:
  * A * x + B * y + C = 0
- * where A and B are different from zero. Changing this expresion to a
+ * where A and B are different from zero. Changing this expression to a
  * y = m * x + b format leads to the following definitions:
  * m: slope of the line. Defined as m = -A/B
  * b: interception point of this line. Defined as b = -c/B
- * angle of the line with respect to the x axis = Math.atan(slope).
+ * angle of the line with respect to the x-axis = Math.atan(slope).
  */
 public class Line2D implements Serializable {
 
@@ -359,9 +359,9 @@ public class Line2D implements Serializable {
             }
 
             // Because m is rank 2, the last column of V, from now on l, will be
-            // the right null-space of m. Hence m*l = 0, which is the equation of
+            // the right null-space of m. Hence, m*l = 0, which is the equation of
             // a line.
-            // Hence l is the null space for both pointA and pointB, or in other
+            // Hence, l is the null space for both pointA and pointB, or in other
             // words, pointA and pointB are the locus of l, or l is the line
             // passing through both pointA and pointB
             final Matrix v = decomposer.getV();
@@ -458,7 +458,7 @@ public class Line2D implements Serializable {
 
     /**
      * Distance between a line and a point. Returned distance equals to the
-     * euclidean distance between this line and provided point but having sign.
+     * Euclidean distance between this line and provided point but having sign.
      * Sign indicates whether point is at one side or the other of the line.
      *
      * @param point Point whose distance to this line will be computed.

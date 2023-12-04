@@ -427,7 +427,7 @@ public class PROMedSSphereRobustEstimator extends SphereRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

@@ -313,7 +313,7 @@ public class DualConic extends BaseConic implements Serializable {
             line5.normalize();
 
 
-            // estimate dual conic that lines inside of provided 5 lines
+            // estimate dual conic that lines inside provided 5 lines
             final Matrix m = new Matrix(5, 6);
 
             double l1 = line1.getA();

@@ -52,8 +52,8 @@ public class Box2DTest {
         box = new Box2D(lo, hi);
 
         // check
-        assertSame(box.getLo(), lo);
-        assertSame(box.getHi(), hi);
+        assertSame(lo, box.getLo());
+        assertSame(hi, box.getHi());
 
         // test constructor with rectangle
         final InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
@@ -62,8 +62,8 @@ public class Box2DTest {
         box = new Box2D(rectangle);
 
         // check
-        assertEquals(box.getLo(), lo);
-        assertEquals(box.getHi(), hi);
+        assertEquals(lo, box.getLo());
+        assertEquals(hi, box.getHi());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class Box2DTest {
         box.setLo(lo);
 
         // check
-        assertSame(box.getLo(), lo);
+        assertSame(lo, box.getLo());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class Box2DTest {
         box.setHi(hi);
 
         // check
-        assertSame(box.getHi(), hi);
+        assertSame(hi, box.getHi());
     }
 
     @Test
@@ -110,8 +110,8 @@ public class Box2DTest {
         box.setBounds(lo, hi);
 
         // check
-        assertSame(box.getLo(), lo);
-        assertSame(box.getHi(), hi);
+        assertSame(lo, box.getLo());
+        assertSame(hi, box.getHi());
 
         // random values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -125,8 +125,8 @@ public class Box2DTest {
         box.setBounds(loX, loY, hiX, hiY);
 
         // check
-        assertEquals(box.getLo(), lo);
-        assertEquals(box.getHi(), hi);
+        assertEquals(lo, box.getLo());
+        assertEquals(hi, box.getHi());
     }
 
     @Test
@@ -150,8 +150,8 @@ public class Box2DTest {
         box.fromRectangle(rectangle);
 
         // check
-        assertEquals(box.getLo(), lo);
-        assertEquals(box.getHi(), hi);
+        assertEquals(lo, box.getLo());
+        assertEquals(hi, box.getHi());
 
         // to rectangle
         final Rectangle rectangle2 = box.toRectangle();
@@ -159,10 +159,10 @@ public class Box2DTest {
         box.toRectangle(rectangle3);
 
         // check
-        assertEquals(rectangle2.getTopLeft(), topLeft);
-        assertEquals(rectangle2.getBottomRight(), bottomRight);
-        assertEquals(rectangle3.getTopLeft(), topLeft);
-        assertEquals(rectangle3.getBottomRight(), bottomRight);
+        assertEquals(topLeft, rectangle2.getTopLeft());
+        assertEquals(bottomRight, rectangle2.getBottomRight());
+        assertEquals(topLeft, rectangle3.getTopLeft());
+        assertEquals(bottomRight, rectangle3.getBottomRight());
     }
 
     @Test
@@ -214,23 +214,23 @@ public class Box2DTest {
 
 
         final Box2D box = new Box2D(rectangle);
-        assertEquals(box.getDistance(pointAtLeftSide),
-                rectangle.getDistance(pointAtLeftSide), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtTopLeftCorner),
-                rectangle.getDistance(pointAtTopLeftCorner), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtTopSide),
-                rectangle.getDistance(pointAtTopSide), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtTopRightCorner),
-                rectangle.getDistance(pointAtTopRightCorner), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtRightSide),
-                rectangle.getDistance(pointAtRightSide), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtBottomRightCorner),
-                rectangle.getDistance(pointAtBottomRightCorner), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtBottomSide),
-                rectangle.getDistance(pointAtBottomSide), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(pointAtBottomLeftCorner),
-                rectangle.getDistance(pointAtBottomLeftCorner), ABSOLUTE_ERROR);
-        assertEquals(box.getDistance(insidePoint), 0.0, ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtLeftSide),
+                box.getDistance(pointAtLeftSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtTopLeftCorner),
+                box.getDistance(pointAtTopLeftCorner), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtTopSide),
+                box.getDistance(pointAtTopSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtTopRightCorner),
+                box.getDistance(pointAtTopRightCorner), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtRightSide),
+                box.getDistance(pointAtRightSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtBottomRightCorner),
+                box.getDistance(pointAtBottomRightCorner), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtBottomSide),
+                box.getDistance(pointAtBottomSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtBottomLeftCorner),
+                box.getDistance(pointAtBottomLeftCorner), ABSOLUTE_ERROR);
+        assertEquals(0.0, box.getDistance(insidePoint), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -281,23 +281,23 @@ public class Box2DTest {
                 centerY + height * randomizer.nextDouble(-0.5, 0.5));
 
         final Box2D box = new Box2D(rectangle);
-        assertEquals(box.getSqrDistance(pointAtLeftSide),
-                Math.pow(rectangle.getDistance(pointAtLeftSide), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtTopLeftCorner),
-                Math.pow(rectangle.getDistance(pointAtTopLeftCorner), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtTopSide),
-                Math.pow(rectangle.getDistance(pointAtTopSide), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtTopRightCorner),
-                Math.pow(rectangle.getDistance(pointAtTopRightCorner), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtRightSide),
-                Math.pow(rectangle.getDistance(pointAtRightSide), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtBottomRightCorner),
-                Math.pow(rectangle.getDistance(pointAtBottomRightCorner), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtBottomSide),
-                Math.pow(rectangle.getDistance(pointAtBottomSide), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(pointAtBottomLeftCorner),
-                Math.pow(rectangle.getDistance(pointAtBottomLeftCorner), 2.0), ABSOLUTE_ERROR);
-        assertEquals(box.getSqrDistance(insidePoint), 0.0, ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtLeftSide), 2.0),
+                box.getSqrDistance(pointAtLeftSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtTopLeftCorner), 2.0),
+                box.getSqrDistance(pointAtTopLeftCorner), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtTopSide), 2.0),
+                box.getSqrDistance(pointAtTopSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtTopRightCorner), 2.0),
+                box.getSqrDistance(pointAtTopRightCorner), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtRightSide), 2.0),
+                box.getSqrDistance(pointAtRightSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtBottomRightCorner), 2.0),
+                box.getSqrDistance(pointAtBottomRightCorner), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtBottomSide), 2.0),
+                box.getSqrDistance(pointAtBottomSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtBottomLeftCorner), 2.0),
+                box.getSqrDistance(pointAtBottomLeftCorner), ABSOLUTE_ERROR);
+        assertEquals(0.0, box.getSqrDistance(insidePoint), ABSOLUTE_ERROR);
     }
 
     @Test

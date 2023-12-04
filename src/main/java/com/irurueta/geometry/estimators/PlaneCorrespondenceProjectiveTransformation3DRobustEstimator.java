@@ -35,7 +35,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of planes to be used to estimate a projective 3D transformation.
@@ -214,7 +214,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
 
     /**
      * Creates a projective 3D transformation estimator based on 3D plane
-     * correspondences an using provided robust estimator method.
+     * correspondences and using provided robust estimator method.
      *
      * @param method method of a robust estimator algorithm to estimate
      *               best projective 3D transformation.
@@ -223,13 +223,13 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case RANSAC:
             default:
@@ -255,7 +255,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
             case MSAC:
@@ -264,7 +264,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
             case RANSAC:
@@ -288,7 +288,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -297,7 +297,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
             case RANSAC:
@@ -328,7 +328,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Plane> inputPlanes, List<Plane> outputPlanes,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
             case MSAC:
@@ -337,7 +337,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
             case RANSAC:
@@ -360,14 +360,14 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -396,7 +396,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
             case MSAC:
@@ -405,7 +405,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
@@ -431,7 +431,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -440,7 +440,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -473,7 +473,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
             case MSAC:
@@ -482,7 +482,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
@@ -554,7 +554,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     }
 
     /**
-     * Creates an projective 3D transformation estimator based on plane
+     * Creates a projective 3D transformation estimator based on plane
      * correspondences and using default robust estimator method.
      *
      * @param qualityScores quality scores corresponding to each pair of matched
@@ -682,7 +682,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

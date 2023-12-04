@@ -228,7 +228,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
             final double inhomX, final double inhomY);
 
     /**
-     * Checks if the 2d point described by this class equals the input Point2d
+     * Checks if the 2d point described by this class equals the input {@link Point2D}
      * (using a comparison threshold).
      *
      * @param point     Point that will be compared to.
@@ -241,7 +241,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     public abstract boolean equals(final Point2D point, final double threshold);
 
     /**
-     * Checks if the 2d point described by this class equals the input Point2d
+     * Checks if the 2d point described by this class equals the input {@link Point2D}
      * (using DEFAULT_COMPARISON_THRESHOLD).
      *
      * @param point Point that will be compared to.
@@ -305,7 +305,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     /**
      * Returns boolean indicating whether this point has already been
      * normalized.
-     * This method is meant to be overridden. By default it will always return
+     * This method is meant to be overridden. By default, it will always return
      * true, to indicate that no further normalization is possible.
      *
      * @return True if normalized, false otherwise.
@@ -349,7 +349,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     /**
      * Sets value of inhomogeneous coordinate for provided dimension.
      *
-     * @param dim   dimension to set coordinate for (i.e. 0 means x, 1 means y, 2 means z, etc).
+     * @param dim   dimension to set coordinate for (i.e. 0 means x, 1 means y, 2 means z, etc.).
      * @param value value to be set.
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
@@ -368,7 +368,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     }
 
     /**
-     * Returns euclidean distance between this point and provided point.
+     * Returns Euclidean distance between this point and provided point.
      *
      * @param point Point to compare.
      * @return Euclidean distance between this point and provided point.
@@ -379,10 +379,10 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     }
 
     /**
-     * Returns squared euclidean distance between this point and provided point.
+     * Returns squared Euclidean distance between this point and provided point.
      *
      * @param point point to compare.
-     * @return euclidean distance between this point and provided point.
+     * @return Euclidean distance between this point and provided point.
      */
     @Override
     public double sqrDistanceTo(final Point2D point) {

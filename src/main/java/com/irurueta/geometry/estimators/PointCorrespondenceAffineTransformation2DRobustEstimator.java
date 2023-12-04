@@ -35,7 +35,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of points to be used to estimate an affine 2D transformation.
@@ -216,19 +216,19 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * correspondences and using provided robust estimator method.
      *
      * @param method method of a robust estimator algorithm to estimate
-     *               best affine 2D transformation.
+     *               the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACPointCorrespondenceAffineTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator();
             case RANSAC:
             default:
@@ -245,7 +245,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param outputPoints list of output points to be used to estimate an
      *                     affine 2D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 2D transformation.
+     *                     the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -254,7 +254,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -263,7 +263,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
             case RANSAC:
@@ -280,14 +280,14 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param method   method of a robust estimator algorithm to estimate
-     *                 best affine 2D transformation.
+     *                 the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator create(
             final AffineTransformation2DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -296,7 +296,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
             case RANSAC:
@@ -317,7 +317,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param outputPoints list of output points to be used to estimate an
      *                     affine 2D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 2D transformation.
+     *                     the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -327,7 +327,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -336,7 +336,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case RANSAC:
@@ -353,7 +353,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 2D transformation.
+     *                      the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 matched points).
@@ -361,14 +361,14 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
     public static PointCorrespondenceAffineTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACPointCorrespondenceAffineTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -388,7 +388,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 2D transformation.
+     *                      the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points or quality
      *                                  scores don't have the same size or their size is smaller than
@@ -398,7 +398,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -407,7 +407,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -426,7 +426,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 2D transformation.
+     *                      the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
      *                                  the required minimum size.
@@ -435,7 +435,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             final AffineTransformation2DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -444,7 +444,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -467,7 +467,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
      * @param method        method of a robust estimator algorithm to estimate
-     *                      best affine 2D transformation.
+     *                      the best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -477,7 +477,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -486,7 +486,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
             case PROSAC:
                 return new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -635,7 +635,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

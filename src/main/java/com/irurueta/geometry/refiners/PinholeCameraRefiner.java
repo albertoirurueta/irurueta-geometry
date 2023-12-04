@@ -37,7 +37,7 @@ import java.util.List;
  * an initial estimation, inlier point or line matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  *
  * @param <S1> type of matched samples in 1st set.
@@ -49,7 +49,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
 
     /**
      * Default value indicating whether skewness value is suggested or not.
-     * By default this is disabled.
+     * By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED = false;
 
@@ -61,45 +61,45 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
 
     /**
      * Default value indicating whether horizontal focal length value is
-     * suggested or not. By default this is disabled.
+     * suggested or not. By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
             false;
 
     /**
      * Default value indicating whether vertical focal length value is suggested
-     * or not. By default this is disabled.
+     * or not. By default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
             false;
 
     /**
      * Default value indicating whether aspect ratio is suggested or not. By
-     * default this is disabled.
+     * default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED = false;
 
     /**
      * Default value of aspect ratio to be suggested when suggestion is enabled.
-     * By default suggested aspect ratio is 1.0, although also -1.0 is a typical
+     * By default, suggested aspect ratio is 1.0, although also -1.0 is a typical
      * value when vertical coordinates increase downwards.
      */
     public static final double DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE = 1.0;
 
     /**
      * Default value indicating whether principal point is suggested or not. By
-     * default this is disabled.
+     * default, this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED = false;
 
     /**
-     * Default value indicating whether rotation is suggested or not. By default
+     * Default value indicating whether rotation is suggested or not. By default,
      * this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_ROTATION_ENABLED = false;
 
     /**
-     * Default value indicating whether center is suggested or not. By default
+     * Default value indicating whether center is suggested or not. By default,
      * this is disabled.
      */
     public static final boolean DEFAULT_SUGGEST_CENTER_ENABLED = false;
@@ -109,7 +109,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
@@ -321,7 +321,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *
@@ -336,7 +336,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *

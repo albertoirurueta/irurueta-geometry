@@ -77,13 +77,13 @@ public class InhomogeneousPoint2DRefinerTest implements
         InhomogeneousPoint2DRefiner refiner = new InhomogeneousPoint2DRefiner();
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
         assertNull(refiner.getSamples());
         assertFalse(refiner.isReady());
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
-        assertEquals(refiner.getNumInliers(), 0);
-        assertEquals(refiner.getTotalSamples(), 0);
+        assertEquals(0, refiner.getNumInliers());
+        assertEquals(0, refiner.getTotalSamples());
         assertNull(refiner.getInitialEstimation());
         assertFalse(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
@@ -95,15 +95,14 @@ public class InhomogeneousPoint2DRefinerTest implements
                 residuals, numInliers, samples, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
-        assertSame(refiner.getSamples(), samples);
+        assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
+        assertSame(samples, refiner.getSamples());
         assertTrue(refiner.isReady());
-        assertSame(refiner.getInliers(), inliers);
-        assertSame(refiner.getResiduals(), residuals);
-        assertEquals(refiner.getNumInliers(), numInliers);
-        assertEquals(refiner.getTotalSamples(), samples.size());
-        assertSame(refiner.getInitialEstimation(), point);
+        assertSame(inliers, refiner.getInliers());
+        assertSame(residuals, refiner.getResiduals());
+        assertEquals(numInliers, refiner.getNumInliers());
+        assertEquals(samples.size(), refiner.getTotalSamples());
+        assertSame(point, refiner.getInitialEstimation());
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
@@ -114,15 +113,14 @@ public class InhomogeneousPoint2DRefinerTest implements
                 samples, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
-        assertSame(refiner.getSamples(), samples);
+        assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
+        assertSame(samples, refiner.getSamples());
         assertTrue(refiner.isReady());
-        assertSame(refiner.getInliers(), inliers);
-        assertSame(refiner.getResiduals(), residuals);
-        assertEquals(refiner.getNumInliers(), numInliers);
-        assertEquals(refiner.getTotalSamples(), samples.size());
-        assertSame(refiner.getInitialEstimation(), point);
+        assertSame(inliers, refiner.getInliers());
+        assertSame(residuals, refiner.getResiduals());
+        assertEquals(numInliers, refiner.getNumInliers());
+        assertEquals(samples.size(), refiner.getTotalSamples());
+        assertSame(point, refiner.getInitialEstimation());
         assertTrue(refiner.isCovarianceKept());
         assertFalse(refiner.isLocked());
         assertNull(refiner.getCovariance());
@@ -140,7 +138,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         refiner.setListener(this);
 
         // check correctness
-        assertSame(refiner.getListener(), this);
+        assertSame(this, refiner.getListener());
     }
 
     @Test
@@ -148,7 +146,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         final InhomogeneousPoint2DRefiner refiner = new InhomogeneousPoint2DRefiner();
 
         // check default value
-        assertEquals(refiner.getRefinementStandardDeviation(), 0.0, 0.0);
+        assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -157,8 +155,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
         // check correctness
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
     }
 
     @Test
@@ -175,7 +172,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         refiner.setSamples(samples);
 
         // check correctness
-        assertSame(refiner.getSamples(), samples);
+        assertSame(samples, refiner.getSamples());
     }
 
     @Test
@@ -196,7 +193,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         refiner.setInliers(inliers);
 
         // check correctness
-        assertSame(refiner.getInliers(), inliers);
+        assertSame(inliers, refiner.getInliers());
     }
 
     @Test
@@ -217,7 +214,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         refiner.setResiduals(residuals);
 
         // check correctness
-        assertSame(refiner.getResiduals(), residuals);
+        assertSame(residuals, refiner.getResiduals());
     }
 
     @Test
@@ -232,13 +229,13 @@ public class InhomogeneousPoint2DRefinerTest implements
         final InhomogeneousPoint2DRefiner refiner = new InhomogeneousPoint2DRefiner();
 
         // check default value
-        assertEquals(refiner.getNumInliers(), 0);
+        assertEquals(0, refiner.getNumInliers());
 
         // set new value
         refiner.setNumInliers(numInliers);
 
         // check correctness
-        assertEquals(refiner.getNumInliers(), numInliers);
+        assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
         try {
@@ -261,15 +258,15 @@ public class InhomogeneousPoint2DRefinerTest implements
         // check default values
         assertNull(refiner.getInliers());
         assertNull(refiner.getResiduals());
-        assertEquals(refiner.getNumInliers(), 0);
+        assertEquals(0, refiner.getNumInliers());
 
         // set new value
         refiner.setInliersData(inliersData);
 
         // check correctness
-        assertSame(refiner.getInliers(), inliersData.getInliers());
-        assertSame(refiner.getResiduals(), inliersData.getResiduals());
-        assertEquals(refiner.getNumInliers(), inliersData.getNumInliers());
+        assertSame(inliersData.getInliers(), refiner.getInliers());
+        assertSame(inliersData.getResiduals(), refiner.getResiduals());
+        assertEquals(inliersData.getNumInliers(), refiner.getNumInliers());
     }
 
     @Test
@@ -284,7 +281,7 @@ public class InhomogeneousPoint2DRefinerTest implements
         refiner.setInitialEstimation(point);
 
         // check correctness
-        assertSame(refiner.getInitialEstimation(), point);
+        assertSame(point, refiner.getInitialEstimation());
     }
 
     @Test
@@ -322,8 +319,8 @@ public class InhomogeneousPoint2DRefinerTest implements
             final InhomogeneousPoint2D result1 = new InhomogeneousPoint2D();
 
             reset();
-            assertEquals(mRefineStart, 0);
-            assertEquals(mRefineEnd, 0);
+            assertEquals(0, mRefineStart);
+            assertEquals(0, mRefineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
@@ -331,8 +328,8 @@ public class InhomogeneousPoint2DRefinerTest implements
 
             final InhomogeneousPoint2D result2 = refiner.refine();
 
-            assertEquals(mRefineStart, 2);
-            assertEquals(mRefineEnd, 2);
+            assertEquals(2, mRefineStart);
+            assertEquals(2, mRefineEnd);
 
             assertEquals(result1, result2);
 

@@ -28,7 +28,7 @@ import com.irurueta.geometry.Rotation2D;
 import java.util.List;
 
 /**
- * Estimator of a 2D euclidean transformation based on point correspondences.
+ * Estimator of a 2D Euclidean transformation based on point correspondences.
  * This estimator uses Kabsch algorithm on 2D.
  * A minimum of 3 non-coincident matched 2D input/output points is required for
  * estimation.
@@ -36,7 +36,9 @@ import java.util.List;
  * If more points are provided an LMSE (Least Mean Squared Error) solution will
  * be found.
  * Based on:
- * https://en.wikipedia.org/wiki/Kabsch_algorithm
+ * <a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">
+ *     https://en.wikipedia.org/wiki/Kabsch_algorithm
+ * </a>
  */
 @SuppressWarnings("DuplicatedCode")
 public class EuclideanTransformation2DEstimator {
@@ -185,14 +187,14 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Returns list of input points to be used to estimate an euclidean 2D
+     * Returns list of input points to be used to estimate an Euclidean 2D
      * transformation.
      * Each point in the list of input points must be matched with the
      * corresponding point in the list of output points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      *
-     * @return list of input points to be used to estimate an euclidean
+     * @return list of input points to be used to estimate an Euclidean
      * transformation.
      */
     public List<Point2D> getInputPoints() {
@@ -200,14 +202,14 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Returns list of output points to be used to estimate an euclidean 2D
+     * Returns list of output points to be used to estimate an Euclidean 2D
      * transformation.
      * Each point in the list of output points must be matched with the
      * corresponding point in the list of input points located at the same
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      *
-     * @return list of input points to be used to estimate an euclidean
+     * @return list of input points to be used to estimate an Euclidean
      * transformation.
      */
     public List<Point2D> getOutputPoints() {
@@ -215,16 +217,16 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Sets list of points to be used to estimate an euclidean 2D
+     * Sets list of points to be used to estimate an Euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints  list of input points ot be used ot estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @param outputPoints list of output points ot be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      * @throws LockedException          if estimator is locked because a computation is
@@ -317,7 +319,7 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Indicates if estimator is ready to start the euclidean 2D transformation
+     * Indicates if estimator is ready to start the Euclidean 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points) are provided
      * and a minimum of MINIMUM_SIZE points are available.
@@ -331,7 +333,7 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Estimates an euclidean 2D transformation using the list of matched input
+     * Estimates an Euclidean 2D transformation using the list of matched input
      * and output 2D points.
      * A minimum of 3 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.
@@ -351,7 +353,7 @@ public class EuclideanTransformation2DEstimator {
     }
 
     /**
-     * Estimates an euclidean 2D transformation using the list of matched input
+     * Estimates an Euclidean 2D transformation using the list of matched input
      * and output 2D points.
      * A minimum of 3 matched non-coincident points is required. If more points
      * are provided an LMSE (Least Mean Squared Error) solution will be found.
@@ -482,13 +484,13 @@ public class EuclideanTransformation2DEstimator {
 
     /**
      * Internal method to set lists of points to be used to estimate an
-     * euclidean 2D transformation.
+     * Euclidean 2D transformation.
      * This method does not check whether estimator is locked or not.
      *
      * @param inputPoints  list of input points to be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than #getMinimumPoints.
      */

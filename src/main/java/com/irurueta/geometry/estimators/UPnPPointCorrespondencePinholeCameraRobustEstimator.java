@@ -177,7 +177,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @return true to allow 2 dimensional null-space, false otherwise.
+     * @return true to allow 2-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
         return mNullspaceDimension2Allowed;
@@ -189,7 +189,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      *
-     * @param nullspaceDimension2Allowed true to allow 2 dimensional nullspace,
+     * @param nullspaceDimension2Allowed true to allow 2-dimensional null-space,
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
@@ -348,20 +348,20 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      * Creates a pinhole camera robust estimator based on point correspondences
      * and using provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
     public static UPnPPointCorrespondencePinholeCameraRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator();
             case MSAC:
                 return new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator();
             case RANSAC:
             default:
@@ -376,7 +376,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -387,7 +387,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             final List<Point3D> points3D, final List<Point2D> points2D,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
             case MSAC:
@@ -396,7 +396,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
             case RANSAC:
@@ -412,7 +412,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
@@ -420,7 +420,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             final PinholeCameraRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case MSAC:
@@ -429,7 +429,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case RANSAC:
@@ -448,7 +448,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      * @param points3D list of 3D points used to estimate a pinhole camera.
      * @param points2D list of corresponding projected 2D points used to
      *                 estimate a pinhole camera.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -460,7 +460,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             final List<Point3D> points3D, final List<Point2D> points2D,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
             case MSAC:
@@ -469,7 +469,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
             case RANSAC:
@@ -485,7 +485,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -494,14 +494,14 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
     public static UPnPPointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator();
             case MSAC:
                 return new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -520,7 +520,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -531,7 +531,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             final List<Point3D> points3D, final List<Point2D> points2D,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
             case MSAC:
@@ -540,7 +540,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D, qualityScores);
             case RANSAC:
@@ -558,7 +558,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -568,7 +568,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             final PinholeCameraRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener);
             case MSAC:
@@ -577,7 +577,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -599,7 +599,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
      *                      estimate a pinhole camera.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      * @throws IllegalArgumentException if provided lists of points and quality
@@ -611,7 +611,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             final List<Point3D> points3D, final List<Point2D> points2D,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D);
             case MSAC:
@@ -620,7 +620,7 @@ public abstract class UPnPPointCorrespondencePinholeCameraRobustEstimator extend
             case PROSAC:
                 return new PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator(
                         listener, points3D, points2D, qualityScores);
             case RANSAC:

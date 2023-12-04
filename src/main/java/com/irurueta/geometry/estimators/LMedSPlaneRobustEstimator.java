@@ -295,6 +295,6 @@ public class LMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 }

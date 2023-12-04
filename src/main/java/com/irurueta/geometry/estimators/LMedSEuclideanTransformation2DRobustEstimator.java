@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Finds the best euclidean 2D transformation for provided collections of
+ * Finds the best Euclidean 2D transformation for provided collections of
  * matched 2D points using LMedS algorithm.
  */
 public class LMedSEuclideanTransformation2DRobustEstimator extends
@@ -84,16 +84,16 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Constructor with lists of points to be used to estimate an euclidean 2D
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints  list of input points to be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
@@ -117,7 +117,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
 
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * euclidean 2D transformation.
+     * Euclidean 2D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -125,9 +125,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * @param listener     listener to be notified of events such as when estimation
      *                     starts, ends or its progress significantly changes.
      * @param inputPoints  list of input points to be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @param outputPoints list of output points to be used to estimate an
-     *                     euclidean 2D transformation.
+     *                     Euclidean 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
@@ -150,16 +150,16 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Constructor with lists of points to be used to estimate an euclidean 2D
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
      *
      * @param inputPoints            list of input points to be used to estimate an
-     *                               euclidean 2D transformation.
+     *                               Euclidean 2D transformation.
      * @param outputPoints           list of output points to be used to estimate an
-     *                               euclidean 2D transformation.
+     *                               Euclidean 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -187,7 +187,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
 
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * euclidean 2D transformation.
+     * Euclidean 2D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -195,9 +195,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * @param listener               listener to be notified of events such as when estimation
      *                               starts, ends or its progress significantly changes.
      * @param inputPoints            list of input points to be used to estimate an
-     *                               euclidean 2D transformation.
+     *                               Euclidean 2D transformation.
      * @param outputPoints           list of output points to be used to estimate an
-     *                               euclidean 2D transformation.
+     *                               Euclidean 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -267,11 +267,11 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
     }
 
     /**
-     * Estimates an euclidean 2D transformation using a robust estimator and
+     * Estimates an Euclidean 2D transformation using a robust estimator and
      * the best set of matched 2d point correspondences found using the robust
      * estimator.
      *
-     * @return an euclidean 2D transformation.
+     * @return an Euclidean 2D transformation.
      * @throws LockedException          if robust estimator is locked because an
      *                                  estimation is already in progress.
      * @throws NotReadyException        if provided input data is not enough to start
@@ -423,7 +423,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 
     /**

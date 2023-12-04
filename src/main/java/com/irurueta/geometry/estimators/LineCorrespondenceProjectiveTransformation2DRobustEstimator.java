@@ -35,7 +35,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of lines to be used to estimate a projective 2D transformation.
@@ -214,7 +214,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
 
     /**
      * Creates a projective 2D transformation estimator based on 2D line
-     * correspondences an using provided robust estimator method.
+     * correspondences and using provided robust estimator method.
      *
      * @param method method of a robust estimator algorithm to estimate
      *               best projective 2D transformation.
@@ -223,13 +223,13 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
             case RANSAC:
             default:
@@ -255,7 +255,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputLines, outputLines);
             case MSAC:
@@ -264,7 +264,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputLines, outputLines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputLines, outputLines);
             case RANSAC:
@@ -288,7 +288,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -297,7 +297,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener);
             case RANSAC:
@@ -328,7 +328,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
             case MSAC:
@@ -337,7 +337,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
             case RANSAC:
@@ -360,14 +360,14 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -396,7 +396,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputLines, outputLines);
             case MSAC:
@@ -405,7 +405,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputLines, outputLines, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputLines, outputLines, qualityScores);
             case RANSAC:
@@ -431,7 +431,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -440,7 +440,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -473,7 +473,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             final List<Line2D> inputLines, final List<Line2D> outputLines,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
             case MSAC:
@@ -482,7 +482,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             case PROSAC:
                 return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputLines, outputLines, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputLines, outputLines, qualityScores);
             case RANSAC:
@@ -533,12 +533,12 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
     }
 
     /**
-     * Creates an projective 2D transformation estimator based on 2D line
+     * Creates a projective 2D transformation estimator based on 2D line
      * correspondences and using default robust estimator method.
      *
      * @param listener    listener to be notified of events such as when estimation
      *                    starts, ends or its progress significantly changes.
-     * @param inputLines  list of input lines to be used to estimate an
+     * @param inputLines  list of input lines to be used to estimate a
      *                    projective 2D transformation.
      * @param outputLines list of output lines to be used to estimate a
      *                    projective 2D transformation.
@@ -661,7 +661,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * If dot product was -1, then although their director vectors are opposed,
      * lines are considered equal, since sign changes are not taken into account.
      *
-     * @param line            originally sampled output line line.
+     * @param line            originally sampled output line.
      * @param transformedLine estimated output line obtained after using
      *                        estimated transformation.
      * @return computed residual.
@@ -680,7 +680,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

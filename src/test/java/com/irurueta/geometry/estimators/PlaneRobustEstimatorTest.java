@@ -37,7 +37,7 @@ public class PlaneRobustEstimatorTest {
         assertEquals(0.0, PlaneRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, PlaneRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, PlaneRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, PlaneRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, PlaneRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test
@@ -48,27 +48,27 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = PlaneRobustEstimator.create(RobustEstimatorMethod.LMedS);
+        estimator = PlaneRobustEstimator.create(RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -78,12 +78,12 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -93,27 +93,27 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
-        estimator = PlaneRobustEstimator.create(RobustEstimatorMethod.PROMedS);
+        estimator = PlaneRobustEstimator.create(RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -131,12 +131,12 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertSame(estimator.getPoints(), points);
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -152,18 +152,18 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator);
 
         estimator = PlaneRobustEstimator.create(points,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -171,7 +171,7 @@ public class PlaneRobustEstimatorTest {
         estimator = null;
         try {
             estimator = PlaneRobustEstimator.create(emptyPoints,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (IllegalArgumentException ignore) {
         }
@@ -183,13 +183,13 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -209,13 +209,13 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -230,18 +230,18 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator);
 
         estimator = PlaneRobustEstimator.create(points,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -249,7 +249,7 @@ public class PlaneRobustEstimatorTest {
         estimator = null;
         try {
             estimator = PlaneRobustEstimator.create(emptyPoints,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -280,31 +280,31 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -312,15 +312,15 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -328,31 +328,31 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -361,80 +361,80 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener, points,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -458,28 +458,28 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -490,12 +490,12 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -506,31 +506,31 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -549,29 +549,29 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -581,13 +581,13 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -597,29 +597,29 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(points, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertSame(estimator.getQualityScores(), qualityScores);
 
@@ -643,31 +643,31 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener, qualityScores,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -675,15 +675,15 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener, qualityScores,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -691,34 +691,34 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener, qualityScores,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertSame(estimator.getQualityScores(), qualityScores);
 
         estimator = PlaneRobustEstimator.create(listener, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -734,82 +734,82 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener, points, qualityScores,
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof RANSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof LMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points, qualityScores,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof MSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points, qualityScores,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof PROSACPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = PlaneRobustEstimator.create(listener, points, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = null;
         try {
@@ -832,12 +832,12 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -848,13 +848,13 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -870,15 +870,15 @@ public class PlaneRobustEstimatorTest {
         // test with listener
         estimator = PlaneRobustEstimator.create(listener);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -886,16 +886,16 @@ public class PlaneRobustEstimatorTest {
         // test with listener and points
         estimator = PlaneRobustEstimator.create(listener, points);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -914,15 +914,15 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -939,15 +939,15 @@ public class PlaneRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -966,18 +966,18 @@ public class PlaneRobustEstimatorTest {
         // test with listener and quality scores
         estimator = PlaneRobustEstimator.create(listener, qualityScores);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -992,18 +992,18 @@ public class PlaneRobustEstimatorTest {
         estimator = PlaneRobustEstimator.create(listener, points,
                 qualityScores);
         assertTrue(estimator instanceof PROMedSPlaneRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;

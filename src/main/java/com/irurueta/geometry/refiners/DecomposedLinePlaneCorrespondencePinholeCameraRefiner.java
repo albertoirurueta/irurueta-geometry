@@ -39,7 +39,7 @@ import java.util.List;
  * A pinhole camera refiner using line/plane correspondences and the
  * Powell algorithm to try to decrease overall error in LMSE terms among
  * inlier samples by taking the decomposed parameters of a pinhole camera.
- * Typically this refiner is used by a robust estimator, however it can also be
+ * Typically, this refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")

@@ -49,7 +49,7 @@ public abstract class MetricTransformation2DRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -105,7 +105,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -160,7 +160,7 @@ public abstract class MetricTransformation2DRobustEstimator {
     private boolean mKeepCovariance;
 
     /**
-     * Estimated covariance of estimated 2D euclidean transformation.
+     * Estimated covariance of estimated 2D Euclidean transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
@@ -708,19 +708,19 @@ public abstract class MetricTransformation2DRobustEstimator {
      * correspondences and using provided robust estimator method.
      *
      * @param method method of a robust estimator algorithm to estimate
-     *               best metric 2D transformation.
+     *               the best metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      */
     public static MetricTransformation2DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACMetricTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator();
             case RANSAC:
             default:
@@ -736,7 +736,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *                     metric 2D transformation.
      * @param outputPoints list of output points to be used to estimate a
      *                     metric 2D transformation.
-     * @param method       method of a robust estimator algorithm to estimate best
+     * @param method       method of a robust estimator algorithm to estimate the best
      *                     metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -746,7 +746,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -755,7 +755,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
             case RANSAC:
@@ -771,7 +771,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      */
@@ -779,7 +779,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final MetricTransformation2DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -788,7 +788,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener);
             case RANSAC:
@@ -808,7 +808,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *                     metric 2D transformation.
      * @param outputPoints list of output points to be used to estimate a
      *                     metric 2D transformation.
-     * @param method       method of a robust estimator algorithm to estimate best
+     * @param method       method of a robust estimator algorithm to estimate the best
      *                     metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -819,7 +819,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -828,7 +828,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case RANSAC:
@@ -844,7 +844,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -853,14 +853,14 @@ public abstract class MetricTransformation2DRobustEstimator {
     public static MetricTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator();
             case MSAC:
                 return new MSACMetricTransformation2DRobustEstimator();
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -879,7 +879,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *                      metric 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points or scores
@@ -889,7 +889,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -898,7 +898,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -916,7 +916,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -926,7 +926,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final MetricTransformation2DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener);
             case MSAC:
@@ -935,7 +935,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -957,7 +957,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      *                      metric 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      *                      points.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -968,7 +968,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -977,7 +977,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -993,13 +993,13 @@ public abstract class MetricTransformation2DRobustEstimator {
      *
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @param method                 method of a robust estimator algorithm to estimate
-     *                               best metric 2D transformation.
+     *                               the best metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      */
     public static MetricTransformation2DRobustEstimator create(
             final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         weakMinimumSizeAllowed);
             case MSAC:
@@ -1008,7 +1008,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         weakMinimumSizeAllowed);
             case RANSAC:
@@ -1027,7 +1027,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param outputPoints           list of output points to be used to estimate a
      *                               metric 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1037,7 +1037,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
@@ -1046,7 +1046,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case RANSAC:
@@ -1063,7 +1063,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param listener               listener to be notified of events such as when estimation
      *                               starts, ends or its progress significantly changes.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      */
@@ -1071,7 +1071,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final MetricTransformation2DRobustEstimatorListener listener,
             final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener, weakMinimumSizeAllowed);
             case MSAC:
@@ -1080,7 +1080,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, weakMinimumSizeAllowed);
             case RANSAC:
@@ -1101,7 +1101,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param outputPoints           list of output points to be used to estimate a
      *                               metric 2D transformation.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1112,7 +1112,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
@@ -1124,7 +1124,7 @@ public abstract class MetricTransformation2DRobustEstimator {
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
@@ -1143,7 +1143,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param qualityScores          quality scores corresponding to each pair of matched
      *                               points.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -1153,7 +1153,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final double[] qualityScores, final boolean weakMinimumSizeAllowed,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         weakMinimumSizeAllowed);
             case MSAC:
@@ -1162,7 +1162,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         qualityScores, weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
@@ -1183,7 +1183,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param qualityScores          quality scores corresponding to each pair of matched
      *                               points.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points or scores
@@ -1194,7 +1194,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final double[] qualityScores, final boolean weakMinimumSizeAllowed,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
@@ -1204,7 +1204,7 @@ public abstract class MetricTransformation2DRobustEstimator {
                 return new PROSACMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
@@ -1224,7 +1224,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param qualityScores          quality scores corresponding to each pair of matched
      *                               points.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores don't have
@@ -1235,7 +1235,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final double[] qualityScores, final boolean weakMinimumSizeAllowed,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener, weakMinimumSizeAllowed);
             case MSAC:
@@ -1244,7 +1244,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             case PROSAC:
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, qualityScores, weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
@@ -1267,7 +1267,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @param qualityScores          quality scores corresponding to each pair of matched
      *                               points.
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
-     * @param method                 method of a robust estimator algorithm to estimate best
+     * @param method                 method of a robust estimator algorithm to estimate the best
      *                               metric 2D transformation.
      * @return an instance of metric 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
@@ -1279,7 +1279,7 @@ public abstract class MetricTransformation2DRobustEstimator {
             final double[] qualityScores, final boolean weakMinimumSizeAllowed,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints,
                         weakMinimumSizeAllowed);
@@ -1291,7 +1291,7 @@ public abstract class MetricTransformation2DRobustEstimator {
                 return new PROSACMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSMetricTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
@@ -1586,13 +1586,13 @@ public abstract class MetricTransformation2DRobustEstimator {
     }
 
     /**
-     * Internal method to set lists of points to be used to estimate an
+     * Internal method to set lists of points to be used to estimate a
      * metric 2D transformation.
      * This method does not check whether estimator is locked or not.
      *
-     * @param inputPoints  list of input points to be used to estimate an
+     * @param inputPoints  list of input points to be used to estimate a
      *                     metric 2D transformation.
-     * @param outputPoints list of output points to be used to estimate an
+     * @param outputPoints list of output points to be used to estimate a
      *                     metric 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -1613,7 +1613,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator
@@ -1654,7 +1654,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *

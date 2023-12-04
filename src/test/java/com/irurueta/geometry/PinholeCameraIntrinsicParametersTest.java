@@ -65,14 +65,12 @@ public class PinholeCameraIntrinsicParametersTest {
     public void testConstructor() throws WrongSizeException,
             InvalidPinholeCameraIntrinsicParametersException {
 
-        PinholeCameraIntrinsicParameters k =
-                new PinholeCameraIntrinsicParameters();
+        PinholeCameraIntrinsicParameters k = new PinholeCameraIntrinsicParameters();
 
         // check that internal matrix is the identity, which corresponds to
         // canonical intrinsic parameters
         assertTrue(k.getInternalMatrix().equals(Matrix.identity(INTRINSIC_ROWS,
                 INTRINSIC_COLS), ABSOLUTE_ERROR));
-
 
         // Test constructor providing an internal matrix
 
@@ -123,16 +121,13 @@ public class PinholeCameraIntrinsicParametersTest {
         k = new PinholeCameraIntrinsicParameters(kMatrix);
 
         // check correctness of internal matrix
-        assertTrue(k.getInternalMatrix().equals(triangularMatrix,
-                ABSOLUTE_ERROR));
-        assertEquals(triangularMatrix.getElementAt(2, 2), 1.0, ABSOLUTE_ERROR);
+        assertTrue(k.getInternalMatrix().equals(triangularMatrix, ABSOLUTE_ERROR));
+        assertEquals(1.0, triangularMatrix.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Test constructor with parameters
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
         final double aspectRatio = verticalFocalLength / horizontalFocalLength;
 
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
@@ -146,17 +141,13 @@ public class PinholeCameraIntrinsicParametersTest {
         k = new PinholeCameraIntrinsicParameters(horizontalFocalLength,
                 verticalFocalLength, horizontalPrincipalPoint,
                 verticalPrincipalPoint, skewness);
-        assertEquals(k.getHorizontalFocalLength(), horizontalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalFocalLength(), verticalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getAspectRatio(), aspectRatio, ABSOLUTE_ERROR);
-        assertEquals(k.getHorizontalPrincipalPoint(), horizontalPrincipalPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalPrincipalPoint(), verticalPrincipalPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(k.getSkewnessAngle(), skewnessAngle, ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, k.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, k.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(aspectRatio, k.getAspectRatio(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, k.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, k.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(skewness, k.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(skewnessAngle, k.getSkewnessAngle(), ABSOLUTE_ERROR);
 
         final Matrix kMatrix2 = new Matrix(INTRINSIC_ROWS, INTRINSIC_COLS);
         kMatrix2.setElementAt(0, 0, horizontalFocalLength);
@@ -174,8 +165,7 @@ public class PinholeCameraIntrinsicParametersTest {
                 verticalPrincipalPoint, skewness);
         final PinholeCameraIntrinsicParameters k2 =
                 new PinholeCameraIntrinsicParameters(k);
-        assertTrue(k.getInternalMatrix().equals(k2.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(k.getInternalMatrix().equals(k2.getInternalMatrix(), ABSOLUTE_ERROR));
     }
 
     @Test
@@ -199,8 +189,7 @@ public class PinholeCameraIntrinsicParametersTest {
         Matrix kMatrix = transTriangularMatrix.multiplyAndReturnNew(
                 triangularMatrix);
 
-        final PinholeCameraIntrinsicParameters k =
-                new PinholeCameraIntrinsicParameters();
+        final PinholeCameraIntrinsicParameters k = new PinholeCameraIntrinsicParameters();
 
         // Force InvalidPinholeCameraIntrinsicParametersException when matrix is
         // not upper triangular
@@ -231,7 +220,7 @@ public class PinholeCameraIntrinsicParametersTest {
 
         // check that now lower-right element of KMatrix is 1.0 (because it has
         // been normalized)
-        assertEquals(triangularMatrix.getElementAt(2, 2), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, triangularMatrix.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         assertTrue(kMatrix.equals(k.getInternalMatrix(), ABSOLUTE_ERROR));
 
@@ -243,10 +232,8 @@ public class PinholeCameraIntrinsicParametersTest {
     @Test
     public void testGetInverseInternalMatrix() throws AlgebraException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
@@ -311,17 +298,13 @@ public class PinholeCameraIntrinsicParametersTest {
                         verticalPrincipalPoint, skewness);
 
         // Test getting parameters
-        assertEquals(k.getHorizontalFocalLength(), horizontalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalFocalLength(), verticalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getAspectRatio(), aspectRatio, ABSOLUTE_ERROR);
-        assertEquals(k.getHorizontalPrincipalPoint(), horizontalPrincipalPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalPrincipalPoint(), verticalPrincipalPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(k.getSkewnessAngle(), skewnessAngle, ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, k.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, k.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(aspectRatio, k.getAspectRatio(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, k.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, k.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(skewness, k.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(skewnessAngle, k.getSkewnessAngle(), ABSOLUTE_ERROR);
 
         // Simulate internal matrix
         final Matrix kMatrix2 = new Matrix(INTRINSIC_ROWS, INTRINSIC_COLS);
@@ -339,43 +322,37 @@ public class PinholeCameraIntrinsicParametersTest {
 
         // set new parameters
         k.setHorizontalFocalLength(horizontalFocalLength2);
-        assertEquals(k.getHorizontalFocalLength(), horizontalFocalLength2,
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength2, k.getHorizontalFocalLength(), ABSOLUTE_ERROR);
 
         k.setVerticalFocalLength(verticalFocalLength2);
-        assertEquals(k.getVerticalFocalLength(), verticalFocalLength2,
-                ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength2, k.getVerticalFocalLength(), ABSOLUTE_ERROR);
 
-        assertEquals(k.getAspectRatio(), aspectRatio2, ABSOLUTE_ERROR);
+        assertEquals(aspectRatio2, k.getAspectRatio(), ABSOLUTE_ERROR);
 
         k.setAspectRatioKeepingHorizontalFocalLength(aspectRatio3);
-        assertEquals(k.getAspectRatio(), aspectRatio3, ABSOLUTE_ERROR);
-        assertEquals(k.getHorizontalFocalLength(), horizontalFocalLength2,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalFocalLength(),
-                aspectRatio3 * horizontalFocalLength2, ABSOLUTE_ERROR);
+        assertEquals(aspectRatio3, k.getAspectRatio(), ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength2, k.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(aspectRatio3 * horizontalFocalLength2,
+                k.getVerticalFocalLength(), ABSOLUTE_ERROR);
 
         k.setAspectRatioKeepingVerticalFocalLength(aspectRatio4);
-        assertEquals(k.getAspectRatio(), aspectRatio4, ABSOLUTE_ERROR);
-        assertEquals(k.getHorizontalFocalLength(),
-                aspectRatio3 * horizontalFocalLength2 / aspectRatio4,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalFocalLength(),
-                aspectRatio3 * horizontalFocalLength2, ABSOLUTE_ERROR);
+        assertEquals(aspectRatio4, k.getAspectRatio(), ABSOLUTE_ERROR);
+        assertEquals(aspectRatio3 * horizontalFocalLength2 / aspectRatio4,
+                k.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(aspectRatio3 * horizontalFocalLength2,
+                k.getVerticalFocalLength(), ABSOLUTE_ERROR);
 
         k.setHorizontalPrincipalPoint(horizontalPrincipalPoint2);
-        assertEquals(k.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint2, ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint2, k.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
 
         k.setVerticalPrincipalPoint(verticalPrincipalPoint2);
-        assertEquals(k.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint2, ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint2, k.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         k.setSkewness(skewness2);
-        assertEquals(k.getSkewness(), skewness2, ABSOLUTE_ERROR);
+        assertEquals(skewness2, k.getSkewness(), ABSOLUTE_ERROR);
         k.setVerticalFocalLength(verticalFocalLength2);
         k.setSkewnessAngle(skewnessAngle2);
-        assertEquals(k.getSkewnessAngle(), skewnessAngle2, ABSOLUTE_ERROR);
+        assertEquals(skewnessAngle2, k.getSkewnessAngle(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -410,25 +387,21 @@ public class PinholeCameraIntrinsicParametersTest {
 
         assertTrue(kMatrix.equals(kMatrix2, ABSOLUTE_ERROR));
 
-        assertEquals(k.getHorizontalFocalLength(),
-                (double) (imageWidth + imageHeight) / 2.0, ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalFocalLength(),
-                (double) (imageWidth + imageHeight) / 2.0, ABSOLUTE_ERROR);
-        assertEquals(k.getSkewness(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(k.getHorizontalPrincipalPoint(), (double) imageWidth / 2.0,
+        assertEquals((double) (imageWidth + imageHeight) / 2.0, k.getHorizontalFocalLength(),
                 ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalPrincipalPoint(), (double) imageHeight / 2.0,
+        assertEquals((double) (imageWidth + imageHeight) / 2.0, k.getVerticalFocalLength(),
                 ABSOLUTE_ERROR);
+        assertEquals(0.0, k.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals((double) imageWidth / 2.0, k.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals((double) imageHeight / 2.0, k.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
     }
 
     @Test
     public void testClone() {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
         final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
@@ -447,8 +420,7 @@ public class PinholeCameraIntrinsicParametersTest {
         final PinholeCameraIntrinsicParameters k2 = new PinholeCameraIntrinsicParameters(k);
 
         // check both intrinsic parameters are equal
-        assertTrue(k.getInternalMatrix().equals(k2.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(k.getInternalMatrix().equals(k2.getInternalMatrix(), ABSOLUTE_ERROR));
 
         // if we change K parameters, K2 will still remain the same
         k.setHorizontalFocalLength(horizontalFocalLength + 1.0);
@@ -456,24 +428,18 @@ public class PinholeCameraIntrinsicParametersTest {
         k.setSkewness(skewness + 1.0);
         k.setHorizontalPrincipalPoint(horizontalPrincipalPoint + 1.0);
         k.setVerticalPrincipalPoint(verticalPrincipalPoint + 1.0);
-        assertEquals(k.getHorizontalFocalLength(), horizontalFocalLength + 1.0,
+        assertEquals(horizontalFocalLength + 1.0, k.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, k2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength + 1.0, k.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, k2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(skewness + 1.0, k.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(skewness, k2.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint + 1.0, k.getHorizontalPrincipalPoint(),
                 ABSOLUTE_ERROR);
-        assertEquals(k2.getHorizontalFocalLength(), horizontalFocalLength,
+        assertEquals(horizontalPrincipalPoint, k2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint + 1.0, k.getVerticalPrincipalPoint(),
                 ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalFocalLength(), verticalFocalLength + 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(k2.getVerticalFocalLength(), verticalFocalLength,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getSkewness(), skewness + 1.0, ABSOLUTE_ERROR);
-        assertEquals(k2.getSkewness(), skewness, ABSOLUTE_ERROR);
-        assertEquals(k.getHorizontalPrincipalPoint(),
-                horizontalPrincipalPoint + 1.0, ABSOLUTE_ERROR);
-        assertEquals(k2.getHorizontalPrincipalPoint(), horizontalPrincipalPoint,
-                ABSOLUTE_ERROR);
-        assertEquals(k.getVerticalPrincipalPoint(),
-                verticalPrincipalPoint + 1.0, ABSOLUTE_ERROR);
-        assertEquals(k2.getVerticalPrincipalPoint(), verticalPrincipalPoint,
-                ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, k2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -497,8 +463,7 @@ public class PinholeCameraIntrinsicParametersTest {
                 triangularMatrix);
 
         assertFalse(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix));
-        assertFalse(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix,
-                ABSOLUTE_ERROR));
+        assertFalse(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix, ABSOLUTE_ERROR));
 
         // use upper triangular matrix
         kMatrix = triangularMatrix;
@@ -506,16 +471,14 @@ public class PinholeCameraIntrinsicParametersTest {
         kMatrix.setElementAt(2, 2, 2.0);
 
         assertFalse(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix));
-        assertFalse(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix,
-                ABSOLUTE_ERROR));
+        assertFalse(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix, ABSOLUTE_ERROR));
 
         // we can normalize KMatrix by setting its lower-right element to 1.0
         kMatrix.multiplyByScalar(0.5);
 
         // now KMatrix should be valid
         assertTrue(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix));
-        assertTrue(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix,
-                ABSOLUTE_ERROR));
+        assertTrue(PinholeCameraIntrinsicParameters.isValidMatrix(kMatrix, ABSOLUTE_ERROR));
     }
 
     @Test
@@ -532,15 +495,13 @@ public class PinholeCameraIntrinsicParametersTest {
                         sensorWidth, sensorHeight, imageWidth, imageHeight);
 
         // check
-        assertEquals(intrinsic.getHorizontalFocalLength(),
-                focalLength * imageWidth / sensorWidth, ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(),
-                focalLength * imageHeight / sensorHeight, ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getSkewness(), 0.0, 0.0);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(focalLength * imageWidth / sensorWidth,
+                intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(focalLength * imageHeight / sensorHeight,
+                intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(0.0, intrinsic.getSkewness(), 0.0);
+        assertEquals(0.0, intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(0.0, intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
     }
 
     @Test

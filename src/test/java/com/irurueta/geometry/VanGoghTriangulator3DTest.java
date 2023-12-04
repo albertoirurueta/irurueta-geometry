@@ -45,7 +45,7 @@ public class VanGoghTriangulator3DTest {
     public void testConstants() {
         assertEquals(3, Triangulator3D.MIN_VERTICES);
         assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, Triangulator3D.DEFAULT_TRIANGULATOR_METHOD);
-        assertEquals(Math.PI / 2.0, VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD, 0.0);
+        assertEquals(VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD, Math.PI / 2.0, 0.0);
         assertEquals(0.0, VanGoghTriangulator3D.MIN_THRESHOLD, 0.0);
         assertEquals(3, VanGoghTriangulator3D.INHOM_COORDS);
     }
@@ -56,8 +56,7 @@ public class VanGoghTriangulator3DTest {
         assertNotNull(triangulator);
 
         // check method correctness
-        assertEquals(triangulator.getMethod(),
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, triangulator.getMethod());
     }
 
     @Test
@@ -92,41 +91,35 @@ public class VanGoghTriangulator3DTest {
         final Polygon3D polygon2 = new Polygon3D(vertices2);
 
         double angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
 
         angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon2);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon2,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, Math.PI, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon2, ABSOLUTE_ERROR);
+        assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
 
         // check that orientation is reversed
-        assertTrue(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1,
-                vertices2));
-        assertTrue(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1,
-                vertices2, DEFAULT_ORIENTATION_THRESHOLD));
+        assertTrue(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1, vertices2));
+        assertTrue(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1, vertices2,
+                DEFAULT_ORIENTATION_THRESHOLD));
 
         // trying with same polygon will return an angle of zero
         angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices1);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices1,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices1, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
 
         angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon1);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
-        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon1,
-                ABSOLUTE_ERROR);
-        assertEquals(angle, 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
+        angle = Polygon3D.getAngleBetweenPolygons(polygon1, polygon1, ABSOLUTE_ERROR);
+        assertEquals(0.0, angle, ABSOLUTE_ERROR);
 
         // now orientation is not reversed
-        assertFalse(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1,
-                vertices1));
-        assertFalse(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1,
-                vertices1, DEFAULT_ORIENTATION_THRESHOLD));
+        assertFalse(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1, vertices1));
+        assertFalse(VanGoghTriangulator3D.isPolygonOrientationReversed(vertices1, vertices1,
+                DEFAULT_ORIENTATION_THRESHOLD));
     }
 
     @Test
@@ -194,7 +187,6 @@ public class VanGoghTriangulator3DTest {
         // 3rd triangle
         triangle.setVertices(v4, v1, v2);
         assertTrue(VanGoghTriangulator3D.isEar(triangle, polygonVertices));
-
 
         // Parallelepiped
         polygonVertices.clear();
@@ -293,7 +285,7 @@ public class VanGoghTriangulator3DTest {
         List<Triangle3D> triangles = triangulator.triangulate(polygonVertices);
 
         // triangles contains a single triangle with vertices v1, v2 and v4
-        assertEquals(triangles.size(), 1);
+        assertEquals(1, triangles.size());
         final Triangle3D triangle = triangles.get(0);
         assertTrue(triangle.getVertex1().equals(v1, ABSOLUTE_ERROR));
         assertTrue(triangle.getVertex2().equals(v2, ABSOLUTE_ERROR));
@@ -309,7 +301,7 @@ public class VanGoghTriangulator3DTest {
         triangles = triangulator.triangulate(polygonVertices);
 
         // parallelepiped is divided into 2 triangles
-        assertEquals(triangles.size(), 2);
+        assertEquals(2, triangles.size());
         // 1st triangle is formed by v4, v1 and v2
         Triangle3D triangle1 = triangles.get(0);
         assertTrue(triangle1.getVertex1().equals(v4, ABSOLUTE_ERROR));
@@ -344,7 +336,7 @@ public class VanGoghTriangulator3DTest {
         triangles = triangulator.triangulate(polygonVertices);
 
         // divided in 3 triangles
-        assertEquals(triangles.size(), 3);
+        assertEquals(3, triangles.size());
         // 1st triangle is formed by v4, v1 and v2
         triangle1 = triangles.get(0);
         assertTrue(triangle1.getVertex1().equals(v5, ABSOLUTE_ERROR));
@@ -363,8 +355,7 @@ public class VanGoghTriangulator3DTest {
     }
 
     @Test
-    public void testTriangulate() throws NotEnoughVerticesException,
-            TriangulatorException {
+    public void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -396,8 +387,7 @@ public class VanGoghTriangulator3DTest {
         final List<Triangle3D> triangles1 = triangulator.triangulate(polygon);
         final List<Triangle3D> triangles2 = triangulator.triangulate(vertices);
         final List<int[]> indices = new ArrayList<>();
-        final List<Triangle3D> triangles3 = triangulator.triangulate(vertices,
-                indices);
+        final List<Triangle3D> triangles3 = triangulator.triangulate(vertices, indices);
 
         double area1 = 0.0;
         boolean inside1 = false;
@@ -422,7 +412,7 @@ public class VanGoghTriangulator3DTest {
         assertFalse(inside2);
 
         double area2 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (final Triangle3D triangle : triangles2) {
             area2 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -443,7 +433,7 @@ public class VanGoghTriangulator3DTest {
         assertFalse(inside2);
 
         double area3 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (final Triangle3D triangle : triangles3) {
             area3 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -463,7 +453,7 @@ public class VanGoghTriangulator3DTest {
         assertFalse(polygon.isInside(point2));
         assertFalse(inside2);
 
-        assertTrue(indices.size() > 0);
+        assertFalse(indices.isEmpty());
     }
 
     private List<Point3D> buildPolygonVertices(

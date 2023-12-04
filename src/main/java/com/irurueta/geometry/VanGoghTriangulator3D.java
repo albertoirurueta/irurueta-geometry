@@ -64,7 +64,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     @Override
     public List<Triangle3D> triangulate(final Polygon3D polygon)
             throws TriangulatorException {
-        // triangulation will modify provided list of vertices so we make a copy
+        // triangulation will modify provided list of vertices, so we make a copy
         // of it
 
         //original vertices
@@ -89,7 +89,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
             throw new TriangulatorException();
         }
 
-        // triangulation will modify provided list of vertices so we make a copy
+        // triangulation will modify provided list of vertices, so we make a copy
         // of it
         final List<Point3D> verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, null, vertices);
@@ -116,7 +116,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
             throw new TriangulatorException();
         }
 
-        // triangulation will modify provided list of vertices so we make a copy
+        // triangulation will modify provided list of vertices, so we make a copy
         // of it
         final List<Point3D> verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, indices, vertices);

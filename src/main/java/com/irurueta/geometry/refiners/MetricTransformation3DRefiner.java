@@ -16,11 +16,7 @@
 package com.irurueta.geometry.refiners;
 
 import com.irurueta.algebra.Matrix;
-import com.irurueta.geometry.CoordinatesType;
-import com.irurueta.geometry.MetricTransformation3D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3DType;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
@@ -38,7 +34,7 @@ import java.util.List;
  * estimation, inlier point matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")
@@ -62,7 +58,7 @@ public class MetricTransformation3DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
@@ -125,7 +121,7 @@ public class MetricTransformation3DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *
@@ -140,7 +136,7 @@ public class MetricTransformation3DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *
@@ -209,7 +205,7 @@ public class MetricTransformation3DRefiner extends
         try {
             // parameters: rotation angle + scale + translation
             final double[] initParams = new double[1 + Quaternion.N_PARAMS +
-                    MetricTransformation3D.NUM_TRANSLATION_COORDS];
+                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
             // copy rotation values
             if (mInitialEstimation.getRotation().getType() ==
                     Rotation3DType.QUATERNION) {
@@ -228,7 +224,7 @@ public class MetricTransformation3DRefiner extends
 
             System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,
                     Quaternion.N_PARAMS + 1,
-                    MetricTransformation3D.NUM_TRANSLATION_COORDS);
+                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
             // output values to be fitted/optimized will contain residuals
             final double[] y = new double[mNumInliers];
@@ -288,7 +284,7 @@ public class MetricTransformation3DRefiner extends
 
                                                 System.arraycopy(params, 1 + Quaternion.N_PARAMS,
                                                         mTransformation.getTranslation(), 0,
-                                                        MetricTransformation3D.NUM_TRANSLATION_COORDS);
+                                                        EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
                                                 return residual(mTransformation, mInputPoint,
                                                         mOutputPoint);
@@ -323,7 +319,7 @@ public class MetricTransformation3DRefiner extends
 
                             System.arraycopy(params, 1 + Quaternion.N_PARAMS,
                                     mTransformation.getTranslation(), 0,
-                                    MetricTransformation3D.NUM_TRANSLATION_COORDS);
+                                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
                             final double y = residual(mTransformation, mInputPoint,
                                     mOutputPoint);
@@ -351,7 +347,7 @@ public class MetricTransformation3DRefiner extends
             result.setRotation(mQuaternion);
             System.arraycopy(params, 1 + Quaternion.N_PARAMS,
                     result.getTranslation(), 0,
-                    MetricTransformation3D.NUM_TRANSLATION_COORDS);
+                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
             if (mKeepCovariance) {
                 // keep covariance
@@ -377,7 +373,7 @@ public class MetricTransformation3DRefiner extends
     }
 
     /**
-     * Computes the residual between the euclidean transformation and a pair or
+     * Computes the residual between the Euclidean transformation and a pair or
      * matched points.
      *
      * @param transformation a transformation.

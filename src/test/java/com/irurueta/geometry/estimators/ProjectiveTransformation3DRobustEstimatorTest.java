@@ -60,20 +60,20 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
-                inputPoints, outputPoints, RobustEstimatorMethod.LMedS);
+                inputPoints, outputPoints, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -84,8 +84,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -96,20 +96,20 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
-                inputPoints, outputPoints, RobustEstimatorMethod.PROMedS);
+                inputPoints, outputPoints, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -119,13 +119,13 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         estimator = null;
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
-                    emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
+                    emptyPoints, outputPoints, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
-                    inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
+                    inputPoints, emptyPoints, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -159,24 +159,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                 listener, inputPoints, outputPoints,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -185,11 +185,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -198,24 +198,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                 listener, inputPoints, outputPoints,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -232,21 +232,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                 inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -258,8 +258,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -271,21 +271,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                 inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -294,21 +294,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                     emptyPoints, outputPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                     inputPoints, emptyPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                     inputPoints, outputPoints, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -320,24 +320,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                 listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -346,11 +346,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -359,24 +359,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                 listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -385,21 +385,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                     listener, emptyPoints, outputPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                     listener, inputPoints, emptyPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPoints(
                     listener, inputPoints, outputPoints, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -413,8 +413,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -439,11 +439,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -471,8 +471,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -481,11 +481,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores);
         assertTrue(estimator instanceof
                 PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
     }
@@ -508,20 +508,20 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
-                inputPlanes, outputPlanes, RobustEstimatorMethod.LMedS);
+                inputPlanes, outputPlanes, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -532,8 +532,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -544,20 +544,20 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
-                inputPlanes, outputPlanes, RobustEstimatorMethod.PROMedS);
+                inputPlanes, outputPlanes, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -567,13 +567,13 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         estimator = null;
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
-                    emptyPlanes, outputPlanes, RobustEstimatorMethod.LMedS);
+                    emptyPlanes, outputPlanes, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
-                    inputPlanes, emptyPlanes, RobustEstimatorMethod.LMedS);
+                    inputPlanes, emptyPlanes, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -607,24 +607,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                 listener, inputPlanes, outputPlanes,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -633,11 +633,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -646,24 +646,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                 listener, inputPlanes, outputPlanes,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -680,21 +680,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                 inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -706,8 +706,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -719,21 +719,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                 inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -742,21 +742,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                     emptyPlanes, outputPlanes, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                     inputPlanes, emptyPlanes, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                     inputPlanes, outputPlanes, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -768,24 +768,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                 listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -794,11 +794,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -807,24 +807,24 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                 listener, inputPlanes, outputPlanes, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -833,21 +833,21 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                     listener, emptyPlanes, outputPlanes, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                     listener, inputPlanes, emptyPlanes, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = ProjectiveTransformation3DRobustEstimator.createFromPlanes(
                     listener, inputPlanes, outputPlanes, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -861,8 +861,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -887,11 +887,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 createFromPlanes(listener, inputPlanes, outputPlanes);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -919,8 +919,8 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -929,11 +929,11 @@ public class ProjectiveTransformation3DRobustEstimatorTest {
                 listener, inputPlanes, outputPlanes, qualityScores);
         assertTrue(estimator instanceof
                 PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
     }

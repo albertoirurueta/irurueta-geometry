@@ -35,7 +35,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of points to be used to estimate a projective 3D transformation.
@@ -223,13 +223,13 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator create(
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();
             case RANSAC:
             default:
@@ -255,7 +255,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -264,7 +264,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
             case RANSAC:
@@ -288,7 +288,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -297,7 +297,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
             case RANSAC:
@@ -318,7 +318,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @param outputPoints list of output points to be used to estimate a
      *                     projective 3D transformation.
      * @param method       method of a robust estimator algorithm to estimate
-     *                     best affine 3D transformation.
+     *                     the best affine 3D transformation.
      * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
@@ -328,7 +328,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -337,7 +337,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case RANSAC:
@@ -360,14 +360,14 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();
             case MSAC:
                 return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         qualityScores);
             case RANSAC:
@@ -377,7 +377,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     }
 
     /**
-     * Creates an projective 3D transformation estimator based on 3D point
+     * Creates a projective 3D transformation estimator based on 3D point
      * correspondences and using provided robust estimator method.
      *
      * @param inputPoints   list of input points to be used to estimate a
@@ -396,7 +396,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPoints, outputPoints);
             case MSAC:
@@ -405,7 +405,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -431,7 +431,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
             case MSAC:
@@ -440,7 +440,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, qualityScores);
             case RANSAC:
@@ -473,7 +473,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints);
             case MSAC:
@@ -482,7 +482,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
             case PROSAC:
                 return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
@@ -567,7 +567,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     }
 
     /**
-     * Creates an projective 3D transformation estimator based on 3D point
+     * Creates a projective 3D transformation estimator based on 3D point
      * correspondences and using default robust estimator method.
      *
      * @param inputPoints   list of input points to be used to estimate a
@@ -631,7 +631,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * Attempts to refine provided solution if refinement is requested.
      * This method returns a refined solution of the same provided solution
      * if refinement is not requested or has failed.
-     * If refinement is enabled and it is requested to keep covariance, this
+     * If refinement is enabled, and it is requested to keep covariance, this
      * method will also keep covariance of refined transformation.
      *
      * @param transformation transformation estimated by a robust estimator

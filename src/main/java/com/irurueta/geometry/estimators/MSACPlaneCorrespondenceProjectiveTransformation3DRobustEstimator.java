@@ -265,8 +265,8 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
                                     return getResidual(outputPlane, mTestPlane);
                                 } catch (final AlgebraException e) {
                                     // this happens when internal matrix of affine transformation
-                                    // cannot be reverse (i.e. transformation is not well defined,
-                                    // numerical instabilities, etc)
+                                    // cannot be reverse (i.e. transformation is not well-defined,
+                                    // numerical instabilities, etc.)
                                     return Double.MAX_VALUE;
                                 }
                             }
@@ -352,7 +352,7 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *

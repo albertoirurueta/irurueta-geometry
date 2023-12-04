@@ -56,13 +56,12 @@ public class QuaternionTest {
         Quaternion q = new Quaternion();
 
         // check correctness
-        assertEquals(q.getA(), 1.0, 0.0);
-        assertEquals(q.getB(), 0.0, 0.0);
-        assertEquals(q.getC(), 0.0, 0.0);
-        assertEquals(q.getD(), 0.0, 0.0);
-        assertEquals(q.toMatrixRotation().getInternalMatrix(),
-                Matrix.identity(MatrixRotation3D.INHOM_COORDS,
-                        MatrixRotation3D.INHOM_COORDS));
+        assertEquals(1.0, q.getA(), 0.0);
+        assertEquals(0.0, q.getB(), 0.0);
+        assertEquals(0.0, q.getC(), 0.0);
+        assertEquals(0.0, q.getD(), 0.0);
+        assertEquals(Matrix.identity(MatrixRotation3D.INHOM_COORDS, MatrixRotation3D.INHOM_COORDS),
+                q.toMatrixRotation().getInternalMatrix());
 
         // constructor with values
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -74,29 +73,29 @@ public class QuaternionTest {
         q = new Quaternion(a, b, c, d);
 
         // check correctness
-        assertEquals(q.getA(), a, 0.0);
-        assertEquals(q.getB(), b, 0.0);
-        assertEquals(q.getC(), c, 0.0);
-        assertEquals(q.getD(), d, 0.0);
+        assertEquals(a, q.getA(), 0.0);
+        assertEquals(b, q.getB(), 0.0);
+        assertEquals(c, q.getC(), 0.0);
+        assertEquals(d, q.getD(), 0.0);
 
         // constructor from another quaternion
         Quaternion q2 = new Quaternion(q);
 
         // check correctness
-        assertEquals(q2.getA(), a, 0.0);
-        assertEquals(q2.getB(), b, 0.0);
-        assertEquals(q2.getC(), c, 0.0);
-        assertEquals(q2.getD(), d, 0.0);
+        assertEquals(a, q2.getA(), 0.0);
+        assertEquals(b, q2.getB(), 0.0);
+        assertEquals(c, q2.getC(), 0.0);
+        assertEquals(d, q2.getD(), 0.0);
 
         // constructor from values
         double[] values = new double[]{a, b, c, d};
         q = new Quaternion(values);
 
         // check correctness
-        assertEquals(q.getA(), a, 0.0);
-        assertEquals(q.getB(), b, 0.0);
-        assertEquals(q.getC(), c, 0.0);
-        assertEquals(q.getD(), d, 0.0);
+        assertEquals(a, q.getA(), 0.0);
+        assertEquals(b, q.getB(), 0.0);
+        assertEquals(c, q.getC(), 0.0);
+        assertEquals(d, q.getD(), 0.0);
 
         // Force IllegalArgumentException
         q = null;
@@ -199,7 +198,7 @@ public class QuaternionTest {
         final Quaternion q = new Quaternion();
 
         // check initial value
-        assertEquals(q.getA(), 1.0, 0.0);
+        assertEquals(1.0, q.getA(), 0.0);
 
         // set new values
         q.setA(a);
@@ -216,7 +215,7 @@ public class QuaternionTest {
         final Quaternion q = new Quaternion();
 
         // check initial value
-        assertEquals(q.getB(), 0.0, 0.0);
+        assertEquals(0.0, q.getB(), 0.0);
 
         // set new value
         q.setB(b);
@@ -233,7 +232,7 @@ public class QuaternionTest {
         final Quaternion q = new Quaternion();
 
         // check initial value
-        assertEquals(q.getC(), 0.0, 0.0);
+        assertEquals(0.0, q.getC(), 0.0);
 
         // set new value
         q.setC(c);
@@ -250,7 +249,7 @@ public class QuaternionTest {
         final Quaternion q = new Quaternion();
 
         // check initial value
-        assertEquals(q.getD(), 0.0, 0.0);
+        assertEquals(0.0, q.getD(), 0.0);
 
         // set new value
         q.setD(d);
@@ -377,8 +376,7 @@ public class QuaternionTest {
 
         // set values with jacobians
         Matrix jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
-        Matrix jacobianOfAxis = new Matrix(Quaternion.N_PARAMS,
-                Quaternion.N_ANGLES);
+        Matrix jacobianOfAxis = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
         q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta,
                 jacobianOfTheta, jacobianOfAxis);
@@ -390,42 +388,36 @@ public class QuaternionTest {
         final double halfC = c / 2.0;
         final double halfS = s / 2.0;
 
-        assertEquals(jacobianOfTheta.getElementAtIndex(0), -halfS,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(1), axis[0] * halfC,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(2), axis[1] * halfC,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(3), axis[2] * halfC,
-                ABSOLUTE_ERROR);
+        assertEquals(-halfS, jacobianOfTheta.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(axis[0] * halfC, jacobianOfTheta.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(axis[1] * halfC, jacobianOfTheta.getElementAtIndex(2), ABSOLUTE_ERROR);
+        assertEquals(axis[2] * halfC, jacobianOfTheta.getElementAtIndex(3), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 0), s, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 0), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 1), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 1), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 1), s, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 1), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 2), s, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 2), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(3, 2), 0.0);
 
         // Force IllegalArgumentException
         final Matrix invalid = new Matrix(1, 1);
         try {
-            q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta,
-                    invalid, jacobianOfAxis);
+            q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, invalid, jacobianOfAxis);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
 
         try {
-            q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta,
-                    jacobianOfTheta, invalid);
+            q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, jacobianOfTheta, invalid);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -452,34 +444,29 @@ public class QuaternionTest {
         q.setFromAxisAndRotation(axis, theta, jacobianOfTheta, jacobianOfAxis);
 
         // check correctness
-        assertEquals(jacobianOfTheta.getElementAtIndex(0), -halfS,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(1), axis[0] * halfC,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(2), axis[1] * halfC,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(3), axis[2] * halfC,
-                ABSOLUTE_ERROR);
+        assertEquals(-halfS, jacobianOfTheta.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(axis[0] * halfC, jacobianOfTheta.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(axis[1] * halfC, jacobianOfTheta.getElementAtIndex(2), ABSOLUTE_ERROR);
+        assertEquals(axis[2] * halfC, jacobianOfTheta.getElementAtIndex(3), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 0), s, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 0), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 1), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 1), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 1), s, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 1), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 2), s, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 2), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(3, 2), 0.0);
 
         // Force IllegalArgumentException
         try {
-            q.setFromAxisAndRotation(new double[1], theta, jacobianOfTheta,
-                    jacobianOfAxis);
+            q.setFromAxisAndRotation(new double[1], theta, jacobianOfTheta, jacobianOfAxis);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -514,29 +501,25 @@ public class QuaternionTest {
         assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
         assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianOfTheta.getElementAtIndex(0), -halfS,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(1), axis[0] * halfC,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(2), axis[1] * halfC,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianOfTheta.getElementAtIndex(3), axis[2] * halfC,
-                ABSOLUTE_ERROR);
+        assertEquals(-halfS, jacobianOfTheta.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(axis[0] * halfC, jacobianOfTheta.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(axis[1] * halfC, jacobianOfTheta.getElementAtIndex(2), ABSOLUTE_ERROR);
+        assertEquals(axis[2] * halfC, jacobianOfTheta.getElementAtIndex(3), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 0), s, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 0), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 1), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 1), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 1), s, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 1), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobianOfAxis.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(1, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobianOfAxis.getElementAt(3, 2), s, 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 2), 0.0);
+        assertEquals(s, jacobianOfAxis.getElementAt(3, 2), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -608,10 +591,8 @@ public class QuaternionTest {
         assertEquals(q.getD(), d, ABSOLUTE_ERROR);
 
         q = new Quaternion();
-        Matrix jacobianQ1 = new Matrix(Quaternion.N_PARAMS,
-                Quaternion.N_PARAMS);
-        Matrix jacobianQ2 = new Matrix(Quaternion.N_PARAMS,
-                Quaternion.N_PARAMS);
+        Matrix jacobianQ1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        Matrix jacobianQ2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
         Quaternion.product(q1, q2, q, jacobianQ1, jacobianQ2);
 
         // check correctness
@@ -620,45 +601,45 @@ public class QuaternionTest {
         assertEquals(q.getC(), c, ABSOLUTE_ERROR);
         assertEquals(q.getD(), d, ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ1.getElementAt(0, 0), a2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(1, 0), b2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(2, 0), c2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(3, 0), d2, ABSOLUTE_ERROR);
+        assertEquals(a2, jacobianQ1.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(b2, jacobianQ1.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(c2, jacobianQ1.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(d2, jacobianQ1.getElementAt(3, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ1.getElementAt(0, 1), -b2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(1, 1), a2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(2, 1), -d2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(3, 1), c2, ABSOLUTE_ERROR);
+        assertEquals(-b2, jacobianQ1.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(a2, jacobianQ1.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-d2, jacobianQ1.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(c2, jacobianQ1.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ1.getElementAt(0, 2), -c2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(1, 2), d2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(2, 2), a2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(3, 2), -b2, ABSOLUTE_ERROR);
+        assertEquals(-c2, jacobianQ1.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(d2, jacobianQ1.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(a2, jacobianQ1.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(-b2, jacobianQ1.getElementAt(3, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ1.getElementAt(0, 3), -d2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(1, 3), -c2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(2, 3), b2, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ1.getElementAt(3, 3), a2, ABSOLUTE_ERROR);
+        assertEquals(-d2, jacobianQ1.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(-c2, jacobianQ1.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(b2, jacobianQ1.getElementAt(2, 3), ABSOLUTE_ERROR);
+        assertEquals(a2, jacobianQ1.getElementAt(3, 3), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ2.getElementAt(0, 0), a1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(1, 0), b1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(2, 0), c1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(3, 0), d1, ABSOLUTE_ERROR);
+        assertEquals(a1, jacobianQ2.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(b1, jacobianQ2.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(c1, jacobianQ2.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(d1, jacobianQ2.getElementAt(3, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ2.getElementAt(0, 1), -b1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(1, 1), a1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(2, 1), d1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(3, 1), -c1, ABSOLUTE_ERROR);
+        assertEquals(-b1, jacobianQ2.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(a1, jacobianQ2.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(d1, jacobianQ2.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(-c1, jacobianQ2.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ2.getElementAt(0, 2), -c1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(1, 2), -d1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(2, 2), a1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(3, 2), b1, ABSOLUTE_ERROR);
+        assertEquals(-c1, jacobianQ2.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(-d1, jacobianQ2.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(a1, jacobianQ2.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(b1, jacobianQ2.getElementAt(3, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ2.getElementAt(0, 3), -d1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(1, 3), c1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(2, 3), -b1, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ2.getElementAt(3, 3), a1, ABSOLUTE_ERROR);
+        assertEquals(-d1, jacobianQ2.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(c1, jacobianQ2.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(-b1, jacobianQ2.getElementAt(2, 3), ABSOLUTE_ERROR);
+        assertEquals(a1, jacobianQ2.getElementAt(3, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final Matrix invalid = new Matrix(1, 1);
@@ -675,10 +656,8 @@ public class QuaternionTest {
 
         // check correctness of jacobians
         q = new Quaternion();
-        jacobianQ1 = new Matrix(Quaternion.N_PARAMS,
-                Quaternion.N_PARAMS);
-        jacobianQ2 = new Matrix(Quaternion.N_PARAMS,
-                Quaternion.N_PARAMS);
+        jacobianQ1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        jacobianQ2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
         Quaternion.product(q1, q2, q, jacobianQ1, jacobianQ2);
 
         // check q1 variation
@@ -761,31 +740,19 @@ public class QuaternionTest {
         final double tmp8 = -cy * cp * sr - sy * sp * cr;
         final double tmp9 = -sy * cp * cr + cy * sp * sr;
         final double tmp10 = -sy * sp * cr + cy * cp * sr;
-        assertEquals(jacobian.getElementAt(0, 0), 0.5 * tmp1,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 0), tmp2,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 0), 0.5 * tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 0), 0.5 * tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(0, 1), 0.5 * tmp5,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 1), 0.5 * tmp6,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 1), tmp7,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 1), 0.5 * tmp8,
-                ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp1, jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp3, jacobian.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp5, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp6, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp7, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp8, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 2), 0.5 * tmp9,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 2), 0.5 * tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 2), 0.5 * tmp10,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 2), tmp2,
-                ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp9, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp10, jacobian.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final Matrix invalid = new Matrix(1, 1);
@@ -816,32 +783,20 @@ public class QuaternionTest {
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 0), 0.5 * tmp1,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 0), tmp2,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 0), 0.5 * tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 0), 0.5 * tmp4,
-                ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp1, jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp3, jacobian.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 1), 0.5 * tmp5,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 1), 0.5 * tmp6,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 1), tmp7,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 1), 0.5 * tmp8,
-                ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp5, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp6, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp7, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp8, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 2), 0.5 * tmp9,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 2), 0.5 * tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 2), 0.5 * tmp10,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 2), tmp2,
-                ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp9, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp10, jacobian.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -901,64 +856,51 @@ public class QuaternionTest {
         final double tmp6 = -cr * cy - sr * sp * sy;
         final double tmp7 = sr * cy - cr * sp * sy;
 
-        assertEquals(rot2.internalMatrix.getElementAt(0, 0), cp * cy,
+        assertEquals(cp * cy, rot2.internalMatrix.getElementAt(0, 0),
                 ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(1, 0), cp * sy,
+        assertEquals(cp * sy, rot2.internalMatrix.getElementAt(1, 0),
                 ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(2, 0), -sp,
+        assertEquals(-sp, rot2.internalMatrix.getElementAt(2, 0), ABSOLUTE_ERROR);
+
+        assertEquals(tmp1, rot2.internalMatrix.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp2, rot2.internalMatrix.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp, rot2.internalMatrix.getElementAt(2, 1),
                 ABSOLUTE_ERROR);
 
-        assertEquals(rot2.internalMatrix.getElementAt(0, 1), tmp1,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(1, 1), tmp2,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(2, 1), sr * cp,
+        assertEquals(tmp3, rot2.internalMatrix.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp4, rot2.internalMatrix.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, rot2.internalMatrix.getElementAt(2, 2),
                 ABSOLUTE_ERROR);
 
-        assertEquals(rot2.internalMatrix.getElementAt(0, 2), tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(1, 2), tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(2, 2), cr * cp,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
+        assertEquals(tmp3, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp4, jacobian.getElementAt(4, 0), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, jacobian.getElementAt(5, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp5, jacobian.getElementAt(6, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp6, jacobian.getElementAt(7, 0), ABSOLUTE_ERROR);
+        assertEquals(-sr * cp, jacobian.getElementAt(8, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 0), tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 0), tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 0), cr * cp, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 0), tmp5,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 0), tmp6,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 0), -sr * cp, ABSOLUTE_ERROR);
+        assertEquals(-sp * cy, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(-sp * sy, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-cp, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * cy, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * sy, jacobian.getElementAt(4, 1), ABSOLUTE_ERROR);
+        assertEquals(-sr * sp, jacobian.getElementAt(5, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * cy, jacobian.getElementAt(6, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * sy, jacobian.getElementAt(7, 1), ABSOLUTE_ERROR);
+        assertEquals(-cr * sp, jacobian.getElementAt(8, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 1), -sp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 1), -sp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 1), -cp, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 1), sr * cp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 1), sr * cp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 1), -sr * sp, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 1), cr * cp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 1), cr * cp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 1), -cr * sp, ABSOLUTE_ERROR);
-
-        assertEquals(jacobian.getElementAt(0, 2), -cp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 2), cp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 2), tmp6,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 2), tmp1,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 2), tmp7,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 2), tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 2), 0.0, 0.0);
+        assertEquals(-cp * sy, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(cp * cy, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
+        assertEquals(tmp6, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp1, jacobian.getElementAt(4, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(5, 2), 0.0);
+        assertEquals(tmp7, jacobian.getElementAt(6, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp3, jacobian.getElementAt(7, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
 
         // Force IllegalArgumentException
         final Matrix invalid = new Matrix(1, 1);
@@ -978,70 +920,56 @@ public class QuaternionTest {
         // set new values
         rot2 = new MatrixRotation3D();
         jacobian = new Matrix(9, 3);
-        Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2,
-                jacobian);
+        Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2, jacobian);
 
         // check correctness
         assertEquals(rot, rot2);
 
-        assertEquals(rot2.internalMatrix.getElementAt(0, 0), cp * cy,
+        assertEquals(cp * cy, rot2.internalMatrix.getElementAt(0, 0),
                 ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(1, 0), cp * sy,
+        assertEquals(cp * sy, rot2.internalMatrix.getElementAt(1, 0),
                 ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(2, 0), -sp,
+        assertEquals(-sp, rot2.internalMatrix.getElementAt(2, 0), ABSOLUTE_ERROR);
+
+        assertEquals(tmp1, rot2.internalMatrix.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp2, rot2.internalMatrix.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp, rot2.internalMatrix.getElementAt(2, 1),
                 ABSOLUTE_ERROR);
 
-        assertEquals(rot2.internalMatrix.getElementAt(0, 1), tmp1,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(1, 1), tmp2,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(2, 1), sr * cp,
+        assertEquals(tmp3, rot2.internalMatrix.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp4, rot2.internalMatrix.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, rot2.internalMatrix.getElementAt(2, 2),
                 ABSOLUTE_ERROR);
 
-        assertEquals(rot2.internalMatrix.getElementAt(0, 2), tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(1, 2), tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(rot2.internalMatrix.getElementAt(2, 2), cr * cp,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
+        assertEquals(tmp3, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp4, jacobian.getElementAt(4, 0), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, jacobian.getElementAt(5, 0),  ABSOLUTE_ERROR);
+        assertEquals(tmp5, jacobian.getElementAt(6, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp6, jacobian.getElementAt(7, 0), ABSOLUTE_ERROR);
+        assertEquals(-sr * cp, jacobian.getElementAt(8, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 0), tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 0), tmp4,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 0), cr * cp, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 0), tmp5,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 0), tmp6,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 0), -sr * cp, ABSOLUTE_ERROR);
+        assertEquals(-sp * cy, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(-sp * sy, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-cp, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * cy, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * sy, jacobian.getElementAt(4, 1), ABSOLUTE_ERROR);
+        assertEquals(-sr * sp, jacobian.getElementAt(5, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * cy, jacobian.getElementAt(6, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * sy, jacobian.getElementAt(7, 1), ABSOLUTE_ERROR);
+        assertEquals(-cr * sp, jacobian.getElementAt(8, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 1), -sp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 1), -sp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 1), -cp, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 1), sr * cp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 1), sr * cp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 1), -sr * sp, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 1), cr * cp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 1), cr * cp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 1), -cr * sp, ABSOLUTE_ERROR);
-
-        assertEquals(jacobian.getElementAt(0, 2), -cp * sy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 2), cp * cy, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 2), tmp6,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 2), tmp1,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(6, 2), tmp7,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 2), tmp3,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 2), 0.0, 0.0);
+        assertEquals(-cp * sy, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(cp * cy, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
+        assertEquals(tmp6, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp1, jacobian.getElementAt(4, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(5, 2), 0.0);
+        assertEquals(tmp7, jacobian.getElementAt(6, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp3, jacobian.getElementAt(7, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -1050,8 +978,7 @@ public class QuaternionTest {
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw},
-                    rot2, invalid);
+            Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2, invalid);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -1100,10 +1027,8 @@ public class QuaternionTest {
 
         final double[] axis2 = new double[Quaternion.N_ANGLES];
         final Matrix jacobianAngle = new Matrix(1, Quaternion.N_PARAMS);
-        final Matrix jacobianAxis = new Matrix(Quaternion.N_ANGLES,
-                Quaternion.N_PARAMS);
-        double theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle,
-                jacobianAxis);
+        final Matrix jacobianAxis = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        double theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle, jacobianAxis);
 
         // check correctness
         assertArrayEquals(axis, axis2, ABSOLUTE_ERROR);
@@ -1117,12 +1042,9 @@ public class QuaternionTest {
         final double aS = -2.0 * n / denom;
 
         assertEquals(jacobianAngle.getElementAtIndex(0), aS, ABSOLUTE_ERROR);
-        assertEquals(jacobianAngle.getElementAtIndex(1), axis[0] * aN,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianAngle.getElementAtIndex(2), axis[1] * aN,
-                ABSOLUTE_ERROR);
-        assertEquals(jacobianAngle.getElementAtIndex(3), axis[2] * aN,
-                ABSOLUTE_ERROR);
+        assertEquals(jacobianAngle.getElementAtIndex(1), axis[0] * aN, ABSOLUTE_ERROR);
+        assertEquals(jacobianAngle.getElementAtIndex(2), axis[1] * aN, ABSOLUTE_ERROR);
+        assertEquals(jacobianAngle.getElementAtIndex(3), axis[2] * aN, ABSOLUTE_ERROR);
 
         final Matrix uV = Matrix.identity(3, 3);
         uV.multiplyByScalar(n);
@@ -1191,18 +1113,15 @@ public class QuaternionTest {
         // check correctness
         final double[] axis2 = new double[axis.length];
         final Matrix jacobianAngle = new Matrix(1, Quaternion.N_PARAMS);
-        final Matrix jacobianAxis = new Matrix(Quaternion.N_ANGLES,
-                Quaternion.N_PARAMS);
-        final double theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle,
-                jacobianAxis);
+        final Matrix jacobianAxis = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        final double theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle, jacobianAxis);
         final Matrix vA = Matrix.newFromArray(axis2, true);
         final Matrix vQ = vA.multiplyAndReturnNew(jacobianAngle).addAndReturnNew(
                 jacobianAxis.multiplyByScalarAndReturnNew(theta2));
 
         // rotation vector is proportional to rotation axis but having a norm equal
         // to the rotation angle
-        assertEquals(ArrayUtils.dotProduct(rotationVector, axis),
-                Math.abs(theta), ABSOLUTE_ERROR);
+        assertEquals(ArrayUtils.dotProduct(rotationVector, axis), Math.abs(theta), ABSOLUTE_ERROR);
 
         assertTrue(jacobian.equals(vQ, ABSOLUTE_ERROR));
 
@@ -1223,8 +1142,7 @@ public class QuaternionTest {
 
         // rotation vector is proportional to rotation axis but having a norm equal
         // to the rotation angle
-        assertEquals(ArrayUtils.dotProduct(rotationVector, axis),
-                Math.abs(theta), ABSOLUTE_ERROR);
+        assertEquals(ArrayUtils.dotProduct(rotationVector, axis), Math.abs(theta), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1292,20 +1210,20 @@ public class QuaternionTest {
         ArrayUtils.multiplyByScalar(dy3dq, de3dy3, dy3dq);
         final double[] de3dq = ArrayUtils.sumAndReturnNew(dx3dq, dy3dq);
 
-        assertEquals(jacobian.getElementAt(0, 0), de1dq[0], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(0, 1), de1dq[1], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(0, 2), de1dq[2], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(0, 3), de1dq[3], ABSOLUTE_ERROR);
+        assertEquals(de1dq[0], jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(de1dq[1], jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(de1dq[2], jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(de1dq[3], jacobian.getElementAt(0, 3), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(1, 0), de2dq[0], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 1), de2dq[1], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 2), de2dq[2], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 3), de2dq[3], ABSOLUTE_ERROR);
+        assertEquals(de2dq[0], jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(de2dq[1], jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(de2dq[2], jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(de2dq[3], jacobian.getElementAt(1, 3), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(2, 0), de3dq[0], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 1), de3dq[1], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 2), de3dq[2], ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 3), de3dq[3], ABSOLUTE_ERROR);
+        assertEquals(de3dq[0], jacobian.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(de3dq[1], jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(de3dq[2], jacobian.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(de3dq[3], jacobian.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         angles = new double[Quaternion.N_ANGLES];
         q.toEulerAngles(angles);
@@ -1364,10 +1282,10 @@ public class QuaternionTest {
         final Quaternion q = new Quaternion(a, b, c, d);
 
         // check correctness
-        assertEquals(q.getA(), a, 0.0);
-        assertEquals(q.getB(), b, 0.0);
-        assertEquals(q.getC(), c, 0.0);
-        assertEquals(q.getD(), d, 0.0);
+        assertEquals(a, q.getA(), 0.0);
+        assertEquals(b, q.getB(), 0.0);
+        assertEquals(c, q.getC(), 0.0);
+        assertEquals(d, q.getD(), 0.0);
 
         // conjugate
         Quaternion qc = new Quaternion();
@@ -1375,30 +1293,30 @@ public class QuaternionTest {
         q.conjugate(qc, jacobian);
 
         // check correctness
-        assertEquals(q.getA(), qc.getA(), 0.0);
-        assertEquals(q.getB(), -qc.getB(), 0.0);
-        assertEquals(q.getC(), -qc.getC(), 0.0);
-        assertEquals(q.getD(), -qc.getD(), 0.0);
+        assertEquals(qc.getA(), q.getA(), 0.0);
+        assertEquals(-qc.getB(), q.getB(), 0.0);
+        assertEquals(-qc.getC(), q.getC(), 0.0);
+        assertEquals(-qc.getD(), q.getD(), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 0), 1.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(1.0, jacobian.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 1), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 1), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 0), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 1), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(1, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 0), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 2), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 2), -1.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 2), 0.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 2), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(2, 2), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(3, 2), 0.0);
 
-        assertEquals(jacobian.getElementAt(0, 3), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(1, 3), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(2, 3), 0.0, 0.0);
-        assertEquals(jacobian.getElementAt(3, 3), -1.0, 0.0);
+        assertEquals(0.0, jacobian.getElementAt(0, 3), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(1, 3), 0.0);
+        assertEquals(0.0, jacobian.getElementAt(2, 3), 0.0);
+        assertEquals(-1.0, jacobian.getElementAt(3, 3), 0.0);
 
         qc = new Quaternion();
         q.conjugate(qc);
@@ -1407,9 +1325,9 @@ public class QuaternionTest {
 
         // check correctness
         assertEquals(q.getA(), qc.getA(), 0.0);
-        assertEquals(q.getB(), -qc.getB(), 0.0);
-        assertEquals(q.getC(), -qc.getC(), 0.0);
-        assertEquals(q.getD(), -qc.getD(), 0.0);
+        assertEquals(-q.getB(), qc.getB(), 0.0);
+        assertEquals(-q.getC(), qc.getC(), 0.0);
+        assertEquals(-q.getD(), qc.getD(), 0.0);
 
         assertEquals(qc, qcB);
 
@@ -1488,45 +1406,45 @@ public class QuaternionTest {
         final double c = q.getC();
         final double d = q.getD();
 
-        assertEquals(jacobian.getElementAt(0, 0), 2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 0), 2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 0), -2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 0), -2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 0), 2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 0), 2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 0), 2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 0), -2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 0), 2 * a, ABSOLUTE_ERROR);
+        assertEquals(2 * a, jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(2 * d, jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-2 * c, jacobian.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(-2 * d, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(2 * a, jacobian.getElementAt(4, 0), ABSOLUTE_ERROR);
+        assertEquals(2 * b, jacobian.getElementAt(5, 0), ABSOLUTE_ERROR);
+        assertEquals(2 * c, jacobian.getElementAt(6, 0), ABSOLUTE_ERROR);
+        assertEquals(-2 * b, jacobian.getElementAt(7, 0), ABSOLUTE_ERROR);
+        assertEquals(2 * a, jacobian.getElementAt(8, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 1), 2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 1), 2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 1), 2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 1), 2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 1), -2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 1), 2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 1), 2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 1), -2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 1), -2 * b, ABSOLUTE_ERROR);
+        assertEquals(2 * b, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(2 * c, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(2 * d, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(2 * c, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
+        assertEquals(-2 * b, jacobian.getElementAt(4, 1), ABSOLUTE_ERROR);
+        assertEquals(2 * a, jacobian.getElementAt(5, 1), ABSOLUTE_ERROR);
+        assertEquals(2 * d, jacobian.getElementAt(6, 1), ABSOLUTE_ERROR);
+        assertEquals(-2 * a, jacobian.getElementAt(7, 1), ABSOLUTE_ERROR);
+        assertEquals(-2 * b, jacobian.getElementAt(8, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 2), -2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 2), 2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 2), -2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 2), 2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 2), 2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 2), 2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 2), 2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 2), 2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 2), -2 * c, ABSOLUTE_ERROR);
+        assertEquals(-2 * c, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(2 * b, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-2 * a, jacobian.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(2 * b, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(2 * c, jacobian.getElementAt(4, 2), ABSOLUTE_ERROR);
+        assertEquals(2 * d, jacobian.getElementAt(5, 2), ABSOLUTE_ERROR);
+        assertEquals(2 * a, jacobian.getElementAt(6, 2), ABSOLUTE_ERROR);
+        assertEquals(2 * d, jacobian.getElementAt(7, 2), ABSOLUTE_ERROR);
+        assertEquals(-2 * c, jacobian.getElementAt(8, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobian.getElementAt(0, 3), -2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(1, 3), 2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(2, 3), 2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(3, 3), -2 * a, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(4, 3), -2 * d, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(5, 3), 2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(6, 3), 2 * b, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(7, 3), 2 * c, ABSOLUTE_ERROR);
-        assertEquals(jacobian.getElementAt(8, 3), 2 * d, ABSOLUTE_ERROR);
+        assertEquals(-2 * d, jacobian.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(2 * a, jacobian.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(2 * b, jacobian.getElementAt(2, 3), ABSOLUTE_ERROR);
+        assertEquals(-2 * a, jacobian.getElementAt(3, 3), ABSOLUTE_ERROR);
+        assertEquals(-2 * d, jacobian.getElementAt(4, 3), ABSOLUTE_ERROR);
+        assertEquals(2 * c, jacobian.getElementAt(5, 3), ABSOLUTE_ERROR);
+        assertEquals(2 * b, jacobian.getElementAt(6, 3), ABSOLUTE_ERROR);
+        assertEquals(2 * c, jacobian.getElementAt(7, 3), ABSOLUTE_ERROR);
+        assertEquals(2 * d, jacobian.getElementAt(8, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -1620,8 +1538,7 @@ public class QuaternionTest {
         final Matrix jacobianPoint1A = new Matrix(3, 3);
         final Matrix jacobianQuaternion1A = new Matrix(3, 4);
         final Point3D rotPoint1A = Point3D.create();
-        Quaternion.rotate(q, point1, rotPoint1A, jacobianPoint1A,
-                jacobianQuaternion1A);
+        Quaternion.rotate(q, point1, rotPoint1A, jacobianPoint1A, jacobianQuaternion1A);
 
         final Point3D rotPoint1B = Point3D.create();
         final Matrix jacobianPoint1B = new Matrix(3, 3);
@@ -1638,8 +1555,7 @@ public class QuaternionTest {
         final Matrix jacobianPoint2A = new Matrix(3, 3);
         final Matrix jacobianQuaternion2A = new Matrix(3, 4);
         final Point3D rotPoint2A = Point3D.create();
-        Quaternion.rotate(q, point2, rotPoint2A, jacobianPoint2A,
-                jacobianQuaternion2A);
+        Quaternion.rotate(q, point2, rotPoint2A, jacobianPoint2A, jacobianQuaternion2A);
 
         final Point3D rotPoint2B = Point3D.create();
         final Matrix jacobianPoint2B = new Matrix(3, 3);
@@ -1656,8 +1572,7 @@ public class QuaternionTest {
         final Matrix jacobianPoint3A = new Matrix(3, 3);
         final Matrix jacobianQuaternion3A = new Matrix(3, 4);
         final Point3D rotPoint3A = Point3D.create();
-        Quaternion.rotate(q, point3, rotPoint3A, jacobianPoint3A,
-                jacobianQuaternion3A);
+        Quaternion.rotate(q, point3, rotPoint3A, jacobianPoint3A, jacobianQuaternion3A);
 
         final Point3D rotPoint3B = Point3D.create();
         final Matrix jacobianPoint3B = new Matrix(3, 3);
@@ -1700,14 +1615,10 @@ public class QuaternionTest {
         final Matrix rotPoint3Mat = R.multiplyAndReturnNew(point3Mat);
 
         // check correctness
-        double scaleX = rotPoint1A.getHomX() /
-                rotPoint1Mat.getElementAtIndex(0);
-        double scaleY = rotPoint1A.getHomY() /
-                rotPoint1Mat.getElementAtIndex(1);
-        double scaleZ = rotPoint1A.getHomZ() /
-                rotPoint1Mat.getElementAtIndex(2);
-        double scaleW = rotPoint1A.getHomW() /
-                rotPoint1Mat.getElementAtIndex(3);
+        double scaleX = rotPoint1A.getHomX() / rotPoint1Mat.getElementAtIndex(0);
+        double scaleY = rotPoint1A.getHomY() / rotPoint1Mat.getElementAtIndex(1);
+        double scaleZ = rotPoint1A.getHomZ() / rotPoint1Mat.getElementAtIndex(2);
+        double scaleW = rotPoint1A.getHomW() / rotPoint1Mat.getElementAtIndex(3);
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
         assertEquals(scaleZ, scaleW, ABSOLUTE_ERROR);
@@ -1884,26 +1795,26 @@ public class QuaternionTest {
 
         assertArrayEquals(jacobianAlpha.getBuffer(), axis, ABSOLUTE_ERROR);
 
-        assertEquals(jacobianRotationVector.getElementAt(0, 0),
-                1 / theta - axis[0] * axis[0] / theta, ABSOLUTE_ERROR);
-        assertEquals(jacobianRotationVector.getElementAt(1, 0),
-                -axis[0] / theta * axis[1], ABSOLUTE_ERROR);
-        assertEquals(jacobianRotationVector.getElementAt(2, 0),
-                -axis[0] / theta * axis[2], ABSOLUTE_ERROR);
+        assertEquals(1 / theta - axis[0] * axis[0] / theta,
+                jacobianRotationVector.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(-axis[0] / theta * axis[1],
+                jacobianRotationVector.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-axis[0] / theta * axis[2],
+                jacobianRotationVector.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianRotationVector.getElementAt(0, 1),
-                -axis[0] / theta * axis[1], ABSOLUTE_ERROR);
-        assertEquals(jacobianRotationVector.getElementAt(1, 1),
-                1 / theta - axis[1] * axis[1] / theta, ABSOLUTE_ERROR);
-        assertEquals(jacobianRotationVector.getElementAt(2, 1),
-                -axis[1] / theta * axis[2], ABSOLUTE_ERROR);
+        assertEquals(-axis[0] / theta * axis[1],
+                jacobianRotationVector.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(1 / theta - axis[1] * axis[1] / theta,
+                jacobianRotationVector.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-axis[1] / theta * axis[2],
+                jacobianRotationVector.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianRotationVector.getElementAt(0, 2),
-                -axis[0] / theta * axis[2], ABSOLUTE_ERROR);
-        assertEquals(jacobianRotationVector.getElementAt(1, 2),
-                -axis[1] / theta * axis[2], ABSOLUTE_ERROR);
-        assertEquals(jacobianRotationVector.getElementAt(2, 2),
-                1 / theta - axis[2] * axis[2] / theta, ABSOLUTE_ERROR);
+        assertEquals(-axis[0] / theta * axis[2],
+                jacobianRotationVector.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(-axis[1] / theta * axis[2],
+                jacobianRotationVector.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(1 / theta - axis[2] * axis[2] / theta,
+                jacobianRotationVector.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -1963,8 +1874,7 @@ public class QuaternionTest {
         final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
                 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis,
-                theta);
+        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
         Quaternion q = new Quaternion();
         Matrix jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
@@ -1977,24 +1887,24 @@ public class QuaternionTest {
         assertArrayEquals(rotationVector, rotationVector2, ABSOLUTE_ERROR);
 
         if (theta < Quaternion.LARGE_AXIS_NORM_THRESHOLD) {
-            assertEquals(jacobian.getElementAt(0, 0), -0.25 * rotationVector[0],
+            assertEquals(-0.25 * rotationVector[0], jacobian.getElementAt(0, 0),
                     ABSOLUTE_ERROR);
-            assertEquals(jacobian.getElementAt(1, 0), -0.25 * rotationVector[1],
+            assertEquals(-0.25 * rotationVector[1], jacobian.getElementAt(1, 0),
                     ABSOLUTE_ERROR);
-            assertEquals(jacobian.getElementAt(2, 0), -0.25 * rotationVector[2],
+            assertEquals(-0.25 * rotationVector[2], jacobian.getElementAt(2, 0),
                     ABSOLUTE_ERROR);
 
-            assertEquals(jacobian.getElementAt(0, 1), 0.5, 0.0);
-            assertEquals(jacobian.getElementAt(1, 1), 0.0, 0.0);
-            assertEquals(jacobian.getElementAt(2, 1), 0.0, 0.0);
+            assertEquals(0.5, jacobian.getElementAt(0, 1), 0.0);
+            assertEquals(0.0, jacobian.getElementAt(1, 1), 0.0);
+            assertEquals(0.0, jacobian.getElementAt(2, 1), 0.0);
 
-            assertEquals(jacobian.getElementAt(0, 2), 0.0, 0.0);
-            assertEquals(jacobian.getElementAt(1, 2), 0.5, 0.0);
-            assertEquals(jacobian.getElementAt(2, 2), 0.0, 0.0);
+            assertEquals(0.0, jacobian.getElementAt(0, 2), 0.0);
+            assertEquals(0.5, jacobian.getElementAt(1, 2), 0.0);
+            assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
 
-            assertEquals(jacobian.getElementAt(0, 3), 0.0, 0.0);
-            assertEquals(jacobian.getElementAt(1, 3), 0.0, 0.0);
-            assertEquals(jacobian.getElementAt(2, 3), 0.5, 0.0);
+            assertEquals(0.0, jacobian.getElementAt(0, 3), 0.0);
+            assertEquals(0.0, jacobian.getElementAt(1, 3), 0.0);
+            assertEquals(0.5, jacobian.getElementAt(2, 3), 0.0);
         } else {
             final Matrix jacobianAlpha = new Matrix(1, Quaternion.N_ANGLES);
             final Matrix jacobianRotationVector = new Matrix(Quaternion.N_ANGLES,
@@ -2087,8 +1997,7 @@ public class QuaternionTest {
         final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
                 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis,
-                theta);
+        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
         final Quaternion q = new Quaternion();
 
@@ -2126,8 +2035,7 @@ public class QuaternionTest {
         final double[] axis = vMatrix.getSubmatrixAsArray(
                 0, 0, 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis,
-                theta);
+        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
         final Matrix m = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                 MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
@@ -2138,7 +2046,7 @@ public class QuaternionTest {
         Quaternion.rotationVectorToMatrixRotation(rotationVector, matrixRot);
 
         // check correctness
-        assertEquals(matrixRot.internalMatrix, m);
+        assertEquals(m, matrixRot.internalMatrix);
 
         final double[] axis2 = matrixRot.getRotationAxis();
         final double theta2 = matrixRot.getRotationAngle();
@@ -2152,7 +2060,7 @@ public class QuaternionTest {
     @Test
     public void testGetType() {
         final Quaternion q = new Quaternion();
-        assertEquals(q.getType(), Rotation3DType.QUATERNION);
+        assertEquals(Rotation3DType.QUATERNION, q.getType());
     }
 
     @Test
@@ -2390,10 +2298,10 @@ public class QuaternionTest {
 
         final Quaternion prodQ = q.multiplyAndReturnNew(invQ1);
 
-        assertEquals(prodQ.getA(), 1.0, ABSOLUTE_ERROR);
-        assertEquals(prodQ.getB(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(prodQ.getC(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(prodQ.getD(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, prodQ.getA(), ABSOLUTE_ERROR);
+        assertEquals(0.0, prodQ.getB(), ABSOLUTE_ERROR);
+        assertEquals(0.0, prodQ.getC(), ABSOLUTE_ERROR);
+        assertEquals(0.0, prodQ.getD(), ABSOLUTE_ERROR);
 
         final HomogeneousPoint3D point = new HomogeneousPoint3D();
         point.setInhomogeneousCoordinates(
@@ -2460,10 +2368,10 @@ public class QuaternionTest {
 
         final Quaternion prodQ = q.multiplyAndReturnNew(invQ2);
 
-        assertEquals(prodQ.getA(), 1.0, ABSOLUTE_ERROR);
-        assertEquals(prodQ.getB(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(prodQ.getC(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(prodQ.getD(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, prodQ.getA(), ABSOLUTE_ERROR);
+        assertEquals(0.0, prodQ.getB(), ABSOLUTE_ERROR);
+        assertEquals(0.0, prodQ.getC(), ABSOLUTE_ERROR);
+        assertEquals(0.0, prodQ.getD(), ABSOLUTE_ERROR);
 
         final HomogeneousPoint3D point = new HomogeneousPoint3D();
         point.setInhomogeneousCoordinates(
@@ -2569,8 +2477,8 @@ public class QuaternionTest {
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
         assertEquals(q, matrixRot);
-        assertArrayEquals(q.getRotationAxis(), axis, ABSOLUTE_ERROR);
-        assertEquals(q.getRotationAngle(), theta, ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
 
         // from axis rotation
         q = new Quaternion();
@@ -2579,8 +2487,8 @@ public class QuaternionTest {
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
         assertEquals(q, axisRot);
-        assertArrayEquals(q.getRotationAxis(), axis, ABSOLUTE_ERROR);
-        assertEquals(q.getRotationAngle(), theta, ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
 
         // from quaternion
         q = new Quaternion();
@@ -2588,8 +2496,8 @@ public class QuaternionTest {
 
         // check correctness
         assertEquals(q, qRot);
-        assertArrayEquals(q.getRotationAxis(), axis, ABSOLUTE_ERROR);
-        assertEquals(q.getRotationAngle(), theta, ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2659,8 +2567,9 @@ public class QuaternionTest {
         // after normalization both quaternions are equivalent
         assertTrue(q1.equals(q2, ABSOLUTE_ERROR));
 
-        assertEquals(Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB() +
-                        q1.getC() * q1.getC() + q1.getD() * q1.getD()), 1.0,
+        assertEquals(1.0,
+                Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB()
+                        + q1.getC() * q1.getC() + q1.getD() * q1.getD()),
                 ABSOLUTE_ERROR);
 
         assertTrue(q1.isNormalized());
@@ -2682,8 +2591,9 @@ public class QuaternionTest {
         // check correctness
         assertTrue(q1.equals(q2, ABSOLUTE_ERROR));
 
-        assertEquals(Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB() +
-                        q1.getC() * q1.getC() + q1.getD() * q1.getD()), 1.0,
+        assertEquals(1.0,
+                Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB() +
+                        q1.getC() * q1.getC() + q1.getD() * q1.getD()),
                 ABSOLUTE_ERROR);
 
         assertTrue(q1.isNormalized());

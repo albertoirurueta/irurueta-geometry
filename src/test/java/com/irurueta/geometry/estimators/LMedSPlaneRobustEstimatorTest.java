@@ -68,18 +68,18 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator = new LMedSPlaneRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -93,19 +93,19 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator = new LMedSPlaneRobustEstimator(points);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -145,18 +145,18 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator = new LMedSPlaneRobustEstimator(listener);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -165,18 +165,18 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator = new LMedSPlaneRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertSame(estimator.getPoints(), points);
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -197,13 +197,13 @@ public class LMedSPlaneRobustEstimatorTest implements
                 new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getStopThreshold(),
-                LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(0.5);
 
-        assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -226,7 +226,7 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -236,14 +236,14 @@ public class LMedSPlaneRobustEstimatorTest implements
                 new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -264,14 +264,14 @@ public class LMedSPlaneRobustEstimatorTest implements
                 new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                PlaneRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5f);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -292,14 +292,14 @@ public class LMedSPlaneRobustEstimatorTest implements
                 new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 1);
+        assertEquals(1, estimator.getMaxIterations());
 
         // Fail IllegalArgumentException
         try {
@@ -326,7 +326,7 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator.setPoints(points);
 
         // check correctness
-        assertSame(estimator.getPoints(), points);
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
 
         // clearing list makes instance not ready
@@ -430,17 +430,17 @@ public class LMedSPlaneRobustEstimatorTest implements
 
             estimator.setStopThreshold(STOP_THRESHOLD);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final Plane plane2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();

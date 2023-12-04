@@ -48,7 +48,7 @@ public class UtilsTest {
         final double radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
         final double degrees = radians * 180.0 / Math.PI;
 
-        assertEquals(Utils.convertToDegrees(radians), degrees, ABSOLUTE_ERROR);
+        assertEquals(degrees, Utils.convertToDegrees(radians), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class UtilsTest {
         final double degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
         final double radians = degrees * Math.PI / 180.0;
 
-        assertEquals(Utils.convertToRadians(degrees), radians, ABSOLUTE_ERROR);
+        assertEquals(radians, Utils.convertToRadians(degrees), ABSOLUTE_ERROR);
     }
 
     @Test

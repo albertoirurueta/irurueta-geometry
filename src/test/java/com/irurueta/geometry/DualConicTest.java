@@ -57,12 +57,12 @@ public class DualConicTest {
 
         // Constructor
         DualConic dualConic = new DualConic();
-        assertEquals(dualConic.getA(), 0.0, 0.0);
-        assertEquals(dualConic.getB(), 0.0, 0.0);
-        assertEquals(dualConic.getC(), 0.0, 0.0);
-        assertEquals(dualConic.getD(), 0.0, 0.0);
-        assertEquals(dualConic.getE(), 0.0, 0.0);
-        assertEquals(dualConic.getF(), 0.0, 0.0);
+        assertEquals(0.0, dualConic.getA(), 0.0);
+        assertEquals(0.0, dualConic.getB(), 0.0);
+        assertEquals(0.0, dualConic.getC(), 0.0);
+        assertEquals(0.0, dualConic.getD(), 0.0);
+        assertEquals(0.0, dualConic.getE(), 0.0);
+        assertEquals(0.0, dualConic.getF(), 0.0);
         assertFalse(dualConic.isNormalized());
 
         // Constructor with params
@@ -73,12 +73,12 @@ public class DualConicTest {
         double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualConic = new DualConic(a, b, c, d, e, f);
-        assertEquals(dualConic.getA(), a, 0.0);
-        assertEquals(dualConic.getB(), b, 0.0);
-        assertEquals(dualConic.getC(), c, 0.0);
-        assertEquals(dualConic.getD(), d, 0.0);
-        assertEquals(dualConic.getE(), e, 0.0);
-        assertEquals(dualConic.getF(), f, 0.0);
+        assertEquals(a, dualConic.getA(), 0.0);
+        assertEquals(b, dualConic.getB(), 0.0);
+        assertEquals(c, dualConic.getC(), 0.0);
+        assertEquals(d, dualConic.getD(), 0.0);
+        assertEquals(e, dualConic.getE(), 0.0);
+        assertEquals(f, dualConic.getF(), 0.0);
         assertFalse(dualConic.isNormalized());
 
         // Constructor using matrix
@@ -99,12 +99,12 @@ public class DualConicTest {
         m.setElementAt(2, 1, e);
         m.setElementAt(2, 2, f);
         dualConic = new DualConic(m);
-        assertEquals(dualConic.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(dualConic.getB(), m.getElementAt(0, 1), 0.0);
-        assertEquals(dualConic.getC(), m.getElementAt(1, 1), 0.0);
-        assertEquals(dualConic.getD(), m.getElementAt(0, 2), 0.0);
-        assertEquals(dualConic.getE(), m.getElementAt(1, 2), 0.0);
-        assertEquals(dualConic.getF(), m.getElementAt(2, 2), 0.0);
+        assertEquals(m.getElementAt(0, 0), dualConic.getA(), 0.0);
+        assertEquals(m.getElementAt(0, 1), dualConic.getB(), 0.0);
+        assertEquals(m.getElementAt(1, 1), dualConic.getC(), 0.0);
+        assertEquals(m.getElementAt(0, 2), dualConic.getD(), 0.0);
+        assertEquals(m.getElementAt(1, 2), dualConic.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 2), dualConic.getF(), 0.0);
 
         // Constructor using matrix with wrong size
         m = new Matrix(DUAL_CONIC_ROWS + 1, DUAL_CONIC_COLS);
@@ -127,7 +127,6 @@ public class DualConicTest {
         m.setElementAt(2, 0, d + 1.0);
         m.setElementAt(2, 1, e);
         m.setElementAt(2, 2, f);
-        dualConic = null;
         try {
             dualConic = new DualConic(m);
             fail("NonSymmetricMatrixException expected but not thrown");
@@ -156,7 +155,7 @@ public class DualConicTest {
         line4.normalize();
         line5.normalize();
 
-        // estimate dual conic that lies inside of provided 5 lines
+        // estimate dual conic that lies inside provided 5 lines
         final Matrix m2 = new Matrix(5, 6);
 
         double l1 = line1.getA();
@@ -318,12 +317,12 @@ public class DualConicTest {
         dualConic.setD(d);
         dualConic.setE(e);
         dualConic.setF(f);
-        assertEquals(dualConic.getA(), a, 0.0);
-        assertEquals(dualConic.getB(), b, 0.0);
-        assertEquals(dualConic.getC(), c, 0.0);
-        assertEquals(dualConic.getD(), d, 0.0);
-        assertEquals(dualConic.getE(), e, 0.0);
-        assertEquals(dualConic.getF(), f, 0.0);
+        assertEquals(a, dualConic.getA(), 0.0);
+        assertEquals(b, dualConic.getB(), 0.0);
+        assertEquals(c, dualConic.getC(), 0.0);
+        assertEquals(d, dualConic.getD(), 0.0);
+        assertEquals(e, dualConic.getE(), 0.0);
+        assertEquals(f, dualConic.getF(), 0.0);
 
         dualConic = new DualConic();
         final Matrix m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
@@ -343,12 +342,12 @@ public class DualConicTest {
         m.setElementAt(2, 1, e);
         m.setElementAt(2, 2, f);
         dualConic.setParameters(m);
-        assertEquals(dualConic.getA(), m.getElementAt(0, 0), 0.0);
-        assertEquals(dualConic.getB(), m.getElementAt(0, 1), 0.0);
-        assertEquals(dualConic.getC(), m.getElementAt(1, 1), 0.0);
-        assertEquals(dualConic.getD(), m.getElementAt(0, 2), 0.0);
-        assertEquals(dualConic.getE(), m.getElementAt(1, 2), 0.0);
-        assertEquals(dualConic.getF(), m.getElementAt(2, 2), 0.0);
+        assertEquals(m.getElementAt(0, 0), dualConic.getA(), 0.0);
+        assertEquals(m.getElementAt(0, 1), dualConic.getB(), 0.0);
+        assertEquals(m.getElementAt(1, 1), dualConic.getC(), 0.0);
+        assertEquals(m.getElementAt(0, 2), dualConic.getD(), 0.0);
+        assertEquals(m.getElementAt(1, 2), dualConic.getE(), 0.0);
+        assertEquals(m.getElementAt(2, 2), dualConic.getF(), 0.0);
     }
 
     @Test
@@ -407,7 +406,7 @@ public class DualConicTest {
         line5.normalize();
 
 
-        // estimate dual conic that lines inside of provided 5 lines
+        // estimate dual conic that lines inside provided 5 lines
         final Matrix systemOfEquationsMatrix = new Matrix(5, 6);
 
         double l1 = line1.getA();
@@ -591,12 +590,12 @@ public class DualConicTest {
         final Matrix conicMatrix = com.irurueta.algebra.Utils.inverse(
                 dualConicMatrix);
 
-        // find line vector outside of dual conic as the product of conic matrix
+        // find line vector outside dual conic as the product of conic matrix
         // and point outside of conic
         final Matrix outsideLineMatrix = conicMatrix.multiplyAndReturnNew(
                 homPointMatrix);
 
-        // instantiate line outside of dual conic using computed vector
+        // instantiate line outside dual conic using computed vector
         final Line2D outsideLine = new Line2D(outsideLineMatrix.toArray());
 
         // instantiate new dual conic instance
@@ -809,7 +808,7 @@ public class DualConicTest {
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
     }
 
     @Test
@@ -836,7 +835,7 @@ public class DualConicTest {
         line4.normalize();
         line5.normalize();
 
-        // estimate dual conic that lies inside of provided 5 lines
+        // estimate dual conic that lies inside provided 5 lines
         final Matrix m2 = new Matrix(5, 6);
 
         double l1 = line1.getA();
@@ -1014,19 +1013,19 @@ public class DualConicTest {
         // machine precision
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
 
-        assertEquals(norm, 0.0, PRECISION_ERROR);
+        assertEquals(0.0, norm, PRECISION_ERROR);
     }
 
     @Test
     public void testCreateCanonicalDualAbsoluteConic() throws WrongSizeException {
         final DualConic dac = DualConic.createCanonicalDualAbsoluteConic();
 
-        assertEquals(dac.getA(), 1.0, 0.0);
-        assertEquals(dac.getB(), 0.0, 0.0);
-        assertEquals(dac.getC(), 1.0, 0.0);
-        assertEquals(dac.getD(), 0.0, 0.0);
-        assertEquals(dac.getE(), 0.0, 0.0);
-        assertEquals(dac.getF(), 1.0, 0.0);
+        assertEquals(1.0, dac.getA(), 0.0);
+        assertEquals(0.0, dac.getB(), 0.0);
+        assertEquals(1.0, dac.getC(), 0.0);
+        assertEquals(0.0, dac.getD(), 0.0);
+        assertEquals(0.0, dac.getE(), 0.0);
+        assertEquals(1.0, dac.getF(), 0.0);
 
         assertEquals(dac.asMatrix(), Matrix.identity(3, 3));
     }
@@ -1044,12 +1043,12 @@ public class DualConicTest {
         final DualConic dualConic1 = new DualConic(a, b, c, d, e, f);
 
         // check
-        assertEquals(dualConic1.getA(), a, 0.0);
-        assertEquals(dualConic1.getB(), b, 0.0);
-        assertEquals(dualConic1.getC(), c, 0.0);
-        assertEquals(dualConic1.getD(), d, 0.0);
-        assertEquals(dualConic1.getE(), e, 0.0);
-        assertEquals(dualConic1.getF(), f, 0.0);
+        assertEquals(a, dualConic1.getA(), 0.0);
+        assertEquals(b, dualConic1.getB(), 0.0);
+        assertEquals(c, dualConic1.getC(), 0.0);
+        assertEquals(d, dualConic1.getD(), 0.0);
+        assertEquals(e, dualConic1.getE(), 0.0);
+        assertEquals(f, dualConic1.getF(), 0.0);
         assertFalse(dualConic1.isNormalized());
 
         // serialize and deserialize

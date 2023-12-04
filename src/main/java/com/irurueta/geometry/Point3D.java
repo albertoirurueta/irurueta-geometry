@@ -21,7 +21,7 @@ import java.util.Collection;
 
 /**
  * Abstract class defining the base interface that all 3D points should have.
- * 3D points describe points in a 3D space such as the euclidean space. They can
+ * 3D points describe points in a 3D space such as the Euclidean space. They can
  * be  implemented either as homogeneous or inhomogeneous points.
  */
 public abstract class Point3D implements Serializable, Point<Point3D> {
@@ -328,7 +328,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     /**
      * Returns boolean indicating whether this point has already been
      * normalized.
-     * This method is meant to be overridden. By default it will always return
+     * This method is meant to be overridden. By default, it will always return
      * true, to indicate that no further normalization is possible.
      *
      * @return True if normalized, false otherwise.
@@ -374,7 +374,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     /**
      * Sets value of inhomogeneous coordinate for provided dimension.
      *
-     * @param dim   dimension to set coordinate for (i.e. 0 means x, 1 means y, 2 means z, etc).
+     * @param dim   dimension to set coordinate for (i.e. 0 means x, 1 means y, 2 means z, etc.).
      * @param value value to be set.
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
@@ -396,7 +396,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     }
 
     /**
-     * Returns euclidean distance between this point and provided point.
+     * Returns Euclidean distance between this point and provided point.
      *
      * @param point Point to compare.
      * @return Euclidean distance between this point and provided point.
@@ -407,10 +407,10 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     }
 
     /**
-     * Returns squared euclidean distance between this point and provided point.
+     * Returns squared Euclidean distance between this point and provided point.
      *
      * @param point point to compare.
-     * @return euclidean distance between this point and provided point.
+     * @return Euclidean distance between this point and provided point.
      */
     @Override
     public double sqrDistanceTo(final Point3D point) {

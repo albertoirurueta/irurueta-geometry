@@ -295,6 +295,6 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 }

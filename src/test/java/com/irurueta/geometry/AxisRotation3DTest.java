@@ -58,10 +58,10 @@ public class AxisRotation3DTest {
         AxisRotation3D rotation = new AxisRotation3D();
         assertNotNull(rotation);
 
-        assertEquals(rotation.getAxisX(), 0.0, 0.0);
-        assertEquals(rotation.getAxisY(), 0.0, 0.0);
-        assertEquals(rotation.getAxisZ(), 1.0, 0.0);
-        assertEquals(rotation.getRotationAngle(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getAxisX(), 0.0);
+        assertEquals(0.0, rotation.getAxisY(), 0.0);
+        assertEquals(1.0, rotation.getAxisZ(), 0.0);
+        assertEquals(0.0, rotation.getRotationAngle(), 0.0);
 
         // check that empty constructor creates a rotation without effect (its
         // matrix representation is equal to the identity
@@ -360,8 +360,7 @@ public class AxisRotation3DTest {
                 rotationMatrix));
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE,
-                MAX_RANDOM_SCALE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE, MAX_RANDOM_SCALE);
 
         // change scale of matrix to make it orthogonal instead of orthonormal
         rotationMatrix.multiplyByScalar(scale);
@@ -420,7 +419,7 @@ public class AxisRotation3DTest {
         assertTrue(rotationMatrix.multiplyAndReturnNew(invRotMatrix2).equals(
                 identity, ABSOLUTE_ERROR));
 
-        // we can also inverse the original rotation
+        // we can also invert the original rotation
         rotation.inverseRotation();
         assertTrue(invRotMatrix.equals(rotation.asInhomogeneousMatrix(),
                 ABSOLUTE_ERROR));
@@ -515,13 +514,11 @@ public class AxisRotation3DTest {
 
         final Matrix rotationMatrix3 = new Matrix(HOM_COORDS, HOM_COORDS);
         rotation.asHomogeneousMatrix(rotationMatrix3);
-        assertTrue(homRotationMatrix.equals(rotationMatrix3,
-                ABSOLUTE_ERROR));
+        assertTrue(homRotationMatrix.equals(rotationMatrix3, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
         try {
-            rotation.asHomogeneousMatrix(new Matrix(INHOM_COORDS,
-                    INHOM_COORDS));
+            rotation.asHomogeneousMatrix(new Matrix(INHOM_COORDS, INHOM_COORDS));
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -632,8 +629,7 @@ public class AxisRotation3DTest {
 
         rotation.fromMatrix(rotationMatrix, ABSOLUTE_ERROR);
         // Check correctness
-        assertTrue(rotationMatrix.equals(rotation.asInhomogeneousMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.equals(rotation.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
         int numValid = 0;
         for (int t = 0; t < 10 * TIMES; t++) {
@@ -646,8 +642,7 @@ public class AxisRotation3DTest {
 
             // or using a non orthonormal matrix
             // because matrix is orthonormal, it's enough to scale it to some value
-            final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE,
-                    MAX_RANDOM_SCALE);
+            final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE, MAX_RANDOM_SCALE);
             rotationMatrix.multiplyByScalar(scale);
             try {
                 rotation.fromInhomogeneousMatrix(rotationMatrix, ABSOLUTE_ERROR);
@@ -689,8 +684,7 @@ public class AxisRotation3DTest {
         final MatrixRotation3D rotation2 = new MatrixRotation3D(axis, theta);
         final Matrix rotationMatrix = rotation2.getInternalMatrix();
 
-        final Matrix homRotationMatrix = Matrix.identity(HOM_COORDS,
-                HOM_COORDS);
+        final Matrix homRotationMatrix = Matrix.identity(HOM_COORDS, HOM_COORDS);
         // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0, 2, 2, rotationMatrix);
 
@@ -698,17 +692,13 @@ public class AxisRotation3DTest {
         // test with homogeneous matrix
         rotation.fromHomogeneousMatrix(homRotationMatrix);
         // check correctness
-        assertTrue(rotationMatrix.equals(rotation.asInhomogeneousMatrix(),
-                ABSOLUTE_ERROR));
-        assertTrue(homRotationMatrix.equals(rotation.asHomogeneousMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.equals(rotation.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        assertTrue(homRotationMatrix.equals(rotation.asHomogeneousMatrix(), ABSOLUTE_ERROR));
 
         rotation.fromHomogeneousMatrix(homRotationMatrix, ABSOLUTE_ERROR);
         // check correctness
-        assertTrue(rotationMatrix.equals(rotation.asInhomogeneousMatrix(),
-                ABSOLUTE_ERROR));
-        assertTrue(homRotationMatrix.equals(rotation.asHomogeneousMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.equals(rotation.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        assertTrue(homRotationMatrix.equals(rotation.asHomogeneousMatrix(), ABSOLUTE_ERROR));
 
         // Force InvalidRotationMatrixException (using a tiny threshold)
         try {
@@ -964,7 +954,7 @@ public class AxisRotation3DTest {
     @Test
     public void testType() {
         final AxisRotation3D rotation = new AxisRotation3D();
-        assertEquals(rotation.getType(), Rotation3DType.AXIS_ROTATION3D);
+        assertEquals(Rotation3DType.AXIS_ROTATION3D, rotation.getType());
     }
 
     @Test

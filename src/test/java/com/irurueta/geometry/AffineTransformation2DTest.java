@@ -52,20 +52,19 @@ public class AffineTransformation2DTest {
         AffineTransformation2D transformation = new AffineTransformation2D();
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
         assertTrue(transformation.getA().equals(
                 transformation.getParameters().asMatrix().multiplyAndReturnNew(
                         transformation.getRotation().asInhomogeneousMatrix()),
@@ -81,12 +80,12 @@ public class AffineTransformation2DTest {
 
         // check correctness
         assertNotNull(transformation.getRotation());
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
         assertNotNull(transformation.getParameters());
 
         // Force NullPointerException
@@ -114,20 +113,17 @@ public class AffineTransformation2DTest {
         transformation = new AffineTransformation2D(scale);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Test constructor with rotation
@@ -139,18 +135,18 @@ public class AffineTransformation2DTest {
         // check correctness
         assertEquals(transformation.getRotation().getTheta(), theta,
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -169,18 +165,16 @@ public class AffineTransformation2DTest {
         // check correctness
         assertEquals(transformation.getRotation().getTheta(), theta,
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS, transformation.getParameters().getSkewness(),
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -204,20 +198,16 @@ public class AffineTransformation2DTest {
         transformation = new AffineTransformation2D(params, rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(), skewness,
-                ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scaleX, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -243,20 +233,19 @@ public class AffineTransformation2DTest {
         transformation = new AffineTransformation2D(translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -282,12 +271,12 @@ public class AffineTransformation2DTest {
 
         // check correctness
         assertNotNull(transformation.getRotation());
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
         assertNotNull(transformation.getParameters());
         assertTrue(a.equals(transformation.getA(), ABSOLUTE_ERROR));
 
@@ -324,20 +313,18 @@ public class AffineTransformation2DTest {
         transformation = new AffineTransformation2D(scale, translation);
 
         // Check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
+        assertEquals(0.0, transformation.getRotation().getTheta(),
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(transformation.getParameters().getScaleX(), scale, ABSOLUTE_ERROR);
+        assertEquals(transformation.getParameters().getScaleY(), scale, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -361,20 +348,19 @@ public class AffineTransformation2DTest {
         transformation = new AffineTransformation2D(rotation, translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(transformation.getRotation().getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -400,7 +386,6 @@ public class AffineTransformation2DTest {
         }
         assertNull(transformation);
 
-
         // Test constructor with scale, rotation and translation
         transformation = new AffineTransformation2D(scale, rotation,
                 translation);
@@ -408,18 +393,16 @@ public class AffineTransformation2DTest {
         // check correctness
         assertEquals(transformation.getRotation().getTheta(), theta,
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -453,18 +436,15 @@ public class AffineTransformation2DTest {
         // check correctness
         assertEquals(transformation.getRotation().getTheta(), theta,
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(), skewness,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(scaleX, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -547,15 +527,13 @@ public class AffineTransformation2DTest {
         final Rotation2D rotation = new Rotation2D(theta);
 
         // test default values
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setRotation(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         try {
@@ -588,15 +566,13 @@ public class AffineTransformation2DTest {
         transformation.setRotation(rotation1);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta1,
-                ABSOLUTE_ERROR);
+        assertEquals(theta1, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
 
         // add second rotation
         transformation.addRotation(rotation2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), combinedTheta,
-                ABSOLUTE_ERROR);
+        assertEquals(combinedTheta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -614,40 +590,37 @@ public class AffineTransformation2DTest {
         final AffineTransformation2D transformation = new AffineTransformation2D();
 
         // check default values
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
 
         final AffineParameters2D defaultParams = new AffineParameters2D();
         transformation.getParameters(defaultParams);
 
-        assertEquals(defaultParams.getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                defaultParams.getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                defaultParams.getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                defaultParams.getSkewness(), ABSOLUTE_ERROR);
 
         // set parameters
         transformation.setParameters(params);
 
         // check correctness
-        assertEquals(transformation.getParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewness(), skewness,
-                ABSOLUTE_ERROR);
+        assertEquals(scaleX, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getParameters().getSkewness(), ABSOLUTE_ERROR);
 
         final AffineParameters2D params2 = new AffineParameters2D();
         transformation.getParameters(params2);
 
-        assertEquals(params2.getScaleX(), scaleX, ABSOLUTE_ERROR);
-        assertEquals(params2.getScaleY(), scaleY, ABSOLUTE_ERROR);
-        assertEquals(params2.getSkewness(), skewness, ABSOLUTE_ERROR);
+        assertEquals(scaleX, params2.getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, params2.getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, params2.getSkewness(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -660,23 +633,23 @@ public class AffineTransformation2DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -703,12 +676,12 @@ public class AffineTransformation2DTest {
 
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -716,27 +689,27 @@ public class AffineTransformation2DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation1[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation1[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation1[1], 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation1[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation1[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation1[1], transformation.getTranslationY(), 0.0);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], 0.0);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0], 0.0);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1], 0.0);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(), 0.0);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(), 0.0);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -757,13 +730,13 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set new value
         transformation.setTranslationX(translationX);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX, 0.0);
+        assertEquals(translationX, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -775,13 +748,13 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslationY(translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY, 0.0);
+        assertEquals(translationY, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -795,27 +768,23 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translationX, translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -831,27 +800,23 @@ public class AffineTransformation2DTest {
                 translationX, translationY);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         final Point2D translation2 = transformation.getTranslationPoint();
         final Point2D translation3 = Point2D.create();
@@ -873,20 +838,19 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set value
         transformation.setTranslationX(translationX1);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX1, 0.0);
+        assertEquals(translationX1, transformation.getTranslationX(), 0.0);
 
         // add translation x
         transformation.addTranslationX(translationX2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -900,20 +864,19 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set value
         transformation.setTranslationY(translationY1);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY1, 0.0);
+        assertEquals(translationY1, transformation.getTranslationY(), 0.0);
 
         // add translation y
         transformation.addTranslationY(translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -931,8 +894,8 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set values
         transformation.setTranslation(translationX1, translationY1);
@@ -941,10 +904,8 @@ public class AffineTransformation2DTest {
         transformation.addTranslation(translationX2, translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -962,8 +923,8 @@ public class AffineTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set values
         transformation.setTranslation(translationX1, translationY1);
@@ -974,10 +935,8 @@ public class AffineTransformation2DTest {
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -988,17 +947,17 @@ public class AffineTransformation2DTest {
         final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
 
         // check default value
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, 0.0);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), 0.0);
 
         // set value
         transformation.setScale(scale);
 
         // check correctness
-        assertEquals(transformation.getParameters().getScaleX(), scale, 0.0);
-        assertEquals(transformation.getParameters().getScaleY(), scale, 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleY(), 0.0);
     }
 
     @Test
@@ -1150,8 +1109,8 @@ public class AffineTransformation2DTest {
         transformation.transformPoints(inputPoints, outPoints2);
 
         // check correctness
-        assertEquals(outPoints1.size(), inputPoints.size());
-        assertEquals(outPoints2.size(), inputPoints.size());
+        assertEquals(inputPoints.size(), outPoints1.size());
+        assertEquals(inputPoints.size(), outPoints2.size());
         for (int i = 0; i < size; i++) {
             final Point2D expectedPoint = expectedPoints.get(i);
 
@@ -1428,49 +1387,31 @@ public class AffineTransformation2DTest {
         outDualConic1.normalize();
         outDualConic2.normalize();
 
-        assertEquals(expectedDualConic.getA(), outDualConic1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic1.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic1.getF(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedDualConic.getA(), outDualConic2.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic2.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic2.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic2.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic2.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic2.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic2.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic2.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic2.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic2.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic2.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic2.getF(), ABSOLUTE_ERROR);
 
         transformation.transform(dualConic);
 
         // check correctness
         dualConic.normalize();
 
-        assertEquals(expectedDualConic.getA(), dualConic.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), dualConic.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), dualConic.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), dualConic.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), dualConic.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), dualConic.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), dualConic.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), dualConic.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), dualConic.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), dualConic.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), dualConic.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), dualConic.getF(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1636,7 +1577,7 @@ public class AffineTransformation2DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 2 non linear dependent rows
+        // ensure we create a matrix with 2 non-linear dependent rows
         while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2142,10 +2083,8 @@ public class AffineTransformation2DTest {
         assertTrue(transformation1.getA().equals(expectedA, ABSOLUTE_ERROR));
         assertTrue(transformation3.getA().equals(expectedA, ABSOLUTE_ERROR));
 
-        assertArrayEquals(transformation1.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
-        assertArrayEquals(transformation3.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
     }
 
     @Test

@@ -37,7 +37,7 @@ public abstract class Line2DRobustEstimator {
 
     /**
      * Default amount of progress variation before notifying a change in
-     * estimation progress. By default this is set to 5%.
+     * estimation progress. By default, this is set to 5%.
      */
     public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
 
@@ -82,7 +82,7 @@ public abstract class Line2DRobustEstimator {
      * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMedS;
+            RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
@@ -388,19 +388,19 @@ public abstract class Line2DRobustEstimator {
      * Creates a 2D line robust estimator based on 2D point samples and using
      * provided robust estimator method.
      *
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               2D line.
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create(final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator();
             case MSAC:
                 return new MSACLine2DRobustEstimator();
             case PROSAC:
                 return new PROSACLine2DRobustEstimator();
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator();
             case RANSAC:
             default:
@@ -413,7 +413,7 @@ public abstract class Line2DRobustEstimator {
      * provided points and robust estimator method.
      *
      * @param points 2D points to estimate a 2D line.
-     * @param method method of a robust estimator algorithm to estimate best
+     * @param method method of a robust estimator algorithm to estimate the best
      *               2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -422,13 +422,13 @@ public abstract class Line2DRobustEstimator {
     public static Line2DRobustEstimator create(final List<Point2D> points,
                                                final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator(points);
             case MSAC:
                 return new MSACLine2DRobustEstimator(points);
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(points);
             case RANSAC:
             default:
@@ -442,7 +442,7 @@ public abstract class Line2DRobustEstimator {
      *
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 2D line.
      * @return an instance of a 2D line robust estimator.
      */
@@ -450,13 +450,13 @@ public abstract class Line2DRobustEstimator {
             final Line2DRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator(listener);
             case MSAC:
                 return new MSACLine2DRobustEstimator(listener);
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(listener);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(listener);
             case RANSAC:
             default:
@@ -471,7 +471,7 @@ public abstract class Line2DRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      * @param points   2D points to estimate a 2D line.
-     * @param method   method of a robust estimator algorithm to estimate best
+     * @param method   method of a robust estimator algorithm to estimate the best
      *                 2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -481,13 +481,13 @@ public abstract class Line2DRobustEstimator {
             final Line2DRobustEstimatorListener listener, final List<Point2D> points,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator(listener, points);
             case MSAC:
                 return new MSACLine2DRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(listener, points);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(listener, points);
             case RANSAC:
             default:
@@ -500,7 +500,7 @@ public abstract class Line2DRobustEstimator {
      * provided robust estimator method.
      *
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -509,13 +509,13 @@ public abstract class Line2DRobustEstimator {
     public static Line2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator();
             case MSAC:
                 return new MSACLine2DRobustEstimator();
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(qualityScores);
             case RANSAC:
             default:
@@ -529,7 +529,7 @@ public abstract class Line2DRobustEstimator {
      *
      * @param points        2D points to estimate a 2D line.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -540,13 +540,13 @@ public abstract class Line2DRobustEstimator {
             final List<Point2D> points, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator(points);
             case MSAC:
                 return new MSACLine2DRobustEstimator(points);
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(points, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(points, qualityScores);
             case RANSAC:
             default:
@@ -561,7 +561,7 @@ public abstract class Line2DRobustEstimator {
      * @param listener      listener to be notified of events such as when estimation
      *                      starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided quality scores length is
@@ -571,13 +571,13 @@ public abstract class Line2DRobustEstimator {
             final Line2DRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator(listener);
             case MSAC:
                 return new MSACLine2DRobustEstimator(listener);
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(listener, qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(listener, qualityScores);
             case RANSAC:
             default:
@@ -593,7 +593,7 @@ public abstract class Line2DRobustEstimator {
      *                      starts, ends or its progress significantly changes.
      * @param points        2D points to estimate a 2D line.
      * @param qualityScores quality scores corresponding to each provided point.
-     * @param method        method of a robust estimator algorithm to estimate best
+     * @param method        method of a robust estimator algorithm to estimate the best
      *                      2D line.
      * @return an instance of a 2D line robust estimator.
      * @throws IllegalArgumentException if provided list of points doesn't have
@@ -604,14 +604,14 @@ public abstract class Line2DRobustEstimator {
             final Line2DRobustEstimatorListener listener, final List<Point2D> points,
             final double[] qualityScores, final RobustEstimatorMethod method) {
         switch (method) {
-            case LMedS:
+            case LMEDS:
                 return new LMedSLine2DRobustEstimator(listener, points);
             case MSAC:
                 return new MSACLine2DRobustEstimator(listener, points);
             case PROSAC:
                 return new PROSACLine2DRobustEstimator(listener, points,
                         qualityScores);
-            case PROMedS:
+            case PROMEDS:
                 return new PROMedSLine2DRobustEstimator(listener, points,
                         qualityScores);
             case RANSAC:

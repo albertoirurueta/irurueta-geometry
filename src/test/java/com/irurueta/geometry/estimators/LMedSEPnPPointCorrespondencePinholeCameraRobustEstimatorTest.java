@@ -80,148 +80,124 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(),
                 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertNull(estimator.getIntrinsic());
 
 
         // test constructor with listener
-        estimator =
-                new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        this);
+        estimator = new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                this);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertNull(estimator.getIntrinsic());
 
 
@@ -237,73 +213,61 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
                         points3D, points2D);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getPoints2D(), points2D);
-        assertSame(estimator.getPoints3D(), points3D);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(points2D, estimator.getPoints2D());
+        assertSame(points3D, estimator.getPoints3D());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertNull(estimator.getIntrinsic());
 
         // Force IllegalArgumentException
@@ -332,73 +296,61 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
                         this, points3D, points2D);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getPoints2D(), points2D);
-        assertSame(estimator.getPoints3D(), points3D);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(points2D, estimator.getPoints2D());
+        assertSame(points3D, estimator.getPoints3D());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertNull(estimator.getIntrinsic());
 
         // Force IllegalArgumentException
@@ -428,73 +380,61 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
                         intrinsic);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertSame(estimator.getIntrinsic(), intrinsic);
 
 
@@ -503,148 +443,125 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
                         this, intrinsic);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
-        assertSame(estimator.getIntrinsic(), intrinsic);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
+        assertSame(intrinsic, estimator.getIntrinsic());
 
 
         // test constructor with points and intrinsic
-        estimator =
-                new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
+        estimator = new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                intrinsic, points3D, points2D);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getPoints2D(), points2D);
-        assertSame(estimator.getPoints3D(), points3D);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(points2D, estimator.getPoints2D());
+        assertSame(points3D, estimator.getPoints3D());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(),
                 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(),
                 0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertSame(estimator.getIntrinsic(), intrinsic);
 
         // Force IllegalArgumentException
@@ -670,73 +587,62 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator = new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
                 this, intrinsic, points3D, points2D);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getPoints2D(), points2D);
-        assertSame(estimator.getPoints3D(), points3D);
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(points2D, estimator.getPoints2D());
+        assertSame(points3D, estimator.getPoints3D());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                PointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(),
                 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
         assertSame(estimator.getIntrinsic(), intrinsic);
 
         // Force IllegalArgumentException
@@ -764,15 +670,14 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getStopThreshold(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -788,15 +693,14 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -818,15 +722,14 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -842,16 +745,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isResultRefined(),
-                PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
 
         // set new value
         estimator.setResultRefined(!PinholeCameraRobustEstimator.
                 DEFAULT_REFINE_RESULT);
 
         // check correctness
-        assertEquals(estimator.isResultRefined(),
-                !PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
     }
 
     @Test
@@ -860,16 +763,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isCovarianceKept(),
-                PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
 
         // set new value
         estimator.setCovarianceKept(!PinholeCameraRobustEstimator.
                 DEFAULT_KEEP_COVARIANCE);
 
         // check correctness
-        assertEquals(estimator.isCovarianceKept(),
-                !PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
+                estimator.isCovarianceKept());
     }
 
     @Test
@@ -878,16 +781,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isFastRefinementUsed(),
-                PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
 
         // set new value
         estimator.setFastRefinementUsed(!PinholeCameraRobustEstimator.
                 DEFAULT_USE_FAST_REFINEMENT);
 
         // check correctness
-        assertEquals(estimator.isFastRefinementUsed(),
-                !PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
+                estimator.isFastRefinementUsed());
     }
 
     @Test
@@ -911,8 +814,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setPoints(points3D, points2D);
 
         // check correctness
-        assertSame(estimator.getPoints3D(), points3D);
-        assertSame(estimator.getPoints2D(), points2D);
+        assertSame(points3D, estimator.getPoints3D());
+        assertSame(points2D, estimator.getPoints2D());
         assertFalse(estimator.isReady());
 
         // Force IllegalArgumentException
@@ -946,7 +849,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -956,9 +859,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
 
         // set new value
         estimator.setSuggestSkewnessValueEnabled(
@@ -966,9 +868,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                         DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
     }
 
     @Test
@@ -977,9 +878,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
 
         // set new value
         estimator.setSuggestedSkewnessValue(-1.0);
@@ -995,19 +895,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
 
         // set new value
         estimator.setSuggestHorizontalFocalLengthEnabled(
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
     }
 
     @Test
@@ -1017,15 +914,13 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
 
         // set new value
         estimator.setSuggestedHorizontalFocalLengthValue(100.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 100.0,
-                0.0);
+        assertEquals(100.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
     }
 
     @Test
@@ -1035,19 +930,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
 
         // set new value
         estimator.setSuggestVerticalFocalLengthEnabled(
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
     }
 
     @Test
@@ -1057,14 +949,12 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
 
         estimator.setSuggestedVerticalFocalLengthValue(100.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 100.0,
-                0.0);
+        assertEquals(100.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
     }
 
     @Test
@@ -1073,18 +963,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
 
         // set new value
-        estimator.setSuggestAspectRatioEnabled(!PinholeCameraRobustEstimator.
-                DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        estimator.setSuggestAspectRatioEnabled(
+                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
     }
 
     @Test
@@ -1093,15 +981,14 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
 
         // set new value
         estimator.setSuggestedAspectRatioValue(-1.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestedAspectRatioValue(), -1.0, 0.0);
+        assertEquals(-1.0, estimator.getSuggestedAspectRatioValue(), 0.0);
     }
 
     @Test
@@ -1110,18 +997,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
 
         // set new value
-        estimator.setSuggestPrincipalPointEnabled(!PinholeCameraRobustEstimator.
-                DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        estimator.setSuggestPrincipalPointEnabled(
+                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                !PinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
     }
 
     @Test
@@ -1138,7 +1023,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setSuggestedPrincipalPointValue(principalPoint);
 
         // check correctness
-        assertSame(estimator.getSuggestedPrincipalPointValue(), principalPoint);
+        assertSame(principalPoint, estimator.getSuggestedPrincipalPointValue());
     }
 
     @Test
@@ -1147,16 +1032,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
 
         // set new value
-        estimator.setSuggestRotationEnabled(!PinholeCameraRobustEstimator.
-                DEFAULT_SUGGEST_ROTATION_ENABLED);
+        estimator.setSuggestRotationEnabled(
+                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
     }
 
     @Test
@@ -1172,7 +1057,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setSuggestedRotationValue(q);
 
         // check correctness
-        assertSame(estimator.getSuggestedRotationValue(), q);
+        assertSame(q, estimator.getSuggestedRotationValue());
     }
 
     @Test
@@ -1181,19 +1066,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
 
         // set new value
         estimator.setSuggestCenterEnabled(
-                !LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_CENTER_ENABLED);
+                !LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                !LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                        DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(!LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
     }
 
     @Test
@@ -1209,7 +1091,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setSuggestedCenterValue(center);
 
         // check correctness
-        assertSame(estimator.getSuggestedCenterValue(), center);
+        assertSame(center, estimator.getSuggestedCenterValue());
     }
 
     @Test
@@ -1218,14 +1100,14 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -1271,7 +1153,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setIntrinsic(intrinsic);
 
         // check correctness
-        assertSame(estimator.getIntrinsic(), intrinsic);
+        assertSame(intrinsic, estimator.getIntrinsic());
         assertFalse(estimator.isReady());
     }
 
@@ -1300,9 +1182,9 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         estimator.setIntrinsic(intrinsic);
 
         // check correctness
-        assertSame(estimator.getPoints3D(), points3D);
-        assertSame(estimator.getPoints2D(), points2D);
-        assertSame(estimator.getIntrinsic(), intrinsic);
+        assertSame(points3D, estimator.getPoints3D());
+        assertSame(points2D, estimator.getPoints2D());
+        assertSame(intrinsic, estimator.getIntrinsic());
         assertTrue(estimator.isReady());
     }
 
@@ -1312,19 +1194,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
 
         // set new value
         estimator.setPlanarConfigurationAllowed(
-                !EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
+                !EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
 
         // check correctness
-        assertEquals(estimator.isPlanarConfigurationAllowed(),
-                !EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_CONFIGURATION_ALLOWED);
+        assertEquals(!EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
     }
 
     @Test
@@ -1333,19 +1212,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
 
         // set new value
         estimator.setNullspaceDimension2Allowed(
-                !EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
+                !EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
 
         // check correctness
-        assertEquals(estimator.isNullspaceDimension2Allowed(),
-                !EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION2_ALLOWED);
+        assertEquals(!EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
     }
 
     @Test
@@ -1354,19 +1230,16 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
 
         // set new value
         estimator.setNullspaceDimension3Allowed(
-                !EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
+                !EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
 
         // check correctness
-        assertEquals(estimator.isNullspaceDimension3Allowed(),
-                !EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NULLSPACE_DIMENSION3_ALLOWED);
+        assertEquals(!EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED,
+                estimator.isNullspaceDimension3Allowed());
     }
 
     @Test
@@ -1375,15 +1248,14 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getPlanarThreshold(),
-                EPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD, 0.0);
+        assertEquals(EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
 
         // set new value
         estimator.setPlanarThreshold(1e9);
 
         // check correctness
-        assertEquals(estimator.getPlanarThreshold(), 1e9, 0.0);
+        assertEquals(1e9, estimator.getPlanarThreshold(), 0.0);
     }
 
     @Test
@@ -1479,10 +1351,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -1497,8 +1369,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -1575,8 +1447,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     isValid = false;
                     break;
                 }
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D),
-                        0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D), ABSOLUTE_ERROR);
             }
 
             if (isValid) {
@@ -1686,10 +1557,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -1704,8 +1575,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -1784,8 +1655,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     isValid = false;
                     break;
                 }
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D),
-                        0.0, LARGE_ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
+                        LARGE_ABSOLUTE_ERROR);
             }
 
             if (isValid) {
@@ -1897,10 +1768,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setFastRefinementUsed(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -1915,8 +1786,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -1995,8 +1866,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     isValid = false;
                     break;
                 }
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D),
-                        0.0, LARGE_ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
+                        LARGE_ABSOLUTE_ERROR);
             }
 
             if (isValid) {
@@ -2106,10 +1977,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setSuggestedRotationValue(rotation);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -2124,8 +1995,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -2278,10 +2149,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -2295,8 +2166,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -2458,10 +2329,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -2475,8 +2346,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -2634,10 +2505,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setSuggestedCenterValue(cameraCenter);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -2652,8 +2523,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -2789,10 +2660,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -2807,8 +2678,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -2953,10 +2824,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -2971,8 +2842,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -3151,10 +3022,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -3169,8 +3040,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -3247,8 +3118,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     isValid = false;
                     break;
                 }
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D),
-                        0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D), ABSOLUTE_ERROR);
             }
 
             if (isValid) {
@@ -3396,10 +3266,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -3414,8 +3284,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -3494,8 +3364,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     isValid = false;
                     break;
                 }
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D),
-                        0.0, LARGE_ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
+                        LARGE_ABSOLUTE_ERROR);
             }
 
             if (isValid) {
@@ -3645,10 +3515,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setFastRefinementUsed(true);
             estimator.setCovarianceKept(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -3663,8 +3533,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -3743,8 +3613,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     isValid = false;
                     break;
                 }
-                assertEquals(originalPoint2D.distanceTo(estimatedPoint2D),
-                        0.0, LARGE_ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
+                        LARGE_ABSOLUTE_ERROR);
             }
 
             if (isValid) {
@@ -3892,10 +3762,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setSuggestedRotationValue(rotation);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -3909,8 +3779,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -4102,10 +3972,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -4119,8 +3989,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -4321,10 +4191,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -4338,8 +4208,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -4535,10 +4405,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setSuggestedCenterValue(cameraCenter);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -4552,8 +4422,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -4727,10 +4597,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -4744,8 +4614,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());
@@ -4928,10 +4798,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
@@ -4945,8 +4815,8 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 continue;
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             assertNotNull(estimator.getInliersData());

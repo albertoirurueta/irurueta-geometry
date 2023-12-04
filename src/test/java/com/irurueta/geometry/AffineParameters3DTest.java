@@ -40,15 +40,12 @@ public class AffineParameters3DTest {
         AffineParameters3D params = new AffineParameters3D();
 
         // check correctness
-        assertEquals(params.getScaleX(), AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(params.getScaleY(), AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(params.getScaleZ(), AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(params.getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
-        assertEquals(params.getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
-        assertEquals(params.getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleX(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleY(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS, params.getSkewnessXY(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS, params.getSkewnessXZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS, params.getSkewnessYZ(), 0.0);
 
         // Test constructor with scale
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -58,15 +55,12 @@ public class AffineParameters3DTest {
         params = new AffineParameters3D(scale);
 
         // check correctness
-        assertEquals(params.getScaleX(), scale, 0.0);
-        assertEquals(params.getScaleY(), scale, 0.0);
-        assertEquals(params.getScaleZ(), scale, 0.0);
-        assertEquals(params.getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
-        assertEquals(params.getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
-        assertEquals(params.getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(scale, params.getScaleX(), 0.0);
+        assertEquals(scale, params.getScaleY(), 0.0);
+        assertEquals(scale, params.getScaleZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS, params.getSkewnessXY(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS, params.getSkewnessXZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS, params.getSkewnessYZ(), 0.0);
 
         // Test constructor with scale and skewness
         final double skewness = randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -75,12 +69,12 @@ public class AffineParameters3DTest {
         params = new AffineParameters3D(scale, skewness);
 
         // check correctness
-        assertEquals(params.getScaleX(), scale, 0.0);
-        assertEquals(params.getScaleY(), scale, 0.0);
-        assertEquals(params.getScaleZ(), scale, 0.0);
-        assertEquals(params.getSkewnessXY(), skewness, 0.0);
-        assertEquals(params.getSkewnessXZ(), skewness, 0.0);
-        assertEquals(params.getSkewnessYZ(), skewness, 0.0);
+        assertEquals(scale, params.getScaleX(), 0.0);
+        assertEquals(scale, params.getScaleY(), 0.0);
+        assertEquals(scale, params.getScaleZ(), 0.0);
+        assertEquals(skewness, params.getSkewnessXY(), 0.0);
+        assertEquals(skewness, params.getSkewnessXZ(), 0.0);
+        assertEquals(skewness, params.getSkewnessYZ(), 0.0);
 
         // Test constructor with scaleX, scaleY, scaleZ, skewnessXY, skewnessXZ
         // and skewnessYZ
@@ -101,12 +95,12 @@ public class AffineParameters3DTest {
                 skewnessXZ, skewnessYZ);
 
         // check correctness
-        assertEquals(params.getScaleX(), scaleX, 0.0);
-        assertEquals(params.getScaleY(), scaleY, 0.0);
-        assertEquals(params.getScaleZ(), scaleZ, 0.0);
-        assertEquals(params.getSkewnessXY(), skewnessXY, 0.0);
-        assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
-        assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(scaleX, params.getScaleX(), 0.0);
+        assertEquals(scaleY, params.getScaleY(), 0.0);
+        assertEquals(scaleZ, params.getScaleZ(), 0.0);
+        assertEquals(skewnessXY, params.getSkewnessXY(), 0.0);
+        assertEquals(skewnessXZ, params.getSkewnessXZ(), 0.0);
+        assertEquals(skewnessYZ, params.getSkewnessYZ(), 0.0);
 
         // test constructor with matrix
         final Matrix m = new Matrix(INHOM_COORDS, INHOM_COORDS);
@@ -120,12 +114,12 @@ public class AffineParameters3DTest {
         params = new AffineParameters3D(m);
 
         // check correctness
-        assertEquals(params.getScaleX(), scaleX, 0.0);
-        assertEquals(params.getScaleY(), scaleY, 0.0);
-        assertEquals(params.getScaleZ(), scaleZ, 0.0);
-        assertEquals(params.getSkewnessXY(), skewnessXY, 0.0);
-        assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
-        assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(scaleX, params.getScaleX(), 0.0);
+        assertEquals(scaleY, params.getScaleY(), 0.0);
+        assertEquals(scaleZ, params.getScaleZ(),  0.0);
+        assertEquals(skewnessXY, params.getSkewnessXY(), 0.0);
+        assertEquals(skewnessXZ, params.getSkewnessXZ(), 0.0);
+        assertEquals(skewnessYZ, params.getSkewnessYZ(), 0.0);
 
         // Force IllegalArgumentException (invalid size)
         final Matrix badM1 = new Matrix(INHOM_COORDS + 1, INHOM_COORDS + 1);
@@ -151,12 +145,12 @@ public class AffineParameters3DTest {
         params = new AffineParameters3D(m, threshold);
 
         // check correctness
-        assertEquals(params.getScaleX(), scaleX, 0.0);
-        assertEquals(params.getScaleY(), scaleY, 0.0);
-        assertEquals(params.getScaleZ(), scaleZ, 0.0);
-        assertEquals(params.getSkewnessXY(), skewnessXY, 0.0);
-        assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
-        assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(scaleX, params.getScaleX(), 0.0);
+        assertEquals(scaleY, params.getScaleY(), 0.0);
+        assertEquals(scaleZ, params.getScaleZ(), 0.0);
+        assertEquals(skewnessXY, params.getSkewnessXY(), 0.0);
+        assertEquals(skewnessXZ, params.getSkewnessXZ(), 0.0);
+        assertEquals(skewnessYZ, params.getSkewnessYZ(), 0.0);
 
         // Force IllegalArgumentException (invalid size)
         params = null;
@@ -192,13 +186,13 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getScaleX(), AffineParameters3D.DEFAULT_SCALE, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleX(), 0.0);
 
         // set new value
         params.setScaleX(scaleX);
 
         // check correctness
-        assertEquals(params.getScaleX(), scaleX, 0.0);
+        assertEquals(scaleX, params.getScaleX(), 0.0);
     }
 
     @Test
@@ -210,13 +204,13 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getScaleY(), AffineParameters3D.DEFAULT_SCALE, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleY(), 0.0);
 
         // set new value
         params.setScaleY(scaleY);
 
         // check correctness
-        assertEquals(params.getScaleY(), scaleY, 0.0);
+        assertEquals(scaleY, params.getScaleY(), 0.0);
     }
 
     @Test
@@ -228,13 +222,13 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getScaleZ(), AffineParameters3D.DEFAULT_SCALE, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleZ(), 0.0);
 
         // set new value
         params.setScaleZ(scaleZ);
 
         // check correctness
-        assertEquals(params.getScaleZ(), scaleZ, 0.0);
+        assertEquals(scaleZ, params.getScaleZ(), 0.0);
     }
 
     @Test
@@ -246,17 +240,17 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getScaleX(), AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(params.getScaleY(), AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(params.getScaleZ(), AffineParameters3D.DEFAULT_SCALE, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleX(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleY(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE, params.getScaleZ(), 0.0);
 
         // set new value
         params.setScale(scale);
 
         // check correctness
-        assertEquals(params.getScaleX(), scale, 0.0);
-        assertEquals(params.getScaleY(), scale, 0.0);
-        assertEquals(params.getScaleZ(), scale, 0.0);
+        assertEquals(scale, params.getScaleX(), 0.0);
+        assertEquals(scale, params.getScaleY(), 0.0);
+        assertEquals(scale, params.getScaleZ(), 0.0);
     }
 
     @Test
@@ -268,14 +262,14 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                params.getSkewnessXY(), 0.0);
 
         // set new value
         params.setSkewnessXY(skewnessXY);
 
         // check correctness
-        assertEquals(params.getSkewnessXY(), skewnessXY, 0.0);
+        assertEquals(skewnessXY, params.getSkewnessXY(), 0.0);
     }
 
     @Test
@@ -287,14 +281,14 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                params.getSkewnessXZ(), 0.0);
 
         // set new value
         params.setSkewnessXZ(skewnessXZ);
 
         // check correctness
-        assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
+        assertEquals(skewnessXZ, params.getSkewnessXZ(), 0.0);
     }
 
     @Test
@@ -306,14 +300,14 @@ public class AffineParameters3DTest {
         final AffineParameters3D params = new AffineParameters3D();
 
         // check default values
-        assertEquals(params.getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                params.getSkewnessYZ(), 0.0);
 
         // set new value
         params.setSkewnessYZ(skewnessYZ);
 
         // check correctness
-        assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(skewnessYZ, params.getSkewnessYZ(), 0.0);
     }
 
     @Test
@@ -396,12 +390,12 @@ public class AffineParameters3DTest {
         params.fromMatrix(m);
 
         // check correctness
-        assertEquals(params.getScaleX(), scaleX, 0.0);
-        assertEquals(params.getScaleY(), scaleY, 0.0);
-        assertEquals(params.getScaleZ(), scaleZ, 0.0);
-        assertEquals(params.getSkewnessXY(), skewnessXY, 0.0);
-        assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
-        assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(scaleX, params.getScaleX(), 0.0);
+        assertEquals(scaleY, params.getScaleY(), 0.0);
+        assertEquals(scaleZ, params.getScaleZ(), 0.0);
+        assertEquals(skewnessXY, params.getSkewnessXY(), 0.0);
+        assertEquals(skewnessXZ, params.getSkewnessXZ(), 0.0);
+        assertEquals(skewnessYZ, params.getSkewnessYZ(), 0.0);
 
         // Force IllegalArgumentException (invalid size)
         final Matrix badM1 = new Matrix(INHOM_COORDS + 1, INHOM_COORDS + 1);
@@ -424,12 +418,12 @@ public class AffineParameters3DTest {
         params.fromMatrix(m, threshold);
 
         // check correctness
-        assertEquals(params.getScaleX(), scaleX, 0.0);
-        assertEquals(params.getScaleY(), scaleY, 0.0);
-        assertEquals(params.getScaleZ(), scaleZ, 0.0);
-        assertEquals(params.getSkewnessXY(), skewnessXY, 0.0);
-        assertEquals(params.getSkewnessXZ(), skewnessXZ, 0.0);
-        assertEquals(params.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(scaleX, params.getScaleX(), 0.0);
+        assertEquals(scaleY, params.getScaleY(), 0.0);
+        assertEquals(scaleZ, params.getScaleZ(), 0.0);
+        assertEquals(skewnessXY, params.getSkewnessXY(), 0.0);
+        assertEquals(skewnessXZ, params.getSkewnessXZ(), 0.0);
+        assertEquals(skewnessYZ, params.getSkewnessYZ(), 0.0);
 
         // Force IllegalArgumentException (invalid size)
         try {
@@ -475,12 +469,12 @@ public class AffineParameters3DTest {
                 skewnessXY, skewnessXZ, skewnessYZ);
 
         // check
-        assertEquals(params1.getScaleX(), scaleX, 0.0);
-        assertEquals(params1.getScaleY(), scaleY, 0.0);
-        assertEquals(params1.getScaleZ(), scaleZ, 0.0);
-        assertEquals(params1.getSkewnessXY(), skewnessXY, 0.0);
-        assertEquals(params1.getSkewnessXZ(), skewnessXZ, 0.0);
-        assertEquals(params1.getSkewnessYZ(), skewnessYZ, 0.0);
+        assertEquals(scaleX, params1.getScaleX(), 0.0);
+        assertEquals(scaleY, params1.getScaleY(), 0.0);
+        assertEquals(scaleZ, params1.getScaleZ(), 0.0);
+        assertEquals(skewnessXY, params1.getSkewnessXY(), 0.0);
+        assertEquals(skewnessXZ, params1.getSkewnessXZ(), 0.0);
+        assertEquals(skewnessYZ, params1.getSkewnessYZ(), 0.0);
 
         // serialize and deserialize
         final byte[] bytes = SerializationHelper.serialize(params1);

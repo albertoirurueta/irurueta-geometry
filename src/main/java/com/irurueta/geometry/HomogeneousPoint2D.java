@@ -363,7 +363,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
 
     /**
      * Checks if the homogeneous 2d point described by this instance equals the
-     * input Point2d (using a comparison threshold).
+     * input {@link Point2D} (using a comparison threshold).
      *
      * @param point     Point that will be compared to.
      * @param threshold threshold grade of tolerance to determine whether the

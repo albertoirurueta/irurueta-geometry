@@ -136,20 +136,20 @@ public class RotationUtilsTest {
         // check correctness
         assertEquals(pi1, pi2);
 
-        assertEquals(pi1.getElementAt(0, 0), -b, 0.0);
-        assertEquals(pi1.getElementAt(1, 0), a, 0.0);
-        assertEquals(pi1.getElementAt(2, 0), d, 0.0);
-        assertEquals(pi1.getElementAt(3, 0), -c, 0.0);
+        assertEquals(-b, pi1.getElementAt(0, 0), 0.0);
+        assertEquals(a, pi1.getElementAt(1, 0), 0.0);
+        assertEquals(d, pi1.getElementAt(2, 0), 0.0);
+        assertEquals(-c, pi1.getElementAt(3, 0), 0.0);
 
-        assertEquals(pi1.getElementAt(0, 1), -c, 0.0);
-        assertEquals(pi1.getElementAt(1, 1), -d, 0.0);
-        assertEquals(pi1.getElementAt(2, 1), a, 0.0);
-        assertEquals(pi1.getElementAt(3, 1), b, 0.0);
+        assertEquals(-c, pi1.getElementAt(0, 1), 0.0);
+        assertEquals(-d, pi1.getElementAt(1, 1), 0.0);
+        assertEquals(a, pi1.getElementAt(2, 1), 0.0);
+        assertEquals(b, pi1.getElementAt(3, 1), 0.0);
 
-        assertEquals(pi1.getElementAt(0, 2), -d, 0.0);
-        assertEquals(pi1.getElementAt(1, 2), c, 0.0);
-        assertEquals(pi1.getElementAt(2, 2), -b, 0.0);
-        assertEquals(pi1.getElementAt(3, 2), a, 0.0);
+        assertEquals(-d, pi1.getElementAt(0, 2), 0.0);
+        assertEquals(c, pi1.getElementAt(1, 2), 0.0);
+        assertEquals(-b, pi1.getElementAt(2, 2), 0.0);
+        assertEquals(a, pi1.getElementAt(3, 2), 0.0);
     }
 
     @Test
@@ -177,20 +177,20 @@ public class RotationUtilsTest {
         // check correctness
         assertEquals(cpi1, cpi2);
 
-        assertEquals(cpi1.getElementAt(0, 0), b, 0.0);
-        assertEquals(cpi1.getElementAt(1, 0), a, 0.0);
-        assertEquals(cpi1.getElementAt(2, 0), -d, 0.0);
-        assertEquals(cpi1.getElementAt(3, 0), c, 0.0);
+        assertEquals(b, cpi1.getElementAt(0, 0), 0.0);
+        assertEquals(a, cpi1.getElementAt(1, 0), 0.0);
+        assertEquals(-d, cpi1.getElementAt(2, 0), 0.0);
+        assertEquals(c, cpi1.getElementAt(3, 0), 0.0);
 
-        assertEquals(cpi1.getElementAt(0, 1), c, 0.0);
-        assertEquals(cpi1.getElementAt(1, 1), d, 0.0);
-        assertEquals(cpi1.getElementAt(2, 1), a, 0.0);
-        assertEquals(cpi1.getElementAt(3, 1), -b, 0.0);
+        assertEquals(c, cpi1.getElementAt(0, 1), 0.0);
+        assertEquals(d, cpi1.getElementAt(1, 1), 0.0);
+        assertEquals(a, cpi1.getElementAt(2, 1), 0.0);
+        assertEquals(-b, cpi1.getElementAt(3, 1), 0.0);
 
-        assertEquals(cpi1.getElementAt(0, 2), d, 0.0);
-        assertEquals(cpi1.getElementAt(1, 2), -c, 0.0);
-        assertEquals(cpi1.getElementAt(2, 2), b, 0.0);
-        assertEquals(cpi1.getElementAt(3, 2), a, 0.0);
+        assertEquals(d, cpi1.getElementAt(0, 2), 0.0);
+        assertEquals(-c, cpi1.getElementAt(1, 2), 0.0);
+        assertEquals(b, cpi1.getElementAt(2, 2), 0.0);
+        assertEquals(a, cpi1.getElementAt(3, 2), 0.0);
     }
 
     @Test
@@ -237,8 +237,7 @@ public class RotationUtilsTest {
         final double[] result2 = new double[point.length];
         final Matrix jacobianQ = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
         final Matrix jacobianP = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
-        RotationUtils.rotationMatrixTimesVector(q, point, result, jacobianQ,
-                jacobianP);
+        RotationUtils.rotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
 
         // check correctness
         Point3D rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
@@ -264,21 +263,21 @@ public class RotationUtilsTest {
         double cxbyaz = 2.0 * (c * x - b * y - a * z);
         double dxaybz = 2.0 * (d * x + a * y - b * z);
 
-        assertEquals(jacobianQ.getElementAt(0, 0), axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 0), dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 0), -cxbyaz, ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(dxaybz, jacobianQ.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-cxbyaz, jacobianQ.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 1), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 1), cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 1), dxaybz, ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(cxbyaz, jacobianQ.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(dxaybz, jacobianQ.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 2), -cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 2), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 2), -axdycz, ABSOLUTE_ERROR);
+        assertEquals(-cxbyaz, jacobianQ.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-axdycz, jacobianQ.getElementAt(2, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 3), -dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 3), axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 3), bxcydz, ABSOLUTE_ERROR);
+        assertEquals(-dxaybz, jacobianQ.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -294,10 +293,8 @@ public class RotationUtilsTest {
         } catch (final IllegalArgumentException ignore) {
         }
 
-
         // test without result
-        result = RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ,
-                jacobianP);
+        result = RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ, jacobianP);
 
         // check correctness
         rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
@@ -323,33 +320,33 @@ public class RotationUtilsTest {
         cxbyaz = 2.0 * (c * x - b * y - a * z);
         dxaybz = 2.0 * (d * x + a * y - b * z);
 
-        assertEquals(jacobianQ.getElementAt(0, 0), axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 0), dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 0), -cxbyaz, ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(dxaybz,  jacobianQ.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-cxbyaz, jacobianQ.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 1), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 1), cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 1), dxaybz, ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(cxbyaz, jacobianQ.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(dxaybz, jacobianQ.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 2), -cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 2), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 2), -axdycz, ABSOLUTE_ERROR);
+        assertEquals(-cxbyaz, jacobianQ.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(-axdycz, jacobianQ.getElementAt(2, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 3), -dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 3), axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 3), bxcydz, ABSOLUTE_ERROR);
+        assertEquals(-dxaybz, jacobianQ.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         double[] result3 = null;
         try {
-            result3 = RotationUtils.rotationMatrixTimesVector(q, point,
-                    new Matrix(1, 1), jacobianP);
+            result3 = RotationUtils.rotationMatrixTimesVector(q, point, new Matrix(1, 1),
+                    jacobianP);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
-            result3 = RotationUtils.rotationMatrixTimesVector(q, point,
-                    jacobianQ, new Matrix(1, 1));
+            result3 = RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ,
+                    new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -383,8 +380,7 @@ public class RotationUtilsTest {
 
         final Point3D p = new InhomogeneousPoint3D(point);
         Point3D resultPoint = new InhomogeneousPoint3D();
-        RotationUtils.rotationMatrixTimesVector(q, p, resultPoint,
-                null, null);
+        RotationUtils.rotationMatrixTimesVector(q, p, resultPoint, null, null);
         result = resultPoint.asArray();
         assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
@@ -423,13 +419,11 @@ public class RotationUtilsTest {
         final double[] result2 = new double[point.length];
         final Matrix jacobianQ = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
         final Matrix jacobianP = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
-        RotationUtils.transposedRotationMatrixTimesVector(q, point, result,
-                jacobianQ, jacobianP);
+        RotationUtils.transposedRotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
 
         // check correctness
         Point3D rotated = new InhomogeneousPoint3D(q.inverseAndReturnNew().
-                rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                        point)));
+                rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
         assertArrayEquals(result2, result, ABSOLUTE_ERROR);
@@ -452,21 +446,21 @@ public class RotationUtilsTest {
         double cxbyaz = 2.0 * (c * x - b * y + a * z);
         double dxaybz = 2.0 * (d * x - a * y - b * z);
 
-        assertEquals(jacobianQ.getElementAt(0, 0), axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 0), -dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 0), cxbyaz, ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(-dxaybz, jacobianQ.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(cxbyaz, jacobianQ.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 1), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 1), cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 1), dxaybz, ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(cxbyaz, jacobianQ.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(dxaybz, jacobianQ.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 2), -cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 2), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 2), axdycz, ABSOLUTE_ERROR);
+        assertEquals(-cxbyaz, jacobianQ.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(2, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 3), -dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 3), -axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 3), bxcydz, ABSOLUTE_ERROR);
+        assertEquals(-dxaybz, jacobianQ.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(-axdycz, jacobianQ.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         try {
@@ -483,8 +477,7 @@ public class RotationUtilsTest {
         }
 
         // test without result
-        result = RotationUtils.transposedRotationMatrixTimesVector(q, point,
-                jacobianQ, jacobianP);
+        result = RotationUtils.transposedRotationMatrixTimesVector(q, point, jacobianQ, jacobianP);
 
         // check correctness
         rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
@@ -493,8 +486,7 @@ public class RotationUtilsTest {
 
         assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
-        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().
-                transposeAndReturnNew(), ABSOLUTE_ERROR));
+        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
         // check jacobian
         a = q.getA();
@@ -511,21 +503,21 @@ public class RotationUtilsTest {
         cxbyaz = 2.0 * (c * x - b * y + a * z);
         dxaybz = 2.0 * (d * x - a * y - b * z);
 
-        assertEquals(jacobianQ.getElementAt(0, 0), axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 0), -dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 0), cxbyaz, ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(-dxaybz, jacobianQ.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(cxbyaz, jacobianQ.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 1), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 1), cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 1), dxaybz, ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(cxbyaz, jacobianQ.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(dxaybz, jacobianQ.getElementAt(2, 1), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 2), -cxbyaz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 2), bxcydz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 2), axdycz, ABSOLUTE_ERROR);
+        assertEquals(-cxbyaz, jacobianQ.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(axdycz, jacobianQ.getElementAt(2, 2), ABSOLUTE_ERROR);
 
-        assertEquals(jacobianQ.getElementAt(0, 3), -dxaybz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(1, 3), -axdycz, ABSOLUTE_ERROR);
-        assertEquals(jacobianQ.getElementAt(2, 3), bxcydz, ABSOLUTE_ERROR);
+        assertEquals(-dxaybz, jacobianQ.getElementAt(0, 3), ABSOLUTE_ERROR);
+        assertEquals(-axdycz, jacobianQ.getElementAt(1, 3), ABSOLUTE_ERROR);
+        assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         double[] result3 = null;
@@ -553,8 +545,7 @@ public class RotationUtilsTest {
 
         assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
-        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().
-                transposeAndReturnNew(), ABSOLUTE_ERROR));
+        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
         // test without jacobian and result
         result = RotationUtils.transposedRotationMatrixTimesVector(q, point);
@@ -566,13 +557,11 @@ public class RotationUtilsTest {
 
         assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
-        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().
-                transposeAndReturnNew(), ABSOLUTE_ERROR));
+        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
         final Point3D p = new InhomogeneousPoint3D(point);
         Point3D resultPoint = new InhomogeneousPoint3D();
-        RotationUtils.transposedRotationMatrixTimesVector(q, p, resultPoint,
-                null, null);
+        RotationUtils.transposedRotationMatrixTimesVector(q, p, resultPoint, null, null);
         result = resultPoint.asArray();
         assertArrayEquals(result2, result, ABSOLUTE_ERROR);
 
@@ -603,11 +592,11 @@ public class RotationUtilsTest {
         assertTrue(rot.equals(rot2, ABSOLUTE_ERROR));
 
         assertEquals(rot.getRollAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
-        assertEquals(rot.getPitchAngle(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, rot.getPitchAngle(), ABSOLUTE_ERROR);
         assertEquals(rot.getYawAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
 
         assertEquals(rot2.getRollAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
-        assertEquals(rot2.getPitchAngle(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, rot2.getPitchAngle(), ABSOLUTE_ERROR);
         assertEquals(rot2.getYawAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
     }
 

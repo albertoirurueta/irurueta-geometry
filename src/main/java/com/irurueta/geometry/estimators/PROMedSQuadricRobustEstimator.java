@@ -440,7 +440,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

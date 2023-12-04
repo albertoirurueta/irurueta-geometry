@@ -69,38 +69,34 @@ public class ProjectiveTransformation2DTest {
 
         // matrix is identity up to scale
         assertTrue(transformation.asMatrix().equals(Matrix.identity(
-                ProjectiveTransformation2D.HOM_COORDS,
-                ProjectiveTransformation2D.HOM_COORDS).
+                                ProjectiveTransformation2D.HOM_COORDS,
+                                ProjectiveTransformation2D.HOM_COORDS).
                         multiplyByScalarAndReturnNew(1.0 /
                                 Math.sqrt(ProjectiveTransformation2D.HOM_COORDS)),
                 ABSOLUTE_ERROR));
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         assertTrue(transformation.getA().equals(
                 transformation.getAffineParameters().asMatrix().multiplyAndReturnNew(
                         transformation.getRotation().asInhomogeneousMatrix()),
                 ABSOLUTE_ERROR));
         assertNotNull(transformation.getA());
         // check projective parameters are equal up to scale
-        double[] projectiveParameters =
-                transformation.getProjectiveParameters();
+        double[] projectiveParameters = transformation.getProjectiveParameters();
         double norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Test constructor with T matrix
         final Matrix t = Matrix.createWithUniformRandomValues(
@@ -142,28 +138,23 @@ public class ProjectiveTransformation2DTest {
         transformation = new ProjectiveTransformation2D(scale);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Test constructor with rotation
         final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
@@ -172,28 +163,25 @@ public class ProjectiveTransformation2DTest {
         transformation = new ProjectiveTransformation2D(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(transformation.getRotation().getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -209,28 +197,23 @@ public class ProjectiveTransformation2DTest {
         transformation = new ProjectiveTransformation2D(scale, rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scale, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -248,47 +231,38 @@ public class ProjectiveTransformation2DTest {
         final double scaleY = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
         final double skewness = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
-        AffineParameters2D params = new AffineParameters2D(scaleX, scaleY,
-                skewness);
+        AffineParameters2D params = new AffineParameters2D(scaleX, scaleY, skewness);
         transformation = new ProjectiveTransformation2D(params, rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                skewness, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(scaleX, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
         try {
             //noinspection ConstantConditions
-            transformation = new ProjectiveTransformation2D(
-                    null, rotation);
+            transformation = new ProjectiveTransformation2D(null, rotation);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
         try {
             //noinspection ConstantConditions
-            transformation = new ProjectiveTransformation2D(params,
-                    null);
+            transformation = new ProjectiveTransformation2D(params, null);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
@@ -301,32 +275,25 @@ public class ProjectiveTransformation2DTest {
         transformation = new ProjectiveTransformation2D(translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -337,8 +304,7 @@ public class ProjectiveTransformation2DTest {
         } catch (final NullPointerException ignore) {
         }
 
-        final double[] badTranslation = new double[
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS + 1];
+        final double[] badTranslation = new double[ProjectiveTransformation2D.NUM_TRANSLATION_COORDS + 1];
         try {
             transformation = new ProjectiveTransformation2D(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
@@ -355,25 +321,19 @@ public class ProjectiveTransformation2DTest {
 
         // check correctness
         assertNotNull(transformation.getRotation());
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getAffineParameters());
         assertTrue(a.equals(transformation.getA(), ABSOLUTE_ERROR));
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -409,46 +369,36 @@ public class ProjectiveTransformation2DTest {
         transformation = new ProjectiveTransformation2D(scale, translation);
 
         // Check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
         ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
                 projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
         try {
             //noinspection ConstantConditions
-            transformation = new ProjectiveTransformation2D(scale,
-                    (double[]) null);
+            transformation = new ProjectiveTransformation2D(scale, (double[]) null);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
 
         // Force IllegalArgumentException
         try {
-            transformation = new ProjectiveTransformation2D(scale,
-                    badTranslation);
+            transformation = new ProjectiveTransformation2D(scale, badTranslation);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -458,108 +408,85 @@ public class ProjectiveTransformation2DTest {
         transformation = new ProjectiveTransformation2D(rotation, translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
         try {
-            transformation = new ProjectiveTransformation2D((Rotation2D) null,
-                    translation);
+            transformation = new ProjectiveTransformation2D((Rotation2D) null, translation);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
         try {
             //noinspection ConstantConditions
-            transformation = new ProjectiveTransformation2D(rotation,
-                    null);
+            transformation = new ProjectiveTransformation2D(rotation, null);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
 
         // Force IllegalArgumentException
         try {
-            transformation = new ProjectiveTransformation2D(rotation,
-                    badTranslation);
+            transformation = new ProjectiveTransformation2D(rotation, badTranslation);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         assertNull(transformation);
 
         // Test constructor with scale, rotation and translation
-        transformation = new ProjectiveTransformation2D(scale, rotation,
-                translation);
+        transformation = new ProjectiveTransformation2D(scale, rotation, translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
         try {
-            transformation = new ProjectiveTransformation2D(scale,
-                    null, translation);
+            transformation = new ProjectiveTransformation2D(scale, null, translation);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
         try {
             //noinspection ConstantConditions
-            transformation = new ProjectiveTransformation2D(scale, rotation,
-                    null);
+            transformation = new ProjectiveTransformation2D(scale, rotation, null);
             fail("NullPointerException expected but not thrown");
         } catch (final NullPointerException ignore) {
         }
 
         // Force IllegalArgumentException
         try {
-            transformation = new ProjectiveTransformation2D(scale, rotation,
-                    badTranslation);
+            transformation = new ProjectiveTransformation2D(scale, rotation, badTranslation);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -568,8 +495,7 @@ public class ProjectiveTransformation2DTest {
 
         // Test constructor with scale, rotation, translation and projective
         // parameters
-        final double[] projectiveParameters2 = new double[
-                ProjectiveTransformation2D.HOM_COORDS];
+        final double[] projectiveParameters2 = new double[ProjectiveTransformation2D.HOM_COORDS];
         do {
             // repeat to ensure that last element in projective parameters is
             // large enough (we use positive values to ensure that rotations
@@ -581,34 +507,24 @@ public class ProjectiveTransformation2DTest {
                 translation, projectiveParameters2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
         norm = Utils.normF(projectiveParameters2);
-        ArrayUtils.multiplyByScalar(projectiveParameters2, 1.0 / norm,
-                projectiveParameters2);
-        assertArrayEquals(projectiveParameters, projectiveParameters2,
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters2, 1.0 / norm, projectiveParameters2);
+        assertArrayEquals(projectiveParameters, projectiveParameters2, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -650,35 +566,24 @@ public class ProjectiveTransformation2DTest {
         assertNull(transformation);
 
         // Test constructor with affine parameters, rotation and translation
-        transformation = new ProjectiveTransformation2D(params, rotation,
-                translation);
+        transformation = new ProjectiveTransformation2D(params, rotation, translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                skewness, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(scaleX, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -717,34 +622,23 @@ public class ProjectiveTransformation2DTest {
                 translation, projectiveParameters2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                skewness, ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(scaleX, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
         // check projective parameters are equal up to scale
         projectiveParameters = transformation.getProjectiveParameters();
         norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
         norm = Utils.normF(projectiveParameters2);
-        ArrayUtils.multiplyByScalar(projectiveParameters2, 1.0 / norm,
-                projectiveParameters2);
-        assertArrayEquals(projectiveParameters, projectiveParameters2,
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters2, 1.0 / norm, projectiveParameters2);
+        assertArrayEquals(projectiveParameters, projectiveParameters2, ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -802,8 +696,8 @@ public class ProjectiveTransformation2DTest {
 
         // check default value (identity up to scale
         assertTrue(transformation.getT().equals(Matrix.identity(
-                ProjectiveTransformation2D.HOM_COORDS,
-                ProjectiveTransformation2D.HOM_COORDS).
+                                ProjectiveTransformation2D.HOM_COORDS,
+                                ProjectiveTransformation2D.HOM_COORDS).
                         multiplyByScalarAndReturnNew(1.0 /
                                 Math.sqrt(ProjectiveTransformation2D.HOM_COORDS)),
                 ABSOLUTE_ERROR));
@@ -887,8 +781,7 @@ public class ProjectiveTransformation2DTest {
     public void testGetSetA() throws WrongSizeException {
         final Matrix a = Matrix.createWithUniformRandomValues(
                 ProjectiveTransformation2D.INHOM_COORDS,
-                ProjectiveTransformation2D.INHOM_COORDS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+                ProjectiveTransformation2D.INHOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final ProjectiveTransformation2D transformation =
                 new ProjectiveTransformation2D();
@@ -931,8 +824,7 @@ public class ProjectiveTransformation2DTest {
         final double norm = Utils.normF(t);
         final Matrix normT = t.multiplyByScalarAndReturnNew(1.0 / norm);
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         transformation.setT(t);
 
@@ -957,15 +849,13 @@ public class ProjectiveTransformation2DTest {
         final Rotation2D rotation = new Rotation2D(theta);
 
         // test default values
-        assertEquals(transformation.getRotation().getTheta(), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setRotation(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta,
-                ABSOLUTE_ERROR);
+        assertEquals(theta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         try {
@@ -999,15 +889,13 @@ public class ProjectiveTransformation2DTest {
         transformation.setRotation(rotation1);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta1,
-                ABSOLUTE_ERROR);
+        assertEquals(theta1, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
 
         // add second rotation
         transformation.addRotation(rotation2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), combinedTheta,
-                ABSOLUTE_ERROR);
+        assertEquals(combinedTheta, transformation.getRotation().getTheta(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1018,48 +906,43 @@ public class ProjectiveTransformation2DTest {
         final double skewness = randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
 
-        final AffineParameters2D params = new AffineParameters2D(scaleX, scaleY,
-                skewness);
+        final AffineParameters2D params = new AffineParameters2D(scaleX, scaleY, skewness);
 
         // instantiate transformation
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         // check default values
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
 
         final AffineParameters2D defaultParams = new AffineParameters2D();
         transformation.getAffineParameters(defaultParams);
 
-        assertEquals(defaultParams.getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getSkewness(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                defaultParams.getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                defaultParams.getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                defaultParams.getSkewness(), ABSOLUTE_ERROR);
 
         // set parameters
         transformation.setAffineParameters(params);
 
         // check correctness
-        assertEquals(transformation.getAffineParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getSkewness(), skewness,
-                ABSOLUTE_ERROR);
+        assertEquals(scaleX, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, transformation.getAffineParameters().getSkewness(), ABSOLUTE_ERROR);
 
         final AffineParameters2D params2 = new AffineParameters2D();
         transformation.getAffineParameters(params2);
 
-        assertEquals(params2.getScaleX(), scaleX, ABSOLUTE_ERROR);
-        assertEquals(params2.getScaleY(), scaleY, ABSOLUTE_ERROR);
-        assertEquals(params2.getSkewness(), skewness, ABSOLUTE_ERROR);
+        assertEquals(scaleX, params2.getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, params2.getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(skewness, params2.getSkewness(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1068,17 +951,13 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D();
 
         // check projective parameters are equal up to scale
-        double[] projectiveParameters =
-                transformation.getProjectiveParameters();
+        double[] projectiveParameters = transformation.getProjectiveParameters();
         final double norm = Utils.normF(projectiveParameters);
-        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm,
-                projectiveParameters);
-        assertArrayEquals(projectiveParameters, new double[]{0.0, 0.0, 1.0},
-                ABSOLUTE_ERROR);
+        ArrayUtils.multiplyByScalar(projectiveParameters, 1.0 / norm, projectiveParameters);
+        assertArrayEquals(new double[]{0.0, 0.0, 1.0}, projectiveParameters, ABSOLUTE_ERROR);
 
         // set new value
-        projectiveParameters = new double[
-                ProjectiveTransformation2D.HOM_COORDS];
+        projectiveParameters = new double[ProjectiveTransformation2D.HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(projectiveParameters);
 
@@ -1086,40 +965,35 @@ public class ProjectiveTransformation2DTest {
         transformation.setProjectiveParameters(projectiveParameters);
 
         // check correctness
-        assertArrayEquals(projectiveParameters,
-                transformation.getProjectiveParameters(), ABSOLUTE_ERROR);
+        assertArrayEquals(transformation.getProjectiveParameters(), projectiveParameters, ABSOLUTE_ERROR);
     }
 
     @Test
     public void testGetSetTranslation() {
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] translation = new double[
-                AffineTransformation2D.NUM_TRANSLATION_COORDS];
+        final double[] translation = new double[AffineTransformation2D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
         final double[] translation2 = transformation.getTranslation();
-        assertEquals(translation2.length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                translation2.length);
         assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -1151,14 +1025,13 @@ public class ProjectiveTransformation2DTest {
                 ProjectiveTransformation2D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -1166,31 +1039,27 @@ public class ProjectiveTransformation2DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1],
-                ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -1217,12 +1086,12 @@ public class ProjectiveTransformation2DTest {
 
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -1230,31 +1099,27 @@ public class ProjectiveTransformation2DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1],
-                ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // add translation
         transformation.addTranslation(translation2[0], translation2[1]);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1273,63 +1138,56 @@ public class ProjectiveTransformation2DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         final Point2D translationCopy = new InhomogeneousPoint2D(translation1);
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1.getInhomX(),
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1.getInhomY(),
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1.getInhomX(),
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1.getInhomY(),
-                ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1.getInhomX(), transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1.getInhomY(), transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1.getInhomX(), transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1.getInhomY(), transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1.getInhomX() +
-                translation2.getInhomX(), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1.getInhomY() +
-                translation2.getInhomY(), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1.getInhomX() +
-                translation2.getInhomX(), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1.getInhomY() +
-                translation2.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1.getInhomX() + translation2.getInhomX(),
+                transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1.getInhomY() + translation2.getInhomY(),
+                transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1.getInhomX() + translation2.getInhomX(),
+                transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1.getInhomY() + translation2.getInhomY(),
+                transformation.getTranslationY(), ABSOLUTE_ERROR);
     }
 
     @Test
     public void testGetSetTranslationX() {
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set new value
         transformation.setTranslationX(translationX);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1338,18 +1196,16 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslationY(translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1358,70 +1214,56 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translationX, translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
     }
 
     @Test
     public void testGetSetTranslationPoint() {
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final InhomogeneousPoint2D translation = new InhomogeneousPoint2D(
-                translationX, translationY);
+        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final InhomogeneousPoint2D translation = new InhomogeneousPoint2D(translationX, translationY);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                ProjectiveTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(ProjectiveTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         final Point2D translation2 = transformation.getTranslationPoint();
         final Point2D translation3 = Point2D.create();
@@ -1438,27 +1280,24 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
 
         // set value
         transformation.setTranslationX(translationX1);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX1,
-                ABSOLUTE_ERROR);
+        assertEquals(translationX1, transformation.getTranslationX(), ABSOLUTE_ERROR);
 
         // add translation x
         transformation.addTranslationX(translationX2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, ABSOLUTE_ERROR);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(),
+                ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1467,51 +1306,45 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set value
         transformation.setTranslationY(translationY1);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY1,
-                ABSOLUTE_ERROR);
+        assertEquals(translationY1, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // add translation y
         transformation.addTranslationY(translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, ABSOLUTE_ERROR);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(),
+                ABSOLUTE_ERROR);
     }
 
     @Test
     public void testGetSetScale() throws AlgebraException {
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
 
         // check default value
-        assertEquals(transformation.getAffineParameters().getScaleX(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(),
-                AffineParameters2D.DEFAULT_SCALE, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SCALE,
+                transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
 
         // set value
         transformation.setScale(scale);
 
         // check correctness
-        assertEquals(transformation.getAffineParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getAffineParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getAffineParameters().getScaleY(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1521,8 +1354,7 @@ public class ProjectiveTransformation2DTest {
                 ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
         transformation.setT(t);
 
@@ -1548,8 +1380,7 @@ public class ProjectiveTransformation2DTest {
     @Test
     public void testTransformPoint() throws AlgebraException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] coords = new double[
-                Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final double[] coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
         randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final Matrix t = Matrix.createWithUniformRandomValues(
                 ProjectiveTransformation2D.HOM_COORDS,
@@ -1559,8 +1390,7 @@ public class ProjectiveTransformation2DTest {
         final ProjectiveTransformation2D transformation =
                 new ProjectiveTransformation2D(t);
 
-        final Point2D point = Point2D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+        final Point2D point = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
         final Point2D expectedPoint = Point2D.create();
         transformPoint(point, expectedPoint, transformation);
@@ -1590,18 +1420,15 @@ public class ProjectiveTransformation2DTest {
                 ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D(t);
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D(t);
 
         final ArrayList<Point2D> inputPoints = new ArrayList<>(size);
         final ArrayList<Point2D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
+            final double[] coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Point2D point = Point2D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final Point2D point = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
             inputPoints.add(point);
 
             final Point2D expectedPoint = Point2D.create();
@@ -1635,21 +1462,17 @@ public class ProjectiveTransformation2DTest {
 
         final Matrix t = Matrix.createWithUniformRandomValues(
                 ProjectiveTransformation2D.HOM_COORDS,
-                ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+                ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D(t);
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D(t);
 
         final ArrayList<Point2D> inputPoints = new ArrayList<>(size);
         final ArrayList<Point2D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
+            final double[] coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Point2D point = Point2D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final Point2D point = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
             inputPoints.add(point);
 
             final Point2D expectedPoint = Point2D.create();
@@ -1693,8 +1516,7 @@ public class ProjectiveTransformation2DTest {
                 ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE);
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D(t);
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D(t);
 
         // compute expected value
         final Conic expectedConic = new Conic();
@@ -1787,8 +1609,7 @@ public class ProjectiveTransformation2DTest {
             luDecomposer.decompose();
         } while (luDecomposer.isSingular());
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D(t);
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D(t);
 
         // compute expected value
         final Conic expectedConic = new Conic();
@@ -1866,49 +1687,31 @@ public class ProjectiveTransformation2DTest {
         outDualConic1.normalize();
         outDualConic2.normalize();
 
-        assertEquals(expectedDualConic.getA(), outDualConic1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic1.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic1.getF(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedDualConic.getA(), outDualConic2.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic2.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic2.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic2.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic2.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic2.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic2.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic2.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic2.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic2.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic2.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic2.getF(), ABSOLUTE_ERROR);
 
         transformation.transform(dualConic);
 
         // check correctness
         dualConic.normalize();
 
-        assertEquals(expectedDualConic.getA(), dualConic.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), dualConic.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), dualConic.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), dualConic.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), dualConic.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), dualConic.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), dualConic.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), dualConic.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), dualConic.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), dualConic.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), dualConic.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), dualConic.getF(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2066,7 +1869,7 @@ public class ProjectiveTransformation2DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 2 non linear dependent rows
+        // ensure we create a matrix with 2 non-linear dependent rows
         while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2376,13 +2179,10 @@ public class ProjectiveTransformation2DTest {
             decomposer.decompose();
         } while (decomposer.isSingular());
 
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D(t);
+        final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D(t);
 
-        final Transformation2D invTransformation1 =
-                transformation.inverseAndReturnNew();
-        final ProjectiveTransformation2D invTransformation2 =
-                new ProjectiveTransformation2D();
+        final Transformation2D invTransformation1 = transformation.inverseAndReturnNew();
+        final ProjectiveTransformation2D invTransformation2 = new ProjectiveTransformation2D();
         transformation.inverse(invTransformation2);
 
         // check that inverse transformation matrix is the inverse matrix of
@@ -2399,13 +2199,11 @@ public class ProjectiveTransformation2DTest {
 
         // test transforming a random point by transformation and then by its
         // inverse to ensure it remains the same
-        final double[] params = new double[
-                Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final double[] params = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Point2D inputPoint = Point2D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, params);
+        final Point2D inputPoint = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, params);
 
         final Point2D transfPoint = transformation.transformAndReturnNew(inputPoint);
 
@@ -2458,11 +2256,9 @@ public class ProjectiveTransformation2DTest {
                 ProjectiveTransformation2D.HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final ProjectiveTransformation2D transformation1 =
-                new ProjectiveTransformation2D(t1);
+        final ProjectiveTransformation2D transformation1 = new ProjectiveTransformation2D(t1);
 
-        final ProjectiveTransformation2D transformation2 =
-                new ProjectiveTransformation2D(t2);
+        final ProjectiveTransformation2D transformation2 = new ProjectiveTransformation2D(t2);
 
         final Matrix expectedMatrix = transformation1.asMatrix().multiplyAndReturnNew(
                 transformation2.asMatrix());
@@ -3025,10 +2821,9 @@ public class ProjectiveTransformation2DTest {
 
 
             // Now build another transformation
-            ProjectiveTransformation2D transformation2 =
-                    new ProjectiveTransformation2D(inputPoint1,
-                            inputPoint2, inputPoint3, inputPoint4, outputPoint1,
-                            outputPoint2, outputPoint3, outputPoint4);
+            ProjectiveTransformation2D transformation2 = new ProjectiveTransformation2D(inputPoint1,
+                    inputPoint2, inputPoint3, inputPoint4, outputPoint1,
+                    outputPoint2, outputPoint3, outputPoint4);
 
             // check correctness of transformation by checking transformed points
             assertTrue(outputPoint1.equals(new InhomogeneousPoint2D(
@@ -3372,8 +3167,7 @@ public class ProjectiveTransformation2DTest {
                 t.multiplyByScalar(1.0 / norm);
             } while (Utils.rank(t) < ProjectiveTransformation2D.HOM_COORDS);
 
-            final ProjectiveTransformation2D transformation1 =
-                    new ProjectiveTransformation2D(t);
+            final ProjectiveTransformation2D transformation1 = new ProjectiveTransformation2D(t);
 
             // generate 4 non coincident random lines
             Line2D inputLine1;
@@ -3592,10 +3386,9 @@ public class ProjectiveTransformation2DTest {
 
 
             // Now build another transformation
-            ProjectiveTransformation2D transformation2 =
-                    new ProjectiveTransformation2D(inputLine1,
-                            inputLine2, inputLine3, inputLine4, outputLine1,
-                            outputLine2, outputLine3, outputLine4);
+            ProjectiveTransformation2D transformation2 = new ProjectiveTransformation2D(inputLine1,
+                    inputLine2, inputLine3, inputLine4, outputLine1,
+                    outputLine2, outputLine3, outputLine4);
 
             // check correctness of lines (up to scale)
             Line2D l = transformation2.transformAndReturnNew(inputLine1);

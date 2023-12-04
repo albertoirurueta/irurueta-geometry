@@ -70,28 +70,24 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         LMedSLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -107,28 +103,24 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         estimator = new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                 inputLines, outputLines);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getInputLines(), inputLines);
-        assertSame(estimator.getOutputLines(), outputLines);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(inputLines, estimator.getInputLines());
+        assertSame(outputLines, estimator.getOutputLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -155,58 +147,49 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         estimator = new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                 this);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-
 
         // test constructor with listener and points
         estimator = new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                 this, inputLines, outputLines);
 
-        assertEquals(estimator.getStopThreshold(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.LMedS);
-        assertSame(estimator.getInputLines(), inputLines);
-        assertSame(estimator.getOutputLines(), outputLines);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
+        assertSame(inputLines, estimator.getInputLines());
+        assertSame(outputLines, estimator.getOutputLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -235,15 +218,14 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getStopThreshold(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_STOP_THRESHOLD, 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
+                estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -259,15 +241,14 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -289,15 +270,14 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -328,8 +308,8 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         estimator.setLines(inputLines, outputLines);
 
         // check correctness
-        assertSame(estimator.getInputLines(), inputLines);
-        assertSame(estimator.getOutputLines(), outputLines);
+        assertSame(inputLines, estimator.getInputLines());
+        assertSame(outputLines, estimator.getOutputLines());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
@@ -361,7 +341,7 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -371,15 +351,14 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -487,17 +466,17 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final AffineTransformation2D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -518,9 +497,9 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                     validLines = false;
                     break;
                 }
-                assertEquals(
-                        LineCorrespondenceAffineTransformation2DRobustEstimator.
-                                getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0,
+                        LineCorrespondenceAffineTransformation2DRobustEstimator.getResidual(l1, l2),
+                        ABSOLUTE_ERROR);
                 assertTrue(l1.equals(l2, ABSOLUTE_ERROR));
             }
 
@@ -602,10 +581,10 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator.setCovarianceKept(true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -628,8 +607,8 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                             AffineTransformation2D.INHOM_COORDS +
                             AffineTransformation2D.NUM_TRANSLATION_COORDS);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -650,9 +629,9 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                     validLines = false;
                     break;
                 }
-                assertEquals(
-                        LineCorrespondenceAffineTransformation2DRobustEstimator.
-                                getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0,
+                        LineCorrespondenceAffineTransformation2DRobustEstimator.getResidual(l1, l2),
+                        ABSOLUTE_ERROR);
                 assertTrue(l1.equals(l2, ABSOLUTE_ERROR));
             }
 

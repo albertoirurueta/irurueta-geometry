@@ -300,6 +300,6 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 }

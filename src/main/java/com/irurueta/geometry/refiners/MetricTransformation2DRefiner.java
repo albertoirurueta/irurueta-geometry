@@ -17,6 +17,7 @@ package com.irurueta.geometry.refiners;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.EuclideanTransformation2D;
 import com.irurueta.geometry.MetricTransformation2D;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.estimators.LockedException;
@@ -36,7 +37,7 @@ import java.util.List;
  * estimation, inlier point matches and their residuals.
  * This class can be used to find a solution that minimizes error of inliers in
  * LMSE terms.
- * Typically a refiner is used by a robust estimator, however it can also be
+ * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")
@@ -55,7 +56,7 @@ public class MetricTransformation2DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
@@ -118,7 +119,7 @@ public class MetricTransformation2DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *
@@ -133,7 +134,7 @@ public class MetricTransformation2DRefiner extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *
@@ -202,12 +203,12 @@ public class MetricTransformation2DRefiner extends
         try {
             // parameters: rotation angle + scale + translation
             final double[] initParams = new double[2 +
-                    MetricTransformation2D.NUM_TRANSLATION_COORDS];
+                    EuclideanTransformation2D.NUM_TRANSLATION_COORDS];
             // copy values
             initParams[0] = mInitialEstimation.getScale();
             initParams[1] = mInitialEstimation.getRotation().getTheta();
             System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,
-                    2, MetricTransformation2D.NUM_TRANSLATION_COORDS);
+                    2, EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
             // output values to be fitted/optimized will contain residuals
             final double[] y = new double[mNumInliers];
@@ -260,7 +261,7 @@ public class MetricTransformation2DRefiner extends
                                                 mTransformation.getRotation().setTheta(params[1]);
                                                 System.arraycopy(params, 2,
                                                         mTransformation.getTranslation(), 0,
-                                                        MetricTransformation2D.NUM_TRANSLATION_COORDS);
+                                                        EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
                                                 return residual(mTransformation, mInputPoint,
                                                         mOutputPoint);
@@ -290,7 +291,7 @@ public class MetricTransformation2DRefiner extends
                             mTransformation.getRotation().setTheta(params[1]);
                             System.arraycopy(params, 2,
                                     mTransformation.getTranslation(), 0,
-                                    MetricTransformation2D.NUM_TRANSLATION_COORDS);
+                                    EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
                             final double y = residual(mTransformation, mInputPoint,
                                     mOutputPoint);
@@ -313,7 +314,7 @@ public class MetricTransformation2DRefiner extends
             result.setScale(params[0]);
             result.getRotation().setTheta(params[1]);
             System.arraycopy(params, 2, result.getTranslation(), 0,
-                    MetricTransformation2D.NUM_TRANSLATION_COORDS);
+                    EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
             if (mKeepCovariance) {
                 // keep covariance
@@ -338,7 +339,7 @@ public class MetricTransformation2DRefiner extends
     }
 
     /**
-     * Computes the residual between the euclidean transformation and a pair or
+     * Computes the residual between the Euclidean transformation and a pair or
      * matched points.
      *
      * @param transformation a transformation.

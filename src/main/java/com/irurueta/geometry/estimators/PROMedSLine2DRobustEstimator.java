@@ -425,7 +425,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**

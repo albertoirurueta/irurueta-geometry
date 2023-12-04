@@ -59,17 +59,17 @@ public class PlaneTest {
         final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         Plane plane = new Plane();
-        assertEquals(plane.getA(), 0.0, 0.0);
-        assertEquals(plane.getB(), 0.0, 0.0);
-        assertEquals(plane.getC(), 0.0, 0.0);
-        assertEquals(plane.getD(), 0.0, 0.0);
+        assertEquals(0.0, plane.getA(), 0.0);
+        assertEquals(0.0, plane.getB(), 0.0);
+        assertEquals(0.0, plane.getC(), 0.0);
+        assertEquals(0.0, plane.getD(), 0.0);
         assertFalse(plane.isNormalized());
 
         plane = new Plane(a, b, c, d);
-        assertEquals(plane.getA(), a, 0.0);
-        assertEquals(plane.getB(), b, 0.0);
-        assertEquals(plane.getC(), c, 0.0);
-        assertEquals(plane.getD(), d, 0.0);
+        assertEquals(a, plane.getA(), 0.0);
+        assertEquals(b, plane.getB(), 0.0);
+        assertEquals(c, plane.getC(), 0.0);
+        assertEquals(d, plane.getD(), 0.0);
         assertFalse(plane.isNormalized());
 
         // instantiate plane using array
@@ -77,9 +77,9 @@ public class PlaneTest {
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         plane = new Plane(array);
-        assertEquals(plane.getA(), array[0], 0.0);
-        assertEquals(plane.getB(), array[1], 0.0);
-        assertEquals(plane.getC(), array[2], 0.0);
+        assertEquals(array[0], plane.getA(), 0.0);
+        assertEquals(array[1], plane.getB(), 0.0);
+        assertEquals(array[2], plane.getC(), 0.0);
 
         // Force IllegalArgumentException
         plane = null;
@@ -107,16 +107,12 @@ public class PlaneTest {
         // array3 = array1 + array3 = array1 + lambda * array2
         ArrayUtils.sum(array1, array3, array3);
 
-        Point3D point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array1);
-        Point3D point2 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array2);
-        Point3D point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array3);
+        Point3D point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array1);
+        Point3D point2 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array2);
+        Point3D point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array3);
 
         // Force ColinearPointsException
         assertTrue(Plane.areColinearPoints(point1, point2, point3));
-        plane = null;
         try {
             plane = new Plane(point1, point2, point3);
         } catch (final ColinearPointsException ignore) {
@@ -129,7 +125,7 @@ public class PlaneTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 3 non linear dependent rows
+        // ensure we create a matrix with 3 non-linear dependent rows
         while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -182,8 +178,7 @@ public class PlaneTest {
         // vectors
         array = new double[HOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array);
+        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
 
         final double[] direction1 = new double[INHOM_COORDS];
         randomizer.fill(direction1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -223,12 +218,9 @@ public class PlaneTest {
         assertEquals(directorVector2[2], plane2.getC(), 0.0);
 
         // check that both director vectors are equal
-        assertEquals(directorVector1[0], directorVector2[0],
-                PRECISION_ERROR);
-        assertEquals(directorVector1[1], directorVector2[1],
-                PRECISION_ERROR);
-        assertEquals(directorVector1[2], directorVector2[2],
-                PRECISION_ERROR);
+        assertEquals(directorVector1[0], directorVector2[0], PRECISION_ERROR);
+        assertEquals(directorVector1[1], directorVector2[1], PRECISION_ERROR);
+        assertEquals(directorVector1[2], directorVector2[2], PRECISION_ERROR);
 
         // and equal to the estimated director vector
         final double scale1 = directorVector1[0] / directorVector[0];
@@ -286,10 +278,10 @@ public class PlaneTest {
 
         // set parameters using array
         plane.setParameters(array);
-        assertEquals(plane.getA(), array[0], 0.0);
-        assertEquals(plane.getB(), array[1], 0.0);
-        assertEquals(plane.getC(), array[2], 0.0);
-        assertEquals(plane.getD(), array[3], 0.0);
+        assertEquals(array[0], plane.getA(), 0.0);
+        assertEquals(array[1], plane.getB(), 0.0);
+        assertEquals(array[2], plane.getC(), 0.0);
+        assertEquals(array[3], plane.getD(), 0.0);
 
         double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -301,10 +293,10 @@ public class PlaneTest {
         plane.setC(c);
         plane.setD(d);
 
-        assertEquals(plane.getA(), a, 0.0);
-        assertEquals(plane.getB(), b, 0.0);
-        assertEquals(plane.getC(), c, 0.0);
-        assertEquals(plane.getD(), d, 0.0);
+        assertEquals(a, plane.getA(), 0.0);
+        assertEquals(b, plane.getB(), 0.0);
+        assertEquals(c, plane.getC(), 0.0);
+        assertEquals(d, plane.getD(), 0.0);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -312,10 +304,10 @@ public class PlaneTest {
         d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         plane.setParameters(a, b, c, d);
-        assertEquals(plane.getA(), a, 0.0);
-        assertEquals(plane.getB(), b, 0.0);
-        assertEquals(plane.getC(), c, 0.0);
-        assertEquals(plane.getD(), d, 0.0);
+        assertEquals(a, plane.getA(), 0.0);
+        assertEquals(b, plane.getB(), 0.0);
+        assertEquals(c, plane.getC(), 0.0);
+        assertEquals(d, plane.getD(), 0.0);
     }
 
     @Test
@@ -408,12 +400,9 @@ public class PlaneTest {
         // array3 = array1 + array3 = array1 + lambda * array2
         ArrayUtils.sum(array1, array3, array3);
 
-        point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array1);
-        point2 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array2);
-        point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array3);
+        point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array1);
+        point2 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array2);
+        point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array3);
 
         // Force ColinearPointsException
         plane = null;
@@ -427,15 +416,13 @@ public class PlaneTest {
 
     @Test
     public void testSetParametersFrom1PointAnd2Vectors()
-            throws WrongSizeException, IllegalArgumentException,
-            ParallelVectorsException {
+            throws WrongSizeException, IllegalArgumentException, ParallelVectorsException {
         // create plane passing through a point and laying on provided direction
         // vectors
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array);
+        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
 
         final double[] direction1 = new double[INHOM_COORDS];
         randomizer.fill(direction1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -510,8 +497,7 @@ public class PlaneTest {
         final double[] array = new double[HOM_COORDS];
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                array);
+        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
 
         final double[] direction1 = new double[INHOM_COORDS];
         randomizer.fill(direction1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -627,8 +613,7 @@ public class PlaneTest {
         assertFalse(plane.isLocus(point4, PRECISION_ERROR));
 
         // indeed point4 is at normDirectorVector distance from plane
-        assertEquals(plane.signedDistance(point4), normDirectorVector,
-                PRECISION_ERROR);
+        assertEquals(normDirectorVector, plane.signedDistance(point4), PRECISION_ERROR);
     }
 
     @Test
@@ -678,15 +663,14 @@ public class PlaneTest {
 
         // points belong to plane, hence their distance is zero up to machine
         // precision
-        assertEquals(plane.signedDistance(point1), 0.0, PRECISION_ERROR);
-        assertEquals(plane.signedDistance(point2), 0.0, PRECISION_ERROR);
-        assertEquals(plane.signedDistance(point3), 0.0, PRECISION_ERROR);
+        assertEquals(0.0, plane.signedDistance(point1), PRECISION_ERROR);
+        assertEquals(0.0, plane.signedDistance(point2), PRECISION_ERROR);
+        assertEquals(0.0, plane.signedDistance(point3), PRECISION_ERROR);
 
         // use plane director vector to find another point at desired signed
         // distance
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double signedDistance = randomizer.nextDouble(MIN_RANDOM_DISTANCE,
-                MAX_RANDOM_DISTANCE);
+        final double signedDistance = randomizer.nextDouble(MIN_RANDOM_DISTANCE, MAX_RANDOM_DISTANCE);
 
         final HomogeneousPoint3D point4 = new HomogeneousPoint3D(point1);
 
@@ -698,8 +682,7 @@ public class PlaneTest {
                         normDirectorVector, point4.getInhomZ() +
                         signedDistance * plane.getC() / normDirectorVector);
 
-        assertEquals(plane.signedDistance(point4), signedDistance,
-                PRECISION_ERROR);
+        assertEquals(plane.signedDistance(point4), signedDistance, PRECISION_ERROR);
     }
 
     @Test
@@ -714,10 +697,10 @@ public class PlaneTest {
         final Plane plane = new Plane(a, b, c, d);
         final double[] array = plane.asArray();
 
-        assertEquals(array[0], a, 0.0);
-        assertEquals(array[1], b, 0.0);
-        assertEquals(array[2], c, 0.0);
-        assertEquals(array[3], d, 0.0);
+        assertEquals(a, array[0], 0.0);
+        assertEquals(b, array[1], 0.0);
+        assertEquals(c, array[2], 0.0);
+        assertEquals(d, array[3], 0.0);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -727,10 +710,10 @@ public class PlaneTest {
         plane.setParameters(a, b, c, d);
         plane.asArray(array);
 
-        assertEquals(array[0], a, 0.0);
-        assertEquals(array[1], b, 0.0);
-        assertEquals(array[2], c, 0.0);
-        assertEquals(array[3], d, 0.0);
+        assertEquals(a, array[0], 0.0);
+        assertEquals(b, array[1], 0.0);
+        assertEquals(c, array[2], 0.0);
+        assertEquals(d, array[3], 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -788,10 +771,10 @@ public class PlaneTest {
 
         final double[] n = plane.getDirectorVector();
 
-        assertEquals(n.length, 3);
-        assertEquals(n[0], array[0], 0.0);
-        assertEquals(n[1], array[1], 0.0);
-        assertEquals(n[2], array[2], 0.0);
+        assertEquals(3, n.length);
+        assertEquals(array[0], n[0],0.0);
+        assertEquals(array[1], n[1], 0.0);
+        assertEquals(array[2], n[2], 0.0);
 
         // try again
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -799,7 +782,7 @@ public class PlaneTest {
 
         plane.directorVector(n);
 
-        assertEquals(n.length, 3);
+        assertEquals(3, n.length);
         assertEquals(n[0], array[0], 0.0);
         assertEquals(n[1], array[1], 0.0);
         assertEquals(n[2], array[2], 0.0);
@@ -833,21 +816,18 @@ public class PlaneTest {
         Plane plane3 = new Plane(v.getSubmatrixAsArray(0, 3,
                 3, 3));
 
-        assertTrue(plane1.getIntersection(plane2, plane3).equals(point,
-                ABSOLUTE_ERROR));
+        assertTrue(plane1.getIntersection(plane2, plane3).equals(point, ABSOLUTE_ERROR));
 
         final Point3D intersection = Point3D.create();
         plane1.intersection(plane2, plane3, intersection);
         assertTrue(intersection.equals(point, ABSOLUTE_ERROR));
 
-        assertTrue(plane2.getIntersection(plane1, plane3).equals(point,
-                ABSOLUTE_ERROR));
+        assertTrue(plane2.getIntersection(plane1, plane3).equals(point, ABSOLUTE_ERROR));
 
         plane2.intersection(plane1, plane3, intersection);
         assertTrue(intersection.equals(point, ABSOLUTE_ERROR));
 
-        assertTrue(plane3.getIntersection(plane1, plane2).equals(point,
-                ABSOLUTE_ERROR));
+        assertTrue(plane3.getIntersection(plane1, plane2).equals(point, ABSOLUTE_ERROR));
 
         plane3.intersection(plane1, plane2, intersection);
         assertTrue(intersection.equals(point, ABSOLUTE_ERROR));
@@ -935,18 +915,15 @@ public class PlaneTest {
 
         // because all three planes have in common point1, then their
         // intersection must be point1
-        assertTrue(plane1.getIntersection(plane2, plane3).equals(point1,
-                ABSOLUTE_ERROR));
+        assertTrue(plane1.getIntersection(plane2, plane3).equals(point1, ABSOLUTE_ERROR));
         plane1.intersection(plane2, plane3, intersection);
         assertTrue(intersection.equals(point1, ABSOLUTE_ERROR));
 
-        assertTrue(plane2.getIntersection(plane1, plane3).equals(point1,
-                ABSOLUTE_ERROR));
+        assertTrue(plane2.getIntersection(plane1, plane3).equals(point1, ABSOLUTE_ERROR));
         plane2.intersection(plane1, plane3, intersection);
         assertTrue(intersection.equals(point1, ABSOLUTE_ERROR));
 
-        assertTrue(plane3.getIntersection(plane1, plane2).equals(point1,
-                ABSOLUTE_ERROR));
+        assertTrue(plane3.getIntersection(plane1, plane2).equals(point1, ABSOLUTE_ERROR));
         plane3.intersection(plane1, plane2, intersection);
         assertTrue(intersection.equals(point1, ABSOLUTE_ERROR));
     }
@@ -983,9 +960,9 @@ public class PlaneTest {
 
         // point1, point2 and point3 belong to plane, hence their distance to the
         // plane is zero up to machine precision
-        assertEquals(plane.signedDistance(point1), 0.0, PRECISION_ERROR);
-        assertEquals(plane.signedDistance(point2), 0.0, PRECISION_ERROR);
-        assertEquals(plane.signedDistance(point3), 0.0, PRECISION_ERROR);
+        assertEquals(0.0, plane.signedDistance(point1), PRECISION_ERROR);
+        assertEquals(0.0, plane.signedDistance(point2), PRECISION_ERROR);
+        assertEquals(0.0, plane.signedDistance(point3), PRECISION_ERROR);
 
         // because they belong to plane, their closest point to plane is
         // themselves
@@ -1042,8 +1019,7 @@ public class PlaneTest {
                         normDirectorVector, point1.getInhomZ() +
                         signedDistance * plane.getC() / normDirectorVector);
 
-        assertEquals(plane.signedDistance(point4), signedDistance,
-                PRECISION_ERROR);
+        assertEquals(plane.signedDistance(point4), signedDistance, PRECISION_ERROR);
 
         // because point4 goes in plane's perpendicular direction from point1,
         // its closest point belonging to the plane will be point1
@@ -1082,22 +1058,24 @@ public class PlaneTest {
         final Plane plane1 = new Plane(array);
 
         // opposed sign line
-        final Plane plane2 = new Plane(-plane1.getA(), -plane1.getB(),
-                -plane1.getC(), -plane1.getD());
+        final Plane plane2 = new Plane(-plane1.getA(), -plane1.getB(), -plane1.getC(), -plane1.getD());
 
         // another random line
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final Plane plane3 = new Plane(array);
 
+        plane1.normalize();
+        plane2.normalize();
+        plane3.normalize();
+
         // test for equal lines
-        assertEquals(plane1.dotProduct(plane1), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, plane1.dotProduct(plane1), ABSOLUTE_ERROR);
         // test for opposed sign lines
-        assertEquals(plane1.dotProduct(plane2), -1.0, ABSOLUTE_ERROR);
+        assertEquals(-1.0, plane1.dotProduct(plane2), ABSOLUTE_ERROR);
         // test for 2 random lines
-        assertEquals(plane1.dotProduct(plane3), plane1.getA() * plane3.getA() +
-                        plane1.getB() * plane3.getB() + plane1.getC() * plane3.getC() +
-                        plane1.getD() * plane3.getD(),
-                ABSOLUTE_ERROR);
+        assertEquals(plane1.getA() * plane3.getA() + plane1.getB() * plane3.getB()
+                        + plane1.getC() * plane3.getC() + plane1.getD() * plane3.getD(),
+                plane1.dotProduct(plane3), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1110,12 +1088,11 @@ public class PlaneTest {
         Plane plane2 = new Plane(array);
         assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
         assertTrue(plane1.equals(plane2));
-        //noinspection all
+        //noinspection SimplifiableAssertion
         assertTrue(plane1.equals((Object) plane2));
         assertEquals(plane1.hashCode(), plane2.hashCode());
 
-        array[0] = plane1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        array[0] = plane1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[1] = plane1.getB();
         array[2] = plane1.getC();
         array[3] = plane1.getD();
@@ -1147,10 +1124,10 @@ public class PlaneTest {
     public void testCreateCanonicalPlaneAtInfinity() {
         final Plane plane = Plane.createCanonicalPlaneAtInfinity();
 
-        assertEquals(plane.getA(), 0.0, 0.0);
-        assertEquals(plane.getB(), 0.0, 0.0);
-        assertEquals(plane.getC(), 0.0, 0.0);
-        assertEquals(plane.getD(), 1.0, 0.0);
+        assertEquals(0.0, plane.getA(), 0.0);
+        assertEquals(0.0, plane.getB(), 0.0);
+        assertEquals(0.0, plane.getC(), 0.0);
+        assertEquals(1.0, plane.getD(), 0.0);
 
         // create a point at infinity
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1181,10 +1158,10 @@ public class PlaneTest {
         Plane.setAsCanonicalPlaneAtInfinity(plane);
 
         // check correctness
-        assertEquals(plane.getA(), 0.0, 0.0);
-        assertEquals(plane.getB(), 0.0, 0.0);
-        assertEquals(plane.getC(), 0.0, 0.0);
-        assertEquals(plane.getD(), 1.0, 0.0);
+        assertEquals(0.0, plane.getA(), 0.0);
+        assertEquals(0.0, plane.getB(), 0.0);
+        assertEquals(0.0, plane.getC(), 0.0);
+        assertEquals(1.0, plane.getD(), 0.0);
 
         // check that point at infinity is now locus of plane
         assertTrue(plane.isLocus(point));
@@ -1202,10 +1179,10 @@ public class PlaneTest {
         final Plane plane1 = new Plane(a, b, c, d);
 
         // check
-        assertEquals(plane1.getA(), a, 0.0);
-        assertEquals(plane1.getB(), b, 0.0);
-        assertEquals(plane1.getC(), c, 0.0);
-        assertEquals(plane1.getD(), d, 0.0);
+        assertEquals(a, plane1.getA(), 0.0);
+        assertEquals(b, plane1.getB(), 0.0);
+        assertEquals(c, plane1.getC(), 0.0);
+        assertEquals(d, plane1.getD(), 0.0);
         assertFalse(plane1.isNormalized());
 
         // serialize and deserialize

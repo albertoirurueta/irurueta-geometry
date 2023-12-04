@@ -44,7 +44,7 @@ public interface DualQuadricRobustEstimatorListener {
                                  final int iteration);
 
     /**
-     * Called when estimation progress changes significantly..
+     * Called when estimation progress changes significantly.
      *
      * @param estimator reference to robust estimator.
      * @param progress  progress of estimation expressed as a value between 0.0

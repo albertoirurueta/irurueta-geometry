@@ -429,7 +429,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param jacobianOfAxis  if provided, matrix where jacobian of rotation axis
      *                        will be stored. Must be a 4x4 matrix.
      * @throws IllegalArgumentException if provided axis array does not have
-     *                                  length 3 or if if any of the provided jacobian matrices
+     *                                  length 3, or if any of the provided jacobian matrices
      *                                  does not have proper size.
      */
     public void setFromAxisAndRotation(
@@ -610,9 +610,9 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     /**
      * Sets quaternion from euler angles (roll, pitch and yaw).
      *
-     * @param roll     roll angle expressed in radians. Rotation around x axis.
-     * @param pitch    pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw      yaw angle expressed in radians. Rotation around z axis.
+     * @param roll     roll angle expressed in radians. Rotation around x-axis.
+     * @param pitch    pitch angle expressed in radians. Rotation around y-axis.
+     * @param yaw      yaw angle expressed in radians. Rotation around z-axis.
      * @param jacobian matrix where jacobian will be stored if provided.
      * @throws IllegalArgumentException if provided jacobian matrix does not
      *                                  have size 4x3
@@ -671,9 +671,9 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     /**
      * Sets quaternion from euler angles (roll, pitch and yaw).
      *
-     * @param roll  roll angle expressed in radians. Rotation around x axis.
-     * @param pitch pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw   yaw angle expressed in radians. Rotation around z axis.
+     * @param roll  roll angle expressed in radians. Rotation around x-axis.
+     * @param pitch pitch angle expressed in radians. Rotation around y-axis.
+     * @param yaw   yaw angle expressed in radians. Rotation around z-axis.
      * @see <a href="https://github.com/joansola/slamtb">e2q.m at https://github.com/joansola/slamtb</a>
      */
     public final void setFromEulerAngles(
@@ -714,9 +714,9 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * Computes the rotation matrix body-to-world corresponding to the body
      * orientation given by the Euler angles (roll, pitch, yaw).
      *
-     * @param roll     roll angle expressed in radians. Rotation around x axis.
-     * @param pitch    pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw      yaw angle expressed in radians. Rotation around z axis.
+     * @param roll     roll angle expressed in radians. Rotation around x-axis.
+     * @param pitch    pitch angle expressed in radians. Rotation around y-axis.
+     * @param yaw      yaw angle expressed in radians. Rotation around z-axis.
      * @param result   instance where computed rotation will be stored.
      * @param jacobian jacobian of computed rotation (optional).
      * @throws IllegalArgumentException if provided jacobian is not 9x3.
@@ -779,9 +779,9 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * Computes the rotation matrix body-to-world corresponding to the body
      * orientation given by the Euler angles (roll, pitch, yaw).
      *
-     * @param roll   roll angle expressed in radians. Rotation around x axis.
-     * @param pitch  pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw    yaw angle expressed in radians. Rotation around z axis.
+     * @param roll   roll angle expressed in radians. Rotation around x-axis.
+     * @param pitch  pitch angle expressed in radians. Rotation around y-axis.
+     * @param yaw    yaw angle expressed in radians. Rotation around z-axis.
      * @param result instance where computed rotation will be stored.
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
@@ -2030,7 +2030,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
      *
      * @param m         Provided rotation matrix.
@@ -2047,7 +2047,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
-     * transpose must be it's inverse) and must have determinant equal to 1.
+     * transpose must be its inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 4x4, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
      *

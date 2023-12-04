@@ -65,8 +65,8 @@ public class EuclideanTransformation2DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
 
         // constructor with points
@@ -84,15 +84,15 @@ public class EuclideanTransformation2DEstimatorTest implements
                 outputPoints);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         final List<Point2D> wrong = new ArrayList<>();
@@ -125,13 +125,13 @@ public class EuclideanTransformation2DEstimatorTest implements
         // check default values
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
 
         // constructor with listener and points
@@ -139,15 +139,15 @@ public class EuclideanTransformation2DEstimatorTest implements
                 outputPoints);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
-        assertSame(estimator.getListener(), this);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -183,8 +183,8 @@ public class EuclideanTransformation2DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
 
         // constructor with points
@@ -200,15 +200,15 @@ public class EuclideanTransformation2DEstimatorTest implements
                 outputPoints, true);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -239,13 +239,13 @@ public class EuclideanTransformation2DEstimatorTest implements
         // check default values
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
 
         // constructor with listener and points
@@ -253,15 +253,15 @@ public class EuclideanTransformation2DEstimatorTest implements
                 outputPoints, true);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
-        assertSame(estimator.getListener(), this);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -309,8 +309,8 @@ public class EuclideanTransformation2DEstimatorTest implements
         estimator.setPoints(inputPoints, outputPoints);
 
         // check correctness
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
 
         // Force IllegalArgumentException
         final List<Point2D> wrong = new ArrayList<>();
@@ -344,7 +344,7 @@ public class EuclideanTransformation2DEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -355,16 +355,16 @@ public class EuclideanTransformation2DEstimatorTest implements
 
         // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // set new value
         estimator.setWeakMinimumSizeAllowed(true);
 
         // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
     }
 
     @Test
@@ -409,27 +409,27 @@ public class EuclideanTransformation2DEstimatorTest implements
                             outputPoints);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final EuclideanTransformation2D transformation2 = estimator.estimate();
             final EuclideanTransformation2D transformation3 =
                     new EuclideanTransformation2D();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             estimator.estimate(transformation3);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
 
@@ -463,7 +463,7 @@ public class EuclideanTransformation2DEstimatorTest implements
             numValid++;
         }
 
-        assertEquals(numValid, TIMES);
+        assertEquals(TIMES, numValid);
     }
 
     @Test
@@ -507,27 +507,27 @@ public class EuclideanTransformation2DEstimatorTest implements
                             outputPoints);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final EuclideanTransformation2D transformation2 = estimator.estimate();
             final EuclideanTransformation2D transformation3 =
                     new EuclideanTransformation2D();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             estimator.estimate(transformation3);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
 
@@ -547,21 +547,21 @@ public class EuclideanTransformation2DEstimatorTest implements
             final Rotation2D rotation2 = transformation2.getRotation();
             final double[] translation2 = transformation2.getTranslation();
 
-            assertEquals(rotation2.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation2.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
 
             final Rotation2D rotation3 = transformation3.getRotation();
             final double[] translation3 = transformation3.getTranslation();
 
-            assertEquals(rotation3.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation3.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation3, ABSOLUTE_ERROR);
 
             numValid++;
         }
 
-        assertEquals(numValid, TIMES);
+        assertEquals(TIMES, numValid);
     }
 
     @Test
@@ -628,27 +628,27 @@ public class EuclideanTransformation2DEstimatorTest implements
                             outputPoints, true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final EuclideanTransformation2D transformation2 = estimator.estimate();
             final EuclideanTransformation2D transformation3 =
                     new EuclideanTransformation2D();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             estimator.estimate(transformation3);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
 

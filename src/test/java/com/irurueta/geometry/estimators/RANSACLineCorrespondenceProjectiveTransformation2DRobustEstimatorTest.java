@@ -69,7 +69,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         assertEquals(1, ProjectiveTransformation2DRobustEstimator.MIN_ITERATIONS);
         assertTrue(ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(ProjectiveTransformation2DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(RobustEstimatorMethod.PROMedS,
+        assertEquals(RobustEstimatorMethod.PROMEDS,
                 LineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1e-6, RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
                 0.0);
@@ -86,28 +86,24 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
                 new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
-        assertEquals(estimator.getThreshold(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -124,28 +120,24 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         estimator = new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                 inputLines, outputLines);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputLines(), inputLines);
-        assertSame(estimator.getOutputLines(), outputLines);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputLines, estimator.getInputLines());
+        assertSame(outputLines, estimator.getOutputLines());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -174,28 +166,24 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         estimator = new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                 this);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputLines());
         assertNull(estimator.getOutputLines());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -205,28 +193,24 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         estimator = new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
                 this, inputLines, outputLines);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputLines(), inputLines);
-        assertSame(estimator.getOutputLines(), outputLines);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputLines, estimator.getInputLines());
+        assertSame(outputLines, estimator.getOutputLines());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -257,15 +241,14 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                 new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -281,15 +264,14 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                 new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -311,15 +293,14 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                 new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -350,8 +331,8 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         estimator.setLines(inputLines, outputLines);
 
         // check correctness
-        assertSame(estimator.getInputLines(), inputLines);
-        assertSame(estimator.getOutputLines(), outputLines);
+        assertSame(inputLines, estimator.getInputLines());
+        assertSame(outputLines, estimator.getOutputLines());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
@@ -383,7 +364,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -393,15 +374,14 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                 new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(ProjectiveTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -538,17 +518,17 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final ProjectiveTransformation2D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -569,9 +549,9 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                     failed = true;
                     break;
                 }
-                assertEquals(
-                        LineCorrespondenceAffineTransformation2DRobustEstimator.
-                                getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0,
+                        LineCorrespondenceAffineTransformation2DRobustEstimator.getResidual(l1, l2),
+                        ABSOLUTE_ERROR);
                 if (!l1.equals(l2, ABSOLUTE_ERROR)) {
                     failed = true;
                     break;
@@ -656,10 +636,10 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -678,8 +658,8 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                                 ProjectiveTransformation2D.HOM_COORDS);
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -694,9 +674,9 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTe
                 l2 = transformation2.transformAndReturnNew(inputLines.get(i));
                 l1.normalize();
                 l2.normalize();
-                assertEquals(
-                        LineCorrespondenceAffineTransformation2DRobustEstimator.
-                                getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
+                assertEquals(0.0,
+                        LineCorrespondenceAffineTransformation2DRobustEstimator.getResidual(l1, l2),
+                        ABSOLUTE_ERROR);
                 assertTrue(l1.equals(l2, ABSOLUTE_ERROR));
             }
         }

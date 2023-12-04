@@ -57,13 +57,13 @@ public class EuclideanTransformation2DTest {
                 new EuclideanTransformation2D();
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // Test constructor with rotation
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -74,13 +74,13 @@ public class EuclideanTransformation2DTest {
         transformation = new EuclideanTransformation2D(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta, 0.0);
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(theta, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -92,7 +92,6 @@ public class EuclideanTransformation2DTest {
         //noinspection ConstantConditions
         assertNull(transformation);
 
-
         // Test constructor with translation
         double[] translation =
                 new double[EuclideanTransformation2D.NUM_TRANSLATION_COORDS];
@@ -101,12 +100,12 @@ public class EuclideanTransformation2DTest {
         transformation = new EuclideanTransformation2D(translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
-        assertEquals(transformation.getTranslation().length, translation.length);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(translation.length, transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -131,13 +130,12 @@ public class EuclideanTransformation2DTest {
         transformation = new EuclideanTransformation2D(rotation, translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta, 0.0);
-        assertEquals(transformation.getTranslation().length,
-                translation.length);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
+        assertEquals(theta, transformation.getRotation().getTheta(), 0.0);
+        assertEquals(translation.length, transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
 
         // Force NullPointerException
         transformation = null;
@@ -154,7 +152,6 @@ public class EuclideanTransformation2DTest {
         assertNull(transformation);
 
         // Force IllegalArgumentException
-        transformation = null;
         try {
             transformation = new EuclideanTransformation2D(rotation,
                     badTranslation);
@@ -215,13 +212,13 @@ public class EuclideanTransformation2DTest {
         final Rotation2D rotation = new Rotation2D(theta);
 
         // test default values
-        assertEquals(transformation.getRotation().getTheta(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getRotation().getTheta(), 0.0);
 
         // set new value
         transformation.setRotation(rotation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta, 0.0);
+        assertEquals(theta, transformation.getRotation().getTheta(), 0.0);
 
         // Force NullPointerException
         try {
@@ -250,14 +247,13 @@ public class EuclideanTransformation2DTest {
         transformation.setRotation(rotation1);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), theta1, 0.0);
+        assertEquals(theta1, transformation.getRotation().getTheta(), 0.0);
 
         // add second rotation
         transformation.addRotation(rotation2);
 
         // check correctness
-        assertEquals(transformation.getRotation().getTheta(), combinedTheta,
-                0.0);
+        assertEquals(combinedTheta, transformation.getRotation().getTheta(), 0.0);
     }
 
     @Test
@@ -271,23 +267,23 @@ public class EuclideanTransformation2DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -314,12 +310,12 @@ public class EuclideanTransformation2DTest {
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -327,27 +323,27 @@ public class EuclideanTransformation2DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation1[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation1[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation1[1], 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation1[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation1[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation1[1], transformation.getTranslationY(), 0.0);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], 0.0);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], 0.0);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0], 0.0);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1], 0.0);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(), 0.0);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(), 0.0);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -369,13 +365,13 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set new value
         transformation.setTranslationX(translationX);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX, 0.0);
+        assertEquals(translationX, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -388,13 +384,13 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslationY(translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY, 0.0);
+        assertEquals(translationY, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -409,23 +405,21 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translationX, translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
     }
 
     @Test
@@ -434,35 +428,29 @@ public class EuclideanTransformation2DTest {
                 new EuclideanTransformation2D();
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         final InhomogeneousPoint2D translation = new InhomogeneousPoint2D(
                 translationX, translationY);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(EuclideanTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation2D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation2D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         final Point2D translation2 = transformation.getTranslationPoint();
         final Point2D translation3 = Point2D.create();
@@ -485,20 +473,19 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set value
         transformation.setTranslationX(translationX1);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX1, 0.0);
+        assertEquals(translationX1, transformation.getTranslationX(), 0.0);
 
         // add translation x
         transformation.addTranslationX(translationX2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -513,20 +500,19 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set value
         transformation.setTranslationY(translationY1);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY1, 0.0);
+        assertEquals(translationY1, transformation.getTranslationY(), 0.0);
 
         // add translation y
         transformation.addTranslationY(translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -545,8 +531,8 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set values
         transformation.setTranslation(translationX1, translationY1);
@@ -555,10 +541,8 @@ public class EuclideanTransformation2DTest {
         transformation.addTranslation(translationX2, translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -577,8 +561,8 @@ public class EuclideanTransformation2DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set values
         transformation.setTranslation(translationX1, translationY1);
@@ -589,10 +573,8 @@ public class EuclideanTransformation2DTest {
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -962,49 +944,31 @@ public class EuclideanTransformation2DTest {
         outDualConic1.normalize();
         outDualConic2.normalize();
 
-        assertEquals(expectedDualConic.getA(), outDualConic1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic1.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic1.getF(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedDualConic.getA(), outDualConic2.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), outDualConic2.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), outDualConic2.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), outDualConic2.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), outDualConic2.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), outDualConic2.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), outDualConic2.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic2.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic2.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic2.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic2.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic2.getF(), ABSOLUTE_ERROR);
 
         transformation.transform(dualConic);
 
         // check correctness
         dualConic.normalize();
 
-        assertEquals(expectedDualConic.getA(), dualConic.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getB(), dualConic.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getC(), dualConic.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getD(), dualConic.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getE(), dualConic.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualConic.getF(), dualConic.getF(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getA(), dualConic.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), dualConic.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), dualConic.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), dualConic.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), dualConic.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), dualConic.getF(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1159,7 +1123,7 @@ public class EuclideanTransformation2DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 2 non linear dependent rows
+        // ensure we create a matrix with 2 non-linear dependent rows
         while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);

@@ -355,7 +355,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
                             @Override
                             public int getSubsetSize() {
-                                return EPnPPointCorrespondencePinholeCameraEstimator.
+                                return PointCorrespondencePinholeCameraEstimator.
                                         MIN_NUMBER_OF_POINT_CORRESPONDENCES;
                             }
 
@@ -475,7 +475,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.LMedS;
+        return RobustEstimatorMethod.LMEDS;
     }
 
     /**
@@ -483,7 +483,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      *

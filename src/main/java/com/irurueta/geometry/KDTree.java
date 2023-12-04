@@ -47,13 +47,13 @@ public abstract class KDTree<P extends Point<P>> {
     protected BoxNode<P>[] mBoxes;
 
     /**
-     * Indices of points pointing from boxes in the tree to the input collection of points.
+     * Indices of points going from boxes in the tree to the input collection of points.
      * Indices are sorted as the tree is built.
      */
     private final int[] mPtIndx;
 
     /**
-     * Indices of points pointing from input collection of points to boxes in the tree.
+     * Indices of points going from input collection of points to boxes in the tree.
      * This is the reverse of mPtIndx.
      */
     private final int[] mRPtIndx;
@@ -234,7 +234,7 @@ public abstract class KDTree<P extends Point<P>> {
         double dnrst = BIG;
         double d;
 
-        // find smallest box index containing point
+        // find the smallest box index containing point
         k = locateBoxIndex(pt);
         for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
             pi = mPtIndx[i];
@@ -793,6 +793,7 @@ public abstract class KDTree<P extends Point<P>> {
          * @param hi high coordinate values.
          * @throws IllegalArgumentException always thrown.
          */
+        @Override
         public void setHi(final P hi) {
             throw new IllegalArgumentException();
         }

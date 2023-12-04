@@ -65,7 +65,7 @@ public class RANSACLine2DRobustEstimatorTest implements
         assertEquals(0.0, Line2DRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, Line2DRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, Line2DRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, Line2DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, Line2DRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1.0, RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, RANSACLine2DRobustEstimator.MIN_THRESHOLD, 0.0);
     }
@@ -76,18 +76,18 @@ public class RANSACLine2DRobustEstimatorTest implements
         RANSACLine2DRobustEstimator estimator = new RANSACLine2DRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Line2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -101,19 +101,19 @@ public class RANSACLine2DRobustEstimatorTest implements
         estimator = new RANSACLine2DRobustEstimator(points);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Line2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -153,18 +153,18 @@ public class RANSACLine2DRobustEstimatorTest implements
         estimator = new RANSACLine2DRobustEstimator(listener);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Line2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -173,19 +173,19 @@ public class RANSACLine2DRobustEstimatorTest implements
         estimator = new RANSACLine2DRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                Line2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -205,13 +205,13 @@ public class RANSACLine2DRobustEstimatorTest implements
                 new RANSACLine2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -234,7 +234,7 @@ public class RANSACLine2DRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -244,14 +244,14 @@ public class RANSACLine2DRobustEstimatorTest implements
                 new RANSACLine2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -272,14 +272,14 @@ public class RANSACLine2DRobustEstimatorTest implements
                 new RANSACLine2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                Line2DRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5f);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -300,14 +300,14 @@ public class RANSACLine2DRobustEstimatorTest implements
                 new RANSACLine2DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 1);
+        assertEquals(1, estimator.getMaxIterations());
 
         // Fail IllegalArgumentException
         try {
@@ -334,7 +334,7 @@ public class RANSACLine2DRobustEstimatorTest implements
         estimator.setPoints(points);
 
         // check correctness
-        assertSame(estimator.getPoints(), points);
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
 
         // clearing list makes instance not ready
@@ -432,17 +432,17 @@ public class RANSACLine2DRobustEstimatorTest implements
 
             estimator.setThreshold(THRESHOLD);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final Line2D line2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Finds the best euclidean 3D transformation for provided collections of
+ * Finds the best Euclidean 3D transformation for provided collections of
  * matched 3D point using PROMedS algorithm.
  */
 @SuppressWarnings("DuplicatedCode")
@@ -91,7 +91,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
     }
 
     /**
-     * Constructor with lists of points to be used to estimate an euclidean 3D
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -124,7 +124,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
 
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * euclidean 3D transformation.
+     * Euclidean 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -161,7 +161,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
     }
 
     /**
-     * Constructor with lists of points to be used to estimate an euclidean 3D
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -210,7 +210,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
 
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * euclidean 3D transformation.
+     * Euclidean 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -252,7 +252,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
     }
 
     /**
-     * Constructor with lists of points to be used to estimate an euclidean 3D
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -289,7 +289,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
 
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * euclidean 3D transformation.
+     * Euclidean 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -329,7 +329,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
     }
 
     /**
-     * Constructor with lists of points to be used to estimate an euclidean 3D
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
@@ -380,7 +380,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
 
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * euclidean 3D transformation.
+     * Euclidean 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
      * be greater or equal than MINIMUM_SIZE.
@@ -514,11 +514,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
     }
 
     /**
-     * Estimates an euclidean 3D transformation using a robust estimator and
+     * Estimates an Euclidean 3D transformation using a robust estimator and
      * the best set of matched 3D point correspondences found using the robust
      * estimator.
      *
-     * @return an euclidean 3D transformation.
+     * @return an Euclidean 3D transformation.
      * @throws LockedException          if robust estimator is locked because an
      *                                  estimation is already in progress.
      * @throws NotReadyException        if provided input data is not enough to start
@@ -678,7 +678,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
      */
     @Override
     public RobustEstimatorMethod getMethod() {
-        return RobustEstimatorMethod.PROMedS;
+        return RobustEstimatorMethod.PROMEDS;
     }
 
     /**
@@ -686,7 +686,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
      * refinement.
      * Returned value gives an indication of how much variance each residual
      * has.
-     * Typically this value is related to the threshold used on each robust
+     * Typically, this value is related to the threshold used on each robust
      * estimation, since residuals of found inliers are within the range of such
      * threshold.
      *

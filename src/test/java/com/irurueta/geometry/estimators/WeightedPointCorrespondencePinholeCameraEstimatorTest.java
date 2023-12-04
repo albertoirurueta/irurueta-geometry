@@ -83,20 +83,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check correctness
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.
-                        WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
         assertFalse(estimator.areListsAvailable());
         assertFalse(estimator.areWeightsAvailable());
         try {
@@ -115,58 +111,51 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         } catch (final NotAvailableException ignore) {
         }
         assertNull(estimator.getListener());
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
 
         // testing constructor with listener
         estimator = new WeightedPointCorrespondencePinholeCameraEstimator(this);
 
         // check correctness
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.
-                        WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
         assertFalse(estimator.areListsAvailable());
         assertFalse(estimator.areWeightsAvailable());
         try {
@@ -185,38 +174,35 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         } catch (final NotAvailableException ignore) {
         }
         assertEquals(estimator.getListener(), this);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
         // testing constructor with lists
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -237,62 +223,55 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                 points3D, points2D);
         // check correctness
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.
-                        WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
         assertTrue(estimator.areListsAvailable());
         assertFalse(estimator.areWeightsAvailable());
-        assertEquals(estimator.getPoints2D(), points2D);
-        assertEquals(estimator.getPoints3D(), points3D);
+        assertEquals(points2D, estimator.getPoints2D());
+        assertEquals(points3D, estimator.getPoints3D());
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
         assertNull(estimator.getListener());
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
         // Force WrongListSizesException
         final List<Point3D> wrong3D = new ArrayList<>();
@@ -330,62 +309,55 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                 points3D, points2D, this);
         // check correctness
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.
-                        WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
         assertTrue(estimator.areListsAvailable());
         assertFalse(estimator.areWeightsAvailable());
-        assertEquals(estimator.getPoints2D(), points2D);
-        assertEquals(estimator.getPoints3D(), points3D);
+        assertEquals(points2D, estimator.getPoints2D());
+        assertEquals(points3D, estimator.getPoints3D());
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
         } catch (final NotAvailableException ignore) {
         }
         assertEquals(estimator.getListener(), this);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
         // Force WrongListSizesException
         estimator = null;
@@ -424,56 +396,49 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                 points3D, points2D, weights);
         // check correctness
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.
-                        WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
-        assertEquals(estimator.getPoints2D(), points2D);
-        assertEquals(estimator.getPoints3D(), points3D);
-        assertArrayEquals(estimator.getWeights(), weights, 0.0);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
+        assertEquals(points2D, estimator.getPoints2D());
+        assertEquals(points3D, estimator.getPoints3D());
+        assertArrayEquals(weights, estimator.getWeights(), 0.0);
         assertNull(estimator.getListener());
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
         // Force WrongListSizesException
         final double[] wrongWeights = new double[1];
@@ -522,56 +487,49 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                 points3D, points2D, weights, this);
         // check correctness
-        assertEquals(estimator.getType(),
-                PinholeCameraEstimatorType.
-                        WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
+                estimator.getType());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
-        assertEquals(estimator.getPoints2D(), points2D);
-        assertEquals(estimator.getPoints3D(), points3D);
-        assertArrayEquals(estimator.getWeights(), weights, 0.0);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
+        assertEquals(points2D, estimator.getPoints2D());
+        assertEquals(points3D, estimator.getPoints3D());
+        assertArrayEquals(weights, estimator.getWeights(), 0.0);
         assertEquals(estimator.getListener(), this);
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
-                0.0);
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
         // Force WrongListSizesException
         estimator = null;
@@ -623,9 +581,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         final WeightedPointCorrespondencePinholeCameraEstimator estimator =
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
-        assertEquals(estimator.arePointCorrespondencesNormalized(),
-                DLTPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_NORMALIZE_POINT_CORRESPONDENCES);
+        assertEquals(DLTPointCorrespondencePinholeCameraEstimator.DEFAULT_NORMALIZE_POINT_CORRESPONDENCES,
+                estimator.arePointCorrespondencesNormalized());
 
         // disable
         estimator.setPointCorrespondencesNormalized(false);
@@ -842,7 +799,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertEquals(estimator.getListener(), this);
+        assertEquals(this, estimator.getListener());
     }
 
     @Test
@@ -851,16 +808,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
 
         // set new value
         estimator.setSuggestSkewnessValueEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestSkewnessValueEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
     }
 
     @Test
@@ -869,14 +826,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedSkewnessValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
 
         // set new value
         estimator.setSuggestedSkewnessValue(1e-3);
 
         // check correctness
-        assertEquals(estimator.getSuggestedSkewnessValue(), 1e-3, 0.0);
+        assertEquals(1e-3, estimator.getSuggestedSkewnessValue(), 0.0);
     }
 
     @Test
@@ -886,16 +843,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
 
         // set new value
         estimator.setSuggestHorizontalFocalLengthEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestHorizontalFocalLengthEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
     }
 
     @Test
@@ -905,15 +862,13 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 0.0,
-                0.0);
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
 
         // set new value
         estimator.setSuggestedHorizontalFocalLengthValue(100.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestedHorizontalFocalLengthValue(), 100.0,
-                0.0);
+        assertEquals(100.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
     }
 
     @Test
@@ -923,16 +878,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
 
         // set new value
         estimator.setSuggestVerticalFocalLengthEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestVerticalFocalLengthEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
     }
 
     @Test
@@ -942,15 +897,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 0.0,
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(),
                 0.0);
 
         // set new value
         estimator.setSuggestedVerticalFocalLengthValue(100.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestedVerticalFocalLengthValue(), 100.0,
-                0.0);
+        assertEquals(100.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
     }
 
     @Test
@@ -959,16 +913,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
 
         // set new value
         estimator.setSuggestAspectRatioEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestAspectRatioEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
     }
 
     @Test
@@ -977,15 +931,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestedAspectRatioValue(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
 
         // set new value
         estimator.setSuggestedAspectRatioValue(-1.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestedAspectRatioValue(), -1.0, 0.0);
+        assertEquals(-1.0, estimator.getSuggestedAspectRatioValue(), 0.0);
     }
 
     @Test
@@ -994,16 +947,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
 
         // set new value
         estimator.setSuggestPrincipalPointEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestPrincipalPointEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
     }
 
     @Test
@@ -1020,7 +973,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator.setSuggestedPrincipalPointValue(principalPoint);
 
         // check correctness
-        assertSame(estimator.getSuggestedPrincipalPointValue(), principalPoint);
+        assertSame(principalPoint, estimator.getSuggestedPrincipalPointValue());
     }
 
     @Test
@@ -1029,16 +982,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
 
         // set new value
         estimator.setSuggestRotationEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestRotationEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
     }
 
     @Test
@@ -1054,7 +1007,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator.setSuggestedRotationValue(q);
 
         // check correctness
-        assertSame(estimator.getSuggestedRotationValue(), q);
+        assertSame(q, estimator.getSuggestedRotationValue());
     }
 
     @Test
@@ -1063,16 +1016,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
 
         // set new value
         estimator.setSuggestCenterEnabled(
                 !PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
 
         // check correctness
-        assertEquals(estimator.isSuggestCenterEnabled(),
-                !PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED);
+        assertEquals(!PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
+                estimator.isSuggestCenterEnabled());
     }
 
     @Test
@@ -1088,7 +1041,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator.setSuggestedCenterValue(center);
 
         // check correctness
-        assertSame(estimator.getSuggestedCenterValue(), center);
+        assertSame(center, estimator.getSuggestedCenterValue());
     }
 
     @Test
@@ -1097,14 +1050,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
 
         // set new value
         estimator.setMinSuggestionWeight(1.0);
 
         // check correctness
-        assertEquals(estimator.getMinSuggestionWeight(), 1.0, 0.0);
+        assertEquals(1.0, estimator.getMinSuggestionWeight(), 0.0);
     }
 
     @Test
@@ -1113,14 +1066,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
 
         // set new value
         estimator.setMaxSuggestionWeight(1.0);
 
         // check correctness
-        assertEquals(estimator.getMaxSuggestionWeight(), 1.0, 0.0);
+        assertEquals(1.0, estimator.getMaxSuggestionWeight(), 0.0);
     }
 
     @Test
@@ -1129,17 +1082,17 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getMinSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(),
-                PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
+                estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
+                estimator.getMaxSuggestionWeight(), 0.0);
 
         // set new value
         estimator.setMinMaxSuggestionWeight(10.0, 20.0);
 
         // check correctness
-        assertEquals(estimator.getMinSuggestionWeight(), 10.0, 0.0);
-        assertEquals(estimator.getMaxSuggestionWeight(), 20.0, 0.0);
+        assertEquals(10.0, estimator.getMinSuggestionWeight(), 0.0);
+        assertEquals(20.0, estimator.getMaxSuggestionWeight(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -1155,14 +1108,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
         // check default value
-        assertEquals(estimator.getSuggestionWeightStep(),
-                PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
+                estimator.getSuggestionWeightStep(), 0.0);
 
         // set new value
         estimator.setSuggestionWeightStep(1.0);
 
         // check correctness
-        assertEquals(estimator.getSuggestionWeightStep(), 1.0, 0.0);
+        assertEquals(1.0, estimator.getSuggestionWeightStep(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -1177,9 +1130,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         final WeightedPointCorrespondencePinholeCameraEstimator estimator =
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
-        assertEquals(estimator.getMaxPoints(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_MAX_POINTS);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_MAX_POINTS,
+                estimator.getMaxPoints());
 
         // set new value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1187,7 +1139,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         estimator.setMaxPoints(maxPoints);
 
         // check correctness
-        assertEquals(estimator.getMaxPoints(), maxPoints);
+        assertEquals(maxPoints, estimator.getMaxPoints());
     }
 
     @Test
@@ -1195,9 +1147,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         final WeightedPointCorrespondencePinholeCameraEstimator estimator =
                 new WeightedPointCorrespondencePinholeCameraEstimator();
 
-        assertEquals(estimator.isSortWeightsEnabled(),
-                WeightedPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_SORT_WEIGHTS);
+        assertEquals(WeightedPointCorrespondencePinholeCameraEstimator.DEFAULT_SORT_WEIGHTS,
+                estimator.isSortWeightsEnabled());
 
         // disable
         estimator.setSortWeightsEnabled(false);
@@ -1301,9 +1252,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -1312,8 +1263,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
 
             // check that points2D and estimated points2D are equal
             Iterator<Point2D> points2DIt = points2D.iterator();
-            Iterator<Point2D> estimatedPoints2DIt =
-                    estimatedPoints2D.iterator();
+            Iterator<Point2D> estimatedPoints2DIt = estimatedPoints2D.iterator();
 
             Point2D point2D;
             Point2D estimatedPoint2D;
@@ -1442,9 +1392,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -1492,26 +1442,20 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             estimatedBetaEuler = estimatedRotation2.getBetaEulerAngle();
             estimatedGammaEuler = estimatedRotation2.getGammaEulerAngle();
 
-            if (Math.abs(alphaEuler - estimatedAlphaEuler) <=
+            if (Math.abs(alphaEuler - estimatedAlphaEuler) >
                     VERY_LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
-            } else {
                 validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
                         Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR;
             }
 
-            if (Math.abs(betaEuler - estimatedBetaEuler) <=
+            if (Math.abs(betaEuler - estimatedBetaEuler) >
                     VERY_LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
-            } else {
                 validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
                         Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR;
             }
 
-            if (Math.abs(gammaEuler - estimatedGammaEuler) <=
+            if (Math.abs(gammaEuler - estimatedGammaEuler) >
                     VERY_LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
-            } else {
                 validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
                         Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR;
             }
@@ -1633,9 +1577,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -1781,9 +1725,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -1932,9 +1876,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -2083,9 +2027,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -2235,9 +2179,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -2390,9 +2334,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -2547,9 +2491,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -2692,9 +2636,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             }
 
             assertFalse(estimator.isLocked());
-            assertEquals(startCount, 1);
-            assertEquals(endCount, 1);
-            assertEquals(progressCount, 0);
+            assertEquals(1, startCount);
+            assertEquals(1, endCount);
+            assertEquals(0, progressCount);
 
             assertNotNull(estimatedCamera);
 
@@ -2792,7 +2736,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             estimator.setLists(null, null);
             fail("LockedException expected but not thrown");
         } catch (final LockedException ignore) {
-        } catch (final Throwable t) {
+        } catch (final Exception t) {
             fail("LockedException expected but not thrown");
         }
 
@@ -2800,7 +2744,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             estimator.setListsAndWeights(null, null, null);
             fail("LockedException expected but not thrown");
         } catch (final LockedException ignore) {
-        } catch (final Throwable t) {
+        } catch (final Exception t) {
             fail("LockedException expected but not thrown");
         }
 

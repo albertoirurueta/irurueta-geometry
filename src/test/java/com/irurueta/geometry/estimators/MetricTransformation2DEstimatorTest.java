@@ -68,8 +68,8 @@ public class MetricTransformation2DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // constructor with points
         List<Point2D> inputPoints = new ArrayList<>();
@@ -88,15 +88,15 @@ public class MetricTransformation2DEstimatorTest implements
                 outputPoints);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         final List<Point2D> wrong = new ArrayList<>();
@@ -129,28 +129,28 @@ public class MetricTransformation2DEstimatorTest implements
         // check default values
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // constructor with listener and points
         estimator = new MetricTransformation2DEstimator(this, inputPoints,
                 outputPoints);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
-        assertSame(estimator.getListener(), this);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -186,8 +186,8 @@ public class MetricTransformation2DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // constructor with points
         inputPoints = new ArrayList<>();
@@ -204,15 +204,15 @@ public class MetricTransformation2DEstimatorTest implements
                 outputPoints, true);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -242,13 +242,13 @@ public class MetricTransformation2DEstimatorTest implements
         // check default values
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
 
         // constructor with listener and points
@@ -256,15 +256,15 @@ public class MetricTransformation2DEstimatorTest implements
                 outputPoints, true);
 
         // check default values
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
-        assertSame(estimator.getListener(), this);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -312,8 +312,8 @@ public class MetricTransformation2DEstimatorTest implements
         estimator.setPoints(inputPoints, outputPoints);
 
         // check correctness
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
 
         // Force IllegalArgumentException
         final List<Point2D> wrong = new ArrayList<>();
@@ -347,7 +347,7 @@ public class MetricTransformation2DEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -358,16 +358,16 @@ public class MetricTransformation2DEstimatorTest implements
 
         // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // set new value
         estimator.setWeakMinimumSizeAllowed(true);
 
         // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
     }
 
     @Test
@@ -411,27 +411,27 @@ public class MetricTransformation2DEstimatorTest implements
                             outputPoints);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation3 =
                     new MetricTransformation2D();
             estimator.estimate(transformation3);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
 
@@ -484,7 +484,7 @@ public class MetricTransformation2DEstimatorTest implements
             final double[] translation3 = transformation3.getTranslation();
             final double scale3 = transformation3.getScale();
 
-            assertEquals(rotation3.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation3.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation3, ABSOLUTE_ERROR);
             assertEquals(scale, scale3, ABSOLUTE_ERROR);
@@ -537,27 +537,27 @@ public class MetricTransformation2DEstimatorTest implements
                             outputPoints);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation3 =
                     new MetricTransformation2D();
             estimator.estimate(transformation3);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
 
@@ -579,7 +579,7 @@ public class MetricTransformation2DEstimatorTest implements
             final double[] translation2 = transformation2.getTranslation();
             final double scale2 = transformation2.getScale();
 
-            assertEquals(rotation2.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation2.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
             assertEquals(scale, scale2, ABSOLUTE_ERROR);
@@ -610,7 +610,7 @@ public class MetricTransformation2DEstimatorTest implements
             final double[] translation3 = transformation3.getTranslation();
             final double scale3 = transformation3.getScale();
 
-            assertEquals(rotation3.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation3.getTheta(),
                     ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation3, ABSOLUTE_ERROR);
             assertEquals(scale, scale3, ABSOLUTE_ERROR);
@@ -687,27 +687,27 @@ public class MetricTransformation2DEstimatorTest implements
                             outputPoints, true);
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
             reset();
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
             final MetricTransformation2D transformation3 =
                     new MetricTransformation2D();
             estimator.estimate(transformation3);
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
 
@@ -742,7 +742,7 @@ public class MetricTransformation2DEstimatorTest implements
             if (Math.abs(rotation2.getTheta() - rotation.getTheta()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(rotation2.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation2.getTheta(),
                     ABSOLUTE_ERROR);
             boolean failed = false;
             for (int i = 0; i < translation.length; i++) {
@@ -787,7 +787,7 @@ public class MetricTransformation2DEstimatorTest implements
             if (Math.abs(rotation3.getTheta() - rotation.getTheta()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(rotation3.getTheta(), rotation.getTheta(),
+            assertEquals(rotation.getTheta(), rotation3.getTheta(),
                     ABSOLUTE_ERROR);
             for (int i = 0; i < translation.length; i++) {
                 if (Math.abs(translation[i] - translation3[i]) > ABSOLUTE_ERROR) {

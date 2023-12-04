@@ -74,34 +74,30 @@ public class AffineTransformation3DTest {
         AffineTransformation3D transformation = new AffineTransformation3D();
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, 0.0);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, 0.0);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), 0.0);
         assertTrue(transformation.getA().equals(
                 transformation.getParameters().asMatrix().multiplyAndReturnNew(
                         transformation.getRotation().asInhomogeneousMatrix()),
@@ -117,12 +113,12 @@ public class AffineTransformation3DTest {
 
         // check correctness
         assertNotNull(transformation.getRotation());
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
         assertNotNull(transformation.getParameters());
 
         // Force NullPointerException
@@ -149,34 +145,27 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(scale);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[2], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                scale, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[2], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Test constructor with rotation
@@ -192,37 +181,38 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(rotation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[2], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()),
+                ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]),
+                ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]),
+                ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]),
+                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[2], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -239,37 +229,31 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(scale, rotation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[2], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[2], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -299,37 +283,28 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(params, rotation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[1], 0.0, 0.0);
-        assertEquals(transformation.getTranslation()[2], 0.0, 0.0);
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(), scaleZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(), skewnessXY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(), skewnessXZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(), skewnessYZ,
-                ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[1], 0.0);
+        assertEquals(0.0, transformation.getTranslation()[2], 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
+        assertEquals(scaleX, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scaleZ, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXY, transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXZ, transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessYZ, transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -357,35 +332,31 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(translation);
 
         // check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, Math.abs(transformation.getRotation().getRotationAxis()[2]),
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]), 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
         assertNotNull(transformation.getA());
 
         // Force NullPointerException
@@ -411,14 +382,14 @@ public class AffineTransformation3DTest {
 
         // check correctness
         assertNotNull(transformation.getRotation());
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
         assertNotNull(transformation.getParameters());
         assertTrue(a.equals(transformation.getA(), ABSOLUTE_ERROR));
 
@@ -454,35 +425,28 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(scale, translation);
 
         // Check correctness
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, Math.abs(transformation.getRotation().getRotationAxis()[2]),
                 ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]), 1.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -505,37 +469,34 @@ public class AffineTransformation3DTest {
         transformation = new AffineTransformation3D(rotation, translation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -567,37 +528,31 @@ public class AffineTransformation3DTest {
                 translation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -629,37 +584,28 @@ public class AffineTransformation3DTest {
                 translation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0], 0.0);
-        assertEquals(transformation.getTranslation()[1], translation[1], 0.0);
-        assertEquals(transformation.getTranslation()[2], translation[2], 0.0);
-        assertEquals(transformation.getTranslationX(), translation[0], 0.0);
-        assertEquals(transformation.getTranslationY(), translation[1], 0.0);
-        assertEquals(transformation.getTranslationZ(), translation[2], 0.0);
-        assertEquals(transformation.getParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(), scaleZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(), skewnessXY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(), skewnessXZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(), skewnessYZ,
-                ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]), ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
+        assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
+        assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
+        assertEquals(translation[0], transformation.getTranslationX(), 0.0);
+        assertEquals(translation[1], transformation.getTranslationY(), 0.0);
+        assertEquals(translation[2], transformation.getTranslationZ(), 0.0);
+        assertEquals(scaleX, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scaleZ, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXY, transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXZ, transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessYZ, transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         transformation = null;
@@ -749,30 +695,23 @@ public class AffineTransformation3DTest {
         final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
 
         // test default values
-        assertEquals(transformation.getRotation().getRotationAngle(), 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[0], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[1], 0.0,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getRotation().getRotationAxis()[2], 1.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
         // set new value
         transformation.setRotation(rotation);
 
         // check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(theta), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(rotAxis[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(rotAxis[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(rotAxis[2]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(theta),
+                Math.abs(transformation.getRotation().getRotationAngle()), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[0]),
+                Math.abs(transformation.getRotation().getRotationAxis()[0]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[1]),
+                Math.abs(transformation.getRotation().getRotationAxis()[1]), ABSOLUTE_ERROR);
+        assertEquals(Math.abs(rotAxis[2]),
+                Math.abs(transformation.getRotation().getRotationAxis()[2]), ABSOLUTE_ERROR);
 
         // Force NullPointerException
         try {
@@ -880,61 +819,55 @@ public class AffineTransformation3DTest {
         final AffineTransformation3D transformation = new AffineTransformation3D();
 
         // check default values
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(),
-                AffineParameters3D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SKEWNESS,
+                transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
 
         final AffineParameters3D defaultParams = new AffineParameters3D();
         transformation.getParameters(defaultParams);
 
-        assertEquals(defaultParams.getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getScaleY(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getScaleZ(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getSkewnessXY(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getSkewnessXZ(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
-        assertEquals(defaultParams.getSkewnessYZ(),
-                AffineParameters2D.DEFAULT_SKEWNESS, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                defaultParams.getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                defaultParams.getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                defaultParams.getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                defaultParams.getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                defaultParams.getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters2D.DEFAULT_SKEWNESS,
+                defaultParams.getSkewnessYZ(), ABSOLUTE_ERROR);
 
         // set parameters
         transformation.setParameters(params);
 
         // check correctness
-        assertEquals(transformation.getParameters().getScaleX(), scaleX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleY(), scaleY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleZ(), scaleZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXY(), skewnessXY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessXZ(), skewnessXZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getSkewnessYZ(), skewnessYZ,
-                ABSOLUTE_ERROR);
+        assertEquals(scaleX, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, transformation.getParameters().getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scaleZ, transformation.getParameters().getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXY, transformation.getParameters().getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXZ, transformation.getParameters().getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessYZ, transformation.getParameters().getSkewnessYZ(), ABSOLUTE_ERROR);
 
         final AffineParameters3D params2 = new AffineParameters3D();
         transformation.getParameters(params2);
 
-        assertEquals(params2.getScaleX(), scaleX, ABSOLUTE_ERROR);
-        assertEquals(params2.getScaleY(), scaleY, ABSOLUTE_ERROR);
-        assertEquals(params2.getScaleZ(), scaleZ, ABSOLUTE_ERROR);
-        assertEquals(params2.getSkewnessXY(), skewnessXY, ABSOLUTE_ERROR);
-        assertEquals(params2.getSkewnessXZ(), skewnessXZ, ABSOLUTE_ERROR);
-        assertEquals(params2.getSkewnessYZ(), skewnessYZ, ABSOLUTE_ERROR);
+        assertEquals(scaleX, params2.getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scaleY, params2.getScaleY(), ABSOLUTE_ERROR);
+        assertEquals(scaleZ, params2.getScaleZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXY, params2.getSkewnessXY(), ABSOLUTE_ERROR);
+        assertEquals(skewnessXZ, params2.getSkewnessXZ(), ABSOLUTE_ERROR);
+        assertEquals(skewnessYZ, params2.getSkewnessYZ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -947,33 +880,27 @@ public class AffineTransformation3DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation[2],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translation[2],
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation[2], transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -999,13 +926,13 @@ public class AffineTransformation3DTest {
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
         final double[] translationCopy = Arrays.copyOf(translation1,
@@ -1013,39 +940,33 @@ public class AffineTransformation3DTest {
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation1[2],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1],
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translation1[2],
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation1[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation1[2], transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // add translation
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translation1[2] +
-                translation2[2], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translation1[0] +
-                translation2[0], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translation1[1] +
-                translation2[1], ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translation1[2] +
-                translation2[2], ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[2] + translation2[2],
+                transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation1[0] + translation2[0],
+                transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1],
+                transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation1[2] + translation2[2],
+                transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         final double[] badTranslation = new double[
@@ -1066,13 +987,13 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set new value
         transformation.setTranslationX(translationX);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX, 0.0);
+        assertEquals(translationX, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -1084,13 +1005,13 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set new value
         transformation.setTranslationY(translationY);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY, 0.0);
+        assertEquals(translationY, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -1102,13 +1023,13 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set new value
         transformation.setTranslationZ(translationZ);
 
         // check correctness
-        assertEquals(transformation.getTranslationZ(), translationZ, 0.0);
+        assertEquals(translationZ, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -1124,33 +1045,27 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translationX, translationY, translationZ);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translationZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translationZ,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslationZ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1168,33 +1083,27 @@ public class AffineTransformation3DTest {
                 translationX, translationY, translationZ);
 
         // check default value
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), 0.0, ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), 0.0, ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // set new value
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(transformation.getTranslation().length,
-                AffineTransformation3D.NUM_TRANSLATION_COORDS);
-        assertEquals(transformation.getTranslation()[0], translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[1], translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslation()[2], translationZ,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationX(), translationX,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationY(), translationY,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getTranslationZ(), translationZ,
-                ABSOLUTE_ERROR);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
+                transformation.getTranslation().length);
+        assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translationX, transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translationZ, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         final Point3D translation2 = transformation.getTranslationPoint();
         final Point3D translation3 = Point3D.create();
@@ -1216,20 +1125,19 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
 
         // set value
         transformation.setTranslationX(translationX1);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(), translationX1, 0.0);
+        assertEquals(translationX1, transformation.getTranslationX(), 0.0);
 
         // add translation x
         transformation.addTranslationX(translationX2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
     }
 
     @Test
@@ -1243,20 +1151,19 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
 
         // set value
         transformation.setTranslationY(translationY1);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(), translationY1, 0.0);
+        assertEquals(translationY1, transformation.getTranslationY(), 0.0);
 
         // add translation y
         transformation.addTranslationY(translationY2);
 
         // check correctness
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
     }
 
     @Test
@@ -1270,20 +1177,19 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set value
         transformation.setTranslationZ(translationZ1);
 
         // Check correctness
-        assertEquals(transformation.getTranslationZ(), translationZ1, 0.0);
+        assertEquals(translationZ1, transformation.getTranslationZ(), 0.0);
 
         // add translationZ
         transformation.addTranslationZ(translationZ2);
 
         // check correctness
-        assertEquals(transformation.getTranslationZ(),
-                translationZ1 + translationZ2, 0.0);
+        assertEquals(translationZ1 + translationZ2, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -1305,25 +1211,20 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set values
-        transformation.setTranslation(translationX1, translationY1,
-                translationZ1);
+        transformation.setTranslation(translationX1, translationY1, translationZ1);
 
         // add translation
-        transformation.addTranslation(translationX2, translationY2,
-                translationZ2);
+        transformation.addTranslation(translationX2, translationY2, translationZ2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
-        assertEquals(transformation.getTranslationZ(),
-                translationZ1 + translationZ2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
+        assertEquals(translationZ1 + translationZ2, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -1345,26 +1246,22 @@ public class AffineTransformation3DTest {
                 MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(transformation.getTranslationX(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationY(), 0.0, 0.0);
-        assertEquals(transformation.getTranslationZ(), 0.0, 0.0);
+        assertEquals(0.0, transformation.getTranslationX(), 0.0);
+        assertEquals(0.0, transformation.getTranslationY(), 0.0);
+        assertEquals(0.0, transformation.getTranslationZ(), 0.0);
 
         // set values
-        transformation.setTranslation(translationX1, translationY1,
-                translationZ1);
+        transformation.setTranslation(translationX1, translationY1, translationZ1);
 
         // add translation
-        final Point3D translation2 = new InhomogeneousPoint3D(translationX2,
-                translationY2, translationZ2);
+        final Point3D translation2 = new InhomogeneousPoint3D(
+                translationX2, translationY2, translationZ2);
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(transformation.getTranslationX(),
-                translationX1 + translationX2, 0.0);
-        assertEquals(transformation.getTranslationY(),
-                translationY1 + translationY2, 0.0);
-        assertEquals(transformation.getTranslationZ(),
-                translationZ1 + translationZ2, 0.0);
+        assertEquals(translationX1 + translationX2, transformation.getTranslationX(), 0.0);
+        assertEquals(translationY1 + translationY2, transformation.getTranslationY(), 0.0);
+        assertEquals(translationZ1 + translationZ2, transformation.getTranslationZ(), 0.0);
     }
 
     @Test
@@ -1376,23 +1273,20 @@ public class AffineTransformation3DTest {
                 MAX_SCALE);
 
         // check default value
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleX(),
-                AffineParameters3D.DEFAULT_SCALE, ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(AffineParameters3D.DEFAULT_SCALE,
+                transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
 
         // set value
         transformation.setScale(scale);
 
         // check correctness
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
-        assertEquals(transformation.getParameters().getScaleX(), scale,
-                ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
+        assertEquals(scale, transformation.getParameters().getScaleX(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1735,73 +1629,43 @@ public class AffineTransformation3DTest {
         outQuadric1.normalize();
         outQuadric2.normalize();
 
-        assertEquals(expectedQuadric.getA(), outQuadric1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), outQuadric1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), outQuadric1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), outQuadric1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), outQuadric1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), outQuadric1.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), outQuadric1.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), outQuadric1.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), outQuadric1.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), outQuadric1.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), outQuadric1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric1.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric1.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric1.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric1.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric1.getJ(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedQuadric.getA(), outQuadric2.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), outQuadric2.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), outQuadric2.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), outQuadric2.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), outQuadric2.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), outQuadric2.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), outQuadric2.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), outQuadric2.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), outQuadric2.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), outQuadric2.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), outQuadric2.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric2.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric2.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric2.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric2.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric2.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric2.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric2.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric2.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric2.getJ(), ABSOLUTE_ERROR);
 
         transformation.transform(quadric);
 
         // check correctness
         quadric.normalize();
 
-        assertEquals(expectedQuadric.getA(), quadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), quadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), quadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), quadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), quadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), quadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), quadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), quadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), quadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), quadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), quadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), quadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), quadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), quadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), quadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), quadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), quadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), quadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), quadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), quadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -1927,26 +1791,16 @@ public class AffineTransformation3DTest {
         // check quadric correctness
         outQuadric.normalize();
 
-        assertEquals(expectedQuadric.getA(), outQuadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getB(), outQuadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getC(), outQuadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getD(), outQuadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getE(), outQuadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getF(), outQuadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getG(), outQuadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getH(), outQuadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getI(), outQuadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedQuadric.getJ(), outQuadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getA(), outQuadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2017,73 +1871,43 @@ public class AffineTransformation3DTest {
         outDualQuadric1.normalize();
         outDualQuadric2.normalize();
 
-        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric1.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric1.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric1.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric1.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric1.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric1.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric1.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric1.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric1.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric1.getJ(), ABSOLUTE_ERROR);
 
         transformation.transform(dualQuadric);
 
         // check correctness
         dualQuadric.normalize();
 
-        assertEquals(expectedDualQuadric.getA(), dualQuadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), dualQuadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), dualQuadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), dualQuadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), dualQuadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), dualQuadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), dualQuadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), dualQuadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), dualQuadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), dualQuadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), dualQuadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), dualQuadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), dualQuadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), dualQuadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), dualQuadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), dualQuadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), dualQuadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), dualQuadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), dualQuadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), dualQuadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2219,26 +2043,16 @@ public class AffineTransformation3DTest {
         // check dual quadric correctness
         outDualQuadric.normalize();
 
-        assertEquals(expectedDualQuadric.getA(), outDualQuadric.getA(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getB(), outDualQuadric.getB(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getC(), outDualQuadric.getC(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getD(), outDualQuadric.getD(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getE(), outDualQuadric.getE(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getF(), outDualQuadric.getF(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getG(), outDualQuadric.getG(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getH(), outDualQuadric.getH(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getI(), outDualQuadric.getI(),
-                ABSOLUTE_ERROR);
-        assertEquals(expectedDualQuadric.getJ(), outDualQuadric.getJ(),
-                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric.getF(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric.getG(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric.getH(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric.getI(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric.getJ(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2325,7 +2139,7 @@ public class AffineTransformation3DTest {
         final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        // ensure we create a matrix with 3 non linear dependent rows
+        // ensure we create a matrix with 3 non-linear dependent rows
         while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2487,23 +2301,15 @@ public class AffineTransformation3DTest {
             outPlane2.normalize();
 
             // check correctness
-            assertEquals(expectedPlane.getA(), outPlane1.getA(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getB(), outPlane1.getB(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getC(), outPlane1.getC(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getD(), outPlane1.getD(),
-                    ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getA(), outPlane1.getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getB(), outPlane1.getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getC(), outPlane1.getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getD(), outPlane1.getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedPlane.getA(), outPlane2.getA(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getB(), outPlane2.getB(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getC(), outPlane2.getC(),
-                    ABSOLUTE_ERROR);
-            assertEquals(expectedPlane.getD(), outPlane2.getD(),
-                    ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getA(), outPlane2.getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getB(), outPlane2.getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getC(), outPlane2.getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedPlane.getD(), outPlane2.getD(), ABSOLUTE_ERROR);
         }
     }
 
@@ -2641,64 +2447,40 @@ public class AffineTransformation3DTest {
         outLine2.normalize();
 
         // check correctness
-        assertEquals(expectedLine.getPlane1().getA(),
-                outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getB(),
-                outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getC(),
-                outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getD(),
-                outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getA(), outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getB(), outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getC(), outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getD(), outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane2().getA(),
-                outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getB(),
-                outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getC(),
-                outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getD(),
-                outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getA(), outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getB(), outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getC(), outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getD(), outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane1().getA(),
-                outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getB(),
-                outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getC(),
-                outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getD(),
-                outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getA(), outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getB(), outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getC(), outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getD(), outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane2().getA(),
-                outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getB(),
-                outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getC(),
-                outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getD(),
-                outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getA(), outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getB(), outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getC(), outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getD(), outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
 
         transformation.transform(line);
 
         line.normalize();
 
         // check correctness
-        assertEquals(expectedLine.getPlane1().getA(),
-                line.getPlane1().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getB(),
-                line.getPlane1().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getC(),
-                line.getPlane1().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane1().getD(),
-                line.getPlane1().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getA(), line.getPlane1().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getB(), line.getPlane1().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getC(), line.getPlane1().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane1().getD(), line.getPlane1().getD(), ABSOLUTE_ERROR);
 
-        assertEquals(expectedLine.getPlane2().getA(),
-                line.getPlane2().getA(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getB(),
-                line.getPlane2().getB(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getC(),
-                line.getPlane2().getC(), ABSOLUTE_ERROR);
-        assertEquals(expectedLine.getPlane2().getD(),
-                line.getPlane2().getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getA(), line.getPlane2().getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getB(), line.getPlane2().getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getC(), line.getPlane2().getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getPlane2().getD(), line.getPlane2().getD(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -2767,8 +2549,8 @@ public class AffineTransformation3DTest {
         transformation.transformLines(inputLines, outLines2);
 
         // check correctness
-        assertEquals(outLines1.size(), inputLines.size());
-        assertEquals(outLines2.size(), inputLines.size());
+        assertEquals(inputLines.size(), outLines1.size());
+        assertEquals(inputLines.size(), outLines2.size());
         for (int i = 0; i < size; i++) {
             final Line3D expectedLine = expectedLines.get(i);
 
@@ -2780,42 +2562,25 @@ public class AffineTransformation3DTest {
             outLine2.normalize();
 
             // check correctness
-            assertEquals(expectedLine.getPlane1().getA(),
-                    outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getB(),
-                    outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getC(),
-                    outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getD(),
-                    outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getA(), outLine1.getPlane1().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getB(), outLine1.getPlane1().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getC(), outLine1.getPlane1().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getD(), outLine1.getPlane1().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane2().getA(),
-                    outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getB(),
-                    outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getC(),
-                    outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getD(),
-                    outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getA(), outLine1.getPlane2().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getB(), outLine1.getPlane2().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getC(), outLine1.getPlane2().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getD(), outLine1.getPlane2().getD(), ABSOLUTE_ERROR);
 
+            assertEquals(expectedLine.getPlane1().getA(), outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getB(), outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getC(), outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getD(), outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane1().getA(),
-                    outLine2.getPlane1().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getB(),
-                    outLine2.getPlane1().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getC(),
-                    outLine2.getPlane1().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getD(),
-                    outLine2.getPlane1().getD(), ABSOLUTE_ERROR);
-
-            assertEquals(expectedLine.getPlane2().getA(),
-                    outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getB(),
-                    outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getC(),
-                    outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getD(),
-                    outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getA(), outLine2.getPlane2().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getB(), outLine2.getPlane2().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getC(), outLine2.getPlane2().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getD(), outLine2.getPlane2().getD(), ABSOLUTE_ERROR);
         }
     }
 
@@ -2893,23 +2658,15 @@ public class AffineTransformation3DTest {
             line.normalize();
 
             // check correctness
-            assertEquals(expectedLine.getPlane1().getA(),
-                    line.getPlane1().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getB(),
-                    line.getPlane1().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getC(),
-                    line.getPlane1().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane1().getD(),
-                    line.getPlane1().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getA(), line.getPlane1().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getB(), line.getPlane1().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getC(), line.getPlane1().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane1().getD(), line.getPlane1().getD(), ABSOLUTE_ERROR);
 
-            assertEquals(expectedLine.getPlane2().getA(),
-                    line.getPlane2().getA(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getB(),
-                    line.getPlane2().getB(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getC(),
-                    line.getPlane2().getC(), ABSOLUTE_ERROR);
-            assertEquals(expectedLine.getPlane2().getD(),
-                    line.getPlane2().getD(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getA(), line.getPlane2().getA(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getB(), line.getPlane2().getB(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getC(), line.getPlane2().getC(), ABSOLUTE_ERROR);
+            assertEquals(expectedLine.getPlane2().getD(), line.getPlane2().getD(), ABSOLUTE_ERROR);
         }
     }
 
@@ -3026,18 +2783,12 @@ public class AffineTransformation3DTest {
         final double[] translation = new double[
                 MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final AffineParameters3D affineParams = new AffineParameters3D(scaleX, scaleY,
                 scaleZ, skewnessXY, skewnessXZ, skewnessYZ);
@@ -3131,18 +2882,12 @@ public class AffineTransformation3DTest {
         final double[] translation = new double[
                 MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         final AffineParameters3D affineParams = new AffineParameters3D(scaleX, scaleY,
                 scaleZ, skewnessXY, skewnessXZ, skewnessYZ);
@@ -3151,8 +2896,7 @@ public class AffineTransformation3DTest {
 
         // transform metric point and camera
         final Point3D affinePoint = transformation.transformAndReturnNew(metricPoint);
-        final PinholeCamera affineCamera1 = transformation.transformAndReturnNew(
-                camera);
+        final PinholeCamera affineCamera1 = transformation.transformAndReturnNew(camera);
         final PinholeCamera affineCamera2 = new PinholeCamera();
         transformation.transform(camera, affineCamera2);
 
@@ -3518,10 +3262,8 @@ public class AffineTransformation3DTest {
         assertTrue(transformation1.getA().equals(expectedA, ABSOLUTE_ERROR));
         assertTrue(transformation3.getA().equals(expectedA, ABSOLUTE_ERROR));
 
-        assertArrayEquals(transformation1.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
-        assertArrayEquals(transformation3.getTranslation(), expectedTranslation,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
+        assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -3583,14 +3325,10 @@ public class AffineTransformation3DTest {
                     CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
             // Transform points using transformation
-            outputPoint1 = transformation1.transformAndReturnNew(
-                    inputPoint1);
-            outputPoint2 = transformation1.transformAndReturnNew(
-                    inputPoint2);
-            outputPoint3 = transformation1.transformAndReturnNew(
-                    inputPoint3);
-            outputPoint4 = transformation1.transformAndReturnNew(
-                    inputPoint4);
+            outputPoint1 = transformation1.transformAndReturnNew(inputPoint1);
+            outputPoint2 = transformation1.transformAndReturnNew(inputPoint2);
+            outputPoint3 = transformation1.transformAndReturnNew(inputPoint3);
+            outputPoint4 = transformation1.transformAndReturnNew(inputPoint4);
 
             // 1st pair of points
             double iX = inputPoint1.getHomX();
@@ -3639,7 +3377,6 @@ public class AffineTransformation3DTest {
             m.setElementAt(2, 11, oWiW / norm);
             m.setElementAt(2, 12, -oZiW / norm);
 
-
             // 2nd pair of points
             iX = inputPoint2.getHomX();
             iY = inputPoint2.getHomY();
@@ -3686,7 +3423,6 @@ public class AffineTransformation3DTest {
             m.setElementAt(5, 8, oWiZ / norm);
             m.setElementAt(5, 11, oWiW / norm);
             m.setElementAt(5, 12, -oZiW / norm);
-
 
             // 3rd pair of points
             iX = inputPoint3.getHomX();
@@ -3782,7 +3518,6 @@ public class AffineTransformation3DTest {
             m.setElementAt(11, 11, oWiW / norm);
             m.setElementAt(11, 12, -oZiW / norm);
         } while (Utils.rank(m) < 12);
-
 
         // Now build another transformation
         final AffineTransformation3D transformation2 =
@@ -4073,7 +3808,6 @@ public class AffineTransformation3DTest {
             m.setElementAt(11, 11, oWiW / norm);
             m.setElementAt(11, 12, -oZiW / norm);
         } while (Utils.rank(m) < 12);
-
 
         // Now build another transformation
         AffineTransformation3D transformation2 =
@@ -4855,7 +4589,6 @@ public class AffineTransformation3DTest {
                 m.setElementAt(2, 11, oDiD / norm);
                 m.setElementAt(2, 12, -oCiD / norm);
 
-
                 // 2nd pair of planes
                 iA = inputLine1.getPlane2().getA();
                 iB = inputLine1.getPlane2().getB();
@@ -4998,7 +4731,6 @@ public class AffineTransformation3DTest {
                 m.setElementAt(11, 12, -oCiD / norm);
 
             } while (Utils.rank(m) < 8);
-
 
             // Now build another transformation
             final AffineTransformation3D transformation2 =
@@ -5320,7 +5052,6 @@ public class AffineTransformation3DTest {
                 m.setElementAt(11, 12, -oCiD / norm);
 
             } while (Utils.rank(m) < 8);
-
 
             // Now build another transformation
             AffineTransformation3D transformation2 =

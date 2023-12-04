@@ -243,7 +243,7 @@ public class Triangle3D implements Serializable {
 
     /**
      * Determines whether vertices of this triangle are considered to be
-     * colinear. Points are considered to be colinear when area of triangle is
+     * co-linear. Points are considered to be colinear when area of triangle is
      * very small.
      *
      * @return True if vertices are colinear, false otherwise.
@@ -254,7 +254,7 @@ public class Triangle3D implements Serializable {
 
     /**
      * Determines whether vertices of this triangle are considered to be
-     * colinear up to certain threshold. Points are considered to be colinear
+     * co-linear up to certain threshold. Points are considered to be colinear
      * when are of triangle is very small.
      *
      * @param threshold Threshold to determine whether vertices are colinear.
@@ -880,7 +880,7 @@ public class Triangle3D implements Serializable {
         }
 
 
-        // point does not belong to any line forming a side of the triangle
+        // point does not belong to any line forming a side of the triangle,
         // so we find the closest point for each side
         Point3D closest1;
         Point3D closest2;

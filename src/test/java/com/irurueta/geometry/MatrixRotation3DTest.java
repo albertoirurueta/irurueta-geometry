@@ -71,16 +71,16 @@ public class MatrixRotation3DTest {
 
             final Matrix internalMatrix = rotation.getInternalMatrix();
 
-            assertEquals(internalMatrix.getRows(), ROTATION_ROWS);
-            assertEquals(internalMatrix.getColumns(), ROTATION_COLS);
+            assertEquals(ROTATION_ROWS, internalMatrix.getRows());
+            assertEquals(ROTATION_COLS, internalMatrix.getColumns());
 
             for (int v = 0; v < ROTATION_COLS; v++) {
                 for (int u = 0; u < ROTATION_ROWS; u++) {
                     if (u == v) {
-                        assertEquals(internalMatrix.getElementAt(u, v), 1.0,
+                        assertEquals(1.0, internalMatrix.getElementAt(u, v),
                                 ABSOLUTE_ERROR);
                     } else {
-                        assertEquals(internalMatrix.getElementAt(u, v), 0.0,
+                        assertEquals(0.0, internalMatrix.getElementAt(u, v),
                                 ABSOLUTE_ERROR);
                     }
                 }
@@ -96,7 +96,7 @@ public class MatrixRotation3DTest {
             Matrix rotationMatrix = decomposer.getV();
 
             rotation = new MatrixRotation3D(rotationMatrix, ABSOLUTE_ERROR);
-            assertEquals(rotation.getInternalMatrix(), rotationMatrix);
+            assertEquals(rotationMatrix, rotation.getInternalMatrix());
 
             // Attempt Force InvalidRotationMatrixException
             // (when threshold is too small, the following might fail)
@@ -135,8 +135,7 @@ public class MatrixRotation3DTest {
             // Test copy constructor
             rotation = new MatrixRotation3D(rotationMatrix, ABSOLUTE_ERROR);
             final MatrixRotation3D rotation2 = new MatrixRotation3D(rotation);
-            assertEquals(rotation2.getInternalMatrix(),
-                    rotation.getInternalMatrix());
+            assertEquals(rotation.getInternalMatrix(), rotation2.getInternalMatrix());
 
 
             // test constructor using euler angles
@@ -297,9 +296,9 @@ public class MatrixRotation3DTest {
 
             // check correctness of angles (including sign) for method in class
             if (scaleX > 0.0) {
-                assertEquals(theta, theta2b, ABSOLUTE_ERROR);
+                assertEquals(theta2b, theta, ABSOLUTE_ERROR);
             } else {
-                assertEquals(theta, -theta2b, ABSOLUTE_ERROR);
+                assertEquals(-theta2b, theta, ABSOLUTE_ERROR);
             }
         }
     }
@@ -316,8 +315,8 @@ public class MatrixRotation3DTest {
         final Matrix internalMatrix = rotation.getInternalMatrix();
 
         // Check internal matrix is the identity
-        assertEquals(internalMatrix.getRows(), ROTATION_ROWS);
-        assertEquals(internalMatrix.getColumns(), ROTATION_COLS);
+        assertEquals(ROTATION_ROWS, internalMatrix.getRows());
+        assertEquals(ROTATION_COLS, internalMatrix.getColumns());
         assertTrue(internalMatrix.equals(Matrix.identity(ROTATION_ROWS,
                 ROTATION_COLS), ABSOLUTE_ERROR));
 
@@ -332,8 +331,7 @@ public class MatrixRotation3DTest {
         final Matrix rotationMatrix = decomposer.getV();
 
         rotation.setInternalMatrix(rotationMatrix, ABSOLUTE_ERROR);
-        assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(), ABSOLUTE_ERROR));
 
         // Force InvalidRotationMatrixException
 
@@ -344,8 +342,7 @@ public class MatrixRotation3DTest {
         } catch (final InvalidRotationMatrixException ignore) {
         }
         // but still rotation matrix remains from previous valid assignment
-        assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(), ABSOLUTE_ERROR));
 
         // or when matrix is not orthogonal
         final Matrix transRotationMatrix = rotationMatrix.transposeAndReturnNew();
@@ -365,8 +362,7 @@ public class MatrixRotation3DTest {
         } catch (final InvalidRotationMatrixException ignore) {
         }
         // but still rotation matrix remains from previous valid assignment
-        assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.equals(rotation.getInternalMatrix(), ABSOLUTE_ERROR));
 
         rotation.setInternalMatrix(Matrix.identity(ROTATION_ROWS, ROTATION_COLS));
 
@@ -392,31 +388,25 @@ public class MatrixRotation3DTest {
         rotation.setEulerAngles(alphaEuler, betaEuler, gammaEuler);
 
         // retrieve euler angles to check correctness
-        if (Math.abs(rotation.getAlphaEulerAngle() - alphaEuler) <
-                ABSOLUTE_ERROR) {
+        if (Math.abs(rotation.getAlphaEulerAngle() - alphaEuler) < ABSOLUTE_ERROR) {
             valid = true;
-        } else if (Math.abs(rotation.getAlphaEulerAngle() - (alphaEuler -
-                Math.PI)) < ABSOLUTE_ERROR) {
+        } else if (Math.abs(rotation.getAlphaEulerAngle() - (alphaEuler - Math.PI)) < ABSOLUTE_ERROR) {
             valid = true;
         }
         assertTrue(valid);
         // beta ambiguity: can be beta or -beta
         valid = false;
-        if (Math.abs(rotation.getBetaEulerAngle() - betaEuler) <
-                ABSOLUTE_ERROR) {
+        if (Math.abs(rotation.getBetaEulerAngle() - betaEuler) < ABSOLUTE_ERROR) {
             valid = true;
-        } else if (Math.abs(rotation.getBetaEulerAngle() + betaEuler) <
-                ABSOLUTE_ERROR) {
+        } else if (Math.abs(rotation.getBetaEulerAngle() + betaEuler) < ABSOLUTE_ERROR) {
             valid = true;
         }
         assertTrue(valid);
         // gamma ambiguity: gamma can be gamma or gamma - pi
         valid = false;
-        if (Math.abs(rotation.getGammaEulerAngle() - gammaEuler) <
-                ABSOLUTE_ERROR) {
+        if (Math.abs(rotation.getGammaEulerAngle() - gammaEuler) < ABSOLUTE_ERROR) {
             valid = true;
-        } else if (Math.abs(rotation.getGammaEulerAngle() -
-                (gammaEuler - Math.PI)) < ABSOLUTE_ERROR) {
+        } else if (Math.abs(rotation.getGammaEulerAngle() - (gammaEuler - Math.PI)) < ABSOLUTE_ERROR) {
             valid = true;
         }
         assertTrue(valid);
@@ -536,9 +526,9 @@ public class MatrixRotation3DTest {
 
         // check correctness of angles (including sign) for method in class
         if (scaleX > 0.0) {
-            assertEquals(theta, theta2b, ABSOLUTE_ERROR);
+            assertEquals(theta2b, theta, ABSOLUTE_ERROR);
         } else {
-            assertEquals(theta, -theta2b, ABSOLUTE_ERROR);
+            assertEquals(-theta2b, theta, ABSOLUTE_ERROR);
         }
     }
 
@@ -558,25 +548,21 @@ public class MatrixRotation3DTest {
         final Matrix rotationMatrix = decomposer.getV();
 
         // rotation matrix shouldn't be valid for tiny thresholds
-        assertFalse(MatrixRotation3D.isValidRotationMatrix(rotationMatrix,
-                0.0));
+        assertFalse(MatrixRotation3D.isValidRotationMatrix(rotationMatrix, 0.0));
 
         // for reasonable thresholds, matrix should be valid because it is
         //orthonormal with some imprecision due to machine precision
-        assertTrue(MatrixRotation3D.isValidRotationMatrix(rotationMatrix,
-                ABSOLUTE_ERROR));
+        assertTrue(MatrixRotation3D.isValidRotationMatrix(rotationMatrix, ABSOLUTE_ERROR));
         assertTrue(MatrixRotation3D.isValidRotationMatrix(rotationMatrix));
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE,
-                MAX_RANDOM_SCALE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE, MAX_RANDOM_SCALE);
 
         // change scale of matrix to make it orthogonal instead of orthonormal
         rotationMatrix.multiplyByScalar(scale);
 
         // now matrix shouldn't be valid even for reasonable thresholds
-        assertFalse(MatrixRotation3D.isValidRotationMatrix(rotationMatrix,
-                ABSOLUTE_ERROR));
+        assertFalse(MatrixRotation3D.isValidRotationMatrix(rotationMatrix, ABSOLUTE_ERROR));
         assertFalse(MatrixRotation3D.isValidRotationMatrix(rotationMatrix));
     }
 
@@ -596,8 +582,7 @@ public class MatrixRotation3DTest {
 
         final Matrix rotationMatrix = decomposer.getV();
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(rotationMatrix,
-                ABSOLUTE_ERROR);
+        final MatrixRotation3D rotation = new MatrixRotation3D(rotationMatrix, ABSOLUTE_ERROR);
 
         // compute inverse rotation
         final MatrixRotation3D invRotation = rotation.inverseRotationAndReturnNew();
@@ -610,16 +595,12 @@ public class MatrixRotation3DTest {
 
         final Matrix identity = Matrix.identity(ROTATION_ROWS, ROTATION_COLS);
 
-        assertTrue(rotationMatrix.multiplyAndReturnNew(invRotMatrix).equals(
-                identity, ABSOLUTE_ERROR));
-        assertTrue(rotationMatrix.multiplyAndReturnNew(invRotMatrix2).equals(
-                identity, ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.multiplyAndReturnNew(invRotMatrix).equals(identity, ABSOLUTE_ERROR));
+        assertTrue(rotationMatrix.multiplyAndReturnNew(invRotMatrix2).equals(identity, ABSOLUTE_ERROR));
 
-        // we can also inverse the original rotation
+        // we can also invert the original rotation
         rotation.inverseRotation();
-        assertTrue(invRotMatrix.equals(rotation.getInternalMatrix(),
-                ABSOLUTE_ERROR));
-
+        assertTrue(invRotMatrix.equals(rotation.getInternalMatrix(), ABSOLUTE_ERROR));
     }
 
     @Test
@@ -638,8 +619,7 @@ public class MatrixRotation3DTest {
 
         final Matrix rotationMatrix = decomposer.getV();
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(rotationMatrix,
-                ABSOLUTE_ERROR);
+        final MatrixRotation3D rotation = new MatrixRotation3D(rotationMatrix, ABSOLUTE_ERROR);
 
         assertEquals(rotationMatrix, rotation.asInhomogeneousMatrix());
 
@@ -679,14 +659,12 @@ public class MatrixRotation3DTest {
                 2, 2, rotationMatrix);
 
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(homRotationMatrix,
-                ABSOLUTE_ERROR);
+        final MatrixRotation3D rotation = new MatrixRotation3D(homRotationMatrix, ABSOLUTE_ERROR);
 
         assertEquals(rotationMatrix, rotation.asInhomogeneousMatrix());
         assertEquals(homRotationMatrix, rotation.asHomogeneousMatrix());
 
-        final Matrix rotationMatrix2 =
-                new Matrix(HOM_ROTATION_ROWS, HOM_ROTATION_COLS);
+        final Matrix rotationMatrix2 = new Matrix(HOM_ROTATION_ROWS, HOM_ROTATION_COLS);
         rotation.asHomogeneousMatrix(rotationMatrix2);
         assertEquals(homRotationMatrix, rotationMatrix2);
 
@@ -716,8 +694,7 @@ public class MatrixRotation3DTest {
 
         final Matrix rotationMatrix = decomposer.getV();
 
-        final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS,
-                HOM_ROTATION_COLS);
+        final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS, HOM_ROTATION_COLS);
         // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0,
                 2, 2, rotationMatrix);
@@ -749,7 +726,6 @@ public class MatrixRotation3DTest {
         assertEquals(rotationMatrix, rotation.asInhomogeneousMatrix());
         assertEquals(rotationMatrix, rotation.getInternalMatrix());
         assertEquals(homRotationMatrix, rotation.asHomogeneousMatrix());
-
 
         // Force InvalidRotationMatrixException (using a tiny threshold)
         try {
@@ -805,8 +781,7 @@ public class MatrixRotation3DTest {
         // or using a non orthonormal matrix
         // because matrix is orthonormal, it's enough to scale it to some value
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE,
-                MAX_RANDOM_SCALE);
+        final double scale = randomizer.nextDouble(MIN_RANDOM_SCALE, MAX_RANDOM_SCALE);
         rotationMatrix.multiplyByScalar(scale);
         try {
             rotation.fromInhomogeneousMatrix(rotationMatrix, ABSOLUTE_ERROR);
@@ -831,8 +806,7 @@ public class MatrixRotation3DTest {
 
         final Matrix rotationMatrix = decomposer.getV();
 
-        final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS,
-                HOM_ROTATION_COLS);
+        final Matrix homRotationMatrix = Matrix.identity(HOM_ROTATION_ROWS, HOM_ROTATION_COLS);
         // set top-left 3x3 sub-matrix
         homRotationMatrix.setSubmatrix(0, 0,
                 2, 2, rotationMatrix);
@@ -932,7 +906,6 @@ public class MatrixRotation3DTest {
         final Point3D rotPoint3A = rotation.rotate(point3);
         final Point3D rotPoint3B = Point3D.create();
         rotation.rotate(point3, rotPoint3B);
-
 
         // check that rotated points A and B are equal
         assertTrue(rotPoint1A.equals(rotPoint1B, ABSOLUTE_ERROR));
@@ -1072,7 +1045,7 @@ public class MatrixRotation3DTest {
     @Test
     public void testType() {
         final MatrixRotation3D rotation = new MatrixRotation3D();
-        assertEquals(rotation.getType(), Rotation3DType.MATRIX_ROTATION3D);
+        assertEquals(Rotation3DType.MATRIX_ROTATION3D, rotation.getType());
     }
 
     @Test
@@ -1232,7 +1205,7 @@ public class MatrixRotation3DTest {
         rotation2.fromRotation(axisRotation);
 
         // check correctness
-        //noinspection all
+        //noinspection AssertBetweenInconvertibleTypes
         assertEquals(axisRotation, rotation2);
 
         // test from quaternion
@@ -1240,7 +1213,7 @@ public class MatrixRotation3DTest {
         rotation3.fromRotation(quaternion);
 
         // check correctness
-        //noinspection all
+        //noinspection AssertBetweenInconvertibleTypes
         assertEquals(quaternion, rotation3);
     }
 
@@ -1317,12 +1290,12 @@ public class MatrixRotation3DTest {
             if (!rotation.equals(axisRotation1)) {
                 continue;
             }
-            //noinspection all
+            //noinspection AssertBetweenInconvertibleTypes
             assertEquals(rotation, axisRotation1);
             if (!rotation.equals(axisRotation2)) {
                 continue;
             }
-            //noinspection all
+            //noinspection AssertBetweenInconvertibleTypes
             assertEquals(rotation, axisRotation2);
 
             numValid++;
@@ -1364,9 +1337,9 @@ public class MatrixRotation3DTest {
         final Quaternion quaternion2 = rotation.toQuaternion();
 
         // check correctness
-        //noinspection all
+        //noinspection AssertBetweenInconvertibleTypes
         assertEquals(rotation, quaternion1);
-        //noinspection all
+        //noinspection AssertBetweenInconvertibleTypes
         assertEquals(rotation, quaternion2);
     }
 

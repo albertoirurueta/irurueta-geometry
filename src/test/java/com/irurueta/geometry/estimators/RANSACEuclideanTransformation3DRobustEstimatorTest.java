@@ -78,7 +78,7 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         assertEquals(1, EuclideanTransformation3DRobustEstimator.MIN_ITERATIONS);
         assertTrue(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(EuclideanTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(RobustEstimatorMethod.PROMedS, EuclideanTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, EuclideanTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1.0, RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, RANSACEuclideanTransformation3DRobustEstimator.MIN_THRESHOLD, 0.0);
         assertFalse(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_COMPUTE_AND_KEEP_INLIERS);
@@ -91,31 +91,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         RANSACEuclideanTransformation3DRobustEstimator estimator =
                 new RANSACEuclideanTransformation3DRobustEstimator();
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -132,31 +128,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(
                 inputPoints, outputPoints);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -184,31 +176,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         // test constructor with listener
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(this);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -218,31 +206,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(
                 this, inputPoints, outputPoints);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -269,31 +253,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         // test constructor without arguments and weak min points
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(true);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -310,31 +290,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(
                 inputPoints, outputPoints, true);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -362,31 +338,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(this,
                 true);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -396,31 +368,27 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator = new RANSACEuclideanTransformation3DRobustEstimator(
                 this, inputPoints, outputPoints, true);
 
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.RANSAC);
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(EuclideanTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -451,15 +419,14 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                 new RANSACEuclideanTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_THRESHOLD, 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -475,15 +442,14 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                 new RANSACEuclideanTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -505,15 +471,14 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                 new RANSACEuclideanTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                RANSACEuclideanTransformation3DRobustEstimator.
-                        DEFAULT_MAX_ITERATIONS);
+        assertEquals(RANSACEuclideanTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 10);
+        assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -544,8 +509,8 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator.setPoints(inputPoints, outputPoints);
 
         // check correctness
-        assertSame(estimator.getInputPoints(), inputPoints);
-        assertSame(estimator.getOutputPoints(), outputPoints);
+        assertSame(inputPoints, estimator.getInputPoints());
+        assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
@@ -578,7 +543,7 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -589,16 +554,16 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
 
         // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE,
+                estimator.getMinimumPoints());
 
         // set new value
         estimator.setWeakMinimumSizeAllowed(true);
 
         // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(estimator.getMinimumPoints(),
-                EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
+        assertEquals(EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
+                estimator.getMinimumPoints());
     }
 
     @Test
@@ -607,15 +572,14 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                 new RANSACEuclideanTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                EuclideanTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                0.0);
+        assertEquals(EuclideanTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -755,17 +719,17 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final EuclideanTransformation3D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -779,8 +743,7 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
                 p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             // check parameters of estimated transformation
@@ -889,17 +852,17 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
             estimator.setResultRefined(false);
             estimator.setCovarianceKept(false);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final EuclideanTransformation3D transformation2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -918,8 +881,7 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                     isValid = false;
                     break;
                 }
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             if (!isValid) {
@@ -1014,10 +976,10 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -1036,8 +998,8 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                                 EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -1051,8 +1013,7 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
                 p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             // check parameters of estimated transformation
@@ -1162,10 +1123,10 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
@@ -1184,8 +1145,8 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                                 EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
             }
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -1204,8 +1165,7 @@ public class RANSACEuclideanTransformation3DRobustEstimatorTest implements
                     isValid = false;
                     break;
                 }
-                assertEquals(p1.distanceTo(p2), 0.0,
-                        ABSOLUTE_ERROR);
+                assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             if (!isValid) {

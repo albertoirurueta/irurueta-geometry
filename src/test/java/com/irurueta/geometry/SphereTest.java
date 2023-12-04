@@ -44,7 +44,7 @@ public class SphereTest {
         // check center is at origin and radius is 1.0;
         assertTrue(sphere.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0,
                 0.0), ABSOLUTE_ERROR));
-        assertEquals(sphere.getRadius(), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, sphere.getRadius(), ABSOLUTE_ERROR);
 
         // Test constructor with center and radius
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -52,8 +52,7 @@ public class SphereTest {
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         sphere = new Sphere(center, radius);
         // check correctness
@@ -135,8 +134,7 @@ public class SphereTest {
 
         // check that both spheres are equal
         sphere = new Sphere(center, radius);
-        assertEquals(sphere.getCenter().distanceTo(sphere2.getCenter()), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, sphere.getCenter().distanceTo(sphere2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(sphere.getRadius(), sphere2.getRadius(), ABSOLUTE_ERROR);
 
         // Force CoplanarPointsException
@@ -152,8 +150,7 @@ public class SphereTest {
         sphere = new Sphere(center, radius);
         Quadric quadric = sphere.toQuadric();
         sphere2 = new Sphere(quadric);
-        assertEquals(sphere.getCenter().distanceTo(sphere2.getCenter()), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, sphere.getCenter().distanceTo(sphere2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(sphere.getRadius(), sphere2.getRadius(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
@@ -177,8 +174,8 @@ public class SphereTest {
 
         final Sphere sphere = new Sphere();
         // check center
-        assertTrue(sphere.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0,
-                0.0), ABSOLUTE_ERROR));
+        assertTrue(sphere.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0, 0.0),
+                ABSOLUTE_ERROR));
 
         // set center
         sphere.setCenter(center);
@@ -201,12 +198,12 @@ public class SphereTest {
 
         final Sphere sphere = new Sphere();
         // check radius
-        assertEquals(sphere.getRadius(), 1.0, 0.0);
+        assertEquals(1.0, sphere.getRadius(), 0.0);
 
         // set radius
         sphere.setRadius(radius);
         // check correctness
-        assertEquals(sphere.getRadius(), radius, 0.0);
+        assertEquals(radius, sphere.getRadius(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -220,25 +217,24 @@ public class SphereTest {
     public void testSetCenterAndRadius() {
         // Test constructor with center and radius
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         final Sphere sphere = new Sphere();
         // check center
-        assertTrue(sphere.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0,
-                0.0), ABSOLUTE_ERROR));
+        assertTrue(sphere.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0, 0.0),
+                ABSOLUTE_ERROR));
         // check radius
-        assertEquals(sphere.getRadius(), 1.0, 0.0);
+        assertEquals(1.0, sphere.getRadius(), 0.0);
 
         // set center and radius
         sphere.setCenterAndRadius(center, radius);
         // check correctness
         assertTrue(sphere.getCenter().equals(center, ABSOLUTE_ERROR));
-        assertEquals(sphere.getRadius(), radius, 0.0);
+        assertEquals(radius, sphere.getRadius(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -332,7 +328,7 @@ public class SphereTest {
         sphere2.setParametersFromPoints(point1, point2, point3, point4);
 
         // check that both spheres are equal
-        assertEquals(sphere1.getCenter().distanceTo(sphere2.getCenter()), 0.0,
+        assertEquals(0.0, sphere1.getCenter().distanceTo(sphere2.getCenter()),
                 ABSOLUTE_ERROR);
         assertEquals(sphere1.getRadius(), sphere2.getRadius(), ABSOLUTE_ERROR);
 
@@ -359,8 +355,8 @@ public class SphereTest {
         final double volume = 4.0 / 3.0 * Math.PI * radius * radius * radius;
 
         // Check correctness
-        assertEquals(sphere.getVolume(), volume, ABSOLUTE_ERROR);
-        assertEquals(Sphere.volume(radius), volume, ABSOLUTE_ERROR);
+        assertEquals(volume, sphere.getVolume(), ABSOLUTE_ERROR);
+        assertEquals(volume, Sphere.volume(radius), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -378,19 +374,18 @@ public class SphereTest {
         final double surface = 4.0 * Math.PI * radius * radius;
 
         // Check correctness
-        assertEquals(sphere.getSurface(), surface, ABSOLUTE_ERROR);
-        assertEquals(Sphere.surface(radius), surface, ABSOLUTE_ERROR);
+        assertEquals(surface, sphere.getSurface(), ABSOLUTE_ERROR);
+        assertEquals(surface, Sphere.surface(radius), ABSOLUTE_ERROR);
     }
 
     @Test
     public void testIsInside() {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         final double value = randomizer.nextDouble(0.2, 0.8);
         final double value2 = 1.0 + value;
         final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
@@ -401,16 +396,12 @@ public class SphereTest {
         final Sphere sphere = new Sphere(center, radius);
 
         final Point3D inside = new InhomogeneousPoint3D(
-                center.getInhomX() + value * radius * Math.cos(theta) *
-                        Math.sin(phi),
-                center.getInhomY() + value * radius * Math.sin(theta) *
-                        Math.sin(phi),
+                center.getInhomX() + value * radius * Math.cos(theta) * Math.sin(phi),
+                center.getInhomY() + value * radius * Math.sin(theta) * Math.sin(phi),
                 center.getInhomZ() + value * radius * Math.cos(phi));
         final Point3D outside = new InhomogeneousPoint3D(
-                center.getInhomX() + value2 * radius * Math.cos(theta) *
-                        Math.sin(phi),
-                center.getInhomY() + value2 * radius * Math.sin(theta) *
-                        Math.sin(phi),
+                center.getInhomX() + value2 * radius * Math.cos(theta) * Math.sin(phi),
+                center.getInhomY() + value2 * radius * Math.sin(theta) * Math.sin(phi),
                 center.getInhomZ() + value2 * radius * Math.cos(phi));
 
         // check correctness
@@ -431,12 +422,11 @@ public class SphereTest {
     @Test
     public void testSignedDistanceDistanceAndIsLocus() {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         final double value = randomizer.nextDouble(0.2, 0.8);
         final double value2 = 1.0 + value;
         final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
@@ -453,16 +443,12 @@ public class SphereTest {
         assertTrue(sphere.isLocus(center, 2.0 * radius));
 
         final Point3D inside = new InhomogeneousPoint3D(
-                center.getInhomX() + value * radius * Math.cos(theta) *
-                        Math.sin(phi),
-                center.getInhomY() + value * radius * Math.sin(theta) *
-                        Math.sin(phi),
+                center.getInhomX() + value * radius * Math.cos(theta) * Math.sin(phi),
+                center.getInhomY() + value * radius * Math.sin(theta) * Math.sin(phi),
                 center.getInhomZ() + value * radius * Math.cos(phi));
         final Point3D outside = new InhomogeneousPoint3D(
-                center.getInhomX() + value2 * radius * Math.cos(theta) *
-                        Math.sin(phi),
-                center.getInhomY() + value2 * radius * Math.sin(theta) *
-                        Math.sin(phi),
+                center.getInhomX() + value2 * radius * Math.cos(theta) * Math.sin(phi),
+                center.getInhomY() + value2 * radius * Math.sin(theta) * Math.sin(phi),
                 center.getInhomZ() + value2 * radius * Math.cos(phi));
         final Point3D zero = new InhomogeneousPoint3D(
                 center.getInhomX() + radius * Math.cos(theta) * Math.sin(phi),
@@ -470,15 +456,11 @@ public class SphereTest {
                 center.getInhomZ() + radius * Math.cos(phi));
 
         // check correctness
-        assertEquals(sphere.getSignedDistance(inside), (value - 1.0) * radius,
-                ABSOLUTE_ERROR);
-        assertEquals(Sphere.signedDistance(sphere, inside),
-                (value - 1.0) * radius, ABSOLUTE_ERROR);
+        assertEquals(sphere.getSignedDistance(inside), (value - 1.0) * radius, ABSOLUTE_ERROR);
+        assertEquals(Sphere.signedDistance(sphere, inside), (value - 1.0) * radius, ABSOLUTE_ERROR);
 
-        assertEquals(sphere.getDistance(inside),
-                Math.abs((value - 1.0) * radius), ABSOLUTE_ERROR);
-        assertEquals(Sphere.distance(sphere, inside),
-                Math.abs((value - 1.0) * radius), ABSOLUTE_ERROR);
+        assertEquals(sphere.getDistance(inside), Math.abs((value - 1.0) * radius), ABSOLUTE_ERROR);
+        assertEquals(Sphere.distance(sphere, inside), Math.abs((value - 1.0) * radius), ABSOLUTE_ERROR);
 
         // for inside point signed distance is negative
         assertTrue(sphere.getSignedDistance(inside) <= 0.0);
@@ -488,15 +470,12 @@ public class SphereTest {
         // true for a large enough threshold
         assertTrue(sphere.isLocus(inside, radius));
 
-        assertEquals(sphere.getSignedDistance(outside), (value2 - 1.0) * radius,
+        assertEquals(sphere.getSignedDistance(outside), (value2 - 1.0) * radius, ABSOLUTE_ERROR);
+        assertEquals(Sphere.signedDistance(sphere, outside), (value2 - 1.0) * radius,
                 ABSOLUTE_ERROR);
-        assertEquals(Sphere.signedDistance(sphere, outside),
-                (value2 - 1.0) * radius, ABSOLUTE_ERROR);
 
-        assertEquals(sphere.getDistance(outside),
-                Math.abs((value2 - 1.0) * radius), ABSOLUTE_ERROR);
-        assertEquals(Sphere.distance(sphere, outside),
-                Math.abs((value2 - 1.0) * radius), ABSOLUTE_ERROR);
+        assertEquals(sphere.getDistance(outside), Math.abs((value2 - 1.0) * radius), ABSOLUTE_ERROR);
+        assertEquals(Sphere.distance(sphere, outside), Math.abs((value2 - 1.0) * radius), ABSOLUTE_ERROR);
 
         // for outside point distance is positive
         assertTrue(sphere.getSignedDistance(outside) >= 0.0);
@@ -507,8 +486,8 @@ public class SphereTest {
         assertTrue(sphere.isLocus(outside, radius));
 
         // for point at locus of circle, distance is zero
-        assertEquals(sphere.getSignedDistance(zero), 0.0, ABSOLUTE_ERROR);
-        assertEquals(Sphere.signedDistance(sphere, zero), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, sphere.getSignedDistance(zero), ABSOLUTE_ERROR);
+        assertEquals(0.0, Sphere.signedDistance(sphere, zero), ABSOLUTE_ERROR);
 
         // zero is locus
         assertTrue(sphere.isLocus(zero));
@@ -525,12 +504,11 @@ public class SphereTest {
     @Test
     public void testClosestPointAndIsLocus() throws UndefinedPointException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         final double value = randomizer.nextDouble(0.2, 0.8);
         final double value2 = 1.0 + value;
         final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
@@ -547,16 +525,12 @@ public class SphereTest {
         assertTrue(sphere.isLocus(center, 2.0 * radius));
 
         final Point3D inside = new InhomogeneousPoint3D(
-                center.getInhomX() + value * radius * Math.cos(theta) *
-                        Math.sin(phi),
-                center.getInhomY() + value * radius * Math.sin(theta) *
-                        Math.sin(phi),
+                center.getInhomX() + value * radius * Math.cos(theta) * Math.sin(phi),
+                center.getInhomY() + value * radius * Math.sin(theta) * Math.sin(phi),
                 center.getInhomZ() + value * radius * Math.cos(phi));
         final Point3D outside = new InhomogeneousPoint3D(
-                center.getInhomX() + value2 * radius * Math.cos(theta) *
-                        Math.sin(phi),
-                center.getInhomY() + value2 * radius * Math.sin(theta) *
-                        Math.sin(phi),
+                center.getInhomX() + value2 * radius * Math.cos(theta) * Math.sin(phi),
+                center.getInhomY() + value2 * radius * Math.sin(theta) * Math.sin(phi),
                 center.getInhomZ() + value2 * radius * Math.cos(phi));
         final Point3D zero = new InhomogeneousPoint3D(
                 center.getInhomX() + radius * Math.cos(theta) * Math.sin(phi),
@@ -568,8 +542,7 @@ public class SphereTest {
         final Point3D result = Point3D.create();
 
         // test for point inside (but far from center)
-        assertTrue(sphere.getClosestPoint(inside).equals(expectedPoint,
-                ABSOLUTE_ERROR));
+        assertTrue(sphere.getClosestPoint(inside).equals(expectedPoint, ABSOLUTE_ERROR));
         sphere.closestPoint(inside, result);
         assertTrue(result.equals(expectedPoint, ABSOLUTE_ERROR));
 
@@ -579,8 +552,7 @@ public class SphereTest {
         // threshold
 
         // test for point outside of circle
-        assertTrue(sphere.getClosestPoint(outside).equals(expectedPoint,
-                ABSOLUTE_ERROR));
+        assertTrue(sphere.getClosestPoint(outside).equals(expectedPoint, ABSOLUTE_ERROR));
         sphere.closestPoint(outside, result);
         assertTrue(result.equals(expectedPoint, ABSOLUTE_ERROR));
 
@@ -590,15 +562,13 @@ public class SphereTest {
         assertTrue(sphere.isLocus(outside, radius));
 
         // test for point in circle boundary
-        assertTrue(sphere.getClosestPoint(zero).equals(expectedPoint,
-                ABSOLUTE_ERROR));
+        assertTrue(sphere.getClosestPoint(zero).equals(expectedPoint, ABSOLUTE_ERROR));
         sphere.closestPoint(zero, result);
         assertTrue(result.equals(expectedPoint, ABSOLUTE_ERROR));
 
         // zero is locus
         assertTrue(sphere.isLocus(zero));
         assertTrue(sphere.isLocus(zero, radius));
-
 
         // Force UndefinedPointException (by testing at center)
         try {
@@ -676,10 +646,10 @@ public class SphereTest {
     @Test
     public void testToQuadric() throws WrongSizeException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new HomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
+        final Point3D center = new HomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
         final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
                 MAX_RANDOM_VALUE));
         final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
@@ -749,8 +719,7 @@ public class SphereTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         final Sphere sphere = new Sphere(center, radius);
 
@@ -760,8 +729,7 @@ public class SphereTest {
         sphere2.setFromQuadric(quadric);
 
         // check correctness
-        assertEquals(sphere.getCenter().distanceTo(sphere2.getCenter()), 0.0,
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, sphere.getCenter().distanceTo(sphere2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(sphere.getRadius(), sphere2.getRadius(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
@@ -776,12 +744,11 @@ public class SphereTest {
     @Test
     public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final Point3D center = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         final Sphere sphere1 = new Sphere(center, radius);
 

@@ -55,7 +55,7 @@ public class Rotation2DTest {
 
         // test empty constructor
         assertNotNull(rotation = new Rotation2D());
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
@@ -66,7 +66,7 @@ public class Rotation2DTest {
 
         // test from another rotation
         final Rotation2D rotation2 = new Rotation2D(rotation);
-        assertEquals(rotation2.getTheta(), theta, 0.0);
+        assertEquals(theta, rotation2.getTheta(), 0.0);
 
         // test from inhomogeneous rotation matrix
         final Matrix inhomRotMat = new Matrix(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS,
@@ -79,11 +79,11 @@ public class Rotation2DTest {
         inhomRotMat.setElementAt(1, 1, cosTheta);
 
         rotation = new Rotation2D(inhomRotMat);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // now using threshold
         rotation = new Rotation2D(inhomRotMat, ABSOLUTE_ERROR);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException by using a negative threshold
         rotation = null;
@@ -98,14 +98,15 @@ public class Rotation2DTest {
         final Matrix homRotMat = Matrix.identity(
                 Rotation2D.ROTATION2D_HOM_MATRIX_ROWS,
                 Rotation2D.ROTATION2D_HOM_MATRIX_COLS);
-        homRotMat.setSubmatrix(0, 0, 1, 1, inhomRotMat);
+        homRotMat.setSubmatrix(0, 0, 1, 1,
+                inhomRotMat);
 
         rotation = new Rotation2D(homRotMat);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // now using threshold
         rotation = new Rotation2D(homRotMat, ABSOLUTE_ERROR);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException by using a negative threshold
         rotation = null;
@@ -144,12 +145,12 @@ public class Rotation2DTest {
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
 
         final Rotation2D rotation = new Rotation2D();
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // set new theta
         rotation.setTheta(theta);
         // check correctness
-        assertEquals(rotation.getTheta(), theta, 0.0);
+        assertEquals(theta, rotation.getTheta(), 0.0);
     }
 
     @Test
@@ -158,11 +159,11 @@ public class Rotation2DTest {
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
 
         final Rotation2D rotation = new Rotation2D(theta);
-        assertEquals(rotation.getTheta(), theta, 0.0);
+        assertEquals(theta, rotation.getTheta(), 0.0);
 
         // get inverse rotation
         final Rotation2D invRotation = rotation.inverseRotation();
-        assertEquals(invRotation.getTheta(), -theta, 0.0);
+        assertEquals(-theta, invRotation.getTheta(), 0.0);
 
         // check inverse rotation matrix is indeed the inverse
         final Matrix rotInhomMatrix = rotation.asInhomogeneousMatrix();
@@ -181,7 +182,7 @@ public class Rotation2DTest {
 
         // inverse rotation using provided rotation instance
         rotation.inverseRotation(rotation);
-        assertEquals(rotation.getTheta(), -theta, 0.0);
+        assertEquals(-theta, rotation.getTheta(), 0.0);
 
 
         // check again inverse rotation matrix is indeed the inverse
@@ -212,18 +213,16 @@ public class Rotation2DTest {
         final double cosTheta = Math.cos(theta);
 
         // check matrix correctness
-        assertEquals(rotMatrix.getRows(),
-                Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS);
-        assertEquals(rotMatrix.getColumns(),
-                Rotation2D.ROTATION2D_INHOM_MATRIX_COLS);
-        assertEquals(rotMatrix.getElementAt(0, 0), cosTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 0), sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(0, 1), -sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 1), cosTheta, 0.0);
+        assertEquals(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS, rotMatrix.getRows());
+        assertEquals(Rotation2D.ROTATION2D_INHOM_MATRIX_COLS, rotMatrix.getColumns());
+        assertEquals(cosTheta, rotMatrix.getElementAt(0, 0), 0.0);
+        assertEquals(sinTheta, rotMatrix.getElementAt(1, 0), 0.0);
+        assertEquals(-sinTheta, rotMatrix.getElementAt(0, 1), 0.0);
+        assertEquals(cosTheta, rotMatrix.getElementAt(1, 1), 0.0);
 
         // build rotation from matrix and check correctness
         Rotation2D rotation2 = new Rotation2D(rotMatrix);
-        assertEquals(rotation2.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation2.getTheta(), ABSOLUTE_ERROR);
 
 
         // try again providing matrix where rotation will be stored
@@ -232,18 +231,16 @@ public class Rotation2DTest {
         rotation.asInhomogeneousMatrix(rotMatrix);
 
         // check matrix correctness
-        assertEquals(rotMatrix.getRows(),
-                Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS);
-        assertEquals(rotMatrix.getColumns(),
-                Rotation2D.ROTATION2D_INHOM_MATRIX_COLS);
-        assertEquals(rotMatrix.getElementAt(0, 0), cosTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 0), sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(0, 1), -sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 1), cosTheta, 0.0);
+        assertEquals(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS, rotMatrix.getRows());
+        assertEquals(Rotation2D.ROTATION2D_INHOM_MATRIX_COLS, rotMatrix.getColumns());
+        assertEquals(cosTheta, rotMatrix.getElementAt(0, 0), 0.0);
+        assertEquals(sinTheta, rotMatrix.getElementAt(1, 0), 0.0);
+        assertEquals(-sinTheta, rotMatrix.getElementAt(0, 1), 0.0);
+        assertEquals(cosTheta, rotMatrix.getElementAt(1, 1), 0.0);
 
         // build rotation from matrix and check correctness
         rotation2 = new Rotation2D(rotMatrix);
-        assertEquals(rotation2.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation2.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         rotMatrix = new Matrix(Rotation2D.ROTATION2D_HOM_MATRIX_ROWS,
@@ -269,23 +266,21 @@ public class Rotation2DTest {
         final double cosTheta = Math.cos(theta);
 
         // check matrix correctness
-        assertEquals(rotMatrix.getRows(),
-                Rotation2D.ROTATION2D_HOM_MATRIX_ROWS);
-        assertEquals(rotMatrix.getColumns(),
-                Rotation2D.ROTATION2D_HOM_MATRIX_COLS);
-        assertEquals(rotMatrix.getElementAt(0, 0), cosTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 0), sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(0, 1), -sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 1), cosTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(2, 1), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 2), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(2, 2), 1.0, 0.0);
+        assertEquals(Rotation2D.ROTATION2D_HOM_MATRIX_ROWS, rotMatrix.getRows());
+        assertEquals(Rotation2D.ROTATION2D_HOM_MATRIX_COLS, rotMatrix.getColumns());
+        assertEquals(cosTheta, rotMatrix.getElementAt(0, 0), 0.0);
+        assertEquals(sinTheta, rotMatrix.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(2, 0), 0.0);
+        assertEquals(-sinTheta, rotMatrix.getElementAt(0, 1), 0.0);
+        assertEquals(cosTheta, rotMatrix.getElementAt(1, 1), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(1, 2), 0.0);
+        assertEquals(1.0, rotMatrix.getElementAt(2, 2), 0.0);
 
         // build rotation from matrix and check correctness
         Rotation2D rotation2 = new Rotation2D(rotMatrix);
-        assertEquals(rotation2.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation2.getTheta(), ABSOLUTE_ERROR);
 
         // try again providing matrix where rotation will be stored
         rotMatrix = new Matrix(Rotation2D.ROTATION2D_HOM_MATRIX_ROWS,
@@ -293,23 +288,21 @@ public class Rotation2DTest {
         rotation.asHomogeneousMatrix(rotMatrix);
 
         // check matrix correctness
-        assertEquals(rotMatrix.getRows(),
-                Rotation2D.ROTATION2D_HOM_MATRIX_ROWS);
-        assertEquals(rotMatrix.getColumns(),
-                Rotation2D.ROTATION2D_HOM_MATRIX_COLS);
-        assertEquals(rotMatrix.getElementAt(0, 0), cosTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 0), sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(2, 0), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(0, 1), -sinTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 1), cosTheta, 0.0);
-        assertEquals(rotMatrix.getElementAt(2, 1), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(0, 2), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(1, 2), 0.0, 0.0);
-        assertEquals(rotMatrix.getElementAt(2, 2), 1.0, 0.0);
+        assertEquals(Rotation2D.ROTATION2D_HOM_MATRIX_ROWS, rotMatrix.getRows());
+        assertEquals(Rotation2D.ROTATION2D_HOM_MATRIX_COLS, rotMatrix.getColumns());
+        assertEquals(cosTheta, rotMatrix.getElementAt(0, 0), 0.0);
+        assertEquals(sinTheta, rotMatrix.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(2, 0), 0.0);
+        assertEquals(-sinTheta, rotMatrix.getElementAt(0, 1), 0.0);
+        assertEquals(cosTheta, rotMatrix.getElementAt(1, 1), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, rotMatrix.getElementAt(1, 2), 0.0);
+        assertEquals(1.0, rotMatrix.getElementAt(2, 2), 0.0);
 
         // build rotation from matrix and check correctness
         rotation2 = new Rotation2D(rotMatrix);
-        assertEquals(rotation2.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation2.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         rotMatrix = new Matrix(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS,
@@ -329,7 +322,7 @@ public class Rotation2DTest {
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
 
         final Rotation2D rotation = new Rotation2D();
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // test from inhomogeneous rotation matrix
         final Matrix inhomRotMat = new Matrix(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS,
@@ -343,24 +336,23 @@ public class Rotation2DTest {
 
         // check rotation matrix is valid
         assertTrue(Rotation2D.isValidRotationMatrix(inhomRotMat));
-        assertTrue(Rotation2D.isValidRotationMatrix(inhomRotMat,
-                ABSOLUTE_ERROR));
+        assertTrue(Rotation2D.isValidRotationMatrix(inhomRotMat, ABSOLUTE_ERROR));
 
         // set rotation from inhomogeneous matrix
         rotation.fromMatrix(inhomRotMat);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // reset theta
         rotation.setTheta(0.0);
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // try again with threshold
         rotation.fromMatrix(inhomRotMat, ABSOLUTE_ERROR);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // reset theta
         rotation.setTheta(0.0);
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // test from homogeneous rotation matrix
         final Matrix homRotMat = Matrix.identity(
@@ -370,19 +362,18 @@ public class Rotation2DTest {
 
         // check rotation matrix is valid
         assertTrue(Rotation2D.isValidRotationMatrix(homRotMat));
-        assertTrue(Rotation2D.isValidRotationMatrix(homRotMat,
-                ABSOLUTE_ERROR));
+        assertTrue(Rotation2D.isValidRotationMatrix(homRotMat, ABSOLUTE_ERROR));
 
         rotation.fromMatrix(homRotMat);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // reset theta
         rotation.setTheta(0.0);
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // try again with threshold
         rotation.fromMatrix(homRotMat, ABSOLUTE_ERROR);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException by using a negative threshold
         try {
@@ -441,7 +432,7 @@ public class Rotation2DTest {
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
 
         final Rotation2D rotation = new Rotation2D();
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // test from inhomogeneous rotation matrix
         final Matrix inhomRotMat = new Matrix(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS,
@@ -455,20 +446,19 @@ public class Rotation2DTest {
 
         // check rotation matrix is valid
         assertTrue(Rotation2D.isValidRotationMatrix(inhomRotMat));
-        assertTrue(Rotation2D.isValidRotationMatrix(inhomRotMat,
-                ABSOLUTE_ERROR));
+        assertTrue(Rotation2D.isValidRotationMatrix(inhomRotMat, ABSOLUTE_ERROR));
 
         // set rotation from inhomogeneous matrix
         rotation.fromInhomogeneousMatrix(inhomRotMat);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // reset theta
         rotation.setTheta(0.0);
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // try again with threshold
         rotation.fromInhomogeneousMatrix(inhomRotMat, ABSOLUTE_ERROR);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException by using a negative threshold
         try {
@@ -527,7 +517,7 @@ public class Rotation2DTest {
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
 
         final Rotation2D rotation = new Rotation2D();
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // test from inhomogeneous rotation matrix
         final Matrix homRotMat = new Matrix(Rotation2D.ROTATION2D_HOM_MATRIX_ROWS,
@@ -546,20 +536,19 @@ public class Rotation2DTest {
 
         // check rotation matrix is valid
         assertTrue(Rotation2D.isValidRotationMatrix(homRotMat));
-        assertTrue(Rotation2D.isValidRotationMatrix(homRotMat,
-                ABSOLUTE_ERROR));
+        assertTrue(Rotation2D.isValidRotationMatrix(homRotMat, ABSOLUTE_ERROR));
 
         // set rotation from homogeneous matrix
         rotation.fromHomogeneousMatrix(homRotMat);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // reset theta
         rotation.setTheta(0.0);
-        assertEquals(rotation.getTheta(), 0.0, 0.0);
+        assertEquals(0.0, rotation.getTheta(), 0.0);
 
         // try again with threshold
         rotation.fromHomogeneousMatrix(homRotMat, ABSOLUTE_ERROR);
-        assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
+        assertEquals(theta, rotation.getTheta(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException by using a negative threshold
         try {
@@ -661,12 +650,9 @@ public class Rotation2DTest {
         final Matrix rotPoint2Mat = r.multiplyAndReturnNew(point2Mat);
 
         // check correctness
-        double scaleX = rotPoint1A.getHomX() /
-                rotPoint1Mat.getElementAtIndex(0);
-        double scaleY = rotPoint1A.getHomY() /
-                rotPoint1Mat.getElementAtIndex(1);
-        double scaleW = rotPoint1A.getHomW() /
-                rotPoint1Mat.getElementAtIndex(2);
+        double scaleX = rotPoint1A.getHomX() / rotPoint1Mat.getElementAtIndex(0);
+        double scaleY = rotPoint1A.getHomY() / rotPoint1Mat.getElementAtIndex(1);
+        double scaleW = rotPoint1A.getHomW() / rotPoint1Mat.getElementAtIndex(2);
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
@@ -733,32 +719,32 @@ public class Rotation2DTest {
 
         final Rotation2D rot = new Rotation2D();
         Rotation2D.combine(rot1, rot2, rot);
-        assertEquals(rot.getTheta(), theta1 + theta2, 0.0);
+        assertEquals(theta1 + theta2, rot.getTheta(), 0.0);
 
         final Rotation2D rot3 = rot.combineAndReturnNew(rot2);
-        assertEquals(rot3.getTheta(), theta1 + 2.0 * theta2, ABSOLUTE_ERROR);
+        assertEquals(theta1 + 2.0 * theta2, rot3.getTheta(), ABSOLUTE_ERROR);
 
         rot.combine(rot1);
-        assertEquals(rot.getTheta(), 2.0 * theta1 + theta2, ABSOLUTE_ERROR);
+        assertEquals(2.0 * theta1 + theta2, rot.getTheta(), ABSOLUTE_ERROR);
     }
 
     @Test
     public void testEqualsAndHashCode() {
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
-        final double threshold = randomizer.nextDouble(
-                Rotation2D.DEFAULT_COMPARISON_THRESHOLD,
+        final double threshold = randomizer.nextDouble(Rotation2D.DEFAULT_COMPARISON_THRESHOLD,
                 2.0 * Rotation2D.DEFAULT_COMPARISON_THRESHOLD);
         final double theta2 = theta + threshold;
 
         // test from rotation angle
         final Rotation2D rotation1 = new Rotation2D(theta);
-        assertEquals(rotation1.getTheta(), theta, 0.0);
+        assertEquals(theta, rotation1.getTheta(), 0.0);
 
         final Rotation2D rotation2 = new Rotation2D(theta);
         final Rotation2D rotation3 = new Rotation2D(theta2);
 
         // check equal-ness
+        //noinspection EqualsWithItself
         assertEquals(rotation1, rotation1);
         assertEquals(rotation1.hashCode(), rotation1.hashCode());
 
@@ -766,10 +752,8 @@ public class Rotation2DTest {
         assertEquals(rotation1.hashCode(), rotation2.hashCode());
 
         assertNotEquals(rotation1, rotation3);
-        assertTrue(rotation1.equals(rotation2,
-                Rotation2D.DEFAULT_COMPARISON_THRESHOLD));
-        assertFalse(rotation1.equals(rotation3,
-                Rotation2D.DEFAULT_COMPARISON_THRESHOLD));
+        assertTrue(rotation1.equals(rotation2, Rotation2D.DEFAULT_COMPARISON_THRESHOLD));
+        assertFalse(rotation1.equals(rotation3, Rotation2D.DEFAULT_COMPARISON_THRESHOLD));
         // check with larger threshold
         assertTrue(rotation1.equals(rotation3, 2.0 * threshold));
         assertTrue(rotation1.equals(rotation2));

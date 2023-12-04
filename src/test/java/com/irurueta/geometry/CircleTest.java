@@ -51,7 +51,7 @@ public class CircleTest {
         // check center is at origin and radius is 1.0
         assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0),
                 ABSOLUTE_ERROR));
-        assertEquals(circle.getRadius(), 1.0, ABSOLUTE_ERROR);
+        assertEquals(1.0, circle.getRadius(), ABSOLUTE_ERROR);
 
         // Test constructor with center and radius
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -64,7 +64,7 @@ public class CircleTest {
         circle = new Circle(center, radius);
         // check correctness
         assertTrue(circle.getCenter().equals(center, ABSOLUTE_ERROR));
-        assertEquals(circle.getRadius(), radius, ABSOLUTE_ERROR);
+        assertEquals(radius, circle.getRadius(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         circle = null;
@@ -111,7 +111,7 @@ public class CircleTest {
 
         // check that both circles are equal
         circle = new Circle(center, radius);
-        assertEquals(circle.getCenter().distanceTo(circle2.getCenter()), 0.0,
+        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()),
                 ABSOLUTE_ERROR);
         assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
@@ -128,7 +128,7 @@ public class CircleTest {
         circle = new Circle(center, radius);
         Conic conic = circle.toConic();
         circle2 = new Circle(conic);
-        assertEquals(circle.getCenter().distanceTo(circle2.getCenter()), 0.0,
+        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()),
                 ABSOLUTE_ERROR);
         assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
@@ -176,12 +176,12 @@ public class CircleTest {
 
         final Circle circle = new Circle();
         // check radius
-        assertEquals(circle.getRadius(), 1.0, 0.0);
+        assertEquals(1.0, circle.getRadius(), 0.0);
 
         // set radius
         circle.setRadius(radius);
         // check correctness
-        assertEquals(circle.getRadius(), radius, 0.0);
+        assertEquals(radius, circle.getRadius(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -206,13 +206,13 @@ public class CircleTest {
         assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0),
                 ABSOLUTE_ERROR));
         // check radius
-        assertEquals(circle.getRadius(), 1.0, 0.0);
+        assertEquals(1.0, circle.getRadius(), 0.0);
 
         // set center and radius
         circle.setCenterAndRadius(center, radius);
         // check correctness
         assertTrue(circle.getCenter().equals(center, ABSOLUTE_ERROR));
-        assertEquals(circle.getRadius(), radius, 0.0);
+        assertEquals(radius, circle.getRadius(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -274,7 +274,7 @@ public class CircleTest {
         circle2.setParametersFromPoints(point1, point2, point3);
 
         // check that both circles are equal
-        assertEquals(circle1.getCenter().distanceTo(circle2.getCenter()), 0.0,
+        assertEquals(0.0, circle1.getCenter().distanceTo(circle2.getCenter()),
                 ABSOLUTE_ERROR);
         assertEquals(circle1.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
@@ -300,8 +300,8 @@ public class CircleTest {
         final double area = Math.PI * radius * radius;
 
         // Check correctness
-        assertEquals(circle.getArea(), area, ABSOLUTE_ERROR);
-        assertEquals(Circle.area(radius), area, ABSOLUTE_ERROR);
+        assertEquals(area, circle.getArea(), ABSOLUTE_ERROR);
+        assertEquals(area, Circle.area(radius), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -318,8 +318,8 @@ public class CircleTest {
         final double perimeter = 2.0 * Math.PI * radius;
 
         // Check correctness
-        assertEquals(circle.getPerimeter(), perimeter, ABSOLUTE_ERROR);
-        assertEquals(Circle.perimeter(radius), perimeter, ABSOLUTE_ERROR);
+        assertEquals(perimeter, circle.getPerimeter(), ABSOLUTE_ERROR);
+        assertEquals(perimeter, Circle.perimeter(radius), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -333,8 +333,8 @@ public class CircleTest {
 
         final Circle circle = new Circle(center, radius);
 
-        assertEquals(Circle.curvature(radius), 1.0 / radius, ABSOLUTE_ERROR);
-        assertEquals(circle.getCurvature(), 1.0 / radius, ABSOLUTE_ERROR);
+        assertEquals(1.0 / radius, Circle.curvature(radius), ABSOLUTE_ERROR);
+        assertEquals(1.0 / radius, circle.getCurvature(), ABSOLUTE_ERROR);
     }
 
     @Test
@@ -411,10 +411,8 @@ public class CircleTest {
         assertEquals(Circle.signedDistance(circle, inside),
                 (value - 1.0) * radius, ABSOLUTE_ERROR);
 
-        assertEquals(circle.getDistance(inside),
-                Math.abs((value - 1.0) * radius), ABSOLUTE_ERROR);
-        assertEquals(Circle.distance(circle, inside),
-                Math.abs((value - 1.0) * radius), ABSOLUTE_ERROR);
+        assertEquals(Math.abs((value - 1.0) * radius), circle.getDistance(inside), ABSOLUTE_ERROR);
+        assertEquals(Math.abs((value - 1.0) * radius), Circle.distance(circle, inside), ABSOLUTE_ERROR);
 
         // for inside point signed distance is negative
         assertTrue(circle.getSignedDistance(inside) <= 0.0);
@@ -424,15 +422,13 @@ public class CircleTest {
         // true for a large enough threshold
         assertTrue(circle.isLocus(inside, radius));
 
-        assertEquals(circle.getSignedDistance(outside), (value2 - 1.0) * radius,
+        assertEquals((value2 - 1.0) * radius, circle.getSignedDistance(outside), ABSOLUTE_ERROR);
+        assertEquals((value2 - 1.0) * radius, Circle.signedDistance(circle, outside),
                 ABSOLUTE_ERROR);
-        assertEquals(Circle.signedDistance(circle, outside),
-                (value2 - 1.0) * radius, ABSOLUTE_ERROR);
 
-        assertEquals(circle.getDistance(outside),
-                Math.abs((value2 - 1.0) * radius), ABSOLUTE_ERROR);
-        assertEquals(Circle.distance(circle, outside),
-                Math.abs((value2 - 1.0) * radius), ABSOLUTE_ERROR);
+        assertEquals(Math.abs((value2 - 1.0) * radius), circle.getDistance(outside), ABSOLUTE_ERROR);
+        assertEquals(Math.abs((value2 - 1.0) * radius), Circle.distance(circle, outside),
+                ABSOLUTE_ERROR);
 
         // for outside point distance is positive
         assertTrue(circle.getSignedDistance(outside) >= 0.0);
@@ -443,8 +439,8 @@ public class CircleTest {
         assertTrue(circle.isLocus(outside, radius));
 
         // for point at locus of circle, distance is zero
-        assertEquals(circle.getSignedDistance(zero), 0.0, ABSOLUTE_ERROR);
-        assertEquals(Circle.signedDistance(circle, zero), 0.0, ABSOLUTE_ERROR);
+        assertEquals(0.0, circle.getSignedDistance(zero), ABSOLUTE_ERROR);
+        assertEquals(0.0, Circle.signedDistance(circle, zero), ABSOLUTE_ERROR);
 
         // zero is locus
         assertTrue(circle.isLocus(zero));
@@ -495,8 +491,7 @@ public class CircleTest {
         final Point2D result = Point2D.create();
 
         // test for point inside (but far from center)
-        assertTrue(circle.getClosestPoint(inside).equals(expectedPoint,
-                ABSOLUTE_ERROR));
+        assertTrue(circle.getClosestPoint(inside).equals(expectedPoint, ABSOLUTE_ERROR));
         circle.closestPoint(inside, result);
         assertTrue(result.equals(expectedPoint, ABSOLUTE_ERROR));
 
@@ -506,8 +501,7 @@ public class CircleTest {
         assertTrue(circle.isLocus(inside, radius));
 
         // test for point outside of circle
-        assertTrue(circle.getClosestPoint(outside).equals(expectedPoint,
-                ABSOLUTE_ERROR));
+        assertTrue(circle.getClosestPoint(outside).equals(expectedPoint, ABSOLUTE_ERROR));
         circle.closestPoint(outside, result);
         assertTrue(result.equals(expectedPoint, ABSOLUTE_ERROR));
 
@@ -670,7 +664,7 @@ public class CircleTest {
         circle2.setFromConic(conic);
 
         // check correctness
-        assertEquals(circle.getCenter().distanceTo(circle2.getCenter()), 0.0,
+        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()),
                 ABSOLUTE_ERROR);
         assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 

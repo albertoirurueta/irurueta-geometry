@@ -43,13 +43,11 @@ public class VanGoghTriangulator2DTest {
         assertNotNull(triangulator);
 
         // check method correctness
-        assertEquals(triangulator.getMethod(),
-                TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, triangulator.getMethod());
     }
 
     @Test
-    public void testTriangulate() throws NotEnoughVerticesException,
-            TriangulatorException {
+    public void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
 
         final UniformRandomizer randomizer = new UniformRandomizer(new Random());
         final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -77,8 +75,7 @@ public class VanGoghTriangulator2DTest {
         final List<Triangle2D> triangles1 = triangulator.triangulate(polygon);
         final List<Triangle2D> triangles2 = triangulator.triangulate(vertices);
         final List<int[]> indices = new ArrayList<>();
-        final List<Triangle2D> triangles3 = triangulator.triangulate(vertices,
-                indices);
+        final List<Triangle2D> triangles3 = triangulator.triangulate(vertices, indices);
 
         double signedArea1 = 0.0;
         double area1 = 0.0;
@@ -107,7 +104,7 @@ public class VanGoghTriangulator2DTest {
 
         double signedArea2 = 0.0;
         double area2 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (final Triangle2D triangle : triangles2) {
             signedArea2 += triangle.getSignedArea();
             area2 += triangle.getArea();
@@ -130,7 +127,7 @@ public class VanGoghTriangulator2DTest {
         assertFalse(inside2);
 
         double area3 = 0.0;
-        inside1 = inside2 = false;
+        inside1 = false;
         for (final Triangle2D triangle : triangles3) {
             area3 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -150,7 +147,7 @@ public class VanGoghTriangulator2DTest {
         assertFalse(polygon.isInside(point2));
         assertFalse(inside2);
 
-        assertTrue(indices.size() > 0);
+        assertFalse(indices.isEmpty());
     }
 
     private List<Point2D> buildPolygonVertices(

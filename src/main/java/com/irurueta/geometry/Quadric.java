@@ -266,7 +266,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @param dualQuadric Dual quadric instance where the values of the dual
      *                    quadric of this quadric instance will be stored.
      * @throws DualQuadricNotAvailableException Raised if the dual quadric does
-     *                                          not exists because this quadric instance is degenerate (its inverse
+     *                                          not exist because this quadric instance is degenerate (its inverse
      *                                          cannot be computed).
      */
     public void dualQuadric(final DualQuadric dualQuadric)
@@ -586,7 +586,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * coordinates.
      * If resulting conic needs to be expressed in terms of plane coordinates,
      * then the plane and the conic must be rotated so that the plane becomes
-     * an xy plane.
+     * an xy-plane.
      *
      * @param plane  plane to intersect this quadric with.
      * @param result instance where resulting intersection will be stored.

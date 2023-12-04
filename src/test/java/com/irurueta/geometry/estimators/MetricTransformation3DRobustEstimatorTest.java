@@ -54,7 +54,7 @@ public class MetricTransformation3DRobustEstimatorTest {
                 MetricTransformation3DRobustEstimator.MIN_ITERATIONS);
         assertTrue(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
         assertFalse(MetricTransformation3DRobustEstimator.DEFAULT_KEEP_COVARIANCE);
-        assertEquals(RobustEstimatorMethod.PROMedS,
+        assertEquals(RobustEstimatorMethod.PROMEDS,
                 MetricTransformation3DRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
@@ -67,7 +67,7 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RANSACMetricTransformation3DRobustEstimator);
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
 
@@ -82,7 +82,7 @@ public class MetricTransformation3DRobustEstimatorTest {
                 PROSACMetricTransformation3DRobustEstimator);
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
 
@@ -102,21 +102,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, RobustEstimatorMethod.LMedS);
+                inputPoints, outputPoints, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -128,8 +128,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -141,21 +141,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, RobustEstimatorMethod.PROMedS);
+                inputPoints, outputPoints, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -165,13 +165,13 @@ public class MetricTransformation3DRobustEstimatorTest {
         estimator = null;
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
-                    emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
+                    emptyPoints, outputPoints, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
-                    inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
+                    inputPoints, emptyPoints, RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -207,31 +207,31 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
         // test with listener and points
         estimator = MetricTransformation3DRobustEstimator.create(
@@ -239,26 +239,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -267,12 +267,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -281,26 +281,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -314,7 +314,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
 
         estimator = MetricTransformation3DRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getQualityScores());
@@ -332,7 +332,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = MetricTransformation3DRobustEstimator.create(qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertSame(qualityScores, estimator.getQualityScores());
@@ -349,22 +349,22 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -377,8 +377,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -391,22 +391,22 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -415,21 +415,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     emptyPoints, outputPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     inputPoints, emptyPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     inputPoints, outputPoints, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -444,7 +444,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertNull(estimator.getQualityScores());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
-                qualityScores, RobustEstimatorMethod.LMedS);
+                qualityScores, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -465,7 +465,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertSame(qualityScores, estimator.getQualityScores());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
-                qualityScores, RobustEstimatorMethod.PROMedS);
+                qualityScores, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -477,26 +477,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -505,12 +505,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -519,26 +519,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -547,21 +547,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, qualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     listener, inputPoints, outputPoints, wrongQualityScores,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -575,7 +575,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                true, RobustEstimatorMethod.LMedS);
+                true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
@@ -593,7 +593,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                true, RobustEstimatorMethod.PROMedS);
+                true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
@@ -607,7 +607,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
-                true, RobustEstimatorMethod.LMedS);
+                true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -628,7 +628,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
-                true, RobustEstimatorMethod.PROMedS);
+                true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -643,7 +643,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = MetricTransformation3DRobustEstimator.create(qualityScores,
-                true, RobustEstimatorMethod.LMedS);
+                true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getQualityScores());
@@ -664,7 +664,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertTrue(estimator.isWeakMinimumSizeAllowed());
 
         estimator = MetricTransformation3DRobustEstimator.create(qualityScores,
-                true, RobustEstimatorMethod.PROMedS);
+                true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertSame(qualityScores, estimator.getQualityScores());
@@ -682,7 +682,7 @@ public class MetricTransformation3DRobustEstimatorTest {
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
                 qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -709,7 +709,7 @@ public class MetricTransformation3DRobustEstimatorTest {
 
         estimator = MetricTransformation3DRobustEstimator.create(listener,
                 qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertSame(listener, estimator.getListener());
@@ -732,21 +732,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, true, RobustEstimatorMethod.LMedS);
+                inputPoints, outputPoints, true, RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -758,8 +758,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -771,21 +771,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, true, RobustEstimatorMethod.PROMedS);
+                inputPoints, outputPoints, true, RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -794,14 +794,14 @@ public class MetricTransformation3DRobustEstimatorTest {
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     emptyPoints, outputPoints, true,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     inputPoints, emptyPoints, true,
-                    RobustEstimatorMethod.LMedS);
+                    RobustEstimatorMethod.LMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -813,26 +813,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -841,12 +841,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -855,26 +855,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -891,22 +891,22 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -919,8 +919,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -933,22 +933,22 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -957,21 +957,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     emptyPoints, outputPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     inputPoints, emptyPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     inputPoints, outputPoints, wrongQualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -983,26 +983,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.RANSAC);
         assertTrue(estimator instanceof
                 RANSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.LMedS);
+                RobustEstimatorMethod.LMEDS);
         assertTrue(estimator instanceof
                 LMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1011,12 +1011,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.MSAC);
         assertTrue(estimator instanceof
                 MSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1025,26 +1025,26 @@ public class MetricTransformation3DRobustEstimatorTest {
                 RobustEstimatorMethod.PROSAC);
         assertTrue(estimator instanceof
                 PROSACMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         estimator = MetricTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores, true,
-                RobustEstimatorMethod.PROMedS);
+                RobustEstimatorMethod.PROMEDS);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1053,21 +1053,21 @@ public class MetricTransformation3DRobustEstimatorTest {
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, qualityScores, true,
-                    RobustEstimatorMethod.PROMedS);
+                    RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
         try {
             estimator = MetricTransformation3DRobustEstimator.create(
                     listener, inputPoints, outputPoints, wrongQualityScores,
-                    true, RobustEstimatorMethod.PROMedS);
+                    true, RobustEstimatorMethod.PROMEDS);
             fail("IllegalArgumentException expected but not thrown");
         } catch (final IllegalArgumentException ignore) {
         }
@@ -1097,8 +1097,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1150,7 +1150,7 @@ public class MetricTransformation3DRobustEstimatorTest {
         estimator = MetricTransformation3DRobustEstimator.create(listener);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
 
 
         // test with listener and points
@@ -1158,12 +1158,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1187,8 +1187,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1227,12 +1227,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1281,8 +1281,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1315,12 +1315,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, true);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1345,8 +1345,8 @@ public class MetricTransformation3DRobustEstimatorTest {
         assertFalse(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
@@ -1386,12 +1386,12 @@ public class MetricTransformation3DRobustEstimatorTest {
                 listener, inputPoints, outputPoints, qualityScores, true);
         assertTrue(estimator instanceof
                 PROMedSMetricTransformation3DRobustEstimator);
-        assertSame(estimator.getListener(), listener);
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
         assertNull(estimator.getInliersData());
-        assertEquals(estimator.isResultRefined(),
-                MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
+                estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 

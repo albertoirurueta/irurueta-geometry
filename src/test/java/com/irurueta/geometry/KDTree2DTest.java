@@ -92,7 +92,7 @@ public class KDTree2DTest {
 
         assertNotNull(tree);
 
-        assertEquals(KDTree2D.MIN_PTS, 3);
+        assertEquals(3, KDTree2D.MIN_PTS);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class KDTree2DTest {
 
                 if (i == j) {
                     // for equal indices distance is BIG
-                    assertEquals(tree.distance(i, j), KDTree.BIG, 0.0);
+                    assertEquals(KDTree.BIG, tree.distance(i, j), 0.0);
                 } else {
                     pj = points.get(j);
                     assertEquals(tree.distance(i, j), pi.distanceTo(pj), ABSOLUTE_ERROR);
@@ -148,7 +148,7 @@ public class KDTree2DTest {
             KDTree2D.BoxNode<Point2D> box = tree.mBoxes[boxIndex];
 
             // point is inside box, so its distance is zero
-            assertEquals(box.getDistance(p), 0.0, 0.0);
+            assertEquals(0.0, box.getDistance(p), 0.0);
         }
     }
 
@@ -171,7 +171,7 @@ public class KDTree2DTest {
             final KDTree2D.BoxNode<Point2D> box = tree.locateBox(p);
 
             // point is inside box, so its distance is zero
-            assertEquals(box.getDistance(p), 0.0, 0.0);
+            assertEquals(0.0, box.getDistance(p), 0.0);
         }
     }
 
@@ -253,7 +253,7 @@ public class KDTree2DTest {
 
         final int nearestIndex = tree.nearestIndex(p);
 
-        assertSame(points.get(nearestIndex), bestP);
+        assertSame(bestP, points.get(nearestIndex));
         assertEquals(nearestIndex, bestIndex);
     }
 
@@ -290,7 +290,7 @@ public class KDTree2DTest {
 
             final Point2D nearestPoint = tree.nearestPoint(pi);
 
-            assertSame(nearestPoint, bestP);
+            assertSame(bestP, nearestPoint);
         }
     }
 
@@ -328,7 +328,7 @@ public class KDTree2DTest {
 
         final Point2D nearestPoint = tree.nearestPoint(p);
 
-        assertSame(nearestPoint, bestP);
+        assertSame(bestP, nearestPoint);
     }
 
     @Test
@@ -997,13 +997,13 @@ public class KDTree2DTest {
         KDTree.BoxNode<Point2D> node = new KDTree.BoxNode<>(lo, hi, mom, d1, d2, ptLo, ptHi);
 
         // check
-        assertSame(node.getLo(), lo);
-        assertSame(node.getHi(), hi);
-        assertEquals(node.getMom(), mom);
-        assertEquals(node.getDau1(), d1);
-        assertEquals(node.getDau2(), d2);
-        assertEquals(node.getPtLo(), ptLo);
-        assertEquals(node.getPtHi(), ptHi);
+        assertSame(lo, node.getLo());
+        assertSame(hi, node.getHi());
+        assertEquals(mom, node.getMom());
+        assertEquals(d1, node.getDau1());
+        assertEquals(d2, node.getDau2());
+        assertEquals(ptLo, node.getPtLo());
+        assertEquals(ptHi, node.getPtHi());
 
         // Force IllegalArgumentException
         try {

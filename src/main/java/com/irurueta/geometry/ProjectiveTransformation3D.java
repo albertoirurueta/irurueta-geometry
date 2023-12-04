@@ -830,7 +830,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * Returns the projective parameters associated to this instance.
      * These parameters are the located in the last row of the internal
      * transformation matrix.
-     * For affine, metric or euclidean transformations this last row is always
+     * For affine, metric or Euclidean transformations this last row is always
      * [0, 0, 0, 1] (taking into account that transformation matrix is defined
      * up to scale).
      *
@@ -847,7 +847,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * Sets the projective parameters associated to this instance.
      * These parameters will be set in the last row of the internal
      * transformation matrix.
-     * For affine, matrix or euclidean transformations parameters are always
+     * For affine, matrix or Euclidean transformations parameters are always
      * [0, 0, 0, 1] (taking into account that transformation matrix is defined
      * up to scale).
      *

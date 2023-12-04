@@ -271,7 +271,7 @@ public class AffineParameters2D implements Serializable {
      *                  triangular. Matrix will be considered upper triangular if its lower
      *                  triangular elements are smaller or equal than provided threshold.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
-     *                                  it it is not upper triangular or if threshold is negative.
+     *                                  if it is not upper triangular or if threshold is negative.
      */
     public final void fromMatrix(final Matrix m, final double threshold) {
         if (!isValidMatrix(m, threshold)) {

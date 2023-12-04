@@ -419,9 +419,9 @@ public abstract class BaseQuadric implements Serializable {
     }
 
     /**
-     * This method sets the I parameter of a base quadric.
+     * This method sets the "I" parameter of a base quadric.
      *
-     * @param i Parameter I of the given base quadric.
+     * @param i Parameter "I" of the given base quadric.
      */
     public void setI(final double i) {
         mI = i;

@@ -24,6 +24,8 @@ import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.geometry.estimators.DLTLinePlaneCorrespondencePinholeCameraEstimator;
 import com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraEstimator;
+import com.irurueta.geometry.estimators.LinePlaneCorrespondencePinholeCameraEstimator;
+import com.irurueta.geometry.estimators.PointCorrespondencePinholeCameraEstimator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -395,7 +397,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * ray of light.
      * This method only computes one possible solution. Any other solution can
      * be computed as a linear combination between the camera center and the
-     * estimated back-projeted point.
+     * estimated back-projected point.
      *
      * @param point  2D point to be back-projected.
      * @param result Instance where back-projected 3D point data will be stored.
@@ -426,8 +428,8 @@ public class PinholeCamera extends Camera implements Serializable {
             final double norm = Utils.normF(pseudoInverseInternalMatrix);
             pseudoInverseInternalMatrix.multiplyByScalar(1.0 / norm);
 
-            // back-projected point (ray of light) is the product of pseudo-
-            // inverse of internal matrix with image point matrix
+            // back-projected point (ray of light) is the product of pseudo-inverse
+            // of internal matrix with image point matrix
             pseudoInverseInternalMatrix.multiply(m);
 
             result.setHomogeneousCoordinates(
@@ -444,7 +446,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Back-projects a 2D conic into a 3D quadric and stores the result into
      * provided instance.
      *
-     * @param conic  2D conic to be back-rojected.
+     * @param conic  2D conic to be back-projected.
      * @param result Instance where data of back-projected 3D quadric will be
      *               stored.
      */
@@ -566,7 +568,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Normalizes camera matrix.
      * Normalization can help to increase accuracy on camera operations.
-     * This method should only called when an increase on accuracy is needed
+     * This method should only be called when an increase on accuracy is needed
      * to save the additional computational cost.
      * Notice that affine pinhole cameras are never normalized, since elements
      * to be used for normalization have norm equal to zero in such case.
@@ -865,7 +867,7 @@ public class PinholeCamera extends Camera implements Serializable {
                     PINHOLE_CAMERA_MATRIX_COLS - 1, mp);
 
             // because we do not check sign of new director vector, we reset
-            // camera sign so that it is checked afterwards when needed
+            // camera sign so that it is checked afterward when needed
             mCameraSignFixed = false;
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -1048,10 +1050,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Returns the projected 2D coordinates of the x axis, which corresponds to
+     * Returns the projected 2D coordinates of the x-axis, which corresponds to
      * its vanishing point.
      *
-     * @return vanishing point of x axis.
+     * @return vanishing point of x-axis.
      */
     public Point2D getXAxisVanishingPoint() {
         final Point2D result = Point2D.create();
@@ -1060,10 +1062,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Computes the projected 2D coordinates of the x axis, which corresponds to
+     * Computes the projected 2D coordinates of the x-axis, which corresponds to
      * its vanishing point.
      *
-     * @param result 2D point where vanishing point of x axis will be stored.
+     * @param result 2D point where vanishing point of x-axis will be stored.
      */
     public void xAxisVanishingPoint(final Point2D result) {
 
@@ -1074,10 +1076,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Returns the projected 2D coordinates of the y axis, which corresponds to
+     * Returns the projected 2D coordinates of the y-axis, which corresponds to
      * its vanishing point.
      *
-     * @return vanishing point of y axis.
+     * @return vanishing point of y-axis.
      */
     public Point2D getYAxisVanishingPoint() {
         final Point2D result = Point2D.create();
@@ -1086,10 +1088,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Computes the projected 2D coordinates of the y axis, which corresponds to
+     * Computes the projected 2D coordinates of the y-axis, which corresponds to
      * its vanishing point.
      *
-     * @param result 2D point where vanishing point of y axis will be stored.
+     * @param result 2D point where vanishing point of y-axis will be stored.
      */
     public void yAxisVanishingPoint(final Point2D result) {
 
@@ -1151,10 +1153,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Sets the projected 2D coordinates of the x axis, which corresponds to its
+     * Sets the projected 2D coordinates of the x-axis, which corresponds to its
      * vanishing point.
      *
-     * @param xAxisVanishingPoint vanishing point of x axis to be set.
+     * @param xAxisVanishingPoint vanishing point of x-axis to be set.
      */
     public void setXAxisVanishingPoint(final Point2D xAxisVanishingPoint) {
         // to increase accuracy
@@ -1174,10 +1176,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Sets the projected 2D coordinates of the y axis, which corresponds to its
+     * Sets the projected 2D coordinates of the y-axis, which corresponds to its
      * vanishing point.
      *
-     * @param yAxisVanishingPoint vanishing point of y axis to be set.
+     * @param yAxisVanishingPoint vanishing point of y-axis to be set.
      */
     public void setYAxisVanishingPoint(final Point2D yAxisVanishingPoint) {
         // to increase accuracy
@@ -1241,8 +1243,8 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Returns plane formed by x and z retinal axes. x axis is taken respect the
-     * projected camera coordinates (i.e. retinal plane), and z axis just points
+     * Returns plane formed by x and z retinal axes. x-axis is taken respect the
+     * projected camera coordinates (i.e. retinal plane), and z-axis just points
      * in the direction that the camera is looking at.
      *
      * @return horizontal plane respect camera retinal plane.
@@ -1254,8 +1256,8 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Computes the plane formed by x and z retinal axes. x axis is taken
-     * respect the projected camera coordinates (i.e. retinal plane), and z axis
+     * Computes the plane formed by x and z retinal axes. x-axis is taken
+     * respect the projected camera coordinates (i.e. retinal plane), and z-axis
      * just points in the direction that the camera is looking at.
      *
      * @param result plane where results will be stored.
@@ -1270,8 +1272,8 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Returns plane formed by y and z retinal axes. y axis is taken respect the
-     * projected camera coordinates (i.e. retinal plane), and z axis just points
+     * Returns plane formed by y and z retinal axes. y-axis is taken respect the
+     * projected camera coordinates (i.e. retinal plane), and z-axis just points
      * in the direction that the camera is looking at.
      *
      * @return vertical plane respect camera retinal plane.
@@ -1283,8 +1285,8 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Computes the plane formed by y and z retinal axes. y axis is taken
-     * respect the projected camera coordinates (i.e. retinal plane), and z axis
+     * Computes the plane formed by y and z retinal axes. y-axis is taken
+     * respect the projected camera coordinates (i.e. retinal plane), and z-axis
      * just point in the direction that the camera is looking at.
      *
      * @param result plane where results will be stored.
@@ -1328,8 +1330,8 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Sets plane formed by x and z retinal plane. x axis is taken respect the
-     * projected camera coordinates (i.e. retinal plane), and z axis just points
+     * Sets plane formed by x and z retinal plane. x-axis is taken respect the
+     * projected camera coordinates (i.e. retinal plane), and z-axis just points
      * in the direction that the camera is looking at.
      *
      * @param horizontalAxisPlane horizontal plane respect camera retinal plane
@@ -1355,8 +1357,8 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * Sets plane formed by y and z retinal plane. y axis is taken respect the
-     * projected camera coordinates (i.e. retinal plane), and z axis just points
+     * Sets plane formed by y and z retinal plane. y-axis is taken respect the
+     * projected camera coordinates (i.e. retinal plane), and z-axis just points
      * in the direction that the camera is looking at.
      *
      * @param verticalAxisPlane vertical plane respect camera retinal plane to
@@ -1777,7 +1779,7 @@ public class PinholeCamera extends Camera implements Serializable {
     }
 
     /**
-     * COmputes list indicating if corresponding provided points are located in
+     * Computes list indicating if corresponding provided points are located in
      * front of the camera or not.
      *
      * @param points points to be checked.
@@ -1864,7 +1866,7 @@ public class PinholeCamera extends Camera implements Serializable {
 
             mDiag2.multiply(q);
 
-            // thresholds should not be a problem and so we disable the change of
+            // thresholds should not be a problem, and so we disable the change of
             // throwing any exception by setting infinity threshold (and ignoring
             // GeometryException)
             mIntrinsicParameters = new PinholeCameraIntrinsicParameters(
@@ -2119,11 +2121,9 @@ public class PinholeCamera extends Camera implements Serializable {
             final Point2D point2D4, final Point2D point2D5, final Point2D point2D6) throws CameraException {
 
         final List<Point3D> points3D = new ArrayList<>(
-                DLTPointCorrespondencePinholeCameraEstimator.
-                        MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+                PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
         final List<Point2D> points2D = new ArrayList<>(
-                DLTPointCorrespondencePinholeCameraEstimator.
-                        MIN_NUMBER_OF_POINT_CORRESPONDENCES);
+                PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES);
 
         points3D.add(point3D1);
         points3D.add(point3D2);
@@ -2172,10 +2172,10 @@ public class PinholeCamera extends Camera implements Serializable {
             throws CameraException {
 
         final List<Plane> planes = new ArrayList<>(
-                DLTLinePlaneCorrespondencePinholeCameraEstimator.
+                LinePlaneCorrespondencePinholeCameraEstimator.
                         MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES);
         final List<Line2D> lines2D = new ArrayList<>(
-                DLTLinePlaneCorrespondencePinholeCameraEstimator.
+                LinePlaneCorrespondencePinholeCameraEstimator.
                         MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES);
 
         planes.add(plane1);

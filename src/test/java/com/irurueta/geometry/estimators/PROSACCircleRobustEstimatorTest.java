@@ -68,7 +68,7 @@ public class PROSACCircleRobustEstimatorTest implements
         assertEquals(0.0, CircleRobustEstimator.MIN_CONFIDENCE, 0.0);
         assertEquals(1.0, CircleRobustEstimator.MAX_CONFIDENCE, 0.0);
         assertEquals(1, CircleRobustEstimator.MIN_ITERATIONS);
-        assertEquals(RobustEstimatorMethod.PROMedS, CircleRobustEstimator.DEFAULT_ROBUST_METHOD);
+        assertEquals(RobustEstimatorMethod.PROMEDS, CircleRobustEstimator.DEFAULT_ROBUST_METHOD);
         assertEquals(1.0, PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, PROSACCircleRobustEstimator.MIN_THRESHOLD, 0.0);
     }
@@ -79,18 +79,18 @@ public class PROSACCircleRobustEstimatorTest implements
         PROSACCircleRobustEstimator estimator = new PROSACCircleRobustEstimator();
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -104,19 +104,19 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator = new PROSACCircleRobustEstimator(points);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                MSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(MSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -156,18 +156,18 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator = new PROSACCircleRobustEstimator(listener);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                MSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(MSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -176,19 +176,19 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator = new PROSACCircleRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                MSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(MSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
@@ -206,21 +206,21 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator = new PROSACCircleRobustEstimator(qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         final double[] emptyScores = new double[0];
@@ -236,21 +236,21 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator = new PROSACCircleRobustEstimator(points, qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
+        assertEquals(PROSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -271,21 +271,21 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator = new PROSACCircleRobustEstimator(listener, qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(PROSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -302,21 +302,21 @@ public class PROSACCircleRobustEstimatorTest implements
                 qualityScores);
 
         // check correctness
-        assertEquals(estimator.getThreshold(),
-                PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
-        assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROSAC);
-        assertSame(estimator.getListener(), listener);
+        assertEquals(PROSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
+        assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
-        assertSame(estimator.getPoints(), points);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         estimator = null;
@@ -341,14 +341,14 @@ public class PROSACCircleRobustEstimatorTest implements
                 new PROSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getThreshold(),
-                PROSACCircleRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(PROSACCircleRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
 
         // check correctness
-        assertEquals(estimator.getThreshold(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -371,7 +371,7 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator.setListener(this);
 
         // check correctness
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
     }
 
@@ -381,14 +381,14 @@ public class PROSACCircleRobustEstimatorTest implements
                 new PROSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getProgressDelta(),
-                CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
 
         // check correctness
-        assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
+        assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -409,14 +409,14 @@ public class PROSACCircleRobustEstimatorTest implements
                 new PROSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getConfidence(),
-                CircleRobustEstimator.DEFAULT_CONFIDENCE, 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
 
         // check correctness
-        assertEquals(estimator.getConfidence(), 0.5, 0.0);
+        assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
         try {
@@ -437,14 +437,14 @@ public class PROSACCircleRobustEstimatorTest implements
                 new PROSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(estimator.getMaxIterations(),
-                CircleRobustEstimator.DEFAULT_MAX_ITERATIONS);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
 
         // check correctness
-        assertEquals(estimator.getMaxIterations(), 1);
+        assertEquals(1, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
         try {
@@ -471,7 +471,7 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator.setPoints(points);
 
         // check correctness
-        assertSame(estimator.getPoints(), points);
+        assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
 
         // if we set quality scores, then estimator becomes ready
@@ -505,7 +505,7 @@ public class PROSACCircleRobustEstimatorTest implements
         estimator.setQualityScores(qualityScores);
 
         // check correctness
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
         qualityScores = new double[1];
@@ -579,17 +579,17 @@ public class PROSACCircleRobustEstimatorTest implements
 
             estimator.setThreshold(THRESHOLD);
 
-            assertEquals(estimateStart, 0);
-            assertEquals(estimateEnd, 0);
-            assertEquals(estimateNextIteration, 0);
-            assertEquals(estimateProgressChange, 0);
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
             final Circle circle2 = estimator.estimate();
 
-            assertEquals(estimateStart, 1);
-            assertEquals(estimateEnd, 1);
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
             assertTrue(estimateNextIteration > 0);
             assertTrue(estimateProgressChange >= 0);
             reset();
@@ -601,8 +601,7 @@ public class PROSACCircleRobustEstimatorTest implements
             }
 
             // check that both circles are equal
-            assertEquals(circle.getCenter().distanceTo(circle2.getCenter()),
-                    0.0, ABSOLUTE_ERROR);
+            assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
             assertEquals(circle.getRadius(), circle2.getRadius(),
                     ABSOLUTE_ERROR);
         }
