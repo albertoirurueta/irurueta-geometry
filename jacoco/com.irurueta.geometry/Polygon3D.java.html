@@ -1,0 +1,1148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Polygon3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Polygon3D.java</span></div><h1>Polygon3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * This class defines a polygon in 3D space.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class Polygon3D implements Serializable {
+
+    /**
+     * Default threshold value. Thresholds are used to determine whether a point
+     * lies inside the polygon or not, or if it's locus or not, etc.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-9;
+
+    /**
+     * Minimum allowed threshold value.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Minimum number of vertices that a polygon is allowed to have.
+     */
+    public static final int MIN_VERTICES = 3;
+
+    /**
+     * Constant defining inhomogeneous coordinates.
+     */
+    public static final int INHOM_COORDS = 3;
+
+    /**
+     * Default method for triangulation.
+     */
+<span class="fc" id="L53">    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD =</span>
+            TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
+
+    /**
+     * List containing vertices of this polygon. Each vertex is a 3D point.
+     */
+    private List&lt;Point3D&gt; mVertices;
+
+    /**
+     * Boolean indicating whether polygon has already been triangulated.
+     */
+    private boolean mTriangulated;
+
+    /**
+     * List containing triangles found after triangulating this polygon.
+     * Initially this list will be null until triangulation is done.
+     */
+    private List&lt;Triangle3D&gt; mTriangles;
+
+    /**
+     * Method to do triangulation.
+     */
+    private TriangulatorMethod mTriangulatorMethod;
+
+    /**
+     * Constructor.
+     *
+     * @param vertices List of vertices forming this polygon.
+     * @throws NotEnoughVerticesException Raised if list does not contain enough
+     *                                    vertices.
+     * @see #MIN_VERTICES
+     */
+<span class="fc" id="L85">    public Polygon3D(final List&lt;Point3D&gt; vertices) throws NotEnoughVerticesException {</span>
+<span class="fc" id="L86">        setVertices(vertices);</span>
+<span class="fc" id="L87">        mTriangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Returns triangulator method. Triangulator method determines the way a
+     * polygon is divided into triangles.
+     * If none has been provided DEFAULT_TRIANGULATOR_METHOD will be returned.
+     *
+     * @return Triangulator method.
+     */
+    public TriangulatorMethod getTriangulatorMethod() {
+<span class="fc" id="L98">        return mTriangulatorMethod;</span>
+    }
+
+    /**
+     * Sets triangulator method. A triangulator method determines the way a
+     * polygon is divided into triangles.
+     *
+     * @param triangulatorMethod A triangulator method.
+     */
+    public void setTriangulatorMethod(final TriangulatorMethod triangulatorMethod) {
+<span class="fc" id="L108">        mTriangulatorMethod = triangulatorMethod;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Returns the list of vertices forming this polygon.
+     *
+     * @return List of vertices.
+     */
+    public List&lt;Point3D&gt; getVertices() {
+<span class="fc" id="L117">        return mVertices;</span>
+    }
+
+    /**
+     * Sets list of vertices forming this polygon.
+     *
+     * @param vertices List of vertices.
+     * @throws NotEnoughVerticesException Raised if provided list does not have
+     *                                    enough vertices.
+     * @see #MIN_VERTICES
+     */
+    public final void setVertices(final List&lt;Point3D&gt; vertices)
+            throws NotEnoughVerticesException {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
+<span class="fc" id="L131">            throw new NotEnoughVerticesException();</span>
+        }
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (vertices instanceof Serializable) {</span>
+<span class="fc" id="L135">            mVertices = vertices;</span>
+        } else {
+<span class="nc" id="L137">            mVertices = new ArrayList&lt;&gt;(vertices);</span>
+        }
+<span class="fc" id="L139">        mTriangulated = false;</span>
+<span class="fc" id="L140">        mTriangles = null;</span>
+<span class="fc" id="L141">    }</span>
+
+    /**
+     * Determines whether this polygon has already been triangulated.
+     * A polygon will only need to be triangulated once, unless the list of
+     * vertices is reset.
+     *
+     * @return True if polygon has already been triangulated, false otherwise.
+     */
+    public boolean isTriangulated() {
+<span class="fc" id="L151">        return mTriangulated;</span>
+    }
+
+    /**
+     * Returns a list of triangles forming this polygon.
+     * This method checks whether this polygon has already been triangulated,
+     * if not, it performs triangulation first.
+     *
+     * @return A list of triangles forming this polygon.
+     * @throws TriangulatorException Raised if triangulation was needed and
+     *                               failed.
+     */
+    public List&lt;Triangle3D&gt; getTriangles() throws TriangulatorException {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (!isTriangulated()) {</span>
+<span class="fc" id="L165">            triangulate();</span>
+        }
+<span class="fc" id="L167">        return mTriangles;</span>
+    }
+
+    /**
+     * Returns signed area of this polygon.
+     * The sign of the area determines whether vertices of the polygon are
+     * provided in clockwise (negative sign) or clockwise (positive sign) order.
+     *
+     * @return Signed area of this polygon.
+     */
+    public double getArea() {
+<span class="fc" id="L178">        final Point3D origin = mVertices.get(0);</span>
+<span class="fc" id="L179">        final double inhomX0 = origin.getInhomX();</span>
+<span class="fc" id="L180">        final double inhomY0 = origin.getInhomY();</span>
+<span class="fc" id="L181">        final double inhomZ0 = origin.getInhomZ();</span>
+
+<span class="fc" id="L183">        final Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+
+        // because there are at least 3
+        // vertices
+<span class="fc" id="L187">        Point3D prevPoint = iterator.next();</span>
+        Point3D curPoint;
+<span class="fc" id="L189">        double avgX = 0.0;</span>
+<span class="fc" id="L190">        double avgY = 0.0;</span>
+<span class="fc" id="L191">        double avgZ = 0.0;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L193">            curPoint = iterator.next();</span>
+
+<span class="fc" id="L195">            final double inhomX1 = prevPoint.getInhomX();</span>
+<span class="fc" id="L196">            final double inhomY1 = prevPoint.getInhomY();</span>
+<span class="fc" id="L197">            final double inhomZ1 = prevPoint.getInhomZ();</span>
+
+<span class="fc" id="L199">            final double inhomX2 = curPoint.getInhomX();</span>
+<span class="fc" id="L200">            final double inhomY2 = curPoint.getInhomY();</span>
+<span class="fc" id="L201">            final double inhomZ2 = curPoint.getInhomZ();</span>
+
+            // compute cross product of ab = (prevPoint - origin) and
+            // ac = (curPoint - origin)
+<span class="fc" id="L205">            final double abX = inhomX1 - inhomX0;</span>
+<span class="fc" id="L206">            final double abY = inhomY1 - inhomY0;</span>
+<span class="fc" id="L207">            final double abZ = inhomZ1 - inhomZ0;</span>
+
+<span class="fc" id="L209">            final double acX = inhomX2 - inhomX0;</span>
+<span class="fc" id="L210">            final double acY = inhomY2 - inhomY0;</span>
+<span class="fc" id="L211">            final double acZ = inhomZ2 - inhomZ0;</span>
+
+<span class="fc" id="L213">            final double crossX = abY * acZ - abZ * acY;</span>
+<span class="fc" id="L214">            final double crossY = abZ * acX - abX * acZ;</span>
+<span class="fc" id="L215">            final double crossZ = abX * acY - abY * acX;</span>
+
+<span class="fc" id="L217">            avgX += crossX;</span>
+<span class="fc" id="L218">            avgY += crossY;</span>
+<span class="fc" id="L219">            avgZ += crossZ;</span>
+
+<span class="fc" id="L221">            prevPoint = curPoint;</span>
+<span class="fc" id="L222">        }</span>
+
+<span class="fc" id="L224">        return 0.5 * Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);</span>
+    }
+
+    /**
+     * Returns perimeter of this polygon.
+     * The perimeter is computed as the sum of the distances between consecutive
+     * pairs of vertices.
+     *
+     * @return Perimeter of this polygon.
+     */
+    public double getPerimeter() {
+        // iterate over all vertices and compute their distance
+<span class="fc" id="L236">        final Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L237">        Point3D prevPoint = iterator.next();</span>
+        Point3D point;
+<span class="fc" id="L239">        double perimeter = 0.0;</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L241">            point = iterator.next();</span>
+<span class="fc" id="L242">            perimeter += prevPoint.distanceTo(point);</span>
+<span class="fc" id="L243">            prevPoint = point;</span>
+        }
+        // get distance from last point with first one
+<span class="fc" id="L246">        perimeter += prevPoint.distanceTo(mVertices.get(0));</span>
+<span class="fc" id="L247">        return perimeter;</span>
+    }
+
+    /**
+     * Determines if provided point lies within the region defined by this
+     * polygon.
+     * Notice that this method is only ensured to work for polygons having no
+     * holes or crossing borders. It will safely work on any other polygon,
+     * no matter if it is regular, non-regular, convex or concave.
+     *
+     * @param point Point to be checked.
+     * @return True if point lies within the area defined by this polygon, false
+     * otherwise.
+     * @throws TriangulatorException Raised if triangulation was required but
+     *                               failed.
+     */
+    public boolean isInside(final Point3D point) throws TriangulatorException {
+<span class="fc" id="L264">        return isInside(point, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Determines if provided point lies within the region defined by this
+     * polygon.
+     * Notice that this method is only ensured to work for polygons having no
+     * holes or crossing borders. It will safely work on any other polygon,
+     * no matter if it is regular, non-regular, convex or concave.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold to determine whether point lies inside this
+     *                  polygon. Usually this value should be small.
+     * @return True if point lies within the area defined by this polygon, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     * @throws TriangulatorException    Raised if triangulation was required but
+     *                                  failed.
+     */
+    public boolean isInside(final Point3D point, final double threshold)
+            throws TriangulatorException {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L286">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        for (final Triangle3D triangle : getTriangles()) {</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">            if (triangle.isInside(point, threshold)) {</span>
+<span class="fc" id="L291">                return true;</span>
+            }
+<span class="fc" id="L293">        }</span>
+<span class="fc" id="L294">        return false;</span>
+    }
+
+    /**
+     * Returns the center of this polygon.
+     * The center is the average point among all the vertices of this polygon.
+     * The center is not ensure to lie within the area formed by this polygon.
+     *
+     * @return Center of this polygon.
+     */
+    public Point3D getCenter() {
+<span class="fc" id="L305">        final Point3D result = Point3D.create();</span>
+<span class="fc" id="L306">        center(result);</span>
+<span class="fc" id="L307">        return result;</span>
+    }
+
+    /**
+     * Computes the center of this polygon.
+     * The center is the average point among all the vertices of this polygon.
+     * The center is not ensured to lie within the area formed by this polygon.
+     *
+     * @param result Instance where the computed center will be stored.
+     */
+    public void center(final Point3D result) {
+        // compute average location of all vertices
+<span class="fc" id="L319">        double inhomX = 0.0;</span>
+<span class="fc" id="L320">        double inhomY = 0.0;</span>
+<span class="fc" id="L321">        double inhomZ = 0.0;</span>
+<span class="fc" id="L322">        final int total = mVertices.size();</span>
+
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        for (final Point3D point : mVertices) {</span>
+<span class="fc" id="L325">            inhomX += point.getInhomX() / total;</span>
+<span class="fc" id="L326">            inhomY += point.getInhomY() / total;</span>
+<span class="fc" id="L327">            inhomZ += point.getInhomZ() / total;</span>
+<span class="fc" id="L328">        }</span>
+<span class="fc" id="L329">        result.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);</span>
+<span class="fc" id="L330">    }</span>
+
+    /**
+     * Determines whether provided point is locus of the borders defined by
+     * the vertices of this polygon. A point will be locus if it lies in the
+     * line defined by two consecutive vertices up to a certain threshold of
+     * error.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold of allowed error. This should usually be a
+     *                  small value.
+     * @return True if provided point lies in a border of this polygon, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public boolean isLocus(final Point3D point, final double threshold) {
+<span class="fc bfc" id="L346" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L347">            throw new IllegalArgumentException();</span>
+        }
+
+        // normalize point to increase accuracy
+<span class="fc" id="L351">        point.normalize();</span>
+
+<span class="fc" id="L353">        final Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+        // it's ok because there are at
+        // least 3 vertices
+<span class="fc" id="L356">        Point3D prevPoint = iterator.next();</span>
+        // normalize to increase accuracy
+<span class="fc" id="L358">        prevPoint.normalize();</span>
+
+        Point3D curPoint;
+<span class="fc bfc" id="L361" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L362">            curPoint = iterator.next();</span>
+            // normalize to increase accuracy
+<span class="fc" id="L364">            curPoint.normalize();</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">            if (point.isBetween(prevPoint, curPoint, threshold)) {</span>
+<span class="fc" id="L366">                return true;</span>
+            }
+<span class="fc" id="L368">            prevPoint = curPoint;</span>
+        }
+
+        // check last point with first
+<span class="fc" id="L372">        return point.isBetween(prevPoint, mVertices.get(0), threshold);</span>
+    }
+
+    /**
+     * Determines whether provided point is locus of the borders defined by the
+     * vertices of this polygon. A point will be locus if it lies in the line
+     * defined by two consecutive vertices.
+     *
+     * @param point Point to be checked.
+     * @return True if provided point lies in a border of this polygon, false
+     * otherwise.
+     */
+    public boolean isLocus(final Point3D point) {
+<span class="fc" id="L385">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns the shortest distance from provided point to a border of this
+     * polygon. Note that borders are segments defined by consecutive vertices
+     *
+     * @param point Point to be checked.
+     * @return Shortest distance from provided point to this polygon.
+     * @throws CoincidentPointsException Raised if points in a polygon are too
+     *                                   close. This usually indicates numerical instability or polygon degeneracy.
+     */
+    public double getShortestDistance(final Point3D point)
+            throws CoincidentPointsException {
+        // iterate over all vertices and compute their distance
+<span class="fc" id="L400">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L401">        Point3D prevPoint = iterator.next();</span>
+        // to increase accuracy
+<span class="fc" id="L403">        prevPoint.normalize();</span>
+        Point3D curPoint;
+<span class="fc" id="L405">        double bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L407">        boolean found = false;</span>
+<span class="fc" id="L408">        Line3D line = null;</span>
+<span class="fc" id="L409">        final Point3D pointInLine = Point3D.create();</span>
+
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L412">            curPoint = iterator.next();</span>
+            // to increase accuracy
+<span class="fc" id="L414">            curPoint.normalize();</span>
+
+            // check if point lies in the segment of the boundary of this polygon
+<span class="fc bfc" id="L417" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L418">                return 0.0;</span>
+            }
+
+<span class="fc bfc" id="L421" title="All 2 branches covered.">            if (line == null) {</span>
+<span class="fc" id="L422">                line = new Line3D(curPoint, prevPoint);</span>
+            } else {
+<span class="fc" id="L424">                line.setPlanesFromPoints(curPoint, prevPoint);</span>
+            }
+            // to increase accuracy
+<span class="fc" id="L427">            line.normalize();</span>
+
+            // find the closest point to line
+<span class="fc" id="L430">            line.closestPoint(point, pointInLine);</span>
+            // to increase accuracy
+<span class="fc" id="L432">            pointInLine.normalize();</span>
+
+<span class="fc bfc" id="L434" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+                // closest point lies within segment of polygon boundary, so we
+                // keep distance
+<span class="fc" id="L437">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L438" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+                    // a better point has been found
+<span class="fc" id="L440">                    bestDist = dist;</span>
+<span class="fc" id="L441">                    found = true;</span>
+                }
+            }
+
+<span class="fc" id="L445">            prevPoint = curPoint;</span>
+        }
+
+        // try last vertex with first
+        // check if point lies in the segment of the boundary of this polygon
+<span class="fc" id="L450">        final Point3D first = mVertices.get(0);</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="fc" id="L452">            return 0.0;</span>
+        }
+
+<span class="pc bpc" id="L455" title="1 of 2 branches missed.">        if (line == null) {</span>
+<span class="nc" id="L456">            line = new Line3D(prevPoint, first);</span>
+        } else {
+<span class="fc" id="L458">            line.setPlanesFromPoints(prevPoint, first);</span>
+        }
+        // to increase accuracy
+<span class="fc" id="L461">        line.normalize();</span>
+
+        // find the closest point to line
+<span class="fc" id="L464">        line.closestPoint(point, pointInLine);</span>
+        // to increase accuracy
+<span class="fc" id="L466">        pointInLine.normalize();</span>
+
+<span class="fc bfc" id="L468" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+            // closest point lies within segment of polygon boundary, so we
+            // keep distance
+<span class="fc" id="L471">            dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
+                // a better point has been found
+<span class="fc" id="L474">                bestDist = dist;</span>
+<span class="fc" id="L475">                found = true;</span>
+            }
+        }
+
+
+<span class="pc bpc" id="L480" title="1 of 2 branches missed.">        if (!found) {</span>
+            // no closest point was found on a segment belonging to polygon
+            // boundary, so we search for the closest vertex
+<span class="nc" id="L483">            iterator = mVertices.iterator();</span>
+<span class="nc bnc" id="L484" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+                // a better vertex has been found
+<span class="nc" id="L486">                curPoint = iterator.next();</span>
+<span class="nc" id="L487">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L489">                    bestDist = dist;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L494">        return bestDist;</span>
+    }
+
+    /**
+     * Returns the closest point to provided point that is locus of this
+     * polygon (i.e. lies on a border of this polygon).
+     *
+     * @param point Point to be checked.
+     * @return Closest point being locus of this polygon.
+     * @throws CoincidentPointsException Raised if points in a polygon are too
+     *                                   close. This usually indicates numerical instability or polygon degeneracy.
+     */
+    public Point3D getClosestPoint(final Point3D point)
+            throws CoincidentPointsException {
+<span class="fc" id="L508">        final Point3D result = Point3D.create();</span>
+<span class="fc" id="L509">        closestPoint(point, result);</span>
+<span class="fc" id="L510">        return result;</span>
+    }
+
+    /**
+     * Computes the closes point to provided point that is locus of this
+     * polygon (i.e. lies on a border of this polygon).
+     *
+     * @param point  Point to be checked.
+     * @param result Instance where the closest point will be stored.
+     * @throws CoincidentPointsException Raised if points in a polygon are too
+     *                                   close. This usually indicates numerical instability or polygon degeneracy.
+     */
+    public void closestPoint(final Point3D point, final Point3D result)
+            throws CoincidentPointsException {
+        // iterate over all vertices and compute their distance
+<span class="fc" id="L525">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L526">        Point3D prevPoint = iterator.next();</span>
+        // to increase accuracy
+<span class="fc" id="L528">        prevPoint.normalize();</span>
+
+        Point3D curPoint;
+<span class="fc" id="L531">        double bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L533">        boolean found = false;</span>
+<span class="fc" id="L534">        Line3D line = null;</span>
+<span class="fc" id="L535">        final Point3D pointInLine = Point3D.create();</span>
+
+<span class="fc bfc" id="L537" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L538">            curPoint = iterator.next();</span>
+            // to increase accuracy
+<span class="fc" id="L540">            curPoint.normalize();</span>
+
+            // check if point lies in the segment of the boundary of this polygon
+<span class="fc bfc" id="L543" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L544">                result.setCoordinates(point);</span>
+<span class="fc" id="L545">                return;</span>
+            }
+
+<span class="fc bfc" id="L548" title="All 2 branches covered.">            if (line == null) {</span>
+<span class="fc" id="L549">                line = new Line3D(curPoint, prevPoint);</span>
+            } else {
+<span class="fc" id="L551">                line.setPlanesFromPoints(curPoint, prevPoint);</span>
+            }
+            // to increase accuracy
+<span class="fc" id="L554">            line.normalize();</span>
+
+            // find the closest point to line
+<span class="fc" id="L557">            line.closestPoint(point, pointInLine);</span>
+            // to increase accuracy
+<span class="fc" id="L559">            pointInLine.normalize();</span>
+
+<span class="fc bfc" id="L561" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+                // closest point lies within segment of polygon boundary, so we
+                // keep distance and point
+<span class="fc" id="L564">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L565" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+                    // a better point has been found
+<span class="fc" id="L567">                    bestDist = dist;</span>
+<span class="fc" id="L568">                    result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L569">                    found = true;</span>
+                }
+            }
+
+<span class="fc" id="L573">            prevPoint = curPoint;</span>
+        }
+
+        // try last vertex with first
+        // check if point lies in the segment of the boundary of this polygon
+<span class="fc" id="L578">        final Point3D first = mVertices.get(0);</span>
+<span class="fc bfc" id="L579" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="fc" id="L580">            result.setCoordinates(point);</span>
+<span class="fc" id="L581">            return;</span>
+        }
+
+<span class="pc bpc" id="L584" title="1 of 2 branches missed.">        if (line == null) {</span>
+<span class="nc" id="L585">            line = new Line3D(prevPoint, first);</span>
+        } else {
+<span class="fc" id="L587">            line.setPlanesFromPoints(prevPoint, first);</span>
+        }
+        // to increase accuracy
+<span class="fc" id="L590">        line.normalize();</span>
+
+        // find the closest point to line
+<span class="fc" id="L593">        line.closestPoint(point, pointInLine);</span>
+        // to increase accuracy
+<span class="fc" id="L595">        pointInLine.normalize();</span>
+
+<span class="fc bfc" id="L597" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+            // closest point lies within segment of polygon boundary, so we
+            // keep distance
+<span class="fc" id="L600">            dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L601" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
+                // a better point has been found
+<span class="fc" id="L603">                bestDist = dist;</span>
+<span class="fc" id="L604">                result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L605">                found = true;</span>
+            }
+        }
+
+
+<span class="pc bpc" id="L610" title="1 of 2 branches missed.">        if (!found) {</span>
+            // no closest point was found on a segment belonging to polygon
+            // boundary, so we search for the closest vertex
+<span class="nc" id="L613">            iterator = mVertices.iterator();</span>
+<span class="nc bnc" id="L614" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+<span class="nc" id="L615">                curPoint = iterator.next();</span>
+<span class="nc" id="L616">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L617" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+                    // a better vertex has been found
+<span class="nc" id="L619">                    bestDist = dist;</span>
+<span class="nc" id="L620">                    result.setCoordinates(curPoint);</span>
+                }
+            }
+        }
+<span class="fc" id="L624">    }</span>
+
+    /**
+     * Triangulates this polygon using this polygon's triangulator method.
+     * A polygon only will be triangulated once when required or this method is
+     * called.
+     * This method will make no action if a polygon is already triangulated
+     * unless it's vertices are reset.
+     *
+     * @throws TriangulatorException Raised if triangulation failed.
+     * @see #getTriangulatorMethod
+     * @see #setTriangulatorMethod(TriangulatorMethod)
+     */
+    public void triangulate() throws TriangulatorException {
+<span class="fc bfc" id="L638" title="All 2 branches covered.">        if (!mTriangulated) {</span>
+<span class="fc" id="L639">            final Triangulator3D triangulator = Triangulator3D.create(</span>
+                    mTriangulatorMethod);
+<span class="fc" id="L641">            mTriangles = triangulator.triangulate(mVertices);</span>
+<span class="fc" id="L642">            mTriangulated = true;</span>
+        }
+<span class="fc" id="L644">    }</span>
+
+    /**
+     * Computes the average orientation of a 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param vertices  List of vertices forming a polygon in 3D.
+     * @param result    Array where the estimated orientation will be stored.
+     * @param threshold Threshold to determine whether the orientation can be
+     *                  estimated or not. Because the estimated orientation needs to be
+     *                  normalized, it will only be possible to do so when norm has a reasonable
+     *                  value. If estimated norm happens to be smaller than provided value, then
+     *                  it will be assumed that polygon contains a degeneracy or that a
+     *                  consecutive pair of vertices are coincident.
+     * @throws IllegalArgumentException  Raised if provided result array does not
+     *                                   have length 3, or if the list of provided vertices does not contain at
+     *                                   least three vertices, or if provided threshold is negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static void orientation(
+            final List&lt;Point3D&gt; vertices, final double[] result,
+            final double threshold) throws CoincidentPointsException {
+<span class="fc" id="L673">        final int numVertices = vertices.size();</span>
+<span class="pc bpc" id="L674" title="1 of 2 branches missed.">        if (numVertices &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L675">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L677" title="All 2 branches covered.">        if (result.length != INHOM_COORDS) {</span>
+<span class="fc" id="L678">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L680" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L681">            throw new IllegalArgumentException();</span>
+        }
+
+
+<span class="fc" id="L685">        double avgX = 0.0;</span>
+<span class="fc" id="L686">        double avgY = 0.0;</span>
+<span class="fc" id="L687">        double avgZ = 0.0;</span>
+
+<span class="fc" id="L689">        final Iterator&lt;Point3D&gt; iterator = vertices.iterator();</span>
+<span class="fc" id="L690">        Point3D prevPoint = iterator.next();</span>
+<span class="fc" id="L691">        Point3D origin = prevPoint;</span>
+        Point3D curPoint;
+<span class="fc" id="L693">        final double inhomX0 = origin.getInhomX();</span>
+<span class="fc" id="L694">        final double inhomY0 = origin.getInhomY();</span>
+<span class="fc" id="L695">        final double inhomZ0 = origin.getInhomZ();</span>
+
+
+<span class="fc bfc" id="L698" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L699">            curPoint = iterator.next();</span>
+<span class="fc" id="L700">            final double inhomX1 = prevPoint.getInhomX();</span>
+<span class="fc" id="L701">            final double inhomY1 = prevPoint.getInhomY();</span>
+<span class="fc" id="L702">            final double inhomZ1 = prevPoint.getInhomZ();</span>
+
+<span class="fc" id="L704">            final double inhomX2 = curPoint.getInhomX();</span>
+<span class="fc" id="L705">            final double inhomY2 = curPoint.getInhomY();</span>
+<span class="fc" id="L706">            final double inhomZ2 = curPoint.getInhomZ();</span>
+
+            // compute cross product of ab = (vertex1 - origin) and ac = (vertex2
+            // - origin)
+<span class="fc" id="L710">            final double abX = inhomX1 - inhomX0;</span>
+<span class="fc" id="L711">            final double abY = inhomY1 - inhomY0;</span>
+<span class="fc" id="L712">            final double abZ = inhomZ1 - inhomZ0;</span>
+
+<span class="fc" id="L714">            final double acX = inhomX2 - inhomX0;</span>
+<span class="fc" id="L715">            final double acY = inhomY2 - inhomY0;</span>
+<span class="fc" id="L716">            final double acZ = inhomZ2 - inhomZ0;</span>
+
+<span class="fc" id="L718">            final double crossX = abY * acZ - abZ * acY;</span>
+<span class="fc" id="L719">            final double crossY = abZ * acX - abX * acZ;</span>
+<span class="fc" id="L720">            final double crossZ = abX * acY - abY * acX;</span>
+
+<span class="fc" id="L722">            avgX += crossX;</span>
+<span class="fc" id="L723">            avgY += crossY;</span>
+<span class="fc" id="L724">            avgZ += crossZ;</span>
+
+<span class="fc" id="L726">            prevPoint = curPoint;</span>
+<span class="fc" id="L727">        }</span>
+
+<span class="fc" id="L729">        final double norm = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);</span>
+
+<span class="fc bfc" id="L731" title="All 2 branches covered.">        if (norm &lt; threshold) {</span>
+<span class="fc" id="L732">            throw new CoincidentPointsException();</span>
+        }
+
+<span class="fc" id="L735">        avgX /= norm;</span>
+<span class="fc" id="L736">        avgY /= norm;</span>
+<span class="fc" id="L737">        avgZ /= norm;</span>
+
+<span class="fc" id="L739">        result[0] = avgX;</span>
+<span class="fc" id="L740">        result[1] = avgY;</span>
+<span class="fc" id="L741">        result[2] = avgZ;</span>
+<span class="fc" id="L742">    }</span>
+
+    /**
+     * Computes the average orientation of a 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param vertices List of vertices forming a polygon in 3D.
+     * @param result   Array where the estimated orientation will be stored.
+     * @throws IllegalArgumentException  Raised if provided result array does not
+     *                                   have length 3, or if the list of provided vertices does not contain at
+     *                                   least three vertices.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static void orientation(
+            final List&lt;Point3D&gt; vertices, final double[] result)
+            throws CoincidentPointsException {
+<span class="fc" id="L765">        orientation(vertices, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L766">    }</span>
+
+    /**
+     * Returns the average orientation of a 3D polygon as an array containing
+     * the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param vertices  List of vertices forming a polygon in 3D.
+     * @param threshold Threshold to determine whether the orientation can be
+     *                  estimated or not. Because the estimated orientation needs to be
+     *                  normalized, it will only be possible to do so when norm has a reasonable
+     *                  value. If estimated norm happens to be smaller than provided value, then
+     *                  it will be assumed that polygon contains a degeneracy or that a
+     *                  consecutive pair of vertices are coincident.
+     * @return Array containing estimated orientation.
+     * @throws IllegalArgumentException  Raised if the list of provided vertices
+     *                                   does not contain at least three vertices, or if provided threshold is
+     *                                   negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static double[] orientation(
+            final List&lt;Point3D&gt; vertices, final double threshold)
+            throws CoincidentPointsException {
+<span class="fc" id="L795">        double[] out = new double[INHOM_COORDS];</span>
+<span class="fc" id="L796">        orientation(vertices, out, threshold);</span>
+<span class="fc" id="L797">        return out;</span>
+    }
+
+    /**
+     * Returns the average orientation of a 3D polygon as an array containing
+     * the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param vertices List of vertices forming a polygon in 3D
+     * @return Array containing estimated orientation.
+     * @throws IllegalArgumentException  Raised if the list of provided vertices
+     *                                   does not contain at least three vertices.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static double[] orientation(final List&lt;Point3D&gt; vertices)
+            throws CoincidentPointsException {
+<span class="fc" id="L819">        return orientation(vertices, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Computes the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param polygon   A polygon in 3D.
+     * @param result    Array where the estimated orientation will be stored.
+     * @param threshold Threshold to determine whether the orientation can be
+     *                  estimated or not. Because the estimated orientation needs to be
+     *                  normalized, it will only be possible to do so when norm has a reasonable
+     *                  value. If estimated norm happens to be smaller than provided value, then
+     *                  it will be assumed that polygon contains a degeneracy or that a
+     *                  consecutive pair of vertices are coincident.
+     * @throws IllegalArgumentException  Raised if provided result array does not
+     *                                   have length 3 or if provided threshold is negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static void orientation(
+            final Polygon3D polygon, final double[] result,
+            final double threshold) throws CoincidentPointsException {
+<span class="fc" id="L848">        orientation(polygon.getVertices(), result, threshold);</span>
+<span class="fc" id="L849">    }</span>
+
+    /**
+     * Computes the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param polygon A polygon in 3D.
+     * @param result  Array where the estimated orientation will be stored.
+     * @throws IllegalArgumentException  Raised if provided result array does not
+     *                                   have length 3.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static void orientation(
+            final Polygon3D polygon, final double[] result)
+            throws CoincidentPointsException {
+<span class="fc" id="L871">        orientation(polygon, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L872">    }</span>
+
+    /**
+     * Returns the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param polygon   A polygon in 3D.
+     * @param threshold Threshold to determine whether the orientation can be
+     *                  estimated or not. Because the estimated orientation needs to be
+     *                  normalized, it will only be possible to do so when norm has a reasonable
+     *                  value. If estimated norm happens to be smaller than provided value, then
+     *                  it will be assumed that polygon contains a degeneracy or that a
+     *                  consecutive pair of vertices are coincident.
+     * @return Array containing estimated orientation.
+     * @throws IllegalArgumentException  Raised if provided threshold is
+     *                                   negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static double[] orientation(
+            final Polygon3D polygon, final double threshold)
+            throws CoincidentPointsException {
+<span class="fc" id="L900">        return orientation(polygon.getVertices(), threshold);</span>
+    }
+
+    /**
+     * Returns the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param polygon A polygon in 3D.
+     * @return Array containing estimated orientation.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public static double[] orientation(final Polygon3D polygon)
+            throws CoincidentPointsException {
+<span class="fc" id="L920">        return orientation(polygon, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Computes the average orientation of this polygon as an array containing
+     * the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param result    Array where the estimated orientation will be stored.
+     * @param threshold Threshold to determine whether the orientation can be
+     *                  estimated or not. Because the estimated orientation needs to be
+     *                  normalized, it will only be possible to do so when norm has a reasonable
+     *                  value. If estimated norm happens to be smaller than provided value, then
+     *                  it will be assumed that polygon contains a degeneracy or that a
+     *                  consecutive pair of vertices are coincident.
+     * @throws IllegalArgumentException  Raised if provided result array does not
+     *                                   have length 3 or if provided threshold is negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public void orientation(final double[] result, final double threshold)
+            throws CoincidentPointsException {
+<span class="fc" id="L947">        orientation(mVertices, result, threshold);</span>
+<span class="fc" id="L948">    }</span>
+
+    /**
+     * Computes the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param result Array where the estimated orientation will be stored.
+     * @throws IllegalArgumentException  Raised if provided result array does not
+     *                                   have length 3.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public void orientation(final double[] result) throws CoincidentPointsException {
+<span class="fc" id="L967">        orientation(result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L968">    }</span>
+
+    /**
+     * Returns the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @param threshold Threshold to determine whether the orientation can be
+     *                  estimated or not. Because the estimated orientation needs to be
+     *                  normalized, it will only be possible to do so when norm has a reasonable
+     *                  value. If estimated norm happens to be smaller than provided value, then
+     *                  it will be assumed that polygon contains a degeneracy or that a
+     *                  consecutive pair of vertices are coincident.
+     * @return Array containing estimated orientation.
+     * @throws IllegalArgumentException  Raised if provided threshold is
+     *                                   negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public double[] getOrientation(final double threshold)
+            throws CoincidentPointsException {
+<span class="fc" id="L994">        return orientation(mVertices, threshold);</span>
+    }
+
+    /**
+     * Returns the average orientation of provided 3D polygon as an array
+     * containing the vector coordinates of the orientation.
+     * Notice that if all the vertices of the polygon lie in the same plane,
+     * then the estimated orientation will be exact, otherwise an average
+     * orientation will be estimated.
+     * Estimated orientation will be normalized (the norm of the estimated
+     * vector will be 1).
+     *
+     * @return Array containing estimated orientation.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     */
+    public double[] getOrientation() throws CoincidentPointsException {
+<span class="fc" id="L1012">        return getOrientation(DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns the angle between two polygons, assuming that all vertices of
+     * each polygon lie on a given plane. Hence, this is equivalent to
+     * estimating the angle between the planes formed by two polygons.
+     * The angle between two polygons is estimated by first estimating their
+     * orientation.
+     *
+     * @param polygon1  1st polygon.
+     * @param polygon2  2nd polygon.
+     * @param threshold Threshold to determine when polygon orientation can be
+     *                  estimated.
+     * @return Angle between two polygons in radians.
+     * @throws IllegalArgumentException  Raised if provided threshold is negative.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     * @see #orientation(Polygon3D, double[])
+     */
+    public static double getAngleBetweenPolygons(
+            final Polygon3D polygon1, final Polygon3D polygon2,
+            final double threshold) throws CoincidentPointsException {
+<span class="fc" id="L1036">        return getAngleBetweenPolygons(polygon1.getVertices(),</span>
+<span class="fc" id="L1037">                polygon2.getVertices(), threshold);</span>
+    }
+
+    /**
+     * Returns the angle between two polygons, assuming that all vertices of
+     * each polygon lie on a given plane. Hence, this is equivalent to
+     * estimating the angle between the planes formed by two polygons.
+     * The angle between two polygons is estimated by first estimating their
+     * orientation.
+     *
+     * @param polygon1 1st polygon.
+     * @param polygon2 2nd polygon.
+     * @return Angle between two polygons in radians.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     * @see #orientation(Polygon3D, double[])
+     */
+    public static double getAngleBetweenPolygons(
+            final Polygon3D polygon1, final Polygon3D polygon2)
+            throws CoincidentPointsException {
+<span class="fc" id="L1058">        return getAngleBetweenPolygons(polygon1, polygon2, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns the angle between two polygons formed each of them by the
+     * corresponding list of provided vertices and assuming that all vertices of
+     * each polygon lie on a given plane. Hence, this is equivalent to
+     * estimating the angle between the planes formed by two polygons.
+     * The angle between two polygons is estimated by first estimating their
+     * orientation.
+     *
+     * @param vertices1 Vertices of 1st polygon.
+     * @param vertices2 2nd polygon.
+     * @param threshold Threshold to determine when polygon orientation can be
+     *                  estimated.
+     * @return Angle between two polygons in radians.
+     * @throws IllegalArgumentException  Raised if provided threshold is negative
+     *                                   or if list of vertices do not contain at least 3 vertices for each
+     *                                   polygon.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     * @see #orientation(Polygon3D, double[])
+     */
+    public static double getAngleBetweenPolygons(
+            final List&lt;Point3D&gt; vertices1, final List&lt;Point3D&gt; vertices2,
+            final double threshold) throws CoincidentPointsException {
+<span class="fc" id="L1085">        return getAngleBetweenOrientations(Polygon3D.orientation(vertices1,</span>
+<span class="fc" id="L1086">                threshold), Polygon3D.orientation(vertices2, threshold));</span>
+    }
+
+    /**
+     * Returns the angle between two polygons formed each of them by the
+     * corresponding list of provided vertices and assuming that all vertices of
+     * each polygon lie on a given plane. Hence, this is equivalent to
+     * estimating the angle between the planes formed by two polygons.
+     * The angle between two polygons is estimated by first estimating their
+     * orientation.
+     *
+     * @param vertices1 Vertices of 1st polygon.
+     * @param vertices2 2nd polygon.
+     * @return Angle between two polygons in radians.
+     * @throws IllegalArgumentException  Raised if list of vertices do not
+     *                                   contain at least 3 vertices for each polygon.
+     * @throws CoincidentPointsException Raised usually when it is determined
+     *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
+     *                                   or when there are polygon degeneracies or numerical instabilities.
+     * @see #orientation(Polygon3D, double[])
+     */
+    public static double getAngleBetweenPolygons(
+            final List&lt;Point3D&gt; vertices1, final List&lt;Point3D&gt; vertices2)
+            throws CoincidentPointsException {
+<span class="fc" id="L1110">        return getAngleBetweenPolygons(vertices1, vertices2, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Internal method to compute polygon orientation from their respective
+     * orientation vectors.
+     * Orientation vectors are provided as arrays and can be obtained by calling
+     * orientation(Polygon3D, double[]) among other methods.
+     *
+     * @param orientation1 Orientation of 1st polygon.
+     * @param orientation2 Orientation of 2nd polygon.
+     * @return Angle between two polygons in radians.
+     * @throws IllegalArgumentException Raised if any of the orientation arrays
+     *                                  do not have length 3.
+     */
+    private static double getAngleBetweenOrientations(
+            final double[] orientation1, final double[] orientation2) {
+<span class="pc bpc" id="L1127" title="2 of 4 branches missed.">        if (orientation1.length != INHOM_COORDS ||</span>
+                orientation2.length != INHOM_COORDS) {
+<span class="nc" id="L1129">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L1132">        final double x1 = orientation1[0];</span>
+<span class="fc" id="L1133">        final double y1 = orientation1[1];</span>
+<span class="fc" id="L1134">        final double z1 = orientation1[2];</span>
+
+<span class="fc" id="L1136">        final double x2 = orientation2[0];</span>
+<span class="fc" id="L1137">        final double y2 = orientation2[1];</span>
+<span class="fc" id="L1138">        final double z2 = orientation2[2];</span>
+
+<span class="fc" id="L1140">        final double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);</span>
+<span class="fc" id="L1141">        final double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);</span>
+
+<span class="fc" id="L1143">        final double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);</span>
+
+<span class="fc" id="L1145">        return Math.acos(dotProduct);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

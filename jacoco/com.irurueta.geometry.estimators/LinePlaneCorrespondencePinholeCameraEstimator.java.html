@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LinePlaneCorrespondencePinholeCameraEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LinePlaneCorrespondencePinholeCameraEstimator.java</span></div><h1>LinePlaneCorrespondencePinholeCameraEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.NotAvailableException;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Plane;
+import com.irurueta.geometry.refiners.DecomposedLinePlaneCorrespondencePinholeCameraRefiner;
+
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * This file contains abstract implementation for pinhole camera estimators
+ * based on line/plane correspondences.
+ */
+public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
+        PinholeCameraEstimator {
+
+    /**
+     * List of corresponding 3D planes.
+     */
+    protected List&lt;Plane&gt; mPlanes;
+
+    /**
+     * List of corresponding 2D lines.
+     */
+    protected List&lt;Line2D&gt; mLines2D;
+
+    /**
+     * Minimum number of required line/plane correspondences to estimate a
+     * camera.
+     */
+    public static final int MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES = 4;
+
+    /**
+     * Constructor.
+     */
+    protected LinePlaneCorrespondencePinholeCameraEstimator() {
+<span class="fc" id="L55">        super();</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     */
+    protected LinePlaneCorrespondencePinholeCameraEstimator(
+            final PinholeCameraEstimatorListener listener) {
+<span class="fc" id="L66">        super(listener);</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param planes  list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough correspondences.
+     */
+    protected LinePlaneCorrespondencePinholeCameraEstimator(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines2D) throws WrongListSizesException {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        internalSetLists(planes, lines2D);</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param planes   list of corresponding 3D planes.
+     * @param lines2D  list of corresponding 2D lines.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough correspondences.
+     */
+    protected LinePlaneCorrespondencePinholeCameraEstimator(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines2D,
+            final PinholeCameraEstimatorListener listener)
+            throws WrongListSizesException {
+<span class="fc" id="L99">        super(listener);</span>
+<span class="fc" id="L100">        internalSetLists(planes, lines2D);</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Internal method to set list of corresponding lines/planes (it does not
+     * check if estimator is locked).
+     *
+     * @param planes  list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough correspondences.
+     */
+    private void internalSetLists(final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines2D)
+            throws WrongListSizesException {
+
+<span class="fc bfc" id="L116" title="All 4 branches covered.">        if (planes == null || lines2D == null) {</span>
+<span class="fc" id="L117">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (!areValidLists(planes, lines2D)) {</span>
+<span class="fc" id="L121">            throw new WrongListSizesException();</span>
+        }
+
+<span class="fc" id="L124">        mPlanes = planes;</span>
+<span class="fc" id="L125">        mLines2D = lines2D;</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Set list of corresponding lines/planes.
+     *
+     * @param planes  list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough correspondences.
+     */
+    public void setLists(final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines2D)
+            throws LockedException, WrongListSizesException {
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L141">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L144">        internalSetLists(planes, lines2D);</span>
+<span class="fc" id="L145">    }</span>
+
+    /**
+     * Returns list of corresponding lines/planes.
+     * Notice that this method returns an unmodifiable list of planes to avoid
+     * undesired modifications.
+     *
+     * @return list of corresponding 3D planes.
+     * @throws NotAvailableException if list of planes is not yet available.
+     */
+    public List&lt;Plane&gt; getPlanes() throws NotAvailableException {
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (mPlanes == null) {</span>
+<span class="fc" id="L157">            throw new NotAvailableException();</span>
+        }
+
+        // to avoid undesired modifications
+<span class="fc" id="L161">        return Collections.unmodifiableList(mPlanes);</span>
+    }
+
+    /**
+     * Returns list of corresponding 2D lines.
+     * Notice that this method returns an unmodifiable list of 2D lines to avoid
+     * undesired modifications.
+     *
+     * @return list of corresponding 2D lines.
+     * @throws NotAvailableException if list of 2D lines is not yet available.
+     */
+    public List&lt;Line2D&gt; getLines2D() throws NotAvailableException {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (mLines2D == null) {</span>
+<span class="fc" id="L174">            throw new NotAvailableException();</span>
+        }
+
+        // to avoid undesired modifications
+<span class="fc" id="L178">        return Collections.unmodifiableList(mLines2D);</span>
+    }
+
+    /**
+     * Indicates if lists of corresponding 2D lines and planes are valid.
+     * Lists are considered valid if they have the same number of points and
+     * both have more than the required minimum of correspondences (which is 4).
+     *
+     * @param planes  list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
+     * @return true if corresponding 2D lines and planes are valid, false
+     * otherwise.
+     */
+    public static boolean areValidLists(final List&lt;Plane&gt; planes,
+                                        final List&lt;Line2D&gt; lines2D) {
+<span class="fc bfc" id="L193" title="All 4 branches covered.">        if (planes == null || lines2D == null) {</span>
+<span class="fc" id="L194">            return false;</span>
+        }
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        return planes.size() == lines2D.size() &amp;&amp;</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">                lines2D.size() &gt;= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
+    }
+
+    /**
+     * Indicates if lists have already been provided and are available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean areListsAvailable() {
+<span class="pc bpc" id="L207" title="1 of 4 branches missed.">        return mPlanes != null &amp;&amp; mLines2D != null;</span>
+    }
+
+    /**
+     * Attempts to refine provided camera using requested suggestions.
+     * If no suggestions are requested or if refinement fails, provided
+     * camera is returned instead.
+     *
+     * @param pinholeCamera camera to be refined.
+     * @return refined camera.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    protected PinholeCamera attemptRefine(PinholeCamera pinholeCamera) {
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc" id="L222">            final int numPoints = mPlanes.size();</span>
+<span class="fc" id="L223">            final BitSet inliers = new BitSet(numPoints);</span>
+<span class="fc" id="L224">            inliers.set(0, numPoints, true);</span>
+<span class="fc" id="L225">            final double[] residuals = new double[numPoints];</span>
+
+<span class="fc" id="L227">            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
+                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
+                            pinholeCamera, false, inliers, residuals, numPoints,
+                            mPlanes, mLines2D, 0.0);
+            try {
+<span class="fc" id="L232">                refiner.setMinSuggestionWeight(mMinSuggestionWeight);</span>
+<span class="fc" id="L233">                refiner.setMaxSuggestionWeight(mMaxSuggestionWeight);</span>
+<span class="fc" id="L234">                refiner.setSuggestionWeightStep(mSuggestionWeightStep);</span>
+
+<span class="fc" id="L236">                refiner.setSuggestSkewnessValueEnabled(</span>
+                        mSuggestSkewnessValueEnabled);
+<span class="fc" id="L238">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
+<span class="fc" id="L239">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
+                        mSuggestHorizontalFocalLengthEnabled);
+<span class="fc" id="L241">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
+                        mSuggestedHorizontalFocalLengthValue);
+<span class="fc" id="L243">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
+                        mSuggestVerticalFocalLengthEnabled);
+<span class="fc" id="L245">                refiner.setSuggestedVerticalFocalLengthValue(</span>
+                        mSuggestedVerticalFocalLengthValue);
+<span class="fc" id="L247">                refiner.setSuggestAspectRatioEnabled(</span>
+                        mSuggestAspectRatioEnabled);
+<span class="fc" id="L249">                refiner.setSuggestedAspectRatioValue(</span>
+                        mSuggestedAspectRatioValue);
+<span class="fc" id="L251">                refiner.setSuggestPrincipalPointEnabled(</span>
+                        mSuggestPrincipalPointEnabled);
+<span class="fc" id="L253">                refiner.setSuggestedPrincipalPointValue(</span>
+                        mSuggestedPrincipalPointValue);
+<span class="fc" id="L255">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
+<span class="fc" id="L256">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
+<span class="fc" id="L257">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
+<span class="fc" id="L258">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);</span>
+
+<span class="fc" id="L260">                final PinholeCamera result = new PinholeCamera();</span>
+<span class="fc" id="L261">                final boolean improved = refiner.refine(result);</span>
+
+<span class="fc bfc" id="L263" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+
+<span class="nc" id="L265">            } catch (final Exception e) {</span>
+<span class="nc" id="L266">                return pinholeCamera;</span>
+            }
+        } else {
+<span class="fc" id="L269">            return pinholeCamera;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

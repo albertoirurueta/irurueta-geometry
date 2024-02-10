@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rotation2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Rotation2D.java</span></div><h1>Rotation2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * This class defines the amount of rotation for 2D points or lines.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class Rotation2D implements Serializable {
+
+    /**
+     * Constant defining the number of rows on a 2D rotation matrix expressed
+     * in inhomogeneous coordinates.
+     */
+    public static final int ROTATION2D_INHOM_MATRIX_ROWS = 2;
+
+    /**
+     * Constant defining the number of columns on a 2D rotation matrix expressed
+     * in inhomogeneous coordinates.
+     */
+    public static final int ROTATION2D_INHOM_MATRIX_COLS = 2;
+
+    /**
+     * Constant defining the number of rows on a 2D rotation matrix expressed
+     * in homogeneous coordinates.
+     */
+    public static final int ROTATION2D_HOM_MATRIX_ROWS = 3;
+
+    /**
+     * Constant defining the number of columns on a 2D rotation matrix expressed
+     * in homogeneous coordinates.
+     */
+    public static final int ROTATION2D_HOM_MATRIX_COLS = 3;
+
+    /**
+     * Constant defining threshold to determine whether a matrix is orthogonal
+     * or not and has determinant equal to 1. Rotation matrices must fulfill
+     * those requirements.
+     */
+    public static final double MATRIX_VALID_THRESHOLD = 1e-9;
+
+    /**
+     * Constant defining minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Default threshold to determine if two instances are equal.
+     */
+    public static final double DEFAULT_COMPARISON_THRESHOLD = 1e-9;
+
+    /**
+     * Constant defining minimum allowed comparison threshold.
+     */
+    public static final double MIN_COMPARISON_THRESHOLD = 0.0;
+
+    /**
+     * Private member containing amount of rotation expressed in radians.
+     */
+    private double theta;
+
+    /**
+     * Empty Constructor.
+     * Initializes rotation to zero radians.
+     */
+<span class="fc" id="L87">    public Rotation2D() {</span>
+<span class="fc" id="L88">        theta = 0.0;</span>
+<span class="fc" id="L89">    }</span>
+
+    /**
+     * Copy constructor.
+     * Copies provided rotation into this instance.
+     *
+     * @param rotation Instance to be copied.
+     */
+<span class="fc" id="L97">    public Rotation2D(final Rotation2D rotation) {</span>
+<span class="fc" id="L98">        theta = rotation.theta;</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 2D rotation using provided matrix.
+     * Provided matrix can be expressed in either homogeneous or inhomogeneous
+     * coordinates, and it must also be orthogonal and having determinant equal
+     * to 1.
+     * The threshold to determine whether provided matrix is orthonormal will
+     * be MATRIX_VALID_THRESHOLD.
+     *
+     * @param m Matrix to create rotation from.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (its size is wrong, or it is not orthonormal).
+     * @see #isValidRotationMatrix(Matrix)
+     */
+<span class="fc" id="L115">    public Rotation2D(final Matrix m) throws InvalidRotationMatrixException {</span>
+<span class="fc" id="L116">        fromMatrix(m);</span>
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 2D rotation using provided matrix.
+     * Provided matrix can be expressed in either homogeneous or inhomogeneous
+     * coordinates, and it must also be orthogonal up to provided threshold, and
+     * must have determinant equal to 1.
+     *
+     * @param m         Matrix to create rotation from.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (its size is wrong, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is negative
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public Rotation2D(final Matrix m, final double threshold)
+<span class="fc" id="L134">            throws InvalidRotationMatrixException {</span>
+<span class="fc" id="L135">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 2D rotation using provided rotation value expressed in radians
+     *
+     * @param theta Rotation amount expressed in radians.
+     */
+<span class="fc" id="L144">    public Rotation2D(final double theta) {</span>
+<span class="fc" id="L145">        this.theta = theta;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Returns rotation amount expressed in radians.
+     *
+     * @return Rotation amount expressed in radians.
+     */
+    public double getTheta() {
+<span class="fc" id="L154">        return theta;</span>
+    }
+
+    /**
+     * Sets rotation amount expressed in radians.
+     *
+     * @param theta rotation angle.
+     */
+    public void setTheta(final double theta) {
+<span class="fc" id="L163">        this.theta = theta;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Returns a 2D rotation which is inverse to this instance.
+     * In other words, the combination of this rotation with its inverse
+     * produces no change.
+     *
+     * @return Inverse 2D rotation.
+     */
+    public Rotation2D inverseRotation() {
+<span class="fc" id="L174">        final Rotation2D result = new Rotation2D();</span>
+<span class="fc" id="L175">        inverseRotation(result);</span>
+<span class="fc" id="L176">        return result;</span>
+    }
+
+    /**
+     * Sets into provided Rotation2D instance a rotation inverse to this
+     * instance.
+     * The combination of this rotation with its inverse produces no change.
+     *
+     * @param result Instance where inverse rotation will be set.
+     */
+    public void inverseRotation(final Rotation2D result) {
+<span class="fc" id="L187">        result.setTheta(-theta);</span>
+<span class="fc" id="L188">    }</span>
+
+    /**
+     * Returns this 2D rotation instance expressed as a 2x2 inhomogeneous matrix.
+     *
+     * @return Rotation matrix expressed in inhomogeneous coordinates.
+     */
+    public Matrix asInhomogeneousMatrix() {
+<span class="fc" id="L196">        Matrix result = null;</span>
+        try {
+<span class="fc" id="L198">            result = new Matrix(ROTATION2D_INHOM_MATRIX_ROWS,</span>
+                    ROTATION2D_INHOM_MATRIX_COLS);
+<span class="fc" id="L200">            asInhomogeneousMatrix(result);</span>
+<span class="nc" id="L201">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L203">        }</span>
+<span class="fc" id="L204">        return result;</span>
+    }
+
+    /**
+     * Sets into provided Matrix instance this 2D rotation expressed as a
+     * 2x2 inhomogeneous matrix.
+     *
+     * @param result Matrix where rotation will be set.
+     * @throws IllegalArgumentException Raised if provided instance does not
+     *                                  have size 2x2.
+     */
+    public void asInhomogeneousMatrix(final Matrix result) {
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (result.getRows() != ROTATION2D_INHOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">                result.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {</span>
+<span class="fc" id="L218">            throw new IllegalArgumentException();</span>
+        }
+
+        // set result
+<span class="fc" id="L222">        final double sinTheta = Math.sin(theta);</span>
+<span class="fc" id="L223">        final double cosTheta = Math.cos(theta);</span>
+<span class="fc" id="L224">        result.setElementAt(0, 0, cosTheta);</span>
+<span class="fc" id="L225">        result.setElementAt(1, 0, sinTheta);</span>
+<span class="fc" id="L226">        result.setElementAt(0, 1, -sinTheta);</span>
+<span class="fc" id="L227">        result.setElementAt(1, 1, cosTheta);</span>
+<span class="fc" id="L228">    }</span>
+
+    /**
+     * Returns this 2D rotation instance expressed as a 3x3 homogeneous matrix.
+     *
+     * @return Rotation matrix expressed in homogeneous coordinates.
+     */
+    public Matrix asHomogeneousMatrix() {
+<span class="fc" id="L236">        Matrix result = null;</span>
+        try {
+<span class="fc" id="L238">            result = new Matrix(ROTATION2D_HOM_MATRIX_ROWS,</span>
+                    ROTATION2D_HOM_MATRIX_COLS);
+<span class="fc" id="L240">            asHomogeneousMatrix(result);</span>
+<span class="nc" id="L241">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L243">        }</span>
+<span class="fc" id="L244">        return result;</span>
+    }
+
+    /**
+     * Sets into provided Matrix instance this 2D rotation expressed as a
+     * 3x3 homogeneous matrix.
+     *
+     * @param result Matrix where rotation will be set.
+     * @throws IllegalArgumentException Raised if provided instance does not
+     *                                  have size 3x3.
+     */
+    public void asHomogeneousMatrix(final Matrix result) {
+<span class="fc bfc" id="L256" title="All 2 branches covered.">        if (result.getRows() != ROTATION2D_HOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">                result.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {</span>
+<span class="fc" id="L258">            throw new IllegalArgumentException();</span>
+        }
+
+        // set result
+<span class="fc" id="L262">        final double sinTheta = Math.sin(theta);</span>
+<span class="fc" id="L263">        final double cosTheta = Math.cos(theta);</span>
+<span class="fc" id="L264">        result.setElementAt(0, 0, cosTheta);</span>
+<span class="fc" id="L265">        result.setElementAt(1, 0, sinTheta);</span>
+<span class="fc" id="L266">        result.setElementAt(2, 0, 0.0);</span>
+<span class="fc" id="L267">        result.setElementAt(0, 1, -sinTheta);</span>
+<span class="fc" id="L268">        result.setElementAt(1, 1, cosTheta);</span>
+<span class="fc" id="L269">        result.setElementAt(2, 1, 0.0);</span>
+<span class="fc" id="L270">        result.setElementAt(0, 2, 0.0);</span>
+<span class="fc" id="L271">        result.setElementAt(1, 2, 0.0);</span>
+<span class="fc" id="L272">        result.setElementAt(2, 2, 1.0);</span>
+<span class="fc" id="L273">    }</span>
+
+    /**
+     * Sets amount of rotation from provided rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix can be expressed in either inhomogeneous (2x2) or
+     * homogeneous (3x3) coordinates.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is negative
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public final void fromMatrix(final Matrix m, final double threshold)
+            throws InvalidRotationMatrixException {
+<span class="fc bfc" id="L291" title="All 2 branches covered.">        if (m.getRows() == ROTATION2D_INHOM_MATRIX_ROWS &amp;&amp;</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                m.getColumns() == ROTATION2D_INHOM_MATRIX_COLS) {</span>
+            // inhomogeneous matrix
+<span class="fc" id="L294">            fromInhomogeneousMatrix(m, threshold);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        } else if (m.getRows() == ROTATION2D_HOM_MATRIX_ROWS &amp;&amp;</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">                m.getColumns() == ROTATION2D_HOM_MATRIX_COLS) {</span>
+            // homogeneous matrix
+<span class="fc" id="L298">            fromHomogeneousMatrix(m, threshold);</span>
+        } else {
+<span class="fc" id="L300">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="fc" id="L302">    }</span>
+
+    /**
+     * Sets amount of rotation from provided rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix can be expressed in either inhomogeneous (2x2) or
+     * homogeneous (3x3) coordinates.
+     * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Provided rotation matrix.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public final void fromMatrix(final Matrix m) throws InvalidRotationMatrixException {
+<span class="fc" id="L319">        fromMatrix(m, MATRIX_VALID_THRESHOLD);</span>
+<span class="fc" id="L320">    }</span>
+
+    /**
+     * Sets amount of rotation from provided inhomogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 2x2.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is negative.
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public void fromInhomogeneousMatrix(final Matrix m, final double threshold)
+            throws InvalidRotationMatrixException {
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">        if (m.getRows() != ROTATION2D_INHOM_MATRIX_ROWS ||</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                m.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {</span>
+<span class="fc" id="L339">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L342">            throw new InvalidRotationMatrixException();</span>
+        }
+
+<span class="fc" id="L345">        final double cosTheta = m.getElementAt(0, 0);</span>
+<span class="fc" id="L346">        final double sinTheta = m.getElementAt(1, 0);</span>
+
+        // estimated theta will be in the range -pi, pi.
+<span class="fc" id="L349">        theta = Math.atan2(sinTheta, cosTheta);</span>
+<span class="fc" id="L350">    }</span>
+
+    /**
+     * Sets amount of rotation from provided inhomogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 2x2.
+     * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Provided rotation matrix.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public void fromInhomogeneousMatrix(final Matrix m)
+            throws InvalidRotationMatrixException {
+<span class="fc" id="L367">        fromInhomogeneousMatrix(m, MATRIX_VALID_THRESHOLD);</span>
+<span class="fc" id="L368">    }</span>
+
+    /**
+     * Sets amount of rotation from provided homogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 3x3, and its last row and column must
+     * be zero, except for element in last row and column which must be 1.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is negative.
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public void fromHomogeneousMatrix(final Matrix m, final double threshold)
+            throws InvalidRotationMatrixException {
+<span class="fc bfc" id="L386" title="All 2 branches covered.">        if (m.getRows() != ROTATION2D_HOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">                m.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {</span>
+<span class="fc" id="L388">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="fc bfc" id="L390" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L391">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(2, 0)) &gt; threshold ||</span>
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 1)) &gt; threshold ||</span>
+<span class="pc bpc" id="L395" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 2)) &gt; threshold ||</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 2)) &gt; threshold ||</span>
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 2) - 1.0) &gt; threshold) {</span>
+<span class="nc" id="L398">            throw new InvalidRotationMatrixException();</span>
+        }
+
+<span class="fc" id="L401">        final double cosTheta = m.getElementAt(0, 0);</span>
+<span class="fc" id="L402">        final double sinTheta = m.getElementAt(1, 0);</span>
+
+        // estimated theta will be in the range -pi, pi.
+<span class="fc" id="L405">        theta = Math.atan2(sinTheta, cosTheta);</span>
+<span class="fc" id="L406">    }</span>
+
+    /**
+     * Sets amount of rotation from provided homogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular), its
+     * transpose must be its inverse and must have determinant equal to 1.
+     * Provided matrix must also have size 3x3, and its last row and column must
+     * be zero, except for element in last row and column which must be 1
+     * Because threshold is not provided it is used MATRIX_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Provided rotation matrix.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @see #isValidRotationMatrix(Matrix)
+     */
+    public void fromHomogeneousMatrix(final Matrix m)
+            throws InvalidRotationMatrixException {
+<span class="fc" id="L424">        fromHomogeneousMatrix(m, MATRIX_VALID_THRESHOLD);</span>
+<span class="fc" id="L425">    }</span>
+
+    /**
+     * Rotates a 2D point using the origin of coordinates as the axis of
+     * rotation.
+     * Point will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param inputPoint  Input point to be rotated.
+     * @param resultPoint Rotated point.
+     */
+    public void rotate(final Point2D inputPoint, final Point2D resultPoint) {
+        try {
+<span class="fc" id="L438">            final Matrix r = asHomogeneousMatrix();</span>
+<span class="fc" id="L439">            final Matrix p = new Matrix(</span>
+                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+
+            // to increase accuracy
+<span class="fc" id="L443">            inputPoint.normalize();</span>
+<span class="fc" id="L444">            p.setElementAt(0, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L445">            p.setElementAt(1, 0, inputPoint.getHomY());</span>
+<span class="fc" id="L446">            p.setElementAt(2, 0, inputPoint.getHomW());</span>
+
+            // Rotated point below is R * p
+<span class="fc" id="L449">            r.multiply(p);</span>
+
+<span class="fc" id="L451">            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0),</span>
+<span class="fc" id="L452">                    r.getElementAt(1, 0), r.getElementAt(2, 0));</span>
+<span class="nc" id="L453">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L455">        }</span>
+<span class="fc" id="L456">    }</span>
+
+    /**
+     * Returns a 2D point containing a rotated version of provided point.
+     * Point will be rotated using the origin of the coordinates as the axis of
+     * rotation.
+     * Point will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param point Point to be rotated.
+     * @return Rotated point.
+     */
+    public Point2D rotate(final Point2D point) {
+<span class="fc" id="L469">        final Point2D result = new HomogeneousPoint2D();</span>
+<span class="fc" id="L470">        rotate(point, result);</span>
+<span class="fc" id="L471">        return result;</span>
+    }
+
+    /**
+     * Rotates a line using the origin of coordinates as the axis of rotation.
+     * Line2D will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param inputLine  Input line to be rotated.
+     * @param resultLine Rotated line.
+     */
+    public void rotate(final Line2D inputLine, final Line2D resultLine) {
+        try {
+<span class="fc" id="L484">            final Matrix r = asHomogeneousMatrix();</span>
+            // because of the duality theorem:
+            // l'*m = 0 --&gt; l*R^-1*R*m = 0 --&gt; l2' = l'*R^-1 and m2 = R*m
+            // where l2 and m2 are rotated line and point, however rotated
+            // line uses the inverse rotation, which is the transposed matrix
+            // Hence l2' = l' * R', and by undoing the transposition
+            // l2 = (l' * R')' = R'' * l'' = R * l
+
+<span class="fc" id="L492">            final Matrix l = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
+
+            // to increase accuracy
+<span class="fc" id="L495">            inputLine.normalize();</span>
+<span class="fc" id="L496">            l.setElementAt(0, 0, inputLine.getA());</span>
+<span class="fc" id="L497">            l.setElementAt(1, 0, inputLine.getB());</span>
+<span class="fc" id="L498">            l.setElementAt(2, 0, inputLine.getC());</span>
+
+            // Rotated line below is R * l
+<span class="fc" id="L501">            r.multiply(l);</span>
+
+<span class="fc" id="L503">            resultLine.setParameters(r.getElementAt(0, 0),</span>
+<span class="fc" id="L504">                    r.getElementAt(1, 0), r.getElementAt(2, 0));</span>
+<span class="nc" id="L505">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L507">        }</span>
+<span class="fc" id="L508">    }</span>
+
+    /**
+     * Returns a line containing a rotated version of provided line.
+     * Line2D will be rotated using the origin of the coordinates as the axis of
+     * rotation.
+     * Line2D will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param line Line2D to be rotated.
+     * @return Rotated line.
+     */
+    public Line2D rotate(final Line2D line) {
+<span class="fc" id="L521">        final Line2D result = new Line2D();</span>
+<span class="fc" id="L522">        rotate(line, result);</span>
+<span class="fc" id="L523">        return result;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether provided matrix is a valid matrix for
+     * a rotation.
+     * Rotation matrices must be orthogonal and must have determinant equal to 1.
+     *
+     * @param m         Input matrix to be checked.
+     * @param threshold Threshold to determine whether matrix is orthogonal and
+     *                  whether determinant is one.
+     * @return True if matrix is valid, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public static boolean isValidRotationMatrix(
+            final Matrix m, final double threshold) {
+<span class="fc bfc" id="L539" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L540">            throw new IllegalArgumentException();</span>
+        }
+
+        try {
+<span class="fc bfc" id="L544" title="All 2 branches covered.">            return Utils.isOrthogonal(m, threshold) &amp;&amp;</span>
+<span class="fc bfc" id="L545" title="All 2 branches covered.">                    (Math.abs(Utils.det(m)) - 1.0) &lt; threshold;</span>
+<span class="nc" id="L546">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L547">            return false;</span>
+        }
+    }
+
+    /**
+     * Returns boolean indicating whether provided matrix is a valid matrix for
+     * a rotation.
+     * Rotation matrices must be orthogonal and must have determinant equal to 1
+     * Because threshold is not provided, it is used MATRIX_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Input matrix to be checked.
+     * @return True if matrix is valid, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public static boolean isValidRotationMatrix(final Matrix m) {
+<span class="fc" id="L563">        return isValidRotationMatrix(m, MATRIX_VALID_THRESHOLD);</span>
+    }
+
+    /**
+     * Combines provided rotation with this rotation and returns the result as
+     * a new Rotation2D instance.
+     *
+     * @param rotation Input rotation to be combined.
+     * @return Combined rotation, which is equal to the sum of provided rotation
+     * with this rotation.
+     */
+    public Rotation2D combineAndReturnNew(final Rotation2D rotation) {
+<span class="fc" id="L575">        final Rotation2D result = new Rotation2D();</span>
+<span class="fc" id="L576">        combine(this, rotation, result);</span>
+<span class="fc" id="L577">        return result;</span>
+    }
+
+    /**
+     * Combines provided rotation into this rotation resulting in the sum of
+     * both rotations.
+     *
+     * @param rotation Input rotation to be combined.
+     */
+    public void combine(final Rotation2D rotation) {
+<span class="fc" id="L587">        combine(this, rotation, this);</span>
+<span class="fc" id="L588">    }</span>
+
+    /**
+     * Combines the rotation of instances rot1 and rot1 into provided result
+     * instance.
+     *
+     * @param rot1   1st input rotation.
+     * @param rot2   2nd input rotation.
+     * @param result Combined rotation, which is equal to the sum of provided
+     *               input rotations.
+     */
+    public static void combine(
+            final Rotation2D rot1, final Rotation2D rot2,
+            final Rotation2D result) {
+<span class="fc" id="L602">        result.theta = rot1.theta + rot2.theta;</span>
+<span class="fc" id="L603">    }</span>
+
+    /**
+     * Determines if two Rotation2D instances are equal up to provided threshold
+     * or not (i.e. have the same rotation).
+     *
+     * @param other     other rotation to compare.
+     * @param threshold threshold to determine if they are equal.
+     * @return true if they are equal, false otherwise.
+     * @throws IllegalArgumentException if threshold is negative.
+     */
+    public boolean equals(final Rotation2D other, final double threshold) {
+<span class="pc bpc" id="L615" title="1 of 2 branches missed.">        if (threshold &lt; MIN_COMPARISON_THRESHOLD) {</span>
+<span class="nc" id="L616">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L619" title="All 2 branches covered.">        return Math.abs(other.theta - theta) &lt;= threshold;</span>
+    }
+
+    /**
+     * Determines if two Rotation2D instances are equal or not (i.e. have the
+     * same rotation).
+     *
+     * @param other other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    public boolean equals(final Rotation2D other) {
+<span class="fc" id="L630">        return equals(other, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+
+    /**
+     * Determines if two Rotation2D instances are equal or not (i.e. have the
+     * same rotation).
+     *
+     * @param obj other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="fc bfc" id="L642" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L643">            return true;</span>
+        }
+<span class="pc bpc" id="L645" title="1 of 2 branches missed.">        if (!(obj instanceof Rotation2D)) {</span>
+<span class="nc" id="L646">            return false;</span>
+        }
+
+<span class="fc" id="L649">        return equals((Rotation2D) obj);</span>
+    }
+
+    /**
+     * Hash code to compare instances.
+     *
+     * @return hash code to compare instances.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L659">        return Objects.hash(theta);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

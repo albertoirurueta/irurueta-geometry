@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SphereRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">SphereRobustEstimator.java</span></div><h1>SphereRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.Sphere;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best sphere
+ * that fits in a collection of 3D points.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public abstract class SphereRobustEstimator {
+    /**
+     * Minimum number of 3D points required to estimate a sphere.
+     */
+    public static final int MINIMUM_SIZE = 4;
+
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default, this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L84">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
+            RobustEstimatorMethod.PROMEDS;
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected SphereRobustEstimatorListener mListener;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected volatile boolean mLocked;
+
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float mProgressDelta;
+
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double mConfidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int mMaxIterations;
+
+    /**
+     * List of points to be used to estimate a sphere. Provided list must have
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Point3D&gt; mPoints;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L129">    protected SphereRobustEstimator() {</span>
+<span class="fc" id="L130">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L131">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L132">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+<span class="fc" id="L141">    protected SphereRobustEstimator(final SphereRobustEstimatorListener listener) {</span>
+<span class="fc" id="L142">        mListener = listener;</span>
+<span class="fc" id="L143">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L144">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L145">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 3D points to estimate a sphere.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+<span class="fc" id="L155">    protected SphereRobustEstimator(final List&lt;Point3D&gt; points) {</span>
+<span class="fc" id="L156">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L157">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L158">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L159">        internalSetPoints(points);</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points   3D points to estimate a sphere.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    protected SphereRobustEstimator(final SphereRobustEstimatorListener listener,
+<span class="fc" id="L172">                                    final List&lt;Point3D&gt; points) {</span>
+<span class="fc" id="L173">        mListener = listener;</span>
+<span class="fc" id="L174">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L175">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L176">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L177">        internalSetPoints(points);</span>
+<span class="fc" id="L178">    }</span>
+
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public SphereRobustEstimatorListener getListener() {
+<span class="fc" id="L188">        return mListener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(final SphereRobustEstimatorListener listener)
+            throws LockedException {
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L201">            throw new LockedException();</span>
+        }
+<span class="fc" id="L203">        mListener = listener;</span>
+<span class="fc" id="L204">    }</span>
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being computed
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L222">        return mLocked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L233">        return mProgressDelta;</span>
+    }
+
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L249">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L251" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+                progressDelta &gt; MAX_PROGRESS_DELTA) {
+<span class="fc" id="L253">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L255">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L256">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L267">        return mConfidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L284">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L286" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L287">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L289">        mConfidence = confidence;</span>
+<span class="fc" id="L290">    }</span>
+
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L300">        return mMaxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L315">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L318">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L320">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L321">    }</span>
+
+    /**
+     * Returns list of points to be used to estimate a sphere.
+     * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of points to be used to estimate a sphere.
+     */
+    public List&lt;Point3D&gt; getPoints() {
+<span class="fc" id="L330">        return mPoints;</span>
+    }
+
+    /**
+     * Sets list of points to be used to estimate a sphere.
+     * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
+     * @param points list of points to be used to estimate a sphere.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public void setPoints(final List&lt;Point3D&gt; points) throws LockedException {
+<span class="fc bfc" id="L344" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L345">            throw new LockedException();</span>
+        }
+<span class="fc" id="L347">        internalSetPoints(points);</span>
+<span class="fc" id="L348">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the sphere estimation.
+     * This is true when a minimum if MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="fc bfc" id="L357" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
+    }
+
+    /**
+     * Returns quality scores corresponding to each point.
+     * The larger the score value the better the quality of the point measure.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @return quality scores corresponding to each point.
+     */
+    public double[] getQualityScores() {
+<span class="fc" id="L369">        return null;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each point.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 4 samples).
+     */
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc" id="L386">    }</span>
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided robust estimator method.
+     *
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               sphere.
+     * @return an instance of a sphere robust estimator.
+     */
+    public static SphereRobustEstimator create(final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L397" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L399">                return new LMedSSphereRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L401">                return new MSACSphereRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L403">                return new PROSACSphereRobustEstimator();</span>
+            case PROMEDS:
+<span class="fc" id="L405">                return new PROMedSSphereRobustEstimator();</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L408">                return new RANSACSphereRobustEstimator();</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided points and robust estimator method.
+     *
+     * @param points 3D points to estimate a sphere.
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(final List&lt;Point3D&gt; points,
+                                               final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L425" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L427">                return new LMedSSphereRobustEstimator(points);</span>
+            case MSAC:
+<span class="fc" id="L429">                return new MSACSphereRobustEstimator(points);</span>
+            case PROSAC:
+<span class="fc" id="L431">                return new PROSACSphereRobustEstimator(points);</span>
+            case PROMEDS:
+<span class="fc" id="L433">                return new PROMedSSphereRobustEstimator(points);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L436">                return new RANSACSphereRobustEstimator(points);</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 sphere.
+     * @return an instance of a sphere robust estimator.
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L453" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L455">                return new LMedSSphereRobustEstimator(listener);</span>
+            case MSAC:
+<span class="fc" id="L457">                return new MSACSphereRobustEstimator(listener);</span>
+            case PROSAC:
+<span class="fc" id="L459">                return new PROSACSphereRobustEstimator(listener);</span>
+            case PROMEDS:
+<span class="fc" id="L461">                return new PROMedSSphereRobustEstimator(listener);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L464">                return new RANSACSphereRobustEstimator(listener);</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener and points.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   3D points to estimate a sphere.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener, final List&lt;Point3D&gt; points,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L484" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L486">                return new LMedSSphereRobustEstimator(listener, points);</span>
+            case MSAC:
+<span class="fc" id="L488">                return new MSACSphereRobustEstimator(listener, points);</span>
+            case PROSAC:
+<span class="fc" id="L490">                return new PROSACSphereRobustEstimator(listener, points);</span>
+            case PROMEDS:
+<span class="fc" id="L492">                return new PROMedSSphereRobustEstimator(listener, points);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L495">                return new RANSACSphereRobustEstimator(listener, points);</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided robust estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 4 points).
+     */
+    public static SphereRobustEstimator create(final double[] qualityScores,
+                                               final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L512" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L514">                return new LMedSSphereRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L516">                return new MSACSphereRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L518">                return new PROSACSphereRobustEstimator(qualityScores);</span>
+            case PROMEDS:
+<span class="fc" id="L520">                return new PROMedSSphereRobustEstimator(qualityScores);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L523">                return new RANSACSphereRobustEstimator();</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided points and robust estimator method.
+     *
+     * @param points        3D points to estimate a sphere.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(
+            final List&lt;Point3D&gt; points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L543" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L545">                return new LMedSSphereRobustEstimator(points);</span>
+            case MSAC:
+<span class="fc" id="L547">                return new MSACSphereRobustEstimator(points);</span>
+            case PROSAC:
+<span class="fc" id="L549">                return new PROSACSphereRobustEstimator(points, qualityScores);</span>
+            case PROMEDS:
+<span class="fc" id="L551">                return new PROMedSSphereRobustEstimator(points, qualityScores);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L554">                return new RANSACSphereRobustEstimator(points);</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 4 points).
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L574" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L576">                return new LMedSSphereRobustEstimator(listener);</span>
+            case MSAC:
+<span class="fc" id="L578">                return new MSACSphereRobustEstimator(listener);</span>
+            case PROSAC:
+<span class="fc" id="L580">                return new PROSACSphereRobustEstimator(listener, qualityScores);</span>
+            case PROMEDS:
+<span class="fc" id="L582">                return new PROMedSSphereRobustEstimator(listener, qualityScores);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L585">                return new RANSACSphereRobustEstimator(listener);</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener and points.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        3D points to estimate a sphere.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener, final List&lt;Point3D&gt; points,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L607" title="All 5 branches covered.">        switch (method) {</span>
+            case LMEDS:
+<span class="fc" id="L609">                return new LMedSSphereRobustEstimator(listener, points);</span>
+            case MSAC:
+<span class="fc" id="L611">                return new MSACSphereRobustEstimator(listener, points);</span>
+            case PROSAC:
+<span class="fc" id="L613">                return new PROSACSphereRobustEstimator(listener, points,</span>
+                        qualityScores);
+            case PROMEDS:
+<span class="fc" id="L616">                return new PROMedSSphereRobustEstimator(listener, points,</span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L620">                return new RANSACSphereRobustEstimator(listener, points);</span>
+        }
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * default robust estimator method.
+     *
+     * @return an instance of a sphere robust estimator.
+     */
+    public static SphereRobustEstimator create() {
+<span class="fc" id="L631">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided points and default robust estimator method.
+     *
+     * @param points 3D points to estimate a sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(final List&lt;Point3D&gt; points) {
+<span class="fc" id="L644">        return create(points, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener and default robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @return an instance of a sphere robust estimator.
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener) {
+<span class="fc" id="L657">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener and points and default robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   3D points to estimate a sphere.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener, final List&lt;Point3D&gt; points) {
+<span class="fc" id="L673">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * default robust estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 4 points).
+     */
+    public static SphereRobustEstimator create(final double[] qualityScores) {
+<span class="fc" id="L686">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided points and default estimator method.
+     *
+     * @param points        3D points to estimate a sphere.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(final List&lt;Point3D&gt; points,
+                                               final double[] qualityScores) {
+<span class="fc" id="L702">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener and default estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 4 points).
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L718">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a sphere robust estimator based on 3D point samples and using
+     * provided listener and points and default estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        3D points to estimate a sphere.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @return an instance of a sphere robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static SphereRobustEstimator create(
+            final SphereRobustEstimatorListener listener, final List&lt;Point3D&gt; points,
+            final double[] qualityScores) {
+<span class="fc" id="L737">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Estimates a sphere using a robust estimator and the best set of 3D points
+     * that fit into the locus of the estimated sphere found using the robust
+     * estimator.
+     *
+     * @return a sphere.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract Sphere estimate() throws LockedException,
+            NotReadyException, RobustEstimatorException;
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+
+    /**
+     * Internal method to set lists of points to be used to estimate a sphere.
+     * This method does not check whether estimator is locked or not
+     *
+     * @param points list of points to be used to estimate a sphere
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE
+     */
+    private void internalSetPoints(final List&lt;Point3D&gt; points) {
+<span class="fc bfc" id="L772" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L773">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L775">        mPoints = points;</span>
+<span class="fc" id="L776">    }</span>
+
+    /**
+     * Computes the residual between a sphere and a point.
+     *
+     * @param c     a sphere.
+     * @param point a 3D point.
+     * @return residual.
+     */
+    protected double residual(final Sphere c, final Point3D point) {
+<span class="fc" id="L786">        point.normalize();</span>
+
+<span class="fc" id="L788">        return c.getDistance(point);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

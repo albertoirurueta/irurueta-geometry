@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACMetricTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROSACMetricTransformation3DRobustEstimator.java</span></div><h1>PROSACMetricTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.MetricTransformation3D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best metric 3D transformation for provided collections of
+ * matched 3D points using PROSAC algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROSACMetricTransformation3DRobustEstimator extends
+        MetricTransformation3DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Indicates that by default inliers will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
+
+    /**
+     * Indicates that by default residuals will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double mThreshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] mQualityScores;
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     */
+    private boolean mComputeAndKeepInliers;
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     */
+    private boolean mComputeAndKeepResiduals;
+
+    /**
+     * Constructor.
+     */
+    public PROSACMetricTransformation3DRobustEstimator() {
+<span class="fc" id="L90">        super();</span>
+<span class="fc" id="L91">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L92">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L93">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L112">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L113">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L114">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L115">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L126">        super(listener);</span>
+<span class="fc" id="L127">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L128">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L129">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L151">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L152">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L153">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L154">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final double[] qualityScores) {
+<span class="fc" id="L167">        super();</span>
+<span class="fc" id="L168">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L169">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L170">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L171">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L172">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      metric 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      metric 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L194">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L197">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L200">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L201">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L202">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L203">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L204">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="fc" id="L219">        super(listener);</span>
+<span class="fc" id="L220">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L221">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L222">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L223">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L224">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      stars, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      metric 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      metric 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L248">        super(listener, inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L251">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L254">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L255">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L256">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L257">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L258">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L267">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L268">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L269">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L270">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L271">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L291">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L292">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L293">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L294">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L295">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L307">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L308">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L309">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L310">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L311">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L334">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L335">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L336">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L337">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L338">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L351">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L352">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L353">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L354">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L355">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L356">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L379">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L381" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L382">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L385">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L386">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L387">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L388">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L389">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L405">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L406">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L407">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L408">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L409">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L410">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L435">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L437" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L438">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L441">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L442">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L443">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L444">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L445">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L457">        return mThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @param threshold threshold to determine whether points are inliers or not
+     *                  when testing possible estimation solutions.
+     * @throws IllegalArgumentException if provided values is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L474" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L475">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L478">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L480">        mThreshold = threshold;</span>
+<span class="fc" id="L481">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L491">        return mQualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L507" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L508">            throw new LockedException();</span>
+        }
+<span class="fc" id="L510">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L511">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the metric 3D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L523" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
+    }
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     *
+     * @return true if inliers must be computed and kept, false if inliers
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepInliersEnabled() {
+<span class="fc" id="L534">        return mComputeAndKeepInliers;</span>
+    }
+
+    /**
+     * Specifies whether inliers must be computed and kept.
+     *
+     * @param computeAndKeepInliers true if inliers must be computed and kept,
+     *                              false if inliers only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
+            throws LockedException {
+<span class="pc bpc" id="L546" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L547">            throw new LockedException();</span>
+        }
+<span class="fc" id="L549">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L550">    }</span>
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     *
+     * @return true if residuals must be computed and kept, false if residuals
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepResidualsEnabled() {
+<span class="fc" id="L559">        return mComputeAndKeepResiduals;</span>
+    }
+
+    /**
+     * Specifies whether residuals must be computed and kept.
+     *
+     * @param computeAndKeepResiduals true if residuals must be computed and
+     *                                kept, false if residuals only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepResidualsEnabled(
+            final boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L572">            throw new LockedException();</span>
+        }
+<span class="fc" id="L574">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L575">    }</span>
+
+    /**
+     * Estimates a metric 3D transformation using a robust estimator and
+     * the best set of matched 3D point correspondences found using the robust
+     * estimator.
+     *
+     * @return a metric 3D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public MetricTransformation3D estimate() throws LockedException,
+            NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L593" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L594">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L597">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L600">        final PROSACRobustEstimator&lt;MetricTransformation3D&gt; innerEstimator =</span>
+                new PROSACRobustEstimator&lt;&gt;(
+<span class="fc" id="L602">                        new PROSACRobustEstimatorListener&lt;MetricTransformation3D&gt;() {</span>
+
+                            // point to be reused when computing residuals
+<span class="fc" id="L605">                            private final Point3D mTestPoint = Point3D.create(</span>
+                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+
+<span class="fc" id="L608">                            private final MetricTransformation3DEstimator mNonRobustEstimator =</span>
+                                    new MetricTransformation3DEstimator(
+<span class="fc" id="L610">                                            isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L612">                            private final List&lt;Point3D&gt; mSubsetInputPoints =</span>
+                                    new ArrayList&lt;&gt;();
+<span class="fc" id="L614">                            private final List&lt;Point3D&gt; mSubsetOutputPoints =</span>
+                                    new ArrayList&lt;&gt;();
+
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L619">                                return mThreshold;</span>
+                            }
+
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L624">                                return mInputPoints.size();</span>
+                            }
+
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L629">                                return mNonRobustEstimator.getMinimumPoints();</span>
+                            }
+
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;MetricTransformation3D&gt; solutions) {
+<span class="fc" id="L635">                                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L636">                                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L637" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L638">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L639">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+                                            samplesIndex));
+                                }
+
+                                try {
+<span class="fc" id="L644">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
+                                            mSubsetOutputPoints);
+<span class="fc" id="L646">                                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L647">                                } catch (final Exception e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L649">                                }</span>
+<span class="fc" id="L650">                            }</span>
+
+                            @Override
+                            public double computeResidual(
+                                    final MetricTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L655">                                final Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L656">                                final Point3D outputPoint = mOutputPoints.get(i);</span>
+
+                                // transform input point and store result in mTestPoint
+<span class="fc" id="L659">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
+
+<span class="fc" id="L661">                                return outputPoint.distanceTo(mTestPoint);</span>
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L666">                                return PROSACMetricTransformation3DRobustEstimator.this.</span>
+<span class="fc" id="L667">                                        isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(
+                                    final RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L673" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L674">                                    mListener.onEstimateStart(</span>
+                                            PROSACMetricTransformation3DRobustEstimator.this);
+                                }
+<span class="fc" id="L677">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(
+                                    final RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L682" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L683">                                    mListener.onEstimateEnd(</span>
+                                            PROSACMetricTransformation3DRobustEstimator.this);
+                                }
+<span class="fc" id="L686">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;MetricTransformation3D&gt; estimator,
+                                    final int iteration) {
+<span class="pc bpc" id="L692" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L693">                                    mListener.onEstimateNextIteration(</span>
+                                            PROSACMetricTransformation3DRobustEstimator.this,
+                                            iteration);
+                                }
+<span class="fc" id="L697">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;MetricTransformation3D&gt; estimator,
+                                    final float progress) {
+<span class="nc bnc" id="L703" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L704">                                    mListener.onEstimateProgressChange(</span>
+                                            PROSACMetricTransformation3DRobustEstimator.this,
+                                            progress);
+                                }
+<span class="nc" id="L708">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L712">                                return mQualityScores;</span>
+                            }
+                        });
+
+        try {
+<span class="fc" id="L717">            mLocked = true;</span>
+<span class="fc" id="L718">            mInliersData = null;</span>
+<span class="pc bpc" id="L719" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+                    mComputeAndKeepInliers || mRefineResult);
+<span class="pc bpc" id="L721" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+                    mComputeAndKeepResiduals || mRefineResult);
+<span class="fc" id="L723">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L724">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L725">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L726">            final MetricTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L727">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L728">            return attemptRefine(transformation);</span>
+<span class="nc" id="L729">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L730">            throw new LockedException(e);</span>
+<span class="nc" id="L731">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L732">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L734">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L745">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L761">        return mThreshold;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L774" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L775">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L778">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L779">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

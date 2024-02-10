@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PointCorrespondenceAffineTransformation3DRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">PointCorrespondenceAffineTransformation3DRefiner.java</span></div><h1>PointCorrespondenceAffineTransformation3DRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.AffineTransformation3D;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientEstimator;
+import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * A 3D affine transformation refiner using point correspondences.
+ * This class takes into account an initial estimation, inlier point matches and
+ * their residuals to find a solution that minimizes error of inliers in LMSE
+ * terms.
+ * Typically, a refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PointCorrespondenceAffineTransformation3DRefiner extends
+        AffineTransformation3DRefiner&lt;Point3D, Point3D&gt; {
+
+    /**
+     * Point to be reused when computing residuals.
+     */
+<span class="fc" id="L49">    private final Point3D mResidualTestPoint = Point3D.create(</span>
+            CoordinatesType.HOMOGENEOUS_COORDINATES);
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L55">    public PointCorrespondenceAffineTransformation3DRefiner() {</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public PointCorrespondenceAffineTransformation3DRefiner(
+            final AffineTransformation3D initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List&lt;Point3D&gt; samples1, final List&lt;Point3D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L77">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+                samples1, samples2, refinementStandardDeviation);
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public PointCorrespondenceAffineTransformation3DRefiner(
+            final AffineTransformation3D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Point3D&gt; samples1,
+            final List&lt;Point3D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L98">        super(initialEstimation, keepCovariance, inliersData, samples1,</span>
+                samples2, refinementStandardDeviation);
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Refines provide initial estimation.
+     * This method always sets a value into provided result instance regardless
+     * of the fact that error has actually improved in LMSE terms or not.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (error decreases) in LMSE terms respect
+     * to initial estimation, false if no improvement has been achieved.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
+    @Override
+    public boolean refine(final AffineTransformation3D result)
+            throws NotReadyException, LockedException, RefinerException {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L120">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L123">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L126">        mLocked = true;</span>
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L129">            mListener.onRefineStart(this, mInitialEstimation);</span>
+        }
+
+<span class="fc" id="L132">        final double initialTotalResidual = totalResidual(mInitialEstimation);</span>
+
+        try {
+<span class="fc" id="L135">            final double[] initParams = new double[</span>
+                    AffineTransformation3D.INHOM_COORDS *
+                            AffineTransformation3D.INHOM_COORDS +
+                            AffineTransformation3D.NUM_TRANSLATION_COORDS];
+            // copy values for A matrix
+<span class="fc" id="L140">            System.arraycopy(mInitialEstimation.getA().getBuffer(), 0,</span>
+                    initParams, 0, AffineTransformation3D.INHOM_COORDS *
+                            AffineTransformation3D.INHOM_COORDS);
+            // copy values for translation
+<span class="fc" id="L144">            System.arraycopy(mInitialEstimation.getTranslation(), 0,</span>
+                    initParams, AffineTransformation3D.INHOM_COORDS *
+                            AffineTransformation3D.INHOM_COORDS,
+                    AffineTransformation3D.NUM_TRANSLATION_COORDS);
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L150">            final double[] y = new double[mNumInliers];</span>
+            // input values will contain 2 sets of 2D points to compute residuals
+<span class="fc" id="L152">            final int nDims =</span>
+                    2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
+<span class="fc" id="L154">            final Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L155">            int nSamples = mInliers.length();</span>
+<span class="fc" id="L156">            int pos = 0;</span>
+            Point3D inputPoint;
+            Point3D outputPoint;
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L162">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L163">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L164">                    inputPoint.normalize();</span>
+<span class="fc" id="L165">                    outputPoint.normalize();</span>
+<span class="fc" id="L166">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L167">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L168">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
+<span class="fc" id="L169">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
+<span class="fc" id="L170">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
+<span class="fc" id="L171">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
+<span class="fc" id="L172">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
+<span class="fc" id="L173">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
+
+<span class="fc" id="L175">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L176">                    pos++;</span>
+                }
+            }
+
+<span class="fc" id="L180">            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L181">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+
+<span class="fc" id="L183">                        private final Point3D mInputPoint = Point3D.create(</span>
+                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+
+<span class="fc" id="L186">                        private final Point3D mOutputPoint = Point3D.create(</span>
+                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+
+<span class="fc" id="L189">                        private final AffineTransformation3D mTransformation =</span>
+                                new AffineTransformation3D();
+
+<span class="fc" id="L192">                        private final GradientEstimator mGradientEstimator =</span>
+                                new GradientEstimator(
+<span class="fc" id="L194">                                        new MultiDimensionFunctionEvaluatorListener() {</span>
+                                            @Override
+                                            public double evaluate(final double[] params) {
+                                                // copy values for A matrix
+<span class="fc" id="L198">                                                System.arraycopy(params, 0,</span>
+<span class="fc" id="L199">                                                        mTransformation.getA().getBuffer(), 0,</span>
+                                                        AffineTransformation3D.INHOM_COORDS *
+                                                                AffineTransformation3D.INHOM_COORDS);
+                                                // copy values for translation
+<span class="fc" id="L203">                                                System.arraycopy(params,</span>
+                                                        AffineTransformation3D.INHOM_COORDS *
+                                                                AffineTransformation3D.INHOM_COORDS,
+<span class="fc" id="L206">                                                        mTransformation.getTranslation(), 0,</span>
+                                                        AffineTransformation3D.NUM_TRANSLATION_COORDS);
+
+<span class="fc" id="L209">                                                return residual(mTransformation, mInputPoint,</span>
+                                                        mOutputPoint);
+
+                                            }
+                                        });
+
+                        @Override
+                        public int getNumberOfDimensions() {
+<span class="fc" id="L217">                            return nDims;</span>
+                        }
+
+                        @Override
+                        public double[] createInitialParametersArray() {
+<span class="fc" id="L222">                            return initParams;</span>
+                        }
+
+                        @Override
+                        public double evaluate(final int i, final double[] point, final double[] params,
+                                               final double[] derivatives) throws EvaluationException {
+<span class="fc" id="L228">                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],</span>
+                                    point[2], point[3]);
+<span class="fc" id="L230">                            mOutputPoint.setHomogeneousCoordinates(point[4], point[5],</span>
+                                    point[6], point[7]);
+
+                            // copy values for A matrix
+<span class="fc" id="L234">                            System.arraycopy(params, 0,</span>
+<span class="fc" id="L235">                                    mTransformation.getA().getBuffer(), 0,</span>
+                                    AffineTransformation3D.INHOM_COORDS *
+                                            AffineTransformation3D.INHOM_COORDS);
+                            // copy values for translation
+<span class="fc" id="L239">                            System.arraycopy(params,</span>
+                                    AffineTransformation3D.INHOM_COORDS *
+                                            AffineTransformation3D.INHOM_COORDS,
+<span class="fc" id="L242">                                    mTransformation.getTranslation(), 0,</span>
+                                    AffineTransformation3D.NUM_TRANSLATION_COORDS);
+
+<span class="fc" id="L245">                            final double y = residual(mTransformation, mInputPoint,</span>
+                                    mOutputPoint);
+<span class="fc" id="L247">                            mGradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L249">                            return y;</span>
+                        }
+                    };
+
+<span class="fc" id="L253">            final LevenbergMarquardtMultiDimensionFitter fitter =</span>
+                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+<span class="fc" id="L255">                            getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L257">            fitter.fit();</span>
+
+            // obtain estimated params
+<span class="fc" id="L260">            final double[] params = fitter.getA();</span>
+
+            // update transformation
+
+            // copy values for A matrix
+<span class="fc" id="L265">            System.arraycopy(params, 0, result.getA().getBuffer(), 0,</span>
+                    AffineTransformation3D.INHOM_COORDS *
+                            AffineTransformation3D.INHOM_COORDS);
+            // copy values for translation
+<span class="fc" id="L269">            System.arraycopy(params, AffineTransformation3D.INHOM_COORDS *</span>
+                            AffineTransformation3D.INHOM_COORDS,
+<span class="fc" id="L271">                    result.getTranslation(), 0,</span>
+                    AffineTransformation3D.NUM_TRANSLATION_COORDS);
+
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+                // keep covariance
+<span class="fc" id="L276">                mCovariance = fitter.getCovar();</span>
+            }
+
+<span class="fc" id="L279">            final double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">            final boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+
+<span class="fc bfc" id="L282" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L283">                mListener.onRefineEnd(this, mInitialEstimation, result,</span>
+                        errorDecreased);
+            }
+
+<span class="fc" id="L287">            return errorDecreased;</span>
+
+<span class="nc" id="L289">        } catch (final Exception e) {</span>
+<span class="nc" id="L290">            throw new RefinerException(e);</span>
+        } finally {
+<span class="fc" id="L292">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Computes the residual between the affine transformation and a pair of
+     * matched points.
+     *
+     * @param transformation a transformation.
+     * @param inputPoint     input 3D point.
+     * @param outputPoint    output 3D point.
+     * @return residual.
+     */
+    private double residual(final AffineTransformation3D transformation,
+                            final Point3D inputPoint, final Point3D outputPoint) {
+<span class="fc" id="L307">        inputPoint.normalize();</span>
+<span class="fc" id="L308">        outputPoint.normalize();</span>
+
+<span class="fc" id="L310">        transformation.transform(inputPoint, mResidualTestPoint);</span>
+<span class="fc" id="L311">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+    }
+
+    /**
+     * Computes total residual among all provided inlier samples.
+     *
+     * @param transformation a transformation.
+     * @return total residual.
+     */
+    private double totalResidual(final AffineTransformation3D transformation) {
+<span class="fc" id="L321">        double result = 0.0;</span>
+
+<span class="fc" id="L323">        final int nSamples = mInliers.length();</span>
+        Point3D inputPoint;
+        Point3D outputPoint;
+<span class="fc bfc" id="L326" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L329">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L330">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L331">                inputPoint.normalize();</span>
+<span class="fc" id="L332">                outputPoint.normalize();</span>
+<span class="fc" id="L333">                result += residual(transformation, inputPoint, outputPoint);</span>
+            }
+        }
+
+<span class="fc" id="L337">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlaneCorrespondenceProjectiveTransformation3DRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">PlaneCorrespondenceProjectiveTransformation3DRefiner.java</span></div><h1>PlaneCorrespondenceProjectiveTransformation3DRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.Plane;
+import com.irurueta.geometry.ProjectiveTransformation3D;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientEstimator;
+import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * A 3D projective transformation refiner using plane correspondences.
+ * This class takes into account an initial estimation, inlier line matches
+ * and their residuals to find a solution that minimizes error of inliers in
+ * LMSE terms.
+ * Typically, a refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
+        ProjectiveTransformation3DRefiner&lt;Plane, Plane&gt; {
+
+    /**
+     * Plane to be reused when computing residuals.
+     */
+<span class="fc" id="L49">    private final Plane mResidualTestPlane = new Plane();</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L54">    public PlaneCorrespondenceProjectiveTransformation3DRefiner() {</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public PlaneCorrespondenceProjectiveTransformation3DRefiner(
+            final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List&lt;Plane&gt; samples1, final List&lt;Plane&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L76">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+                samples1, samples2, refinementStandardDeviation);
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public PlaneCorrespondenceProjectiveTransformation3DRefiner(
+            final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Plane&gt; samples1,
+            final List&lt;Plane&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L97">        super(initialEstimation, keepCovariance, inliersData, samples1,</span>
+                samples2, refinementStandardDeviation);
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Refines provided initial estimation.
+     * This method always sets a value into provided result instance regardless
+     * of the fact that error has actually improved in LMSE terms or not.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (error decreases) in LMSE terms respect
+     * to initial estimation, false if no improvement has been achieved.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
+    @Override
+    public boolean refine(final ProjectiveTransformation3D result)
+            throws NotReadyException, LockedException, RefinerException {
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L119">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L122">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L125">        mLocked = true;</span>
+
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L128">            mListener.onRefineStart(this, mInitialEstimation);</span>
+        }
+
+<span class="fc" id="L131">        final double initialTotalResidual = totalResidual(mInitialEstimation);</span>
+
+        try {
+<span class="fc" id="L134">            final double[] initParams = new double[</span>
+                    ProjectiveTransformation3D.HOM_COORDS *
+                            ProjectiveTransformation3D.HOM_COORDS];
+            // copy values
+<span class="fc" id="L138">            System.arraycopy(mInitialEstimation.getT().getBuffer(), 0,</span>
+                    initParams, 0, initParams.length);
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L142">            final double[] y = new double[mNumInliers];</span>
+            // input values will contain 2 sets of 2D points to compute residuals
+<span class="fc" id="L144">            final int nDims = 2 * Plane.PLANE_NUMBER_PARAMS;</span>
+<span class="fc" id="L145">            final Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L146">            final int nSamples = mInliers.length();</span>
+<span class="fc" id="L147">            int pos = 0;</span>
+            Plane inputPlane;
+            Plane outputPlane;
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L153">                    inputPlane = mSamples1.get(i);</span>
+<span class="fc" id="L154">                    outputPlane = mSamples2.get(i);</span>
+<span class="fc" id="L155">                    inputPlane.normalize();</span>
+<span class="fc" id="L156">                    outputPlane.normalize();</span>
+<span class="fc" id="L157">                    x.setElementAt(pos, 0, inputPlane.getA());</span>
+<span class="fc" id="L158">                    x.setElementAt(pos, 1, inputPlane.getB());</span>
+<span class="fc" id="L159">                    x.setElementAt(pos, 2, inputPlane.getC());</span>
+<span class="fc" id="L160">                    x.setElementAt(pos, 3, inputPlane.getD());</span>
+<span class="fc" id="L161">                    x.setElementAt(pos, 4, outputPlane.getA());</span>
+<span class="fc" id="L162">                    x.setElementAt(pos, 5, outputPlane.getB());</span>
+<span class="fc" id="L163">                    x.setElementAt(pos, 6, outputPlane.getC());</span>
+<span class="fc" id="L164">                    x.setElementAt(pos, 7, outputPlane.getD());</span>
+
+<span class="fc" id="L166">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L167">                    pos++;</span>
+                }
+            }
+
+<span class="fc" id="L171">            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L172">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+
+<span class="fc" id="L174">                        private final Plane mInputPlane = new Plane();</span>
+
+<span class="fc" id="L176">                        private final Plane mOutputPlane = new Plane();</span>
+
+<span class="fc" id="L178">                        private final ProjectiveTransformation3D mTransformation =</span>
+                                new ProjectiveTransformation3D();
+
+<span class="fc" id="L181">                        private final GradientEstimator mGradientEstimator =</span>
+                                new GradientEstimator(
+<span class="fc" id="L183">                                        new MultiDimensionFunctionEvaluatorListener() {</span>
+                                            @Override
+                                            public double evaluate(final double[] params) {
+                                                // copy values
+<span class="fc" id="L187">                                                System.arraycopy(params, 0,</span>
+<span class="fc" id="L188">                                                        mTransformation.getT().getBuffer(), 0,</span>
+                                                        params.length);
+
+<span class="fc" id="L191">                                                return residual(mTransformation, mInputPlane,</span>
+                                                        mOutputPlane);
+                                            }
+                                        });
+
+                        @Override
+                        public int getNumberOfDimensions() {
+<span class="fc" id="L198">                            return nDims;</span>
+                        }
+
+                        @Override
+                        public double[] createInitialParametersArray() {
+<span class="fc" id="L203">                            return initParams;</span>
+                        }
+
+                        @Override
+                        public double evaluate(final int i, final double[] point, final double[] params,
+                                               final double[] derivatives) throws EvaluationException {
+<span class="fc" id="L209">                            mInputPlane.setParameters(point[0], point[1], point[2],</span>
+                                    point[3]);
+<span class="fc" id="L211">                            mOutputPlane.setParameters(point[4], point[5], point[6],</span>
+                                    point[7]);
+
+                            // copy values
+<span class="fc" id="L215">                            System.arraycopy(params, 0,</span>
+<span class="fc" id="L216">                                    mTransformation.getT().getBuffer(), 0,</span>
+                                    params.length);
+
+<span class="fc" id="L219">                            final double y = residual(mTransformation, mInputPlane,</span>
+                                    mOutputPlane);
+<span class="fc" id="L221">                            mGradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L223">                            return y;</span>
+                        }
+                    };
+
+<span class="fc" id="L227">            final LevenbergMarquardtMultiDimensionFitter fitter =</span>
+                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+<span class="fc" id="L229">                            getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L231">            fitter.fit();</span>
+
+            // obtain estimated params
+<span class="fc" id="L234">            final double[] params = fitter.getA();</span>
+
+            // update transformation
+
+            // copy values for A matrix
+<span class="fc" id="L239">            System.arraycopy(params, 0, result.getT().getBuffer(), 0,</span>
+                    params.length);
+
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+                // keep covariance
+<span class="fc" id="L244">                mCovariance = fitter.getCovar();</span>
+            }
+
+<span class="fc" id="L247">            final double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">            final boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+
+<span class="fc bfc" id="L250" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L251">                mListener.onRefineEnd(this, mInitialEstimation, result,</span>
+                        errorDecreased);
+            }
+
+<span class="fc" id="L255">            return errorDecreased;</span>
+
+<span class="fc" id="L257">        } catch (final Exception e) {</span>
+<span class="fc" id="L258">            throw new RefinerException(e);</span>
+        } finally {
+<span class="fc" id="L260">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Computes the residual between the projective transformation and a pair of
+     * matched planes.
+     *
+     * @param transformation a transformation.
+     * @param inputPlane     input 3D plane.
+     * @param outputPlane    output 3D plane.
+     * @return residual.
+     */
+    private double residual(final ProjectiveTransformation3D transformation,
+                            final Plane inputPlane, final Plane outputPlane) {
+        try {
+<span class="fc" id="L276">            inputPlane.normalize();</span>
+<span class="fc" id="L277">            outputPlane.normalize();</span>
+
+<span class="fc" id="L279">            transformation.transform(inputPlane, mResidualTestPlane);</span>
+<span class="fc" id="L280">            return 1.0 - Math.abs(outputPlane.dotProduct(mResidualTestPlane));</span>
+<span class="nc" id="L281">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L282">            return 1.0;</span>
+        }
+    }
+
+    /**
+     * Computes total residual among all provided inlier samples.
+     *
+     * @param transformation a transformation.
+     * @return total residual.
+     */
+    private double totalResidual(final ProjectiveTransformation3D transformation) {
+<span class="fc" id="L293">        double result = 0.0;</span>
+
+<span class="fc" id="L295">        final int nSamples = mInliers.length();</span>
+        Plane inputPlane;
+        Plane outputPlane;
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L301">                inputPlane = mSamples1.get(i);</span>
+<span class="fc" id="L302">                outputPlane = mSamples2.get(i);</span>
+<span class="fc" id="L303">                inputPlane.normalize();</span>
+<span class="fc" id="L304">                outputPlane.normalize();</span>
+<span class="fc" id="L305">                result += residual(transformation, inputPlane, outputPlane);</span>
+            }
+        }
+
+<span class="fc" id="L309">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

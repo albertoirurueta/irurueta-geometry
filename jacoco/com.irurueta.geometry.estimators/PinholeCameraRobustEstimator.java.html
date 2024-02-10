@@ -1,0 +1,1962 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PinholeCameraRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PinholeCameraRobustEstimator.java</span></div><h1>PinholeCameraRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.*;
+import com.irurueta.numerical.robust.InliersData;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best
+ * PinholeCamera for provided collections of matched 3D points and their
+ * corresponding projected 2D points, or collections of matched 3D planes and
+ * their corresponding projected 2D lines (depending on point
+ * correspondence or plane/line correspondence is being used).
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+public abstract class PinholeCameraRobustEstimator {
+    /**
+     * Indicates that result is refined by default using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     */
+    public static final boolean DEFAULT_REFINE_RESULT = true;
+
+    /**
+     * Indicates that covariance is not kept by default after refining result.
+     */
+    public static final boolean DEFAULT_KEEP_COVARIANCE = false;
+
+    /**
+     * Indicates whether fast refinement is used by default.
+     */
+    public static final boolean DEFAULT_USE_FAST_REFINEMENT = false;
+
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default, this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Default value indicating whether skewness value is suggested or not.
+     * By default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED = false;
+
+    /**
+     * Default value of skewness to be suggested when suggestion is enabled.
+     * By default suggested skewness is zero.
+     */
+    public static final double DEFAULT_SUGGESTED_SKEWNESS_VALUE = 0.0;
+
+    /**
+     * Default value indicating whether horizontal focal length value is
+     * suggested or not. By default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
+            false;
+
+    /**
+     * Default value indicating whether vertical focal length value is suggested
+     * or not. By default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
+            false;
+
+    /**
+     * Default value indicating whether aspect ratio is suggested or not. By
+     * default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED = false;
+
+    /**
+     * Default value of aspect ratio to be suggested when suggestion is enabled.
+     * By default, suggested aspect ratio is 1.0, although also -1.0 is a typical
+     * value when vertical coordinates increase downwards.
+     */
+    public static final double DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE = 1.0;
+
+    /**
+     * Default value indicating whether principal point is suggested or not. By
+     * default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED = false;
+
+    /**
+     * Default value indicating whether rotation is suggested or not. By default,
+     * this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_ROTATION_ENABLED = false;
+
+    /**
+     * Default value indicating whether center is suggested or not. By default
+     * this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_CENTER_ENABLED = false;
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected PinholeCameraRobustEstimatorListener mListener;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected volatile boolean mLocked;
+
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float mProgressDelta;
+
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double mConfidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int mMaxIterations;
+
+    /**
+     * Data related to inliers found after estimation.
+     */
+    protected InliersData mInliersData;
+
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If true, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     */
+    protected boolean mRefineResult;
+
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     */
+    protected boolean mKeepCovariance;
+
+    /**
+     * Indicates whether fast refinement must be used or not.
+     * When true Levenberg/Marquardt refinement will be used, when false
+     * an initial Powell optimization is done and then Levenberg/Marquard is
+     * used for covariance estimation if needed.
+     */
+    protected boolean mUseFastRefinement;
+
+    /**
+     * Estimated covariance of estimated fundamental matrix.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     */
+    protected Matrix mCovariance;
+
+    /**
+     * Indicates whether skewness value is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L227">    protected boolean mSuggestSkewnessValueEnabled =</span>
+            DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
+
+    /**
+     * Suggested skewness value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided
+     * value.
+     */
+<span class="fc" id="L236">    protected double mSuggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;</span>
+
+    /**
+     * Indicates whether horizontal focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L246">    protected boolean mSuggestHorizontalFocalLengthEnabled =</span>
+            DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
+
+    /**
+     * Suggested horizontal focal length value to be reached when suggestion is
+     * enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected double mSuggestedHorizontalFocalLengthValue;
+
+    /**
+     * Indicates whether vertical focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L265">    protected boolean mSuggestVerticalFocalLengthEnabled =</span>
+            DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
+
+    /**
+     * Suggested vertical focal length value to be reached when suggestion is
+     * enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected double mSuggestedVerticalFocalLengthValue;
+
+    /**
+     * Indicates whether aspect ratio is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L284">    protected boolean mSuggestAspectRatioEnabled =</span>
+            DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
+
+    /**
+     * Suggested aspect ratio value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+<span class="fc" id="L292">    protected double mSuggestedAspectRatioValue =</span>
+            DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
+
+    /**
+     * Indicates whether principal point is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L303">    protected boolean mSuggestPrincipalPointEnabled =</span>
+            DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
+
+    /**
+     * Suggested principal point value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected InhomogeneousPoint2D mSuggestedPrincipalPointValue;
+
+    /**
+     * Indicates whether camera rotation is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L321">    protected boolean mSuggestRotationEnabled =</span>
+            DEFAULT_SUGGEST_ROTATION_ENABLED;
+
+    /**
+     * Suggested rotation to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected Quaternion mSuggestedRotationValue;
+
+    /**
+     * Indicates whether camera center is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+    protected boolean mSuggestCenterEnabled;
+
+    /**
+     * Suggested center to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected InhomogeneousPoint3D mSuggestedCenterValue;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L351">    protected PinholeCameraRobustEstimator() {</span>
+<span class="fc" id="L352">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L353">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L354">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L355">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L356">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L357">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    protected PinholeCameraRobustEstimator(
+<span class="fc" id="L366">            final PinholeCameraRobustEstimatorListener listener) {</span>
+<span class="fc" id="L367">        mListener = listener;</span>
+<span class="fc" id="L368">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L369">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L370">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L371">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L372">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L373">    }</span>
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public PinholeCameraRobustEstimatorListener getListener() {
+<span class="fc" id="L382">        return mListener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(
+            final PinholeCameraRobustEstimatorListener listener)
+            throws LockedException {
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L396">            throw new LockedException();</span>
+        }
+<span class="fc" id="L398">        mListener = listener;</span>
+<span class="fc" id="L399">    }</span>
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+
+    /**
+     * Indicates whether skewness value is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if skewness value is suggested, false otherwise.
+     */
+    public boolean isSuggestSkewnessValueEnabled() {
+<span class="fc" id="L422">        return mSuggestSkewnessValueEnabled;</span>
+    }
+
+    /**
+     * Specifies whether skewness value is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestSkewnessValueEnabled true if skewness value is suggested,
+     *                                    false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestSkewnessValueEnabled(
+            final boolean suggestSkewnessValueEnabled) throws LockedException {
+<span class="fc bfc" id="L439" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L440">            throw new LockedException();</span>
+        }
+<span class="fc" id="L442">        mSuggestSkewnessValueEnabled = suggestSkewnessValueEnabled;</span>
+<span class="fc" id="L443">    }</span>
+
+    /**
+     * Gets suggested skewness value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested skewness value.
+     */
+    public double getSuggestedSkewnessValue() {
+<span class="fc" id="L453">        return mSuggestedSkewnessValue;</span>
+    }
+
+    /**
+     * Sets suggested skewness value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedSkewnessValue suggested skewness value.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue)
+            throws LockedException {
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L467">            throw new LockedException();</span>
+        }
+<span class="fc" id="L469">        mSuggestedSkewnessValue = suggestedSkewnessValue;</span>
+<span class="fc" id="L470">    }</span>
+
+    /**
+     * Indicates whether horizontal focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if horizontal focal length is suggested, false otherwise.
+     */
+    public boolean isSuggestHorizontalFocalLengthEnabled() {
+<span class="fc" id="L483">        return mSuggestHorizontalFocalLengthEnabled;</span>
+    }
+
+    /**
+     * Specifies whether horizontal focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestHorizontalFocalLengthEnabled true if horizontal focal
+     *                                            length is suggested, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestHorizontalFocalLengthEnabled(
+            final boolean suggestHorizontalFocalLengthEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L501" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L502">            throw new LockedException();</span>
+        }
+<span class="fc" id="L504">        mSuggestHorizontalFocalLengthEnabled =</span>
+                suggestHorizontalFocalLengthEnabled;
+<span class="fc" id="L506">    }</span>
+
+    /**
+     * Gets suggested horizontal focal length value to be reached when
+     * suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested horizontal focal length value.
+     */
+    public double getSuggestedHorizontalFocalLengthValue() {
+<span class="fc" id="L517">        return mSuggestedHorizontalFocalLengthValue;</span>
+    }
+
+    /**
+     * Sets suggested horizontal focal length value to be reached when
+     * suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedHorizontalFocalLengthValue suggested horizontal focal
+     *                                            length value.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedHorizontalFocalLengthValue(
+            final double suggestedHorizontalFocalLengthValue) throws LockedException {
+<span class="fc bfc" id="L532" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L533">            throw new LockedException();</span>
+        }
+<span class="fc" id="L535">        mSuggestedHorizontalFocalLengthValue =</span>
+                suggestedHorizontalFocalLengthValue;
+<span class="fc" id="L537">    }</span>
+
+    /**
+     * Indicates whether vertical focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if vertical focal length is suggested, false otherwise.
+     */
+    public boolean isSuggestVerticalFocalLengthEnabled() {
+<span class="fc" id="L550">        return mSuggestVerticalFocalLengthEnabled;</span>
+    }
+
+    /**
+     * Specifies whether vertical focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestVerticalFocalLengthEnabled true if vertical focal length is
+     *                                          suggested, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestVerticalFocalLengthEnabled(
+            final boolean suggestVerticalFocalLengthEnabled) throws LockedException {
+<span class="fc bfc" id="L567" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L568">            throw new LockedException();</span>
+        }
+<span class="fc" id="L570">        mSuggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;</span>
+<span class="fc" id="L571">    }</span>
+
+    /**
+     * Gets suggested vertical focal length value to be reached when suggestion
+     * is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested vertical focal length.
+     */
+    public double getSuggestedVerticalFocalLengthValue() {
+<span class="fc" id="L582">        return mSuggestedVerticalFocalLengthValue;</span>
+    }
+
+    /**
+     * Sets suggested vertical focal length value to be reached when suggestion
+     * is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedVerticalFocalLengthValue suggested vertical focal length.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedVerticalFocalLengthValue(
+            final double suggestedVerticalFocalLengthValue) throws LockedException {
+<span class="fc bfc" id="L596" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L597">            throw new LockedException();</span>
+        }
+<span class="fc" id="L599">        mSuggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;</span>
+<span class="fc" id="L600">    }</span>
+
+    /**
+     * Indicates whether aspect ratio is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if aspect ratio is suggested, false otherwise.
+     */
+    public boolean isSuggestAspectRatioEnabled() {
+<span class="fc" id="L613">        return mSuggestAspectRatioEnabled;</span>
+    }
+
+    /**
+     * Specifies whether aspect ratio is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestAspectRatioEnabled true if aspect ratio is suggested, false
+     *                                  otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L630" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L631">            throw new LockedException();</span>
+        }
+<span class="fc" id="L633">        mSuggestAspectRatioEnabled = suggestAspectRatioEnabled;</span>
+<span class="fc" id="L634">    }</span>
+
+    /**
+     * Gets suggested aspect ratio value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested aspect ratio value.
+     */
+    public double getSuggestedAspectRatioValue() {
+<span class="fc" id="L644">        return mSuggestedAspectRatioValue;</span>
+    }
+
+    /**
+     * Sets suggested aspect ratio value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedAspectRatioValue suggested aspect ratio value.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue)
+            throws LockedException {
+<span class="fc bfc" id="L657" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L658">            throw new LockedException();</span>
+        }
+<span class="fc" id="L660">        mSuggestedAspectRatioValue = suggestedAspectRatioValue;</span>
+<span class="fc" id="L661">    }</span>
+
+    /**
+     * Indicates whether principal point is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if principal point is suggested, false otherwise.
+     */
+    public boolean isSuggestPrincipalPointEnabled() {
+<span class="fc" id="L674">        return mSuggestPrincipalPointEnabled;</span>
+    }
+
+    /**
+     * Specifies whether principal point is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestPrincipalPointEnabled true if principal point is suggested,
+     *                                     false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestPrincipalPointEnabled(
+            final boolean suggestPrincipalPointEnabled) throws LockedException {
+<span class="fc bfc" id="L691" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L692">            throw new LockedException();</span>
+        }
+<span class="fc" id="L694">        mSuggestPrincipalPointEnabled = suggestPrincipalPointEnabled;</span>
+<span class="pc bpc" id="L695" title="1 of 4 branches missed.">        if (suggestPrincipalPointEnabled &amp;&amp;</span>
+                mSuggestedPrincipalPointValue == null) {
+<span class="fc" id="L697">            mSuggestedPrincipalPointValue = new InhomogeneousPoint2D();</span>
+        }
+<span class="fc" id="L699">    }</span>
+
+    /**
+     * Gets suggested principal point value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested principal point value to be reached when suggestion is
+     * enabled.
+     */
+    public InhomogeneousPoint2D getSuggestedPrincipalPointValue() {
+<span class="fc" id="L710">        return mSuggestedPrincipalPointValue;</span>
+    }
+
+    /**
+     * Sets suggested principal point value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedPrincipalPointValue suggested principal point value to be
+     *                                     reached when suggestion is enabled.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedPrincipalPointValue(
+            final InhomogeneousPoint2D suggestedPrincipalPointValue)
+            throws LockedException {
+<span class="fc bfc" id="L725" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L726">            throw new LockedException();</span>
+        }
+<span class="fc" id="L728">        mSuggestedPrincipalPointValue = suggestedPrincipalPointValue;</span>
+<span class="fc" id="L729">    }</span>
+
+    /**
+     * Indicates whether camera rotation is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if camera rotation is suggested, false otherwise.
+     */
+    public boolean isSuggestRotationEnabled() {
+<span class="fc" id="L742">        return mSuggestRotationEnabled;</span>
+    }
+
+    /**
+     * Specifies whether camera rotation is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestRotationEnabled true if camera rotation is suggested, false
+     *                               otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L759" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L760">            throw new LockedException();</span>
+        }
+<span class="fc" id="L762">        mSuggestRotationEnabled = suggestRotationEnabled;</span>
+<span class="pc bpc" id="L763" title="1 of 4 branches missed.">        if (suggestRotationEnabled &amp;&amp; mSuggestedRotationValue == null) {</span>
+<span class="fc" id="L764">            mSuggestedRotationValue = new Quaternion();</span>
+        }
+
+<span class="fc" id="L767">    }</span>
+
+    /**
+     * Gets suggested rotation to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested rotation to be reached when suggestion is enabled.
+     */
+    public Quaternion getSuggestedRotationValue() {
+<span class="fc" id="L777">        return mSuggestedRotationValue;</span>
+    }
+
+    /**
+     * Sets suggested rotation to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedRotationValue suggested rotation to be reached when
+     *                               suggestion is enabled.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue)
+            throws LockedException {
+<span class="fc bfc" id="L791" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L792">            throw new LockedException();</span>
+        }
+<span class="fc" id="L794">        mSuggestedRotationValue = suggestedRotationValue;</span>
+<span class="fc" id="L795">    }</span>
+
+    /**
+     * Indicates whether camera center is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if camera center is suggested, false otherwise.
+     */
+    public boolean isSuggestCenterEnabled() {
+<span class="fc" id="L808">        return mSuggestCenterEnabled;</span>
+    }
+
+    /**
+     * Specifies whether camera center is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestCenterEnabled true if camera is suggested, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L824" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L825">            throw new LockedException();</span>
+        }
+<span class="fc" id="L827">        mSuggestCenterEnabled = suggestCenterEnabled;</span>
+<span class="pc bpc" id="L828" title="1 of 4 branches missed.">        if (suggestCenterEnabled &amp;&amp; mSuggestedCenterValue == null) {</span>
+<span class="fc" id="L829">            mSuggestedCenterValue = new InhomogeneousPoint3D();</span>
+        }
+<span class="fc" id="L831">    }</span>
+
+    /**
+     * Gets suggested center to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested center to be reached when suggestion is enabled.
+     */
+    public InhomogeneousPoint3D getSuggestedCenterValue() {
+<span class="fc" id="L841">        return mSuggestedCenterValue;</span>
+    }
+
+    /**
+     * Sets suggested center to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedCenterValue suggested center to be reached when
+     *                             suggestion is enabled.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedCenterValue(
+            final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
+<span class="fc bfc" id="L855" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L856">            throw new LockedException();</span>
+        }
+<span class="fc" id="L858">        mSuggestedCenterValue = suggestedCenterValue;</span>
+<span class="fc" id="L859">    }</span>
+
+    /**
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L868">        return mLocked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L879">        return mProgressDelta;</span>
+    }
+
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L894" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L895">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L897" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+                progressDelta &gt; MAX_PROGRESS_DELTA) {
+<span class="fc" id="L899">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L901">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L902">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L913">        return mConfidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L929" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L930">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L932" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L933">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L935">        mConfidence = confidence;</span>
+<span class="fc" id="L936">    }</span>
+
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L946">        return mMaxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L960" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L961">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L963" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L964">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L966">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L967">    }</span>
+
+    /**
+     * Gets data related to inliers found after estimation.
+     *
+     * @return data related to inliers found after estimation.
+     */
+    public InliersData getInliersData() {
+<span class="fc" id="L975">        return mInliersData;</span>
+    }
+
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If true, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     *
+     * @return true to refine result, false to simply use result found by
+     * robust estimator without further refining.
+     */
+    public boolean isResultRefined() {
+<span class="fc" id="L988">        return mRefineResult;</span>
+    }
+
+    /**
+     * Specifies whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     *
+     * @param refineResult true to refine result, false to simply use result
+     *                     found by robust estimator without further refining.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setResultRefined(final boolean refineResult) throws LockedException {
+<span class="pc bpc" id="L1000" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L1001">            throw new LockedException();</span>
+        }
+<span class="fc" id="L1003">        mRefineResult = refineResult;</span>
+<span class="fc" id="L1004">    }</span>
+
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     *
+     * @return true if covariance must be kept after refining result, false
+     * otherwise.
+     */
+    public boolean isCovarianceKept() {
+<span class="fc" id="L1014">        return mKeepCovariance;</span>
+    }
+
+    /**
+     * Specifies whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     *
+     * @param keepCovariance true if covariance must be kept after refining
+     *                       result, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setCovarianceKept(final boolean keepCovariance)
+            throws LockedException {
+<span class="pc bpc" id="L1027" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L1028">            throw new LockedException();</span>
+        }
+<span class="fc" id="L1030">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L1031">    }</span>
+
+    /**
+     * Indicates whether fast refinement must be used or not.
+     * When true Levenberg/Marquardt refinement will be used, when false
+     * an initial Powell optimization is done and then Levenberg/Marquard is
+     * used for covariance estimation if needed.
+     * Fast refinement requires less computing time, but it is more likely to
+     * fail than slow one.
+     *
+     * @return true to use fast refinement, false to use a slow but more
+     * accurate and stable refinement.
+     */
+    public boolean isFastRefinementUsed() {
+<span class="fc" id="L1045">        return mUseFastRefinement;</span>
+    }
+
+    /**
+     * Specifies whether fast refinement must be used or not.
+     * When true Levenberg/Marquardt refinement will be used, when false
+     * an initial Powell optimization is done and then Levenberg/Marquard is
+     * used for covariance estimation if needed.
+     * Fast refinement requires less computing time, but it is more likely to
+     * fail than slow one.
+     *
+     * @param useFastRefinement true to use fast refinement, false to use a slow
+     *                          but more accurate and stable refinement.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setFastRefinementUsed(final boolean useFastRefinement)
+            throws LockedException {
+<span class="fc bfc" id="L1062" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L1063">            throw new LockedException();</span>
+        }
+<span class="fc" id="L1065">        mUseFastRefinement = useFastRefinement;</span>
+<span class="fc" id="L1066">    }</span>
+
+    /**
+     * Gets estimated covariance of estimated pinhole camera if available.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     *
+     * @return estimated covariance or null.
+     */
+    public Matrix getCovariance() {
+<span class="fc" id="L1076">        return mCovariance;</span>
+    }
+
+    /**
+     * Estimates a pinhole camera using a robust estimator and
+     * the best set of matched 2D/3D point correspondences or 2D line/3D plane
+     * correspondences found using the robust estimator.
+     *
+     * @return a pinhole camera.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract PinholeCamera estimate() throws LockedException,
+            NotReadyException, RobustEstimatorException;
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    protected abstract double getRefinementStandardDeviation();
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1132">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,</span>
+                points2D, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1156">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                points3D, points2D, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided quality scores and robust estimator
+     * method.
+     *
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L1180">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,</span>
+                points2D, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener, quality scores and robust
+     * estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L1207">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                points3D, points2D, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1225">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,</span>
+                points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1247">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                points3D, points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided quality scores and default robust
+     * estimator method.
+     *
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores) {
+<span class="fc" id="L1269">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,</span>
+                points2D, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores) {
+<span class="fc" id="L1294">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                points3D, points2D, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
+     * @param method    method of a robust estimator algorithm to estimate the best
+     *                  pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final RobustEstimatorMethod method) {
+<span class="fc" id="L1316">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,</span>
+                points3D, points2D, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and robust estimator method.
+     *
+     * @param listener  listener to be notified of events such as when estimation
+     *                  starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
+     * @param method    method of a robust estimator algorithm to estimate the best
+     *                  pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final RobustEstimatorMethod method) {
+<span class="fc" id="L1341">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                intrinsic, points3D, points2D, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided quality scores and robust estimator
+     * method.
+     *
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1367">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,</span>
+                points3D, points2D, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener, quality scores and robust
+     * estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L1396">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                intrinsic, points3D, points2D, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraIntrinsicParameters intrinsic,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1416">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,</span>
+                points3D, points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     *
+     * @param listener  listener to be notified of events such as when estimation
+     *                  starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1440">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                intrinsic, points3D, points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided quality scores and default robust
+     * estimator method.
+     *
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores) {
+<span class="fc" id="L1463">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,</span>
+                points3D, points2D, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param intrinsic     intrinsic parameters of camera to be estimated.
+     * @param points3D      list of 3D points used to estimate a pinhole camera.
+     * @param points2D      list of corresponding projected 2D points used to
+     *                      estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final PinholeCameraIntrinsicParameters intrinsic, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores) {
+<span class="fc" id="L1489">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                intrinsic, points3D, points2D, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @param method                   method of a robust estimator algorithm to estimate the best
+     *                                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final RobustEstimatorMethod method) {
+<span class="fc" id="L1517">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
+                points2D, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and robust estimator method.
+     *
+     * @param listener                 listener to be notified of events such as when estimation
+     *                                 starts, ends or its progress significantly changes.
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @param method                   method of a robust estimator algorithm to estimate the best
+     *                                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final RobustEstimatorMethod method) {
+<span class="fc" id="L1549">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
+                points3D, points2D, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided quality scores and robust estimator
+     * method.
+     *
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @param qualityScores            quality scores corresponding to each pair of matched
+     *                                 points.
+     * @param method                   method of a robust estimator algorithm to estimate the best
+     *                                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1582">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
+                points2D, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener, quality scores and robust
+     * estimator method.
+     *
+     * @param listener                 listener to be notified of events such as when estimation
+     *                                 starts, ends or its progress significantly changes.
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @param qualityScores            quality scores corresponding to each pair of matched
+     *                                 points.
+     * @param method                   method of a robust estimator algorithm to estimate the best
+     *                                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1618">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
+                points3D, points2D, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1645">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
+                points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     *
+     * @param listener                 listener to be notified of events such as when estimation
+     *                                 starts, ends or its progress significantly changes.
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1676">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
+                points3D, points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided quality scores and default robust
+     * estimator method.
+     *
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @param qualityScores            quality scores corresponding to each pair of matched
+     *                                 points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores) {
+<span class="fc" id="L1706">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
+                points2D, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     *
+     * @param listener                 listener to be notified of events such as when estimation
+     *                                 starts, ends or its progress significantly changes.
+     * @param skewness                 skewness value of intrinsic parameters of camera to be
+     *                                 estimated.
+     * @param horizontalPrincipalPoint horizontal principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param verticalPrincipalPoint   vertical principal point value of
+     *                                 intrinsic parameters of camera to be estimated.
+     * @param points3D                 list of 3D points used to estimate a pinhole camera.
+     * @param points2D                 list of corresponding projected 2D points used to
+     *                                 estimate a pinhole camera.
+     * @param qualityScores            quality scores corresponding to each pair of matched
+     *                                 points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     *                                  scores don't have the same size  or their size is smaller than required
+     *                                  minimum size (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener,
+            final double skewness, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final List&lt;Point3D&gt; points3D,
+            final List&lt;Point2D&gt; points2D, final double[] qualityScores) {
+<span class="fc" id="L1739">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
+                points3D, points2D, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided robust estimator method.
+     *
+     * @param planes list of 3D planes used to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines don't
+     *                                  have the same size or their size is smaller than required minimum size (4
+     *                                  correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1761">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                planes, lines, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided listener and robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of 3D planes used to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines don't
+     *                                  have the same size or their size is smaller than required minimum size (4
+     *                                  correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1785">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                listener, planes, lines, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided quality scores and robust estimator
+     * method.
+     *
+     * @param planes        list of 3D planes used to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      samples.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines and
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1809">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                planes, lines, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided listener, quality scores and robust
+     * estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        list of 3D planes used to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      samples.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines and
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes,
+            final List&lt;Line2D&gt; lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L1836">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                listener, planes, lines, qualityScores, method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using default robust estimator method.
+     *
+     * @param planes list of 3D planes used to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines don't
+     *                                  have the same size or their size is smaller than required minimum size (4
+     *                                  correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L1854">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                planes, lines);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of 3D planes used to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines don't
+     *                                  have the same size or their size is smaller than required minimum size (4
+     *                                  correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L1876">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                listener, planes, lines);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided quality scores and default robust
+     * estimator method.
+     *
+     * @param planes        list of 3D planes used to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      samples.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines and
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines, final double[] qualityScores) {
+<span class="fc" id="L1897">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                planes, lines, qualityScores);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 3D plane/2D line
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        list of 3D planes used to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      samples.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes/lines and
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPlanesAndLines(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes,
+            final List&lt;Line2D&gt; lines, final double[] qualityScores) {
+<span class="fc" id="L1921">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+                listener, planes, lines, qualityScores);
+    }
+
+    /**
+     * Indicates whether obtained solution requires refinement to apply provided
+     * suggestions.
+     *
+     * @return true if solution requires refinement to apply provided
+     * suggestions, false otherwise.
+     */
+    protected boolean hasSuggestions() {
+<span class="fc bfc" id="L1933" title="All 4 branches covered.">        return hasIntrinsicSuggestions() || hasExtrinsicSuggestions();</span>
+    }
+
+    /**
+     * Indicates whether suggestions for any intrinsic parameter are required
+     * or not.
+     *
+     * @return true if suggestions for any intrinsic parameters are required,
+     * false otherwise.
+     */
+    private boolean hasIntrinsicSuggestions() {
+<span class="fc bfc" id="L1944" title="All 8 branches covered.">        return mSuggestSkewnessValueEnabled ||</span>
+                mSuggestHorizontalFocalLengthEnabled ||
+                mSuggestVerticalFocalLengthEnabled ||
+                mSuggestAspectRatioEnabled;
+    }
+
+    /**
+     * Indicates whether suggestions for any extrinsic parameter are required
+     * or not.
+     *
+     * @return true if suggestions for any extrinsic parameter are required,
+     * false otherwise.
+     */
+    private boolean hasExtrinsicSuggestions() {
+<span class="fc bfc" id="L1958" title="All 6 branches covered.">        return mSuggestPrincipalPointEnabled ||</span>
+                mSuggestRotationEnabled || mSuggestCenterEnabled;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

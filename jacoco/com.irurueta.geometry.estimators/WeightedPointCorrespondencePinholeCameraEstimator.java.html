@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeightedPointCorrespondencePinholeCameraEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">WeightedPointCorrespondencePinholeCameraEstimator.java</span></div><h1>WeightedPointCorrespondencePinholeCameraEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.geometry.NotAvailableException;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.WeightSelection;
+
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * This class implements pinhole camera estimator using a weighted algorithm and
+ * point correspondences.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class WeightedPointCorrespondencePinholeCameraEstimator extends
+        PointCorrespondencePinholeCameraEstimator {
+
+    /**
+     * Default number of points (i.e. correspondences) to be weighted and taken
+     * into account.
+     */
+    public static final int DEFAULT_MAX_POINTS = 50;
+
+    /**
+     * Indicates if weights are sorted by default so that largest weighted
+     * correspondences are used first.
+     */
+    public static final boolean DEFAULT_SORT_WEIGHTS = true;
+
+    /**
+     * Maximum number of points (i.e. correspondences) to be weighted and taken
+     * into account.
+     */
+    private int mMaxPoints;
+
+    /**
+     * Indicates if weights are sorted by default so that largest weighted
+     * correspondences are used first.
+     */
+    private boolean mSortWeights;
+
+    /**
+     * Array containing weights for all point correspondences.
+     */
+    private double[] mWeights;
+
+    /**
+     * Constructor.
+     */
+    public WeightedPointCorrespondencePinholeCameraEstimator() {
+<span class="fc" id="L71">        super();</span>
+<span class="fc" id="L72">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
+<span class="fc" id="L73">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L74">        mWeights = null;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     */
+    public WeightedPointCorrespondencePinholeCameraEstimator(
+            final PinholeCameraEstimatorListener listener) {
+<span class="fc" id="L85">        super(listener);</span>
+<span class="fc" id="L86">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
+<span class="fc" id="L87">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L88">        mWeights = null;</span>
+<span class="fc" id="L89">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public WeightedPointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D)
+            throws WrongListSizesException {
+<span class="fc" id="L103">        super(points3D, points2D);</span>
+<span class="fc" id="L104">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
+<span class="fc" id="L105">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L106">        mWeights = null;</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public WeightedPointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final PinholeCameraEstimatorListener listener)
+            throws WrongListSizesException {
+<span class="fc" id="L124">        super(points3D, points2D, listener);</span>
+<span class="fc" id="L125">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
+<span class="fc" id="L126">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L127">        mWeights = null;</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param weights  array containing a weight amount for each correspondence.
+     *                 The larger the value of a weight, the most significant the
+     *                 correspondence will be.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public WeightedPointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] weights) throws WrongListSizesException {
+<span class="fc" id="L145">        super();</span>
+<span class="fc" id="L146">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
+<span class="fc" id="L147">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L148">        mWeights = null;</span>
+<span class="fc" id="L149">        internalSetListsAndWeights(points3D, points2D, weights);</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param weights  array containing a weight amount for each correspondence.
+     *                 The larger the value of a weight, the most significant the
+     *                 correspondence will be.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public WeightedPointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] weights, final PinholeCameraEstimatorListener listener)
+            throws WrongListSizesException {
+<span class="fc" id="L170">        super(listener);</span>
+<span class="fc" id="L171">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
+<span class="fc" id="L172">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L173">        mWeights = null;</span>
+<span class="fc" id="L174">        internalSetListsAndWeights(points3D, points2D, weights);</span>
+<span class="fc" id="L175">    }</span>
+
+    /**
+     * Internal method to set list of corresponding points (it does not check
+     * if estimator is locked).
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param weights  array containing a weight amount for each correspondence.
+     *                 The larger the value of a weight, the most significant the
+     *                 correspondence will be.
+     * @throws IllegalArgumentException if any of the lists or arrays are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points or if the length of the weights array
+     *                                  is not equal to the number of point correspondences.
+     */
+    private void internalSetListsAndWeights(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] weights) throws WrongListSizesException {
+
+<span class="fc bfc" id="L195" title="All 6 branches covered.">        if (points3D == null || points2D == null || weights == null) {</span>
+<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (!areValidListsAndWeights(points3D, points2D, weights)) {</span>
+<span class="fc" id="L200">            throw new WrongListSizesException();</span>
+        }
+
+<span class="fc" id="L203">        mPoints3D = points3D;</span>
+<span class="fc" id="L204">        mPoints2D = points2D;</span>
+<span class="fc" id="L205">        mWeights = weights;</span>
+<span class="fc" id="L206">    }</span>
+
+    /**
+     * Sets list of corresponding points.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param weights  array containing a weight amount for each correspondence.
+     *                 The larger the value of a weight, the most significant the
+     *                 correspondence will be.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public void setListsAndWeights(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] weights) throws LockedException, WrongListSizesException {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L225">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L228">        internalSetListsAndWeights(points3D, points2D, weights);</span>
+<span class="fc" id="L229">    }</span>
+
+    /**
+     * Indicates if lists of corresponding 2D/3D points are valid.
+     * Lists are considered valid if they have the same number of points and
+     * both have more than the required minimum of correspondences (which is 6).
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param weights  array containing a weight amount for each correspondence.
+     *                 The larger the value of a weight, the most significant the
+     *                 correspondence will be.
+     * @return true if corresponding 2D/3D points are valid, false otherwise.
+     */
+    public static boolean areValidListsAndWeights(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D,
+            final double[] weights) {
+<span class="fc bfc" id="L246" title="All 6 branches covered.">        if (points3D == null || points2D == null || weights == null) {</span>
+<span class="fc" id="L247">            return false;</span>
+        }
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        return points3D.size() == points2D.size() &amp;&amp;</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">                points2D.size() == weights.length &amp;&amp;</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                points3D.size() &gt;= MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
+    }
+
+    /**
+     * Returns array containing a weight amount for each correspondence.
+     * The larger the value of a weight, the most significant the
+     * correspondence will be.
+     *
+     * @return array containing weights for each correspondence.
+     * @throws NotAvailableException if weights are not available.
+     */
+    public double[] getWeights() throws NotAvailableException {
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (!areWeightsAvailable()) {</span>
+<span class="fc" id="L264">            throw new NotAvailableException();</span>
+        }
+<span class="fc" id="L266">        return mWeights;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether weights have been provided and are
+     * available for retrieval.
+     *
+     * @return true if weights are available, false otherwise.
+     */
+    public boolean areWeightsAvailable() {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        return mWeights != null;</span>
+    }
+
+    /**
+     * Returns maximum number of points (i.e. correspondences) to be weighted
+     * and taken into account.
+     *
+     * @return maximum number of points to be weighted.
+     */
+    public int getMaxPoints() {
+<span class="fc" id="L286">        return mMaxPoints;</span>
+    }
+
+    /**
+     * Sets maximum number of points (i.e. correspondences) to be weighted and
+     * taken into account.
+     *
+     * @param maxPoints maximum number of points to be weighted.
+     * @throws IllegalArgumentException if provided value is less than the
+     *                                  minimum allowed number of point correspondences.
+     * @throws LockedException          if this instance is locked.
+     */
+    public void setMaxPoints(final int maxPoints) throws LockedException {
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L300">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (maxPoints &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
+<span class="nc" id="L303">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L306">        mMaxPoints = maxPoints;</span>
+<span class="fc" id="L307">    }</span>
+
+    /**
+     * Indicates if weights are sorted by so that largest weighted
+     * correspondences are used first.
+     *
+     * @return true if weights are sorted, false otherwise.
+     */
+    public boolean isSortWeightsEnabled() {
+<span class="fc" id="L316">        return mSortWeights;</span>
+    }
+
+    /**
+     * Specifies whether weights are sorted by so that largest weighted
+     * correspondences are used first.
+     *
+     * @param sortWeights true if weights are sorted, false otherwise.
+     * @throws LockedException if this instance is locked.
+     */
+    public void setSortWeightsEnabled(final boolean sortWeights)
+            throws LockedException {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L329">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L332">        mSortWeights = sortWeights;</span>
+<span class="fc" id="L333">    }</span>
+
+    /**
+     * Indicates if this estimator is ready to start the estimation.
+     * Estimator will be ready once both lists and weights are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L343" title="All 4 branches covered.">        return areListsAvailable() &amp;&amp; areWeightsAvailable();</span>
+    }
+
+    /**
+     * Internal method that actually computes the normalized pinhole camera
+     * internal matrix.
+     * Returned matrix must have norm equal to one and might be estimated using
+     * any convenient algorithm (i.e. DLT or weighted DLT).
+     *
+     * @param points3D list of 3D points. Points might or might not be
+     *                 normalized.
+     * @param points2D list of 2D points. Points might or might not be
+     *                 normalized.
+     * @return matrix of estimated pinhole camera.
+     * @throws PinholeCameraEstimatorException if estimation fails for some
+     *                                         reason (i.e. numerical instability or geometric degeneracy).
+     */
+    @Override
+    protected Matrix internalEstimate(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D)
+            throws PinholeCameraEstimatorException {
+
+        try {
+<span class="fc" id="L366">            final WeightSelection selection = WeightSelection.selectWeights(mWeights,</span>
+                    mSortWeights, mMaxPoints);
+<span class="fc" id="L368">            final boolean[] selected = selection.getSelected();</span>
+
+<span class="fc" id="L370">            final Matrix a = new Matrix(12, 12);</span>
+<span class="fc" id="L371">            final Matrix row = new Matrix(2, 12);</span>
+<span class="fc" id="L372">            final Matrix transRow = new Matrix(12, 2);</span>
+<span class="fc" id="L373">            final Matrix tmp = new Matrix(12, 12);</span>
+
+<span class="fc" id="L375">            final Iterator&lt;Point2D&gt; iterator2D = points2D.iterator();</span>
+<span class="fc" id="L376">            final Iterator&lt;Point3D&gt; iterator3D = points3D.iterator();</span>
+
+            Point2D point2D;
+            Point3D point3D;
+<span class="fc" id="L380">            int index = 0;</span>
+<span class="fc" id="L381">            int nMatches = 0;</span>
+            double homImageX;
+            double homImageY;
+            double homImageW;
+            double homWorldX;
+            double homWorldY;
+            double homWorldZ;
+            double homWorldW;
+            double weight;
+<span class="fc" id="L390">            double previousNorm = 1.0;</span>
+            double rowNorm;
+<span class="pc bpc" id="L392" title="1 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
+<span class="fc" id="L393">                point2D = iterator2D.next();</span>
+<span class="fc" id="L394">                point3D = iterator3D.next();</span>
+
+<span class="fc bfc" id="L396" title="All 2 branches covered.">                if (selected[index]) {</span>
+<span class="fc" id="L397">                    weight = mWeights[index];</span>
+
+<span class="pc bpc" id="L399" title="1 of 2 branches missed.">                    if (Math.abs(weight) &lt; EPS) {</span>
+                        // skip, because weight is too small
+<span class="nc" id="L401">                        index++;</span>
+<span class="nc" id="L402">                        continue;</span>
+                    }
+
+                    // normalize points to increase accuracy
+<span class="fc" id="L406">                    point2D.normalize();</span>
+<span class="fc" id="L407">                    point3D.normalize();</span>
+
+<span class="fc" id="L409">                    homImageX = point2D.getHomX();</span>
+<span class="fc" id="L410">                    homImageY = point2D.getHomY();</span>
+<span class="fc" id="L411">                    homImageW = point2D.getHomW();</span>
+
+<span class="fc" id="L413">                    homWorldX = point3D.getHomX();</span>
+<span class="fc" id="L414">                    homWorldY = point3D.getHomY();</span>
+<span class="fc" id="L415">                    homWorldZ = point3D.getHomZ();</span>
+<span class="fc" id="L416">                    homWorldW = point3D.getHomW();</span>
+
+                    // first row
+<span class="fc" id="L419">                    row.setElementAt(0, 0, homImageW * homWorldX * weight);</span>
+<span class="fc" id="L420">                    row.setElementAt(0, 1, homImageW * homWorldY * weight);</span>
+<span class="fc" id="L421">                    row.setElementAt(0, 2, homImageW * homWorldZ * weight);</span>
+<span class="fc" id="L422">                    row.setElementAt(0, 3, homImageW * homWorldW * weight);</span>
+
+                    // columns 4, 5, 6, 7 are left with zero values
+
+<span class="fc" id="L426">                    row.setElementAt(0, 8, -homImageX * homWorldX * weight);</span>
+<span class="fc" id="L427">                    row.setElementAt(0, 9, -homImageX * homWorldY * weight);</span>
+<span class="fc" id="L428">                    row.setElementAt(0, 10, -homImageX * homWorldZ * weight);</span>
+<span class="fc" id="L429">                    row.setElementAt(0, 11, -homImageX * homWorldW * weight);</span>
+
+                    // normalize row
+<span class="fc" id="L432">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L433">                            Math.pow(row.getElementAt(0, 0), 2.0) +</span>
+<span class="fc" id="L434">                                    Math.pow(row.getElementAt(0, 1), 2.0) +</span>
+<span class="fc" id="L435">                                    Math.pow(row.getElementAt(0, 2), 2.0) +</span>
+<span class="fc" id="L436">                                    Math.pow(row.getElementAt(0, 3), 2.0) +</span>
+<span class="fc" id="L437">                                    Math.pow(row.getElementAt(0, 8), 2.0) +</span>
+<span class="fc" id="L438">                                    Math.pow(row.getElementAt(0, 9), 2.0) +</span>
+<span class="fc" id="L439">                                    Math.pow(row.getElementAt(0, 10), 2.0) +</span>
+<span class="fc" id="L440">                                    Math.pow(row.getElementAt(0, 11), 2.0));</span>
+
+<span class="fc" id="L442">                    row.setElementAt(0, 0, row.getElementAt(0, 0) /</span>
+                            rowNorm);
+<span class="fc" id="L444">                    row.setElementAt(0, 1, row.getElementAt(0, 1) /</span>
+                            rowNorm);
+<span class="fc" id="L446">                    row.setElementAt(0, 2, row.getElementAt(0, 2) /</span>
+                            rowNorm);
+<span class="fc" id="L448">                    row.setElementAt(0, 3, row.getElementAt(0, 3) /</span>
+                            rowNorm);
+<span class="fc" id="L450">                    row.setElementAt(0, 8, row.getElementAt(0, 8) /</span>
+                            rowNorm);
+<span class="fc" id="L452">                    row.setElementAt(0, 9, row.getElementAt(0, 9) /</span>
+                            rowNorm);
+<span class="fc" id="L454">                    row.setElementAt(0, 10, row.getElementAt(0, 10) /</span>
+                            rowNorm);
+<span class="fc" id="L456">                    row.setElementAt(0, 11, row.getElementAt(0, 11) /</span>
+                            rowNorm);
+
+                    // second row
+
+                    // columns 0, 1, 2, 3 are left with zero values
+
+<span class="fc" id="L463">                    row.setElementAt(1, 4, homImageW * homWorldX * weight);</span>
+<span class="fc" id="L464">                    row.setElementAt(1, 5, homImageW * homWorldY * weight);</span>
+<span class="fc" id="L465">                    row.setElementAt(1, 6, homImageW * homWorldZ * weight);</span>
+<span class="fc" id="L466">                    row.setElementAt(1, 7, homImageW * homWorldW * weight);</span>
+
+<span class="fc" id="L468">                    row.setElementAt(1, 8, -homImageY * homWorldX * weight);</span>
+<span class="fc" id="L469">                    row.setElementAt(1, 9, -homImageY * homWorldY * weight);</span>
+<span class="fc" id="L470">                    row.setElementAt(1, 10, -homImageY * homWorldZ * weight);</span>
+<span class="fc" id="L471">                    row.setElementAt(1, 11, -homImageY * homWorldW * weight);</span>
+
+                    // normalize row
+<span class="fc" id="L474">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L475">                            Math.pow(row.getElementAt(1, 4), 2.0) +</span>
+<span class="fc" id="L476">                                    Math.pow(row.getElementAt(1, 5), 2.0) +</span>
+<span class="fc" id="L477">                                    Math.pow(row.getElementAt(1, 6), 2.0) +</span>
+<span class="fc" id="L478">                                    Math.pow(row.getElementAt(1, 7), 2.0) +</span>
+<span class="fc" id="L479">                                    Math.pow(row.getElementAt(1, 8), 2.0) +</span>
+<span class="fc" id="L480">                                    Math.pow(row.getElementAt(1, 9), 2.0) +</span>
+<span class="fc" id="L481">                                    Math.pow(row.getElementAt(1, 10), 2.0) +</span>
+<span class="fc" id="L482">                                    Math.pow(row.getElementAt(1, 11), 2.0));</span>
+
+<span class="fc" id="L484">                    row.setElementAt(1, 4, row.getElementAt(1, 4) /</span>
+                            rowNorm);
+<span class="fc" id="L486">                    row.setElementAt(1, 5, row.getElementAt(1, 5) /</span>
+                            rowNorm);
+<span class="fc" id="L488">                    row.setElementAt(1, 6, row.getElementAt(1, 6) /</span>
+                            rowNorm);
+<span class="fc" id="L490">                    row.setElementAt(1, 7, row.getElementAt(1, 7) /</span>
+                            rowNorm);
+<span class="fc" id="L492">                    row.setElementAt(1, 8, row.getElementAt(1, 8) /</span>
+                            rowNorm);
+<span class="fc" id="L494">                    row.setElementAt(1, 9, row.getElementAt(1, 9) /</span>
+                            rowNorm);
+<span class="fc" id="L496">                    row.setElementAt(1, 10, row.getElementAt(1, 10) /</span>
+                            rowNorm);
+<span class="fc" id="L498">                    row.setElementAt(1, 11, row.getElementAt(1, 11) /</span>
+                            rowNorm);
+
+                    // transRow = row'
+<span class="fc" id="L502">                    row.transpose(transRow);</span>
+                    // tmp = row' * row
+<span class="fc" id="L504">                    transRow.multiply(row, tmp);</span>
+
+<span class="fc" id="L506">                    tmp.multiplyByScalar(1.0 / previousNorm);</span>
+
+                    // a += 1.0 / previousNorm * tmp
+<span class="fc" id="L509">                    a.add(tmp);</span>
+                    // normalize
+<span class="fc" id="L511">                    previousNorm = Utils.normF(a);</span>
+<span class="fc" id="L512">                    a.multiplyByScalar(1.0 / previousNorm);</span>
+
+<span class="fc" id="L514">                    nMatches++;</span>
+                }
+<span class="fc" id="L516">                index++;</span>
+            }
+
+<span class="pc bpc" id="L519" title="1 of 2 branches missed.">            if (nMatches &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
+<span class="nc" id="L520">                throw new PinholeCameraEstimatorException();</span>
+            }
+
+<span class="fc" id="L523">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+<span class="fc" id="L524">            decomposer.decompose();</span>
+
+<span class="pc bpc" id="L526" title="1 of 2 branches missed.">            if (decomposer.getNullity() &gt; 1) {</span>
+                // point configuration is degenerate and exists a linear
+                // combination of possible pinhole cameras (i.e. solution is not
+                // unique up to scale)
+<span class="nc" id="L530">                throw new PinholeCameraEstimatorException();</span>
+            }
+
+<span class="fc" id="L533">            final Matrix v = decomposer.getV();</span>
+
+            // use last column of V as pinhole camera vector
+
+            // the last column of V contains pinhole camera matrix ordered by
+            // rows as: P11, P12, P13, P14, P21, P22, P23, P24, P31, P32, P33,
+            // P34, hence we reorder p
+<span class="fc" id="L540">            final Matrix pinholeCameraMatrix = new Matrix(</span>
+                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
+                    PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
+
+<span class="fc" id="L544">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
+<span class="fc" id="L545">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(1, 11));</span>
+<span class="fc" id="L546">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(2, 11));</span>
+<span class="fc" id="L547">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(3, 11));</span>
+
+<span class="fc" id="L549">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(4, 11));</span>
+<span class="fc" id="L550">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(5, 11));</span>
+<span class="fc" id="L551">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(6, 11));</span>
+<span class="fc" id="L552">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(7, 11));</span>
+
+<span class="fc" id="L554">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(8, 11));</span>
+<span class="fc" id="L555">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(9, 11));</span>
+<span class="fc" id="L556">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(10, 11));</span>
+<span class="fc" id="L557">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
+
+            // because pinholeCameraMatrix has been obtained as the last column
+            // of V, then its Frobenius norm will be 1 because SVD already
+            // returns normalized singular vector
+
+<span class="fc" id="L563">            return pinholeCameraMatrix;</span>
+
+<span class="nc" id="L565">        } catch (final PinholeCameraEstimatorException e) {</span>
+<span class="nc" id="L566">            throw e;</span>
+<span class="nc" id="L567">        } catch (final Exception e) {</span>
+<span class="nc" id="L568">            throw new PinholeCameraEstimatorException(e);</span>
+        }
+    }
+
+    /**
+     * Returns type of pinhole camera estimator.
+     *
+     * @return type of pinhole camera estimator.
+     */
+    @Override
+    public PinholeCameraEstimatorType getType() {
+<span class="fc" id="L579">        return PinholeCameraEstimatorType.</span>
+                WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

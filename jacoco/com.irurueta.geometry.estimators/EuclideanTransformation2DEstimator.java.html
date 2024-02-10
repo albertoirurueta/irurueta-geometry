@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EuclideanTransformation2DEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">EuclideanTransformation2DEstimator.java</span></div><h1>EuclideanTransformation2DEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.EuclideanTransformation2D;
+import com.irurueta.geometry.InvalidRotationMatrixException;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Rotation2D;
+
+import java.util.List;
+
+/**
+ * Estimator of a 2D Euclidean transformation based on point correspondences.
+ * This estimator uses Kabsch algorithm on 2D.
+ * A minimum of 3 non-coincident matched 2D input/output points is required for
+ * estimation.
+ * For some point configurations 2 points are enough to find a valid solution.
+ * If more points are provided an LMSE (Least Mean Squared Error) solution will
+ * be found.
+ * Based on:
+ * &lt;a href=&quot;https://en.wikipedia.org/wiki/Kabsch_algorithm&quot;&gt;
+ *     https://en.wikipedia.org/wiki/Kabsch_algorithm
+ * &lt;/a&gt;
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class EuclideanTransformation2DEstimator {
+
+    /**
+     * Minimum required number of matched points.
+     */
+    public static final int MINIMUM_SIZE = 3;
+
+    /**
+     * For some point configurations a solution can be found with only 2 points.
+     */
+    public static final int WEAK_MINIMUM_SIZE = 2;
+
+    /**
+     * 2D input points.
+     */
+    private List&lt;Point2D&gt; mInputPoints;
+
+    /**
+     * 2D output points.
+     */
+    private List&lt;Point2D&gt; mOutputPoints;
+
+    /**
+     * Listener to be notified of events such as when estimation starts or ends.
+     */
+    private EuclideanTransformation2DEstimatorListener mListener;
+
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     * True allows 2 points, false requires 3.
+     */
+    private boolean mWeakMinimumSizeAllowed;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    private boolean mLocked;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L86">    public EuclideanTransformation2DEstimator() {</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputPoints  2D input points.
+     * @param outputPoints 2D input points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 3.
+     */
+    public EuclideanTransformation2DEstimator(final List&lt;Point2D&gt; inputPoints,
+<span class="fc" id="L98">                                              final List&lt;Point2D&gt; outputPoints) {</span>
+<span class="fc" id="L99">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts or ends.
+     */
+    public EuclideanTransformation2DEstimator(
+<span class="fc" id="L109">            final EuclideanTransformation2DEstimatorListener listener) {</span>
+<span class="fc" id="L110">        mListener = listener;</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts or ends.
+     * @param inputPoints  2D input points.
+     * @param outputPoints 2D output points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 3.
+     */
+    public EuclideanTransformation2DEstimator(
+            final EuclideanTransformation2DEstimatorListener listener,
+<span class="fc" id="L125">            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {</span>
+<span class="fc" id="L126">        mListener = listener;</span>
+<span class="fc" id="L127">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+<span class="fc" id="L135">    public EuclideanTransformation2DEstimator(final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L136">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputPoints            2D input points.
+     * @param outputPoints           2D input points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 3.
+     */
+    public EuclideanTransformation2DEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints,
+<span class="fc" id="L150">            final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L151">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L152">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public EuclideanTransformation2DEstimator(
+            final EuclideanTransformation2DEstimatorListener listener,
+<span class="fc" id="L164">            final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L165">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L166">        mListener = listener;</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param inputPoints            2D input points.
+     * @param outputPoints           2D output points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 3.
+     */
+    public EuclideanTransformation2DEstimator(
+            final EuclideanTransformation2DEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints,
+<span class="fc" id="L183">            final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L184">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L185">        mListener = listener;</span>
+<span class="fc" id="L186">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L187">    }</span>
+
+    /**
+     * Returns list of input points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Each point in the list of input points must be matched with the
+     * corresponding point in the list of output points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of input points to be used to estimate an Euclidean
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getInputPoints() {
+<span class="fc" id="L201">        return mInputPoints;</span>
+    }
+
+    /**
+     * Returns list of output points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Each point in the list of output points must be matched with the
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of input points to be used to estimate an Euclidean
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getOutputPoints() {
+<span class="fc" id="L216">        return mOutputPoints;</span>
+    }
+
+    /**
+     * Sets list of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points ot be used ot estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points ot be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public void setPoints(final List&lt;Point2D&gt; inputPoints,
+                          final List&lt;Point2D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L238">            throw new LockedException();</span>
+        }
+<span class="fc" id="L240">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L241">    }</span>
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts or ends.
+     *
+     * @return listener to be notified of events.
+     */
+    public EuclideanTransformation2DEstimatorListener getListener() {
+<span class="fc" id="L250">        return mListener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts or
+     * ends.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setListener(final EuclideanTransformation2DEstimatorListener listener)
+            throws LockedException {
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L263">            throw new LockedException();</span>
+        }
+<span class="fc" id="L265">        mListener = listener;</span>
+<span class="fc" id="L266">    }</span>
+
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     *
+     * @return true allows 2 points, false requires 3.
+     */
+    public boolean isWeakMinimumSizeAllowed() {
+<span class="fc" id="L274">        return mWeakMinimumSizeAllowed;</span>
+    }
+
+    /**
+     * Specifies whether estimation can start with only 2 points or not.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed)
+            throws LockedException {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L286">            throw new LockedException();</span>
+        }
+<span class="fc" id="L288">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Required minimum number of point correspondences to start the estimation.
+     * Can be either 2 or 3.
+     *
+     * @return minimum number of point correspondences.
+     */
+    public int getMinimumPoints() {
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+    }
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L318">        return mLocked;</span>
+    }
+
+    /**
+     * Indicates if estimator is ready to start the Euclidean 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points) are provided
+     * and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L330" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+    }
+
+    /**
+     * Estimates an Euclidean 2D transformation using the list of matched input
+     * and output 2D points.
+     * A minimum of 3 matched non-coincident points is required. If more points
+     * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
+     * @return estimated euclidean 2D transformation.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public EuclideanTransformation2D estimate() throws LockedException,
+            NotReadyException, CoincidentPointsException {
+<span class="fc" id="L350">        final EuclideanTransformation2D result = new EuclideanTransformation2D();</span>
+<span class="fc" id="L351">        estimate(result);</span>
+<span class="fc" id="L352">        return result;</span>
+    }
+
+    /**
+     * Estimates an Euclidean 2D transformation using the list of matched input
+     * and output 2D points.
+     * A minimum of 3 matched non-coincident points is required. If more points
+     * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
+     * @param result instance where result will be stored.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public void estimate(final EuclideanTransformation2D result)
+            throws LockedException, NotReadyException,
+            CoincidentPointsException {
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L372">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L374" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L375">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L379">            mLocked = true;</span>
+
+<span class="fc bfc" id="L381" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L382">                mListener.onEstimateStart(this);</span>
+            }
+
+<span class="fc" id="L385">            final Matrix inCentroid = computeCentroid(mInputPoints);</span>
+<span class="fc" id="L386">            final Matrix outCentroid = computeCentroid(mOutputPoints);</span>
+
+<span class="fc" id="L388">            final Matrix m = new Matrix(</span>
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+
+<span class="fc" id="L392">            final int n = mInputPoints.size();</span>
+            Point2D inputPoint;
+            Point2D outputPoint;
+<span class="fc" id="L395">            final Matrix col = new Matrix(</span>
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+<span class="fc" id="L397">            final Matrix row = new Matrix(1,</span>
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc" id="L399">            final Matrix tmp = new Matrix(</span>
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc bfc" id="L402" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L403">                inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L404">                outputPoint = mOutputPoints.get(i);</span>
+
+<span class="fc" id="L406">                col.setElementAtIndex(0, inputPoint.getInhomX() -</span>
+<span class="fc" id="L407">                        inCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L408">                col.setElementAtIndex(1, inputPoint.getInhomY() -</span>
+<span class="fc" id="L409">                        inCentroid.getElementAtIndex(1));</span>
+
+<span class="fc" id="L411">                row.setElementAtIndex(0, outputPoint.getInhomX() -</span>
+<span class="fc" id="L412">                        outCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L413">                row.setElementAtIndex(1, outputPoint.getInhomY() -</span>
+<span class="fc" id="L414">                        outCentroid.getElementAtIndex(1));</span>
+
+<span class="fc" id="L416">                col.multiply(row, tmp);</span>
+<span class="fc" id="L417">                m.add(tmp);</span>
+            }
+
+<span class="fc" id="L420">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L421">            decomposer.decompose();</span>
+
+<span class="pc bpc" id="L423" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L424">                throw new CoincidentPointsException();</span>
+            }
+
+<span class="fc" id="L427">            final Matrix u = decomposer.getU();</span>
+<span class="fc" id="L428">            final Matrix v = decomposer.getV();</span>
+
+            // rotation R = V*U^T
+<span class="fc" id="L431">            u.transpose();</span>
+<span class="fc" id="L432">            v.multiply(u);</span>
+
+<span class="fc bfc" id="L434" title="All 2 branches covered.">            if (Utils.det(v) &lt; 0.0) {</span>
+                // multiply 2nd column of R by -1
+<span class="fc" id="L436">                v.setElementAt(0, 1, -v.getElementAt(0, 1));</span>
+<span class="fc" id="L437">                v.setElementAt(1, 1, -v.getElementAt(1, 1));</span>
+            }
+
+<span class="fc" id="L440">            final Rotation2D rotation = new Rotation2D(v);</span>
+
+            // translation
+<span class="fc" id="L443">            final Matrix t = v.multiplyAndReturnNew(inCentroid);</span>
+<span class="fc" id="L444">            t.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L445">            t.add(outCentroid);</span>
+
+<span class="fc" id="L447">            result.setRotation(rotation);</span>
+<span class="fc" id="L448">            result.setTranslation(t.getBuffer());</span>
+
+<span class="fc bfc" id="L450" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L451">                mListener.onEstimateEnd(this);</span>
+            }
+<span class="nc" id="L453">        } catch (final AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L454">            throw new CoincidentPointsException(e);</span>
+        } finally {
+<span class="fc" id="L456">            mLocked = false;</span>
+        }
+<span class="fc" id="L458">    }</span>
+
+    /**
+     * Computes centroid of provided list of points using inhomogeneous
+     * coordinates.
+     *
+     * @param points list of points to compute centroid.
+     * @return centroid.
+     * @throws AlgebraException never thrown.
+     */
+    private static Matrix computeCentroid(final List&lt;Point2D&gt; points)
+            throws AlgebraException {
+<span class="fc" id="L470">        double x = 0.0;</span>
+<span class="fc" id="L471">        double y = 0.0;</span>
+<span class="fc" id="L472">        final double n = points.size();</span>
+<span class="fc bfc" id="L473" title="All 2 branches covered.">        for (final Point2D p : points) {</span>
+<span class="fc" id="L474">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L475">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L476">        }</span>
+
+<span class="fc" id="L478">        final Matrix result = new Matrix(</span>
+                Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+<span class="fc" id="L480">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L481">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L482">        return result;</span>
+    }
+
+    /**
+     * Internal method to set lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * This method does not check whether estimator is locked or not.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than #getMinimumPoints.
+     */
+    private void internalSetPoints(final List&lt;Point2D&gt; inputPoints,
+                                   final List&lt;Point2D&gt; outputPoints) {
+<span class="fc bfc" id="L499" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L500">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L502" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L503">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L505">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L506">        mOutputPoints = outputPoints;</span>
+<span class="fc" id="L507">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

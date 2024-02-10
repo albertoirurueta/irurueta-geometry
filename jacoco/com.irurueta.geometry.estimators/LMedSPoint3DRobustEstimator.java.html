@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSPoint3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LMedSPoint3DRobustEstimator.java</span></div><h1>LMedSPoint3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.NoIntersectionException;
+import com.irurueta.geometry.Plane;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best 3D point for provided collection of 3D planes using LMedS
+ * algorithm
+ */
+public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-3;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double mStopThreshold;
+
+    /**
+     * Constructor.
+     */
+    public LMedSPoint3DRobustEstimator() {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Constructor with planes.
+     *
+     * @param planes 3D planes to estimate a 3D point.
+     * @throws IllegalArgumentException if provided list of planes doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public LMedSPoint3DRobustEstimator(final List&lt;Plane&gt; planes) {
+<span class="fc" id="L92">        super(planes);</span>
+<span class="fc" id="L93">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public LMedSPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener) {
+<span class="fc" id="L103">        super(listener);</span>
+<span class="fc" id="L104">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   3D planes to estimate a 3D point.
+     * @throws IllegalArgumentException if provided list of planes doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public LMedSPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener,
+                                       final List&lt;Plane&gt; planes) {
+<span class="fc" id="L119">        super(listener, planes);</span>
+<span class="fc" id="L120">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L143">        return mStopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L170">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L173">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L176">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L177">    }</span>
+
+
+    /**
+     * Estimates a 3D point using a robust estimator and the best set of 3D
+     * planes that intersect into the estimated 3D point.
+     *
+     * @return a 3D point.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Point3D estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException {
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L196">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L199">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L202">        final LMedSRobustEstimator&lt;Point3D&gt; innerEstimator =</span>
+                new LMedSRobustEstimator&lt;&gt;(
+<span class="fc" id="L204">                        new LMedSRobustEstimatorListener&lt;Point3D&gt;() {</span>
+
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L208">                                return mPlanes.size();</span>
+                            }
+
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L213">                                return Point3DRobustEstimator.MINIMUM_SIZE;</span>
+                            }
+
+                            @SuppressWarnings(&quot;DuplicatedCode&quot;)
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;Point3D&gt; solutions) {
+<span class="fc" id="L220">                                final Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L221">                                final Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L222">                                final Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
+
+                                try {
+<span class="fc" id="L225">                                    final Point3D point = plane1.getIntersection(plane2, plane3);</span>
+<span class="fc" id="L226">                                    solutions.add(point);</span>
+<span class="nc" id="L227">                                } catch (final NoIntersectionException e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L229">                                }</span>
+<span class="fc" id="L230">                            }</span>
+
+                            @Override
+                            public double computeResidual(final Point3D currentEstimation, final int i) {
+<span class="fc" id="L234">                                return residual(currentEstimation, mPlanes.get(i));</span>
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L239">                                return LMedSPoint3DRobustEstimator.this.isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(final RobustEstimator&lt;Point3D&gt; estimator) {
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L245">                                    mListener.onEstimateStart(LMedSPoint3DRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L247">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(final RobustEstimator&lt;Point3D&gt; estimator) {
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L252">                                    mListener.onEstimateEnd(LMedSPoint3DRobustEstimator.this);</span>
+                                }
+<span class="fc" id="L254">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;Point3D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L260">                                    mListener.onEstimateNextIteration(</span>
+                                            LMedSPoint3DRobustEstimator.this, iteration);
+                                }
+<span class="fc" id="L263">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;Point3D&gt; estimator, final float progress) {
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L269">                                    mListener.onEstimateProgressChange(</span>
+                                            LMedSPoint3DRobustEstimator.this, progress);
+                                }
+<span class="fc" id="L272">                            }</span>
+                        });
+
+        try {
+<span class="fc" id="L276">            mLocked = true;</span>
+<span class="fc" id="L277">            mInliersData = null;</span>
+<span class="fc" id="L278">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L279">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L280">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L281">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L282">            final Point3D result = innerEstimator.estimate();</span>
+<span class="fc" id="L283">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L284">            return attemptRefine(result);</span>
+<span class="nc" id="L285">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L286">            throw new LockedException(e);</span>
+<span class="nc" id="L287">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L288">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L290">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L301">        return RobustEstimatorMethod.LMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L317">        final LMedSRobustEstimator.LMedSInliersData inliersData =</span>
+<span class="fc" id="L318">                (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+<span class="fc" id="L319">        return inliersData.getEstimatedThreshold();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

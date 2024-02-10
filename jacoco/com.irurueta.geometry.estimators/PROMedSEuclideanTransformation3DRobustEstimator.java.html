@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSEuclideanTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROMedSEuclideanTransformation3DRobustEstimator.java</span></div><h1>PROMedSEuclideanTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.EuclideanTransformation3D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best Euclidean 3D transformation for provided collections of
+ * matched 3D point using PROMedS algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROMedSEuclideanTransformation3DRobustEstimator extends
+        EuclideanTransformation3DRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1.0;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double mStopThreshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] mQualityScores;
+
+    /**
+     * Constructor.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator() {
+<span class="fc" id="L89">        super();</span>
+<span class="fc" id="L90">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L109">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L110">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L121">        super(listener);</span>
+<span class="fc" id="L122">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L144">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L145">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final double[] qualityScores) {
+<span class="fc" id="L158">        super();</span>
+<span class="fc" id="L159">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L160">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L161">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L183">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L186">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L189">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L190">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L191">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores) {
+<span class="fc" id="L206">        super(listener);</span>
+<span class="fc" id="L207">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L208">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L209">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      stars, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores) {
+<span class="fc" id="L233">        super(listener, inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L236">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L239">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L240">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L241">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L250">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L251">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L252">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L272">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L273">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L274">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L286">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L287">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L288">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L311">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L312">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L313">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L326">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L327">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L328">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L329">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L352">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L355">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L358">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L359">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L360">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L376">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L377">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L378">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L379">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L404">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L406" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L407">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L410">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L411">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L412">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L435">        return mStopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L462" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L463">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L465" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L466">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L469">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L470">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L480">        return mQualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L496" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L497">            throw new LockedException();</span>
+        }
+<span class="fc" id="L499">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L500">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the affine 3D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L512" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
+    }
+
+    /**
+     * Estimates an Euclidean 3D transformation using a robust estimator and
+     * the best set of matched 3D point correspondences found using the robust
+     * estimator.
+     *
+     * @return an Euclidean 3D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public EuclideanTransformation3D estimate() throws LockedException,
+            NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L532" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L533">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L535" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L536">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L539">        final PROMedSRobustEstimator&lt;EuclideanTransformation3D&gt; innerEstimator =</span>
+                new PROMedSRobustEstimator&lt;&gt;(
+<span class="fc" id="L541">                        new PROMedSRobustEstimatorListener&lt;EuclideanTransformation3D&gt;() {</span>
+
+                            // point to be reused when computing residuals
+<span class="fc" id="L544">                            private final Point3D mTestPoint = Point3D.create(</span>
+                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+
+<span class="fc" id="L547">                            private final EuclideanTransformation3DEstimator mNonRobustEstimator =</span>
+                                    new EuclideanTransformation3DEstimator(
+<span class="fc" id="L549">                                            isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L551">                            private final List&lt;Point3D&gt; mSubsetInputPoints =</span>
+                                    new ArrayList&lt;&gt;();
+<span class="fc" id="L553">                            private final List&lt;Point3D&gt; mSubsetOutputPoints =</span>
+                                    new ArrayList&lt;&gt;();
+
+                            @Override
+                            public double getThreshold() {
+<span class="fc" id="L558">                                return mStopThreshold;</span>
+                            }
+
+                            @Override
+                            public int getTotalSamples() {
+<span class="fc" id="L563">                                return mInputPoints.size();</span>
+                            }
+
+                            @Override
+                            public int getSubsetSize() {
+<span class="fc" id="L568">                                return mNonRobustEstimator.getMinimumPoints();</span>
+                            }
+
+                            @Override
+                            public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                                    final List&lt;EuclideanTransformation3D&gt; solutions) {
+<span class="fc" id="L574">                                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L575">                                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L576" title="All 2 branches covered.">                                for (final int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L577">                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L578">                                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+                                            samplesIndex));
+                                }
+
+                                try {
+<span class="fc" id="L583">                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,</span>
+                                            mSubsetOutputPoints);
+<span class="fc" id="L585">                                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L586">                                } catch (final Exception e) {</span>
+                                    // if points are coincident, no solution is added
+<span class="fc" id="L588">                                }</span>
+<span class="fc" id="L589">                            }</span>
+
+                            @Override
+                            public double computeResidual(
+                                    final EuclideanTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L594">                                final Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L595">                                final Point3D outputPoint = mOutputPoints.get(i);</span>
+
+                                // transform input point and store result in mTestPoint
+<span class="fc" id="L598">                                currentEstimation.transform(inputPoint, mTestPoint);</span>
+
+<span class="fc" id="L600">                                return outputPoint.distanceTo(mTestPoint);</span>
+                            }
+
+                            @Override
+                            public boolean isReady() {
+<span class="fc" id="L605">                                return PROMedSEuclideanTransformation3DRobustEstimator.this.</span>
+<span class="fc" id="L606">                                        isReady();</span>
+                            }
+
+                            @Override
+                            public void onEstimateStart(
+                                    final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L612" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L613">                                    mListener.onEstimateStart(</span>
+                                            PROMedSEuclideanTransformation3DRobustEstimator.this);
+                                }
+<span class="fc" id="L616">                            }</span>
+
+                            @Override
+                            public void onEstimateEnd(
+                                    final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L621" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L622">                                    mListener.onEstimateEnd(</span>
+                                            PROMedSEuclideanTransformation3DRobustEstimator.this);
+                                }
+<span class="fc" id="L625">                            }</span>
+
+                            @Override
+                            public void onEstimateNextIteration(
+                                    final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator,
+                                    final int iteration) {
+<span class="pc bpc" id="L631" title="1 of 2 branches missed.">                                if (mListener != null) {</span>
+<span class="fc" id="L632">                                    mListener.onEstimateNextIteration(</span>
+                                            PROMedSEuclideanTransformation3DRobustEstimator.this,
+                                            iteration);
+                                }
+<span class="fc" id="L636">                            }</span>
+
+                            @Override
+                            public void onEstimateProgressChange(
+                                    final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator,
+                                    final float progress) {
+<span class="nc bnc" id="L642" title="All 2 branches missed.">                                if (mListener != null) {</span>
+<span class="nc" id="L643">                                    mListener.onEstimateProgressChange(</span>
+                                            PROMedSEuclideanTransformation3DRobustEstimator.this,
+                                            progress);
+                                }
+<span class="nc" id="L647">                            }</span>
+
+                            @Override
+                            public double[] getQualityScores() {
+<span class="fc" id="L651">                                return mQualityScores;</span>
+                            }
+                        });
+
+        try {
+<span class="fc" id="L656">            mLocked = true;</span>
+<span class="fc" id="L657">            mInliersData = null;</span>
+<span class="fc" id="L658">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L659">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L660">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L661">            final EuclideanTransformation3D transformation =</span>
+<span class="fc" id="L662">                    innerEstimator.estimate();</span>
+<span class="fc" id="L663">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L664">            return attemptRefine(transformation);</span>
+<span class="nc" id="L665">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L666">            throw new LockedException(e);</span>
+<span class="nc" id="L667">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L668">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L670">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L681">        return RobustEstimatorMethod.PROMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of such
+     * threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L697">        final PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L698">                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();</span>
+<span class="fc" id="L699">        return inliersData.getEstimatedThreshold();</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L712" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L713">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L716">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L717">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

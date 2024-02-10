@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACConicRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROSACConicRobustEstimator.java</span></div><h1>PROSACConicRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.Conic;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best conic for provided collection of 2D points using PROSAC
+ * algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROSACConicRobustEstimator extends ConicRobustEstimator {
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * Threshold is defined by the equation abs(trans(x) * C * x) &amp;lt; t, where trans
+     * is the transposition, x i a point and C is a conic and t is a threshold.
+     * This equation determines the points x belonging to the locus of a conic
+     * C up to a certain threshold.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-6;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double mThreshold;
+
+    /**
+     * Quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sample.
+     */
+    private double[] mQualityScores;
+
+    /**
+     * Constructor.
+     */
+    public PROSACConicRobustEstimator() {
+<span class="fc" id="L69">        super();</span>
+<span class="fc" id="L70">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 2D points to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACConicRobustEstimator(final List&lt;Point2D&gt; points) {
+<span class="fc" id="L81">        super(points);</span>
+<span class="fc" id="L82">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener) {
+<span class="fc" id="L92">        super(listener);</span>
+<span class="fc" id="L93">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L94">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
+                                      final List&lt;Point2D&gt; points) {
+<span class="fc" id="L108">        super(listener, points);</span>
+<span class="fc" id="L109">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
+     */
+    public PROSACConicRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L120">        super();</span>
+<span class="fc" id="L121">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L122">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points        2D points to estimate a conic.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACConicRobustEstimator(final List&lt;Point2D&gt; points,
+                                      final double[] qualityScores) {
+<span class="fc" id="L136">        super(points);</span>
+
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L139">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L142">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L143">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L144">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
+     */
+    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
+                                      final double[] qualityScores) {
+<span class="fc" id="L157">        super(listener);</span>
+<span class="fc" id="L158">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L159">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L160">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        2D points to estimate a conic.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
+                                      final List&lt;Point2D&gt; points, final double[] qualityScores) {
+<span class="fc" id="L176">        super(listener, points);</span>
+
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L179">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L182">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L183">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L184">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on a
+     * given point.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L196">        return mThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on
+     * a given point.
+     *
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L213">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L216">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L218">        mThreshold = threshold;</span>
+<span class="fc" id="L219">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point
+     *
+     * @return quality scores corresponding to each point.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L229">        return mQualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point.
+     *
+     * @param qualityScores quality scores corresponding to each point.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L245">            throw new LockedException();</span>
+        }
+<span class="fc" id="L247">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L248">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the conic estimation.
+     * This is true when input data (i.e. 2D points and quality scores) are
+     * provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L259" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp;</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
+    }
+
+    /**
+     * Estimates a conic using a robust estimator and the best set of 2D points
+     * that fit into the locus of the estimated conic found using the robust
+     * estimator.
+     *
+     * @return a conic.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Conic estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException {
+<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L280">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L283">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L286">        final PROSACRobustEstimator&lt;Conic&gt; innerEstimator =</span>
+<span class="fc" id="L287">                new PROSACRobustEstimator&lt;&gt;(new PROSACRobustEstimatorListener&lt;Conic&gt;() {</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L291">                        return mThreshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L296">                        return mPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L301">                        return ConicRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                            final List&lt;Conic&gt; solutions) {
+<span class="fc" id="L307">                        final Point2D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L308">                        final Point2D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L309">                        final Point2D point3 = mPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L310">                        final Point2D point4 = mPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L311">                        final Point2D point5 = mPoints.get(samplesIndices[4]);</span>
+
+                        try {
+<span class="fc" id="L314">                            final Conic conic = new Conic(point1, point2, point3, point4,</span>
+                                    point5);
+<span class="fc" id="L316">                            solutions.add(conic);</span>
+<span class="nc" id="L317">                        } catch (final CoincidentPointsException e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L319">                        }</span>
+<span class="fc" id="L320">                    }</span>
+
+                    @Override
+                    public double computeResidual(final Conic currentEstimation, final int i) {
+<span class="fc" id="L324">                        return residual(currentEstimation, mPoints.get(i));</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L329">                        return PROSACConicRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;Conic&gt; estimator) {
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L335">                            mListener.onEstimateStart(PROSACConicRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L337">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;Conic&gt; estimator) {
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L342">                            mListener.onEstimateEnd(PROSACConicRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L344">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;Conic&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L350">                            mListener.onEstimateNextIteration(</span>
+                                    PROSACConicRobustEstimator.this, iteration);
+                        }
+<span class="fc" id="L353">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;Conic&gt; estimator, final float progress) {
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L359">                            mListener.onEstimateProgressChange(</span>
+                                    PROSACConicRobustEstimator.this, progress);
+                        }
+<span class="fc" id="L362">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L366">                        return mQualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L371">            mLocked = true;</span>
+<span class="fc" id="L372">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L373">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L374">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L375">            return innerEstimator.estimate();</span>
+<span class="nc" id="L376">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L377">            throw new LockedException(e);</span>
+<span class="nc" id="L378">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L379">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L381">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L392">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each provided point.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L406">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L409">        mQualityScores = qualityScores;</span>
+<span class="fc" id="L410">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

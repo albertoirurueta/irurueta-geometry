@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EuclideanTransformation2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">EuclideanTransformation2D.java</span></div><h1>EuclideanTransformation2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.geometry.estimators.EuclideanTransformation2DEstimator;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * This class performs Euclidean transformations on 2D space.
+ * Euclidean transformations include transformations related to rotations and
+ * translations.
+ * Scale cannot be modified on Euclidean scale.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class EuclideanTransformation2D extends Transformation2D
+        implements Serializable {
+
+    /**
+     * Constant indicating number of coordinates required in translation arrays.
+     */
+    public static final int NUM_TRANSLATION_COORDS = 2;
+
+    /**
+     * Constant defining number of homogeneous coordinates in 2D space.
+     */
+    public static final int HOM_COORDS = 3;
+
+    /**
+     * 2D rotation to be performed on geometric objects.
+     */
+    private Rotation2D rotation;
+
+    /**
+     * 2D translation to be performed on geometric objects.
+     * Translation is specified using inhomogeneous coordinates.
+     */
+    private double[] translation;
+
+    /**
+     * Empty constructor.
+     * Creates transformation that has no effect.
+     */
+<span class="fc" id="L65">    public EuclideanTransformation2D() {</span>
+<span class="fc" id="L66">        rotation = new Rotation2D();</span>
+<span class="fc" id="L67">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Creates transformation with provided rotation.
+     *
+     * @param rotation a 2D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+<span class="fc" id="L76">    public EuclideanTransformation2D(final Rotation2D rotation) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (rotation == null) {</span>
+<span class="fc" id="L78">            throw new NullPointerException();</span>
+        }
+
+<span class="fc" id="L81">        this.rotation = rotation;</span>
+<span class="fc" id="L82">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Creates transformation with provided 2D translation.
+     *
+     * @param translation Array indicating 2D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided array is null.
+     * @throws IllegalArgumentException raised if length of array is not equal
+     *                                  to NUM_TRANSLATION_COORDS.
+     */
+<span class="fc" id="L94">    public EuclideanTransformation2D(final double[] translation) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L96">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L99">        rotation = new Rotation2D();</span>
+<span class="fc" id="L100">        this.translation = translation;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Creates transformation with provided 2D rotation and translation.
+     *
+     * @param rotation    a 2D rotation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided array is null.
+     * @throws IllegalArgumentException Raised if length of array is not equal
+     *                                  to NUM_TRANSLATION_COORDS.
+     */
+<span class="fc" id="L113">    public EuclideanTransformation2D(final Rotation2D rotation, final double[] translation) {</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (rotation == null) {</span>
+<span class="fc" id="L116">            throw new NullPointerException();</span>
+        }
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L119">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L122">        this.rotation = rotation;</span>
+<span class="fc" id="L123">        this.translation = translation;</span>
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * Creates transformation by estimating its internal values using provided 3
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public EuclideanTransformation2D(
+            final Point2D inputPoint1, final Point2D inputPoint2,
+            final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3)
+<span class="fc" id="L147">            throws CoincidentPointsException {</span>
+<span class="fc" id="L148">        internalSetTransformationFromPoints(inputPoint1, inputPoint2,</span>
+                inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Returns 2D rotation assigned to this transformation.
+     *
+     * @return 2D rotation.
+     */
+    public Rotation2D getRotation() {
+<span class="fc" id="L158">        return rotation;</span>
+    }
+
+    /**
+     * Sets 2D rotation for this transformation.
+     *
+     * @param rotation a 2D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+    public void setRotation(final Rotation2D rotation) {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (rotation == null) {</span>
+<span class="fc" id="L169">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L171">        this.rotation = rotation;</span>
+<span class="fc" id="L172">    }</span>
+
+    /**
+     * Adds provided rotation to current rotation assigned to this
+     * transformation.
+     *
+     * @param rotation 2D rotation to be added.
+     */
+    public void addRotation(final Rotation2D rotation) {
+<span class="fc" id="L181">        this.rotation.combine(rotation);</span>
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * Returns 2D translation assigned to this transformation as an array
+     * expressed in inhomogeneous coordinates.
+     *
+     * @return 2D translation array.
+     */
+    public double[] getTranslation() {
+<span class="fc" id="L191">        return translation;</span>
+    }
+
+    /**
+     * Sets 2D translation assigned to this transformation as an array expressed
+     * in inhomogeneous coordinates.
+     *
+     * @param translation 2D translation array.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void setTranslation(final double[] translation) {
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L204">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L207">        this.translation = translation;</span>
+<span class="fc" id="L208">    }</span>
+
+    /**
+     * Adds provided translation to current translation on this transformation.
+     * Provided translation must be expressed as an array of inhomogeneous
+     * coordinates.
+     *
+     * @param translation 2D translation array.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void addTranslation(final double[] translation) {
+<span class="fc" id="L220">        ArrayUtils.sum(this.translation, translation, this.translation);</span>
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * Returns current x coordinate translation assigned to this transformation.
+     *
+     * @return X coordinate translation.
+     */
+    public double getTranslationX() {
+<span class="fc" id="L229">        return translation[0];</span>
+    }
+
+    /**
+     * Sets x coordinate translation to be made by this transformation.
+     *
+     * @param translationX X coordinate translation to be set.
+     */
+    public void setTranslationX(final double translationX) {
+<span class="fc" id="L238">        translation[0] = translationX;</span>
+<span class="fc" id="L239">    }</span>
+
+    /**
+     * Returns current y coordinate translation assigned to this transformation.
+     *
+     * @return Y coordinate translation.
+     */
+    public double getTranslationY() {
+<span class="fc" id="L247">        return translation[1];</span>
+    }
+
+    /**
+     * Sets y coordinate translation to be made by this transformation.
+     *
+     * @param translationY Y coordinate translation to be set.
+     */
+    public void setTranslationY(final double translationY) {
+<span class="fc" id="L256">        translation[1] = translationY;</span>
+<span class="fc" id="L257">    }</span>
+
+    /**
+     * Sets x, y coordinates of translation to be made by this transformation.
+     *
+     * @param translationX translation x coordinate to be set.
+     * @param translationY translation y coordinate to be set.
+     */
+    public void setTranslation(final double translationX, final double translationY) {
+<span class="fc" id="L266">        translation[0] = translationX;</span>
+<span class="fc" id="L267">        translation[1] = translationY;</span>
+<span class="fc" id="L268">    }</span>
+
+    /**
+     * Sets x, y coordinates of translation to be made by this transformation.
+     *
+     * @param translation translation to be set.
+     */
+    public void setTranslation(final Point2D translation) {
+<span class="fc" id="L276">        setTranslation(translation.getInhomX(), translation.getInhomY());</span>
+<span class="fc" id="L277">    }</span>
+
+    /**
+     * Gets x, y coordinates of translation to be made by this transformation
+     * as a new point.
+     *
+     * @return a new point containing translation coordinates.
+     */
+    public Point2D getTranslationPoint() {
+<span class="fc" id="L286">        final Point2D out = Point2D.create();</span>
+<span class="fc" id="L287">        getTranslationPoint(out);</span>
+<span class="fc" id="L288">        return out;</span>
+    }
+
+    /**
+     * Gets x, y coordinates of translation to be made by this transformation
+     * and stores them into provided point.
+     *
+     * @param out point where translation coordinates will be stored.
+     */
+    public void getTranslationPoint(final Point2D out) {
+<span class="fc" id="L298">        out.setInhomogeneousCoordinates(translation[0], translation[1]);</span>
+<span class="fc" id="L299">    }</span>
+
+    /**
+     * Adds provided x coordinate to current translation assigned to this
+     * transformation.
+     *
+     * @param translationX X coordinate to be added to current translation.
+     */
+    public void addTranslationX(final double translationX) {
+<span class="fc" id="L308">        translation[0] += translationX;</span>
+<span class="fc" id="L309">    }</span>
+
+    /**
+     * Adds provided y coordinate to current translation assigned to this
+     * transformation.
+     *
+     * @param translationY Y coordinate to be added to current translation.
+     */
+    public void addTranslationY(final double translationY) {
+<span class="fc" id="L318">        translation[1] += translationY;</span>
+<span class="fc" id="L319">    }</span>
+
+    /**
+     * Adds provided coordinates to current translation assigned to this
+     * transformation.
+     *
+     * @param translationX x coordinate to be added to current translation.
+     * @param translationY y coordinate to be added to current translation.
+     */
+    public void addTranslation(final double translationX, final double translationY) {
+<span class="fc" id="L329">        translation[0] += translationX;</span>
+<span class="fc" id="L330">        translation[1] += translationY;</span>
+<span class="fc" id="L331">    }</span>
+
+    /**
+     * Adds provided coordinates to current translation assigned to this
+     * transformation.
+     *
+     * @param translation x, y coordinates to be added to current translation.
+     */
+    public void addTranslation(final Point2D translation) {
+<span class="fc" id="L340">        addTranslation(translation.getInhomX(), translation.getInhomY());</span>
+<span class="fc" id="L341">    }</span>
+
+    /**
+     * Represents this transformation as a 3x3 matrix.
+     * A point can be transformed as T * p, where T is the transformation matrix
+     * and p is a point expressed as an homogeneous vector.
+     *
+     * @return This transformation in matrix form.
+     */
+    @Override
+    public Matrix asMatrix() {
+<span class="fc" id="L352">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L354">            m = new Matrix(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L355">            asMatrix(m);</span>
+<span class="nc" id="L356">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L358">        }</span>
+<span class="fc" id="L359">        return m;</span>
+    }
+
+    /**
+     * Represents this transformation as a 3x3 matrix and stores the result in
+     * provided instance.
+     *
+     * @param m instance where transformation matrix will be stored.
+     * @throws IllegalArgumentException raised if provided instance is not a 3x3
+     *                                  matrix.
+     */
+    @Override
+    public void asMatrix(final Matrix m) {
+<span class="pc bpc" id="L372" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L373">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L376">        m.initialize(0.0);</span>
+
+        // set rotation
+<span class="fc" id="L379">        m.setSubmatrix(0, 0,</span>
+                Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS - 1,
+                Rotation2D.ROTATION2D_INHOM_MATRIX_COLS - 1,
+<span class="fc" id="L382">                rotation.asInhomogeneousMatrix());</span>
+
+        // set translation
+<span class="fc" id="L385">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,</span>
+                HOM_COORDS - 1, translation);
+
+        // set last element
+<span class="fc" id="L389">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);</span>
+<span class="fc" id="L390">    }</span>
+
+    /**
+     * Transforms input point using this transformation and stores the result in
+     * provided output points.
+     *
+     * @param inputPoint  point to be transformed.
+     * @param outputPoint instance where transformed point data will be stored.
+     */
+    @Override
+    public void transform(final Point2D inputPoint, final Point2D outputPoint) {
+
+<span class="fc" id="L402">        inputPoint.normalize();</span>
+<span class="fc" id="L403">        rotation.rotate(inputPoint, outputPoint);</span>
+<span class="fc" id="L404">        outputPoint.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L405">                outputPoint.getInhomX() + translation[0],</span>
+<span class="fc" id="L406">                outputPoint.getInhomY() + translation[1]);</span>
+<span class="fc" id="L407">    }</span>
+
+    /**
+     * Transforms a conic using this transformation and stores the result into
+     * provided output conic.
+     *
+     * @param inputConic  conic to be transformed.
+     * @param outputConic instance where data of transformed conic will be
+     *                    stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     *                                     the resulting output conic matrix is not considered to be symmetric.
+     */
+    @Override
+    public void transform(final Conic inputConic, final Conic outputConic)
+            throws NonSymmetricMatrixException {
+        // point' * conic * point = 0
+        // point' * T' * transformedConic * T * point = 0
+        // where:
+        // - transformedPoint = T * point
+
+        // Hence:
+        // transformedConic = T^-1' * conic * T^-1
+
+<span class="fc" id="L430">        inputConic.normalize();</span>
+
+<span class="fc" id="L432">        final Matrix c = inputConic.asMatrix();</span>
+<span class="fc" id="L433">        final Matrix invT = inverseAndReturnNew().asMatrix();</span>
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L435">        double norm = Utils.normF(invT);</span>
+<span class="fc" id="L436">        invT.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L438">        final Matrix m = invT.transposeAndReturnNew();</span>
+        try {
+<span class="fc" id="L440">            m.multiply(c);</span>
+<span class="fc" id="L441">            m.multiply(invT);</span>
+<span class="nc" id="L442">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L444">        }</span>
+
+        // normalize resulting m matrix to increase accuracy so that it can be
+        // considered symmetric
+<span class="fc" id="L448">        norm = Utils.normF(m);</span>
+<span class="fc" id="L449">        m.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L451">        outputConic.setParameters(m);</span>
+<span class="fc" id="L452">    }</span>
+
+    /**
+     * Transforms a dual conic using this transformation and stores the result
+     * into provided output dual conic.
+     *
+     * @param inputDualConic  dual conic to be transformed.
+     * @param outputDualConic instance where data of transformed dual conic will
+     *                        be stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     *                                     the resulting output dual conic matrix is not considered to be symmetric.
+     */
+    @Override
+    public void transform(final DualConic inputDualConic, final DualConic outputDualConic)
+            throws NonSymmetricMatrixException {
+        // line' * dualConic * line = 0
+        // line' * T^-1 * T * dualConic * T' * T^-1'* line
+
+        // Hence:
+        // transformed plane: T^-1'* line
+        // transformed dual quadric: T * dualQuadric * T'
+
+<span class="fc" id="L474">        inputDualConic.normalize();</span>
+
+<span class="fc" id="L476">        final Matrix dualC = inputDualConic.asMatrix();</span>
+<span class="fc" id="L477">        final Matrix t = asMatrix();</span>
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L479">        double norm = Utils.normF(t);</span>
+<span class="fc" id="L480">        t.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L482">        final Matrix transT = t.transposeAndReturnNew();</span>
+        try {
+<span class="fc" id="L484">            t.multiply(dualC);</span>
+<span class="fc" id="L485">            t.multiply(transT);</span>
+<span class="nc" id="L486">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L488">        }</span>
+
+        // normalize resulting m matrix to increase accuracy so that it can be
+        // considered symmetric
+<span class="fc" id="L492">        norm = Utils.normF(t);</span>
+<span class="fc" id="L493">        t.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L495">        outputDualConic.setParameters(t);</span>
+<span class="fc" id="L496">    }</span>
+
+    /**
+     * Transforms provided input line using this transformation and stores the
+     * result into provided output line instance.
+     *
+     * @param inputLine  line to be transformed.
+     * @param outputLine instance where data of transformed line will be stored.
+     */
+    @Override
+    public void transform(final Line2D inputLine, final Line2D outputLine) {
+        // line' * point = 0 --&gt; line' * T^-1 * T * point
+        // (line' * T^-1)*(T*point) = (T^-1'*line)'*(T*point)
+        // where:
+        // - transformedLine = T^-1'*line
+        // - transformedPoint = T*point
+
+<span class="fc" id="L513">        inputLine.normalize();</span>
+
+<span class="fc" id="L515">        final Matrix invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L516">        final Matrix l = Matrix.newFromArray(inputLine.asArray());</span>
+
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L519">        final double norm = Utils.normF(invT);</span>
+<span class="fc" id="L520">        invT.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L522">        invT.transpose();</span>
+        try {
+<span class="fc" id="L524">            invT.multiply(l);</span>
+<span class="nc" id="L525">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L527">        }</span>
+
+<span class="fc" id="L529">        outputLine.setParameters(invT.toArray());</span>
+<span class="fc" id="L530">    }</span>
+
+    /**
+     * Converts this transformation into a metric transformation.
+     *
+     * @return this transformation converted into a metric transformation.
+     */
+    public MetricTransformation2D toMetric() {
+<span class="fc" id="L538">        return new MetricTransformation2D(rotation, translation,</span>
+                MetricTransformation2D.DEFAULT_SCALE);
+    }
+
+    /**
+     * Inverses this transformation.
+     */
+    public void inverse() {
+<span class="fc" id="L546">        inverse(this);</span>
+<span class="fc" id="L547">    }</span>
+
+    /**
+     * Computes the inverse of this transformation and returns the result as a
+     * new transformation instance.
+     *
+     * @return inverse transformation.
+     */
+    public Transformation2D inverseAndReturnNew() {
+<span class="fc" id="L556">        final EuclideanTransformation2D result = new EuclideanTransformation2D();</span>
+<span class="fc" id="L557">        inverse(result);</span>
+<span class="fc" id="L558">        return result;</span>
+    }
+
+    /**
+     * Combines this transformation with provided transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation transformation to be combined with.
+     */
+    public void combine(final EuclideanTransformation2D transformation) {
+<span class="fc" id="L569">        combine(transformation, this);</span>
+<span class="fc" id="L570">    }</span>
+
+    /**
+     * Combines this transformation with provided transformation and returns
+     * the result as a new transformation instance.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation transformation to be combined with.
+     * @return a new transformation resulting of the combination with this
+     * transformation and provided transformation.
+     */
+    public EuclideanTransformation2D combineAndReturnNew(
+            final EuclideanTransformation2D transformation) {
+
+<span class="fc" id="L585">        final EuclideanTransformation2D result = new EuclideanTransformation2D();</span>
+<span class="fc" id="L586">        combine(transformation, result);</span>
+<span class="fc" id="L587">        return result;</span>
+    }
+
+    /**
+     * Estimates this transformation internal parameters by using 3
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public void setTransformationFromPoints(
+            final Point2D inputPoint1, final Point2D inputPoint2,
+            final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3)
+            throws CoincidentPointsException {
+<span class="fc" id="L612">        internalSetTransformationFromPoints(inputPoint1, inputPoint2,</span>
+                inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+<span class="fc" id="L614">    }</span>
+
+    /**
+     * Computes the inverse of this transformation and stores the result in
+     * provided instance.
+     *
+     * @param result instance where inverse transformation will be stored.
+     */
+    protected void inverse(final EuclideanTransformation2D result) {
+        // Transformation is as follows: x' = R* x + t
+        // Then inverse transformation is: R* x' = R' * R * x + R'*t = x + R'*t
+        // --&gt; x = R'*x' - R'*t
+
+        // reverse rotation
+<span class="fc" id="L628">        result.rotation = rotation.inverseRotation();</span>
+
+        // reverse translation
+<span class="fc" id="L631">        final Matrix t = Matrix.newFromArray(translation, true);</span>
+<span class="fc" id="L632">        t.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L633">        final Matrix invRot = result.rotation.asInhomogeneousMatrix();</span>
+        try {
+<span class="fc" id="L635">            invRot.multiply(t);</span>
+<span class="nc" id="L636">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L638">        }</span>
+
+<span class="fc" id="L640">        result.translation = invRot.toArray();</span>
+<span class="fc" id="L641">    }</span>
+
+    /**
+     * Combines this transformation with provided input transformation and
+     * stores the result into provided output transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided input transformation.
+     *
+     * @param inputTransformation  transformation to be combined with.
+     * @param outputTransformation transformation where result will be stored.
+     */
+    private void combine(final EuclideanTransformation2D inputTransformation,
+                         final EuclideanTransformation2D outputTransformation) {
+        // combination in matrix representation is:
+        // [R1 t1] * [R2 t2] = [R1*R2 + t1*0T  R1*t2 + t1*1] = [R1*R2 R1*t2 + t1]
+        // [0T 1 ]   [0T 1 ]   [0T*R2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]
+
+        try {
+            // we do translation first, because this.rotation might change later
+<span class="fc" id="L660">            final Matrix r1 = this.rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L661">            final Matrix t2 = Matrix.newFromArray(inputTransformation.translation,</span>
+                    true);
+            // this is R1 * t2
+<span class="fc" id="L664">            r1.multiply(t2);</span>
+
+<span class="fc" id="L666">            ArrayUtils.sum(r1.toArray(), this.translation,</span>
+                    outputTransformation.translation);
+
+<span class="fc" id="L669">            outputTransformation.rotation = this.rotation.combineAndReturnNew(</span>
+                    inputTransformation.rotation);
+
+<span class="nc" id="L672">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L674">        }</span>
+<span class="fc" id="L675">    }</span>
+
+    /**
+     * Estimates this transformation internal parameters by using 3
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    private void internalSetTransformationFromPoints(
+            final Point2D inputPoint1, final Point2D inputPoint2,
+            final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3)
+            throws CoincidentPointsException {
+<span class="fc" id="L699">        final List&lt;Point2D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L700">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L701">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L702">        inputPoints.add(inputPoint3);</span>
+
+<span class="fc" id="L704">        final List&lt;Point2D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L705">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L706">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L707">        outputPoints.add(outputPoint3);</span>
+
+<span class="fc" id="L709">        final EuclideanTransformation2DEstimator estimator =</span>
+                new EuclideanTransformation2DEstimator(inputPoints,
+                        outputPoints);
+
+        try {
+<span class="fc" id="L714">            estimator.estimate(this);</span>
+<span class="nc" id="L715">        } catch (final LockedException | NotReadyException ignore) {</span>
+            // never thrown
+<span class="fc" id="L717">        }</span>
+<span class="fc" id="L718">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
