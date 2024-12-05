@@ -1263,10 +1263,13 @@ class EllipseTest {
         } else if (theta3 > Math.PI / 2.0) {
             theta3 -= Math.PI;
         }
-        assertEquals(lineAngle * 180.0 / Math.PI, theta3 * 180.0 / Math.PI, ABSOLUTE_ERROR);
+        assertEquals(Math.toDegrees(lineAngle), Math.toDegrees(theta3), ABSOLUTE_ERROR);
 
-        // Force NotLocusException (because of accuracy)
-        assertThrows(NotLocusException.class, () -> ellipse.getTangentLineAt(point));
+        // Force NotLocusException
+        final var point2 = new HomogeneousPoint2D(
+                center.getInhomX() + 2.0 * radius * Math.cos(theta),
+                center.getInhomY() + 2.0 * radius * Math.sin(theta), 1.0);
+        assertThrows(NotLocusException.class, () -> ellipse.getTangentLineAt(point2));
     }
 
     @Test
