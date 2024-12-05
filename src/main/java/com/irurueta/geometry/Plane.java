@@ -71,34 +71,34 @@ public class Plane implements Serializable {
     /**
      * Parameter A of a plane.
      */
-    private double mA;
+    private double a;
 
     /**
      * Parameter B of a plane.
      */
-    private double mB;
+    private double b;
 
     /**
      * Parameter C of a plane.
      */
-    private double mC;
+    private double c;
 
     /**
      * Parameter D of a plane.
      */
-    private double mD;
+    private double d;
 
     /**
      * Defines whether the plane is already normalized or not.
      */
-    private boolean mNormalized;
+    private boolean normalized;
 
     /**
      * Default constructor of this class.
      */
     public Plane() {
-        mA = mB = mC = mD = 0.0;
-        mNormalized = false;
+        a = b = c = d = 0.0;
+        normalized = false;
     }
 
     /**
@@ -112,8 +112,7 @@ public class Plane implements Serializable {
      * @param c Parameter C of this plane.
      * @param d Parameter D of this plane.
      */
-    public Plane(final double a, final double b,
-                 final double c, final double d) {
+    public Plane(final double a, final double b, final double c, final double d) {
         setParameters(a, b, c, d);
     }
 
@@ -143,8 +142,7 @@ public class Plane implements Serializable {
      *                                 configurations where points are co-linear and an infinite set of planes
      *                                 pass through them.
      */
-    public Plane(final Point3D pointA, final Point3D pointB, final Point3D pointC)
-            throws ColinearPointsException {
+    public Plane(final Point3D pointA, final Point3D pointB, final Point3D pointC) throws ColinearPointsException {
         setParametersFromThreePoints(pointA, pointB, pointC);
     }
 
@@ -157,8 +155,7 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if vectors length is not 3.
      * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
-    public Plane(final Point3D point, final double[] vectorA, final double[] vectorB)
-            throws ParallelVectorsException {
+    public Plane(final Point3D point, final double[] vectorA, final double[] vectorB) throws ParallelVectorsException {
         setParametersFrom1PointAnd2Vectors(point, vectorA, vectorB);
     }
 
@@ -180,7 +177,7 @@ public class Plane implements Serializable {
      * @return Parameter A of this plane.
      */
     public double getA() {
-        return mA;
+        return a;
     }
 
     /**
@@ -189,7 +186,7 @@ public class Plane implements Serializable {
      * @return Parameter B of this plane.
      */
     public double getB() {
-        return mB;
+        return b;
     }
 
     /**
@@ -198,7 +195,7 @@ public class Plane implements Serializable {
      * @return Parameter C of this plane.
      */
     public double getC() {
-        return mC;
+        return c;
     }
 
     /**
@@ -207,7 +204,7 @@ public class Plane implements Serializable {
      * @return Parameter D of this plane.
      */
     public double getD() {
-        return mD;
+        return d;
     }
 
     /**
@@ -218,32 +215,30 @@ public class Plane implements Serializable {
      * @param c Parameter C of this plane.
      * @param d Parameter D of this plane.
      */
-    public final void setParameters(
-            final double a, final double b, final double c, final double d) {
-        mA = a;
-        mB = b;
-        mC = c;
-        mD = d;
-        mNormalized = false;
+    public final void setParameters(final double a, final double b, final double c, final double d) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        normalized = false;
     }
 
     /**
      * Sets parameters of this plane.
      *
      * @param array Array containing parameters of this plane.
-     * @throws IllegalArgumentException Raised if provided array does not
-     *                                  have length equal to 4.
+     * @throws IllegalArgumentException Raised if provided array does not have length equal to 4.
      */
     public final void setParameters(final double[] array) {
         if (array.length != PLANE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
         }
 
-        mA = array[0];
-        mB = array[1];
-        mC = array[2];
-        mD = array[3];
-        mNormalized = false;
+        a = array[0];
+        b = array[1];
+        c = array[2];
+        d = array[3];
+        normalized = false;
     }
 
     /**
@@ -253,11 +248,9 @@ public class Plane implements Serializable {
      * @param pointA 1st point.
      * @param pointB 2nd point.
      * @param pointC 3rd point.
-     * @throws ColinearPointsException if provided points are in a co-linear or
-     *                                 degenerate configuration.
+     * @throws ColinearPointsException if provided points are in a co-linear or degenerate configuration.
      */
-    public final void setParametersFromThreePoints(
-            final Point3D pointA, final Point3D pointB, final Point3D pointC)
+    public final void setParametersFromThreePoints(final Point3D pointA, final Point3D pointB, final Point3D pointC)
             throws ColinearPointsException {
 
         // normalize points to increase accuracy
@@ -267,9 +260,8 @@ public class Plane implements Serializable {
 
         // we use 3 points to find one plane
         try {
-            // set homogeneous coordinates of each point on each row of the
-            // matrix
-            final Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);
+            // set homogeneous coordinates of each point on each row of the matrix
+            final var m = new Matrix(3, PLANE_NUMBER_PARAMS);
 
             m.setElementAt(0, 0, pointA.getHomX());
             m.setElementAt(0, 1, pointA.getHomY());
@@ -286,7 +278,7 @@ public class Plane implements Serializable {
             m.setElementAt(2, 2, pointC.getHomZ());
             m.setElementAt(2, 3, pointC.getHomW());
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             if (decomposer.getRank() < 3) {
@@ -297,18 +289,18 @@ public class Plane implements Serializable {
             }
 
             // V is a 4x4 orthonormal matrix
-            final Matrix mV = decomposer.getV();
+            final var mV = decomposer.getV();
 
             // last column of V will contain the right null-space of m, which is
             // the plane where provided points belong to.
-            mA = mV.getElementAt(0, 3);
-            mB = mV.getElementAt(1, 3);
-            mC = mV.getElementAt(2, 3);
-            mD = mV.getElementAt(3, 3);
+            a = mV.getElementAt(0, 3);
+            b = mV.getElementAt(1, 3);
+            c = mV.getElementAt(2, 3);
+            d = mV.getElementAt(3, 3);
 
             // Because V is orthonormal, its columns have norm equal to 1 and
             // there is no need to normalize this plane to increase accuracy
-            mNormalized = true;
+            normalized = true;
 
         } catch (final AlgebraException e) {
             // should only fail if decomposition fails for numerical reasons
@@ -326,8 +318,7 @@ public class Plane implements Serializable {
      * @param pointC 3rd plane.
      * @return true if provided points co-linear, false otherwise.
      */
-    public static boolean areColinearPoints(
-            final Point3D pointA, final Point3D pointB, final Point3D pointC) {
+    public static boolean areColinearPoints(final Point3D pointA, final Point3D pointB, final Point3D pointC) {
         // normalize points to increase accuracy
         pointA.normalize();
         pointB.normalize();
@@ -335,9 +326,8 @@ public class Plane implements Serializable {
 
         // we use 3 points to find one plane
         try {
-            // set homogeneous coordinates of each point on each row of the
-            // matrix
-            final Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);
+            // set homogeneous coordinates of each point on each row of the matrix
+            final var m = new Matrix(3, PLANE_NUMBER_PARAMS);
 
             m.setElementAt(0, 0, pointA.getHomX());
             m.setElementAt(0, 1, pointA.getHomY());
@@ -354,7 +344,7 @@ public class Plane implements Serializable {
             m.setElementAt(2, 2, pointC.getHomZ());
             m.setElementAt(2, 3, pointC.getHomW());
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // if points were co-linear, their null-space has dimension greater
@@ -372,8 +362,8 @@ public class Plane implements Serializable {
      * @param a Parameter A.
      */
     public void setA(final double a) {
-        mA = a;
-        mNormalized = false;
+        this.a = a;
+        normalized = false;
     }
 
     /**
@@ -382,8 +372,8 @@ public class Plane implements Serializable {
      * @param b Parameter B.
      */
     public void setB(final double b) {
-        mB = b;
-        mNormalized = false;
+        this.b = b;
+        normalized = false;
     }
 
     /**
@@ -392,8 +382,8 @@ public class Plane implements Serializable {
      * @param c Parameter C.
      */
     public void setC(final double c) {
-        mC = c;
-        mNormalized = false;
+        this.c = c;
+        normalized = false;
     }
 
     /**
@@ -402,8 +392,8 @@ public class Plane implements Serializable {
      * @param d Parameter D.
      */
     public void setD(final double d) {
-        mD = d;
-        mNormalized = false;
+        this.d = d;
+        normalized = false;
     }
 
     /**
@@ -416,31 +406,26 @@ public class Plane implements Serializable {
      * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public final void setParametersFrom1PointAnd2Vectors(
-            final Point3D point, final double[] vectorA, final double[] vectorB)
-            throws ParallelVectorsException {
+            final Point3D point, final double[] vectorA, final double[] vectorB) throws ParallelVectorsException {
 
-        if (vectorA.length != INHOM_VECTOR_SIZE ||
-                vectorB.length != INHOM_VECTOR_SIZE) {
+        if (vectorA.length != INHOM_VECTOR_SIZE || vectorB.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
         }
 
         // normalize vectors to increase accuracy (we make a copy to avoid
         // changing provided arrays)
-        double norm = com.irurueta.algebra.Utils.normF(vectorA);
-        final double[] vA = ArrayUtils.multiplyByScalarAndReturnNew(vectorA,
-                1.0 / norm);
+        var norm = com.irurueta.algebra.Utils.normF(vectorA);
+        final var vA = ArrayUtils.multiplyByScalarAndReturnNew(vectorA, 1.0 / norm);
         norm = com.irurueta.algebra.Utils.normF(vectorB);
-        final double[] vB = ArrayUtils.multiplyByScalarAndReturnNew(vectorB,
-                1.0 / norm);
+        final var vB = ArrayUtils.multiplyByScalarAndReturnNew(vectorB, 1.0 / norm);
 
         try {
-            final double[] cross = com.irurueta.algebra.Utils.crossProduct(vA, vB);
+            final var cross = com.irurueta.algebra.Utils.crossProduct(vA, vB);
 
             // check if resulting vector from cross product is too small (vectors
             // are almost parallel, and machine precision might worsen things)
-            if (Math.abs(cross[0]) < DEFAULT_ERROR_THRESHOLD &&
-                    Math.abs(cross[1]) < DEFAULT_ERROR_THRESHOLD &&
-                    Math.abs(cross[2]) < DEFAULT_ERROR_THRESHOLD) {
+            if (Math.abs(cross[0]) < DEFAULT_ERROR_THRESHOLD && Math.abs(cross[1]) < DEFAULT_ERROR_THRESHOLD
+                    && Math.abs(cross[2]) < DEFAULT_ERROR_THRESHOLD) {
                 throw new ParallelVectorsException();
             }
 
@@ -465,8 +450,7 @@ public class Plane implements Serializable {
      * @param vector Director vector.
      * @throws IllegalArgumentException Raised if vector length is not 3.
      */
-    public final void setParametersFromPointAndDirectorVector(
-            final Point3D point, final double[] vector) {
+    public final void setParametersFromPointAndDirectorVector(final Point3D point, final double[] vector) {
 
         if (vector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
@@ -475,14 +459,13 @@ public class Plane implements Serializable {
         // normalize point to increase accuracy
         point.normalize();
 
-        mA = vector[0];
-        mB = vector[1];
-        mC = vector[2];
+        a = vector[0];
+        b = vector[1];
+        c = vector[2];
 
-        mD = -(mA * point.getHomX() + mB * point.getHomY() +
-                mC * point.getHomZ()) / point.getHomW();
+        d = -(a * point.getHomX() + b * point.getHomY() + c * point.getHomZ()) / point.getHomW();
 
-        mNormalized = false;
+        normalized = false;
     }
 
     /**
@@ -516,8 +499,7 @@ public class Plane implements Serializable {
         point.normalize();
         normalize();
 
-        final double dotProd = point.getHomX() * mA + point.getHomY() * mB +
-                point.getHomZ() * mC + point.getHomW() * mD;
+        final var dotProd = point.getHomX() * a + point.getHomY() * b + point.getHomZ() * c + point.getHomW() * d;
 
         return Math.abs(dotProd) < threshold;
     }
@@ -535,10 +517,9 @@ public class Plane implements Serializable {
         normalize();
 
         // numerator is the dot product of point and line
-        final double num = point.getHomX() * mA + point.getHomY() * mB +
-                point.getHomZ() * mC + point.getHomW() * mD;
+        final var num = point.getHomX() * a + point.getHomY() * b + point.getHomZ() * c + point.getHomW() * d;
 
-        final double den = Math.sqrt(mA * mA + mB * mB + mC * mC) * point.getHomW();
+        final var den = Math.sqrt(a * a + b * b + c * c) * point.getHomW();
 
         return num / den;
     }
@@ -569,7 +550,7 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public Point3D getClosestPoint(final Point3D point, final double threshold) {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
     }
@@ -599,8 +580,7 @@ public class Plane implements Serializable {
      *                  this plane.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public void closestPoint(final Point3D point, final Point3D result,
-                             final double threshold) {
+    public void closestPoint(final Point3D point, final Point3D result, final double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -618,13 +598,11 @@ public class Plane implements Serializable {
         // (point.getInhomX() + mA * amount) * mA + (point.getInhomY() +
         // mB * amount) * mB + (point.getInhomZ + mC * amount) * mC + mD = 0
 
-        final double amount = -(point.getHomX() * mA + point.getHomY() * mB +
-                point.getHomZ() * mC + point.getHomW() * mD) /
-                (point.getHomW() * (mA * mA + mB * mB + mC * mC));
-        result.setHomogeneousCoordinates(
-                point.getHomX() + mA * amount * point.getHomW(),
-                point.getHomY() + mB * amount * point.getHomW(),
-                point.getHomZ() + mC * amount * point.getHomW(),
+        final var amount = -(point.getHomX() * a + point.getHomY() * b + point.getHomZ() * c + point.getHomW() * d)
+                / (point.getHomW() * (a * a + b * b + c * c));
+        result.setHomogeneousCoordinates(point.getHomX() + a * amount * point.getHomW(),
+                point.getHomY() + b * amount * point.getHomW(),
+                point.getHomZ() + c * amount * point.getHomW(),
                 point.getHomW());
         result.normalize();
     }
@@ -635,7 +613,7 @@ public class Plane implements Serializable {
      * @return Array containing all the parameters that describe this plane.
      */
     public double[] asArray() {
-        final double[] array = new double[PLANE_NUMBER_PARAMS];
+        final var array = new double[PLANE_NUMBER_PARAMS];
         asArray(array);
         return array;
     }
@@ -652,10 +630,10 @@ public class Plane implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        array[0] = mA;
-        array[1] = mB;
-        array[2] = mC;
-        array[3] = mD;
+        array[0] = a;
+        array[1] = b;
+        array[2] = c;
+        array[3] = d;
     }
 
     /**
@@ -663,16 +641,16 @@ public class Plane implements Serializable {
      * computations.
      */
     public void normalize() {
-        if (!mNormalized) {
-            final double norm = Math.sqrt(mA * mA + mB * mB + mC * mC + mD * mD);
+        if (!normalized) {
+            final var norm = Math.sqrt(a * a + b * b + c * c + d * d);
 
             if (norm > PRECISION) {
-                mA /= norm;
-                mB /= norm;
-                mC /= norm;
-                mD /= norm;
+                a /= norm;
+                b /= norm;
+                c /= norm;
+                d /= norm;
 
-                mNormalized = true;
+                normalized = true;
             }
         }
     }
@@ -684,7 +662,7 @@ public class Plane implements Serializable {
      * @return True if this plane is normalized, false otherwise.
      */
     public boolean isNormalized() {
-        return mNormalized;
+        return normalized;
     }
 
     /**
@@ -693,7 +671,7 @@ public class Plane implements Serializable {
      * @return Director vector of this plane.
      */
     public double[] getDirectorVector() {
-        final double[] out = new double[INHOM_VECTOR_SIZE];
+        final var out = new double[INHOM_VECTOR_SIZE];
         directorVector(out);
         return out;
     }
@@ -711,9 +689,9 @@ public class Plane implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        directorVector[0] = mA;
-        directorVector[1] = mB;
-        directorVector[2] = mC;
+        directorVector[0] = a;
+        directorVector[1] = b;
+        directorVector[2] = c;
     }
 
     /**
@@ -726,9 +704,8 @@ public class Plane implements Serializable {
      * @throws NoIntersectionException if the three planes do not intersect in
      *                                 a single point.
      */
-    public Point3D getIntersection(final Plane otherPlane1, final Plane otherPlane2)
-            throws NoIntersectionException {
-        final Point3D result = Point3D.create();
+    public Point3D getIntersection(final Plane otherPlane1, final Plane otherPlane2) throws NoIntersectionException {
+        final var result = Point3D.create();
         intersection(otherPlane1, otherPlane2, result);
         return result;
     }
@@ -743,8 +720,7 @@ public class Plane implements Serializable {
      * @throws NoIntersectionException if the three planes do not intersect in
      *                                 a single point.
      */
-    public void intersection(
-            final Plane otherPlane1, final Plane otherPlane2, final Point3D result)
+    public void intersection(final Plane otherPlane1, final Plane otherPlane2, final Point3D result)
             throws NoIntersectionException {
 
         // normalize planes to increase accuracy
@@ -754,11 +730,11 @@ public class Plane implements Serializable {
 
         // set matrix where each row contains the parameters of the plane
         try {
-            final Matrix m = new Matrix(3, 4);
-            m.setElementAt(0, 0, mA);
-            m.setElementAt(0, 1, mB);
-            m.setElementAt(0, 2, mC);
-            m.setElementAt(0, 3, mD);
+            final var m = new Matrix(3, 4);
+            m.setElementAt(0, 0, a);
+            m.setElementAt(0, 1, b);
+            m.setElementAt(0, 2, c);
+            m.setElementAt(0, 3, d);
 
             m.setElementAt(1, 0, otherPlane1.getA());
             m.setElementAt(1, 1, otherPlane1.getB());
@@ -772,7 +748,7 @@ public class Plane implements Serializable {
 
             // If planes are not parallel, then matrix has rank 3, and its right
             // null-space is equal to their intersection.
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // planes are parallel
@@ -780,15 +756,14 @@ public class Plane implements Serializable {
                 throw new NoIntersectionException();
             }
 
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // last column of V contains the right null-space of m, which is the
             // intersection of lines expressed in homogeneous coordinates.
             // because column is already normalized by SVD decomposition, point
             // will also be normalized
-            result.setHomogeneousCoordinates(v.getElementAt(0, 3),
-                    v.getElementAt(1, 3), v.getElementAt(2, 3),
-                    v.getElementAt(3, 3));
+            result.setHomogeneousCoordinates(v.getElementAt(0, 3), v.getElementAt(1, 3),
+                    v.getElementAt(2, 3), v.getElementAt(3, 3));
         } catch (final AlgebraException e) {
             // lines are numerically unstable
             throw new NoIntersectionException(e);
@@ -806,7 +781,7 @@ public class Plane implements Serializable {
     public double dotProduct(final Plane plane) {
         normalize();
         plane.normalize();
-        return mA * plane.mA + mB * plane.mB + mC * plane.mC + mD * plane.mD;
+        return a * plane.a + b * plane.b + c * plane.c + d * plane.d;
     }
 
     /**
@@ -854,14 +829,13 @@ public class Plane implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Plane)) {
+        if (!(obj instanceof Plane plane)) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        final Plane plane = (Plane) obj;
         return equals(plane);
     }
 
@@ -873,7 +847,7 @@ public class Plane implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(mA, mB, mC, mD);
+        return Objects.hash(a, b, c, d);
     }
 
     /**
@@ -884,7 +858,7 @@ public class Plane implements Serializable {
      * @return a new instance of a plane located at the canonical infinity.
      */
     public static Plane createCanonicalPlaneAtInfinity() {
-        final Plane p = new Plane();
+        final var p = new Plane();
         setAsCanonicalPlaneAtInfinity(p);
         return p;
     }
@@ -897,8 +871,8 @@ public class Plane implements Serializable {
      * @param plane plane to be set at infinity.
      */
     public static void setAsCanonicalPlaneAtInfinity(final Plane plane) {
-        plane.mA = plane.mB = plane.mC = 0.0;
-        plane.mD = 1.0;
-        plane.mNormalized = true;
+        plane.a = plane.b = plane.c = 0.0;
+        plane.d = 1.0;
+        plane.normalized = true;
     }
 }

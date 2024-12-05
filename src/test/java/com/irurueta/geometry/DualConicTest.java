@@ -17,14 +17,13 @@ package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DualConicTest {
+class DualConicTest {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -39,7 +38,7 @@ public class DualConicTest {
     private static final int TIMES = 10;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, BaseConic.BASECONIC_MATRIX_ROW_SIZE);
         assertEquals(3, BaseConic.BASECONIC_MATRIX_COLUMN_SIZE);
         assertEquals(6, BaseConic.N_PARAMS);
@@ -49,14 +48,13 @@ public class DualConicTest {
     }
 
     @Test
-    public void testConstructor() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException,
+    void testConstructor() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentLinesException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // Constructor
-        DualConic dualConic = new DualConic();
+        var dualConic = new DualConic();
         assertEquals(0.0, dualConic.getA(), 0.0);
         assertEquals(0.0, dualConic.getB(), 0.0);
         assertEquals(0.0, dualConic.getC(), 0.0);
@@ -66,12 +64,12 @@ public class DualConicTest {
         assertFalse(dualConic.isNormalized());
 
         // Constructor with params
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualConic = new DualConic(a, b, c, d, e, f);
         assertEquals(a, dualConic.getA(), 0.0);
         assertEquals(b, dualConic.getB(), 0.0);
@@ -82,7 +80,7 @@ public class DualConicTest {
         assertFalse(dualConic.isNormalized());
 
         // Constructor using matrix
-        Matrix m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
+        var m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -107,46 +105,34 @@ public class DualConicTest {
         assertEquals(m.getElementAt(2, 2), dualConic.getF(), 0.0);
 
         // Constructor using matrix with wrong size
-        m = new Matrix(DUAL_CONIC_ROWS + 1, DUAL_CONIC_COLS);
-        dualConic = null;
-        try {
-            dualConic = new DualConic(m);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(dualConic);
+        final var wrong1 = new Matrix(DUAL_CONIC_ROWS + 1, DUAL_CONIC_COLS);
+        assertThrows(IllegalArgumentException.class, () -> new DualConic(wrong1));
 
         // Constructor using non-symmetric matrix
-        m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
-        m.setElementAt(0, 0, a);
-        m.setElementAt(0, 1, b);
-        m.setElementAt(0, 2, d);
-        m.setElementAt(1, 0, b + 1.0);
-        m.setElementAt(1, 1, c);
-        m.setElementAt(1, 2, e + 1.0);
-        m.setElementAt(2, 0, d + 1.0);
-        m.setElementAt(2, 1, e);
-        m.setElementAt(2, 2, f);
-        try {
-            dualConic = new DualConic(m);
-            fail("NonSymmetricMatrixException expected but not thrown");
-        } catch (final NonSymmetricMatrixException ignore) {
-        }
-        assertNull(dualConic);
+        final var wrong2 = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
+        wrong2.setElementAt(0, 0, a);
+        wrong2.setElementAt(0, 1, b);
+        wrong2.setElementAt(0, 2, d);
+        wrong2.setElementAt(1, 0, b + 1.0);
+        wrong2.setElementAt(1, 1, c);
+        wrong2.setElementAt(1, 2, e + 1.0);
+        wrong2.setElementAt(2, 0, d + 1.0);
+        wrong2.setElementAt(2, 1, e);
+        wrong2.setElementAt(2, 2, f);
+        assertThrows(NonSymmetricMatrixException.class, () -> new DualConic(wrong2));
 
         // Constructor from 5 lines
-        m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Line2D line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+        var line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                 m.getElementAt(0, 2));
-        Line2D line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+        var line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
                 m.getElementAt(1, 2));
-        Line2D line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+        var line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
                 m.getElementAt(2, 2));
-        Line2D line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+        var line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
                 m.getElementAt(3, 2));
-        Line2D line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+        var line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2));
 
         line1.normalize();
@@ -156,11 +142,11 @@ public class DualConicTest {
         line5.normalize();
 
         // estimate dual conic that lies inside provided 5 lines
-        final Matrix m2 = new Matrix(5, 6);
+        final var m2 = new Matrix(5, 6);
 
-        double l1 = line1.getA();
-        double l2 = line1.getB();
-        double l3 = line1.getC();
+        var l1 = line1.getA();
+        var l2 = line1.getB();
+        var l3 = line1.getC();
         m2.setElementAt(0, 0, l1 * l1);
         m2.setElementAt(0, 1, 2.0 * l1 * l2);
         m2.setElementAt(0, 2, l2 * l2);
@@ -209,8 +195,7 @@ public class DualConicTest {
         m2.setElementAt(4, 5, l3 * l3);
 
         while (com.irurueta.algebra.Utils.rank(m2) < 5) {
-            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2));
@@ -228,7 +213,6 @@ public class DualConicTest {
             line3.normalize();
             line4.normalize();
             line5.normalize();
-
 
             l1 = line1.getA();
             l2 = line1.getB();
@@ -289,28 +273,26 @@ public class DualConicTest {
         assertTrue(dualConic.isLocus(line5, PRECISION_ERROR));
 
         // Force CoincidentLinesException
-        dualConic = null;
-        try {
-            dualConic = new DualConic(line1, line2, line3, line4, line4);
-            fail("CoincidentLinesException expected but not thrown");
-        } catch (final CoincidentLinesException ignore) {
-        }
-        assertNull(dualConic);
+        final var finalLine1 = line1;
+        final var finalLine2 = line2;
+        final var finalLine3 = line3;
+        final var finalLine4 = line4;
+        assertThrows(CoincidentLinesException.class, () -> new DualConic(finalLine1, finalLine2, finalLine3, finalLine4,
+                finalLine4));
     }
 
     @Test
-    public void testGettersAndSetters() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testGettersAndSetters() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        DualConic dualConic = new DualConic();
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var dualConic = new DualConic();
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualConic.setA(a);
         dualConic.setB(b);
         dualConic.setC(c);
@@ -325,7 +307,7 @@ public class DualConicTest {
         assertEquals(f, dualConic.getF(), 0.0);
 
         dualConic = new DualConic();
-        final Matrix m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
+        final var m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -351,19 +333,18 @@ public class DualConicTest {
     }
 
     @Test
-    public void testAsMatrix() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testAsMatrix() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final DualConic dualConic = new DualConic();
-        final Matrix m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var dualConic = new DualConic();
+        final var m = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         m.setElementAt(0, 0, a);
         m.setElementAt(0, 1, b);
         m.setElementAt(0, 2, d);
@@ -374,29 +355,27 @@ public class DualConicTest {
         m.setElementAt(2, 1, e);
         m.setElementAt(2, 2, f);
         dualConic.setParameters(m);
-        final Matrix m2 = dualConic.asMatrix();
+        final var m2 = dualConic.asMatrix();
 
         assertTrue(m.equals(m2, PRECISION_ERROR));
     }
 
     @Test
-    public void testIsLocus() throws WrongSizeException, DecomposerException,
-            RankDeficientMatrixException, IllegalArgumentException,
-            NonSymmetricMatrixException, NotReadyException, LockedException,
+    void testIsLocus() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException, NotReadyException, LockedException,
             com.irurueta.algebra.NotAvailableException {
 
-        Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Line2D line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+        var line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                 m.getElementAt(0, 2));
-        Line2D line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+        var line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
                 m.getElementAt(1, 2));
-        Line2D line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+        var line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
                 m.getElementAt(2, 2));
-        Line2D line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+        var line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
                 m.getElementAt(3, 2));
-        Line2D line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+        var line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2));
 
         line1.normalize();
@@ -407,11 +386,11 @@ public class DualConicTest {
 
 
         // estimate dual conic that lines inside provided 5 lines
-        final Matrix systemOfEquationsMatrix = new Matrix(5, 6);
+        final var systemOfEquationsMatrix = new Matrix(5, 6);
 
-        double l1 = line1.getA();
-        double l2 = line1.getB();
-        double l3 = line1.getC();
+        var l1 = line1.getA();
+        var l2 = line1.getB();
+        var l3 = line1.getC();
         systemOfEquationsMatrix.setElementAt(0, 0, l1 * l1);
         systemOfEquationsMatrix.setElementAt(0, 1, 2.0 * l1 * l2);
         systemOfEquationsMatrix.setElementAt(0, 2, l2 * l2);
@@ -460,8 +439,7 @@ public class DualConicTest {
         systemOfEquationsMatrix.setElementAt(4, 5, l3 * l3);
 
         while (com.irurueta.algebra.Utils.rank(systemOfEquationsMatrix) < 5) {
-            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2));
@@ -479,7 +457,6 @@ public class DualConicTest {
             line3.normalize();
             line4.normalize();
             line5.normalize();
-
 
             l1 = line1.getA();
             l2 = line1.getB();
@@ -532,28 +509,27 @@ public class DualConicTest {
             systemOfEquationsMatrix.setElementAt(4, 5, l3 * l3);
         }
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(
-                systemOfEquationsMatrix);
+        final var decomposer = new SingularValueDecomposer(systemOfEquationsMatrix);
         decomposer.decompose();
 
-        final Matrix V = decomposer.getV();
+        final var v = decomposer.getV();
 
-        final double a = V.getElementAt(0, 5);
-        final double b = V.getElementAt(1, 5);
-        final double c = V.getElementAt(2, 5);
-        final double d = V.getElementAt(3, 5);
-        final double e = V.getElementAt(4, 5);
-        final double f = V.getElementAt(5, 5);
+        final var a = v.getElementAt(0, 5);
+        final var b = v.getElementAt(1, 5);
+        final var c = v.getElementAt(2, 5);
+        final var d = v.getElementAt(3, 5);
+        final var e = v.getElementAt(4, 5);
+        final var f = v.getElementAt(5, 5);
 
-        final Matrix dualConicLine = new Matrix(HOM_COORDS, 1);
+        final var dualConicLine = new Matrix(HOM_COORDS, 1);
         dualConicLine.setElementAt(0, 0, line1.getA());
         dualConicLine.setElementAt(1, 0, line1.getB());
         dualConicLine.setElementAt(2, 0, line1.getC());
 
-        double norm = com.irurueta.algebra.Utils.normF(dualConicLine);
+        var norm = com.irurueta.algebra.Utils.normF(dualConicLine);
         dualConicLine.multiplyByScalar(1.0 / norm);
 
-        final Matrix dualConicMatrix = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
+        final var dualConicMatrix = new Matrix(DUAL_CONIC_ROWS, DUAL_CONIC_COLS);
         dualConicMatrix.setElementAt(0, 0, a);
         dualConicMatrix.setElementAt(0, 1, b);
         dualConicMatrix.setElementAt(0, 2, d);
@@ -568,14 +544,12 @@ public class DualConicTest {
         dualConicMatrix.multiplyByScalar(1.0 / norm);
 
         // find point where line is tangent to conic
-        final Matrix homPointMatrix = dualConicMatrix.multiplyAndReturnNew(
-                dualConicLine);
+        final var homPointMatrix = dualConicMatrix.multiplyAndReturnNew(dualConicLine);
 
         // add director vector of tangent line to get a point outside of conic
-        double directVectorA = dualConicLine.getElementAtIndex(0);
-        double directVectorB = dualConicLine.getElementAtIndex(1);
-        final double directVectorNorm = Math.sqrt(directVectorA * directVectorA +
-                directVectorB * directVectorB);
+        var directVectorA = dualConicLine.getElementAtIndex(0);
+        var directVectorB = dualConicLine.getElementAtIndex(1);
+        final var directVectorNorm = Math.sqrt(directVectorA * directVectorA + directVectorB * directVectorB);
         directVectorA /= directVectorNorm;
         directVectorB /= directVectorNorm;
         homPointMatrix.setElementAtIndex(0, homPointMatrix.getElementAtIndex(0)
@@ -587,19 +561,17 @@ public class DualConicTest {
         homPointMatrix.multiplyByScalar(1.0 / norm);
 
         // get conic matrix by inverting dual conic matrix
-        final Matrix conicMatrix = com.irurueta.algebra.Utils.inverse(
-                dualConicMatrix);
+        final var conicMatrix = com.irurueta.algebra.Utils.inverse(dualConicMatrix);
 
         // find line vector outside dual conic as the product of conic matrix
         // and point outside of conic
-        final Matrix outsideLineMatrix = conicMatrix.multiplyAndReturnNew(
-                homPointMatrix);
+        final var outsideLineMatrix = conicMatrix.multiplyAndReturnNew(homPointMatrix);
 
         // instantiate line outside dual conic using computed vector
-        final Line2D outsideLine = new Line2D(outsideLineMatrix.toArray());
+        final var outsideLine = new Line2D(outsideLineMatrix.toArray());
 
         // instantiate new dual conic instance
-        final DualConic dualConic = new DualConic(dualConicMatrix);
+        final var dualConic = new DualConic(dualConicMatrix);
 
         // check that initial 5 lines lie inside the dual conic
         assertTrue(dualConic.isLocus(line1, LOCUS_THRESHOLD));
@@ -613,137 +585,116 @@ public class DualConicTest {
     }
 
     @Test
-    public void testAngleBetweenLines() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testAngleBetweenLines() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
         // initial lines
-        final Matrix lineMatrix1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix lineMatrix2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var lineMatrix1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var lineMatrix2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
 
         // transformation matrix
-        final Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
 
         // transform lines
-        final Matrix tLine1 = transform.multiplyAndReturnNew(lineMatrix1);
-        final Matrix tLine2 = transform.multiplyAndReturnNew(lineMatrix2);
+        final var tLine1 = transform.multiplyAndReturnNew(lineMatrix1);
+        final var tLine2 = transform.multiplyAndReturnNew(lineMatrix2);
 
-        final double norm1 = com.irurueta.algebra.Utils.normF(tLine1);
-        final double norm2 = com.irurueta.algebra.Utils.normF(tLine2);
+        final var norm1 = com.irurueta.algebra.Utils.normF(tLine1);
+        final var norm2 = com.irurueta.algebra.Utils.normF(tLine2);
 
-        final double numerator = tLine1.transposeAndReturnNew().multiplyAndReturnNew(
-                tLine2).getElementAt(0, 0);
+        final var numerator = tLine1.transposeAndReturnNew().multiplyAndReturnNew(tLine2)
+                .getElementAt(0, 0);
 
-        final double cosAngle = numerator / (norm1 * norm2);
+        final var cosAngle = numerator / (norm1 * norm2);
 
-        final double angle = Math.acos(cosAngle);
+        final var angle = Math.acos(cosAngle);
 
         // compute dual conic matrix as the product of transposed transform
         // matrix with itself
-        final Matrix transposedTransform = transform.transposeAndReturnNew();
-        final Matrix dualConicMatrix = transposedTransform.multiplyAndReturnNew(
-                transform);
+        final var transposedTransform = transform.transposeAndReturnNew();
+        final var dualConicMatrix = transposedTransform.multiplyAndReturnNew(transform);
 
         // normalize conic matrix
-        final double normDualConic = com.irurueta.algebra.Utils.normF(dualConicMatrix);
+        final var normDualConic = com.irurueta.algebra.Utils.normF(dualConicMatrix);
         dualConicMatrix.multiplyByScalar(1.0 / normDualConic);
 
-        final DualConic dualConic = new DualConic(dualConicMatrix);
+        final var dualConic = new DualConic(dualConicMatrix);
 
-        final Line2D line1 = new Line2D(lineMatrix1.getElementAt(0, 0),
+        final var line1 = new Line2D(lineMatrix1.getElementAt(0, 0),
                 lineMatrix1.getElementAt(1, 0), lineMatrix1.getElementAt(2, 0));
-        final Line2D line2 = new Line2D(lineMatrix2.getElementAt(0, 0),
+        final var line2 = new Line2D(lineMatrix2.getElementAt(0, 0),
                 lineMatrix2.getElementAt(1, 0), lineMatrix2.getElementAt(2, 0));
 
-        assertEquals(dualConic.angleBetweenLines(line1, line2), angle,
-                PRECISION_ERROR);
+        assertEquals(dualConic.angleBetweenLines(line1, line2), angle, PRECISION_ERROR);
     }
 
     @Test
-    public void testArePerpendicularLines() throws WrongSizeException,
-            DecomposerException, RankDeficientMatrixException,
+    void testArePerpendicularLines() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
             IllegalArgumentException, NonSymmetricMatrixException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // trying perpendicular angle
-            Matrix matrixLine1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var matrixLine1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
 
-            double norm = com.irurueta.algebra.Utils.normF(matrixLine1);
+            var norm = com.irurueta.algebra.Utils.normF(matrixLine1);
             matrixLine1.multiplyByScalar(1.0 / norm);
 
-            Matrix matrixLine2 = new Matrix(HOM_COORDS, 1);
-            matrixLine2.setElementAt(0, 0, matrixLine1.getElementAt(1, 0) +
-                    matrixLine1.getElementAt(2, 0));
+            var matrixLine2 = new Matrix(HOM_COORDS, 1);
+            matrixLine2.setElementAt(0, 0, matrixLine1.getElementAt(1, 0)
+                    + matrixLine1.getElementAt(2, 0));
             matrixLine2.setElementAt(1, 0, -matrixLine1.getElementAt(0, 0));
             matrixLine2.setElementAt(2, 0, -matrixLine1.getElementAt(0, 0));
 
             norm = com.irurueta.algebra.Utils.normF(matrixLine2);
             matrixLine2.multiplyByScalar(1.0 / norm);
 
-            Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             while (com.irurueta.algebra.Utils.rank(transform) < 3) {
-                transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                        HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
             }
 
-            final Matrix invTransform = com.irurueta.algebra.Utils.inverse(transform);
+            final var invTransform = com.irurueta.algebra.Utils.inverse(transform);
 
-            Matrix transformLineMatrix1 = transform.multiplyAndReturnNew(
-                    matrixLine1);
-            Matrix transformLineMatrix2 = transform.multiplyAndReturnNew(
-                    matrixLine2);
+            var transformLineMatrix1 = transform.multiplyAndReturnNew(matrixLine1);
+            var transformLineMatrix2 = transform.multiplyAndReturnNew(matrixLine2);
 
-            final Matrix transInvTransform = invTransform.transposeAndReturnNew();
+            final var transInvTransform = invTransform.transposeAndReturnNew();
 
-            final Matrix dualConicMatrix = transInvTransform.multiplyAndReturnNew(
-                    invTransform);
+            final var dualConicMatrix = transInvTransform.multiplyAndReturnNew(invTransform);
             norm = com.irurueta.algebra.Utils.normF(dualConicMatrix);
             dualConicMatrix.multiplyByScalar(1.0 / norm);
 
-            Line2D transformLine1 = new Line2D(transformLineMatrix1.toArray());
-            Line2D transformLine2 = new Line2D(transformLineMatrix2.toArray());
+            var transformLine1 = new Line2D(transformLineMatrix1.toArray());
+            var transformLine2 = new Line2D(transformLineMatrix2.toArray());
 
-            DualConic dualConic = new DualConic(dualConicMatrix);
+            var dualConic = new DualConic(dualConicMatrix);
 
-            assertTrue(dualConic.arePerpendicularLines(transformLine1,
-                    transformLine2, PERPENDICULAR_THRESHOLD));
+            assertTrue(dualConic.arePerpendicularLines(transformLine1, transformLine2, PERPENDICULAR_THRESHOLD));
 
             // trying non-perpendicular points
             double dotProduct;
 
-            matrixLine1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            norm = com.irurueta.algebra.Utils.normF(matrixLine1);
-            matrixLine1.multiplyByScalar(1.0 / norm);
-
-            matrixLine2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            norm = com.irurueta.algebra.Utils.normF(matrixLine2);
-            matrixLine2.multiplyByScalar(1.0 / norm);
-
-            dotProduct = matrixLine1.transposeAndReturnNew().multiplyAndReturnNew(
-                    matrixLine2).getElementAt(0, 0);
-
             // ensure lines are not perpendicular
-            while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD) {
-                matrixLine1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            do {
+                matrixLine1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixLine1);
                 matrixLine1.multiplyByScalar(1.0 / norm);
 
-                matrixLine2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                matrixLine2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixLine2);
                 matrixLine2.multiplyByScalar(1.0 / norm);
 
-                dotProduct = matrixLine1.transposeAndReturnNew().
-                        multiplyAndReturnNew(matrixLine2).getElementAt(0, 0);
-            }
+                dotProduct = matrixLine1.transposeAndReturnNew().multiplyAndReturnNew(matrixLine2)
+                        .getElementAt(0, 0);
+            } while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD);
 
             transformLineMatrix1 = transform.multiplyAndReturnNew(matrixLine1);
             transformLineMatrix2 = transform.multiplyAndReturnNew(matrixLine2);
@@ -755,8 +706,8 @@ public class DualConicTest {
                     5.0 * PERPENDICULAR_THRESHOLD)) {
                 continue;
             }
-            assertFalse(dualConic.arePerpendicularLines(transformLine1,
-                    transformLine2, 5.0 * PERPENDICULAR_THRESHOLD));
+            assertFalse(dualConic.arePerpendicularLines(transformLine1, transformLine2,
+                    5.0 * PERPENDICULAR_THRESHOLD));
 
             dualConic = DualConic.createCanonicalDualAbsoluteConic();
             transformLine1 = new Line2D(1.0, 0.0, 0.0);
@@ -771,30 +722,26 @@ public class DualConicTest {
     }
 
     @Test
-    public void testGetConic() throws WrongSizeException, DecomposerException,
-            RankDeficientMatrixException, IllegalArgumentException,
-            NonSymmetricMatrixException, ConicNotAvailableException {
+    void testGetConic() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException, ConicNotAvailableException {
 
-        Matrix transformMatrix = Matrix.createWithUniformRandomValues(
-                HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
         while (com.irurueta.algebra.Utils.rank(transformMatrix) != 3) {
-            transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
         }
 
-        final Matrix transformTransposedMatrix =
-                transformMatrix.transposeAndReturnNew();
+        final var transformTransposedMatrix = transformMatrix.transposeAndReturnNew();
 
-        final Matrix dualConicMatrix = transformTransposedMatrix.multiplyAndReturnNew(
-                transformMatrix);
+        final var dualConicMatrix = transformTransposedMatrix.multiplyAndReturnNew(transformMatrix);
 
-        final Matrix conicMatrix1 = com.irurueta.algebra.Utils.inverse(
-                dualConicMatrix);
+        final var conicMatrix1 = com.irurueta.algebra.Utils.inverse(dualConicMatrix);
 
-        final DualConic dualConic = new DualConic(dualConicMatrix);
+        final var dualConic = new DualConic(dualConicMatrix);
 
-        final Conic conic = dualConic.getConic();
-        final Matrix conicMatrix2 = conic.asMatrix();
+        final var conic = dualConic.getConic();
+        final var conicMatrix2 = conic.asMatrix();
 
         // normalize conic matrices
         double norm = com.irurueta.algebra.Utils.normF(conicMatrix1);
@@ -804,7 +751,7 @@ public class DualConicTest {
         conicMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute difference of normalized conic matrices
-        final Matrix diffMatrix = conicMatrix1.subtractAndReturnNew(conicMatrix2);
+        final var diffMatrix = conicMatrix1.subtractAndReturnNew(conicMatrix2);
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
@@ -812,21 +759,18 @@ public class DualConicTest {
     }
 
     @Test
-    public void testSetParametersFromLines()
-            throws WrongSizeException, DecomposerException,
-            CoincidentLinesException {
-        Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testSetParametersFromLines() throws WrongSizeException, DecomposerException, CoincidentLinesException {
+        var m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Line2D line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+        var line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                 m.getElementAt(0, 2));
-        Line2D line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+        var line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
                 m.getElementAt(1, 2));
-        Line2D line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+        var line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
                 m.getElementAt(2, 2));
-        Line2D line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+        var line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
                 m.getElementAt(3, 2));
-        Line2D line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+        var line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2));
 
         line1.normalize();
@@ -836,11 +780,11 @@ public class DualConicTest {
         line5.normalize();
 
         // estimate dual conic that lies inside provided 5 lines
-        final Matrix m2 = new Matrix(5, 6);
+        final var m2 = new Matrix(5, 6);
 
-        double l1 = line1.getA();
-        double l2 = line1.getB();
-        double l3 = line1.getC();
+        var l1 = line1.getA();
+        var l2 = line1.getB();
+        var l3 = line1.getC();
         m2.setElementAt(0, 0, l1 * l1);
         m2.setElementAt(0, 1, 2.0 * l1 * l2);
         m2.setElementAt(0, 2, l2 * l2);
@@ -889,8 +833,7 @@ public class DualConicTest {
         m2.setElementAt(4, 5, l3 * l3);
 
         while (com.irurueta.algebra.Utils.rank(m2) < 5) {
-            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2));
@@ -908,7 +851,6 @@ public class DualConicTest {
             line3.normalize();
             line4.normalize();
             line5.normalize();
-
 
             l1 = line1.getA();
             l2 = line1.getB();
@@ -961,7 +903,7 @@ public class DualConicTest {
             m2.setElementAt(4, 5, l3 * l3);
         }
 
-        final DualConic dualConic = new DualConic();
+        final var dualConic = new DualConic();
         dualConic.setParametersFromLines(line1, line2, line3, line4, line5);
 
         assertTrue(dualConic.isLocus(line1, PRECISION_ERROR));
@@ -971,43 +913,41 @@ public class DualConicTest {
         assertTrue(dualConic.isLocus(line5, PRECISION_ERROR));
 
         // Force CoincidentLinesException
-        try {
-            dualConic.setParametersFromLines(line1, line2, line3, line4, line4);
-            fail("CoincidentLinesException expected but not thrown");
-        } catch (final CoincidentLinesException ignore) {
-        }
+        final var finalLine1 = line1;
+        final var finalLine2 = line2;
+        final var finalLine3 = line3;
+        final var finalLine4 = line4;
+        assertThrows(CoincidentLinesException.class,
+                () -> dualConic.setParametersFromLines(finalLine1, finalLine2, finalLine3, finalLine4, finalLine4));
     }
 
     @Test
-    public void testNormalize() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testNormalize() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix transT = t.transposeAndReturnNew();
+        final var t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var transT = t.transposeAndReturnNew();
 
         // make symmetric matrix
-        final Matrix dualConicMatrix = transT.multiplyAndReturnNew(t);
+        final var dualConicMatrix = transT.multiplyAndReturnNew(t);
 
-        final DualConic dualConic = new DualConic(dualConicMatrix);
+        final var dualConic = new DualConic(dualConicMatrix);
 
         // normalize dual conic
         dualConic.normalize();
 
         // return dual conic as matrix
-        final Matrix dualConicMatrix2 = dualConic.asMatrix();
+        final var dualConicMatrix2 = dualConic.asMatrix();
 
         // compare that both matrices are equal up to scale, for that reason we
         // first normalize both matrices
-        double norm = com.irurueta.algebra.Utils.normF(dualConicMatrix);
+        var norm = com.irurueta.algebra.Utils.normF(dualConicMatrix);
         dualConicMatrix.multiplyByScalar(1.0 / norm);
 
         norm = com.irurueta.algebra.Utils.normF(dualConicMatrix2);
         dualConicMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute their difference
-        final Matrix diffMatrix = dualConicMatrix.subtractAndReturnNew(
-                dualConicMatrix2);
+        final var diffMatrix = dualConicMatrix.subtractAndReturnNew(dualConicMatrix2);
 
         // finally, ensure that the norm of the difference matrix is almost up to
         // machine precision
@@ -1017,8 +957,8 @@ public class DualConicTest {
     }
 
     @Test
-    public void testCreateCanonicalDualAbsoluteConic() throws WrongSizeException {
-        final DualConic dac = DualConic.createCanonicalDualAbsoluteConic();
+    void testCreateCanonicalDualAbsoluteConic() throws WrongSizeException {
+        final var dac = DualConic.createCanonicalDualAbsoluteConic();
 
         assertEquals(1.0, dac.getA(), 0.0);
         assertEquals(0.0, dac.getB(), 0.0);
@@ -1031,16 +971,16 @@ public class DualConicTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
 
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final DualConic dualConic1 = new DualConic(a, b, c, d, e, f);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var dualConic1 = new DualConic(a, b, c, d, e, f);
 
         // check
         assertEquals(a, dualConic1.getA(), 0.0);
@@ -1052,8 +992,8 @@ public class DualConicTest {
         assertFalse(dualConic1.isNormalized());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(dualConic1);
-        final DualConic dualConic2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(dualConic1);
+        final var dualConic2 = SerializationHelper.<DualConic>deserialize(bytes);
 
         // check
         assertEquals(dualConic1.getA(), dualConic2.getA(), 0.0);
@@ -1062,7 +1002,6 @@ public class DualConicTest {
         assertEquals(dualConic1.getD(), dualConic2.getD(), 0.0);
         assertEquals(dualConic1.getE(), dualConic2.getE(), 0.0);
         assertEquals(dualConic1.getF(), dualConic2.getF(), 0.0);
-        assertEquals(dualConic1.isNormalized(),
-                dualConic2.isNormalized());
+        assertEquals(dualConic1.isNormalized(), dualConic2.isNormalized());
     }
 }

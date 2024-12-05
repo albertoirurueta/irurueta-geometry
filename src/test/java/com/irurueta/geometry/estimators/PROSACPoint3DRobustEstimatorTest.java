@@ -20,16 +20,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PROSACPoint3DRobustEstimatorTest implements
-        Point3DRobustEstimatorListener {
+class PROSACPoint3DRobustEstimatorTest implements Point3DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -56,7 +53,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, Point3DRobustEstimator.MINIMUM_SIZE);
         assertEquals(0.05f, Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
         assertEquals(0.0f, Point3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
@@ -76,126 +73,103 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        PROSACPoint3DRobustEstimator estimator = new PROSACPoint3DRobustEstimator();
+        var estimator = new PROSACPoint3DRobustEstimator();
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with planes
-        final List<Plane> planes = new ArrayList<>();
-        for (int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var planes = new ArrayList<Plane>();
+        for (var i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
 
         estimator = new PROSACPoint3DRobustEstimator(planes);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        final List<Plane> emptyPlanes = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(emptyPlanes);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPlanes = new ArrayList<Plane>();
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(emptyPlanes));
 
         // test constructor with listener
-        final Point3DRobustEstimatorListener listener =
-                new Point3DRobustEstimatorListener() {
+        final var listener = new Point3DRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final Point3DRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final Point3DRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final Point3DRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final Point3DRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final Point3DRobustEstimator estimator, final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final Point3DRobustEstimator estimator, final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final Point3DRobustEstimator estimator, final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final Point3DRobustEstimator estimator, final float progress) {
+                // no action needed
+            }
+        };
 
         estimator = new PROSACPoint3DRobustEstimator(listener);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
@@ -205,217 +179,146 @@ public class PROSACPoint3DRobustEstimatorTest implements
         estimator = new PROSACPoint3DRobustEstimator(listener, planes);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(listener, emptyPlanes);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(listener, emptyPlanes));
 
         // test constructor with quality scores
-        final double[] qualityScores = new double[Point3DRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[Point3DRobustEstimator.MINIMUM_SIZE];
         estimator = new PROSACPoint3DRobustEstimator(qualityScores);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        final double[] emptyScores = new double[0];
-        estimator = null;
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyScores = new double[0];
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(emptyScores));
 
         // test constructor with lines and scores
         estimator = new PROSACPoint3DRobustEstimator(planes, qualityScores);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(emptyPlanes,
-                    qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(planes, emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(emptyPlanes,
+                qualityScores));
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(planes, emptyScores));
 
         // test constructor with listener and quality scores
         estimator = new PROSACPoint3DRobustEstimator(listener, qualityScores);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(listener, emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(listener, emptyScores));
 
         // test constructor with listener, planes and quality scores
-        estimator = new PROSACPoint3DRobustEstimator(listener, planes,
-                qualityScores);
+        estimator = new PROSACPoint3DRobustEstimator(listener, planes, qualityScores);
 
         // check correctness
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(Point3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(listener, emptyPlanes,
-                    qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new PROSACPoint3DRobustEstimator(listener, planes,
-                    emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(listener, emptyPlanes,
+                qualityScores));
+        assertThrows(IllegalArgumentException.class, () -> new PROSACPoint3DRobustEstimator(listener, planes,
+                emptyScores));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACPoint3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
@@ -423,17 +326,12 @@ public class PROSACPoint3DRobustEstimatorTest implements
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -448,13 +346,11 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -463,26 +359,16 @@ public class PROSACPoint3DRobustEstimatorTest implements
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(Point3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5f);
@@ -491,26 +377,16 @@ public class PROSACPoint3DRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         // check default value
-        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Point3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
@@ -519,25 +395,20 @@ public class PROSACPoint3DRobustEstimatorTest implements
         assertEquals(1, estimator.getMaxIterations());
 
         // Fail IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPlanes() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetPlanes() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Plane> planes = new ArrayList<>();
-        for (int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var planes = new ArrayList<Plane>();
+        for (var i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
         estimator.setPlanes(planes);
@@ -547,7 +418,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // if we set quality scores, then estimator becomes ready
-        final double[] qualityScores = new double[planes.size()];
+        final var qualityScores = new double[planes.size()];
         estimator.setQualityScores(qualityScores);
 
         assertTrue(estimator.isReady());
@@ -558,41 +429,30 @@ public class PROSACPoint3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Plane> emptyPlanes = new ArrayList<>();
-        try {
-            estimator.setPlanes(emptyPlanes);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var emptyPlanes = new ArrayList<Plane>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPlanes(emptyPlanes));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         assertNull(estimator.getQualityScores());
 
-        double[] qualityScores = new double[
-                Point3DRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[Point3DRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
         assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        qualityScores = new double[1];
-        try {
-            estimator.setQualityScores(qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var qualityScores2 = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> estimator.setQualityScores(qualityScores2));
     }
 
     @Test
-    public void testIsSetResultRefined() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testIsSetResultRefined() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
 
@@ -604,26 +464,21 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testGetSetRefinementCoordinatesType() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testGetSetRefinementCoordinatesType() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
 
         // set new value
-        estimator.setRefinementCoordinatesType(
-                CoordinatesType.HOMOGENEOUS_COORDINATES);
+        estimator.setRefinementCoordinatesType(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
         // check correctness
-        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES,
-                estimator.getRefinementCoordinatesType());
+        assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, estimator.getRefinementCoordinatesType());
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         assertFalse(estimator.isCovarianceKept());
 
@@ -635,9 +490,8 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
 
@@ -649,10 +503,8 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testIsSetComputeAndKeepResidualsEnabled()
-            throws LockedException {
-        final PROSACPoint3DRobustEstimator estimator =
-                new PROSACPoint3DRobustEstimator();
+    void testIsSetComputeAndKeepResidualsEnabled() throws LockedException {
+        final var estimator = new PROSACPoint3DRobustEstimator();
 
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
@@ -664,32 +516,27 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateWithoutRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException,
+    void testEstimateWithoutRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
             ColinearPointsException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Point3D point = new HomogeneousPoint3D(
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     1.0);
 
             // compute random lines passing through the point
-            final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            final double[] qualityScores = new double[nPlanes];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Plane> planes = new ArrayList<>();
-            final List<Plane> planesWithError = new ArrayList<>();
-            Plane plane;
-            Plane planeWithError;
-            for (int i = 0; i < nPlanes; i++) {
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+            final var nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+            final var qualityScores = new double[nPlanes];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var planes = new ArrayList<Plane>();
+            final var planesWithError = new ArrayList<Plane>();
+            for (var i = 0; i < nPlanes; i++) {
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
 
                 // get two more points(far enough to compute a plane)
@@ -697,38 +544,32 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 Point3D point3;
                 do {
                     point2 = new HomogeneousPoint3D(
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE), 1.0);
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            1.0);
                 } while (point2.distanceTo(point) < STD_ERROR);
                 do {
                     point3 = new HomogeneousPoint3D(
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE), 1.0);
-                } while (point3.distanceTo(point) < STD_ERROR ||
-                        point3.distanceTo(point2) < STD_ERROR);
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            1.0);
+                } while (point3.distanceTo(point) < STD_ERROR || point3.distanceTo(point2) < STD_ERROR);
 
-                plane = new Plane(point, point2, point3);
+                final var plane = new Plane(point, point2, point3);
 
+                Plane planeWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // line is outlier
-                    final double errorA = errorRandomizer.nextDouble();
-                    final double errorB = errorRandomizer.nextDouble();
-                    final double errorC = errorRandomizer.nextDouble();
-                    final double errorD = errorRandomizer.nextDouble();
-                    planeWithError = new Plane(plane.getA() + errorA,
-                            plane.getB() + errorB, plane.getC() + errorC,
-                            plane.getD() + errorD);
+                    final var errorA = errorRandomizer.nextDouble();
+                    final var errorB = errorRandomizer.nextDouble();
+                    final var errorC = errorRandomizer.nextDouble();
+                    final var errorD = errorRandomizer.nextDouble();
+                    planeWithError = new Plane(plane.getA() + errorA, plane.getB() + errorB,
+                            plane.getC() + errorC, plane.getD() + errorD);
 
-                    final double error = Math.sqrt(errorA * errorA + errorB * errorB +
-                            errorC * errorC);
+                    final var error = Math.sqrt(errorA * errorA + errorB * errorB + errorC * errorC);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier plane
@@ -742,9 +583,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
             }
 
-            final PROSACPoint3DRobustEstimator estimator =
-                    new PROSACPoint3DRobustEstimator(this, planesWithError,
-                            qualityScores);
+            final var estimator = new PROSACPoint3DRobustEstimator(this, planesWithError, qualityScores);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(false);
@@ -757,7 +596,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Point3D point2 = estimator.estimate();
+            final var point2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -767,7 +606,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all planes without
             // error have estimated point as locus
-            for (final Plane p : planes) {
+            for (final var p : planes) {
                 assertTrue(p.isLocus(point2, ABSOLUTE_ERROR));
             }
 
@@ -785,32 +624,27 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateWithInhomogeneousRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException,
+    void testEstimateWithInhomogeneousRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
             ColinearPointsException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Point3D point = new HomogeneousPoint3D(
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     1.0);
 
             // compute random lines passing through the point
-            final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            final double[] qualityScores = new double[nPlanes];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Plane> planes = new ArrayList<>();
-            final List<Plane> planesWithError = new ArrayList<>();
-            Plane plane;
-            Plane planeWithError;
-            for (int i = 0; i < nPlanes; i++) {
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+            final var nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+            final var qualityScores = new double[nPlanes];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var planes = new ArrayList<Plane>();
+            final var planesWithError = new ArrayList<Plane>();
+            for (var i = 0; i < nPlanes; i++) {
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
 
                 // get two more points(far enough to compute a plane)
@@ -818,38 +652,32 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 Point3D point3;
                 do {
                     point2 = new HomogeneousPoint3D(
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE), 1.0);
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            1.0);
                 } while (point2.distanceTo(point) < STD_ERROR);
                 do {
                     point3 = new HomogeneousPoint3D(
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE), 1.0);
-                } while (point3.distanceTo(point) < STD_ERROR ||
-                        point3.distanceTo(point2) < STD_ERROR);
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            1.0);
+                } while (point3.distanceTo(point) < STD_ERROR || point3.distanceTo(point2) < STD_ERROR);
 
-                plane = new Plane(point, point2, point3);
+                final var plane = new Plane(point, point2, point3);
 
+                Plane planeWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // line is outlier
-                    final double errorA = errorRandomizer.nextDouble();
-                    final double errorB = errorRandomizer.nextDouble();
-                    final double errorC = errorRandomizer.nextDouble();
-                    final double errorD = errorRandomizer.nextDouble();
-                    planeWithError = new Plane(plane.getA() + errorA,
-                            plane.getB() + errorB, plane.getC() + errorC,
-                            plane.getD() + errorD);
+                    final var errorA = errorRandomizer.nextDouble();
+                    final var errorB = errorRandomizer.nextDouble();
+                    final var errorC = errorRandomizer.nextDouble();
+                    final var errorD = errorRandomizer.nextDouble();
+                    planeWithError = new Plane(plane.getA() + errorA, plane.getB() + errorB,
+                            plane.getC() + errorC, plane.getD() + errorD);
 
-                    final double error = Math.sqrt(errorA * errorA + errorB * errorB +
-                            errorC * errorC);
+                    final var error = Math.sqrt(errorA * errorA + errorB * errorB + errorC * errorC);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier plane
@@ -863,15 +691,12 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
             }
 
-            final PROSACPoint3DRobustEstimator estimator =
-                    new PROSACPoint3DRobustEstimator(this, planesWithError,
-                            qualityScores);
+            final var estimator = new PROSACPoint3DRobustEstimator(this, planesWithError, qualityScores);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
-            estimator.setRefinementCoordinatesType(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES);
+            estimator.setRefinementCoordinatesType(CoordinatesType.INHOMOGENEOUS_COORDINATES);
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
@@ -882,17 +707,15 @@ public class PROSACPoint3DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Point3D point2 = estimator.estimate();
+            final var point2 = estimator.estimate();
 
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             assertNotNull(estimator.getCovariance());
-            assertEquals(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
-                    estimator.getCovariance().getRows());
-            assertEquals(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
-                    estimator.getCovariance().getColumns());
+            assertEquals(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, estimator.getCovariance().getRows());
+            assertEquals(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, estimator.getCovariance().getColumns());
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -902,7 +725,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all planes without
             // error have estimated point as locus
-            for (final Plane p : planes) {
+            for (final var p : planes) {
                 assertTrue(p.isLocus(point2, ABSOLUTE_ERROR));
             }
 
@@ -920,33 +743,28 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateWithHomogeneousRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException,
+    void testEstimateWithHomogeneousRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
             ColinearPointsException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Point3D point = new HomogeneousPoint3D(
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     1.0);
 
             // compute random lines passing through the point
-            final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            final double[] qualityScores = new double[nPlanes];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Plane> planes = new ArrayList<>();
-            final List<Plane> planesWithError = new ArrayList<>();
-            Plane plane;
-            Plane planeWithError;
-            boolean failed = false;
-            for (int i = 0; i < nPlanes; i++) {
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+            final var nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+            final var qualityScores = new double[nPlanes];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var planes = new ArrayList<Plane>();
+            final var planesWithError = new ArrayList<Plane>();
+            var failed = false;
+            for (var i = 0; i < nPlanes; i++) {
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
 
                 // get two more points(far enough to compute a plane)
@@ -954,38 +772,32 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 Point3D point3;
                 do {
                     point2 = new HomogeneousPoint3D(
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE), 1.0);
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            1.0);
                 } while (point2.distanceTo(point) < STD_ERROR);
                 do {
                     point3 = new HomogeneousPoint3D(
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE),
-                            randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                    MAX_RANDOM_VALUE), 1.0);
-                } while (point3.distanceTo(point) < STD_ERROR ||
-                        point3.distanceTo(point2) < STD_ERROR);
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            1.0);
+                } while (point3.distanceTo(point) < STD_ERROR || point3.distanceTo(point2) < STD_ERROR);
 
-                plane = new Plane(point, point2, point3);
+                final var plane = new Plane(point, point2, point3);
 
+                Plane planeWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // line is outlier
-                    final double errorA = errorRandomizer.nextDouble();
-                    final double errorB = errorRandomizer.nextDouble();
-                    final double errorC = errorRandomizer.nextDouble();
-                    final double errorD = errorRandomizer.nextDouble();
-                    planeWithError = new Plane(plane.getA() + errorA,
-                            plane.getB() + errorB, plane.getC() + errorC,
-                            plane.getD() + errorD);
+                    final var errorA = errorRandomizer.nextDouble();
+                    final var errorB = errorRandomizer.nextDouble();
+                    final var errorC = errorRandomizer.nextDouble();
+                    final var errorD = errorRandomizer.nextDouble();
+                    planeWithError = new Plane(plane.getA() + errorA, plane.getB() + errorB,
+                            plane.getC() + errorC, plane.getD() + errorD);
 
-                    final double error = Math.sqrt(errorA * errorA + errorB * errorB +
-                            errorC * errorC);
+                    final var error = Math.sqrt(errorA * errorA + errorB * errorB + errorC * errorC);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier plane
@@ -1007,15 +819,12 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 continue;
             }
 
-            final PROSACPoint3DRobustEstimator estimator =
-                    new PROSACPoint3DRobustEstimator(this, planesWithError,
-                            qualityScores);
+            final var estimator = new PROSACPoint3DRobustEstimator(this, planesWithError, qualityScores);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(true);
             estimator.setCovarianceKept(true);
-            estimator.setRefinementCoordinatesType(
-                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+            estimator.setRefinementCoordinatesType(CoordinatesType.HOMOGENEOUS_COORDINATES);
             estimator.setComputeAndKeepInliersEnabled(true);
             estimator.setComputeAndKeepResidualsEnabled(true);
 
@@ -1026,17 +835,15 @@ public class PROSACPoint3DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Point3D point2 = estimator.estimate();
+            final var point2 = estimator.estimate();
 
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             assertNotNull(estimator.getCovariance());
-            assertEquals(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
-                    estimator.getCovariance().getRows());
-            assertEquals(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
-                    estimator.getCovariance().getColumns());
+            assertEquals(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, estimator.getCovariance().getRows());
+            assertEquals(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, estimator.getCovariance().getColumns());
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -1046,7 +853,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all planes without
             // error have estimated point as locus
-            for (final Plane p : planes) {
+            for (final var p : planes) {
                 if (!p.isLocus(point2, ABSOLUTE_ERROR)) {
                     failed = true;
                     break;
@@ -1084,83 +891,34 @@ public class PROSACPoint3DRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(final Point3DRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final Point3DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((PROSACPoint3DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(final Point3DRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final Point3DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((PROSACPoint3DRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(final PROSACPoint3DRobustEstimator estimator) {
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.5f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPlanes(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            estimator.setRefinementCoordinatesType(
-                    CoordinatesType.HOMOGENEOUS_COORDINATES);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setCovarianceKept(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setComputeAndKeepInliersEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setComputeAndKeepResidualsEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+    private static void checkLocked(final PROSACPoint3DRobustEstimator estimator) {
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(5));
+        assertThrows(LockedException.class, () -> estimator.setPlanes(null));
+        assertThrows(LockedException.class, estimator::estimate);
+        assertThrows(LockedException.class, () -> estimator.setRefinementCoordinatesType(
+                CoordinatesType.HOMOGENEOUS_COORDINATES));
+        assertThrows(LockedException.class, () -> estimator.setCovarianceKept(true));
+        assertThrows(LockedException.class, () -> estimator.setComputeAndKeepInliersEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setComputeAndKeepResidualsEnabled(true));
         assertTrue(estimator.isLocked());
     }
 }

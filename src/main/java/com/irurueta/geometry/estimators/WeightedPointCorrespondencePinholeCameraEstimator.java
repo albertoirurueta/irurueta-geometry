@@ -32,8 +32,7 @@ import java.util.List;
  * point correspondences.
  */
 @SuppressWarnings("DuplicatedCode")
-public class WeightedPointCorrespondencePinholeCameraEstimator extends
-        PointCorrespondencePinholeCameraEstimator {
+public class WeightedPointCorrespondencePinholeCameraEstimator extends PointCorrespondencePinholeCameraEstimator {
 
     /**
      * Default number of points (i.e. correspondences) to be weighted and taken
@@ -51,27 +50,27 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * Maximum number of points (i.e. correspondences) to be weighted and taken
      * into account.
      */
-    private int mMaxPoints;
+    private int maxPoints;
 
     /**
      * Indicates if weights are sorted by default so that largest weighted
      * correspondences are used first.
      */
-    private boolean mSortWeights;
+    private boolean sortWeights;
 
     /**
      * Array containing weights for all point correspondences.
      */
-    private double[] mWeights;
+    private double[] weights;
 
     /**
      * Constructor.
      */
     public WeightedPointCorrespondencePinholeCameraEstimator() {
         super();
-        mMaxPoints = DEFAULT_MAX_POINTS;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxPoints = DEFAULT_MAX_POINTS;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -80,12 +79,11 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    public WeightedPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    public WeightedPointCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
-        mMaxPoints = DEFAULT_MAX_POINTS;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxPoints = DEFAULT_MAX_POINTS;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -98,12 +96,11 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D)
-            throws WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D) throws WrongListSizesException {
         super(points3D, points2D);
-        mMaxPoints = DEFAULT_MAX_POINTS;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxPoints = DEFAULT_MAX_POINTS;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -118,13 +115,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final PinholeCameraEstimatorListener listener)
+            final List<Point3D> points3D, final List<Point2D> points2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(points3D, points2D, listener);
-        mMaxPoints = DEFAULT_MAX_POINTS;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxPoints = DEFAULT_MAX_POINTS;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -140,12 +136,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] weights) throws WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] weights)
+            throws WrongListSizesException {
         super();
-        mMaxPoints = DEFAULT_MAX_POINTS;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxPoints = DEFAULT_MAX_POINTS;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        this.weights = null;
         internalSetListsAndWeights(points3D, points2D, weights);
     }
 
@@ -164,13 +160,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] weights, final PinholeCameraEstimatorListener listener)
-            throws WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] weights,
+            final PinholeCameraEstimatorListener listener) throws WrongListSizesException {
         super(listener);
-        mMaxPoints = DEFAULT_MAX_POINTS;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxPoints = DEFAULT_MAX_POINTS;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        this.weights = null;
         internalSetListsAndWeights(points3D, points2D, weights);
     }
 
@@ -189,8 +184,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                  is not equal to the number of point correspondences.
      */
     private void internalSetListsAndWeights(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] weights) throws WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] weights)
+            throws WrongListSizesException {
 
         if (points3D == null || points2D == null || weights == null) {
             throw new IllegalArgumentException();
@@ -200,9 +195,9 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
             throw new WrongListSizesException();
         }
 
-        mPoints3D = points3D;
-        mPoints2D = points2D;
-        mWeights = weights;
+        this.points3D = points3D;
+        this.points2D = points2D;
+        this.weights = weights;
     }
 
     /**
@@ -219,8 +214,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public void setListsAndWeights(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] weights) throws LockedException, WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] weights) throws LockedException,
+            WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -241,14 +236,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * @return true if corresponding 2D/3D points are valid, false otherwise.
      */
     public static boolean areValidListsAndWeights(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] weights) {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] weights) {
         if (points3D == null || points2D == null || weights == null) {
             return false;
         }
-        return points3D.size() == points2D.size() &&
-                points2D.size() == weights.length &&
-                points3D.size() >= MIN_NUMBER_OF_POINT_CORRESPONDENCES;
+        return points3D.size() == points2D.size() && points2D.size() == weights.length
+                && points3D.size() >= MIN_NUMBER_OF_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -263,7 +256,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
         if (!areWeightsAvailable()) {
             throw new NotAvailableException();
         }
-        return mWeights;
+        return weights;
     }
 
     /**
@@ -273,7 +266,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * @return true if weights are available, false otherwise.
      */
     public boolean areWeightsAvailable() {
-        return mWeights != null;
+        return weights != null;
     }
 
     /**
@@ -283,7 +276,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * @return maximum number of points to be weighted.
      */
     public int getMaxPoints() {
-        return mMaxPoints;
+        return maxPoints;
     }
 
     /**
@@ -303,7 +296,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mMaxPoints = maxPoints;
+        this.maxPoints = maxPoints;
     }
 
     /**
@@ -313,7 +306,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * @return true if weights are sorted, false otherwise.
      */
     public boolean isSortWeightsEnabled() {
-        return mSortWeights;
+        return sortWeights;
     }
 
     /**
@@ -323,13 +316,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      * @param sortWeights true if weights are sorted, false otherwise.
      * @throws LockedException if this instance is locked.
      */
-    public void setSortWeightsEnabled(final boolean sortWeights)
-            throws LockedException {
+    public void setSortWeightsEnabled(final boolean sortWeights) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
 
-        mSortWeights = sortWeights;
+        this.sortWeights = sortWeights;
     }
 
     /**
@@ -358,43 +350,31 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      *                                         reason (i.e. numerical instability or geometric degeneracy).
      */
     @Override
-    protected Matrix internalEstimate(
-            final List<Point3D> points3D, final List<Point2D> points2D)
+    protected Matrix internalEstimate(final List<Point3D> points3D, final List<Point2D> points2D)
             throws PinholeCameraEstimatorException {
 
         try {
-            final WeightSelection selection = WeightSelection.selectWeights(mWeights,
-                    mSortWeights, mMaxPoints);
-            final boolean[] selected = selection.getSelected();
+            final var selection = WeightSelection.selectWeights(weights, sortWeights, maxPoints);
+            final var selected = selection.getSelected();
 
-            final Matrix a = new Matrix(12, 12);
-            final Matrix row = new Matrix(2, 12);
-            final Matrix transRow = new Matrix(12, 2);
-            final Matrix tmp = new Matrix(12, 12);
+            final var a = new Matrix(12, 12);
+            final var row = new Matrix(2, 12);
+            final var transRow = new Matrix(12, 2);
+            final var tmp = new Matrix(12, 12);
 
-            final Iterator<Point2D> iterator2D = points2D.iterator();
-            final Iterator<Point3D> iterator3D = points3D.iterator();
+            final var iterator2D = points2D.iterator();
+            final var iterator3D = points3D.iterator();
 
-            Point2D point2D;
-            Point3D point3D;
-            int index = 0;
-            int nMatches = 0;
-            double homImageX;
-            double homImageY;
-            double homImageW;
-            double homWorldX;
-            double homWorldY;
-            double homWorldZ;
-            double homWorldW;
-            double weight;
-            double previousNorm = 1.0;
+            var index = 0;
+            var nMatches = 0;
+            var previousNorm = 1.0;
             double rowNorm;
             while (iterator2D.hasNext() && iterator3D.hasNext()) {
-                point2D = iterator2D.next();
-                point3D = iterator3D.next();
+                final var point2D = iterator2D.next();
+                final var point3D = iterator3D.next();
 
                 if (selected[index]) {
-                    weight = mWeights[index];
+                    final var weight = weights[index];
 
                     if (Math.abs(weight) < EPS) {
                         // skip, because weight is too small
@@ -406,14 +386,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
                     point2D.normalize();
                     point3D.normalize();
 
-                    homImageX = point2D.getHomX();
-                    homImageY = point2D.getHomY();
-                    homImageW = point2D.getHomW();
+                    final var homImageX = point2D.getHomX();
+                    final var homImageY = point2D.getHomY();
+                    final var homImageW = point2D.getHomW();
 
-                    homWorldX = point3D.getHomX();
-                    homWorldY = point3D.getHomY();
-                    homWorldZ = point3D.getHomZ();
-                    homWorldW = point3D.getHomW();
+                    final var homWorldX = point3D.getHomX();
+                    final var homWorldY = point3D.getHomY();
+                    final var homWorldZ = point3D.getHomZ();
+                    final var homWorldW = point3D.getHomW();
 
                     // first row
                     row.setElementAt(0, 0, homImageW * homWorldX * weight);
@@ -429,32 +409,23 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
                     row.setElementAt(0, 11, -homImageX * homWorldW * weight);
 
                     // normalize row
-                    rowNorm = Math.sqrt(
-                            Math.pow(row.getElementAt(0, 0), 2.0) +
-                                    Math.pow(row.getElementAt(0, 1), 2.0) +
-                                    Math.pow(row.getElementAt(0, 2), 2.0) +
-                                    Math.pow(row.getElementAt(0, 3), 2.0) +
-                                    Math.pow(row.getElementAt(0, 8), 2.0) +
-                                    Math.pow(row.getElementAt(0, 9), 2.0) +
-                                    Math.pow(row.getElementAt(0, 10), 2.0) +
-                                    Math.pow(row.getElementAt(0, 11), 2.0));
+                    rowNorm = Math.sqrt(Math.pow(row.getElementAt(0, 0), 2.0)
+                            + Math.pow(row.getElementAt(0, 1), 2.0)
+                            + Math.pow(row.getElementAt(0, 2), 2.0)
+                            + Math.pow(row.getElementAt(0, 3), 2.0)
+                            + Math.pow(row.getElementAt(0, 8), 2.0)
+                            + Math.pow(row.getElementAt(0, 9), 2.0)
+                            + Math.pow(row.getElementAt(0, 10), 2.0)
+                            + Math.pow(row.getElementAt(0, 11), 2.0));
 
-                    row.setElementAt(0, 0, row.getElementAt(0, 0) /
-                            rowNorm);
-                    row.setElementAt(0, 1, row.getElementAt(0, 1) /
-                            rowNorm);
-                    row.setElementAt(0, 2, row.getElementAt(0, 2) /
-                            rowNorm);
-                    row.setElementAt(0, 3, row.getElementAt(0, 3) /
-                            rowNorm);
-                    row.setElementAt(0, 8, row.getElementAt(0, 8) /
-                            rowNorm);
-                    row.setElementAt(0, 9, row.getElementAt(0, 9) /
-                            rowNorm);
-                    row.setElementAt(0, 10, row.getElementAt(0, 10) /
-                            rowNorm);
-                    row.setElementAt(0, 11, row.getElementAt(0, 11) /
-                            rowNorm);
+                    row.setElementAt(0, 0, row.getElementAt(0, 0) / rowNorm);
+                    row.setElementAt(0, 1, row.getElementAt(0, 1) / rowNorm);
+                    row.setElementAt(0, 2, row.getElementAt(0, 2) / rowNorm);
+                    row.setElementAt(0, 3, row.getElementAt(0, 3) / rowNorm);
+                    row.setElementAt(0, 8, row.getElementAt(0, 8) / rowNorm);
+                    row.setElementAt(0, 9, row.getElementAt(0, 9) / rowNorm);
+                    row.setElementAt(0, 10, row.getElementAt(0, 10) / rowNorm);
+                    row.setElementAt(0, 11, row.getElementAt(0, 11) / rowNorm);
 
                     // second row
 
@@ -471,32 +442,23 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
                     row.setElementAt(1, 11, -homImageY * homWorldW * weight);
 
                     // normalize row
-                    rowNorm = Math.sqrt(
-                            Math.pow(row.getElementAt(1, 4), 2.0) +
-                                    Math.pow(row.getElementAt(1, 5), 2.0) +
-                                    Math.pow(row.getElementAt(1, 6), 2.0) +
-                                    Math.pow(row.getElementAt(1, 7), 2.0) +
-                                    Math.pow(row.getElementAt(1, 8), 2.0) +
-                                    Math.pow(row.getElementAt(1, 9), 2.0) +
-                                    Math.pow(row.getElementAt(1, 10), 2.0) +
-                                    Math.pow(row.getElementAt(1, 11), 2.0));
+                    rowNorm = Math.sqrt(Math.pow(row.getElementAt(1, 4), 2.0)
+                            + Math.pow(row.getElementAt(1, 5), 2.0)
+                            + Math.pow(row.getElementAt(1, 6), 2.0)
+                            + Math.pow(row.getElementAt(1, 7), 2.0)
+                            + Math.pow(row.getElementAt(1, 8), 2.0)
+                            + Math.pow(row.getElementAt(1, 9), 2.0)
+                            + Math.pow(row.getElementAt(1, 10), 2.0)
+                            + Math.pow(row.getElementAt(1, 11), 2.0));
 
-                    row.setElementAt(1, 4, row.getElementAt(1, 4) /
-                            rowNorm);
-                    row.setElementAt(1, 5, row.getElementAt(1, 5) /
-                            rowNorm);
-                    row.setElementAt(1, 6, row.getElementAt(1, 6) /
-                            rowNorm);
-                    row.setElementAt(1, 7, row.getElementAt(1, 7) /
-                            rowNorm);
-                    row.setElementAt(1, 8, row.getElementAt(1, 8) /
-                            rowNorm);
-                    row.setElementAt(1, 9, row.getElementAt(1, 9) /
-                            rowNorm);
-                    row.setElementAt(1, 10, row.getElementAt(1, 10) /
-                            rowNorm);
-                    row.setElementAt(1, 11, row.getElementAt(1, 11) /
-                            rowNorm);
+                    row.setElementAt(1, 4, row.getElementAt(1, 4) / rowNorm);
+                    row.setElementAt(1, 5, row.getElementAt(1, 5) / rowNorm);
+                    row.setElementAt(1, 6, row.getElementAt(1, 6) / rowNorm);
+                    row.setElementAt(1, 7, row.getElementAt(1, 7) / rowNorm);
+                    row.setElementAt(1, 8, row.getElementAt(1, 8) / rowNorm);
+                    row.setElementAt(1, 9, row.getElementAt(1, 9) / rowNorm);
+                    row.setElementAt(1, 10, row.getElementAt(1, 10) / rowNorm);
+                    row.setElementAt(1, 11, row.getElementAt(1, 11) / rowNorm);
 
                     // transRow = row'
                     row.transpose(transRow);
@@ -520,7 +482,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
                 throw new PinholeCameraEstimatorException();
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+            final var decomposer = new SingularValueDecomposer(a);
             decomposer.decompose();
 
             if (decomposer.getNullity() > 1) {
@@ -530,15 +492,14 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
                 throw new PinholeCameraEstimatorException();
             }
 
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // use last column of V as pinhole camera vector
 
             // the last column of V contains pinhole camera matrix ordered by
             // rows as: P11, P12, P13, P14, P21, P22, P23, P24, P31, P32, P33,
             // P34, hence we reorder p
-            final Matrix pinholeCameraMatrix = new Matrix(
-                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
+            final var pinholeCameraMatrix = new Matrix(PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
 
             pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));
@@ -576,7 +537,6 @@ public class WeightedPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public PinholeCameraEstimatorType getType() {
-        return PinholeCameraEstimatorType.
-                WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR;
+        return PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR;
     }
 }

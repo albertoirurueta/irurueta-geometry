@@ -42,22 +42,22 @@ public class Ellipse implements Serializable {
     /**
      * Center of ellipse.
      */
-    private Point2D mCenter;
+    private Point2D center;
 
     /**
      * Semi-major axis length (a).
      */
-    private double mSemiMajorAxis;
+    private double semiMajorAxis;
 
     /**
      * Semi-minor axis length (b).
      */
-    private double mSemiMinorAxis;
+    private double semiMinorAxis;
 
     /**
      * Rotation angle.
      */
-    private double mRotationAngle;
+    private double rotationAngle;
 
     /**
      * Empty constructor.
@@ -65,9 +65,9 @@ public class Ellipse implements Serializable {
      * radius 1.0.
      */
     public Ellipse() {
-        mCenter = Point2D.create();
-        mSemiMajorAxis = mSemiMinorAxis = 1.0;
-        mRotationAngle = 0.0;
+        center = Point2D.create();
+        semiMajorAxis = semiMinorAxis = 1.0;
+        rotationAngle = 0.0;
     }
 
     /**
@@ -80,8 +80,7 @@ public class Ellipse implements Serializable {
      */
     public Ellipse(final Point2D center, final double semiMajorAxis, final double semiMinorAxis,
                    final double rotationAngle) {
-        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotationAngle);
     }
 
     /**
@@ -94,8 +93,7 @@ public class Ellipse implements Serializable {
      */
     public Ellipse(final Point2D center, final double semiMajorAxis, final double semiMinorAxis,
                    final Rotation2D rotation) {
-        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotation);
+        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotation);
     }
 
     /**
@@ -110,8 +108,7 @@ public class Ellipse implements Serializable {
      */
     public Ellipse(final Point2D point1, final Point2D point2, final Point2D center, final double theta)
             throws ColinearPointsException {
-        setParametersFromPointsCenterAndRotation(point1, point2, center,
-                theta);
+        setParametersFromPointsCenterAndRotation(point1, point2, center, theta);
     }
 
     /**
@@ -125,8 +122,8 @@ public class Ellipse implements Serializable {
      * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
-    public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3,
-                   final Point2D point4, final Point2D point5) throws ColinearPointsException {
+    public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+                   final Point2D point5) throws ColinearPointsException {
         setParametersFromPoints(point1, point2, point3, point4, point5);
     }
 
@@ -143,11 +140,9 @@ public class Ellipse implements Serializable {
      * @throws ColinearPointsException if points are in a co-linear or degenerate
      *                                 configuration.
      */
-    public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3,
-                   final Point2D point4, final Point2D point5, double threshold)
-            throws ColinearPointsException {
-        setParametersFromPoints(point1, point2, point3, point4, point5,
-                threshold);
+    public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+                   final Point2D point5, double threshold) throws ColinearPointsException {
+        setParametersFromPoints(point1, point2, point3, point4, point5, threshold);
     }
 
     /**
@@ -164,8 +159,7 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if parameters do not follow
      *                                  b^2 - 4*a*c &lt; 0.0
      */
-    public Ellipse(final double a, final double b, final double c,
-                   final double d, final double e, final double f) {
+    public Ellipse(final double a, final double b, final double c, final double d, final double e, final double f) {
         setParameters(a, b, c, d, e, f);
     }
 
@@ -185,8 +179,7 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if parameters do not follow
      *                                  b^2 - 4*A*c &lt; threshold
      */
-    public Ellipse(final double a, final double b, final double c,
-                   final double d, final double e, final double f,
+    public Ellipse(final double a, final double b, final double c, final double d, final double e, final double f,
                    final double threshold) {
         setParameters(a, b, c, d, e, f, threshold);
     }
@@ -217,7 +210,7 @@ public class Ellipse implements Serializable {
      * @return center of ellipse.
      */
     public Point2D getCenter() {
-        return mCenter;
+        return center;
     }
 
     /**
@@ -230,7 +223,7 @@ public class Ellipse implements Serializable {
         if (center == null) {
             throw new NullPointerException();
         }
-        mCenter = center;
+        this.center = center;
     }
 
     /**
@@ -239,7 +232,7 @@ public class Ellipse implements Serializable {
      * @return semi-major axis length.
      */
     public double getSemiMajorAxis() {
-        return mSemiMajorAxis;
+        return semiMajorAxis;
     }
 
     /**
@@ -248,7 +241,7 @@ public class Ellipse implements Serializable {
      * @param semiMajorAxis semi-major axis length.
      */
     public void setSemiMajorAxis(final double semiMajorAxis) {
-        mSemiMajorAxis = semiMajorAxis;
+        this.semiMajorAxis = semiMajorAxis;
     }
 
     /**
@@ -257,7 +250,7 @@ public class Ellipse implements Serializable {
      * @return semi-minor axis length.
      */
     public double getSemiMinorAxis() {
-        return mSemiMinorAxis;
+        return semiMinorAxis;
     }
 
     /**
@@ -266,7 +259,7 @@ public class Ellipse implements Serializable {
      * @param semiMinorAxis semi-minor axis length.
      */
     public void setSemiMinorAxis(final double semiMinorAxis) {
-        mSemiMinorAxis = semiMinorAxis;
+        this.semiMinorAxis = semiMinorAxis;
     }
 
     /**
@@ -275,7 +268,7 @@ public class Ellipse implements Serializable {
      * @return rotation angle expressed in radians.
      */
     public double getRotationAngle() {
-        return mRotationAngle;
+        return rotationAngle;
     }
 
     /**
@@ -284,7 +277,7 @@ public class Ellipse implements Serializable {
      * @param rotationAngle rotation angle expressed in radians.
      */
     public void setRotationAngle(final double rotationAngle) {
-        mRotationAngle = rotationAngle;
+        this.rotationAngle = rotationAngle;
     }
 
     /**
@@ -293,7 +286,7 @@ public class Ellipse implements Serializable {
      * @return 2D rotation.
      */
     public Rotation2D getRotation() {
-        return new Rotation2D(mRotationAngle);
+        return new Rotation2D(rotationAngle);
     }
 
     /**
@@ -302,7 +295,7 @@ public class Ellipse implements Serializable {
      * @param rotation 2D rotation to be set.
      */
     public void setRotation(final Rotation2D rotation) {
-        mRotationAngle = rotation.getTheta();
+        rotationAngle = rotation.getTheta();
     }
 
     /**
@@ -312,17 +305,17 @@ public class Ellipse implements Serializable {
      * @return parameter A.
      */
     public double getA() {
-        final double sint = Math.sin(mRotationAngle);
-        final double cost = Math.cos(mRotationAngle);
+        final var sint = Math.sin(rotationAngle);
+        final var cost = Math.cos(rotationAngle);
 
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double sint2 = sint * sint;
-        final double cost2 = cost * cost;
+        final var sint2 = sint * sint;
+        final var cost2 = cost * cost;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
         return a2 * sint2 + b2 * cost2;
     }
@@ -344,12 +337,12 @@ public class Ellipse implements Serializable {
      * @return parameter B.
      */
     public double getB() {
-        final double sint = Math.sin(mRotationAngle);
-        final double cost = Math.cos(mRotationAngle);
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var sint = Math.sin(rotationAngle);
+        final var cost = Math.cos(rotationAngle);
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
         return 2.0 * (b2 - a2) * sint * cost;
     }
@@ -371,17 +364,17 @@ public class Ellipse implements Serializable {
      * @return parameter C.
      */
     public double getC() {
-        final double sint = Math.sin(mRotationAngle);
-        final double cost = Math.cos(mRotationAngle);
+        final var sint = Math.sin(rotationAngle);
+        final var cost = Math.cos(rotationAngle);
 
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double sint2 = sint * sint;
-        final double cost2 = cost * cost;
+        final var sint2 = sint * sint;
+        final var cost2 = cost * cost;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
         return a2 * cost2 + b2 * sint2;
     }
@@ -403,8 +396,8 @@ public class Ellipse implements Serializable {
      * @return parameter D.
      */
     public double getD() {
-        final double xc = mCenter.getInhomX();
-        final double yc = mCenter.getInhomY();
+        final var xc = center.getInhomX();
+        final var yc = center.getInhomY();
 
         return -2.0 * getA() * xc - getB() * yc;
     }
@@ -426,8 +419,8 @@ public class Ellipse implements Serializable {
      * @return parameter E.
      */
     public double getE() {
-        final double xc = mCenter.getInhomX();
-        final double yc = mCenter.getInhomY();
+        final var xc = center.getInhomX();
+        final var yc = center.getInhomY();
 
         return -getB() * xc - 2.0 * getC() * yc;
     }
@@ -449,17 +442,17 @@ public class Ellipse implements Serializable {
      * @return parameter F.
      */
     public double getF() {
-        final double xc = mCenter.getInhomX();
-        final double yc = mCenter.getInhomY();
+        final var xc = center.getInhomX();
+        final var yc = center.getInhomY();
 
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double xc2 = xc * xc;
-        final double yc2 = yc * yc;
+        final var xc2 = xc * xc;
+        final var yc2 = yc * yc;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
         return getA() * xc2 + getB() * xc * yc + getC() * yc2 - a2 * b2;
     }
@@ -483,12 +476,11 @@ public class Ellipse implements Serializable {
      * @param rotationAngle rotation angle expressed in radians.
      */
     public final void setCenterAxesAndRotation(
-            final Point2D center, final double semiMajorAxis,
-            final double semiMinorAxis, final double rotationAngle) {
-        mCenter = center;
-        mSemiMajorAxis = Math.max(semiMajorAxis, semiMinorAxis);
-        mSemiMinorAxis = Math.min(semiMinorAxis, semiMajorAxis);
-        mRotationAngle = rotationAngle;
+            final Point2D center, final double semiMajorAxis, final double semiMinorAxis, final double rotationAngle) {
+        this.center = center;
+        this.semiMajorAxis = Math.max(semiMajorAxis, semiMinorAxis);
+        this.semiMinorAxis = Math.min(semiMinorAxis, semiMajorAxis);
+        this.rotationAngle = rotationAngle;
     }
 
     /**
@@ -500,10 +492,8 @@ public class Ellipse implements Serializable {
      * @param rotation      2D rotation.
      */
     public final void setCenterAxesAndRotation(
-            final Point2D center, final double semiMajorAxis,
-            final double semiMinorAxis, final Rotation2D rotation) {
-        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotation.getTheta());
+            final Point2D center, final double semiMajorAxis, final double semiMinorAxis, final Rotation2D rotation) {
+        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotation.getTheta());
     }
 
     /**
@@ -517,8 +507,8 @@ public class Ellipse implements Serializable {
      *                                 configuration.
      */
     public final void setParametersFromPointsCenterAndRotation(
-            final Point2D point1, final Point2D point2, final Point2D center,
-            final double theta) throws ColinearPointsException {
+            final Point2D point1, final Point2D point2, final Point2D center, final double theta)
+            throws ColinearPointsException {
         // unknowns: semi-major axis (a) and semi-minor axis (b)
 
         // equation of an ellipse follows:
@@ -566,28 +556,27 @@ public class Ellipse implements Serializable {
         // a^2/b^2 and a^2
 
         try {
-            final double sint = Math.sin(theta);
-            final double cost = Math.cos(theta);
+            final var sint = Math.sin(theta);
+            final var cost = Math.cos(theta);
 
-            final double sint2 = sint * sint;
-            final double cost2 = cost * cost;
-            final double sintcost = sint * cost;
+            final var sint2 = sint * sint;
+            final var cost2 = cost * cost;
+            final var sintcost = sint * cost;
 
-            final double xc = center.getInhomX();
-            final double yc = center.getInhomY();
-            final double xc2 = xc * xc;
-            final double yc2 = yc * yc;
+            final var xc = center.getInhomX();
+            final var yc = center.getInhomY();
+            final var xc2 = xc * xc;
+            final var yc2 = yc * yc;
 
+            final var m = new Matrix(2, 2);
+            final var b = new double[2];
 
-            final Matrix m = new Matrix(2, 2);
-            final double[] b = new double[2];
-
-            final double[] x = new double[]{
+            final var x = new double[]{
                     point1.getInhomX(),
                     point2.getInhomX(),
             };
 
-            final double[] y = new double[]{
+            final var y = new double[]{
                     point1.getInhomY(),
                     point2.getInhomY(),
             };
@@ -595,47 +584,44 @@ public class Ellipse implements Serializable {
             double x2;
             double y2;
             double rowNorm;
-            for (int i = 0; i < 2; i++) {
+            for (var i = 0; i < 2; i++) {
                 x2 = x[i] * x[i];
                 y2 = y[i] * y[i];
 
-                final double tmp = 2.0 * sintcost * x[i] * y[i];
+                final var tmp = 2.0 * sintcost * x[i] * y[i];
 
-                m.setElementAt(i, 0, sint2 * x2 - tmp +
-                        cost2 * y2 - 2.0 * sint2 * xc * x[i] + 2.0 * sintcost * yc * x[i] +
-                        2.0 * sintcost * xc * y[i] - 2.0 * cost2 * yc * y[i] + sint2 * xc2 -
-                        2.0 * sintcost * xc * yc + cost2 * yc2);
+                m.setElementAt(i, 0, sint2 * x2 - tmp + cost2 * y2 - 2.0 * sint2 * xc * x[i]
+                        + 2.0 * sintcost * yc * x[i] + 2.0 * sintcost * xc * y[i] - 2.0 * cost2 * yc * y[i]
+                        + sint2 * xc2 - 2.0 * sintcost * xc * yc + cost2 * yc2);
                 m.setElementAt(i, 1, -1.0);
 
-                b[i] = -cost2 * x2 - tmp -
-                        sint2 * y2 + 2.0 * cost2 * xc * x[i] + 2.0 * sintcost * yc * x[i] +
-                        2.0 * sintcost * xc * y[i] + 2.0 * sint2 * yc * y[i] -
-                        cost2 * xc2 - 2.0 * sintcost * xc * yc - sint2 * yc2;
+                b[i] = -cost2 * x2 - tmp - sint2 * y2 + 2.0 * cost2 * xc * x[i] + 2.0 * sintcost * yc * x[i]
+                        + 2.0 * sintcost * xc * y[i] + 2.0 * sint2 * yc * y[i] - cost2 * xc2 - 2.0 * sintcost * xc * yc
+                        - sint2 * yc2;
 
                 // normalize row to increase accuracy
                 rowNorm = 0.0;
-                for (int j = 0; j < 2; j++) {
+                for (var j = 0; j < 2; j++) {
                     rowNorm += Math.pow(m.getElementAt(i, j), 2.0);
                 }
                 rowNorm = Math.sqrt(rowNorm);
 
-                for (int j = 0; j < 2; j++) {
+                for (var j = 0; j < 2; j++) {
                     m.setElementAt(i, j, m.getElementAt(i, j) / rowNorm);
                 }
 
                 b[i] /= rowNorm;
             }
 
-            final double[] params = com.irurueta.algebra.Utils.solve(m, b);
+            final var params = com.irurueta.algebra.Utils.solve(m, b);
 
             // params[1] = a^2
-            final double semiMajorAxis = Math.sqrt(Math.abs(params[1]));
+            final var sMajorAxis = Math.sqrt(Math.abs(params[1]));
 
             // params[0] = a^2/b^2 --> b^2 = a^2/params[0] = params[1]/params[0]
-            final double semiMinorAxis = Math.sqrt(Math.abs(params[1] / params[0]));
+            final var sMinorAxis = Math.sqrt(Math.abs(params[1] / params[0]));
 
-            setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                    theta);
+            setCenterAxesAndRotation(center, sMajorAxis, sMinorAxis, theta);
         } catch (final AlgebraException e) {
             throw new ColinearPointsException(e);
         }
@@ -653,8 +639,7 @@ public class Ellipse implements Serializable {
      *                                 configuration.
      */
     public final void setParametersFromPoints(
-            final Point2D point1, final Point2D point2,
-            final Point2D point3, final Point2D point4,
+            final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
             final Point2D point5) throws ColinearPointsException {
         setParametersFromPoints(point1, point2, point3, point4, point5, 0.0);
     }
@@ -673,10 +658,8 @@ public class Ellipse implements Serializable {
      *                                 configuration.
      */
     public final void setParametersFromPoints(
-            final Point2D point1, final Point2D point2,
-            final Point2D point3, final Point2D point4,
-            final Point2D point5, final double threshold)
-            throws ColinearPointsException {
+            final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+            final Point2D point5, final double threshold) throws ColinearPointsException {
         // normalize points to increase accuracy
         point1.normalize();
         point2.normalize();
@@ -688,10 +671,10 @@ public class Ellipse implements Serializable {
             // each point belonging to a conic follows equation:
             // p' * C * p = 0 ==>
             // x^2 + y^2 + w^2 + 2*x*y + 2*x*w + 2*y*w = 0
-            final Matrix m = new Matrix(5, 6);
-            double x = point1.getHomX();
-            double y = point1.getHomY();
-            double w = point1.getHomW();
+            final var m = new Matrix(5, 6);
+            var x = point1.getHomX();
+            var y = point1.getHomY();
+            var w = point1.getHomW();
             m.setElementAt(0, 0, x * x);
             m.setElementAt(0, 1, 2.0 * x * y);
             m.setElementAt(0, 2, y * y);
@@ -736,18 +719,18 @@ public class Ellipse implements Serializable {
             m.setElementAt(4, 5, w * w);
 
             // normalize each row to increase accuracy
-            final double[] row = new double[6];
+            final var row = new double[6];
             double rowNorm;
 
-            for (int j = 0; j < 5; j++) {
+            for (var j = 0; j < 5; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 5, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for (int i = 0; i < 6; i++) {
+                for (var i = 0; i < 6; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
                 }
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             if (decomposer.getRank() < 5) {
@@ -756,14 +739,14 @@ public class Ellipse implements Serializable {
 
             // the right null-space of m contains the parameters a, b, c, d, e ,f
             // of the conic
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
-            final double aPrime = v.getElementAt(0, 5);
-            final double bPrime = v.getElementAt(1, 5);
-            final double cPrime = v.getElementAt(2, 5);
-            final double dPrime = v.getElementAt(3, 5);
-            final double ePrime = v.getElementAt(4, 5);
-            final double fPrime = v.getElementAt(5, 5);
+            final var aPrime = v.getElementAt(0, 5);
+            final var bPrime = v.getElementAt(1, 5);
+            final var cPrime = v.getElementAt(2, 5);
+            final var dPrime = v.getElementAt(3, 5);
+            final var ePrime = v.getElementAt(4, 5);
+            final var fPrime = v.getElementAt(5, 5);
 
             // an ellipse follows the generic conic equation
             // A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
@@ -773,9 +756,9 @@ public class Ellipse implements Serializable {
             // [B/2  C   E/2 ] = [B' C'  E']
             // [D/2  E/2 F   ]   [D' E'  F']
 
-            final double b = 2.0 * bPrime;
-            final double d = 2.0 * dPrime;
-            final double e = 2.0 * ePrime;
+            final var b = 2.0 * bPrime;
+            final var d = 2.0 * dPrime;
+            final var e = 2.0 * ePrime;
 
             setParameters(aPrime, b, cPrime, d, e, fPrime, threshold);
         } catch (final AlgebraException | IllegalArgumentException ex) {
@@ -797,8 +780,7 @@ public class Ellipse implements Serializable {
      *                                  b^2 - 4*a*c &lt; 0.0.
      */
     public final void setParameters(
-            final double a, final double b, final double c,
-            final double d, final double e, final double f) {
+            final double a, final double b, final double c, final double d, final double e, final double f) {
         setParameters(a, b, c, d, e, f, 0.0);
     }
 
@@ -818,37 +800,32 @@ public class Ellipse implements Serializable {
      *                                  b^2 - 4*A*c &lt; threshold.
      */
     public final void setParameters(
-            final double a, final double b, final double c,
-            final double d, final double e, final double f,
+            final double a, final double b, final double c, final double d, final double e, final double f,
             final double threshold) {
-        final double discriminant = b * b - 4.0 * a * c;
+        final var discriminant = b * b - 4.0 * a * c;
         if (discriminant >= threshold) {
             // not an ellipse
             throw new IllegalArgumentException();
         }
 
-        final double tmp1 = a * e * e + c * d * d - b * d * e + discriminant * f;
-        final double tmp2 = Math.sqrt((a - c) * (a - c) + b * b);
-        final double semiMajorAxis = -Math.sqrt(2.0 * tmp1 * (a + c + tmp2)) /
-                discriminant;
+        final var tmp1 = a * e * e + c * d * d - b * d * e + discriminant * f;
+        final var tmp2 = Math.sqrt((a - c) * (a - c) + b * b);
+        final var sMajorAxis = -Math.sqrt(2.0 * tmp1 * (a + c + tmp2)) / discriminant;
 
-        final double semiMinorAxis = -Math.sqrt(2.0 * tmp1 * (a + c - tmp2)) /
-                discriminant;
+        final var sMinorAxis = -Math.sqrt(2.0 * tmp1 * (a + c - tmp2)) / discriminant;
 
-        final double xc = (2.0 * c * d - b * e) / discriminant;
-        final double yc = (2.0 * a * e - b * d) / discriminant;
-        final Point2D center = new InhomogeneousPoint2D(xc, yc);
+        final var xc = (2.0 * c * d - b * e) / discriminant;
+        final var yc = (2.0 * a * e - b * d) / discriminant;
+        final var centerPoint = new InhomogeneousPoint2D(xc, yc);
 
-        double rotationAngle;
+        double alpha;
         if (Math.abs(b) <= threshold && a < c) {
-            rotationAngle = 0.0;
+            alpha = 0.0;
         } else {
-            rotationAngle = Math.atan2(
-                    c - a - tmp2, b);
+            alpha = Math.atan2(c - a - tmp2, b);
         }
 
-        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        setCenterAxesAndRotation(centerPoint, sMajorAxis, sMinorAxis, alpha);
     }
 
     /**
@@ -861,8 +838,7 @@ public class Ellipse implements Serializable {
      * @return focus distance.
      */
     public double getFocus() {
-        return Math.sqrt(Math.pow(mSemiMajorAxis, 2.0) -
-                Math.pow(mSemiMinorAxis, 2.0));
+        return Math.sqrt(Math.pow(semiMajorAxis, 2.0) - Math.pow(semiMinorAxis, 2.0));
     }
 
     /**
@@ -872,8 +848,8 @@ public class Ellipse implements Serializable {
      *               stored.
      */
     public void getSemiMajorAxisCoordinates(final double[] coords) {
-        coords[0] = mSemiMajorAxis * Math.cos(mRotationAngle);
-        coords[1] = mSemiMajorAxis * Math.sin(mRotationAngle);
+        coords[0] = semiMajorAxis * Math.cos(rotationAngle);
+        coords[1] = semiMajorAxis * Math.sin(rotationAngle);
     }
 
     /**
@@ -882,8 +858,7 @@ public class Ellipse implements Serializable {
      * @return array containing x, y coordinates of semi major axis.
      */
     public double[] getSemiMajorAxisCoordinates() {
-        final double[] coords = new double[
-                Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
         getSemiMajorAxisCoordinates(coords);
         return coords;
     }
@@ -895,8 +870,8 @@ public class Ellipse implements Serializable {
      * @param coords coordinates of semi major axis.
      */
     public void setSemiMajorAxisCoordinates(final double[] coords) {
-        mRotationAngle = Math.atan2(coords[1], coords[0]);
-        mSemiMajorAxis = com.irurueta.algebra.Utils.normF(coords);
+        rotationAngle = Math.atan2(coords[1], coords[0]);
+        semiMajorAxis = com.irurueta.algebra.Utils.normF(coords);
     }
 
     /**
@@ -906,8 +881,8 @@ public class Ellipse implements Serializable {
      *               stored.
      */
     public void getSemiMinorAxisCoordinates(final double[] coords) {
-        coords[0] = -mSemiMinorAxis * Math.sin(mRotationAngle);
-        coords[1] = mSemiMinorAxis * Math.cos(mRotationAngle);
+        coords[0] = -semiMinorAxis * Math.sin(rotationAngle);
+        coords[1] = semiMinorAxis * Math.cos(rotationAngle);
     }
 
     /**
@@ -916,8 +891,7 @@ public class Ellipse implements Serializable {
      * @return array containing x,y coordinates of semi minor axis.
      */
     public double[] getSemiMinorAxisCoordinates() {
-        final double[] coords = new double[
-                Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
         getSemiMinorAxisCoordinates(coords);
         return coords;
     }
@@ -929,8 +903,8 @@ public class Ellipse implements Serializable {
      * @param coords coordinates of semi minor axis.
      */
     public void setSemiMinorAxisCoordinates(final double[] coords) {
-        mRotationAngle = Math.atan2(-coords[0], coords[1]);
-        mSemiMinorAxis = com.irurueta.algebra.Utils.normF(coords);
+        rotationAngle = Math.atan2(-coords[0], coords[1]);
+        semiMinorAxis = com.irurueta.algebra.Utils.normF(coords);
     }
 
     /**
@@ -941,11 +915,10 @@ public class Ellipse implements Serializable {
      * @param focusPoint1 1st focus point.
      */
     public void getFocusPoint1(final Point2D focusPoint1) {
-        final double focus = getFocus();
+        final var focus = getFocus();
 
-        focusPoint1.setInhomogeneousCoordinates(
-                mCenter.getInhomX() - focus * Math.cos(mRotationAngle),
-                mCenter.getInhomY() - focus * Math.sin(mRotationAngle));
+        focusPoint1.setInhomogeneousCoordinates(center.getInhomX() - focus * Math.cos(rotationAngle),
+                center.getInhomY() - focus * Math.sin(rotationAngle));
     }
 
     /**
@@ -956,7 +929,7 @@ public class Ellipse implements Serializable {
      * @return 1st focus point.
      */
     public Point2D getFocusPoint1() {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         getFocusPoint1(result);
         return result;
     }
@@ -969,11 +942,10 @@ public class Ellipse implements Serializable {
      * @param focusPoint2 2nd focus point.
      */
     public void getFocusPoint2(final Point2D focusPoint2) {
-        final double focus = getFocus();
+        final var focus = getFocus();
 
-        focusPoint2.setInhomogeneousCoordinates(
-                mCenter.getInhomX() + focus * Math.cos(mRotationAngle),
-                mCenter.getInhomY() + focus * Math.sin(mRotationAngle));
+        focusPoint2.setInhomogeneousCoordinates(center.getInhomX() + focus * Math.cos(rotationAngle),
+                center.getInhomY() + focus * Math.sin(rotationAngle));
     }
 
     /**
@@ -984,7 +956,7 @@ public class Ellipse implements Serializable {
      * @return 2nd focus point.
      */
     public Point2D getFocusPoint2() {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         getFocusPoint2(result);
         return result;
     }
@@ -997,32 +969,28 @@ public class Ellipse implements Serializable {
      * @param keepSemiMinorAxis true indicates that semi-minor axis is kept,
      *                          false indicates that semi-major axis is kept instead.
      */
-    public void setFocusPoints(final Point2D focusPoint1, final Point2D focusPoint2,
-                               final boolean keepSemiMinorAxis) {
-        final InhomogeneousPoint2D center = new InhomogeneousPoint2D(
-                (focusPoint1.getInhomX() + focusPoint2.getInhomX()) / 2.0,
+    public void setFocusPoints(final Point2D focusPoint1, final Point2D focusPoint2, final boolean keepSemiMinorAxis) {
+        final var c = new InhomogeneousPoint2D((focusPoint1.getInhomX() + focusPoint2.getInhomX()) / 2.0,
                 (focusPoint1.getInhomY() + focusPoint2.getInhomY()) / 2.0);
-        final double rotationAngle = Math.atan2(
-                focusPoint2.getInhomY() - focusPoint1.getInhomY(),
+        final var alpha = Math.atan2(focusPoint2.getInhomY() - focusPoint1.getInhomY(),
                 focusPoint2.getInhomX() - focusPoint1.getInhomX());
 
-        final double f = focusPoint1.distanceTo(center);
-        final double f2 = f * f;
+        final var f = focusPoint1.distanceTo(c);
+        final var f2 = f * f;
         final double a2;
         final double b2;
         if (keepSemiMinorAxis) {
-            b2 = mSemiMinorAxis * mSemiMinorAxis;
+            b2 = semiMinorAxis * semiMinorAxis;
             a2 = f2 + b2;
         } else {
-            a2 = mSemiMajorAxis * mSemiMajorAxis;
+            a2 = semiMajorAxis * semiMajorAxis;
             b2 = a2 - f2;
         }
 
-        final double semiMajorAxis = Math.sqrt(a2);
-        final double semiMinorAxis = Math.sqrt(b2);
+        final var sMajorAxis = Math.sqrt(a2);
+        final var sMinorAxis = Math.sqrt(b2);
 
-        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        setCenterAxesAndRotation(c, sMajorAxis, sMinorAxis, alpha);
     }
 
     /**
@@ -1031,7 +999,7 @@ public class Ellipse implements Serializable {
      * @return eccentricity of ellipsis.
      */
     public double getEccentricity() {
-        return getFocus() / mSemiMajorAxis;
+        return getFocus() / semiMajorAxis;
     }
 
     /**
@@ -1040,7 +1008,7 @@ public class Ellipse implements Serializable {
      * @return area of this ellipse.
      */
     public double getArea() {
-        return Math.PI * mSemiMajorAxis * mSemiMinorAxis;
+        return Math.PI * semiMajorAxis * semiMinorAxis;
     }
 
     /**
@@ -1049,8 +1017,8 @@ public class Ellipse implements Serializable {
      * @return Perimeter of this ellipse.
      */
     public double getPerimeter() {
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
         return Math.PI * (3.0 * (a + b) - Math.sqrt((3.0 * a + b) * (a + 3.0 * b)));
     }
@@ -1062,20 +1030,20 @@ public class Ellipse implements Serializable {
      * @return curvature of ellipse.
      */
     public double getCurvature(final Point2D point) {
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
-        final double a4 = a2 * a2;
-        final double b4 = b2 * b2;
+        final var a4 = a2 * a2;
+        final var b4 = b2 * b2;
 
-        final double x = point.getInhomX() - mCenter.getInhomX();
-        final double y = point.getInhomY() - mCenter.getInhomY();
+        final var x = point.getInhomX() - center.getInhomX();
+        final var y = point.getInhomY() - center.getInhomY();
 
-        final double x2 = x * x;
-        final double y2 = y * y;
+        final var x2 = x * x;
+        final var y2 = y * y;
 
         return Math.pow(x2 / a4 + y2 / b4, -3.0 / 2.0) / (a2 * b2);
     }
@@ -1087,36 +1055,36 @@ public class Ellipse implements Serializable {
      * @return A conic representing this circle
      */
     public Conic toConic() {
-        mCenter.normalize();
+        center.normalize();
         // use inhomogeneous center coordinates
-        final double xc = mCenter.getInhomX();
-        final double yc = mCenter.getInhomY();
+        final var xc = center.getInhomX();
+        final var yc = center.getInhomY();
 
-        final double sint = Math.sin(mRotationAngle);
-        final double cost = Math.cos(mRotationAngle);
+        final var sint = Math.sin(rotationAngle);
+        final var cost = Math.cos(rotationAngle);
 
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double xc2 = xc * xc;
-        final double yc2 = yc * yc;
+        final var xc2 = xc * xc;
+        final var yc2 = yc * yc;
 
-        final double sint2 = sint * sint;
-        final double cost2 = cost * cost;
+        final var sint2 = sint * sint;
+        final var cost2 = cost * cost;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
-        final double aParam = a2 * sint2 + b2 * cost2;
-        final double bParam = 2.0 * (b2 - a2) * sint * cost;
-        final double cParam = a2 * cost2 + b2 * sint2;
-        final double dParam = -2.0 * aParam * xc - bParam * yc;
-        final double eParam = -bParam * xc - 2.0 * cParam * yc;
-        final double fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;
+        final var aParam = a2 * sint2 + b2 * cost2;
+        final var bParam = 2.0 * (b2 - a2) * sint * cost;
+        final var cParam = a2 * cost2 + b2 * sint2;
+        final var dParam = -2.0 * aParam * xc - bParam * yc;
+        final var eParam = -bParam * xc - 2.0 * cParam * yc;
+        final var fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;
 
-        final double bConic = bParam / 2.0;
-        final double dConic = dParam / 2.0;
-        final double eConic = eParam / 2.0;
+        final var bConic = bParam / 2.0;
+        final var dConic = dParam / 2.0;
+        final var eConic = eParam / 2.0;
 
         return new Conic(aParam, bConic, cParam, dConic, eConic, fParam);
     }
@@ -1129,19 +1097,19 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if provided conic is not an ellipse.
      */
     public final void setFromConic(final Conic conic) {
-        if (conic.getConicType() != ConicType.ELLIPSE_CONIC_TYPE &&
-                conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {
+        if (conic.getConicType() != ConicType.ELLIPSE_CONIC_TYPE
+                && conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {
             throw new IllegalArgumentException();
         }
 
         conic.normalize();
 
-        final double aConic = conic.getA();
-        final double bConic = conic.getB();
-        final double cConic = conic.getC();
-        final double dConic = conic.getD();
-        final double eConic = conic.getE();
-        final double fConic = conic.getF();
+        final var aConic = conic.getA();
+        final var bConic = conic.getB();
+        final var cConic = conic.getC();
+        final var dConic = conic.getD();
+        final var eConic = conic.getE();
+        final var fConic = conic.getF();
 
         // an ellipse follows the generic conic equation
         // A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
@@ -1151,9 +1119,9 @@ public class Ellipse implements Serializable {
         // [B/2  C   E/2 ] = [B' C'  E']
         // [D/2  E/2 F   ]   [D' E'  F']
 
-        final double b = 2.0 * bConic;
-        final double d = 2.0 * dConic;
-        final double e = 2.0 * eConic;
+        final var b = 2.0 * bConic;
+        final var d = 2.0 * dConic;
+        final var e = 2.0 * eConic;
 
         setParameters(aConic, b, cConic, d, e, fConic);
     }
@@ -1164,9 +1132,9 @@ public class Ellipse implements Serializable {
      * @param circle a circle to set parameters from.
      */
     public final void setFromCircle(final Circle circle) {
-        mCenter = circle.getCenter();
-        mSemiMajorAxis = mSemiMinorAxis = circle.getRadius();
-        mRotationAngle = 0.0;
+        center = circle.getCenter();
+        semiMajorAxis = semiMinorAxis = circle.getRadius();
+        rotationAngle = 0.0;
     }
 
     /**
@@ -1183,35 +1151,35 @@ public class Ellipse implements Serializable {
      * otherwise.
      */
     public boolean isInside(final Point2D point, final double threshold) {
-        mCenter.normalize();
+        center.normalize();
         // use inhomogeneous center coordinates
-        final double xc = mCenter.getInhomX();
-        final double yc = mCenter.getInhomY();
+        final var xc = center.getInhomX();
+        final var yc = center.getInhomY();
 
-        final double sint = Math.sin(mRotationAngle);
-        final double cost = Math.cos(mRotationAngle);
+        final var sint = Math.sin(rotationAngle);
+        final var cost = Math.cos(rotationAngle);
 
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double xc2 = xc * xc;
-        final double yc2 = yc * yc;
+        final var xc2 = xc * xc;
+        final var yc2 = yc * yc;
 
-        final double sint2 = sint * sint;
-        final double cost2 = cost * cost;
+        final var sint2 = sint * sint;
+        final var cost2 = cost * cost;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
-        final double aParam = a2 * sint2 + b2 * cost2;
-        final double bParam = 2.0 * (b2 - a2) * sint * cost;
-        final double cParam = a2 * cost2 + b2 * sint2;
-        final double dParam = -2.0 * aParam * xc - bParam * yc;
-        final double eParam = -bParam * xc - 2.0 * cParam * yc;
-        final double fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;
+        final var aParam = a2 * sint2 + b2 * cost2;
+        final var bParam = 2.0 * (b2 - a2) * sint * cost;
+        final var cParam = a2 * cost2 + b2 * sint2;
+        final var dParam = -2.0 * aParam * xc - bParam * yc;
+        final var eParam = -bParam * xc - 2.0 * cParam * yc;
+        final var fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;
 
-        final double x = point.getInhomX();
-        final double y = point.getInhomY();
+        final var x = point.getInhomX();
+        final var y = point.getInhomY();
 
         return aParam * x * x + bParam * x * y + cParam * y * y + dParam * x + eParam * y + fParam <= threshold;
     }
@@ -1243,35 +1211,35 @@ public class Ellipse implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        mCenter.normalize();
+        center.normalize();
         // use inhomogeneous center coordinates
-        final double xc = mCenter.getInhomX();
-        final double yc = mCenter.getInhomY();
+        final var xc = center.getInhomX();
+        final var yc = center.getInhomY();
 
-        final double sint = Math.sin(mRotationAngle);
-        final double cost = Math.cos(mRotationAngle);
+        final var sint = Math.sin(rotationAngle);
+        final var cost = Math.cos(rotationAngle);
 
-        final double a = mSemiMajorAxis;
-        final double b = mSemiMinorAxis;
+        final var a = semiMajorAxis;
+        final var b = semiMinorAxis;
 
-        final double xc2 = xc * xc;
-        final double yc2 = yc * yc;
+        final var xc2 = xc * xc;
+        final var yc2 = yc * yc;
 
-        final double sint2 = sint * sint;
-        final double cost2 = cost * cost;
+        final var sint2 = sint * sint;
+        final var cost2 = cost * cost;
 
-        final double a2 = a * a;
-        final double b2 = b * b;
+        final var a2 = a * a;
+        final var b2 = b * b;
 
-        final double aParam = a2 * sint2 + b2 * cost2;
-        final double bParam = 2.0 * (b2 - a2) * sint * cost;
-        final double cParam = a2 * cost2 + b2 * sint2;
-        final double dParam = -2.0 * aParam * xc - bParam * yc;
-        final double eParam = -bParam * xc - 2.0 * cParam * yc;
-        final double fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;
+        final var aParam = a2 * sint2 + b2 * cost2;
+        final var bParam = 2.0 * (b2 - a2) * sint * cost;
+        final var cParam = a2 * cost2 + b2 * sint2;
+        final var dParam = -2.0 * aParam * xc - bParam * yc;
+        final var eParam = -bParam * xc - 2.0 * cParam * yc;
+        final var fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;
 
-        final double x = point.getInhomX();
-        final double y = point.getInhomY();
+        final var x = point.getInhomX();
+        final var y = point.getInhomY();
 
         return Math.abs(aParam * x * x + bParam * x * y + cParam * y * y + dParam * x + eParam * y + fParam) <= threshold;
     }
@@ -1312,10 +1280,8 @@ public class Ellipse implements Serializable {
      *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public Line2D getTangentLineAt(final Point2D point, final double threshold)
-            throws NotLocusException {
-
-        final Line2D line = new Line2D();
+    public Line2D getTangentLineAt(final Point2D point, final double threshold) throws NotLocusException {
+        final var line = new Line2D();
         tangentLineAt(point, line, threshold);
         return line;
     }
@@ -1332,14 +1298,12 @@ public class Ellipse implements Serializable {
      *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public void tangentLineAt(final Point2D point, final Line2D line, final double threshold)
-            throws NotLocusException {
-
+    public void tangentLineAt(final Point2D point, final Line2D line, final double threshold) throws NotLocusException {
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
         }
 
-        final Conic c = toConic();
+        final var c = toConic();
         c.tangentLineAt(point, line, threshold);
     }
 }

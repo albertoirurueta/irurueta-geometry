@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RotationExceptionTest {
+class RotationExceptionTest {
 
     @Test
-    public void testConstructor() {
-        RotationException ex = new RotationException();
+    void testConstructor() {
+        var ex = new RotationException();
         assertNotNull(ex);
 
         ex = new RotationException("message");
@@ -32,8 +32,7 @@ public class RotationExceptionTest {
         ex = new RotationException(new Exception());
         assertNotNull(ex);
 
-        ex = new RotationException("message",
-                new Exception());
+        ex = new RotationException("message", new Exception());
         assertNotNull(ex);
     }
 }

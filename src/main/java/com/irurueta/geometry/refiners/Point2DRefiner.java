@@ -33,8 +33,7 @@ import java.util.List;
  *
  * @param <T> an implementation of a 2D point.
  */
-public abstract class Point2DRefiner<T extends Point2D> extends
-        SamplesAndInliersDataRefiner<T, Line2D> {
+public abstract class Point2DRefiner<T extends Point2D> extends SamplesAndInliersDataRefiner<T, Line2D> {
 
     /**
      * Standard deviation used for Levenberg-Marquardt fitting during
@@ -45,7 +44,7 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    private double mRefinementStandardDeviation;
+    private double refinementStandardDeviation;
 
     /**
      * Constructor.
@@ -67,12 +66,10 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected Point2DRefiner(
-            final T initialEstimation, final boolean keepCovariance, final BitSet inliers,
-            final double[] residuals, final int numInliers, final List<Line2D> samples,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final T initialEstimation, final boolean keepCovariance, final BitSet inliers, final double[] residuals,
+            final int numInliers, final List<Line2D> samples, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -87,11 +84,10 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected Point2DRefiner(
-            final T initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Line2D> samples,
-            final double refinementStandardDeviation) {
+            final T initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<Line2D> samples, final double refinementStandardDeviation) {
         super(initialEstimation, keepCovariance, inliersData, samples);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -106,7 +102,7 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-        return mRefinementStandardDeviation;
+        return refinementStandardDeviation;
     }
 
     /**
@@ -122,12 +118,11 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementStandardDeviation(
-            final double refinementStandardDeviation) throws LockedException {
+    public void setRefinementStandardDeviation(final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -150,14 +145,13 @@ public abstract class Point2DRefiner<T extends Point2D> extends
      * @return total residual.
      */
     protected double totalResidual(final Point2D point) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Line2D line;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                line = mSamples.get(i);
+                final var line = samples.get(i);
                 result += residual(point, line);
             }
         }

@@ -52,14 +52,14 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a sampled line.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACPlaneRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -71,7 +71,7 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     public MSACPlaneRobustEstimator(final List<Point3D> points) {
         super(points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -82,7 +82,7 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     public MSACPlaneRobustEstimator(final PlaneRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
 
@@ -95,10 +95,9 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
-                                    final List<Point3D> points) {
+    public MSACPlaneRobustEstimator(final PlaneRobustEstimatorListener listener, final List<Point3D> points) {
         super(listener, points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -111,7 +110,7 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -133,7 +132,7 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
 
@@ -151,8 +150,7 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Plane estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Plane estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -160,95 +158,88 @@ public class MSACPlaneRobustEstimator extends PlaneRobustEstimator {
             throw new NotReadyException();
         }
 
-        final MSACRobustEstimator<Plane> innerEstimator =
-                new MSACRobustEstimator<>(
-                        new MSACRobustEstimatorListener<Plane>() {
+        final var innerEstimator = new MSACRobustEstimator<>(new MSACRobustEstimatorListener<Plane>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return PlaneRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return PlaneRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Plane> solutions) {
-                                final Point3D point1 = mPoints.get(samplesIndices[0]);
-                                final Point3D point2 = mPoints.get(samplesIndices[1]);
-                                final Point3D point3 = mPoints.get(samplesIndices[2]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Plane> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
 
-                                try {
-                                    final Plane plane = new Plane(point1, point2, point3);
-                                    solutions.add(plane);
-                                } catch (final ColinearPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var plane = new Plane(point1, point2, point3);
+                    solutions.add(plane);
+                } catch (final ColinearPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Plane currentEstimation, final int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(final Plane currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return MSACPlaneRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return MSACPlaneRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Plane> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(MSACPlaneRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Plane> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(MSACPlaneRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Plane> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(MSACPlaneRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Plane> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(MSACPlaneRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Plane> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            MSACPlaneRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Plane> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(MSACPlaneRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Plane> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            MSACPlaneRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Plane> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(MSACPlaneRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
-        } catch (final  com.irurueta.numerical.LockedException e) {
+        } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

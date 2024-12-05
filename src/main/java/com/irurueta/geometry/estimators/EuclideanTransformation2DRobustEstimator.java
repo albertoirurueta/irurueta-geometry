@@ -38,14 +38,12 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * Minimum number of matched points required to estimate an Euclidean 2D
      * transformation.
      */
-    public static final int MINIMUM_SIZE =
-            EuclideanTransformation2DEstimator.MINIMUM_SIZE;
+    public static final int MINIMUM_SIZE = EuclideanTransformation2DEstimator.MINIMUM_SIZE;
 
     /**
      * For some point configurations a solution can be found with only 2 points.
      */
-    public static final int WEAK_MINIMUM_SIZE =
-            EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE;
+    public static final int WEAK_MINIMUM_SIZE = EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE;
 
     /**
      * Default amount of progress variation before notifying a change in
@@ -104,26 +102,25 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected EuclideanTransformation2DRobustEstimatorListener mListener;
+    protected EuclideanTransformation2DRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected boolean mLocked;
+    protected boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -131,19 +128,19 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * Data related to inliers found after estimation.
      */
-    protected InliersData mInliersData;
+    protected InliersData inliersData;
 
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
@@ -151,20 +148,20 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
      */
-    protected boolean mRefineResult;
+    protected boolean refineResult;
 
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    private boolean mKeepCovariance;
+    private boolean keepCovariance;
 
     /**
      * Estimated covariance of estimated 2D Euclidean transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    private Matrix mCovariance;
+    private Matrix covariance;
 
     /**
      * List of points to be used to estimate an Euclidean 2D transformation.
@@ -173,7 +170,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mInputPoints;
+    protected List<Point2D> inputPoints;
 
     /**
      * List of points to be used to estimate an Euclidean 2D transformation.
@@ -182,24 +179,24 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mOutputPoints;
+    protected List<Point2D> outputPoints;
 
     /**
      * Indicates whether estimation can start with only 2 points or not.
      * True allows 2 points, false requires 3.
      */
-    private boolean mWeakMinimumSizeAllowed;
+    private boolean weakMinimumSizeAllowed;
 
 
     /**
      * Constructor.
      */
     protected EuclideanTransformation2DRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -211,7 +208,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     protected EuclideanTransformation2DRobustEstimator(
             final EuclideanTransformation2DRobustEstimatorListener listener) {
         this();
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -251,8 +248,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     protected EuclideanTransformation2DRobustEstimator(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints) {
         this(listener);
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -262,10 +259,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
-    protected EuclideanTransformation2DRobustEstimator(
-            final boolean weakMinimumSizeAllowed) {
+    protected EuclideanTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
         this();
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -276,11 +272,10 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
     protected EuclideanTransformation2DRobustEstimator(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         this();
-        mListener = listener;
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.listener = listener;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -299,10 +294,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     protected EuclideanTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         this();
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -324,11 +318,10 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     protected EuclideanTransformation2DRobustEstimator(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         this(listener);
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -344,7 +337,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * transformation.
      */
     public List<Point2D> getInputPoints() {
-        return mInputPoints;
+        return inputPoints;
     }
 
     /**
@@ -359,7 +352,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * transformation.
      */
     public List<Point2D> getOutputPoints() {
-        return mOutputPoints;
+        return outputPoints;
     }
 
     /**
@@ -378,8 +371,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public void setPoints(final List<Point2D> inputPoints,
-                          final List<Point2D> outputPoints) throws LockedException {
+    public void setPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -395,9 +387,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputPoints != null && mOutputPoints != null &&
-                mInputPoints.size() == mOutputPoints.size() &&
-                mInputPoints.size() >= getMinimumPoints();
+        return inputPoints != null && outputPoints != null && inputPoints.size() == outputPoints.size()
+                && inputPoints.size() >= getMinimumPoints();
     }
 
     /**
@@ -435,7 +426,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return listener to be notified of events.
      */
     public EuclideanTransformation2DRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -445,13 +436,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(
-            final EuclideanTransformation2DRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final EuclideanTransformation2DRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -461,7 +450,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -470,7 +459,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true allows 2 points, false requires 3.
      */
     public boolean isWeakMinimumSizeAllowed() {
-        return mWeakMinimumSizeAllowed;
+        return weakMinimumSizeAllowed;
     }
 
     /**
@@ -479,12 +468,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws LockedException if estimator is locked.
      */
-    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed)
-            throws LockedException {
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -494,7 +482,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;
+        return weakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;
     }
 
     /**
@@ -504,7 +492,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -515,7 +503,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -533,11 +521,10 @@ public abstract class EuclideanTransformation2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -549,7 +536,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -571,7 +558,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -582,7 +569,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -602,7 +589,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -611,7 +598,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-        return mInliersData;
+        return inliersData;
     }
 
     /**
@@ -624,7 +611,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-        return mRefineResult;
+        return refineResult;
     }
 
     /**
@@ -639,7 +626,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefineResult = refineResult;
+        this.refineResult = refineResult;
     }
 
     /**
@@ -650,7 +637,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-        return mKeepCovariance;
+        return keepCovariance;
     }
 
     /**
@@ -661,12 +648,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(final boolean keepCovariance)
-            throws LockedException {
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mKeepCovariance = keepCovariance;
+        this.keepCovariance = keepCovariance;
     }
 
     /**
@@ -677,7 +663,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -693,8 +679,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract EuclideanTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract EuclideanTransformation2D estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -702,7 +688,6 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return method being used for robust estimation.
      */
     public abstract RobustEstimatorMethod getMethod();
-
 
     /**
      * Creates an Euclidean 2D transformation estimator based on 2D point
@@ -712,21 +697,14 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *               best Euclidean 2D transformation.
      * @return an instance of Euclidean 2D transformation estimator.
      */
-    public static EuclideanTransformation2DRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator();
-        }
+    public static EuclideanTransformation2DRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator();
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator();
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator();
+            default -> new RANSACEuclideanTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -744,26 +722,14 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-        }
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -777,26 +743,14 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return an instance of Euclidean 2D transformation estimator.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(listener);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -816,27 +770,15 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -853,21 +795,13 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator();
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(qualityScores);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -887,26 +821,16 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  don't have the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, qualityScores);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-        }
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints, qualityScores);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, qualityScores);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -924,26 +848,15 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the required minimum size.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(listener, qualityScores);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -965,27 +878,17 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints, qualityScores);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, qualityScores);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, qualityScores);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -999,24 +902,13 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1035,26 +927,20 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-        }
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1069,26 +955,15 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return an instance of Euclidean 2D transformation estimator.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1109,32 +984,21 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1151,26 +1015,14 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        qualityScores, weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        qualityScores, weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        weakMinimumSizeAllowed);
-        }
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(qualityScores, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(qualityScores, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1191,29 +1043,20 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  don't have the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, qualityScores,
-                        weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, qualityScores,
-                        weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, weakMinimumSizeAllowed);
-        }
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1232,27 +1075,17 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the required minimum size.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, qualityScores, weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, qualityScores, weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener, weakMinimumSizeAllowed);
-        }
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(
+                    listener, qualityScores, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    listener, qualityScores, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);
+        };
     }
 
     /**
@@ -1275,33 +1108,21 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed,
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-            case MSAC:
-                return new MSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-            case PROSAC:
-                return new PROSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints, qualityScores,
-                        weakMinimumSizeAllowed);
-            case PROMEDS:
-                return new PROMedSEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints, qualityScores,
-                        weakMinimumSizeAllowed);
-            case RANSAC:
-            default:
-                return new RANSACEuclideanTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints,
-                        weakMinimumSizeAllowed);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case MSAC -> new MSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROSAC -> new PROSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+            case PROMEDS -> new PROMedSEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+            default -> new RANSACEuclideanTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
     }
 
 
@@ -1360,10 +1181,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
-        return create(listener, inputPoints, outputPoints,
-                DEFAULT_ROBUST_METHOD);
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints) {
+        return create(listener, inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1374,8 +1194,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                      points.
      * @return an instance of Euclidean 2D transformation estimator.
      */
-    public static EuclideanTransformation2DRobustEstimator create(
-            final double[] qualityScores) {
+    public static EuclideanTransformation2DRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1393,10 +1212,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
-        return create(inputPoints, outputPoints, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
+        return create(inputPoints, outputPoints, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1410,8 +1227,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return an instance of Euclidean 2D transformation estimator.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1432,11 +1248,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
-        return create(listener, inputPoints, outputPoints, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores) {
+        return create(listener, inputPoints, outputPoints, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1446,8 +1260,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @return an instance of Euclidean 2D transformation estimator.
      */
-    public static EuclideanTransformation2DRobustEstimator create(
-            final boolean weakMinimumSizeAllowed) {
+    public static EuclideanTransformation2DRobustEstimator create(final boolean weakMinimumSizeAllowed) {
         return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1465,10 +1278,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
-        return create(inputPoints, outputPoints, weakMinimumSizeAllowed,
-                DEFAULT_ROBUST_METHOD);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
+        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1481,8 +1292,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return an instance of Euclidean 2D transformation estimator.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1502,11 +1312,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
-        return create(listener, inputPoints, outputPoints,
-                weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
+        return create(listener, inputPoints, outputPoints, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1520,8 +1328,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
-        return create(qualityScores, weakMinimumSizeAllowed,
-                DEFAULT_ROBUST_METHOD);
+        return create(qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1539,10 +1346,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
-        return create(inputPoints, outputPoints, qualityScores,
-                weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
+        return create(inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1557,10 +1363,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return an instance of Euclidean 2D transformation estimator.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
-        return create(listener, qualityScores, weakMinimumSizeAllowed,
-                DEFAULT_ROBUST_METHOD);
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
+        return create(listener, qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1581,11 +1386,10 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
-        return create(listener, inputPoints, outputPoints, qualityScores,
-                weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+        return create(listener, inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed,
+                DEFAULT_ROBUST_METHOD);
     }
 
 
@@ -1601,16 +1405,15 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetPoints(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
+    private void internalSetPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }
         if (inputPoints.size() != outputPoints.size()) {
             throw new IllegalArgumentException();
         }
-        mInputPoints = inputPoints;
-        mOutputPoints = outputPoints;
+        this.inputPoints = inputPoints;
+        this.outputPoints = outputPoints;
     }
 
     /**
@@ -1625,21 +1428,18 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return solution after refinement (if requested) or the provided
      * non-refined solution if not requested or refinement failed.
      */
-    protected EuclideanTransformation2D attemptRefine(
-            final EuclideanTransformation2D transformation) {
-        if (mRefineResult) {
-            EuclideanTransformation2DRefiner refiner =
-                    new EuclideanTransformation2DRefiner(transformation,
-                            mKeepCovariance, getInliersData(), mInputPoints,
-                            mOutputPoints, getRefinementStandardDeviation());
+    protected EuclideanTransformation2D attemptRefine(final EuclideanTransformation2D transformation) {
+        if (refineResult) {
+            final var refiner = new EuclideanTransformation2DRefiner(transformation, keepCovariance, getInliersData(),
+                    inputPoints, outputPoints, getRefinementStandardDeviation());
 
             try {
-                final EuclideanTransformation2D result = new EuclideanTransformation2D();
-                final boolean improved = refiner.refine(result);
+                final var result = new EuclideanTransformation2D();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : transformation;

@@ -21,7 +21,6 @@ import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,8 +28,7 @@ import java.util.List;
  * algorithm and point correspondences.
  */
 @SuppressWarnings("DuplicatedCode")
-public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
-        LinePlaneCorrespondencePinholeCameraEstimator {
+public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends LinePlaneCorrespondencePinholeCameraEstimator {
 
     /**
      * Minimum number of required equations to estimate a pinhole camera.
@@ -54,14 +52,14 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * exceeding correspondences will be ignored and only the 6 first
      * correspondences will be used.
      */
-    private boolean mAllowLMSESolution;
+    private boolean allowLMSESolution;
 
     /**
      * Constructor.
      */
     public DLTLinePlaneCorrespondencePinholeCameraEstimator() {
         super();
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -70,10 +68,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    public DLTLinePlaneCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    public DLTLinePlaneCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -88,7 +85,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
     public DLTLinePlaneCorrespondencePinholeCameraEstimator(
             final List<Plane> planes, final List<Line2D> lines2D) throws WrongListSizesException {
         super(planes, lines2D);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -103,11 +100,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                  don't have the same size and enough correspondences.
      */
     public DLTLinePlaneCorrespondencePinholeCameraEstimator(
-            final List<Plane> planes, final List<Line2D> lines2D,
-            final PinholeCameraEstimatorListener listener)
+            final List<Plane> planes, final List<Line2D> lines2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(planes, lines2D, listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -119,7 +115,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if LMSE solution is allowed, false otherwise.
      */
     public boolean isLMSESolutionAllowed() {
-        return mAllowLMSESolution;
+        return allowLMSESolution;
     }
 
     /**
@@ -135,7 +131,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
         if (isLocked()) {
             throw new LockedException();
         }
-        mAllowLMSESolution = allowed;
+        allowLMSESolution = allowed;
     }
 
     /**
@@ -158,8 +154,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                         estimation, usually because input data is not valid.
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            PinholeCameraEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -169,14 +164,14 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
         }
 
         try {
-            final int nLines = mLines2D.size();
+            final var nLines = lines2D.size();
 
-            mLocked = true;
-            if (mListener != null) {
-                mListener.onEstimateStart(this);
+            locked = true;
+            if (listener != null) {
+                listener.onEstimateStart(this);
             }
 
-            Matrix a;
+            final Matrix a;
             if (isLMSESolutionAllowed()) {
                 // initialize new matrix to zero when LMSE is enabled
                 a = new Matrix(3 * nLines, 12);
@@ -186,12 +181,12 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 a = new Matrix(MIN_NUMBER_OF_EQUATIONS, 12);
             }
 
-            final Iterator<Line2D> iterator2D = mLines2D.iterator();
-            final Iterator<Plane> iterator3D = mPlanes.iterator();
+            final var iterator2D = lines2D.iterator();
+            final var iterator3D = planes.iterator();
 
             Line2D line2D;
             Plane plane;
-            int counter = 0;
+            var counter = 0;
             double la;
             double lb;
             double lc;
@@ -229,26 +224,19 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 a.setElementAt(counter, 11, pA * lc);
 
                 // normalize row
-                rowNorm = Math.sqrt(
-                        Math.pow(a.getElementAt(counter, 0), 2.0) +
-                                Math.pow(a.getElementAt(counter, 1), 2.0) +
-                                Math.pow(a.getElementAt(counter, 2), 2.0) +
-                                Math.pow(a.getElementAt(counter, 9), 2.0) +
-                                Math.pow(a.getElementAt(counter, 10), 2.0) +
-                                Math.pow(a.getElementAt(counter, 11), 2.0));
+                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 0), 2.0)
+                        + Math.pow(a.getElementAt(counter, 1), 2.0)
+                        + Math.pow(a.getElementAt(counter, 2), 2.0)
+                        + Math.pow(a.getElementAt(counter, 9), 2.0)
+                        + Math.pow(a.getElementAt(counter, 10), 2.0)
+                        + Math.pow(a.getElementAt(counter, 11), 2.0));
 
-                a.setElementAt(counter, 0, a.getElementAt(counter, 0) /
-                        rowNorm);
-                a.setElementAt(counter, 1, a.getElementAt(counter, 1) /
-                        rowNorm);
-                a.setElementAt(counter, 2, a.getElementAt(counter, 2) /
-                        rowNorm);
-                a.setElementAt(counter, 9, a.getElementAt(counter, 9) /
-                        rowNorm);
-                a.setElementAt(counter, 10, a.getElementAt(counter, 10) /
-                        rowNorm);
-                a.setElementAt(counter, 11, a.getElementAt(counter, 11) /
-                        rowNorm);
+                a.setElementAt(counter, 0, a.getElementAt(counter, 0) / rowNorm);
+                a.setElementAt(counter, 1, a.getElementAt(counter, 1) / rowNorm);
+                a.setElementAt(counter, 2, a.getElementAt(counter, 2) / rowNorm);
+                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);
+                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);
+                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);
                 counter++;
 
                 // second row
@@ -266,26 +254,19 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 a.setElementAt(counter, 11, pB * lc);
 
                 // normalize row
-                rowNorm = Math.sqrt(
-                        Math.pow(a.getElementAt(counter, 3), 2.0) +
-                                Math.pow(a.getElementAt(counter, 4), 2.0) +
-                                Math.pow(a.getElementAt(counter, 5), 2.0) +
-                                Math.pow(a.getElementAt(counter, 9), 2.0) +
-                                Math.pow(a.getElementAt(counter, 10), 2.0) +
-                                Math.pow(a.getElementAt(counter, 11), 2.0));
+                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 3), 2.0)
+                        + Math.pow(a.getElementAt(counter, 4), 2.0)
+                        + Math.pow(a.getElementAt(counter, 5), 2.0)
+                        + Math.pow(a.getElementAt(counter, 9), 2.0)
+                        + Math.pow(a.getElementAt(counter, 10), 2.0)
+                        + Math.pow(a.getElementAt(counter, 11), 2.0));
 
-                a.setElementAt(counter, 3, a.getElementAt(counter, 3) /
-                        rowNorm);
-                a.setElementAt(counter, 4, a.getElementAt(counter, 4) /
-                        rowNorm);
-                a.setElementAt(counter, 5, a.getElementAt(counter, 5) /
-                        rowNorm);
-                a.setElementAt(counter, 9, a.getElementAt(counter, 9) /
-                        rowNorm);
-                a.setElementAt(counter, 10, a.getElementAt(counter, 10) /
-                        rowNorm);
-                a.setElementAt(counter, 11, a.getElementAt(counter, 11) /
-                        rowNorm);
+                a.setElementAt(counter, 3, a.getElementAt(counter, 3) / rowNorm);
+                a.setElementAt(counter, 4, a.getElementAt(counter, 4) / rowNorm);
+                a.setElementAt(counter, 5, a.getElementAt(counter, 5) / rowNorm);
+                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);
+                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);
+                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);
                 counter++;
 
 
@@ -308,30 +289,23 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 a.setElementAt(counter, 11, pC * lc);
 
                 // normalize row
-                rowNorm = Math.sqrt(
-                        Math.pow(a.getElementAt(counter, 6), 2.0) +
-                                Math.pow(a.getElementAt(counter, 7), 2.0) +
-                                Math.pow(a.getElementAt(counter, 8), 2.0) +
-                                Math.pow(a.getElementAt(counter, 9), 2.0) +
-                                Math.pow(a.getElementAt(counter, 10), 2.0) +
-                                Math.pow(a.getElementAt(counter, 11), 2.0));
+                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 6), 2.0)
+                        + Math.pow(a.getElementAt(counter, 7), 2.0)
+                        + Math.pow(a.getElementAt(counter, 8), 2.0)
+                        + Math.pow(a.getElementAt(counter, 9), 2.0)
+                        + Math.pow(a.getElementAt(counter, 10), 2.0)
+                        + Math.pow(a.getElementAt(counter, 11), 2.0));
 
-                a.setElementAt(counter, 6, a.getElementAt(counter, 6) /
-                        rowNorm);
-                a.setElementAt(counter, 7, a.getElementAt(counter, 7) /
-                        rowNorm);
-                a.setElementAt(counter, 8, a.getElementAt(counter, 8) /
-                        rowNorm);
-                a.setElementAt(counter, 9, a.getElementAt(counter, 9) /
-                        rowNorm);
-                a.setElementAt(counter, 10, a.getElementAt(counter, 10) /
-                        rowNorm);
-                a.setElementAt(counter, 11, a.getElementAt(counter, 11) /
-                        rowNorm);
+                a.setElementAt(counter, 6, a.getElementAt(counter, 6) / rowNorm);
+                a.setElementAt(counter, 7, a.getElementAt(counter, 7) / rowNorm);
+                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / rowNorm);
+                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);
+                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);
+                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);
                 counter++;
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+            final var decomposer = new SingularValueDecomposer(a);
             decomposer.decompose();
 
             if (decomposer.getNullity() > 1) {
@@ -341,16 +315,15 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 throw new PinholeCameraEstimatorException();
             }
 
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // use last column of V as pinhole camera vector
 
             // the last column of V contains pinhole camera matrix ordered by
             // columns as: P11, P21, P31, P12, P22, P32, P13, P23, P33, P14, P24,
             // P34, hence we reorder p
-            final Matrix pinholeCameraMatrix = new Matrix(
-                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
-                    PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
+            final var pinholeCameraMatrix = new Matrix(
+                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS, PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
 
             pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));
             pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(1, 11));
@@ -372,10 +345,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
             // of V, then its Frobenius norm will be 1 because SVD already
             // returns normalized singular vector
 
-            final PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);
+            final var camera = new PinholeCamera(pinholeCameraMatrix);
 
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
+            if (listener != null) {
+                listener.onEstimateEnd(this);
             }
 
             return attemptRefine(camera);
@@ -385,7 +358,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
         } catch (final Exception e) {
             throw new PinholeCameraEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -396,7 +369,6 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public PinholeCameraEstimatorType getType() {
-        return PinholeCameraEstimatorType.
-                DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR;
+        return PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR;
     }
 }

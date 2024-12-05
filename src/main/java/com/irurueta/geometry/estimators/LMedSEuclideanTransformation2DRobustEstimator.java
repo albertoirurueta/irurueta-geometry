@@ -31,8 +31,7 @@ import java.util.List;
  * Finds the best Euclidean 2D transformation for provided collections of
  * matched 2D points using LMedS algorithm.
  */
-public class LMedSEuclideanTransformation2DRobustEstimator extends
-        EuclideanTransformation2DRobustEstimator {
+public class LMedSEuclideanTransformation2DRobustEstimator extends EuclideanTransformation2DRobustEstimator {
 
     /**
      * Default value ot be used for stop threshold. Stop threshold can be used
@@ -73,14 +72,14 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSEuclideanTransformation2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -100,7 +99,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
     public LMedSEuclideanTransformation2DRobustEstimator(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -112,7 +111,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
     public LMedSEuclideanTransformation2DRobustEstimator(
             final EuclideanTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -135,7 +134,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
             final EuclideanTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -143,10 +142,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      *
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
-    public LMedSEuclideanTransformation2DRobustEstimator(
-            final boolean weakMinimumSizeAllowed) {
+    public LMedSEuclideanTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -165,10 +163,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -179,10 +176,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
-            final EuclideanTransformation2DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -204,10 +200,9 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      */
     public LMedSEuclideanTransformation2DRobustEstimator(
             final EuclideanTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -230,7 +225,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -263,7 +258,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -280,8 +275,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public EuclideanTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public EuclideanTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -289,130 +283,112 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<EuclideanTransformation2D> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<EuclideanTransformation2D>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<EuclideanTransformation2D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            private final EuclideanTransformation2DEstimator mNonRobustEstimator =
-                                    new EuclideanTransformation2DEstimator(
-                                            isWeakMinimumSizeAllowed());
+                    private final EuclideanTransformation2DEstimator nonRobustEstimator =
+                            new EuclideanTransformation2DEstimator(isWeakMinimumSizeAllowed());
 
-                            private final List<Point2D> mSubsetInputPoints =
-                                    new ArrayList<>();
-                            private final List<Point2D> mSubsetOutputPoints =
-                                    new ArrayList<>();
+                    private final List<Point2D> subsetInputPoints = new ArrayList<>();
+                    private final List<Point2D> subsetOutputPoints = new ArrayList<>();
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return mNonRobustEstimator.getMinimumPoints();
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return nonRobustEstimator.getMinimumPoints();
+                    }
 
-                            @SuppressWarnings("DuplicatedCode")
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<EuclideanTransformation2D> solutions) {
-                                mSubsetInputPoints.clear();
-                                mSubsetOutputPoints.clear();
-                                for (final int samplesIndex : samplesIndices) {
-                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
-                                    mSubsetOutputPoints.add(mOutputPoints.get(
-                                            samplesIndex));
-                                }
+                    @SuppressWarnings("DuplicatedCode")
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<EuclideanTransformation2D> solutions) {
+                        subsetInputPoints.clear();
+                        subsetOutputPoints.clear();
+                        for (final var samplesIndex : samplesIndices) {
+                            subsetInputPoints.add(inputPoints.get(samplesIndex));
+                            subsetOutputPoints.add(outputPoints.get(samplesIndex));
+                        }
 
-                                try {
-                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,
-                                            mSubsetOutputPoints);
-                                    solutions.add(mNonRobustEstimator.estimate());
-                                } catch (final Exception e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);
+                            solutions.add(nonRobustEstimator.estimate());
+                        } catch (final Exception e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final EuclideanTransformation2D currentEstimation, final int i) {
-                                final Point2D inputPoint = mInputPoints.get(i);
-                                final Point2D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final EuclideanTransformation2D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSEuclideanTransformation2DRobustEstimator.this.
-                                        isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return LMedSEuclideanTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<EuclideanTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            LMedSEuclideanTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<EuclideanTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(LMedSEuclideanTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<EuclideanTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            LMedSEuclideanTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<EuclideanTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(LMedSEuclideanTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<EuclideanTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSEuclideanTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<EuclideanTransformation2D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    LMedSEuclideanTransformation2DRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<EuclideanTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSEuclideanTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<EuclideanTransformation2D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    LMedSEuclideanTransformation2DRobustEstimator.this, progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
-            final EuclideanTransformation2D transformation =
-                    innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -439,8 +415,7 @@ public class LMedSEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final LMedSRobustEstimator.LMedSInliersData inliersData =
-                (LMedSRobustEstimator.LMedSInliersData) getInliersData();
+        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();
         return inliersData.getEstimatedThreshold();
     }
 }

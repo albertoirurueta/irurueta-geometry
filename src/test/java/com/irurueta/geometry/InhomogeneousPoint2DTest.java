@@ -17,14 +17,13 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class InhomogeneousPoint2DTest {
+class InhomogeneousPoint2DTest {
 
     private static final int HOM_COORDS = 3;
     private static final int INHOM_COORDS = 2;
@@ -34,23 +33,23 @@ public class InhomogeneousPoint2DTest {
     private static final double MAX_RANDOM_VALUE = 100.0;
 
     @Test
-    public void testConstructor() {
-        InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D();
+    void testConstructor() {
+        var iPoint = new InhomogeneousPoint2D();
         assertEquals(0.0, iPoint.getInhomX(), 0.0);
         assertEquals(0.0, iPoint.getInhomY(), 0.0);
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double[] array = new double[INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
+        var array = new double[INHOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         iPoint = new InhomogeneousPoint2D(array);
 
-        final double[] array2 = iPoint.asArray();
+        final var array2 = iPoint.asArray();
 
         assertArrayEquals(array, array2, 0.0);
 
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         iPoint = new InhomogeneousPoint2D(a, b);
         array = iPoint.asArray();
@@ -58,8 +57,7 @@ public class InhomogeneousPoint2DTest {
         assertEquals(a, array[0], 0.0);
         assertEquals(b, array[1], 0.0);
 
-        final Point2D point = Point2D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES);
+        final var point = Point2D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         point.setInhomogeneousCoordinates(a, b);
@@ -70,17 +68,17 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testGettersAndSetters() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testGettersAndSetters() {
+        final var randomizer = new UniformRandomizer();
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D();
+        final var iPoint = new InhomogeneousPoint2D();
 
         iPoint.setX(x);
         iPoint.setY(y);
@@ -88,9 +86,9 @@ public class InhomogeneousPoint2DTest {
         assertEquals(iPoint.getY(), y, 0.0);
 
         iPoint.setHomogeneousCoordinates(homX, homY, homW);
-        final double constantX = iPoint.getHomX() / homX;
-        final double constantY = iPoint.getHomY() / homY;
-        final double constantW = iPoint.getHomW() / homW;
+        final var constantX = iPoint.getHomX() / homX;
+        final var constantY = iPoint.getHomY() / homY;
+        final var constantW = iPoint.getHomW() / homW;
         assertEquals(constantX, constantY, ABSOLUTE_ERROR);
         assertEquals(constantY, constantW, ABSOLUTE_ERROR);
         assertEquals(constantW, constantX, ABSOLUTE_ERROR);
@@ -103,23 +101,23 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testToHomogeneous() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] array = new double[INHOM_COORDS];
+    void testToHomogeneous() {
+        final var randomizer = new UniformRandomizer();
+        final var array = new double[INHOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D(array);
+        final var iPoint = new InhomogeneousPoint2D(array);
 
-        final HomogeneousPoint2D hPoint = iPoint.toHomogeneous();
+        final var hPoint = iPoint.toHomogeneous();
 
         // check that inhomogeneous coordinates are almost equal
         assertEquals(hPoint.getInhomX(), iPoint.getInhomX(), ABSOLUTE_ERROR);
         assertEquals(hPoint.getInhomY(), iPoint.getInhomY(), ABSOLUTE_ERROR);
 
         // check that homogeneous coordinates are up to scale
-        final double scaleX = hPoint.getHomX() / iPoint.getHomX();
-        final double scaleY = hPoint.getHomY() / iPoint.getHomY();
-        final double scaleW = hPoint.getHomW() / iPoint.getHomW();
+        final var scaleX = hPoint.getHomX() / iPoint.getHomX();
+        final var scaleY = hPoint.getHomY() / iPoint.getHomY();
+        final var scaleW = hPoint.getHomW() / iPoint.getHomW();
 
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
@@ -127,66 +125,56 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testSetCoordinates() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double[] array = new double[INHOM_COORDS];
+    void testSetCoordinates() {
+        final var randomizer = new UniformRandomizer();
+        var array = new double[INHOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D();
+        final var iPoint = new InhomogeneousPoint2D();
         iPoint.setCoordinates(array);
-        double[] array2 = iPoint.asArray();
+        var array2 = iPoint.asArray();
         assertArrayEquals(array, array2, 0.0);
 
         // Force IllegalArgumentException
-        array = new double[INHOM_COORDS + 1];
-        iPoint = new InhomogeneousPoint2D();
-        try {
-            iPoint.setCoordinates(array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var array3 = new double[INHOM_COORDS + 1];
+        final var iPoint3 = new InhomogeneousPoint2D();
+        assertThrows(IllegalArgumentException.class, () -> iPoint3.setCoordinates(array3));
 
-        array = new double[INHOM_COORDS - 1];
-        iPoint = new InhomogeneousPoint2D();
-        try {
-            iPoint.setCoordinates(array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var array4 = new double[INHOM_COORDS - 1];
+        final var iPoint4 = new InhomogeneousPoint2D();
+        assertThrows(IllegalArgumentException.class, () -> iPoint4.setCoordinates(array4));
 
-        final double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        iPoint = new InhomogeneousPoint2D();
-        iPoint.setCoordinates(x, y);
-        assertEquals(x, iPoint.getX(), 0.0);
-        assertEquals(y, iPoint.getY(), 0.0);
+        final var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var iPoint5 = new InhomogeneousPoint2D();
+        iPoint5.setCoordinates(x, y);
+        assertEquals(x, iPoint5.getX(), 0.0);
+        assertEquals(y, iPoint5.getY(), 0.0);
 
-        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        iPoint = new InhomogeneousPoint2D();
-        iPoint.setInhomogeneousCoordinates(inhomX, inhomY);
-        assertEquals(inhomX, iPoint.getInhomX(), 0.0);
-        assertEquals(inhomY, iPoint.getInhomY(), 0.0);
-        assertEquals(inhomX, iPoint.getX(), 0.0);
-        assertEquals(inhomY, iPoint.getY(), 0.0);
+        final var inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var iPoint6 = new InhomogeneousPoint2D();
+        iPoint6.setInhomogeneousCoordinates(inhomX, inhomY);
+        assertEquals(inhomX, iPoint6.getInhomX(), 0.0);
+        assertEquals(inhomY, iPoint6.getInhomY(), 0.0);
+        assertEquals(inhomX, iPoint6.getX(), 0.0);
+        assertEquals(inhomY, iPoint6.getY(), 0.0);
 
         array = new double[INHOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint2D iPoint2 = new InhomogeneousPoint2D(array);
-        iPoint = new InhomogeneousPoint2D();
+        final var iPoint2 = new InhomogeneousPoint2D(array);
+        final var iPoint7 = new InhomogeneousPoint2D();
         // pass another point to set coordinates
-        iPoint.setCoordinates(iPoint2);
-        array2 = iPoint.asArray();
+        iPoint7.setCoordinates(iPoint2);
+        array2 = iPoint7.asArray();
         assertArrayEquals(array, array2, 0.0);
 
         array = new double[HOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final HomogeneousPoint2D hPoint = new HomogeneousPoint2D(array);
-        iPoint = new InhomogeneousPoint2D();
-        iPoint.setCoordinates(hPoint);
-        array2 = iPoint.asArray();
+        final var hPoint = new HomogeneousPoint2D(array);
+        final var iPoint8 = new InhomogeneousPoint2D();
+        iPoint8.setCoordinates(hPoint);
+        array2 = iPoint8.asArray();
         assertEquals(HOM_COORDS, array.length);
         assertEquals(INHOM_COORDS, array2.length);
         assertEquals(array[0] / array[2], array2[0], 0.0);
@@ -194,13 +182,13 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testArray() {
-        final double[] array = new double[INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testArray() {
+        final var array = new double[INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D(array);
-        double[] array2 = iPoint.asArray();
+        final var iPoint = new InhomogeneousPoint2D(array);
+        var array2 = iPoint.asArray();
         assertArrayEquals(array, array2, 0.0);
 
         array2 = new double[INHOM_COORDS];
@@ -209,27 +197,24 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testEqualsAndHashCode() {
-        final double[] array = new double[INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testEqualsAndHashCode() {
+        final var array = new double[INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        InhomogeneousPoint2D iPoint1 = new InhomogeneousPoint2D(array);
-        InhomogeneousPoint2D iPoint2 = new InhomogeneousPoint2D(array);
+        var iPoint1 = new InhomogeneousPoint2D(array);
+        var iPoint2 = new InhomogeneousPoint2D(array);
         assertTrue(iPoint1.equals(iPoint2, 0.0));
         assertTrue(iPoint1.equals((Point2D) iPoint2, 0.0));
         assertEquals(iPoint1.hashCode(), iPoint2.hashCode());
 
-        array[0] = iPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        array[0] = iPoint1.getX() + randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[1] = iPoint1.getY();
         iPoint2 = new InhomogeneousPoint2D(array);
         assertFalse(iPoint1.equals(iPoint2, 0.0));
         assertFalse(iPoint1.equals((Point2D) iPoint2, 0.0));
 
-        array[0] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        array[1] = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        array[0] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        array[1] = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         iPoint1 = new InhomogeneousPoint2D(array);
         array[0] += 1.0;
         iPoint2 = new InhomogeneousPoint2D(array);
@@ -239,13 +224,13 @@ public class InhomogeneousPoint2DTest {
         assertFalse(iPoint1.equals(iPoint2, 0.5));
 
         // Testing equals from one homogeneous point
-        final double[] hArray = new double[HOM_COORDS];
+        final var hArray = new double[HOM_COORDS];
         randomizer.fill(hArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         array[0] = hArray[0] / hArray[2];
         array[1] = hArray[1] / hArray[2];
 
-        InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D(array);
-        HomogeneousPoint2D hPoint = new HomogeneousPoint2D(hArray);
+        final var iPoint = new InhomogeneousPoint2D(array);
+        var hPoint = new HomogeneousPoint2D(hArray);
         assertTrue(iPoint.equals(hPoint, ABSOLUTE_ERROR));
         assertTrue(iPoint.equals((Point2D) hPoint, ABSOLUTE_ERROR));
 
@@ -257,54 +242,40 @@ public class InhomogeneousPoint2DTest {
         assertFalse(iPoint.equals((Point2D) hPoint, 0.0));
 
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        iPoint = new InhomogeneousPoint2D(array);
+        final var iPoint3 = new InhomogeneousPoint2D(array);
 
-        hArray[0] = iPoint.getHomX() + iPoint.getHomW();
-        hArray[1] = iPoint.getHomY() + iPoint.getHomW();
-        hArray[2] = iPoint.getHomW();
-        hPoint = new HomogeneousPoint2D(hArray);
-        assertTrue(iPoint.equals(hPoint, 1.1));
-        assertTrue(iPoint.equals((Point2D) hPoint, 1.1));
-        assertFalse(iPoint.equals(hPoint, 0.5));
-        assertFalse(iPoint.equals((Point2D) hPoint, 0.5));
+        hArray[0] = iPoint3.getHomX() + iPoint3.getHomW();
+        hArray[1] = iPoint3.getHomY() + iPoint3.getHomW();
+        hArray[2] = iPoint3.getHomW();
+        final var hPoint2 = new HomogeneousPoint2D(hArray);
+        assertTrue(iPoint3.equals(hPoint2, 1.1));
+        assertTrue(iPoint3.equals((Point2D) hPoint2, 1.1));
+        assertFalse(iPoint3.equals(hPoint, 0.5));
+        assertFalse(iPoint3.equals((Point2D) hPoint2, 0.5));
 
         // Force IllegalArgumentException
-        boolean value = false;
-        try {
-            value = iPoint.equals(hPoint, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            value = iPoint.equals(iPoint, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            value = iPoint.equals((Point2D) iPoint, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertFalse(value);
+        assertThrows(IllegalArgumentException.class, () -> iPoint.equals(hPoint2, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> iPoint.equals(iPoint3, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> iPoint.equals((Point2D) iPoint3, -ABSOLUTE_ERROR));
 
         hPoint = new HomogeneousPoint2D();
-        iPoint = new InhomogeneousPoint2D();
-        assertTrue(iPoint.equals(hPoint));
-        assertEquals(iPoint.hashCode(), hPoint.hashCode());
-        iPoint2 = new InhomogeneousPoint2D(iPoint);
-        assertTrue(iPoint.equals(iPoint2));
-        assertEquals(iPoint.hashCode(), iPoint2.hashCode());
-        assertTrue(iPoint.equals((Point2D) hPoint));
-        assertTrue(iPoint.equals((Point2D) iPoint2));
+        final var iPoint4 = new InhomogeneousPoint2D();
+        assertTrue(iPoint4.equals(hPoint));
+        assertEquals(iPoint4.hashCode(), hPoint.hashCode());
+        final var iPoint5 = new InhomogeneousPoint2D(iPoint);
+        assertTrue(iPoint.equals(iPoint5));
+        assertEquals(iPoint.hashCode(), iPoint5.hashCode());
+        assertTrue(iPoint4.equals((Point2D) hPoint));
+        assertTrue(iPoint.equals((Point2D) iPoint5));
     }
 
     @Test
-    public void testIsAtInfinity() {
-        final double[] array = new double[INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testIsAtInfinity() {
+        final var array = new double[INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        InhomogeneousPoint2D iPoint = new InhomogeneousPoint2D(array);
+        var iPoint = new InhomogeneousPoint2D(array);
         iPoint.setX(Double.POSITIVE_INFINITY);
         assertTrue(iPoint.isAtInfinity());
 
@@ -333,15 +304,15 @@ public class InhomogeneousPoint2DTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final double[] array = new double[INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var array = new double[INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint2D iPoint1 = new InhomogeneousPoint2D(array);
+        final var iPoint1 = new InhomogeneousPoint2D(array);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(iPoint1);
-        final InhomogeneousPoint2D iPoint2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(iPoint1);
+        final var iPoint2 = SerializationHelper.<InhomogeneousPoint2D>deserialize(bytes);
 
         // check
         assertEquals(iPoint1, iPoint2);

@@ -33,18 +33,17 @@ import java.util.List;
  * @param <S1> type of matched samples in 1st set.
  * @param <S2> type of matched samples in 2nd set.
  */
-public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
-        InliersDataRefiner<T> {
+public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends InliersDataRefiner<T> {
 
     /**
      * 1st set of paired samples.
      */
-    protected List<S1> mSamples1;
+    protected List<S1> samples1;
 
     /**
      * 2nd set of paired samples.
      */
-    protected List<S2> mSamples2;
+    protected List<S2> samples2;
 
     /**
      * Constructor.
@@ -66,12 +65,10 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
      */
     protected PairMatchesAndInliersDataRefiner(
             final T initialEstimation, final boolean keepCovariance, final BitSet inliers,
-            final double[] residuals, final int numInliers, final List<S1> samples1,
-            final List<S2> samples2) {
-        super(initialEstimation, keepCovariance, inliers, residuals,
-                numInliers);
-        mSamples1 = samples1;
-        mSamples2 = samples2;
+            final double[] residuals, final int numInliers, final List<S1> samples1, final List<S2> samples2) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers);
+        this.samples1 = samples1;
+        this.samples2 = samples2;
     }
 
     /**
@@ -86,12 +83,11 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
      * @param samples2          2nd set of paired samples.
      */
     protected PairMatchesAndInliersDataRefiner(
-            final T initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<S1> samples1,
-            final List<S2> samples2) {
+            final T initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<S1> samples1, final List<S2> samples2) {
         super(initialEstimation, keepCovariance, inliersData);
-        mSamples1 = samples1;
-        mSamples2 = samples2;
+        this.samples1 = samples1;
+        this.samples2 = samples2;
     }
 
     /**
@@ -100,7 +96,7 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
      * @return 1st set of paired samples.
      */
     public List<S1> getSamples1() {
-        return mSamples1;
+        return samples1;
     }
 
     /**
@@ -113,7 +109,7 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
         if (isLocked()) {
             throw new LockedException();
         }
-        mSamples1 = samples1;
+        this.samples1 = samples1;
     }
 
     /**
@@ -122,7 +118,7 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
      * @return 2nd set of paired samples.
      */
     public List<S2> getSamples2() {
-        return mSamples2;
+        return samples2;
     }
 
     /**
@@ -135,7 +131,7 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
         if (isLocked()) {
             throw new LockedException();
         }
-        mSamples2 = samples2;
+        this.samples2 = samples2;
     }
 
     /**
@@ -145,9 +141,8 @@ public abstract class PairMatchesAndInliersDataRefiner<T, S1, S2> extends
      */
     @Override
     public boolean isReady() {
-        return mInitialEstimation != null && mInliers != null &&
-                mResiduals != null && mSamples1 != null &&
-                mSamples2 != null && mResiduals.length == mSamples1.size() &&
-                mSamples1.size() == mSamples2.size() && mNumInliers > 0;
+        return initialEstimation != null && inliers != null && residuals != null && samples1 != null
+                && samples2 != null && residuals.length == samples1.size() && samples1.size() == samples2.size()
+                && numInliers > 0;
     }
 }

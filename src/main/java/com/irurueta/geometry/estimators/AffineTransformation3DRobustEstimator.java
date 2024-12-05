@@ -97,19 +97,19 @@ public abstract class AffineTransformation3DRobustEstimator {
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected AffineTransformation3DRobustEstimatorListener mListener;
+    protected AffineTransformation3DRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -117,19 +117,19 @@ public abstract class AffineTransformation3DRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * Data related to inliers found after estimation.
      */
-    protected InliersData mInliersData;
+    protected InliersData inliersData;
 
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
@@ -137,30 +137,30 @@ public abstract class AffineTransformation3DRobustEstimator {
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
      */
-    protected boolean mRefineResult;
+    protected boolean refineResult;
 
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    protected boolean mKeepCovariance;
+    protected boolean keepCovariance;
 
     /**
      * Estimated covariance of estimated 2D affine transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    protected Matrix mCovariance;
+    protected Matrix covariance;
 
     /**
      * Constructor.
      */
     protected AffineTransformation3DRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -169,14 +169,13 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 stars, ends or its progress significantly changes.
      */
-    protected AffineTransformation3DRobustEstimator(
-            final AffineTransformation3DRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+    protected AffineTransformation3DRobustEstimator(final AffineTransformation3DRobustEstimatorListener listener) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -186,7 +185,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return listener to be notified of events.
      */
     public AffineTransformation3DRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -197,12 +196,11 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @throws LockedException if robust estimator is locked.
      */
     public void setListener(
-            final AffineTransformation3DRobustEstimatorListener listener)
-            throws LockedException {
+            final AffineTransformation3DRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -212,7 +210,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -222,7 +220,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -233,7 +231,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -247,16 +245,14 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setProgressDelta(final float progressDelta)
-            throws LockedException {
+    public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -268,7 +264,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -283,15 +279,14 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimator
      *                                  is being computed.
      */
-    public void setConfidence(final double confidence)
-            throws LockedException {
+    public void setConfidence(final double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -302,7 +297,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -315,15 +310,14 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setMaxIterations(final int maxIterations)
-            throws LockedException {
+    public void setMaxIterations(final int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -332,7 +326,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-        return mInliersData;
+        return inliersData;
     }
 
     /**
@@ -345,7 +339,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-        return mRefineResult;
+        return refineResult;
     }
 
     /**
@@ -360,7 +354,7 @@ public abstract class AffineTransformation3DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefineResult = refineResult;
+        this.refineResult = refineResult;
     }
 
     /**
@@ -371,7 +365,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-        return mKeepCovariance;
+        return keepCovariance;
     }
 
     /**
@@ -382,12 +376,11 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(final boolean keepCovariance)
-            throws LockedException {
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mKeepCovariance = keepCovariance;
+        this.keepCovariance = keepCovariance;
     }
 
     /**
@@ -398,7 +391,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -414,8 +407,8 @@ public abstract class AffineTransformation3DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract AffineTransformation3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract AffineTransformation3D estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -439,10 +432,8 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, method);
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final RobustEstimatorMethod method) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(inputPoints, outputPoints, method);
     }
 
     /**
@@ -462,11 +453,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPoints, outputPoints, method);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Point3D> inputPoints,
+            final List<Point3D> outputPoints, final RobustEstimatorMethod method) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPoints, outputPoints,
+                method);
     }
 
     /**
@@ -486,10 +476,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, qualityScores, method);
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(inputPoints, outputPoints, qualityScores,
+                method);
     }
 
     /**
@@ -511,11 +501,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPoints, outputPoints, qualityScores, method);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Point3D> inputPoints,
+            final List<Point3D> outputPoints, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, method);
     }
 
     /**
@@ -532,8 +521,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.
-                create(inputPoints, outputPoints);
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(inputPoints, outputPoints);
     }
 
     /**
@@ -551,10 +539,9 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPoints, outputPoints);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Point3D> inputPoints,
+            final List<Point3D> outputPoints) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPoints, outputPoints);
     }
 
     /**
@@ -572,10 +559,9 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final double[] qualityScores) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPoints, outputPoints, qualityScores);
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final double[] qualityScores) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores);
     }
 
     /**
@@ -595,11 +581,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final double[] qualityScores) {
-        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPoints, outputPoints, qualityScores);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Point3D> inputPoints,
+            final List<Point3D> outputPoints, final double[] qualityScores) {
+        return PointCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores);
     }
 
     /**
@@ -617,10 +602,8 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final RobustEstimatorMethod method) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPlanes, outputPlanes, method);
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final RobustEstimatorMethod method) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(inputPlanes, outputPlanes, method);
     }
 
     /**
@@ -640,11 +623,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final RobustEstimatorMethod method) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPlanes, outputPlanes, method);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Plane> inputPlanes,
+            final List<Plane> outputPlanes, final RobustEstimatorMethod method) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPlanes, outputPlanes,
+                method);
     }
 
     /**
@@ -664,10 +646,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPlanes, outputPlanes, qualityScores, method);
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(inputPlanes, outputPlanes, qualityScores,
+                method);
     }
 
     /**
@@ -689,11 +671,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPlanes, outputPlanes, qualityScores, method);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Plane> inputPlanes,
+            final List<Plane> outputPlanes, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPlanes, outputPlanes,
+                qualityScores, method);
     }
 
     /**
@@ -710,8 +691,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPlanes, outputPlanes);
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(inputPlanes, outputPlanes);
     }
 
     /**
@@ -729,10 +709,9 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPlanes, outputPlanes);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Plane> inputPlanes,
+            final List<Plane> outputPlanes) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPlanes, outputPlanes);
     }
 
     /**
@@ -750,10 +729,9 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                inputPlanes, outputPlanes, qualityScores);
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final double[] qualityScores) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(inputPlanes, outputPlanes,
+                qualityScores);
     }
 
     /**
@@ -773,11 +751,10 @@ public abstract class AffineTransformation3DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores) {
-        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
-                listener, inputPlanes, outputPlanes, qualityScores);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Plane> inputPlanes,
+            final List<Plane> outputPlanes, final double[] qualityScores) {
+        return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(listener, inputPlanes, outputPlanes,
+                qualityScores);
     }
 
     /**

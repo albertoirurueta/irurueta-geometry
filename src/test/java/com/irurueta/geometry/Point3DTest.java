@@ -17,16 +17,14 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Point3DTest {
+class Point3DTest {
 
     private static final int HOM_COORDS = 4;
     private static final int INHOM_COORDS = 3;
@@ -40,7 +38,7 @@ public class Point3DTest {
     private static final int MAX_POINTS = 500;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1e-10, Point3D.DEFAULT_COMPARISON_THRESHOLD, 0.0);
         assertEquals(0.0, Point3D.MIN_THRESHOLD, 0.0);
         assertEquals(4, Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
@@ -49,8 +47,8 @@ public class Point3DTest {
     }
 
     @Test
-    public void testCreate() {
-        Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+    void testCreate() {
+        var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
         assertEquals(3, point.getDimensions());
         assertEquals(0.0, point.getInhomX(), 0.0);
@@ -62,8 +60,7 @@ public class Point3DTest {
         assertEquals(1.0, point.getHomW(), 0.0);
 
         point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES);
-        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                point.getType());
+        assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, point.getType());
         assertEquals(3, point.getDimensions());
         assertEquals(0.0, point.getInhomX(), 0.0);
         assertEquals(0.0, point.getInhomY(), 0.0);
@@ -73,8 +70,8 @@ public class Point3DTest {
         assertEquals(0.0, point.getHomZ(), 0.0);
         assertEquals(1.0, point.getHomW(), 0.0);
 
-        final double[] array = new double[HOM_COORDS];
-        final double[] iArray = new double[INHOM_COORDS];
+        final var array = new double[HOM_COORDS];
+        final var iArray = new double[INHOM_COORDS];
 
         point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
         assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
@@ -83,36 +80,25 @@ public class Point3DTest {
         assertEquals(CoordinatesType.INHOMOGENEOUS_COORDINATES, point.getType());
 
         // Force IllegalArgumentException
-        try {
-            Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, array);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, iArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, array));
+        assertThrows(IllegalArgumentException.class,
+                () -> Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, iArray));
 
         point = Point3D.create(array);
         assertEquals(Point3D.DEFAULT_COORDINATES_TYPE, point.getType());
 
         // Force IllegalArgumentException
-        try {
-            Point3D.create(iArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> Point3D.create(iArray));
 
         point = Point3D.create();
         assertEquals(Point3D.DEFAULT_COORDINATES_TYPE, point.getType());
     }
 
     @Test
-    public void testGetSetInhomX() {
+    void testGetSetInhomX() {
         // check default values for homogeneous coordinates
-        Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+        var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
         assertEquals(3, point.getDimensions());
         assertEquals(0.0, point.getInhomX(), 0.0);
@@ -120,8 +106,8 @@ public class Point3DTest {
         assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         point.setInhomX(inhomX);
 
         // check
@@ -147,9 +133,9 @@ public class Point3DTest {
     }
 
     @Test
-    public void testGetSetInhomY() {
+    void testGetSetInhomY() {
         // check default values for homogeneous coordinates
-        Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+        var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
         assertEquals(3, point.getDimensions());
         assertEquals(0.0, point.getInhomX(), 0.0);
@@ -157,8 +143,8 @@ public class Point3DTest {
         assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         point.setInhomY(inhomY);
 
         // check
@@ -184,9 +170,9 @@ public class Point3DTest {
     }
 
     @Test
-    public void testGetSetInhomZ() {
+    void testGetSetInhomZ() {
         // check default values for homogeneous coordinates
-        Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+        var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         assertEquals(CoordinatesType.HOMOGENEOUS_COORDINATES, point.getType());
         assertEquals(3, point.getDimensions());
         assertEquals(0.0, point.getInhomX(), 0.0);
@@ -194,8 +180,8 @@ public class Point3DTest {
         assertEquals(0.0, point.getInhomZ(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         point.setInhomZ(inhomZ);
 
         // check
@@ -221,9 +207,9 @@ public class Point3DTest {
     }
 
     @Test
-    public void testGetSetInhomogeneousCoordinate() {
+    void testGetSetInhomogeneousCoordinate() {
         // check default values
-        final Point3D point = Point3D.create();
+        final var point = Point3D.create();
         assertEquals(0.0, point.getInhomX(), 0.0);
         assertEquals(0.0, point.getInhomY(), 0.0);
         assertEquals(0.0, point.getInhomZ(), 0.0);
@@ -232,10 +218,10 @@ public class Point3DTest {
         assertEquals(point.getInhomZ(), point.getInhomogeneousCoordinate(2), 0.0);
 
         // set new values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         point.setInhomogeneousCoordinate(0, inhomX);
 
@@ -256,33 +242,17 @@ public class Point3DTest {
         assertEquals(inhomZ, point.getInhomZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            point.getInhomogeneousCoordinate(-1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            point.getInhomogeneousCoordinate(3);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            point.setInhomogeneousCoordinate(-1, 0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            point.setInhomogeneousCoordinate(3, 0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> point.getInhomogeneousCoordinate(-1));
+        assertThrows(IllegalArgumentException.class, () -> point.getInhomogeneousCoordinate(3));
+        assertThrows(IllegalArgumentException.class, () -> point.setInhomogeneousCoordinate(-1, 0.0));
+        assertThrows(IllegalArgumentException.class, () -> point.setInhomogeneousCoordinate(3, 0.0));
     }
 
     @Test
-    public void testDistanceTo() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D point1 = Point3D.create();
-        final Point3D point2 = Point3D.create();
+    void testDistanceTo() {
+        final var randomizer = new UniformRandomizer();
+        final var point1 = Point3D.create();
+        final var point2 = Point3D.create();
 
         point1.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -293,10 +263,10 @@ public class Point3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final double diffX = point1.getInhomX() - point2.getInhomX();
-        final double diffY = point1.getInhomY() - point2.getInhomY();
-        final double diffZ = point1.getInhomZ() - point2.getInhomZ();
-        final double distance = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        final var diffX = point1.getInhomX() - point2.getInhomX();
+        final var diffY = point1.getInhomY() - point2.getInhomY();
+        final var diffZ = point1.getInhomZ() - point2.getInhomZ();
+        final var distance = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
 
         // check distance
         assertEquals(point1.distanceTo(point2), distance, ABSOLUTE_ERROR);
@@ -308,10 +278,10 @@ public class Point3DTest {
     }
 
     @Test
-    public void testSqrDistanceTo() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D point1 = Point3D.create();
-        final Point3D point2 = Point3D.create();
+    void testSqrDistanceTo() {
+        final var randomizer = new UniformRandomizer();
+        final var point1 = Point3D.create();
+        final var point2 = Point3D.create();
 
         point1.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -322,10 +292,10 @@ public class Point3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final double diffX = point1.getInhomX() - point2.getInhomX();
-        final double diffY = point1.getInhomY() - point2.getInhomY();
-        final double diffZ = point1.getInhomZ() - point2.getInhomZ();
-        final double sqrDistance = diffX * diffX + diffY * diffY + diffZ * diffZ;
+        final var diffX = point1.getInhomX() - point2.getInhomX();
+        final var diffY = point1.getInhomY() - point2.getInhomY();
+        final var diffZ = point1.getInhomZ() - point2.getInhomZ();
+        final var sqrDistance = diffX * diffX + diffY * diffY + diffZ * diffZ;
 
         // check distance
         assertEquals(sqrDistance, point1.sqrDistanceTo(point2), ABSOLUTE_ERROR);
@@ -337,19 +307,18 @@ public class Point3DTest {
     }
 
     @Test
-    public void testDotProduct() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D point1 = Point3D.create();
-        final Point3D point2 = Point3D.create();
-        final Point3D point3 = Point3D.create();
+    void testDotProduct() {
+        final var randomizer = new UniformRandomizer();
+        final var point1 = Point3D.create();
+        final var point2 = Point3D.create();
+        final var point3 = Point3D.create();
 
         point1.setHomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        point2.setHomogeneousCoordinates(-point1.getHomX(), -point1.getHomY(),
-                -point1.getHomZ(), -point1.getHomW());
+        point2.setHomogeneousCoordinates(-point1.getHomX(), -point1.getHomY(), -point1.getHomZ(), -point1.getHomW());
         point3.setHomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -363,21 +332,20 @@ public class Point3DTest {
         // dot product for random points
         point1.normalize();
         point3.normalize();
-        assertEquals(point1.dotProduct(point3),
-                point1.getHomX() * point3.getHomX() +
-                        point1.getHomY() * point3.getHomY() +
-                        point1.getHomZ() * point3.getHomZ() +
-                        point1.getHomW() * point3.getHomW(), ABSOLUTE_ERROR);
+        assertEquals(point1.dotProduct(point3), point1.getHomX() * point3.getHomX()
+                + point1.getHomY() * point3.getHomY()
+                + point1.getHomZ() * point3.getHomZ()
+                + point1.getHomW() * point3.getHomW(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testIsBetween() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double valueBetween = randomizer.nextDouble(0.2, 0.8);
-        final double valueOutside = 1.0 + valueBetween;
+    void testIsBetween() {
+        final var randomizer = new UniformRandomizer();
+        final var valueBetween = randomizer.nextDouble(0.2, 0.8);
+        final var valueOutside = 1.0 + valueBetween;
 
-        final Point3D point1 = Point3D.create();
-        final Point3D point2 = Point3D.create();
+        final var point1 = Point3D.create();
+        final var point2 = Point3D.create();
 
         point1.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -388,18 +356,18 @@ public class Point3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final double diffX = point2.getInhomX() - point1.getInhomX();
-        final double diffY = point2.getInhomY() - point1.getInhomY();
-        final double diffZ = point2.getInhomZ() - point1.getInhomZ();
-        final double dist = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        final var diffX = point2.getInhomX() - point1.getInhomX();
+        final var diffY = point2.getInhomY() - point1.getInhomY();
+        final var diffZ = point2.getInhomZ() - point1.getInhomZ();
+        final var dist = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
 
-        final Point3D betweenPoint = Point3D.create();
+        final var betweenPoint = Point3D.create();
         betweenPoint.setInhomogeneousCoordinates(
                 point1.getInhomX() + valueBetween * diffX,
                 point1.getInhomY() + valueBetween * diffY,
                 point1.getInhomZ() + valueBetween * diffZ);
 
-        final Point3D outsidePoint = Point3D.create();
+        final var outsidePoint = Point3D.create();
         outsidePoint.setInhomogeneousCoordinates(
                 point1.getInhomX() + valueOutside * diffX,
                 point1.getInhomY() + valueOutside * diffY,
@@ -418,26 +386,22 @@ public class Point3DTest {
         assertTrue(outsidePoint.isBetween(point1, point2, 2.0 * dist));
 
         // Force IllegalArgumentException
-        try {
-            betweenPoint.isBetween(point1, point2, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> betweenPoint.isBetween(point1, point2, -ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testCentroid() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int numPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+    void testCentroid() {
+        final var randomizer = new UniformRandomizer();
+        final var numPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final List<Point3D> points = new ArrayList<>();
+        final var points = new ArrayList<Point3D>();
         double x;
         double y;
         double z;
-        double meanX = 0.0;
-        double meanY = 0.0;
-        double meanZ = 0.0;
-        for (int i = 0; i < numPoints; i++) {
+        var meanX = 0.0;
+        var meanY = 0.0;
+        var meanZ = 0.0;
+        for (var i = 0; i < numPoints; i++) {
             x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             z = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -453,9 +417,9 @@ public class Point3DTest {
         meanY /= numPoints;
         meanZ /= numPoints;
 
-        final Point3D mean1 = Point3D.create();
+        final var mean1 = Point3D.create();
         Point3D.centroid(points, mean1);
-        final Point3D mean2 = Point3D.centroid(points);
+        final var mean2 = Point3D.centroid(points);
 
         assertEquals(mean1, mean2);
         assertEquals(mean1.getInhomX(), meanX, ABSOLUTE_ERROR);
@@ -464,13 +428,13 @@ public class Point3DTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var inhomX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var inhomZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Point3D point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
+        final var point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         point1.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);
 
         // check
@@ -479,8 +443,8 @@ public class Point3DTest {
         assertEquals(inhomZ, point1.getInhomZ(), 0.0);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(point1);
-        final Point3D point2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(point1);
+        final var point2 = SerializationHelper.<Point3D>deserialize(bytes);
 
         // check
         assertEquals(point1, point2);

@@ -17,14 +17,13 @@ package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PlaneTest {
+class PlaneTest {
 
     private static final int HOM_COORDS = 4;
     private static final int INHOM_COORDS = 3;
@@ -38,7 +37,7 @@ public class PlaneTest {
     private static final double ABSOLUTE_ERROR = 1e-8;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(4, Plane.PLANE_NUMBER_PARAMS);
         assertEquals(1e-12, Plane.DEFAULT_LOCUS_THRESHOLD, 0.0);
         assertEquals(0.0, Plane.MIN_THRESHOLD, 0.0);
@@ -46,19 +45,18 @@ public class PlaneTest {
     }
 
     @Test
-    public void testConstructor() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException,
-            com.irurueta.algebra.NotAvailableException, ColinearPointsException,
-            IllegalArgumentException, ParallelVectorsException {
+    void testConstructor() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException, ColinearPointsException, IllegalArgumentException,
+            ParallelVectorsException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Plane plane = new Plane();
+        var plane = new Plane();
         assertEquals(0.0, plane.getA(), 0.0);
         assertEquals(0.0, plane.getB(), 0.0);
         assertEquals(0.0, plane.getC(), 0.0);
@@ -73,7 +71,7 @@ public class PlaneTest {
         assertFalse(plane.isNormalized());
 
         // instantiate plane using array
-        double[] array = new double[HOM_COORDS];
+        var array = new double[HOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         plane = new Plane(array);
@@ -82,60 +80,51 @@ public class PlaneTest {
         assertEquals(array[2], plane.getC(), 0.0);
 
         // Force IllegalArgumentException
-        plane = null;
-        try {
-            plane = new Plane(new double[HOM_COORDS + 1]);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(plane);
+        assertThrows(IllegalArgumentException.class, () -> new Plane(new double[HOM_COORDS + 1]));
 
         // find 1st point
-        final double[] array1 = new double[HOM_COORDS];
+        final var array1 = new double[HOM_COORDS];
         randomizer.fill(array1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // find 2nd point
-        final double[] array2 = new double[HOM_COORDS];
+        final var array2 = new double[HOM_COORDS];
         randomizer.fill(array2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double lambda = randomizer.nextDouble();
+        final var lambda = randomizer.nextDouble();
 
         // find 3rd point as a co-linear point of 1st and 2nd point
-        final double[] array3 = new double[HOM_COORDS];
+        final var array3 = new double[HOM_COORDS];
         // array3 = lamda * array2
         ArrayUtils.multiplyByScalar(array2, lambda, array3);
         // array3 = array1 + array3 = array1 + lambda * array2
         ArrayUtils.sum(array1, array3, array3);
 
-        Point3D point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array1);
-        Point3D point2 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array2);
-        Point3D point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array3);
+        var point1 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array1);
+        var point2 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array2);
+        var point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array3);
 
         // Force ColinearPointsException
         assertTrue(Plane.areColinearPoints(point1, point2, point3));
-        try {
-            plane = new Plane(point1, point2, point3);
-        } catch (final ColinearPointsException ignore) {
-        }
-        assertNull(plane);
+        final var finalPoint1 = point1;
+        final var finalPoint2 = point2;
+        final var finalPoint3 = point3;
+        assertThrows(ColinearPointsException.class, () -> new Plane(finalPoint1, finalPoint2, finalPoint3));
 
         // try with 3 non co-linear points
-        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        var m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         // ensure we create a matrix with 3 non-linear dependent rows
         while (decomposer.getRank() < 3) {
-            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
 
         // V contains the right null-space of m in the last column, which is the
         // plane where the points belong to in the rows of m
-        Matrix v = decomposer.getV();
+        var v = decomposer.getV();
 
         point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1),
@@ -154,7 +143,7 @@ public class PlaneTest {
         point2.normalize();
         point3.normalize();
 
-        final double[] arrayPlane = new double[HOM_COORDS];
+        final var arrayPlane = new double[HOM_COORDS];
         arrayPlane[0] = v.getElementAt(0, 3);
         arrayPlane[1] = v.getElementAt(1, 3);
         arrayPlane[2] = v.getElementAt(2, 3);
@@ -164,10 +153,10 @@ public class PlaneTest {
         plane = new Plane(point1, point2, point3);
 
         // check correctness of obtained plane
-        final double scaleA = plane.getA() / arrayPlane[0];
-        final double scaleB = plane.getB() / arrayPlane[1];
-        final double scaleC = plane.getC() / arrayPlane[2];
-        final double scaleD = plane.getD() / arrayPlane[3];
+        final var scaleA = plane.getA() / arrayPlane[0];
+        final var scaleB = plane.getB() / arrayPlane[1];
+        final var scaleC = plane.getC() / arrayPlane[2];
+        final var scaleD = plane.getD() / arrayPlane[3];
 
         assertEquals(scaleA, scaleB, PRECISION_ERROR);
         assertEquals(scaleB, scaleC, PRECISION_ERROR);
@@ -178,41 +167,37 @@ public class PlaneTest {
         // vectors
         array = new double[HOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
+        final var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
 
-        final double[] direction1 = new double[INHOM_COORDS];
+        final var direction1 = new double[INHOM_COORDS];
         randomizer.fill(direction1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double[] direction2 = new double[INHOM_COORDS];
+        final var direction2 = new double[INHOM_COORDS];
         randomizer.fill(direction2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // normalize to compare with greater accuracy
-        final double norm1 = com.irurueta.algebra.Utils.normF(direction1);
-        final double[] direction1b = ArrayUtils.multiplyByScalarAndReturnNew(
-                direction1, 1.0 / norm1);
-        final double norm2 = com.irurueta.algebra.Utils.normF(direction2);
-        final double[] direction2b = ArrayUtils.multiplyByScalarAndReturnNew(
-                direction2, 1.0 / norm2);
+        final var norm1 = com.irurueta.algebra.Utils.normF(direction1);
+        final var direction1b = ArrayUtils.multiplyByScalarAndReturnNew(direction1, 1.0 / norm1);
+        final var norm2 = com.irurueta.algebra.Utils.normF(direction2);
+        final var direction2b = ArrayUtils.multiplyByScalarAndReturnNew(direction2, 1.0 / norm2);
 
-        // director vector will already be normalized because direction vectors
-        // are normalized
-        final double[] directorVector = com.irurueta.algebra.Utils.crossProduct(
-                direction1b, direction2b);
+        // director vector will already be normalized because direction vectors are normalized
+        final var directorVector = com.irurueta.algebra.Utils.crossProduct(direction1b, direction2b);
 
         // create plane using point and directions
-        Plane plane1 = new Plane(point, direction1, direction2);
+        var plane1 = new Plane(point, direction1, direction2);
         // and create plane using point and director vector
-        Plane plane2 = new Plane(point, directorVector);
+        var plane2 = new Plane(point, directorVector);
 
         // check correctness of instantiated planes
         assertTrue(plane1.isLocus(point));
         assertTrue(plane2.isLocus(point));
 
-        final double[] directorVector1 = plane1.getDirectorVector();
+        final var directorVector1 = plane1.getDirectorVector();
         assertEquals(directorVector1[0], plane1.getA(), 0.0);
         assertEquals(directorVector1[1], plane1.getB(), 0.0);
         assertEquals(directorVector1[2], plane1.getC(), 0.0);
-        final double[] directorVector2 = plane2.getDirectorVector();
+        final var directorVector2 = plane2.getDirectorVector();
         assertEquals(directorVector2[0], plane2.getA(), 0.0);
         assertEquals(directorVector2[1], plane2.getB(), 0.0);
         assertEquals(directorVector2[2], plane2.getC(), 0.0);
@@ -223,9 +208,9 @@ public class PlaneTest {
         assertEquals(directorVector1[2], directorVector2[2], PRECISION_ERROR);
 
         // and equal to the estimated director vector
-        final double scale1 = directorVector1[0] / directorVector[0];
-        final double scale2 = directorVector1[1] / directorVector[1];
-        final double scale3 = directorVector1[2] / directorVector[2];
+        final var scale1 = directorVector1[0] / directorVector[0];
+        final var scale2 = directorVector1[1] / directorVector[1];
+        final var scale3 = directorVector1[2] / directorVector[2];
 
         assertEquals(scale1, scale2, PRECISION_ERROR);
         assertEquals(scale2, scale3, PRECISION_ERROR);
@@ -238,43 +223,22 @@ public class PlaneTest {
         assertEquals(plane1.getD(), plane2.getD(), PRECISION_ERROR);
 
         // Force ParallelVectorsException
-        plane1 = null;
-        try {
-            plane1 = new Plane(point, direction1, direction1);
-            fail("ParallelsVectorsException expected but not thrown");
-        } catch (final ParallelVectorsException ignore) {
-        }
-        assertNull(plane1);
+        assertThrows(ParallelVectorsException.class, () -> new Plane(point, direction1, direction1));
 
         // Force IllegalArgumentException
-        final double[] wrongArray = new double[HOM_COORDS];
-        plane2 = null;
-        try {
-            plane1 = new Plane(point, wrongArray, direction2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            plane1 = new Plane(point, direction1, wrongArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            plane2 = new Plane(point, wrongArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(plane1);
-        assertNull(plane2);
+        final var wrongArray = new double[HOM_COORDS];
+        assertThrows(IllegalArgumentException.class, () -> new Plane(point, wrongArray, direction2));
+        assertThrows(IllegalArgumentException.class, () -> new Plane(point, direction1, wrongArray));
+        assertThrows(IllegalArgumentException.class, () -> new Plane(point, wrongArray));
     }
 
     @Test
-    public void testGettersAndSetters() {
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGettersAndSetters() {
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Plane plane = new Plane();
+        final var plane = new Plane();
 
         // set parameters using array
         plane.setParameters(array);
@@ -283,10 +247,10 @@ public class PlaneTest {
         assertEquals(array[2], plane.getC(), 0.0);
         assertEquals(array[3], plane.getD(), 0.0);
 
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         plane.setA(a);
         plane.setB(b);
@@ -311,26 +275,23 @@ public class PlaneTest {
     }
 
     @Test
-    public void testSetParametersFromThreePoints() throws WrongSizeException,
-            NotReadyException, LockedException, DecomposerException,
-            com.irurueta.algebra.NotAvailableException, ColinearPointsException {
+    void testSetParametersFromThreePoints() throws WrongSizeException, NotReadyException, LockedException,
+            DecomposerException, com.irurueta.algebra.NotAvailableException, ColinearPointsException {
 
-        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         while (decomposer.getRank() < 2) {
-            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
 
         // the right null-space of m (last column of V) contains the plane where
         // the 3 points belong to
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
         Point3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1),
@@ -349,22 +310,22 @@ public class PlaneTest {
         point2.normalize();
         point3.normalize();
 
-        final double[] planeArray = new double[HOM_COORDS];
+        final var planeArray = new double[HOM_COORDS];
         planeArray[0] = v.getElementAt(0, 3);
         planeArray[1] = v.getElementAt(1, 3);
         planeArray[2] = v.getElementAt(2, 3);
         planeArray[3] = v.getElementAt(3, 3);
 
-        Plane plane = new Plane();
+        var plane = new Plane();
         assertFalse(Plane.areColinearPoints(point1, point2, point3));
         plane.setParametersFromThreePoints(point1, point2, point3);
 
         // compare plane parameters respect to computed plane array parameters
         // They will be equal up to scale
-        final double scaleA = plane.getA() / planeArray[0];
-        final double scaleB = plane.getB() / planeArray[1];
-        final double scaleC = plane.getC() / planeArray[2];
-        final double scaleD = plane.getD() / planeArray[3];
+        final var scaleA = plane.getA() / planeArray[0];
+        final var scaleB = plane.getB() / planeArray[1];
+        final var scaleC = plane.getC() / planeArray[2];
+        final var scaleD = plane.getD() / planeArray[3];
 
         assertEquals(scaleA, scaleB, PRECISION_ERROR);
         assertEquals(scaleB, scaleC, PRECISION_ERROR);
@@ -381,20 +342,20 @@ public class PlaneTest {
         // Force ColinearPointsException
         // find co-linear points using a third point being a linear combination
         // of two other points so that a plane cannot be defined
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // find 1st point
-        final double[] array1 = new double[HOM_COORDS];
+        final var array1 = new double[HOM_COORDS];
         randomizer.fill(array1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // find 2nd point
-        final double[] array2 = new double[HOM_COORDS];
+        final var array2 = new double[HOM_COORDS];
         randomizer.fill(array2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double lambda = randomizer.nextDouble();
+        final var lambda = randomizer.nextDouble();
 
         // find 3rd point as a co-linear point of 1st and 2nd point
-        final double[] array3 = new double[HOM_COORDS];
+        final var array3 = new double[HOM_COORDS];
         // array3 = lamda * array2
         ArrayUtils.multiplyByScalar(array2, lambda, array3);
         // array3 = array1 + array3 = array1 + lambda * array2
@@ -405,45 +366,40 @@ public class PlaneTest {
         point3 = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array3);
 
         // Force ColinearPointsException
-        plane = null;
         assertTrue(Plane.areColinearPoints(point1, point2, point3));
-        try {
-            plane = new Plane(point1, point2, point3);
-        } catch (final ColinearPointsException ignore) {
-        }
-        assertNull(plane);
+        final var finalPoint1 = point1;
+        final var finalPoint2 = point2;
+        final var finalPoint3 = point3;
+        assertThrows(ColinearPointsException.class, () -> new Plane(finalPoint1, finalPoint2, finalPoint3));
     }
 
     @Test
-    public void testSetParametersFrom1PointAnd2Vectors()
-            throws WrongSizeException, IllegalArgumentException, ParallelVectorsException {
+    void testSetParametersFrom1PointAnd2Vectors() throws WrongSizeException, IllegalArgumentException,
+            ParallelVectorsException {
         // create plane passing through a point and laying on provided direction
         // vectors
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
+        final var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
 
-        final double[] direction1 = new double[INHOM_COORDS];
+        final var direction1 = new double[INHOM_COORDS];
         randomizer.fill(direction1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double[] direction2 = new double[INHOM_COORDS];
+        final var direction2 = new double[INHOM_COORDS];
         randomizer.fill(direction2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // normalize to compare with greater accuracy
-        final double norm1 = com.irurueta.algebra.Utils.normF(direction1);
-        final double[] direction1b = ArrayUtils.multiplyByScalarAndReturnNew(
-                direction1, 1.0 / norm1);
-        final double norm2 = com.irurueta.algebra.Utils.normF(direction2);
-        final double[] direction2b = ArrayUtils.multiplyByScalarAndReturnNew(
-                direction2, 1.0 / norm2);
+        final var norm1 = com.irurueta.algebra.Utils.normF(direction1);
+        final var direction1b = ArrayUtils.multiplyByScalarAndReturnNew(direction1, 1.0 / norm1);
+        final var norm2 = com.irurueta.algebra.Utils.normF(direction2);
+        final var direction2b = ArrayUtils.multiplyByScalarAndReturnNew(direction2, 1.0 / norm2);
 
         // director vector will already be normalized because direction vectors
         // are normalized
-        final double[] directorVector = com.irurueta.algebra.Utils.crossProduct(
-                direction1b, direction2b);
+        final var directorVector = com.irurueta.algebra.Utils.crossProduct(direction1b, direction2b);
 
-        final Plane plane = new Plane();
+        final var plane = new Plane();
 
         // set parameters using point and directions
         plane.setParametersFrom1PointAnd2Vectors(point, direction1, direction2);
@@ -451,74 +407,57 @@ public class PlaneTest {
         // check correctness of plane
         assertTrue(plane.isLocus(point));
 
-        final double[] directorVectorB = plane.getDirectorVector();
+        final var directorVectorB = plane.getDirectorVector();
         assertEquals(directorVectorB[0], plane.getA(), 0.0);
         assertEquals(directorVectorB[1], plane.getB(), 0.0);
         assertEquals(directorVectorB[2], plane.getC(), 0.0);
 
         // and equal to the estimated director vector
-        final double scale1 = directorVectorB[0] / directorVector[0];
-        final double scale2 = directorVectorB[1] / directorVector[1];
-        final double scale3 = directorVectorB[2] / directorVector[2];
+        final var scale1 = directorVectorB[0] / directorVector[0];
+        final var scale2 = directorVectorB[1] / directorVector[1];
+        final var scale3 = directorVectorB[2] / directorVector[2];
 
         assertEquals(scale1, scale2, PRECISION_ERROR);
         assertEquals(scale2, scale3, PRECISION_ERROR);
         assertEquals(scale3, scale1, PRECISION_ERROR);
 
         // Force ParallelVectorsException
-        try {
-            plane.setParametersFrom1PointAnd2Vectors(point, direction1,
-                    direction1);
-            fail("ParallelsVectorsException expected but not thrown");
-        } catch (final ParallelVectorsException ignore) {
-        }
+        assertThrows(ParallelVectorsException.class, () -> plane.setParametersFrom1PointAnd2Vectors(point, direction1,
+                direction1));
 
         // Force IllegalArgumentException
-        final double[] wrongArray = new double[HOM_COORDS];
-        try {
-            plane.setParametersFrom1PointAnd2Vectors(point, wrongArray,
-                    direction2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            plane.setParametersFrom1PointAnd2Vectors(point, direction1,
-                    wrongArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrongArray = new double[HOM_COORDS];
+        assertThrows(IllegalArgumentException.class,
+                () -> plane.setParametersFrom1PointAnd2Vectors(point, wrongArray, direction2));
+        assertThrows(IllegalArgumentException.class, () -> plane.setParametersFrom1PointAnd2Vectors(point, direction1,
+                wrongArray));
     }
 
     @Test
-    public void testSetParametersFrom1PointAndDirectorVector()
-            throws WrongSizeException {
+    void testSetParametersFrom1PointAndDirectorVector() throws WrongSizeException {
         // create plane passing through a point and laying on provided direction
         // vectors
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
+        final var point = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES, array);
 
-        final double[] direction1 = new double[INHOM_COORDS];
+        final var direction1 = new double[INHOM_COORDS];
         randomizer.fill(direction1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double[] direction2 = new double[INHOM_COORDS];
+        final var direction2 = new double[INHOM_COORDS];
         randomizer.fill(direction2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // normalize to compare with greater accuracy
-        final double norm1 = com.irurueta.algebra.Utils.normF(direction1);
-        final double[] direction1b = ArrayUtils.multiplyByScalarAndReturnNew(
-                direction1, 1.0 / norm1);
-        final double norm2 = com.irurueta.algebra.Utils.normF(direction2);
-        final double[] direction2b = ArrayUtils.multiplyByScalarAndReturnNew(
-                direction2, 1.0 / norm2);
+        final var norm1 = com.irurueta.algebra.Utils.normF(direction1);
+        final var direction1b = ArrayUtils.multiplyByScalarAndReturnNew(direction1, 1.0 / norm1);
+        final var norm2 = com.irurueta.algebra.Utils.normF(direction2);
+        final var direction2b = ArrayUtils.multiplyByScalarAndReturnNew(direction2, 1.0 / norm2);
 
-        // director vector will already be normalized because direction vectors
-        // are normalized
-        final double[] directorVector = com.irurueta.algebra.Utils.crossProduct(
-                direction1b, direction2b);
+        // director vector will already be normalized because direction vectors are normalized
+        final var directorVector = com.irurueta.algebra.Utils.crossProduct(direction1b, direction2b);
 
-        final Plane plane = new Plane();
+        final var plane = new Plane();
 
         // create plane using point and directions
         // and create plane using point and director vector
@@ -527,66 +466,60 @@ public class PlaneTest {
         // check correctness of plane
         assertTrue(plane.isLocus(point));
 
-        final double[] directorVectorB = plane.getDirectorVector();
+        final var directorVectorB = plane.getDirectorVector();
         assertEquals(directorVectorB[0], plane.getA(), 0.0);
         assertEquals(directorVectorB[1], plane.getB(), 0.0);
         assertEquals(directorVectorB[2], plane.getC(), 0.0);
 
         // and equal to the estimated director vector
-        final double scale1 = directorVectorB[0] / directorVector[0];
-        final double scale2 = directorVectorB[1] / directorVector[1];
-        final double scale3 = directorVectorB[2] / directorVector[2];
+        final var scale1 = directorVectorB[0] / directorVector[0];
+        final var scale2 = directorVectorB[1] / directorVector[1];
+        final var scale3 = directorVectorB[2] / directorVector[2];
 
         assertEquals(scale1, scale2, PRECISION_ERROR);
         assertEquals(scale2, scale3, PRECISION_ERROR);
         assertEquals(scale3, scale1, PRECISION_ERROR);
 
         // Force IllegalArgumentException
-        final double[] wrongArray = new double[HOM_COORDS];
-        try {
-            plane.setParametersFromPointAndDirectorVector(point, wrongArray);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrongArray = new double[HOM_COORDS];
+        assertThrows(IllegalArgumentException.class,
+                () -> plane.setParametersFromPointAndDirectorVector(point, wrongArray));
     }
 
     @Test
-    public void testIsLocus() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException,
+    void testIsLocus() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
             com.irurueta.algebra.NotAvailableException {
 
         // randomly choose 3 points to find their corresponding plane
-        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         while (decomposer.getRank() < 3) {
-            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
 
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
-        final Plane plane = new Plane(v.getElementAt(0, 3),
+        final var plane = new Plane(v.getElementAt(0, 3),
                 v.getElementAt(1, 3),
                 v.getElementAt(2, 3),
                 v.getElementAt(3, 3));
 
-        final Point3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+        final var point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1),
                 m.getElementAt(0, 2),
                 m.getElementAt(0, 3));
 
-        final Point3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+        final var point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
                 m.getElementAt(1, 1),
                 m.getElementAt(1, 2),
                 m.getElementAt(1, 3));
 
-        final Point3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+        final var point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
                 m.getElementAt(2, 1),
                 m.getElementAt(2, 2),
                 m.getElementAt(2, 3));
@@ -601,13 +534,12 @@ public class PlaneTest {
         assertTrue(plane.isLocus(point3, PRECISION_ERROR));
 
         // use plane director vector to find another point outside of plane
-        final HomogeneousPoint3D point4 = new HomogeneousPoint3D(point1);
+        final var point4 = new HomogeneousPoint3D(point1);
 
-        final double normDirectorVector = Math.sqrt(plane.getA() * plane.getA() +
-                plane.getB() * plane.getB() +
-                plane.getC() * plane.getC());
-        point4.setInhomogeneousCoordinates(point4.getInhomX() +
-                        plane.getA(), point4.getInhomY() + plane.getB(),
+        final var normDirectorVector = Math.sqrt(plane.getA() * plane.getA() + plane.getB() * plane.getB()
+                + plane.getC() * plane.getC());
+        point4.setInhomogeneousCoordinates(point4.getInhomX() + plane.getA(),
+                point4.getInhomY() + plane.getB(),
                 point4.getInhomZ() + plane.getC());
 
         assertFalse(plane.isLocus(point4, PRECISION_ERROR));
@@ -617,42 +549,39 @@ public class PlaneTest {
     }
 
     @Test
-    public void testSignedDistance() throws WrongSizeException,
-            NotReadyException, LockedException, DecomposerException,
+    void testSignedDistance() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
             com.irurueta.algebra.NotAvailableException {
 
         // randomly choose 3 points to find their corresponding plane
-        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         while (decomposer.getRank() < 2) {
-            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
 
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
-        final Plane plane = new Plane(v.getElementAt(0, 3),
+        final var plane = new Plane(v.getElementAt(0, 3),
                 v.getElementAt(1, 3),
                 v.getElementAt(2, 3),
                 v.getElementAt(3, 3));
 
-        final Point3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+        final var point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1),
                 m.getElementAt(0, 2),
                 m.getElementAt(0, 3));
 
-        final Point3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+        final var point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
                 m.getElementAt(1, 1),
                 m.getElementAt(1, 2),
                 m.getElementAt(1, 3));
 
-        final Point3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+        final var point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
                 m.getElementAt(2, 1),
                 m.getElementAt(2, 2),
                 m.getElementAt(2, 3));
@@ -661,41 +590,37 @@ public class PlaneTest {
         point2.normalize();
         point3.normalize();
 
-        // points belong to plane, hence their distance is zero up to machine
-        // precision
+        // points belong to plane, hence their distance is zero up to machine precision
         assertEquals(0.0, plane.signedDistance(point1), PRECISION_ERROR);
         assertEquals(0.0, plane.signedDistance(point2), PRECISION_ERROR);
         assertEquals(0.0, plane.signedDistance(point3), PRECISION_ERROR);
 
-        // use plane director vector to find another point at desired signed
-        // distance
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double signedDistance = randomizer.nextDouble(MIN_RANDOM_DISTANCE, MAX_RANDOM_DISTANCE);
+        // use plane director vector to find another point at desired signed distance
+        final var randomizer = new UniformRandomizer();
+        final var signedDistance = randomizer.nextDouble(MIN_RANDOM_DISTANCE, MAX_RANDOM_DISTANCE);
 
-        final HomogeneousPoint3D point4 = new HomogeneousPoint3D(point1);
+        final var point4 = new HomogeneousPoint3D(point1);
 
-        final double normDirectorVector = com.irurueta.algebra.Utils.normF(
-                plane.getDirectorVector());
-        point4.setInhomogeneousCoordinates(point4.getInhomX() +
-                        signedDistance * plane.getA() / normDirectorVector,
-                point4.getInhomY() + signedDistance * plane.getB() /
-                        normDirectorVector, point4.getInhomZ() +
-                        signedDistance * plane.getC() / normDirectorVector);
+        final var normDirectorVector = com.irurueta.algebra.Utils.normF(plane.getDirectorVector());
+        point4.setInhomogeneousCoordinates(
+                point4.getInhomX() + signedDistance * plane.getA() / normDirectorVector,
+                point4.getInhomY() + signedDistance * plane.getB() / normDirectorVector,
+                point4.getInhomZ() + signedDistance * plane.getC() / normDirectorVector);
 
         assertEquals(plane.signedDistance(point4), signedDistance, PRECISION_ERROR);
     }
 
     @Test
-    public void testAsArray() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testAsArray() {
+        final var randomizer = new UniformRandomizer();
 
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Plane plane = new Plane(a, b, c, d);
-        final double[] array = plane.asArray();
+        final var plane = new Plane(a, b, c, d);
+        final var array = plane.asArray();
 
         assertEquals(a, array[0], 0.0);
         assertEquals(b, array[1], 0.0);
@@ -716,20 +641,16 @@ public class PlaneTest {
         assertEquals(d, array[3], 0.0);
 
         // Force IllegalArgumentException
-        try {
-            plane.asArray(new double[HOM_COORDS + 1]);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> plane.asArray(new double[HOM_COORDS + 1]));
     }
 
     @Test
-    public void testNormalize() {
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testNormalize() {
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Plane plane = new Plane(array);
+        var plane = new Plane(array);
         assertFalse(plane.isNormalized());
 
         // normalize plane
@@ -737,14 +658,14 @@ public class PlaneTest {
         assertTrue(plane.isNormalized());
 
         // return plane as array
-        final double[] array2 = plane.asArray();
+        final var array2 = plane.asArray();
 
         // compare that both arrays are equal up to scale
         // check correctness of obtained plane
-        final double scaleA = array[0] / array2[0];
-        final double scaleB = array[1] / array2[1];
-        final double scaleC = array[2] / array2[2];
-        final double scaleD = array[3] / array2[3];
+        final var scaleA = array[0] / array2[0];
+        final var scaleB = array[1] / array2[1];
+        final var scaleC = array[2] / array2[2];
+        final var scaleD = array[3] / array2[3];
 
         assertEquals(scaleA, scaleB, PRECISION_ERROR);
         assertEquals(scaleB, scaleC, PRECISION_ERROR);
@@ -762,14 +683,14 @@ public class PlaneTest {
     }
 
     @Test
-    public void testDirectorVector() {
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testDirectorVector() {
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Plane plane = new Plane(array);
+        final var plane = new Plane(array);
 
-        final double[] n = plane.getDirectorVector();
+        final var n = plane.getDirectorVector();
 
         assertEquals(3, n.length);
         assertEquals(array[0], n[0],0.0);
@@ -789,36 +710,34 @@ public class PlaneTest {
     }
 
     @Test
-    public void testIntersection() throws WrongSizeException, NotReadyException,
-            com.irurueta.algebra.NotAvailableException, LockedException,
-            DecomposerException, NoIntersectionException, ColinearPointsException {
+    void testIntersection() throws WrongSizeException, NotReadyException, com.irurueta.algebra.NotAvailableException,
+            LockedException, DecomposerException, NoIntersectionException, ColinearPointsException {
 
         // Create random homogeneous coordinates for a point
-        final Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // M is a 1x4 matrix having rank 1, hence its right null-space will have
         // dimension 3. Each vector of the right null-space will follow equation:
         // m * P = 0, hence each of those vectors will be a plane where the point
         // will be locus, and hence the point will be the intersection of those
         // 3 planes, which will be perpendicular among them
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
-        final HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
+        final var point = new HomogeneousPoint3D(m.toArray());
 
-        Plane plane1 = new Plane(v.getSubmatrixAsArray(0, 1,
+        var plane1 = new Plane(v.getSubmatrixAsArray(0, 1,
                 3, 1));
-        Plane plane2 = new Plane(v.getSubmatrixAsArray(0, 2,
+        var plane2 = new Plane(v.getSubmatrixAsArray(0, 2,
                 3, 2));
-        Plane plane3 = new Plane(v.getSubmatrixAsArray(0, 3,
+        var plane3 = new Plane(v.getSubmatrixAsArray(0, 3,
                 3, 3));
 
         assertTrue(plane1.getIntersection(plane2, plane3).equals(point, ABSOLUTE_ERROR));
 
-        final Point3D intersection = Point3D.create();
+        final var intersection = Point3D.create();
         plane1.intersection(plane2, plane3, intersection);
         assertTrue(intersection.equals(point, ABSOLUTE_ERROR));
 
@@ -832,38 +751,28 @@ public class PlaneTest {
         plane3.intersection(plane1, plane2, intersection);
         assertTrue(intersection.equals(point, ABSOLUTE_ERROR));
 
-        // Force NoIntersectionException by using two coincident or parallel
-        // planes
-        try {
-            plane1.getIntersection(plane1, plane2);
-            fail("NoIntersectionException expected but not thrown");
-        } catch (final NoIntersectionException ignore) {
-        }
-        try {
-            plane1.intersection(plane1, plane2, intersection);
-            fail("NoIntersectionException expected but not thrown");
-        } catch (final NoIntersectionException ignore) {
-        }
-
+        // Force NoIntersectionException by using two coincident or parallel planes
+        final var finalPlane1 = plane1;
+        final var finalPlane2 = plane2;
+        assertThrows(NoIntersectionException.class, () -> finalPlane1.getIntersection(finalPlane1, finalPlane2));
+        assertThrows(NoIntersectionException.class,
+                () -> finalPlane1.intersection(finalPlane1, finalPlane2, intersection));
 
         // we could also find 7 random points to find 3 planes having one point
         // in common, which will be their intersection
-        final Point3D point1 = new HomogeneousPoint3D();
-        final Point3D point2 = new HomogeneousPoint3D();
-        final Point3D point3 = new HomogeneousPoint3D();
-        final Point3D point4 = new HomogeneousPoint3D();
-        final Point3D point5 = new HomogeneousPoint3D();
-        final Point3D point6 = new HomogeneousPoint3D();
-        final Point3D point7 = new HomogeneousPoint3D();
+        final var point1 = new HomogeneousPoint3D();
+        final var point2 = new HomogeneousPoint3D();
+        final var point3 = new HomogeneousPoint3D();
+        final var point4 = new HomogeneousPoint3D();
+        final var point5 = new HomogeneousPoint3D();
+        final var point6 = new HomogeneousPoint3D();
+        final var point7 = new HomogeneousPoint3D();
 
         // create three intersecting planes using all points (each point is
         // defined as one row of the matrix)
-        Matrix m1 = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        Matrix m2 = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        Matrix m3 = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m1 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m2 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m3 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // set 1st point in common in all three matrices
         m2.setSubmatrix(0, 0, 0, HOM_COORDS - 1,
@@ -872,16 +781,12 @@ public class PlaneTest {
                 m1.getSubmatrix(0, 0, 0, HOM_COORDS - 1));
 
         // ensure that all matrices have rank 3 (points are not co-linear)
-        while (com.irurueta.algebra.Utils.rank(m1) < 3 ||
-                com.irurueta.algebra.Utils.rank(m2) < 3 ||
-                com.irurueta.algebra.Utils.rank(m3) < 3) {
+        while (com.irurueta.algebra.Utils.rank(m1) < 3 || com.irurueta.algebra.Utils.rank(m2) < 3
+                || com.irurueta.algebra.Utils.rank(m3) < 3) {
             // create random matrices again
-            m1 = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            m2 = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            m3 = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m1 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m2 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m3 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             // set 1st point in common in all three matrices
             m2.setSubmatrix(0, 0, 0, HOM_COORDS - 1,
@@ -890,22 +795,22 @@ public class PlaneTest {
                     m1.getSubmatrix(0, 0, 0, HOM_COORDS - 1));
         }
 
-        point1.setCoordinates(m1.getSubmatrixAsArray(0, 0,
-                0, HOM_COORDS - 1));
-        point2.setCoordinates(m1.getSubmatrixAsArray(1, 0,
-                1, HOM_COORDS - 1));
-        point3.setCoordinates(m1.getSubmatrixAsArray(2, 0,
-                2, HOM_COORDS - 1));
+        point1.setCoordinates(m1.getSubmatrixAsArray(0, 0, 0,
+                HOM_COORDS - 1));
+        point2.setCoordinates(m1.getSubmatrixAsArray(1, 0, 1,
+                HOM_COORDS - 1));
+        point3.setCoordinates(m1.getSubmatrixAsArray(2, 0, 2,
+                HOM_COORDS - 1));
 
-        point4.setCoordinates(m2.getSubmatrixAsArray(1, 0,
-                1, HOM_COORDS - 1));
-        point5.setCoordinates(m2.getSubmatrixAsArray(2, 0,
-                2, HOM_COORDS - 1));
+        point4.setCoordinates(m2.getSubmatrixAsArray(1, 0, 1,
+                HOM_COORDS - 1));
+        point5.setCoordinates(m2.getSubmatrixAsArray(2, 0, 2,
+                HOM_COORDS - 1));
 
-        point6.setCoordinates(m3.getSubmatrixAsArray(1, 0,
-                1, HOM_COORDS - 1));
-        point7.setCoordinates(m3.getSubmatrixAsArray(2, 0,
-                2, HOM_COORDS - 1));
+        point6.setCoordinates(m3.getSubmatrixAsArray(1, 0, 1,
+                HOM_COORDS - 1));
+        point7.setCoordinates(m3.getSubmatrixAsArray(2, 0, 2,
+                HOM_COORDS - 1));
 
         // Create three planes between point1-point2-point3,
         // point1-point4-point5 and point1-point6-point7
@@ -929,34 +834,31 @@ public class PlaneTest {
     }
 
     @Test
-    public void testClosestPoint() throws WrongSizeException, NotReadyException,
-            LockedException, DecomposerException,
+    void testClosestPoint() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
             com.irurueta.algebra.NotAvailableException, ColinearPointsException {
 
         // randomly choose 3 points to find their corresponding plane.
         // Each point is represented as one row of matrix below
-        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         // ensure points are not co-linear
         while (decomposer.getRank() < 3) {
-            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
 
-        final Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0,
+        final var point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0,
                 HOM_COORDS - 1));
-        final Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1,
+        final var point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1,
                 HOM_COORDS - 1));
-        final Point3D point3 = new HomogeneousPoint3D(m.getSubmatrixAsArray(2, 0, 2,
+        final var point3 = new HomogeneousPoint3D(m.getSubmatrixAsArray(2, 0, 2,
                 HOM_COORDS - 1));
 
-        final Plane plane = new Plane(point1, point2, point3);
+        final var plane = new Plane(point1, point2, point3);
 
         // point1, point2 and point3 belong to plane, hence their distance to the
         // plane is zero up to machine precision
@@ -966,11 +868,11 @@ public class PlaneTest {
 
         // because they belong to plane, their closest point to plane is
         // themselves
-        final Point3D closestPoint1 = plane.getClosestPoint(point1);
-        final Point3D closestPoint1b = plane.getClosestPoint(point1, PRECISION_ERROR);
-        final Point3D closestPoint1c = Point3D.create();
+        final var closestPoint1 = plane.getClosestPoint(point1);
+        final var closestPoint1b = plane.getClosestPoint(point1, PRECISION_ERROR);
+        final var closestPoint1c = Point3D.create();
         plane.closestPoint(point1, closestPoint1c);
-        final Point3D closestPoint1d = Point3D.create();
+        final var closestPoint1d = Point3D.create();
         plane.closestPoint(point1, closestPoint1d, ABSOLUTE_ERROR);
 
         assertTrue(closestPoint1.equals(point1, ABSOLUTE_ERROR));
@@ -978,12 +880,11 @@ public class PlaneTest {
         assertTrue(closestPoint1c.equals(point1, ABSOLUTE_ERROR));
         assertTrue(closestPoint1d.equals(point1, ABSOLUTE_ERROR));
 
-
-        final Point3D closestPoint2 = plane.getClosestPoint(point2);
-        final Point3D closestPoint2b = plane.getClosestPoint(point2, PRECISION_ERROR);
-        final Point3D closestPoint2c = Point3D.create();
+        final var closestPoint2 = plane.getClosestPoint(point2);
+        final var closestPoint2b = plane.getClosestPoint(point2, PRECISION_ERROR);
+        final var closestPoint2c = Point3D.create();
         plane.closestPoint(point2, closestPoint2c);
-        final Point3D closestPoint2d = Point3D.create();
+        final var closestPoint2d = Point3D.create();
         plane.closestPoint(point2, closestPoint2d, ABSOLUTE_ERROR);
 
         assertTrue(closestPoint2.equals(point2, ABSOLUTE_ERROR));
@@ -991,11 +892,11 @@ public class PlaneTest {
         assertTrue(closestPoint2c.equals(point2, ABSOLUTE_ERROR));
         assertTrue(closestPoint2d.equals(point2, ABSOLUTE_ERROR));
 
-        final Point3D closestPoint3 = plane.getClosestPoint(point3);
-        final Point3D closestPoint3b = plane.getClosestPoint(point3, PRECISION_ERROR);
-        final Point3D closestPoint3c = Point3D.create();
+        final var closestPoint3 = plane.getClosestPoint(point3);
+        final var closestPoint3b = plane.getClosestPoint(point3, PRECISION_ERROR);
+        final var closestPoint3c = Point3D.create();
         plane.closestPoint(point3, closestPoint3c);
-        final Point3D closestPoint3d = Point3D.create();
+        final var closestPoint3d = Point3D.create();
         plane.closestPoint(point3, closestPoint3d, ABSOLUTE_ERROR);
 
         assertTrue(closestPoint3.equals(point3, ABSOLUTE_ERROR));
@@ -1005,29 +906,27 @@ public class PlaneTest {
 
         // use plane director vector to find another point at desired signed
         // distance
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double signedDistance = randomizer.nextDouble(MIN_RANDOM_DISTANCE,
-                MAX_RANDOM_DISTANCE);
+        final var randomizer = new UniformRandomizer();
+        final var signedDistance = randomizer.nextDouble(MIN_RANDOM_DISTANCE, MAX_RANDOM_DISTANCE);
 
-        final HomogeneousPoint3D point4 = new HomogeneousPoint3D();
+        final var point4 = new HomogeneousPoint3D();
 
-        final double normDirectorVector = Math.sqrt(plane.getA() * plane.getA() +
-                plane.getB() * plane.getB() + plane.getC() * plane.getC());
-        point4.setInhomogeneousCoordinates(point1.getInhomX() +
-                        signedDistance * plane.getA() / normDirectorVector,
-                point1.getInhomY() + signedDistance * plane.getB() /
-                        normDirectorVector, point1.getInhomZ() +
-                        signedDistance * plane.getC() / normDirectorVector);
+        final var normDirectorVector = Math.sqrt(plane.getA() * plane.getA() + plane.getB() * plane.getB()
+                + plane.getC() * plane.getC());
+        point4.setInhomogeneousCoordinates(
+                point1.getInhomX() + signedDistance * plane.getA() / normDirectorVector,
+                point1.getInhomY() + signedDistance * plane.getB() / normDirectorVector,
+                point1.getInhomZ() + signedDistance * plane.getC() / normDirectorVector);
 
         assertEquals(plane.signedDistance(point4), signedDistance, PRECISION_ERROR);
 
         // because point4 goes in plane's perpendicular direction from point1,
         // its closest point belonging to the plane will be point1
-        final Point3D closestPoint = plane.getClosestPoint(point4);
-        final Point3D closestPointB = plane.getClosestPoint(point4, PRECISION_ERROR);
-        final Point3D closestPointC = Point3D.create();
+        final var closestPoint = plane.getClosestPoint(point4);
+        final var closestPointB = plane.getClosestPoint(point4, PRECISION_ERROR);
+        final var closestPointC = Point3D.create();
         plane.closestPoint(point4, closestPointC);
-        final Point3D closestPointD = Point3D.create();
+        final var closestPointD = Point3D.create();
         plane.closestPoint(point4, closestPointD, ABSOLUTE_ERROR);
 
         assertTrue(closestPoint.equals(point1, ABSOLUTE_ERROR));
@@ -1036,33 +935,25 @@ public class PlaneTest {
         assertTrue(closestPointD.equals(point1, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            plane.getClosestPoint(point4, -PRECISION_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            plane.closestPoint(point4, closestPointD, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> plane.getClosestPoint(point4, -PRECISION_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> plane.closestPoint(point4, closestPointD, -ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testDotProduct() {
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testDotProduct() {
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // a random line
-        final Plane plane1 = new Plane(array);
+        final var plane1 = new Plane(array);
 
         // opposed sign line
-        final Plane plane2 = new Plane(-plane1.getA(), -plane1.getB(), -plane1.getC(), -plane1.getD());
+        final var plane2 = new Plane(-plane1.getA(), -plane1.getB(), -plane1.getC(), -plane1.getD());
 
         // another random line
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Plane plane3 = new Plane(array);
+        final var plane3 = new Plane(array);
 
         plane1.normalize();
         plane2.normalize();
@@ -1079,17 +970,16 @@ public class PlaneTest {
     }
 
     @Test
-    public void testEqualsAndHashCode() {
-        final double[] array = new double[HOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testEqualsAndHashCode() {
+        final var array = new double[HOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Plane plane1 = new Plane(array);
-        Plane plane2 = new Plane(array);
+        var plane1 = new Plane(array);
+        var plane2 = new Plane(array);
         assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
         assertTrue(plane1.equals(plane2));
-        //noinspection SimplifiableAssertion
-        assertTrue(plane1.equals((Object) plane2));
+        assertEquals(plane1, plane2);
         assertEquals(plane1.hashCode(), plane2.hashCode());
 
         array[0] = plane1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1112,17 +1002,13 @@ public class PlaneTest {
         assertFalse(plane1.equals(plane2, 0.0));
 
         // Force IllegalArgumentException
-        try {
-            //noinspection all
-            plane1.equals(plane1, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var finalPlane1 = plane1;
+        assertThrows(IllegalArgumentException.class, () -> finalPlane1.equals(finalPlane1, -ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testCreateCanonicalPlaneAtInfinity() {
-        final Plane plane = Plane.createCanonicalPlaneAtInfinity();
+    void testCreateCanonicalPlaneAtInfinity() {
+        final var plane = Plane.createCanonicalPlaneAtInfinity();
 
         assertEquals(0.0, plane.getA(), 0.0);
         assertEquals(0.0, plane.getB(), 0.0);
@@ -1130,8 +1016,8 @@ public class PlaneTest {
         assertEquals(1.0, plane.getD(), 0.0);
 
         // create a point at infinity
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D point = new HomogeneousPoint3D(
+        final var randomizer = new UniformRandomizer();
+        final var point = new HomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 0.0);
@@ -1141,15 +1027,15 @@ public class PlaneTest {
     }
 
     @Test
-    public void testSetAsCanonicalPlaneAtInfinity() {
+    void testSetAsCanonicalPlaneAtInfinity() {
         // create a point at infinity
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D point = new HomogeneousPoint3D(
+        final var randomizer = new UniformRandomizer();
+        final var point = new HomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 0.0);
 
-        final Plane plane = new Plane(1.0, 1.0, 1.0, 1.0);
+        final var plane = new Plane(1.0, 1.0, 1.0, 1.0);
 
         // initially plane is not at infinity
         assertFalse(plane.isLocus(point));
@@ -1168,15 +1054,15 @@ public class PlaneTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
 
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Plane plane1 = new Plane(a, b, c, d);
+        final var plane1 = new Plane(a, b, c, d);
 
         // check
         assertEquals(a, plane1.getA(), 0.0);
@@ -1186,8 +1072,8 @@ public class PlaneTest {
         assertFalse(plane1.isNormalized());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(plane1);
-        final Plane plane2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(plane1);
+        final var plane2 = SerializationHelper.<Plane>deserialize(bytes);
 
         // check
         assertEquals(plane1, plane2);

@@ -18,30 +18,25 @@ package com.irurueta.geometry.estimators;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
+class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(RobustEstimatorMethod.PROMEDS,
                 LinePlaneCorrespondencePinholeCameraRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test
-    public void testCreate() {
-        LinePlaneCorrespondencePinholeCameraRobustEstimator estimator;
-
+    void testCreate() {
         // create with robust estimator method
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        var estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -49,25 +44,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -75,25 +62,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -101,25 +80,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -127,25 +98,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -153,34 +116,27 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // create with robust estimator method and lines and planes
-        final List<Plane> planes = new ArrayList<>();
-        final List<Line2D> lines = new ArrayList<>();
-        for (int i = 0;
+        final var planes = new ArrayList<Plane>();
+        final var lines = new ArrayList<Line2D>();
+        for (var i = 0;
              i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
             planes.add(new Plane());
             lines.add(new Line2D());
         }
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -188,25 +144,19 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
 
         estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -214,25 +164,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -240,25 +183,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -266,25 +202,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -292,68 +221,53 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        final List<Plane> emptyPlanes = new ArrayList<>();
-        final List<Line2D> emptyLines = new ArrayList<>();
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(emptyPlanes, emptyLines,
-                            RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, emptyLines, RobustEstimatorMethod.RANSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPlanes = new ArrayList<Plane>();
+        final var emptyLines = new ArrayList<Line2D>();
+        // empty points
+        assertThrows(IllegalArgumentException.class,
+                () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(emptyPlanes, emptyLines,
+                        RobustEstimatorMethod.RANSAC));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, emptyLines,
+                        RobustEstimatorMethod.RANSAC));
 
         // create with listener and robust estimator method
-        final PinholeCameraRobustEstimatorListener listener =
-                new PinholeCameraRobustEstimatorListener() {
+        final var listener = new PinholeCameraRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final PinholeCameraRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final PinholeCameraRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final PinholeCameraRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final PinholeCameraRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final PinholeCameraRobustEstimator estimator, final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final PinholeCameraRobustEstimator estimator, final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final PinholeCameraRobustEstimator estimator, final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final PinholeCameraRobustEstimator estimator, final float progress) {
+                // no action needed
+            }
+        };
 
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -361,25 +275,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -387,25 +293,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -413,25 +311,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -439,25 +329,17 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -465,26 +347,19 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-
 
         // test with listener, points and robust estimator method
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -492,25 +367,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -518,25 +386,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -544,25 +405,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -570,25 +424,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -596,31 +443,23 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-
 
         // test with quality scores and robust estimator method
-        final double[] qualityScores = new double[
-                LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                        MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES];
-        final double[] shortScores = new double[1];
+        final var qualityScores = new double[
+                LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES];
+        final var shortScores = new double[1];
 
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -628,25 +467,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -654,25 +486,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -680,25 +505,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -706,25 +524,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -732,36 +543,23 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(shortScores, RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                shortScores, RobustEstimatorMethod.PROSAC));
 
         // test with points, quality scores and robust estimator method
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores,
                 RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -769,26 +567,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores,
                 RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -796,26 +586,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores,
                 RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -823,26 +605,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores,
                 RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -850,26 +624,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores,
                 RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -877,53 +643,30 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(emptyPlanes, emptyLines, qualityScores,
-                            RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, emptyLines, qualityScores,
-                            RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // short scores
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, lines, shortScores,
-                            RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // empty points
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                emptyPlanes, emptyLines, qualityScores, RobustEstimatorMethod.PROSAC));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, emptyLines, qualityScores, RobustEstimatorMethod.PROSAC));
+        // short scores
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, lines, shortScores, RobustEstimatorMethod.PROSAC));
 
         // test with listener, quality scores and method
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -931,25 +674,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -957,25 +693,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -983,25 +712,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1009,25 +731,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1035,36 +750,23 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, shortScores, RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, shortScores, RobustEstimatorMethod.PROSAC));
 
         // test with listener, points, quality scores and method
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,
                 RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1072,26 +774,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,
                 RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1099,26 +793,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,
                 RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1126,26 +812,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,
                 RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1153,26 +831,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores,
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,
                 RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1180,53 +850,29 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, emptyPlanes, emptyLines, qualityScores,
-                            RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, planes, emptyLines, qualityScores,
-                            RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // short scores
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, planes, lines, shortScores,
-                            RobustEstimatorMethod.PROSAC);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // empty points
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, emptyPlanes, emptyLines, qualityScores, RobustEstimatorMethod.PROSAC));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, planes, emptyLines, qualityScores, RobustEstimatorMethod.PROSAC));
+        // short scores
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, planes, lines, shortScores, RobustEstimatorMethod.PROSAC));
 
         // test with no arguments
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                create();
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create();
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1234,26 +880,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
-
 
         // test with points
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1261,44 +899,26 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(emptyPlanes, emptyLines);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, emptyLines);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        // empty points
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                emptyPlanes, emptyLines));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, emptyLines));
 
         // test with listener
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1306,26 +926,18 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
         // test with listener and points
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1333,44 +945,26 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, emptyPlanes, emptyLines);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, planes, emptyLines);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        // empty points
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, emptyPlanes, emptyLines));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, planes, emptyLines));
 
         // test with quality scores
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1378,36 +972,22 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(shortScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                shortScores));
 
         // test with points and quality scores
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1415,51 +995,29 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(emptyPlanes, emptyLines, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, emptyLines, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // short scores
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, lines, shortScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        // empty points
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                emptyPlanes, emptyLines, qualityScores));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, emptyLines, qualityScores));
+        // short scores
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, lines, shortScores));
 
         // test with listener and scores
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertNull(estimator.getLines());
         assertNull(estimator.getPlanes());
         assertFalse(estimator.isReady());
@@ -1467,36 +1025,22 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(listener, shortScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                listener, shortScores));
 
         // test with listener, points and quality scores
-        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator);
+        estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores);
+        assertInstanceOf(PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.class, estimator);
         assertSame(lines, estimator.getLines());
         assertSame(planes, estimator.getPlanes());
         assertTrue(estimator.isReady());
@@ -1504,43 +1048,24 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // empty points
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(emptyPlanes, emptyLines, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, emptyLines, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // short scores
-            estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
-                    create(planes, lines, shortScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // empty points
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                emptyPlanes, emptyLines, qualityScores));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, emptyLines, qualityScores));
+        // short scores
+        assertThrows(IllegalArgumentException.class, () -> LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
+                planes, lines, shortScores));
     }
 }

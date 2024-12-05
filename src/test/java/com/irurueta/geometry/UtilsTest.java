@@ -16,13 +16,11 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
-
-public class UtilsTest {
+class UtilsTest {
 
     private static final double MIN_RADIANS = -Math.PI / 2.0;
     private static final double MAX_RADIANS = Math.PI / 2.0;
@@ -37,46 +35,44 @@ public class UtilsTest {
     private static final double LARGE_ABSOLUTE_ERROR = 1e-6;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(180.0, Utils.HALF_TURN_DEGREES, 0.0);
         assertEquals(Math.PI, Utils.HALF_TURN_RADIANS, 0.0);
     }
 
     @Test
-    public void testConvertToDegrees() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
-        final double degrees = radians * 180.0 / Math.PI;
+    void testConvertToDegrees() {
+        final var randomizer = new UniformRandomizer();
+        final var radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
+        final var degrees = radians * 180.0 / Math.PI;
 
         assertEquals(degrees, Utils.convertToDegrees(radians), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testConvertToRadians() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
-        final double radians = degrees * Math.PI / 180.0;
+    void testConvertToRadians() {
+        final var randomizer = new UniformRandomizer();
+        final var degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
+        final var radians = Math.toRadians(degrees);
 
         assertEquals(radians, Utils.convertToRadians(degrees), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testNormalizeAngleDegrees() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
-        final int turns = (randomizer.nextBoolean() ? 1 : -1) *
-                randomizer.nextInt(MIN_TURNS, MAX_TURNS);
-        final double degrees2 = degrees +
-                turns * 360.0;
+    void testNormalizeAngleDegrees() {
+        final var randomizer = new UniformRandomizer();
+        final var degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
+        final var turns = (randomizer.nextBoolean() ? 1 : -1) * randomizer.nextInt(MIN_TURNS, MAX_TURNS);
+        final var degrees2 = degrees + turns * 360.0;
 
-        final double degrees3 = Utils.normalizeAngleDegrees(degrees2);
-        final double degrees4 = Utils.normalizeAngleDegrees(degrees);
+        final var degrees3 = Utils.normalizeAngleDegrees(degrees2);
+        final var degrees4 = Utils.normalizeAngleDegrees(degrees);
 
         // check correctness
         assertEquals(degrees, degrees3, ABSOLUTE_ERROR);
         assertEquals(degrees, degrees4, ABSOLUTE_ERROR);
 
-        double degrees5 = degrees2;
+        var degrees5 = degrees2;
         while (degrees5 <= -180.0) {
             degrees5 += 2.0 * 180.0;
         }
@@ -88,22 +84,20 @@ public class UtilsTest {
     }
 
     @Test
-    public void testNormalizeAngleRadians() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
-        final int turns = (randomizer.nextBoolean() ? 1 : -1) *
-                randomizer.nextInt(MIN_TURNS, MAX_TURNS);
-        final double radians2 = radians +
-                turns * 2.0 * Math.PI;
+    void testNormalizeAngleRadians() {
+        final var randomizer = new UniformRandomizer();
+        final var radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
+        final var turns = (randomizer.nextBoolean() ? 1 : -1) * randomizer.nextInt(MIN_TURNS, MAX_TURNS);
+        final var radians2 = radians + turns * 2.0 * Math.PI;
 
-        final double radians3 = Utils.normalizeAngleRadians(radians2);
-        final double radians4 = Utils.normalizeAngleRadians(radians);
+        final var radians3 = Utils.normalizeAngleRadians(radians2);
+        final var radians4 = Utils.normalizeAngleRadians(radians);
 
         // check correctness
         assertEquals(radians, radians3, ABSOLUTE_ERROR);
         assertEquals(radians, radians4, ABSOLUTE_ERROR);
 
-        double radians5 = radians2;
+        var radians5 = radians2;
         while (radians5 <= -Math.PI) {
             radians5 += 2.0 * Math.PI;
         }

@@ -50,10 +50,8 @@ public class RotationUtils {
      * @throws IllegalArgumentException if provided matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">w2omega.m at https://github.com/joansola/slamtb</a>
      */
-    public static void w2omega(
-            final double w1, final double w2, final double w3, final Matrix result) {
-        if (result.getRows() != SKEW_MATRIX_SIZE ||
-                result.getColumns() != SKEW_MATRIX_SIZE) {
+    public static void w2omega(final double w1, final double w2, final double w3, final Matrix result) {
+        if (result.getRows() != SKEW_MATRIX_SIZE || result.getColumns() != SKEW_MATRIX_SIZE) {
             throw new IllegalArgumentException("result must be 4x4");
         }
 
@@ -103,8 +101,7 @@ public class RotationUtils {
      * @return a new skew symmetric matrix omega.
      * @see <a href="https://github.com/joansola/slamtb">w2omega.m at https://github.com/joansola/slamtb</a>
      */
-    public static Matrix w2omega(
-            final double w1, final double w2, final double w3) {
+    public static Matrix w2omega(final double w1, final double w2, final double w3) {
         Matrix result = null;
         try {
             result = new Matrix(SKEW_MATRIX_SIZE, SKEW_MATRIX_SIZE);
@@ -141,18 +138,15 @@ public class RotationUtils {
      * @throws IllegalArgumentException if provided result matrix is not 4x3.
      * @see <a href="https://github.com/joansola/slamtb">q2Pi.m at https://github.com/joansola/slamtb</a>
      */
-    public static void quaternionToPiMatrix(
-            final Quaternion quaternion,
-            final Matrix result) {
-        if (result.getRows() != Quaternion.N_PARAMS ||
-                result.getColumns() != Quaternion.N_ANGLES) {
+    public static void quaternionToPiMatrix(final Quaternion quaternion, final Matrix result) {
+        if (result.getRows() != Quaternion.N_PARAMS || result.getColumns() != Quaternion.N_ANGLES) {
             throw new IllegalArgumentException("result matrix must be 4x3");
         }
 
-        final double a = quaternion.getA();
-        final double b = quaternion.getB();
-        final double c = quaternion.getC();
-        final double d = quaternion.getD();
+        final var a = quaternion.getA();
+        final var b = quaternion.getB();
+        final var c = quaternion.getC();
+        final var d = quaternion.getD();
 
         result.setElementAt(0, 0, -b);
         result.setElementAt(1, 0, a);
@@ -201,8 +195,7 @@ public class RotationUtils {
      * @throws IllegalArgumentException if provided result matrix is not 4x3.
      * @see <a href="https://github.com/joansola/slamtb">pi2pc.m at https://github.com/joansola/slamtb</a>
      */
-    public static void quaternionToConjugatedPiMatrix(
-            final Quaternion quaternion, final Matrix result) {
+    public static void quaternionToConjugatedPiMatrix(final Quaternion quaternion, final Matrix result) {
         quaternionToPiMatrix(quaternion.conjugateAndReturnNew(), result);
     }
 
@@ -215,8 +208,7 @@ public class RotationUtils {
      * @return a matrix containing the conjugated pi matrix.
      * @see <a href="https://github.com/joansola/slamtb">pi2pc.m at https://github.com/joansola/slamtb</a>
      */
-    public static Matrix quaternionToConjugatedPiMatrix(
-            final Quaternion quaternion) {
+    public static Matrix quaternionToConjugatedPiMatrix(final Quaternion quaternion) {
         Matrix m = null;
         try {
             m = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
@@ -235,14 +227,11 @@ public class RotationUtils {
      * @throws IllegalArgumentException if provided matrices are not 4x3.
      * @see <a href="https://github.com/joansola/slamtb">pi2pc.m at https://github.com/joansola/slamtb</a>
      */
-    public static void piMatrixToConjugatedPiMatrix(
-            final Matrix pi, final Matrix result) {
-        if (pi.getRows() != Quaternion.N_PARAMS ||
-                pi.getColumns() != Quaternion.N_ANGLES) {
+    public static void piMatrixToConjugatedPiMatrix(final Matrix pi, final Matrix result) {
+        if (pi.getRows() != Quaternion.N_PARAMS || pi.getColumns() != Quaternion.N_ANGLES) {
             throw new IllegalArgumentException("pi must be 4x3");
         }
-        if (result.getRows() != Quaternion.N_PARAMS ||
-                result.getColumns() != Quaternion.N_ANGLES) {
+        if (result.getRows() != Quaternion.N_PARAMS || result.getColumns() != Quaternion.N_ANGLES) {
             throw new IllegalArgumentException("result must be 4x3");
         }
 
@@ -293,28 +282,25 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationMatrixTimesVector(
-            final Quaternion q, final double[] point,
-            final double[] result, final Matrix jacobianQ, final Matrix jacobianP) {
+            final Quaternion q, final double[] point, final double[] result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
         if (point.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException("point must have length 3");
         }
         if (result.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException("result must have length 3");
         }
-        if (jacobianQ != null && (jacobianQ.getRows() != Quaternion.N_ANGLES ||
-                jacobianQ.getColumns() != Quaternion.N_PARAMS)) {
-            throw new IllegalArgumentException(
-                    "jacobian wrt of quaternion must be 3x4");
+        if (jacobianQ != null && (jacobianQ.getRows() != Quaternion.N_ANGLES
+                || jacobianQ.getColumns() != Quaternion.N_PARAMS)) {
+            throw new IllegalArgumentException("jacobian wrt of quaternion must be 3x4");
         }
-        if (jacobianP != null &&
-                (jacobianP.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS ||
-                        jacobianP.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS)) {
-            throw new IllegalArgumentException(
-                    "jacobian wrt of point must be 3x3");
+        if (jacobianP != null && (jacobianP.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS
+                || jacobianP.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS)) {
+            throw new IllegalArgumentException("jacobian wrt of point must be 3x3");
         }
 
         try {
-            final Matrix r = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
+            final var r = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                     MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
             q.toMatrixRotation(r);
 
@@ -322,7 +308,7 @@ public class RotationUtils {
                 jacobianP.copyFrom(r);
             }
             // multiply rotation matrix by point
-            final Matrix p = Matrix.newFromArray(point, true);
+            final var p = Matrix.newFromArray(point, true);
             r.multiply(p);
 
             // copy to result
@@ -330,19 +316,19 @@ public class RotationUtils {
                     r.getColumns() - 1, result);
 
             if (jacobianQ != null) {
-                final double a = q.getA();
-                final double b = q.getB();
-                final double c = q.getC();
-                final double d = q.getD();
+                final var a = q.getA();
+                final var b = q.getB();
+                final var c = q.getC();
+                final var d = q.getD();
 
-                final double x = point[0];
-                final double y = point[1];
-                final double z = point[2];
+                final var x = point[0];
+                final var y = point[1];
+                final var z = point[2];
 
-                final double axdycz = 2.0 * (a * x - d * y + c * z);
-                final double bxcydz = 2.0 * (b * x + c * y + d * z);
-                final double cxbyaz = 2.0 * (c * x - b * y - a * z);
-                final double dxaybz = 2.0 * (d * x + a * y - b * z);
+                final var axdycz = 2.0 * (a * x - d * y + c * z);
+                final var bxcydz = 2.0 * (b * x + c * y + d * z);
+                final var cxbyaz = 2.0 * (c * x - b * y - a * z);
+                final var dxaybz = 2.0 * (d * x + a * y - b * z);
 
                 jacobianQ.setElementAt(0, 0, axdycz);
                 jacobianQ.setElementAt(1, 0, dxaybz);
@@ -381,10 +367,8 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
     public static double[] rotationMatrixTimesVector(
-            final Quaternion q, final double[] point,
-            final Matrix jacobianQ, final Matrix jacobianP) {
-        final double[] result =
-                new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+            final Quaternion q, final double[] point, final Matrix jacobianQ, final Matrix jacobianP) {
+        final var result = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
         rotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
         return result;
     }
@@ -400,9 +384,7 @@ public class RotationUtils {
      *                                  don't have length 3.
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
-    public static void rotationMatrixTimesVector(
-            final Quaternion q, final double[] point,
-            final double[] result) {
+    public static void rotationMatrixTimesVector(final Quaternion q, final double[] point, final double[] result) {
         rotationMatrixTimesVector(q, point, result, null, null);
     }
 
@@ -418,8 +400,7 @@ public class RotationUtils {
      *                                  length 3.
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
-    public static double[] rotationMatrixTimesVector(
-            final Quaternion q, final double[] point) {
+    public static double[] rotationMatrixTimesVector(final Quaternion q, final double[] point) {
         return rotationMatrixTimesVector(q, point, null, null);
     }
 
@@ -437,12 +418,10 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationMatrixTimesVector(
-            final Quaternion q, final Point3D point, final Point3D result,
-            final Matrix jacobianQ, final Matrix jacobianP) {
-        final double[] coords = new double[]{
-                point.getInhomX(), point.getInhomY(), point.getInhomZ()};
-        final double[] rp = rotationMatrixTimesVector(q, coords, jacobianQ,
-                jacobianP);
+            final Quaternion q, final Point3D point, final Point3D result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
+        final var coords = new double[]{point.getInhomX(), point.getInhomY(), point.getInhomZ()};
+        final var rp = rotationMatrixTimesVector(q, coords, jacobianQ, jacobianP);
         result.setInhomogeneousCoordinates(rp[0], rp[1], rp[2]);
     }
 
@@ -460,9 +439,8 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
     public static Point3D rotationMatrixTimesVector(
-            final Quaternion q, final Point3D point,
-            final Matrix jacobianQ, final Matrix jacobianP) {
-        final Point3D result = Point3D.create();
+            final Quaternion q, final Point3D point, final Matrix jacobianQ, final Matrix jacobianP) {
+        final var result = Point3D.create();
         rotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
         return result;
     }
@@ -476,8 +454,7 @@ public class RotationUtils {
      * @param result result of rotation.
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
-    public static void rotationMatrixTimesVector(
-            final Quaternion q, final Point3D point, final Point3D result) {
+    public static void rotationMatrixTimesVector(final Quaternion q, final Point3D point, final Point3D result) {
         rotationMatrixTimesVector(q, point, result, null, null);
     }
 
@@ -490,8 +467,7 @@ public class RotationUtils {
      * @return result of rotation.
      * @see <a href="https://github.com/joansola/slamtb">Rp.m at https://github.com/joansola/slamtb</a>
      */
-    public static Point3D rotationMatrixTimesVector(
-            final Quaternion q, final Point3D point) {
+    public static Point3D rotationMatrixTimesVector(final Quaternion q, final Point3D point) {
         return rotationMatrixTimesVector(q, point, null, null);
     }
 
@@ -510,28 +486,25 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rtp.m at https://github.com/joansola/slamtb</a>
      */
     public static void transposedRotationMatrixTimesVector(
-            final Quaternion q, final double[] point, final double[] result,
-            final Matrix jacobianQ, final Matrix jacobianP) {
+            final Quaternion q, final double[] point, final double[] result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
         if (point.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException("point must have length 3");
         }
         if (result.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException("result must have length 3");
         }
-        if (jacobianQ != null && (jacobianQ.getRows() != Quaternion.N_ANGLES ||
-                jacobianQ.getColumns() != Quaternion.N_PARAMS)) {
-            throw new IllegalArgumentException(
-                    "jacobian wrt of quaternion must be 3x4");
+        if (jacobianQ != null && (jacobianQ.getRows() != Quaternion.N_ANGLES
+                || jacobianQ.getColumns() != Quaternion.N_PARAMS)) {
+            throw new IllegalArgumentException("jacobian wrt of quaternion must be 3x4");
         }
-        if (jacobianP != null &&
-                (jacobianP.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS ||
-                        jacobianP.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS)) {
-            throw new IllegalArgumentException(
-                    "jacobian wrt of point must be 3x3");
+        if (jacobianP != null && (jacobianP.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS
+                || jacobianP.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS)) {
+            throw new IllegalArgumentException("jacobian wrt of point must be 3x3");
         }
 
         try {
-            final Matrix rt = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
+            final var rt = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                     MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
             q.toMatrixRotation(rt);
             // transpose rotation
@@ -542,7 +515,7 @@ public class RotationUtils {
                 jacobianP.copyFrom(rt);
             }
             // multiply rotation matrix by point
-            final Matrix p = Matrix.newFromArray(point, true);
+            final var p = Matrix.newFromArray(point, true);
             rt.multiply(p);
 
             // copy to result
@@ -550,19 +523,19 @@ public class RotationUtils {
                     rt.getColumns() - 1, result);
 
             if (jacobianQ != null) {
-                final double a = q.getA();
-                final double b = q.getB();
-                final double c = q.getC();
-                final double d = q.getD();
+                final var a = q.getA();
+                final var b = q.getB();
+                final var c = q.getC();
+                final var d = q.getD();
 
-                final double x = p.getElementAtIndex(0);
-                final double y = p.getElementAtIndex(1);
-                final double z = p.getElementAtIndex(2);
+                final var x = p.getElementAtIndex(0);
+                final var y = p.getElementAtIndex(1);
+                final var z = p.getElementAtIndex(2);
 
-                final double axdycz = 2.0 * (a * x + d * y - c * z);
-                final double bxcydz = 2.0 * (b * x + c * y + d * z);
-                final double cxbyaz = 2.0 * (c * x - b * y + a * z);
-                final double dxaybz = 2.0 * (d * x - a * y - b * z);
+                final var axdycz = 2.0 * (a * x + d * y - c * z);
+                final var bxcydz = 2.0 * (b * x + c * y + d * z);
+                final var cxbyaz = 2.0 * (c * x - b * y + a * z);
+                final var dxaybz = 2.0 * (d * x - a * y - b * z);
 
                 jacobianQ.setElementAt(0, 0, axdycz);
                 jacobianQ.setElementAt(1, 0, -dxaybz);
@@ -600,12 +573,9 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rtp.m at https://github.com/joansola/slamtb</a>
      */
     public static double[] transposedRotationMatrixTimesVector(
-            final Quaternion q, final double[] point,
-            final Matrix jacobianQ, final Matrix jacobianP) {
-        final double[] result =
-                new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-        transposedRotationMatrixTimesVector(q, point, result, jacobianQ,
-                jacobianP);
+            final Quaternion q, final double[] point, final Matrix jacobianQ, final Matrix jacobianP) {
+        final var result = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        transposedRotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
         return result;
     }
 
@@ -637,8 +607,7 @@ public class RotationUtils {
      *                                  length 3.
      * @see <a href="https://github.com/joansola/slamtb">Rtp.m at https://github.com/joansola/slamtb</a>
      */
-    public static double[] transposedRotationMatrixTimesVector(
-            final Quaternion q, final double[] point) {
+    public static double[] transposedRotationMatrixTimesVector(final Quaternion q, final double[] point) {
         return transposedRotationMatrixTimesVector(q, point, null, null);
     }
 
@@ -656,12 +625,10 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rtp.m at https://github.com/joansola/slamtb</a>
      */
     public static void transposedRotationMatrixTimesVector(
-            final Quaternion q, final Point3D point, final Point3D result,
-            final Matrix jacobianQ, final Matrix jacobianP) {
-        final double[] coords = new double[]{
-                point.getInhomX(), point.getInhomY(), point.getInhomZ()};
-        final double[] rp = transposedRotationMatrixTimesVector(q, coords, jacobianQ,
-                jacobianP);
+            final Quaternion q, final Point3D point, final Point3D result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
+        final var coords = new double[]{point.getInhomX(), point.getInhomY(), point.getInhomZ()};
+        final var rp = transposedRotationMatrixTimesVector(q, coords, jacobianQ, jacobianP);
         result.setInhomogeneousCoordinates(rp[0], rp[1], rp[2]);
     }
 
@@ -679,11 +646,9 @@ public class RotationUtils {
      * @see <a href="https://github.com/joansola/slamtb">Rtp.m at https://github.com/joansola/slamtb</a>
      */
     public static Point3D transposedRotationMatrixTimesVector(
-            final Quaternion q, final Point3D point,
-            final Matrix jacobianQ, final Matrix jacobianP) {
-        final Point3D result = Point3D.create();
-        transposedRotationMatrixTimesVector(q, point, result, jacobianQ,
-                jacobianP);
+            final Quaternion q, final Point3D point, final Matrix jacobianQ, final Matrix jacobianP) {
+        final var result = Point3D.create();
+        transposedRotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
         return result;
     }
 
@@ -708,8 +673,7 @@ public class RotationUtils {
      * @return result of rotation.
      * @see <a href="https://github.com/joansola/slamtb">Rtp.m at https://github.com/joansola/slamtb</a>
      */
-    public static Point3D transposedRotationMatrixTimesVector(
-            final Quaternion q, final Point3D point) {
+    public static Point3D transposedRotationMatrixTimesVector(final Quaternion q, final Point3D point) {
         return transposedRotationMatrixTimesVector(q, point, null, null);
     }
 
@@ -718,10 +682,8 @@ public class RotationUtils {
      *
      * @param result instance where resulting rotation will be stored.
      */
-    public static void cameraBodyToCameraSensorRotation(
-            final MatrixRotation3D result) {
-        Quaternion.eulerToMatrixRotation(-Math.PI / 2.0, 0, -Math.PI / 2.0,
-                result);
+    public static void cameraBodyToCameraSensorRotation(final MatrixRotation3D result) {
+        Quaternion.eulerToMatrixRotation(-Math.PI / 2.0, 0, -Math.PI / 2.0, result);
     }
 
     /**
@@ -730,7 +692,7 @@ public class RotationUtils {
      * @return a new instance containing rotation.
      */
     public static MatrixRotation3D cameraBodyToCameraSensorRotation() {
-        final MatrixRotation3D result = new MatrixRotation3D();
+        final var result = new MatrixRotation3D();
         cameraBodyToCameraSensorRotation(result);
         return result;
     }
@@ -753,14 +715,13 @@ public class RotationUtils {
     public static void quaternionToEulerGaussian(
             final Quaternion q, final Matrix quaternionCovariance, final double[] angles,
             final Matrix anglesCovariance) {
-        if (quaternionCovariance.getRows() != Quaternion.N_PARAMS ||
-                quaternionCovariance.getColumns() != Quaternion.N_PARAMS) {
-            throw new IllegalArgumentException(
-                    "quaternion covariance must be 4x4");
+        if (quaternionCovariance.getRows() != Quaternion.N_PARAMS
+                || quaternionCovariance.getColumns() != Quaternion.N_PARAMS) {
+            throw new IllegalArgumentException("quaternion covariance must be 4x4");
         }
 
         try {
-            final Matrix eq = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+            final var eq = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
             q.toEulerAngles(angles, eq);
 
             // jacobian = eq * Q * eq', where is provided covariance
@@ -781,14 +742,11 @@ public class RotationUtils {
      * @throws IllegalArgumentException if provided array of angular rates does
      *                                  not have length 3 or if provided result matrix is not 4x4.
      */
-    public static void angularRatesToSkew(
-            final double[] angularRates, final Matrix result) {
+    public static void angularRatesToSkew(final double[] angularRates, final Matrix result) {
         if (angularRates.length != Quaternion.N_ANGLES) {
-            throw new IllegalArgumentException(
-                    "angular rates must have length 3");
+            throw new IllegalArgumentException("angular rates must have length 3");
         }
-        if (result.getRows() != Quaternion.N_PARAMS ||
-                result.getColumns() != Quaternion.N_PARAMS) {
+        if (result.getRows() != Quaternion.N_PARAMS || result.getColumns() != Quaternion.N_PARAMS) {
             throw new IllegalArgumentException("result matrix must be 4x4");
         }
 

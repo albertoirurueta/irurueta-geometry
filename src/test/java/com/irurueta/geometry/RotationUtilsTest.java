@@ -18,13 +18,11 @@ package com.irurueta.geometry;
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-public class RotationUtilsTest {
+class RotationUtilsTest {
 
     private static final double MIN_ANGLE_DEGREES = 0.0;
     private static final double MAX_ANGLE_DEGREES = 90.0;
@@ -35,24 +33,24 @@ public class RotationUtilsTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, RotationUtils.N_ANGULAR_RATES);
         assertEquals(4, RotationUtils.SKEW_MATRIX_SIZE);
     }
 
     @Test
-    public void testW2omega() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testW2omega() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double w1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double w2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double w3 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var w1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var w2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var w3 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Matrix result = new Matrix(4, 4);
-        RotationUtils.w2omega(w1, w2, w3, result);
+        final var result1 = new Matrix(4, 4);
+        RotationUtils.w2omega(w1, w2, w3, result1);
 
         // check correctness
-        final Matrix resultB = new Matrix(4, 4);
+        final var resultB = new Matrix(4, 4);
         resultB.setSubmatrix(0, 0, 3, 3,
                 new double[]{
                         0.0, w1, w2, w3,
@@ -61,77 +59,58 @@ public class RotationUtilsTest {
                         -w3, -w2, w1, 0.0
                 }, true);
 
-        assertTrue(result.equals(resultB, ABSOLUTE_ERROR));
+        assertTrue(result1.equals(resultB, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            RotationUtils.w2omega(w1, w2, w3, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.w2omega(w1, w2, w3, m));
 
         // test with array
-        final double[] w = new double[]{w1, w2, w3};
-        RotationUtils.w2omega(w, result);
+        final var w = new double[]{w1, w2, w3};
+        RotationUtils.w2omega(w, result1);
 
         // check correctness
-        assertTrue(result.equals(resultB, ABSOLUTE_ERROR));
+        assertTrue(result1.equals(resultB, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            RotationUtils.w2omega(new double[1], result);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            RotationUtils.w2omega(w, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m1 = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.w2omega(new double[1], result1));
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.w2omega(w, m1));
 
         // test with new instance
-        result = RotationUtils.w2omega(w1, w2, w3);
+        final var result2 = RotationUtils.w2omega(w1, w2, w3);
 
         // check correctness
-        assertTrue(result.equals(resultB, ABSOLUTE_ERROR));
+        assertTrue(result2.equals(resultB, ABSOLUTE_ERROR));
 
         // test with array
-        result = RotationUtils.w2omega(w);
+        final var result3 = RotationUtils.w2omega(w);
 
         // check correctness
-        assertTrue(result.equals(resultB, ABSOLUTE_ERROR));
+        assertTrue(result3.equals(resultB, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        result = null;
-        try {
-            result = RotationUtils.w2omega(new double[1]);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(result);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.w2omega(new double[1]));
     }
 
     @Test
-    public void testQuaternionToPiMatrix() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testQuaternionToPiMatrix() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        final double a = q.getA();
-        final double b = q.getB();
-        final double c = q.getC();
-        final double d = q.getD();
+        final var a = q.getA();
+        final var b = q.getB();
+        final var c = q.getC();
+        final var d = q.getD();
 
-        final Matrix pi1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var pi1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
         RotationUtils.quaternionToPiMatrix(q, pi1);
-        final Matrix pi2 = RotationUtils.quaternionToPiMatrix(q);
+        final var pi2 = RotationUtils.quaternionToPiMatrix(q);
 
         // check correctness
         assertEquals(pi1, pi2);
@@ -153,26 +132,23 @@ public class RotationUtilsTest {
     }
 
     @Test
-    public void testQuaternionToConjugatedPiMatrix() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testQuaternionToConjugatedPiMatrix() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        final double a = q.getA();
-        final double b = q.getB();
-        final double c = q.getC();
-        final double d = q.getD();
+        final var a = q.getA();
+        final var b = q.getB();
+        final var c = q.getC();
+        final var d = q.getD();
 
-        final Matrix cpi1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var cpi1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
         RotationUtils.quaternionToConjugatedPiMatrix(q, cpi1);
-        final Matrix cpi2 = RotationUtils.quaternionToConjugatedPiMatrix(q);
+        final var cpi2 = RotationUtils.quaternionToConjugatedPiMatrix(q);
 
         // check correctness
         assertEquals(cpi1, cpi2);
@@ -194,24 +170,21 @@ public class RotationUtilsTest {
     }
 
     @Test
-    public void testPiMatrixToConjugatedPiMatrix() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testPiMatrixToConjugatedPiMatrix() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        final Matrix pi = RotationUtils.quaternionToPiMatrix(q);
-        final Matrix cpi = RotationUtils.quaternionToConjugatedPiMatrix(q);
+        final var pi = RotationUtils.quaternionToPiMatrix(q);
+        final var cpi = RotationUtils.quaternionToConjugatedPiMatrix(q);
 
-        final Matrix cpi2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var cpi2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
         RotationUtils.piMatrixToConjugatedPiMatrix(pi, cpi2);
-        final Matrix cpi3 = RotationUtils.piMatrixToConjugatedPiMatrix(pi);
+        final var cpi3 = RotationUtils.piMatrixToConjugatedPiMatrix(pi);
 
         assertEquals(cpi, cpi2);
         assertEquals(cpi, cpi3);
@@ -219,49 +192,45 @@ public class RotationUtilsTest {
     }
 
     @Test
-    public void testRotationMatrixTimesVector() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testRotationMatrixTimesVector() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        final double[] point = new double[
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-        double[] result = new double[point.length];
-        final double[] result2 = new double[point.length];
-        final Matrix jacobianQ = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
-        final Matrix jacobianP = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
-        RotationUtils.rotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
+        final var point = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var result1 = new double[point.length];
+        final var result2 = new double[point.length];
+        final var jacobianQ = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        final var jacobianP = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
+        RotationUtils.rotationMatrixTimesVector(q, point, result1, jacobianQ, jacobianP);
 
         // check correctness
-        Point3D rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        var rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES,
+                point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result1, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
         // check jacobian
-        double a = q.getA();
-        double b = q.getB();
-        double c = q.getC();
-        double d = q.getD();
+        var a = q.getA();
+        var b = q.getB();
+        var c = q.getC();
+        var d = q.getD();
 
-        double x = point[0];
-        double y = point[1];
-        double z = point[2];
+        var x = point[0];
+        var y = point[1];
+        var z = point[2];
 
-        double axdycz = 2.0 * (a * x - d * y + c * z);
-        double bxcydz = 2.0 * (b * x + c * y + d * z);
-        double cxbyaz = 2.0 * (c * x - b * y - a * z);
-        double dxaybz = 2.0 * (d * x + a * y - b * z);
+        var axdycz = 2.0 * (a * x - d * y + c * z);
+        var bxcydz = 2.0 * (b * x + c * y + d * z);
+        var cxbyaz = 2.0 * (c * x - b * y - a * z);
+        var dxaybz = 2.0 * (d * x + a * y - b * z);
 
         assertEquals(axdycz, jacobianQ.getElementAt(0, 0), ABSOLUTE_ERROR);
         assertEquals(dxaybz, jacobianQ.getElementAt(1, 0), ABSOLUTE_ERROR);
@@ -280,28 +249,20 @@ public class RotationUtilsTest {
         assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            RotationUtils.rotationMatrixTimesVector(q, point, result,
-                    new Matrix(1, 1), jacobianP);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            RotationUtils.rotationMatrixTimesVector(q, point, result, jacobianQ,
-                    new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.rotationMatrixTimesVector(q, point, result1,
+                m, jacobianP));
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.rotationMatrixTimesVector(q, point, result1,
+                jacobianQ, m));
 
         // test without result
-        result = RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ, jacobianP);
+        final var result3 = RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ, jacobianP);
 
         // check correctness
-        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result3, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
@@ -337,114 +298,94 @@ public class RotationUtilsTest {
         assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        double[] result3 = null;
-        try {
-            result3 = RotationUtils.rotationMatrixTimesVector(q, point, new Matrix(1, 1),
-                    jacobianP);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result3 = RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ,
-                    new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(result3);
-
+        final var m1 = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.rotationMatrixTimesVector(q, point, m1,
+                jacobianP));
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.rotationMatrixTimesVector(q, point, jacobianQ,
+                m1));
 
         // test without jacobian
-        RotationUtils.rotationMatrixTimesVector(q, point, result);
+        RotationUtils.rotationMatrixTimesVector(q, point, result3);
 
         // check correctness
-        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result3, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-
 
         // test without jacobian and result
-        result = RotationUtils.rotationMatrixTimesVector(q, point);
+        final var result4 = RotationUtils.rotationMatrixTimesVector(q, point);
 
         // check correctness
-        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result4, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
-        final Point3D p = new InhomogeneousPoint3D(point);
+        final var p = new InhomogeneousPoint3D(point);
         Point3D resultPoint = new InhomogeneousPoint3D();
         RotationUtils.rotationMatrixTimesVector(q, p, resultPoint, null, null);
-        result = resultPoint.asArray();
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        final var result5 = resultPoint.asArray();
+        assertArrayEquals(result2, result5, ABSOLUTE_ERROR);
 
-        resultPoint = RotationUtils.rotationMatrixTimesVector(q, p,
-                null, null);
+        resultPoint = RotationUtils.rotationMatrixTimesVector(q, p, null, null);
         new InhomogeneousPoint3D(resultPoint).asArray(result2);
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result5, ABSOLUTE_ERROR);
 
         resultPoint = new InhomogeneousPoint3D();
         RotationUtils.rotationMatrixTimesVector(q, p, resultPoint);
-        result = resultPoint.asArray();
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        final var result6 = resultPoint.asArray();
+        assertArrayEquals(result2, result6, ABSOLUTE_ERROR);
 
         resultPoint = RotationUtils.rotationMatrixTimesVector(q, p);
         new InhomogeneousPoint3D(resultPoint).asArray(result2);
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result6, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testTransposedRotationMatrixTimesVector()
-            throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testTransposedRotationMatrixTimesVector() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        final double[] point = new double[
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-        double[] result = new double[point.length];
-        final double[] result2 = new double[point.length];
-        final Matrix jacobianQ = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
-        final Matrix jacobianP = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
-        RotationUtils.transposedRotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);
+        final var point = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var result1 = new double[point.length];
+        final var result2 = new double[point.length];
+        final var jacobianQ = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        final var jacobianP = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
+        RotationUtils.transposedRotationMatrixTimesVector(q, point, result1, jacobianQ, jacobianP);
 
         // check correctness
-        Point3D rotated = new InhomogeneousPoint3D(q.inverseAndReturnNew().
-                rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        var rotated = new InhomogeneousPoint3D(q.inverseAndReturnNew().rotate(Point3D.create(
+                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result1, ABSOLUTE_ERROR);
 
-        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().
-                transposeAndReturnNew(), ABSOLUTE_ERROR));
+        assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
         // check jacobian
-        double a = q.getA();
-        double b = q.getB();
-        double c = q.getC();
-        double d = q.getD();
+        var a = q.getA();
+        var b = q.getB();
+        var c = q.getC();
+        var d = q.getD();
 
-        double x = point[0];
-        double y = point[1];
-        double z = point[2];
+        var x = point[0];
+        var y = point[1];
+        var z = point[2];
 
-        double axdycz = 2.0 * (a * x + d * y - c * z);
-        double bxcydz = 2.0 * (b * x + c * y + d * z);
-        double cxbyaz = 2.0 * (c * x - b * y + a * z);
-        double dxaybz = 2.0 * (d * x - a * y - b * z);
+        var axdycz = 2.0 * (a * x + d * y - c * z);
+        var bxcydz = 2.0 * (b * x + c * y + d * z);
+        var cxbyaz = 2.0 * (c * x - b * y + a * z);
+        var dxaybz = 2.0 * (d * x - a * y - b * z);
 
         assertEquals(axdycz, jacobianQ.getElementAt(0, 0), ABSOLUTE_ERROR);
         assertEquals(-dxaybz, jacobianQ.getElementAt(1, 0), ABSOLUTE_ERROR);
@@ -463,28 +404,20 @@ public class RotationUtilsTest {
         assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            RotationUtils.transposedRotationMatrixTimesVector(q, point, result,
-                    new Matrix(1, 1), jacobianP);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            RotationUtils.transposedRotationMatrixTimesVector(q, point, result,
-                    jacobianQ, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class,
+                () -> RotationUtils.transposedRotationMatrixTimesVector(q, point, result1, m, jacobianP));
+        assertThrows(IllegalArgumentException.class,
+                () -> RotationUtils.transposedRotationMatrixTimesVector(q, point, result1, jacobianQ, m));
 
         // test without result
-        result = RotationUtils.transposedRotationMatrixTimesVector(q, point, jacobianQ, jacobianP);
+        final var result3 = RotationUtils.transposedRotationMatrixTimesVector(q, point, jacobianQ, jacobianP);
 
         // check correctness
-        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result3, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
@@ -520,133 +453,116 @@ public class RotationUtilsTest {
         assertEquals(bxcydz, jacobianQ.getElementAt(2, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        double[] result3 = null;
-        try {
-            result3 = RotationUtils.transposedRotationMatrixTimesVector(q,
-                    point, new Matrix(1, 1), jacobianP);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            result3 = RotationUtils.transposedRotationMatrixTimesVector(q,
-                    point, jacobianQ, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(result3);
+        final var m1 = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.transposedRotationMatrixTimesVector(q,
+                point, m1, jacobianP));
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.transposedRotationMatrixTimesVector(q,
+                point, jacobianQ, m1));
 
         // test without jacobian
-        RotationUtils.transposedRotationMatrixTimesVector(q, point, result);
+        RotationUtils.transposedRotationMatrixTimesVector(q, point, result3);
 
         // check correctness
-        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result3, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
         // test without jacobian and result
-        result = RotationUtils.transposedRotationMatrixTimesVector(q, point);
+        final var result4 = RotationUtils.transposedRotationMatrixTimesVector(q, point);
 
         // check correctness
-        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
+        rotated = new InhomogeneousPoint3D(q.rotate(Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, point)));
         rotated.asArray(result2);
 
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        assertArrayEquals(result2, result4, ABSOLUTE_ERROR);
 
         assertTrue(jacobianP.equals(q.asInhomogeneousMatrix().transposeAndReturnNew(), ABSOLUTE_ERROR));
 
-        final Point3D p = new InhomogeneousPoint3D(point);
+        final var p = new InhomogeneousPoint3D(point);
         Point3D resultPoint = new InhomogeneousPoint3D();
         RotationUtils.transposedRotationMatrixTimesVector(q, p, resultPoint, null, null);
-        result = resultPoint.asArray();
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        final var result5 = resultPoint.asArray();
+        assertArrayEquals(result2, result5, ABSOLUTE_ERROR);
 
-        resultPoint = RotationUtils.transposedRotationMatrixTimesVector(
-                q, p, null, null);
-        result = new InhomogeneousPoint3D(resultPoint).asArray();
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        resultPoint = RotationUtils.transposedRotationMatrixTimesVector(q, p, null, null);
+        final var result6 = new InhomogeneousPoint3D(resultPoint).asArray();
+        assertArrayEquals(result2, result6, ABSOLUTE_ERROR);
 
         resultPoint = new InhomogeneousPoint3D();
         RotationUtils.transposedRotationMatrixTimesVector(q, p, resultPoint);
-        result = resultPoint.asArray();
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        final var result7 = resultPoint.asArray();
+        assertArrayEquals(result2, result7, ABSOLUTE_ERROR);
 
         resultPoint = RotationUtils.transposedRotationMatrixTimesVector(q, p);
-        result = new InhomogeneousPoint3D(resultPoint).asArray();
-        assertArrayEquals(result2, result, ABSOLUTE_ERROR);
+        final var result8 = new InhomogeneousPoint3D(resultPoint).asArray();
+        assertArrayEquals(result2, result8, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testCameraBodyToCameraSensorRotation() throws RotationException {
-        final MatrixRotation3D rot = new MatrixRotation3D();
+    void testCameraBodyToCameraSensorRotation() throws RotationException {
+        final var rot = new MatrixRotation3D();
         RotationUtils.cameraBodyToCameraSensorRotation(rot);
 
-        final MatrixRotation3D rot2 =
-                RotationUtils.cameraBodyToCameraSensorRotation();
+        final var rot2 = RotationUtils.cameraBodyToCameraSensorRotation();
 
         // check correctness
         assertTrue(rot.equals(rot2, ABSOLUTE_ERROR));
 
-        assertEquals(rot.getRollAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
+        assertEquals(-Math.PI / 2.0, rot.getRollAngle(), ABSOLUTE_ERROR);
         assertEquals(0.0, rot.getPitchAngle(), ABSOLUTE_ERROR);
-        assertEquals(rot.getYawAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
+        assertEquals(-Math.PI / 2.0, rot.getYawAngle(), ABSOLUTE_ERROR);
 
-        assertEquals(rot2.getRollAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
+        assertEquals(-Math.PI / 2.0, rot2.getRollAngle(), ABSOLUTE_ERROR);
         assertEquals(0.0, rot2.getPitchAngle(), ABSOLUTE_ERROR);
-        assertEquals(rot2.getYawAngle(), -Math.PI / 2.0, ABSOLUTE_ERROR);
+        assertEquals(-Math.PI / 2.0, rot2.getYawAngle(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testQuaternionToEulerGaussian() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testQuaternionToEulerGaussian() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        final Matrix covQ = Matrix.identity(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        final double[] euler = new double[Quaternion.N_ANGLES];
-        final Matrix covE = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
+        final var covQ = Matrix.identity(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        final var euler = new double[Quaternion.N_ANGLES];
+        final var covE = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
         RotationUtils.quaternionToEulerGaussian(q, covQ, euler, covE);
 
         // check correctness
-        final double[] angles = q.toEulerAngles();
+        final var angles = q.toEulerAngles();
         assertArrayEquals(euler, angles, ABSOLUTE_ERROR);
 
-        final Matrix j = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        final var j = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
         q.toEulerAngles(angles, j);
-        final Matrix covE2 = j.multiplyAndReturnNew(covQ).multiplyAndReturnNew(
-                j.transposeAndReturnNew());
+        final var covE2 = j.multiplyAndReturnNew(covQ).multiplyAndReturnNew(j.transposeAndReturnNew());
 
         assertEquals(covE, covE2);
     }
 
     @Test
-    public void testAngularRatesToSkew() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testAngularRatesToSkew() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
-        final double wx = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double wy = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double wz = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var wx = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var wy = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var wz = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double[] angularRates = new double[]{wx, wy, wz};
+        final var angularRates = new double[]{wx, wy, wz};
 
-        final Matrix skew1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        final var skew1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
         RotationUtils.angularRatesToSkew(angularRates, skew1);
-        Matrix skew2 = RotationUtils.angularRatesToSkew(angularRates);
+        var skew2 = RotationUtils.angularRatesToSkew(angularRates);
 
         assertEquals(skew1, skew2);
 
-        final Matrix skew3 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        final var skew3 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
         skew3.setElementAtIndex(0, 0.0);
         skew3.setElementAtIndex(1, wx);
         skew3.setElementAtIndex(2, wy);
@@ -671,23 +587,9 @@ public class RotationUtilsTest {
         assertEquals(skew2, skew3);
 
         // Force IllegalArgumentException
-        try {
-            RotationUtils.angularRatesToSkew(new double[1], skew1);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            RotationUtils.angularRatesToSkew(angularRates, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        skew2 = null;
-        try {
-            skew2 = RotationUtils.angularRatesToSkew(new double[1]);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(skew2);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.angularRatesToSkew(new double[1], skew1));
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.angularRatesToSkew(angularRates, m));
+        assertThrows(IllegalArgumentException.class, () -> RotationUtils.angularRatesToSkew(new double[1]));
     }
 }

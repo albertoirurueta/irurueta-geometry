@@ -23,7 +23,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -58,7 +57,7 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * Suggestion error weight. This weight is applied to errors related to
      * suggested camera parameters during computation of projection residuals.
      */
-    private double mSuggestionErrorWeight = DEFAULT_SUGGESTION_ERROR_WEIGHT;
+    private double suggestionErrorWeight = DEFAULT_SUGGESTION_ERROR_WEIGHT;
 
     /**
      * Constructor.
@@ -83,10 +82,9 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
     public NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
             final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Plane> samples1, final List<Line2D> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+            final List<Plane> samples1, final List<Line2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -104,10 +102,9 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      */
     public NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Plane> samples1,
-            final List<Line2D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+            final InliersData inliersData, final List<Plane> samples1, final List<Line2D> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -117,7 +114,7 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * @return suggestion error weight.
      */
     public double getSuggestionErrorWeight() {
-        return mSuggestionErrorWeight;
+        return suggestionErrorWeight;
     }
 
     /**
@@ -127,12 +124,11 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * @param suggestionErrorWeight suggestion error weight.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestionErrorWeight(final double suggestionErrorWeight)
-            throws LockedException {
+    public void setSuggestionErrorWeight(final double suggestionErrorWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestionErrorWeight = suggestionErrorWeight;
+        this.suggestionErrorWeight = suggestionErrorWeight;
     }
 
     /**
@@ -150,8 +146,7 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final PinholeCamera result) throws NotReadyException,
-            LockedException, RefinerException {
+    public boolean refine(final PinholeCamera result) throws NotReadyException, LockedException, RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -159,39 +154,34 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
         try {
-            mInitialEstimation.normalize();
+            initialEstimation.normalize();
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain line and plane to compute residuals
-            final int nDims = Line2D.LINE_NUMBER_PARAMS +
-                    Plane.PLANE_NUMBER_PARAMS;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Line2D line;
-            Plane plane;
-            final double[] initParams = new double[REFINE_DIMS];
-            cameraToParameters(mInitialEstimation, initParams);
+            final var nDims = Line2D.LINE_NUMBER_PARAMS + Plane.PLANE_NUMBER_PARAMS;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            final var initParams = new double[REFINE_DIMS];
+            cameraToParameters(initialEstimation, initParams);
 
-            final double initResidual = residualPowell(mInitialEstimation, initParams,
-                    mSuggestionErrorWeight);
+            final var initResidual = residualPowell(initialEstimation, initParams, suggestionErrorWeight);
 
-            final double suggestionResidual = hasSuggestions() ?
-                    suggestionResidual(initParams, mSuggestionErrorWeight) :
+            final var suggestionResidual = hasSuggestions() ? suggestionResidual(initParams, suggestionErrorWeight) :
                     0.0;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    line = mSamples2.get(i);
-                    plane = mSamples1.get(i);
+                    final var line = samples2.get(i);
+                    final var plane = samples1.get(i);
                     line.normalize();
                     plane.normalize();
                     x.setElementAt(pos, 0, line.getA());
@@ -202,82 +192,68 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
                     x.setElementAt(pos, 5, plane.getC());
                     x.setElementAt(pos, 6, plane.getD());
 
-                    y[pos] = Math.pow(mResiduals[i], 2.0) + suggestionResidual;
+                    y[pos] = Math.pow(residuals[i], 2.0) + suggestionResidual;
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Line2D mLine = new Line2D();
+                private final Line2D line = new Line2D();
 
-                        private final Plane mPlane = new Plane();
+                private final Plane plane = new Plane();
 
-                        private final PinholeCamera mPinholeCamera = new PinholeCamera();
+                private final PinholeCamera pinholeCamera = new PinholeCamera();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    parametersToCamera(params, pinholeCamera);
+                    return residualLevenbergMarquardt(pinholeCamera, line, plane, params, suggestionErrorWeight);
+                });
 
-                                                parametersToCamera(params, mPinholeCamera);
-                                                return residualLevenbergMarquardt(mPinholeCamera,
-                                                        mLine, mPlane, params, mSuggestionErrorWeight);
-                                            }
-                                        });
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    line.setParameters(point[0], point[1], point[2]);
+                    plane.setParameters(point[3], point[4], point[5], point[6]);
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mLine.setParameters(point[0], point[1], point[2]);
-                            mPlane.setParameters(point[3], point[4], point[5],
-                                    point[6]);
+                    line.normalize();
+                    plane.normalize();
 
-                            mLine.normalize();
-                            mPlane.normalize();
+                    parametersToCamera(params, pinholeCamera);
+                    final var y = residualLevenbergMarquardt(pinholeCamera, line, plane, params, suggestionErrorWeight);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            parametersToCamera(params, mPinholeCamera);
-                            double y = residualLevenbergMarquardt(mPinholeCamera,
-                                    mLine, mPlane, params, mSuggestionErrorWeight);
-                            mGradientEstimator.gradient(params, derivatives);
+                    return y;
+                }
+            };
 
-                            return y;
-                        }
-                    };
-
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator,
-                            x, y, mRefinementStandardDeviation);
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, refinementStandardDeviation);
 
             fitter.fit();
 
-            final double[] finalParams = fitter.getA();
+            final var finalParams = fitter.getA();
 
             parametersToCamera(finalParams, result);
 
-            if (mKeepCovariance) {
-                mCovariance = fitter.getCovar();
+            if (keepCovariance) {
+                covariance = fitter.getCovar();
             }
 
-            final double finalResidual = residualPowell(result, finalParams,
-                    mSuggestionErrorWeight);
-            final boolean errorDecreased = finalResidual < initResidual;
+            final var finalResidual = residualPowell(result, finalParams, suggestionErrorWeight);
+            final var errorDecreased = finalResidual < initResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -285,7 +261,7 @@ public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 }

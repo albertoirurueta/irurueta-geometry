@@ -44,29 +44,29 @@ public abstract class KDTree<P extends Point<P>> {
     /**
      * Array of boxes stored in this tree as its nodes.
      */
-    protected BoxNode<P>[] mBoxes;
+    protected BoxNode<P>[] boxes;
 
     /**
      * Indices of points going from boxes in the tree to the input collection of points.
      * Indices are sorted as the tree is built.
      */
-    private final int[] mPtIndx;
+    private final int[] ptIndx;
 
     /**
      * Indices of points going from input collection of points to boxes in the tree.
      * This is the reverse of mPtIndx.
      */
-    private final int[] mRPtIndx;
+    private final int[] rPtIndx;
 
     /**
      * Number of points stored by the tree.
      */
-    private final int mNpts;
+    private final int nPts;
 
     /**
      * Array of points containing input collection of points.
      */
-    private P[] mPts;
+    private P[] pts;
 
     /**
      * Constructor.
@@ -75,16 +75,16 @@ public abstract class KDTree<P extends Point<P>> {
      * @param clazz class of point implementation to use.
      */
     protected KDTree(final Collection<P> pts, final Class<P> clazz) {
-        mNpts = pts.size();
-        if (mNpts < MIN_PTS) {
+        nPts = pts.size();
+        if (nPts < MIN_PTS) {
             throw new IllegalArgumentException("number of points must be at least 3");
         }
 
         //noinspection unchecked
-        mPts = (P[]) Array.newInstance(clazz, pts.size());
-        mPts = pts.toArray(mPts);
-        mPtIndx = new int[mNpts];
-        mRPtIndx = new int[mNpts];
+        this.pts = (P[]) Array.newInstance(clazz, pts.size());
+        this.pts = pts.toArray(this.pts);
+        ptIndx = new int[nPts];
+        rPtIndx = new int[nPts];
         final int dim = getDimensions();
 
         // build tree
@@ -102,31 +102,31 @@ public abstract class KDTree<P extends Point<P>> {
         int pthi;
         int hpOffset;
         int cpOffset;
-        final int[] taskmom = new int[N_TASKS];
-        final int[] taskdim = new int[N_TASKS];
-        for (k = 0; k < mNpts; k++) {
-            mPtIndx[k] = k;
+        final var taskmom = new int[N_TASKS];
+        final var taskdim = new int[N_TASKS];
+        for (k = 0; k < nPts; k++) {
+            ptIndx[k] = k;
         }
         m = 1;
-        for (ntmp = mNpts; ntmp != 0; ntmp >>= 1) {
+        for (ntmp = nPts; ntmp != 0; ntmp >>= 1) {
             m <<= 1;
         }
-        int nboxes = 2 * mNpts - (m >> 1); // number of boxes to store points
+        var nboxes = 2 * nPts - (m >> 1); // number of boxes to store points
         if (m < nboxes) {
             nboxes = m;
         }
         nboxes--;
         //noinspection unchecked
-        mBoxes = (BoxNode<P>[]) Array.newInstance(BoxNode.class, nboxes);
-        final double[] coords = new double[dim * mNpts];
-        for (j = 0, kk = 0; j < dim; j++, kk += mNpts) {
-            for (k = 0; k < mNpts; k++) {
-                coords[kk + k] = mPts[k].getInhomogeneousCoordinate(j);
+        boxes = (BoxNode<P>[]) Array.newInstance(BoxNode.class, nboxes);
+        final var coords = new double[dim * nPts];
+        for (j = 0, kk = 0; j < dim; j++, kk += nPts) {
+            for (k = 0; k < nPts; k++) {
+                coords[kk + k] = this.pts[k].getInhomogeneousCoordinate(j);
             }
         }
         P lo = createPoint(-BIG);
         P hi = createPoint(BIG);
-        mBoxes[0] = new BoxNode<>(lo, hi, 0, 0, 0, 0, mNpts - 1);
+        boxes[0] = new BoxNode<>(lo, hi, 0, 0, 0, 0, nPts - 1);
         jbox = 0;
         taskmom[1] = 0;
         taskdim[1] = 0;
@@ -134,27 +134,26 @@ public abstract class KDTree<P extends Point<P>> {
         while (nowtask != 0) {
             tmom = taskmom[nowtask];
             tdim = taskdim[nowtask--];
-            ptlo = mBoxes[tmom].mPtLo;
-            pthi = mBoxes[tmom].mPtHi;
+            ptlo = boxes[tmom].ptLo;
+            pthi = boxes[tmom].ptHi;
             hpOffset = ptlo;
-            cpOffset = tdim * mNpts;
+            cpOffset = tdim * nPts;
             np = pthi - ptlo + 1;
             kk = (np - 1) / 2;
-            selecti(kk, hpOffset, mPtIndx, np, cpOffset, coords);
+            selecti(kk, hpOffset, ptIndx, np, cpOffset, coords);
 
-            hi = copyPoint(mBoxes[tmom].getHi());
-            lo = copyPoint(mBoxes[tmom].getLo());
+            hi = copyPoint(boxes[tmom].getHi());
+            lo = copyPoint(boxes[tmom].getLo());
 
-            final double value = coords[tdim * mNpts + mPtIndx[hpOffset + kk]];
+            final var value = coords[tdim * nPts + ptIndx[hpOffset + kk]];
             hi.setInhomogeneousCoordinate(tdim, value);
             lo.setInhomogeneousCoordinate(tdim, value);
 
-            mBoxes[++jbox] = new BoxNode<>(copyPoint(mBoxes[tmom].getLo()), hi, tmom, 0, 0, ptlo,
-                    ptlo + kk);
-            mBoxes[++jbox] = new BoxNode<>(lo, copyPoint(mBoxes[tmom].getHi()), tmom, 0, 0,
-                    ptlo + kk + 1, pthi);
-            mBoxes[tmom].mDau1 = jbox - 1;
-            mBoxes[tmom].mDau2 = jbox;
+            boxes[++jbox] = new BoxNode<>(copyPoint(boxes[tmom].getLo()), hi, tmom, 0, 0, ptlo, ptlo + kk);
+            boxes[++jbox] = new BoxNode<>(lo, copyPoint(boxes[tmom].getHi()), tmom, 0, 0, ptlo + kk + 1,
+                    pthi);
+            boxes[tmom].dau1 = jbox - 1;
+            boxes[tmom].dau2 = jbox;
             if (kk > 1) {
                 taskmom[++nowtask] = jbox - 1;
                 taskdim[nowtask] = (tdim + 1) % dim;
@@ -164,8 +163,8 @@ public abstract class KDTree<P extends Point<P>> {
                 taskdim[nowtask] = (tdim + 1) % dim;
             }
         }
-        for (j = 0; j < mNpts; j++) {
-            mRPtIndx[mPtIndx[j]] = j;
+        for (j = 0; j < nPts; j++) {
+            rPtIndx[ptIndx[j]] = j;
         }
     }
 
@@ -180,7 +179,7 @@ public abstract class KDTree<P extends Point<P>> {
         if (jpt == kpt) {
             return BIG;
         } else {
-            return mPts[jpt].distanceTo(mPts[kpt]);
+            return pts[jpt].distanceTo(pts[kpt]);
         }
     }
 
@@ -191,17 +190,17 @@ public abstract class KDTree<P extends Point<P>> {
      * @return position of smallest box containing the point.
      */
     public int locateBoxIndex(final P pt) {
-        final int dim = getDimensions();
+        final var dim = getDimensions();
 
-        int nb = 0;
+        var nb = 0;
         int d1;
-        int jdim = 0;
-        while (mBoxes[nb].mDau1 != 0) {
-            d1 = mBoxes[nb].mDau1;
-            if (pt.getInhomogeneousCoordinate(jdim) <= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
+        var jdim = 0;
+        while (boxes[nb].dau1 != 0) {
+            d1 = boxes[nb].dau1;
+            if (pt.getInhomogeneousCoordinate(jdim) <= boxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
                 nb = d1;
             } else {
-                nb = mBoxes[nb].mDau2;
+                nb = boxes[nb].dau2;
             }
             jdim = ++jdim % dim;
         }
@@ -215,7 +214,7 @@ public abstract class KDTree<P extends Point<P>> {
      * @return smallest box containing the point.
      */
     public BoxNode<P> locateBox(final P pt) {
-        return mBoxes[locateBoxIndex(pt)];
+        return boxes[locateBoxIndex(pt)];
     }
 
     /**
@@ -230,15 +229,15 @@ public abstract class KDTree<P extends Point<P>> {
         int nrst = 0;
         int ntask;
         int pi;
-        final int[] task = new int[N_TASKS];
-        double dnrst = BIG;
+        final var task = new int[N_TASKS];
+        var dnrst = BIG;
         double d;
 
         // find the smallest box index containing point
         k = locateBoxIndex(pt);
-        for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
-            pi = mPtIndx[i];
-            d = mPts[pi].distanceTo(pt);
+        for (i = boxes[k].ptLo; i <= boxes[k].ptHi; i++) {
+            pi = ptIndx[i];
+            d = pts[pi].distanceTo(pt);
             if (d < dnrst) {
                 nrst = pi; // index of nearest point
                 dnrst = d; // distance to nearest point
@@ -250,15 +249,15 @@ public abstract class KDTree<P extends Point<P>> {
         ntask = 1;
         while (ntask != 0) {
             k = task[ntask--];
-            if (mBoxes[k].getDistance(pt) < dnrst) {
-                if (mBoxes[k].mDau1 != 0) {
-                    task[++ntask] = mBoxes[k].mDau1;
-                    task[++ntask] = mBoxes[k].mDau2;
+            if (boxes[k].getDistance(pt) < dnrst) {
+                if (boxes[k].dau1 != 0) {
+                    task[++ntask] = boxes[k].dau1;
+                    task[++ntask] = boxes[k].dau2;
                 } else {
-                    for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
-                        d = mPts[mPtIndx[i]].distanceTo(pt);
+                    for (i = boxes[k].ptLo; i <= boxes[k].ptHi; i++) {
+                        d = pts[ptIndx[i]].distanceTo(pt);
                         if (d < dnrst) {
-                            nrst = mPtIndx[i];
+                            nrst = ptIndx[i];
                             dnrst = d;
                         }
                     }
@@ -275,7 +274,7 @@ public abstract class KDTree<P extends Point<P>> {
      * @return closest point.
      */
     public P nearestPoint(final P pt) {
-        return mPts[nearestIndex(pt)];
+        return pts[nearestIndex(pt)];
     }
 
     /**
@@ -292,7 +291,7 @@ public abstract class KDTree<P extends Point<P>> {
         if (n < 0) {
             throw new IllegalArgumentException("no neighbours requested");
         }
-        if (n > mNpts - 1) {
+        if (n > nPts - 1) {
             throw new IllegalArgumentException("too many neighbours requested");
         }
         if (nn.length != n || dn.length != n) {
@@ -303,23 +302,23 @@ public abstract class KDTree<P extends Point<P>> {
         int k;
         int ntask;
         int kp;
-        final int[] task = new int[N_TASKS];
+        final var task = new int[N_TASKS];
         double d;
         for (i = 0; i < n; i++) {
             dn[i] = BIG;
         }
-        kp = mBoxes[locate(jpt)].mMom;
-        while (mBoxes[kp].mPtHi - mBoxes[kp].mPtLo < n) {
-            kp = mBoxes[kp].mMom;
+        kp = boxes[locate(jpt)].mom;
+        while (boxes[kp].ptHi - boxes[kp].ptLo < n) {
+            kp = boxes[kp].mom;
         }
-        for (i = mBoxes[kp].mPtLo; i <= mBoxes[kp].mPtHi; i++) {
-            if (jpt == mPtIndx[i]) {
+        for (i = boxes[kp].ptLo; i <= boxes[kp].ptHi; i++) {
+            if (jpt == ptIndx[i]) {
                 continue;
             }
-            d = distance(mPtIndx[i], jpt);
+            d = distance(ptIndx[i], jpt);
             if (d < dn[0]) {
                 dn[0] = d;
-                nn[0] = mPtIndx[i];
+                nn[0] = ptIndx[i];
                 if (n > 1) {
                     siftDown(dn, nn, n);
                 }
@@ -332,16 +331,16 @@ public abstract class KDTree<P extends Point<P>> {
             if (k == kp) {
                 continue;
             }
-            if (mBoxes[k].getDistance(mPts[jpt]) < dn[0]) {
-                if (mBoxes[k].mDau1 != 0) {
-                    task[++ntask] = mBoxes[k].mDau1;
-                    task[++ntask] = mBoxes[k].mDau2;
+            if (boxes[k].getDistance(pts[jpt]) < dn[0]) {
+                if (boxes[k].dau1 != 0) {
+                    task[++ntask] = boxes[k].dau1;
+                    task[++ntask] = boxes[k].dau2;
                 } else {
-                    for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
-                        d = distance(mPtIndx[i], jpt);
+                    for (i = boxes[k].ptLo; i <= boxes[k].ptHi; i++) {
+                        d = distance(ptIndx[i], jpt);
                         if (d < dn[0]) {
                             dn[0] = d;
-                            nn[0] = mPtIndx[i];
+                            nn[0] = ptIndx[i];
                             if (n > 1) {
                                 siftDown(dn, nn, n);
                             }
@@ -381,12 +380,12 @@ public abstract class KDTree<P extends Point<P>> {
             throw new IllegalArgumentException("no neighbours requested");
         }
 
-        final int[] nn = new int[n];
+        final var nn = new int[n];
 
         nNearest(jpt, nn, dn, n);
 
-        for (int i = 0; i < n; i++) {
-            pn[i] = mPts[nn[i]];
+        for (var i = 0; i < n; i++) {
+            pn[i] = pts[nn[i]];
         }
     }
 
@@ -439,17 +438,17 @@ public abstract class KDTree<P extends Point<P>> {
         int jdim;
         int d1;
         int d2;
-        final int[] task = new int[N_TASKS];
+        final var task = new int[N_TASKS];
         nb = jdim = nret = 0;
 
-        while (mBoxes[nb].mDau1 != 0) {
+        while (boxes[nb].dau1 != 0) {
             nbold = nb;
-            d1 = mBoxes[nb].mDau1;
-            d2 = mBoxes[nb].mDau2;
-            final double coord = pt.getInhomogeneousCoordinate(jdim);
-            if (coord + r <= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
+            d1 = boxes[nb].dau1;
+            d2 = boxes[nb].dau2;
+            final var coord = pt.getInhomogeneousCoordinate(jdim);
+            if (coord + r <= boxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
                 nb = d1;
-            } else if (coord - r >= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {
+            } else if (coord - r >= boxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {
                 nb = d2;
             }
             jdim = ++jdim % dim;
@@ -461,16 +460,16 @@ public abstract class KDTree<P extends Point<P>> {
         ntask = 1;
         while (ntask != 0) {
             k = task[ntask--];
-            if (mBoxes[k].getDistance(pt) > r) {
+            if (boxes[k].getDistance(pt) > r) {
                 continue;
             }
-            if (mBoxes[k].mDau1 != 0) {
-                task[++ntask] = mBoxes[k].mDau1;
-                task[++ntask] = mBoxes[k].mDau2;
+            if (boxes[k].dau1 != 0) {
+                task[++ntask] = boxes[k].dau1;
+                task[++ntask] = boxes[k].dau2;
             } else {
-                for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
-                    if (mPts[mPtIndx[i]].distanceTo(pt) <= r && nret < nmax) {
-                        list[nret++] = mPtIndx[i];
+                for (i = boxes[k].ptLo; i <= boxes[k].ptHi; i++) {
+                    if (pts[ptIndx[i]].distanceTo(pt) <= r && nret < nmax) {
+                        list[nret++] = ptIndx[i];
                     }
                     if (nret == nmax) {
                         return nmax;
@@ -503,11 +502,11 @@ public abstract class KDTree<P extends Point<P>> {
             throw new IllegalArgumentException("result might not fit into provided list");
         }
 
-        final int[] list = new int[nmax];
-        final int result = locateNear(pt, r, list, nmax);
+        final var list = new int[nmax];
+        final var result = locateNear(pt, r, list, nmax);
 
         for (int i = 0; i < result; i++) {
-            plist[i] = mPts[list[i]];
+            plist[i] = pts[list[i]];
         }
 
         return result;
@@ -543,15 +542,15 @@ public abstract class KDTree<P extends Point<P>> {
      * @return position in the input collection of points.
      */
     private int locate(final int jpt) {
-        int nb = 0;
+        var nb = 0;
         int d1;
-        final int jh = mRPtIndx[jpt];
-        while (mBoxes[nb].mDau1 != 0) {
-            d1 = mBoxes[nb].mDau1;
-            if (jh <= mBoxes[d1].mPtHi) {
+        final var jh = rPtIndx[jpt];
+        while (boxes[nb].dau1 != 0) {
+            d1 = boxes[nb].dau1;
+            if (jh <= boxes[d1].ptHi) {
                 nb = d1;
             } else {
-                nb = mBoxes[nb].mDau2;
+                nb = boxes[nb].dau2;
             }
         }
         return nb;
@@ -574,13 +573,13 @@ public abstract class KDTree<P extends Point<P>> {
      * @return index of selected point.
      */
     @SuppressWarnings("UnusedReturnValue")
-    private static int selecti(final int k, final int indxOffset, final int[] indx, final int n,
-                               final int arrOffset, final double[] arr) {
+    private static int selecti(final int k, final int indxOffset, final int[] indx, final int n, final int arrOffset,
+                               final double[] arr) {
         int i;
         int ia;
-        int ir = n - 1;
+        var ir = n - 1;
         int j;
-        int l = 0;
+        var l = 0;
         int mid;
         double a;
 
@@ -638,11 +637,11 @@ public abstract class KDTree<P extends Point<P>> {
      * @param nn   number of indices to move.
      */
     private static void siftDown(final double[] heap, final int[] ndx, final int nn) {
-        final int n = nn - 1;
-        int j = 1;
-        int jold = 0;
-        final int ia = ndx[0];
-        final double a = heap[0];
+        final var n = nn - 1;
+        var j = 1;
+        var jold = 0;
+        final var ia = ndx[0];
+        final var a = heap[0];
         while (j <= n) {
             if (j < n && heap[j] < heap[j + 1]) {
                 j++;
@@ -668,7 +667,7 @@ public abstract class KDTree<P extends Point<P>> {
      * @param posB position to be swapped on 2nd array.
      */
     private static void swap(final int[] a, final int posA, final int[] b, final int posB) {
-        final int tmp = a[posA];
+        final var tmp = a[posA];
 
         a[posA] = b[posB];
         b[posB] = tmp;
@@ -682,29 +681,29 @@ public abstract class KDTree<P extends Point<P>> {
         /**
          * Position of mother node in the list of nodes of a tree.
          */
-        private final int mMom;
+        private final int mom;
 
         /**
          * Position of 1st daughter node in the list of nodes of a tree.
          */
-        private int mDau1;
+        private int dau1;
 
         /**
          * Position of 2nd daughter node of a tree.
          */
-        private int mDau2;
+        private int dau2;
 
         /**
          * Low index of list of points inside this box.
          * mPtLo and mPtHi define the range of points inside the box.
          */
-        private final int mPtLo;
+        private final int ptLo;
 
         /**
          * High index of list of points inside this box.
          * mPtLo and mPtHi define the range of points inside the box.
          */
-        private final int mPtHi;
+        private final int ptHi;
 
         /**
          * Constructor.
@@ -720,11 +719,11 @@ public abstract class KDTree<P extends Point<P>> {
         public BoxNode(final P lo, final P hi, final int mom, final int d1, final int d2, final int ptLo,
                        final int ptHi) {
             super(lo, hi);
-            mMom = mom;
-            mDau1 = d1;
-            mDau2 = d2;
-            mPtLo = ptLo;
-            mPtHi = ptHi;
+            this.mom = mom;
+            dau1 = d1;
+            dau2 = d2;
+            this.ptLo = ptLo;
+            this.ptHi = ptHi;
         }
 
         /**
@@ -733,7 +732,7 @@ public abstract class KDTree<P extends Point<P>> {
          * @return position of mother node in the list of nodes of a tree.
          */
         public int getMom() {
-            return mMom;
+            return mom;
         }
 
         /**
@@ -742,7 +741,7 @@ public abstract class KDTree<P extends Point<P>> {
          * @return position of 1st daughter node in the list of nodes of a tree.
          */
         public int getDau1() {
-            return mDau1;
+            return dau1;
         }
 
         /**
@@ -751,7 +750,7 @@ public abstract class KDTree<P extends Point<P>> {
          * @return position of 2nd daughter node of a tree.
          */
         public int getDau2() {
-            return mDau2;
+            return dau2;
         }
 
         /**
@@ -762,7 +761,7 @@ public abstract class KDTree<P extends Point<P>> {
          * @return low index of list of points inside this box.
          */
         public int getPtLo() {
-            return mPtLo;
+            return ptLo;
         }
 
         /**
@@ -773,7 +772,7 @@ public abstract class KDTree<P extends Point<P>> {
          * @return high index of list of points inside this box.
          */
         public int getPtHi() {
-            return mPtHi;
+            return ptHi;
         }
 
         /**

@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PinholeCameraEstimatorExceptionTest {
+class PinholeCameraEstimatorExceptionTest {
 
     @Test
-    public void testConstructor() {
-        PinholeCameraEstimatorException ex = new PinholeCameraEstimatorException();
+    void testConstructor() {
+        var ex = new PinholeCameraEstimatorException();
         assertNotNull(ex);
 
         ex = new PinholeCameraEstimatorException("message");

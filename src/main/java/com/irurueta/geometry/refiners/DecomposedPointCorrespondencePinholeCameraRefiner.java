@@ -44,8 +44,7 @@ import java.util.List;
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")
-public class DecomposedPointCorrespondencePinholeCameraRefiner extends
-        PointCorrespondencePinholeCameraRefiner {
+public class DecomposedPointCorrespondencePinholeCameraRefiner extends PointCorrespondencePinholeCameraRefiner {
 
     /**
      * Default value for minimum suggestion weight. This weight is used to
@@ -91,7 +90,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * The faster the weights are increased the less likely that suggested
      * values can be converged if they differ too much from the original ones.
      */
-    private double mMinSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;
+    private double minSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;
 
     /**
      * Maximum suggestion weight. This weight is used to slowly draw original
@@ -101,7 +100,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * The faster the weights are increased the less likely that suggested
      * values can be converged if they differ too much from the original ones.
      */
-    private double mMaxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;
+    private double maxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;
 
     /**
      * Step to increase suggestion weight. This weight is used to slowly draw
@@ -111,17 +110,17 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * faster the weights are increased the less likely that suggested values
      * can be converged if they differ too much from the original ones.
      */
-    private double mSuggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;
+    private double suggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;
 
     /**
      * Instance of a pinhole camera to be reused during refinement.
      */
-    private PinholeCamera mRefineCamera;
+    private PinholeCamera refineCamera;
 
     /**
      * Current weight during refinement.
      */
-    private double mCurrentWeight;
+    private double currentWeight;
 
     /**
      * Constructor.
@@ -146,10 +145,9 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
     public DecomposedPointCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
             final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Point3D> samples1, final List<Point2D> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+            final List<Point3D> samples1, final List<Point2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -167,10 +165,9 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      */
     public DecomposedPointCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Point3D> samples1,
-            final List<Point2D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+            final InliersData inliersData, final List<Point3D> samples1, final List<Point2D> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -184,7 +181,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @return minimum suggestion weight.
      */
     public double getMinSuggestionWeight() {
-        return mMinSuggestionWeight;
+        return minSuggestionWeight;
     }
 
     /**
@@ -198,12 +195,11 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @param minSuggestionWeight minimum suggestion weight.
      * @throws LockedException if estimator is locked.
      */
-    public void setMinSuggestionWeight(final double minSuggestionWeight)
-            throws LockedException {
+    public void setMinSuggestionWeight(final double minSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mMinSuggestionWeight = minSuggestionWeight;
+        this.minSuggestionWeight = minSuggestionWeight;
     }
 
     /**
@@ -217,7 +213,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @return maximum suggestion weight.
      */
     public double getMaxSuggestionWeight() {
-        return mMaxSuggestionWeight;
+        return maxSuggestionWeight;
     }
 
     /**
@@ -231,12 +227,11 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @param maxSuggestionWeight maximum suggestion weight.
      * @throws LockedException if estimator is locked.
      */
-    public void setMaxSuggestionWeight(final double maxSuggestionWeight)
-            throws LockedException {
+    public void setMaxSuggestionWeight(final double maxSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mMaxSuggestionWeight = maxSuggestionWeight;
+        this.maxSuggestionWeight = maxSuggestionWeight;
     }
 
     /**
@@ -253,8 +248,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @throws IllegalArgumentException if minimum suggestion weight is greater
      *                                  or equal than maximum value.
      */
-    public void setMinMaxSuggestionWeight(final double minSuggestionWeight,
-                                          final double maxSuggestionWeight) throws LockedException {
+    public void setMinMaxSuggestionWeight(final double minSuggestionWeight, final double maxSuggestionWeight)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -262,8 +257,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
             throw new IllegalArgumentException();
         }
 
-        mMinSuggestionWeight = minSuggestionWeight;
-        mMaxSuggestionWeight = maxSuggestionWeight;
+        this.minSuggestionWeight = minSuggestionWeight;
+        this.maxSuggestionWeight = maxSuggestionWeight;
     }
 
     /**
@@ -277,7 +272,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @return step to increase suggestion weight.
      */
     public double getSuggestionWeightStep() {
-        return mSuggestionWeightStep;
+        return suggestionWeightStep;
     }
 
     /**
@@ -292,8 +287,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @throws LockedException          if estimator is locked.
      * @throws IllegalArgumentException if provided step is negative or zero.
      */
-    public void setSuggestionWeightStep(final double suggestionWeightStep)
-            throws LockedException {
+    public void setSuggestionWeightStep(final double suggestionWeightStep) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -301,7 +295,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
             throw new IllegalArgumentException();
         }
 
-        mSuggestionWeightStep = suggestionWeightStep;
+        this.suggestionWeightStep = suggestionWeightStep;
     }
 
     /**
@@ -317,8 +311,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      *                           already in progress.
      */
     @Override
-    public boolean refine(final PinholeCamera result) throws NotReadyException,
-            LockedException {
+    public boolean refine(final PinholeCamera result) throws NotReadyException, LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -326,25 +319,23 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        final boolean improved = refinePowell(result);
+        final var improved = refinePowell(result);
 
-        if (mKeepCovariance) {
-            mCovariance = estimateCovarianceLevenbergMarquardt(
-                    improved ? result : mInitialEstimation,
-                    mCurrentWeight);
+        if (keepCovariance) {
+            covariance = estimateCovarianceLevenbergMarquardt(improved ? result : initialEstimation, currentWeight);
         }
 
-        if (mListener != null) {
-            mListener.onRefineEnd(this, mInitialEstimation, result, improved);
+        if (listener != null) {
+            listener.onRefineEnd(this, initialEstimation, result, improved);
         }
 
-        mLocked = false;
+        locked = false;
 
         return improved;
     }
@@ -356,32 +347,28 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @param weight        weight for suggestion residual.
      * @return estimated covariance or null if anything fails.
      */
-    private Matrix estimateCovarianceLevenbergMarquardt(
-            final PinholeCamera pinholeCamera, final double weight) {
+    private Matrix estimateCovarianceLevenbergMarquardt(final PinholeCamera pinholeCamera, final double weight) {
         try {
             pinholeCamera.normalize();
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 3D point and 2D point to compute
             // residuals
-            final int nDims = Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH +
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Point2D point2D;
-            Point3D point3D;
-            final double[] initParams = new double[REFINE_DIMS];
+            final var nDims = Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH
+                    + Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            final var initParams = new double[REFINE_DIMS];
             cameraToParameters(pinholeCamera, initParams);
 
-            final double suggestionResidual = hasSuggestions() ?
-                    suggestionResidual(initParams, weight) : 0.0;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var suggestionResidual = hasSuggestions() ? suggestionResidual(initParams, weight) : 0.0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    point2D = mSamples2.get(i);
-                    point3D = mSamples1.get(i);
+                    final var point2D = samples2.get(i);
+                    final var point3D = samples1.get(i);
                     point2D.normalize();
                     point3D.normalize();
                     x.setElementAt(pos, 0, point2D.getHomX());
@@ -392,64 +379,50 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
                     x.setElementAt(pos, 5, point3D.getHomZ());
                     x.setElementAt(pos, 6, point3D.getHomW());
 
-                    y[pos] = Math.pow(mResiduals[i], 2.0) + suggestionResidual;
+                    y[pos] = Math.pow(residuals[i], 2.0) + suggestionResidual;
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Point2D mPoint2D = Point2D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point2D point2D = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final Point3D mPoint3D = Point3D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point3D point3D = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final PinholeCamera mPinholeCamera = new PinholeCamera();
+                private final PinholeCamera pinholeCamera = new PinholeCamera();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(double[] params) {
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    parametersToCamera(params, pinholeCamera);
+                    return residualLevenbergMarquardt(pinholeCamera, point3D, point2D, params, weight);
+                });
 
-                                                parametersToCamera(params, mPinholeCamera);
-                                                return residualLevenbergMarquardt(mPinholeCamera,
-                                                        mPoint3D, mPoint2D, params, weight);
-                                            }
-                                        });
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    point2D.setHomogeneousCoordinates(point[0], point[1], point[2]);
+                    point3D.setHomogeneousCoordinates(point[3], point[4], point[5], point[6]);
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mPoint2D.setHomogeneousCoordinates(point[0], point[1],
-                                    point[2]);
-                            mPoint3D.setHomogeneousCoordinates(point[3], point[4],
-                                    point[5], point[6]);
+                    parametersToCamera(params, pinholeCamera);
+                    final var y = residualLevenbergMarquardt(pinholeCamera, point3D, point2D, params, weight);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            parametersToCamera(params, mPinholeCamera);
-                            final double y = residualLevenbergMarquardt(mPinholeCamera,
-                                    mPoint3D, mPoint2D, params, weight);
-                            mGradientEstimator.gradient(params, derivatives);
+                    return y;
+                }
+            };
 
-                            return y;
-                        }
-                    };
-
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator,
-                            x, y, getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
@@ -472,37 +445,31 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * initial estimation, false if no improvement has been achieved.
      */
     private boolean refinePowell(final PinholeCamera result) {
-        boolean improvedAtLeastOnce = false;
-        mCurrentWeight = mMinSuggestionWeight;
+        var improvedAtLeastOnce = false;
+        currentWeight = minSuggestionWeight;
 
         if (hasSuggestions()) {
             try {
                 // copy camera into a new instance
-                mRefineCamera = new PinholeCamera(
-                        new Matrix(mInitialEstimation.getInternalMatrix()));
-                mRefineCamera.normalize();
+                refineCamera = new PinholeCamera(new Matrix(initialEstimation.getInternalMatrix()));
+                refineCamera.normalize();
 
-                final double[] startPoint = new double[REFINE_DIMS];
-                final RefinementMultiDimensionFunctionEvaluatorListener listener =
-                        new RefinementMultiDimensionFunctionEvaluatorListener();
-                final PowellMultiOptimizer optimizer = new PowellMultiOptimizer(
-                        listener,
-                        PowellMultiOptimizer.DEFAULT_TOLERANCE);
+                final var startPoint = new double[REFINE_DIMS];
+                final var listener = new RefinementMultiDimensionFunctionEvaluatorListener();
+                final var optimizer = new PowellMultiOptimizer(listener, PowellMultiOptimizer.DEFAULT_TOLERANCE);
 
                 boolean improved;
                 do {
-                    improved = refinementStepPowell(optimizer, listener,
-                            startPoint, mCurrentWeight);
+                    improved = refinementStepPowell(optimizer, listener, startPoint, currentWeight);
 
                     if (improved) {
                         // update result
-                        result.setInternalMatrix(
-                                new Matrix(mRefineCamera.getInternalMatrix()));
+                        result.setInternalMatrix(new Matrix(refineCamera.getInternalMatrix()));
                         improvedAtLeastOnce = true;
                     }
 
-                    mCurrentWeight += mSuggestionWeightStep;
-                } while (mCurrentWeight < mMaxSuggestionWeight && improved);
+                    currentWeight += suggestionWeightStep;
+                } while (currentWeight < maxSuggestionWeight && improved);
 
                 return improvedAtLeastOnce;
             } catch (final GeometryException | NumericalException | AlgebraException e) {
@@ -528,23 +495,20 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @throws NumericalException if something failed.
      */
     private boolean refinementStepPowell(
-            final PowellMultiOptimizer optimizer,
-            final RefinementMultiDimensionFunctionEvaluatorListener listener,
-            final double[] startPoint, final double weight)
-            throws GeometryException, NumericalException {
+            final PowellMultiOptimizer optimizer, final RefinementMultiDimensionFunctionEvaluatorListener listener,
+            final double[] startPoint, final double weight) throws GeometryException, NumericalException {
 
         listener.weight = weight;
-        cameraToParameters(mRefineCamera, startPoint);
-        final double initResidual = residualPowell(mRefineCamera, startPoint, weight);
+        cameraToParameters(refineCamera, startPoint);
+        final var initResidual = residualPowell(refineCamera, startPoint, weight);
 
         optimizer.setStartPoint(startPoint);
         optimizer.minimize();
 
-        final double[] resultParams = optimizer.getResult();
-        parametersToCamera(resultParams, mRefineCamera);
+        final var resultParams = optimizer.getResult();
+        parametersToCamera(resultParams, refineCamera);
 
-        final double finalResidual = residualPowell(mRefineCamera, resultParams,
-                weight);
+        final var finalResidual = residualPowell(refineCamera, resultParams, weight);
 
         return finalResidual < initResidual;
     }
@@ -555,8 +519,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * A weight can be provided so that required parameters are slowly drawn
      * to suggested values.
      */
-    private class RefinementMultiDimensionFunctionEvaluatorListener
-            implements MultiDimensionFunctionEvaluatorListener {
+    private class RefinementMultiDimensionFunctionEvaluatorListener implements MultiDimensionFunctionEvaluatorListener {
         /**
          * Weight to slowly draw parameters to suggested values.
          */
@@ -570,8 +533,8 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
          */
         @Override
         public double evaluate(final double[] point) {
-            parametersToCamera(point, mRefineCamera);
-            return residualPowell(mRefineCamera, point, weight);
+            parametersToCamera(point, refineCamera);
+            return residualPowell(refineCamera, point, weight);
         }
     }
 }

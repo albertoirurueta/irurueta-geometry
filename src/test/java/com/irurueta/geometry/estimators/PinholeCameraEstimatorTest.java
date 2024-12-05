@@ -15,35 +15,28 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PinholeCameraEstimatorTest {
+class PinholeCameraEstimatorTest {
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         // create with type
-        PinholeCameraEstimator estimator = PinholeCameraEstimator.create(
+        var estimator = PinholeCameraEstimator.create(
                 PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PinholeCameraEstimatorType.DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR, estimator.getType());
 
         estimator = PinholeCameraEstimator.create(
                 PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR, estimator.getType());
 
-        estimator = PinholeCameraEstimator.create(
-                PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR,
-                estimator.getType());
+        estimator = PinholeCameraEstimator.create(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR, estimator.getType());
 
-        estimator = PinholeCameraEstimator.create(
-                PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
-        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR,
-                estimator.getType());
-
+        estimator = PinholeCameraEstimator.create(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR);
+        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR, estimator.getType());
 
         estimator = PinholeCameraEstimator.create();
 
@@ -51,8 +44,8 @@ public class PinholeCameraEstimatorTest {
         assertNull(estimator.getListener());
         assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
                 estimator.isSuggestSkewnessValueEnabled());
-        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE, estimator.getSuggestedSkewnessValue(),
+                0.0);
         assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
                 estimator.isSuggestHorizontalFocalLengthEnabled());
         assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
@@ -66,21 +59,18 @@ public class PinholeCameraEstimatorTest {
         assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
                 estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
-                estimator.isSuggestRotationEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED, estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
-                estimator.isSuggestCenterEnabled());
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGEST_CENTER_ENABLED, estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
-        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT,
-                estimator.getMinSuggestionWeight(), 0.0);
-        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT,
-                estimator.getMaxSuggestionWeight(), 0.0);
-        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP,
-                estimator.getSuggestionWeightStep(), 0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MIN_SUGGESTION_WEIGHT, estimator.getMinSuggestionWeight(),
+                0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_MAX_SUGGESTION_WEIGHT, estimator.getMaxSuggestionWeight(),
+                0.0);
+        assertEquals(PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, estimator.getSuggestionWeightStep(),
+                0.0);
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
-        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR,
-                estimator.getType());
+        assertEquals(PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR, estimator.getType());
     }
 }

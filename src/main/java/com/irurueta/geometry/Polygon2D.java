@@ -17,7 +17,6 @@ package com.irurueta.geometry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -45,29 +44,28 @@ public class Polygon2D implements Serializable {
     /**
      * Default method for triangulation.
      */
-    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD =
-            TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
+    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD = TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
 
     /**
      * List containing vertices of this polygon. Each vertex is a 2D point.
      */
-    private List<Point2D> mVertices;
+    private List<Point2D> vertices;
 
     /**
      * Boolean indicating whether polygon has already been triangulated.
      */
-    private boolean mTriangulated;
+    private boolean triangulated;
 
     /**
      * List containing triangles found after triangulating this polygon.
      * Initially this list will be null until triangulation is done.
      */
-    private List<Triangle2D> mTriangles;
+    private List<Triangle2D> triangles;
 
     /**
      * Method to do triangulation.
      */
-    private TriangulatorMethod mTriangulatorMethod;
+    private TriangulatorMethod triangulatorMethod;
 
     /**
      * Constructor.
@@ -79,7 +77,7 @@ public class Polygon2D implements Serializable {
      */
     public Polygon2D(final List<Point2D> vertices) throws NotEnoughVerticesException {
         setVertices(vertices);
-        mTriangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;
+        triangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;
     }
 
     /**
@@ -90,7 +88,7 @@ public class Polygon2D implements Serializable {
      * @return Triangulator method.
      */
     public TriangulatorMethod getTriangulatorMethod() {
-        return mTriangulatorMethod;
+        return triangulatorMethod;
     }
 
     /**
@@ -100,7 +98,7 @@ public class Polygon2D implements Serializable {
      * @param triangulatorMethod A triangulator method.
      */
     public void setTriangulatorMethod(final TriangulatorMethod triangulatorMethod) {
-        mTriangulatorMethod = triangulatorMethod;
+        this.triangulatorMethod = triangulatorMethod;
     }
 
     /**
@@ -109,7 +107,7 @@ public class Polygon2D implements Serializable {
      * @return List of vertices.
      */
     public List<Point2D> getVertices() {
-        return mVertices;
+        return vertices;
     }
 
     /**
@@ -120,19 +118,18 @@ public class Polygon2D implements Serializable {
      *                                    enough vertices.
      * @see #MIN_VERTICES
      */
-    public final void setVertices(final List<Point2D> vertices)
-            throws NotEnoughVerticesException {
+    public final void setVertices(final List<Point2D> vertices) throws NotEnoughVerticesException {
         if (vertices.size() < MIN_VERTICES) {
             throw new NotEnoughVerticesException();
         }
 
         if (vertices instanceof Serializable) {
-            mVertices = vertices;
+            this.vertices = vertices;
         } else {
-            mVertices = new ArrayList<>(vertices);
+            this.vertices = new ArrayList<>(vertices);
         }
-        mTriangulated = false;
-        mTriangles = null;
+        triangulated = false;
+        triangles = null;
     }
 
     /**
@@ -143,7 +140,7 @@ public class Polygon2D implements Serializable {
      * @return True if polygon has already been triangulated, false otherwise.
      */
     public boolean isTriangulated() {
-        return mTriangulated;
+        return triangulated;
     }
 
     /**
@@ -159,7 +156,7 @@ public class Polygon2D implements Serializable {
         if (!isTriangulated()) {
             triangulate();
         }
-        return mTriangles;
+        return triangles;
     }
 
     /**
@@ -170,25 +167,23 @@ public class Polygon2D implements Serializable {
      * @return Signed area of this polygon.
      */
     public double getSignedArea() {
-        final Iterator<Point2D> iterator = mVertices.iterator();
+        final var iterator = vertices.iterator();
 
         // because there are at least 3
         // vertices
-        Point2D prevPoint = iterator.next();
+        var prevPoint = iterator.next();
         Point2D curPoint;
-        double signedArea = 0.0;
+        var signedArea = 0.0;
 
         while (iterator.hasNext()) {
             curPoint = iterator.next();
 
-            signedArea += prevPoint.getInhomX() * (curPoint.getInhomY() -
-                    prevPoint.getInhomY());
+            signedArea += prevPoint.getInhomX() * (curPoint.getInhomY() - prevPoint.getInhomY());
             prevPoint = curPoint;
         }
         // on last point, check previous with first
-        curPoint = mVertices.get(0);
-        signedArea += prevPoint.getInhomX() * (curPoint.getInhomY() -
-                prevPoint.getInhomY());
+        curPoint = vertices.get(0);
+        signedArea += prevPoint.getInhomX() * (curPoint.getInhomY() - prevPoint.getInhomY());
 
         // signed area is half the sum of cross products of consecutive vertices
         return signedArea;
@@ -236,17 +231,17 @@ public class Polygon2D implements Serializable {
      */
     public double getPerimeter() {
         // iterate over all vertices and compute their distance
-        final Iterator<Point2D> iterator = mVertices.iterator();
-        Point2D prevPoint = iterator.next();
+        final var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
         Point2D point;
-        double perimeter = 0.0;
+        var perimeter = 0.0;
         while (iterator.hasNext()) {
             point = iterator.next();
             perimeter += prevPoint.distanceTo(point);
             prevPoint = point;
         }
         // get distance from last point with first one
-        perimeter += prevPoint.distanceTo(mVertices.get(0));
+        perimeter += prevPoint.distanceTo(vertices.get(0));
         return perimeter;
     }
 
@@ -283,13 +278,12 @@ public class Polygon2D implements Serializable {
      * @throws TriangulatorException    Raised if triangulation was required but
      *                                  failed.
      */
-    public boolean isInside(final Point2D point, final double threshold)
-            throws TriangulatorException {
+    public boolean isInside(final Point2D point, final double threshold) throws TriangulatorException {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
-        for (final Triangle2D triangle : getTriangles()) {
+        for (final var triangle : getTriangles()) {
             if (triangle.isInside(point, threshold)) {
                 return true;
             }
@@ -305,7 +299,7 @@ public class Polygon2D implements Serializable {
      * @return Center of this polygon.
      */
     public Point2D getCenter() {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         center(result);
         return result;
     }
@@ -319,11 +313,11 @@ public class Polygon2D implements Serializable {
      */
     public void center(final Point2D result) {
         // compute average location of all vertices
-        double inhomX = 0.0;
-        double inhomY = 0.0;
-        final int total = mVertices.size();
+        var inhomX = 0.0;
+        var inhomY = 0.0;
+        final var total = vertices.size();
 
-        for (final Point2D point : mVertices) {
+        for (final var point : vertices) {
             inhomX += point.getInhomX() / total;
             inhomY += point.getInhomY() / total;
         }
@@ -348,10 +342,10 @@ public class Polygon2D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        final Iterator<Point2D> iterator = mVertices.iterator();
+        final var iterator = vertices.iterator();
         // it's ok because there are at
         // least 3 vertices
-        Point2D prevPoint = iterator.next();
+        var prevPoint = iterator.next();
         Point2D curPoint;
         while (iterator.hasNext()) {
             curPoint = iterator.next();
@@ -362,7 +356,7 @@ public class Polygon2D implements Serializable {
         }
 
         // check last point with first
-        return point.isBetween(prevPoint, mVertices.get(0), threshold);
+        return point.isBetween(prevPoint, vertices.get(0), threshold);
     }
 
     /**
@@ -387,16 +381,16 @@ public class Polygon2D implements Serializable {
      */
     public double getShortestDistance(final Point2D point) {
         // iterate over all vertices and compute their distance
-        Iterator<Point2D> iterator = mVertices.iterator();
-        Point2D prevPoint = iterator.next();
+        var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
         // to increase accuracy
         prevPoint.normalize();
         Point2D curPoint;
-        double bestDist = Double.MAX_VALUE;
+        var bestDist = Double.MAX_VALUE;
         double dist;
-        boolean found = false;
-        final Line2D line = new Line2D();
-        final Point2D pointInLine = Point2D.create();
+        var found = false;
+        final var line = new Line2D();
+        final var pointInLine = Point2D.create();
 
         while (iterator.hasNext()) {
             curPoint = iterator.next();
@@ -433,7 +427,7 @@ public class Polygon2D implements Serializable {
 
         // try last vertex with first
         // check if point lies in the segment of the boundary of this polygon
-        final Point2D first = mVertices.get(0);
+        final var first = vertices.get(0);
         if (point.isBetween(prevPoint, first)) {
             return 0.0;
         }
@@ -461,7 +455,7 @@ public class Polygon2D implements Serializable {
         if (!found) {
             // no closest point was found on a segment belonging to polygon
             // boundary, so we search for the closest vertex
-            iterator = mVertices.iterator();
+            iterator = vertices.iterator();
             while (iterator.hasNext()) {
                 // a better vertex has been found
                 curPoint = iterator.next();
@@ -483,7 +477,7 @@ public class Polygon2D implements Serializable {
      * @return Closest point being locus of this polygon.
      */
     public Point2D getClosestPoint(final Point2D point) {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         closestPoint(point, result);
         return result;
     }
@@ -497,17 +491,17 @@ public class Polygon2D implements Serializable {
      */
     public void closestPoint(final Point2D point, final Point2D result) {
         // iterate over all vertices and compute their distance
-        Iterator<Point2D> iterator = mVertices.iterator();
-        Point2D prevPoint = iterator.next();
+        var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
         // to increase accuracy
         prevPoint.normalize();
 
         Point2D curPoint;
-        double bestDist = Double.MAX_VALUE;
+        var bestDist = Double.MAX_VALUE;
         double dist;
-        boolean found = false;
-        final Line2D line = new Line2D();
-        final Point2D pointInLine = Point2D.create();
+        var found = false;
+        final var line = new Line2D();
+        final var pointInLine = Point2D.create();
 
         while (iterator.hasNext()) {
             curPoint = iterator.next();
@@ -546,7 +540,7 @@ public class Polygon2D implements Serializable {
 
         // try last vertex with first
         // check if point lies in the segment of the boundary of this polygon
-        final Point2D first = mVertices.get(0);
+        final var first = vertices.get(0);
         if (point.isBetween(prevPoint, first)) {
             result.setCoordinates(point);
             return;
@@ -573,11 +567,10 @@ public class Polygon2D implements Serializable {
             }
         }
 
-
         if (!found) {
             // no closest point was found on a segment belonging to polygon
             // boundary, so we search for the closest vertex
-            iterator = mVertices.iterator();
+            iterator = vertices.iterator();
             while (iterator.hasNext()) {
                 curPoint = iterator.next();
                 dist = point.distanceTo(curPoint);
@@ -602,11 +595,10 @@ public class Polygon2D implements Serializable {
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
     public void triangulate() throws TriangulatorException {
-        if (!mTriangulated) {
-            final Triangulator2D triangulator = Triangulator2D.create(
-                    mTriangulatorMethod);
-            mTriangles = triangulator.triangulate(mVertices);
-            mTriangulated = true;
+        if (!triangulated) {
+            final var triangulator = Triangulator2D.create(triangulatorMethod);
+            triangles = triangulator.triangulate(vertices);
+            triangulated = true;
         }
     }
 }

@@ -17,38 +17,36 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Box2DTest {
+class Box2DTest {
 
     private static final double ABSOLUTE_ERROR = 1e-9;
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor
-        Box2D box = new Box2D();
+        var box = new Box2D();
 
         // check default values
-        assertEquals(box.getLo(), new InhomogeneousPoint2D(-0.5, -0.5));
-        assertEquals(box.getHi(), new InhomogeneousPoint2D(0.5, 0.5));
+        assertEquals(new InhomogeneousPoint2D(-0.5, -0.5), box.getLo());
+        assertEquals(new InhomogeneousPoint2D(0.5, 0.5), box.getHi());
 
         // test constructor with lo and hi
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final var hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
-        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
-        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
+        final var lo = new InhomogeneousPoint2D(loX, loY);
+        final var hi = new InhomogeneousPoint2D(hiX, hiY);
         box = new Box2D(lo, hi);
 
         // check
@@ -56,9 +54,9 @@ public class Box2DTest {
         assertSame(hi, box.getHi());
 
         // test constructor with rectangle
-        final InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
-        final InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(hiX, loY);
-        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final var topLeft = new InhomogeneousPoint2D(loX, hiY);
+        final var bottomRight = new InhomogeneousPoint2D(hiX, loY);
+        final var rectangle = new Rectangle(topLeft, bottomRight);
         box = new Box2D(rectangle);
 
         // check
@@ -67,14 +65,14 @@ public class Box2DTest {
     }
 
     @Test
-    public void testGetSetLo() {
-        final Box2D box = new Box2D();
+    void testGetSetLo() {
+        final var box = new Box2D();
 
         // check default value
-        assertEquals(box.getLo(), new InhomogeneousPoint2D(-0.5, -0.5));
+        assertEquals(new InhomogeneousPoint2D(-0.5, -0.5), box.getLo());
 
         // set new value
-        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D();
+        final var lo = new InhomogeneousPoint2D();
         box.setLo(lo);
 
         // check
@@ -82,14 +80,14 @@ public class Box2DTest {
     }
 
     @Test
-    public void testGetSetHi() {
-        final Box2D box = new Box2D();
+    void testGetSetHi() {
+        final var box = new Box2D();
 
         // check default value
-        assertEquals(box.getHi(), new InhomogeneousPoint2D(0.5, 0.5));
+        assertEquals(new InhomogeneousPoint2D(0.5, 0.5), box.getHi());
 
         // set new value
-        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D();
+        final var hi = new InhomogeneousPoint2D();
         box.setHi(hi);
 
         // check
@@ -97,16 +95,16 @@ public class Box2DTest {
     }
 
     @Test
-    public void testSetBounds() {
-        final Box2D box = new Box2D();
+    void testSetBounds() {
+        final var box = new Box2D();
 
         // check default values
-        assertEquals(box.getLo(), new InhomogeneousPoint2D(-0.5, -0.5));
-        assertEquals(box.getHi(), new InhomogeneousPoint2D(0.5, 0.5));
+        assertEquals(new InhomogeneousPoint2D(-0.5, -0.5), box.getLo());
+        assertEquals(new InhomogeneousPoint2D(0.5, 0.5), box.getHi());
 
         // set bounds
-        InhomogeneousPoint2D lo = new InhomogeneousPoint2D();
-        InhomogeneousPoint2D hi = new InhomogeneousPoint2D();
+        var lo = new InhomogeneousPoint2D();
+        var hi = new InhomogeneousPoint2D();
         box.setBounds(lo, hi);
 
         // check
@@ -114,11 +112,11 @@ public class Box2DTest {
         assertSame(hi, box.getHi());
 
         // random values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final var hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
         lo = new InhomogeneousPoint2D(loX, loY);
         hi = new InhomogeneousPoint2D(hiX, hiY);
@@ -130,21 +128,21 @@ public class Box2DTest {
     }
 
     @Test
-    public void testFromToRectangle() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+    void testFromToRectangle() {
+        final var randomizer = new UniformRandomizer();
+        final var loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final var hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
-        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
-        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
+        final var lo = new InhomogeneousPoint2D(loX, loY);
+        final var hi = new InhomogeneousPoint2D(hiX, hiY);
 
-        final InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(loX, hiY);
-        final InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(hiX, loY);
-        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final var topLeft = new InhomogeneousPoint2D(loX, hiY);
+        final var bottomRight = new InhomogeneousPoint2D(hiX, loY);
+        final var rectangle = new Rectangle(topLeft, bottomRight);
 
-        final Box2D box = new Box2D();
+        final var box = new Box2D();
 
         // from rectangle
         box.fromRectangle(rectangle);
@@ -154,8 +152,8 @@ public class Box2DTest {
         assertEquals(hi, box.getHi());
 
         // to rectangle
-        final Rectangle rectangle2 = box.toRectangle();
-        final Rectangle rectangle3 = new Rectangle();
+        final var rectangle2 = box.toRectangle();
+        final var rectangle3 = new Rectangle();
         box.toRectangle(rectangle3);
 
         // check
@@ -166,159 +164,151 @@ public class Box2DTest {
     }
 
     @Test
-    public void testGetDistance() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        final double height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+    void testGetDistance() {
+        final var randomizer = new UniformRandomizer();
+        final var centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var centerY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final var height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
 
-        final double left = centerX - 0.5 * width;
-        final double right = centerX + 0.5 * width;
-        final double top = centerY + 0.5 * height;
-        final double bottom = centerY - 0.5 * height;
+        final var left = centerX - 0.5 * width;
+        final var right = centerX + 0.5 * width;
+        final var top = centerY + 0.5 * height;
+        final var bottom = centerY - 0.5 * height;
 
-        final Point2D topLeft = new InhomogeneousPoint2D(left, top);
-        final Point2D bottomRight = new InhomogeneousPoint2D(right, bottom);
-        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final var topLeft = new InhomogeneousPoint2D(left, top);
+        final var bottomRight = new InhomogeneousPoint2D(right, bottom);
+        final var rectangle = new Rectangle(topLeft, bottomRight);
 
-        final Point2D pointAtLeftSide = new InhomogeneousPoint2D(
+        final var pointAtLeftSide = new InhomogeneousPoint2D(
                 centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        final Point2D pointAtTopLeftCorner = new InhomogeneousPoint2D(
+        final var pointAtTopLeftCorner = new InhomogeneousPoint2D(
                 centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY + height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtTopSide = new InhomogeneousPoint2D(
+        final var pointAtTopSide = new InhomogeneousPoint2D(
                 centerX,
                 centerY + height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtTopRightCorner = new InhomogeneousPoint2D(
+        final var pointAtTopRightCorner = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY + height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtRightSide = new InhomogeneousPoint2D(
+        final var pointAtRightSide = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        final Point2D pointAtBottomRightCorner = new InhomogeneousPoint2D(
+        final var pointAtBottomRightCorner = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY - height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtBottomSide = new InhomogeneousPoint2D(
+        final var pointAtBottomSide = new InhomogeneousPoint2D(
                 centerX,
                 centerY - height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtBottomLeftCorner = new InhomogeneousPoint2D(
+        final var pointAtBottomLeftCorner = new InhomogeneousPoint2D(
                 centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY - height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D insidePoint = new InhomogeneousPoint2D(
+        final var insidePoint = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(-0.5, 0.5),
                 centerY + height * randomizer.nextDouble(-0.5, 0.5));
 
 
-        final Box2D box = new Box2D(rectangle);
-        assertEquals(rectangle.getDistance(pointAtLeftSide),
-                box.getDistance(pointAtLeftSide), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtTopLeftCorner),
-                box.getDistance(pointAtTopLeftCorner), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtTopSide),
-                box.getDistance(pointAtTopSide), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtTopRightCorner),
-                box.getDistance(pointAtTopRightCorner), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtRightSide),
-                box.getDistance(pointAtRightSide), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtBottomRightCorner),
-                box.getDistance(pointAtBottomRightCorner), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtBottomSide),
-                box.getDistance(pointAtBottomSide), ABSOLUTE_ERROR);
-        assertEquals(rectangle.getDistance(pointAtBottomLeftCorner),
-                box.getDistance(pointAtBottomLeftCorner), ABSOLUTE_ERROR);
+        final var box = new Box2D(rectangle);
+        assertEquals(rectangle.getDistance(pointAtLeftSide), box.getDistance(pointAtLeftSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtTopLeftCorner), box.getDistance(pointAtTopLeftCorner),
+                ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtTopSide), box.getDistance(pointAtTopSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtTopRightCorner), box.getDistance(pointAtTopRightCorner),
+                ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtRightSide), box.getDistance(pointAtRightSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtBottomRightCorner), box.getDistance(pointAtBottomRightCorner),
+                ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtBottomSide), box.getDistance(pointAtBottomSide), ABSOLUTE_ERROR);
+        assertEquals(rectangle.getDistance(pointAtBottomLeftCorner), box.getDistance(pointAtBottomLeftCorner),
+                ABSOLUTE_ERROR);
         assertEquals(0.0, box.getDistance(insidePoint), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSqrDistance() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double centerY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
-        final double height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+    void testGetSqrDistance() {
+        final var randomizer = new UniformRandomizer();
+        final var centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var centerY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var width = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
+        final var height = randomizer.nextDouble(0, MAX_RANDOM_VALUE);
 
-        final double left = centerX - 0.5 * width;
-        final double right = centerX + 0.5 * width;
-        final double top = centerY + 0.5 * height;
-        final double bottom = centerY - 0.5 * height;
+        final var left = centerX - 0.5 * width;
+        final var right = centerX + 0.5 * width;
+        final var top = centerY + 0.5 * height;
+        final var bottom = centerY - 0.5 * height;
 
-        final Point2D topLeft = new InhomogeneousPoint2D(left, top);
-        final Point2D bottomRight = new InhomogeneousPoint2D(right, bottom);
-        final Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+        final var topLeft = new InhomogeneousPoint2D(left, top);
+        final var bottomRight = new InhomogeneousPoint2D(right, bottom);
+        final var rectangle = new Rectangle(topLeft, bottomRight);
 
-        final Point2D pointAtLeftSide = new InhomogeneousPoint2D(
+        final var pointAtLeftSide = new InhomogeneousPoint2D(
                 centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        final Point2D pointAtTopLeftCorner = new InhomogeneousPoint2D(
+        final var pointAtTopLeftCorner = new InhomogeneousPoint2D(
                 centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY + height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtTopSide = new InhomogeneousPoint2D(
+        final var pointAtTopSide = new InhomogeneousPoint2D(
                 centerX,
                 centerY + height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtTopRightCorner = new InhomogeneousPoint2D(
+        final var pointAtTopRightCorner = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY + height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtRightSide = new InhomogeneousPoint2D(
+        final var pointAtRightSide = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY);
-        final Point2D pointAtBottomRightCorner = new InhomogeneousPoint2D(
+        final var pointAtBottomRightCorner = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(1.5, 2.5),
                 centerY - height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtBottomSide = new InhomogeneousPoint2D(
+        final var pointAtBottomSide = new InhomogeneousPoint2D(
                 centerX,
                 centerY - height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D pointAtBottomLeftCorner = new InhomogeneousPoint2D(
+        final var pointAtBottomLeftCorner = new InhomogeneousPoint2D(
                 centerX - width * randomizer.nextDouble(1.5, 2.5),
                 centerY - height * randomizer.nextDouble(1.5, 2.5));
-        final Point2D insidePoint = new InhomogeneousPoint2D(
+        final var insidePoint = new InhomogeneousPoint2D(
                 centerX + width * randomizer.nextDouble(-0.5, 0.5),
                 centerY + height * randomizer.nextDouble(-0.5, 0.5));
 
-        final Box2D box = new Box2D(rectangle);
-        assertEquals(Math.pow(rectangle.getDistance(pointAtLeftSide), 2.0),
-                box.getSqrDistance(pointAtLeftSide), ABSOLUTE_ERROR);
+        final var box = new Box2D(rectangle);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtLeftSide), 2.0), box.getSqrDistance(pointAtLeftSide),
+                ABSOLUTE_ERROR);
         assertEquals(Math.pow(rectangle.getDistance(pointAtTopLeftCorner), 2.0),
                 box.getSqrDistance(pointAtTopLeftCorner), ABSOLUTE_ERROR);
-        assertEquals(Math.pow(rectangle.getDistance(pointAtTopSide), 2.0),
-                box.getSqrDistance(pointAtTopSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtTopSide), 2.0), box.getSqrDistance(pointAtTopSide),
+                ABSOLUTE_ERROR);
         assertEquals(Math.pow(rectangle.getDistance(pointAtTopRightCorner), 2.0),
                 box.getSqrDistance(pointAtTopRightCorner), ABSOLUTE_ERROR);
-        assertEquals(Math.pow(rectangle.getDistance(pointAtRightSide), 2.0),
-                box.getSqrDistance(pointAtRightSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtRightSide), 2.0), box.getSqrDistance(pointAtRightSide),
+                ABSOLUTE_ERROR);
         assertEquals(Math.pow(rectangle.getDistance(pointAtBottomRightCorner), 2.0),
                 box.getSqrDistance(pointAtBottomRightCorner), ABSOLUTE_ERROR);
-        assertEquals(Math.pow(rectangle.getDistance(pointAtBottomSide), 2.0),
-                box.getSqrDistance(pointAtBottomSide), ABSOLUTE_ERROR);
+        assertEquals(Math.pow(rectangle.getDistance(pointAtBottomSide), 2.0), box.getSqrDistance(pointAtBottomSide),
+                ABSOLUTE_ERROR);
         assertEquals(Math.pow(rectangle.getDistance(pointAtBottomLeftCorner), 2.0),
                 box.getSqrDistance(pointAtBottomLeftCorner), ABSOLUTE_ERROR);
         assertEquals(0.0, box.getSqrDistance(insidePoint), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
-        final double hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var loX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var loY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var hiX = randomizer.nextDouble(loX, MAX_RANDOM_VALUE);
+        final var hiY = randomizer.nextDouble(loY, MAX_RANDOM_VALUE);
 
-        final InhomogeneousPoint2D lo = new InhomogeneousPoint2D(loX, loY);
-        final InhomogeneousPoint2D hi = new InhomogeneousPoint2D(hiX, hiY);
-        final Box2D box1 = new Box2D(lo, hi);
+        final var lo = new InhomogeneousPoint2D(loX, loY);
+        final var hi = new InhomogeneousPoint2D(hiX, hiY);
+        final var box1 = new Box2D(lo, hi);
 
         // check
         assertSame(box1.getLo(), lo);
         assertSame(box1.getHi(), hi);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(box1);
-        final Box2D box2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(box1);
+        final var box2 = SerializationHelper.<Box2D>deserialize(bytes);
 
         // check
         assertNotSame(box1, box2);

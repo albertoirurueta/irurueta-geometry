@@ -24,16 +24,13 @@ import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.Quaternion;
 import com.irurueta.geometry.Utils;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class EuclideanTransformation3DEstimatorTest implements
-        EuclideanTransformation3DEstimatorListener {
+class EuclideanTransformation3DEstimatorTest implements EuclideanTransformation3DEstimatorListener {
 
     private static final double MIN_ANGLE_DEGREES = -90.0;
     private static final double MAX_ANGLE_DEGREES = 90.0;
@@ -52,10 +49,9 @@ public class EuclideanTransformation3DEstimatorTest implements
     private int estimateEnd;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // empty constructor
-        EuclideanTransformation3DEstimator estimator =
-                new EuclideanTransformation3DEstimator();
+        var estimator = new EuclideanTransformation3DEstimator();
 
         // check default values
         assertNull(estimator.getInputPoints());
@@ -65,25 +61,22 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
-
+        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // constructor with points
-        List<Point3D> inputPoints = new ArrayList<>();
+        final var inputPoints = new ArrayList<Point3D>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
 
-        List<Point3D> outputPoints = new ArrayList<>();
+        final var outputPoints = new ArrayList<Point3D>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
 
-        estimator = new EuclideanTransformation3DEstimator(inputPoints,
-                outputPoints);
+        estimator = new EuclideanTransformation3DEstimator(inputPoints, outputPoints);
 
         // check default values
         assertSame(inputPoints, estimator.getInputPoints());
@@ -93,33 +86,15 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
-        final List<Point3D> wrong = new ArrayList<>();
+        final var wrong = new ArrayList<Point3D>();
         wrong.add(Point3D.create());
 
-        estimator = null;
-        try {
-            estimator = new EuclideanTransformation3DEstimator(wrong, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(wrong,
-                    outputPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(inputPoints,
-                    wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(wrong, wrong));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(wrong, outputPoints));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(inputPoints, wrong));
 
         // constructor with listener
         estimator = new EuclideanTransformation3DEstimator(this);
@@ -132,13 +107,11 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
 
 
         // constructor with listener and points
-        estimator = new EuclideanTransformation3DEstimator(this, inputPoints,
-                outputPoints);
+        estimator = new EuclideanTransformation3DEstimator(this, inputPoints, outputPoints);
 
         // check default values
         assertSame(inputPoints, estimator.getInputPoints());
@@ -148,31 +121,15 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new EuclideanTransformation3DEstimator(this, wrong,
-                    wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(this, wrong,
-                    outputPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(this,
-                    inputPoints, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(this, wrong,
+                wrong));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(this, wrong,
+                outputPoints));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(this,
+                inputPoints, wrong));
 
         // empty constructor with weak minimum points allowed
         estimator = new EuclideanTransformation3DEstimator(true);
@@ -185,57 +142,38 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
-
+        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // constructor with points
-        inputPoints = new ArrayList<>();
-        inputPoints.add(Point3D.create());
-        inputPoints.add(Point3D.create());
-        inputPoints.add(Point3D.create());
+        final var inputPoints2 = new ArrayList<Point3D>();
+        inputPoints2.add(Point3D.create());
+        inputPoints2.add(Point3D.create());
+        inputPoints2.add(Point3D.create());
 
-        outputPoints = new ArrayList<>();
-        outputPoints.add(Point3D.create());
-        outputPoints.add(Point3D.create());
-        outputPoints.add(Point3D.create());
+        final var outputPoints2 = new ArrayList<Point3D>();
+        outputPoints2.add(Point3D.create());
+        outputPoints2.add(Point3D.create());
+        outputPoints2.add(Point3D.create());
 
-        estimator = new EuclideanTransformation3DEstimator(inputPoints,
-                outputPoints, true);
+        estimator = new EuclideanTransformation3DEstimator(inputPoints2, outputPoints2, true);
 
         // check default values
-        assertSame(inputPoints, estimator.getInputPoints());
-        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(inputPoints2, estimator.getInputPoints());
+        assertSame(outputPoints2, estimator.getOutputPoints());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new EuclideanTransformation3DEstimator(wrong, wrong,
-                    true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(wrong,
-                    outputPoints, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(inputPoints,
-                    wrong, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(wrong, wrong,
+                true));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(wrong, outputPoints,
+                true));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(inputPoints, wrong,
+                true));
 
         // constructor with listener
         estimator = new EuclideanTransformation3DEstimator(this, true);
@@ -248,65 +186,48 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertFalse(estimator.isLocked());
         assertFalse(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
 
 
         // constructor with listener and points
-        estimator = new EuclideanTransformation3DEstimator(this, inputPoints,
-                outputPoints, true);
+        estimator = new EuclideanTransformation3DEstimator(this, inputPoints2, outputPoints2,
+                true);
 
         // check default values
-        assertSame(inputPoints, estimator.getInputPoints());
-        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(inputPoints2, estimator.getInputPoints());
+        assertSame(outputPoints2, estimator.getOutputPoints());
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
         assertTrue(estimator.isReady());
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new EuclideanTransformation3DEstimator(this, wrong,
-                    wrong, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(this, wrong,
-                    outputPoints, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new EuclideanTransformation3DEstimator(this,
-                    inputPoints, wrong, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(this, wrong,
+                wrong, true));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(this, wrong,
+                outputPoints, true));
+        assertThrows(IllegalArgumentException.class, () -> new EuclideanTransformation3DEstimator(this,
+                inputPoints, wrong, true));
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final EuclideanTransformation3DEstimator estimator =
-                new EuclideanTransformation3DEstimator();
+    void testGetSetPoints() throws LockedException {
+        final var estimator = new EuclideanTransformation3DEstimator();
 
         // initial values
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
 
         // set values
-        final List<Point3D> inputPoints = new ArrayList<>();
+        final var inputPoints = new ArrayList<Point3D>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
 
-        final List<Point3D> outputPoints = new ArrayList<>();
+        final var outputPoints = new ArrayList<Point3D>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -319,28 +240,15 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertSame(outputPoints, estimator.getOutputPoints());
 
         // Force IllegalArgumentException
-        final List<Point3D> wrong = new ArrayList<>();
-        try {
-            estimator.setPoints(wrong, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setPoints(wrong, outputPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setPoints(inputPoints, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new ArrayList<Point3D>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(wrong, wrong));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(wrong, outputPoints));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(inputPoints, wrong));
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final EuclideanTransformation3DEstimator estimator =
-                new EuclideanTransformation3DEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new EuclideanTransformation3DEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -355,76 +263,63 @@ public class EuclideanTransformation3DEstimatorTest implements
     }
 
     @Test
-    public void testIsSetWeakMinimumPointsAllowed() throws LockedException {
-        final EuclideanTransformation3DEstimator estimator =
-                new EuclideanTransformation3DEstimator();
+    void testIsSetWeakMinimumPointsAllowed() throws LockedException {
+        final var estimator = new EuclideanTransformation3DEstimator();
 
         // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // set new value
         estimator.setWeakMinimumSizeAllowed(true);
 
         // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(EuclideanTransformation3DEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
     }
 
     @Test
-    public void testEstimateNoLMSE() throws NotReadyException, LockedException,
-            CoincidentPointsException {
+    void testEstimateNoLMSE() throws NotReadyException, LockedException, CoincidentPointsException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
 
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var randomizer = new UniformRandomizer();
 
-            final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final double pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final double yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final Quaternion q = new Quaternion(roll, pitch, yaw);
+            final var q = new Quaternion(roll, pitch, yaw);
             q.normalize();
 
-            final double[] translation = new double[3];
+            final var translation = new double[3];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-            final EuclideanTransformation3D transformation =
-                    new EuclideanTransformation3D(q, translation);
+            final var transformation = new EuclideanTransformation3D(q, translation);
 
             // generate random list of input points and transform them
-            final List<Point3D> inputPoints = new ArrayList<>();
-            InhomogeneousPoint3D inputPoint;
-            for (int i = 0; i < EuclideanTransformation3DEstimator.MINIMUM_SIZE; i++) {
-                final double x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
-                final double y = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
-                final double z = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
-                inputPoint = new InhomogeneousPoint3D(x, y, z);
+            final var inputPoints = new ArrayList<Point3D>();
+            for (var i = 0; i < EuclideanTransformation3DEstimator.MINIMUM_SIZE; i++) {
+                final var x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
+                final var y = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
+                final var z = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
+                final var inputPoint = new InhomogeneousPoint3D(x, y, z);
                 inputPoints.add(inputPoint);
             }
 
             // transform points
-            final List<Point3D> outputPoints = transformation.
-                    transformPointsAndReturnNew(inputPoints);
+            final var outputPoints = transformation.transformPointsAndReturnNew(inputPoints);
 
-            final EuclideanTransformation3DEstimator estimator =
-                    new EuclideanTransformation3DEstimator(this, inputPoints,
-                            outputPoints);
+            final var estimator = new EuclideanTransformation3DEstimator(this, inputPoints, outputPoints);
 
             reset();
             assertEquals(0, estimateStart);
             assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
-            final EuclideanTransformation3D transformation2 = estimator.estimate();
-            final EuclideanTransformation3D transformation3 =
-                    new EuclideanTransformation3D();
+            final var transformation2 = estimator.estimate();
+            final var transformation3 = new EuclideanTransformation3D();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -441,24 +336,21 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
-
             // check correctness of estimated transformations
 
             // transform points using transformation2
-            final List<Point3D> outputPoints2 =
-                    transformation2.transformPointsAndReturnNew(inputPoints);
+            final var outputPoints2 = transformation2.transformPointsAndReturnNew(inputPoints);
 
             // check correctness
             assertEquals(outputPoints.size(), outputPoints2.size());
-            for (int i = 0; i < outputPoints.size(); i++) {
-                assertTrue(outputPoints.get(i).equals(outputPoints2.get(i),
-                        ABSOLUTE_ERROR));
+            for (var i = 0; i < outputPoints.size(); i++) {
+                assertTrue(outputPoints.get(i).equals(outputPoints2.get(i), ABSOLUTE_ERROR));
             }
 
-            final Quaternion q2 = transformation2.getRotation().toQuaternion();
+            final var q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
 
-            final double[] translation2 = transformation2.getTranslation();
+            final var translation2 = transformation2.getTranslation();
 
             assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -466,22 +358,19 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertEquals(q.getD(), q2.getD(), ABSOLUTE_ERROR);
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
 
-
             // transform points using transformation3
-            final List<Point3D> outputPoints3 =
-                    transformation3.transformPointsAndReturnNew(inputPoints);
+            final var outputPoints3 = transformation3.transformPointsAndReturnNew(inputPoints);
 
             // check correctness
             assertEquals(outputPoints.size(), outputPoints2.size());
-            for (int i = 0; i < outputPoints.size(); i++) {
-                assertTrue(outputPoints.get(i).equals(outputPoints3.get(i),
-                        ABSOLUTE_ERROR));
+            for (var i = 0; i < outputPoints.size(); i++) {
+                assertTrue(outputPoints.get(i).equals(outputPoints3.get(i), ABSOLUTE_ERROR));
             }
 
-            final Quaternion q3 = transformation3.getRotation().toQuaternion();
+            final var q3 = transformation3.getRotation().toQuaternion();
             q3.normalize();
 
-            final double[] translation3 = transformation3.getTranslation();
+            final var translation3 = transformation3.getTranslation();
 
             assertEquals(q.getA(), q3.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q3.getB(), ABSOLUTE_ERROR);
@@ -496,57 +385,47 @@ public class EuclideanTransformation3DEstimatorTest implements
     }
 
     @Test
-    public void testEstimateLMSE() throws NotReadyException, LockedException,
-            CoincidentPointsException {
+    void testEstimateLMSE() throws NotReadyException, LockedException, CoincidentPointsException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
 
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var randomizer = new UniformRandomizer();
 
-            final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final Quaternion q = new Quaternion(roll, pitch, yaw);
+            final var q = new Quaternion(roll, pitch, yaw);
             q.normalize();
 
-            final double[] translation = new double[3];
+            final var translation = new double[3];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-            final EuclideanTransformation3D transformation =
-                    new EuclideanTransformation3D(q, translation);
+            final var transformation = new EuclideanTransformation3D(q, translation);
 
             // generate random list of input points and transform them
-            final List<Point3D> inputPoints = new ArrayList<>();
-            InhomogeneousPoint3D inputPoint;
-            for (int i = 0; i < EuclideanTransformation3DEstimator.MINIMUM_SIZE + 1; i++) {
-                final double x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
-                final double y = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
-                final double z = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
-                inputPoint = new InhomogeneousPoint3D(x, y, z);
+            final var inputPoints = new ArrayList<Point3D>();
+            for (var i = 0; i < EuclideanTransformation3DEstimator.MINIMUM_SIZE + 1; i++) {
+                final var x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
+                final var y = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
+                final var z = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
+                final var inputPoint = new InhomogeneousPoint3D(x, y, z);
                 inputPoints.add(inputPoint);
             }
 
             // transform points
-            final List<Point3D> outputPoints = transformation.
-                    transformPointsAndReturnNew(inputPoints);
+            final var outputPoints = transformation.transformPointsAndReturnNew(inputPoints);
 
-            final EuclideanTransformation3DEstimator estimator =
-                    new EuclideanTransformation3DEstimator(this, inputPoints,
-                            outputPoints);
+            final var estimator = new EuclideanTransformation3DEstimator(this, inputPoints, outputPoints);
 
             reset();
             assertEquals(0, estimateStart);
             assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
-            final EuclideanTransformation3D transformation2 = estimator.estimate();
-            final EuclideanTransformation3D transformation3 =
-                    new EuclideanTransformation3D();
+            final var transformation2 = estimator.estimate();
+            final var transformation3 = new EuclideanTransformation3D();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -563,33 +442,30 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
-
             // check correctness of estimated transformations
 
             // transform points using transformation2
-            final List<Point3D> outputPoints2 =
-                    transformation2.transformPointsAndReturnNew(inputPoints);
+            final var outputPoints2 = transformation2.transformPointsAndReturnNew(inputPoints);
 
             // check correctness
             assertEquals(outputPoints.size(), outputPoints2.size());
-            boolean valid = true;
-            for (int i = 0; i < outputPoints.size(); i++) {
+            var valid = true;
+            for (var i = 0; i < outputPoints.size(); i++) {
                 if (!outputPoints.get(i).equals(outputPoints2.get(i), ABSOLUTE_ERROR)) {
                     valid = false;
                     break;
                 }
-                assertTrue(outputPoints.get(i).equals(outputPoints2.get(i),
-                        ABSOLUTE_ERROR));
+                assertTrue(outputPoints.get(i).equals(outputPoints2.get(i), ABSOLUTE_ERROR));
             }
 
             if (!valid) {
                 continue;
             }
 
-            final Quaternion q2 = transformation2.getRotation().toQuaternion();
+            final var q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
 
-            final double[] translation2 = transformation2.getTranslation();
+            final var translation2 = transformation2.getTranslation();
 
             assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -598,20 +474,18 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
 
             // transform points using transformation3
-            final List<Point3D> outputPoints3 =
-                    transformation3.transformPointsAndReturnNew(inputPoints);
+            final var outputPoints3 = transformation3.transformPointsAndReturnNew(inputPoints);
 
             // check correctness
             assertEquals(outputPoints.size(), outputPoints2.size());
-            for (int i = 0; i < outputPoints.size(); i++) {
-                assertTrue(outputPoints.get(i).equals(outputPoints3.get(i),
-                        ABSOLUTE_ERROR));
+            for (var i = 0; i < outputPoints.size(); i++) {
+                assertTrue(outputPoints.get(i).equals(outputPoints3.get(i), ABSOLUTE_ERROR));
             }
 
-            final Quaternion q3 = transformation3.getRotation().toQuaternion();
+            final var q3 = transformation3.getRotation().toQuaternion();
             q3.normalize();
 
-            final double[] translation3 = transformation3.getTranslation();
+            final var translation3 = transformation3.getTranslation();
 
             assertEquals(q.getA(), q3.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q3.getB(), ABSOLUTE_ERROR);
@@ -626,60 +500,45 @@ public class EuclideanTransformation3DEstimatorTest implements
     }
 
     @Test
-    public void testEstimatePlanar() throws NotReadyException, LockedException,
-            CoincidentPointsException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testEstimatePlanar() throws NotReadyException, LockedException, CoincidentPointsException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
-            final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final Quaternion q = new Quaternion(roll, pitch, yaw);
+            final var q = new Quaternion(roll, pitch, yaw);
             q.normalize();
 
-            final double[] translation = new double[3];
+            final var translation = new double[3];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-            final EuclideanTransformation3D transformation =
-                    new EuclideanTransformation3D(q, translation);
+            final var transformation = new EuclideanTransformation3D(q, translation);
 
             // generate random list of input points and transform them
             // generate random plane
-            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double d = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final Plane plane = new Plane(a, b, c, d);
+            final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var plane = new Plane(a, b, c, d);
 
-            final List<Point3D> inputPoints = new ArrayList<>();
-            HomogeneousPoint3D inputPoint;
-            for (int i = 0; i < MetricTransformation3DEstimator.WEAK_MINIMUM_SIZE; i++) {
-
+            final var inputPoints = new ArrayList<Point3D>();
+            for (var i = 0; i < MetricTransformation3DEstimator.WEAK_MINIMUM_SIZE; i++) {
                 final double homX;
                 final double homY;
-                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+                final var homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
                 }
-                inputPoint = new HomogeneousPoint3D(homX, homY, homZ, homW);
+                final var inputPoint = new HomogeneousPoint3D(homX, homY, homZ, homW);
 
                 assertTrue(plane.isLocus(inputPoint));
 
@@ -687,19 +546,17 @@ public class EuclideanTransformation3DEstimatorTest implements
             }
 
             // transform points
-            final List<Point3D> outputPoints = transformation.
-                    transformPointsAndReturnNew(inputPoints);
+            final var outputPoints = transformation.transformPointsAndReturnNew(inputPoints);
 
-            final EuclideanTransformation3DEstimator estimator =
-                    new EuclideanTransformation3DEstimator(this, inputPoints,
-                            outputPoints, true);
+            final var estimator = new EuclideanTransformation3DEstimator(this, inputPoints, outputPoints,
+                    true);
 
             reset();
             assertEquals(0, estimateStart);
             assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
-            final EuclideanTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -710,42 +567,37 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertEquals(0, estimateEnd);
             assertFalse(estimator.isLocked());
 
-            final EuclideanTransformation3D transformation3 =
-                    new EuclideanTransformation3D();
+            final var transformation3 = new EuclideanTransformation3D();
             estimator.estimate(transformation3);
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
             assertFalse(estimator.isLocked());
 
-
             // check correctness of estimated transformations
 
             // transform points using transformation2
-            final List<Point3D> outputPoints2 =
-                    transformation2.transformPointsAndReturnNew(inputPoints);
+            final var outputPoints2 = transformation2.transformPointsAndReturnNew(inputPoints);
 
             // check correctness
             assertEquals(outputPoints.size(), outputPoints2.size());
-            boolean isValid = true;
-            for (int i = 0; i < outputPoints.size(); i++) {
-                if (!outputPoints.get(i).equals(outputPoints2.get(i),
-                        ABSOLUTE_ERROR)) {
+            var isValid = true;
+            for (var i = 0; i < outputPoints.size(); i++) {
+                if (!outputPoints.get(i).equals(outputPoints2.get(i), ABSOLUTE_ERROR)) {
                     isValid = false;
                     break;
                 }
-                assertTrue(outputPoints.get(i).equals(outputPoints2.get(i),
-                        ABSOLUTE_ERROR));
+                assertTrue(outputPoints.get(i).equals(outputPoints2.get(i), ABSOLUTE_ERROR));
             }
 
             if (!isValid) {
                 continue;
             }
 
-            final Quaternion q2 = transformation2.getRotation().toQuaternion();
+            final var q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
 
-            final double[] translation2 = transformation2.getTranslation();
+            final var translation2 = transformation2.getTranslation();
 
             assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -754,20 +606,18 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
 
             // transform points using transformation3
-            final List<Point3D> outputPoints3 =
-                    transformation3.transformPointsAndReturnNew(inputPoints);
+            final var outputPoints3 = transformation3.transformPointsAndReturnNew(inputPoints);
 
             // check correctness
             assertEquals(outputPoints.size(), outputPoints2.size());
-            for (int i = 0; i < outputPoints.size(); i++) {
-                assertTrue(outputPoints.get(i).equals(outputPoints3.get(i),
-                        ABSOLUTE_ERROR));
+            for (var i = 0; i < outputPoints.size(); i++) {
+                assertTrue(outputPoints.get(i).equals(outputPoints3.get(i), ABSOLUTE_ERROR));
             }
 
-            final Quaternion q3 = transformation3.getRotation().toQuaternion();
+            final var q3 = transformation3.getRotation().toQuaternion();
             q3.normalize();
 
-            final double[] translation3 = transformation3.getTranslation();
+            final var translation3 = transformation3.getTranslation();
 
             assertEquals(q.getA(), q3.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q3.getB(), ABSOLUTE_ERROR);
@@ -798,34 +648,10 @@ public class EuclideanTransformation3DEstimatorTest implements
     }
 
     private void checkLocked(final EuclideanTransformation3DEstimator estimator) {
-        try {
-            estimator.setPoints(null, null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(this);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            estimator.estimate(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            estimator.setWeakMinimumSizeAllowed(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> estimator.setPoints(null, null));
+        assertThrows(LockedException.class, () -> estimator.setListener(this));
+        assertThrows(LockedException.class, estimator::estimate);
+        assertThrows(LockedException.class, () -> estimator.estimate(null));
+        assertThrows(LockedException.class, () -> estimator.setWeakMinimumSizeAllowed(true));
     }
 }

@@ -24,15 +24,18 @@ import com.irurueta.geometry.estimators.NotReadyException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class performs metric transformations on 2D space.
  * Metric transformations include transformations related to rotations,
  * translations and scale.
  */
-public class MetricTransformation2D extends EuclideanTransformation2D
-        implements Serializable {
+public class MetricTransformation2D extends EuclideanTransformation2D implements Serializable {
+
+    /**
+     * Default scale factor, which leaves objects with the same scale.
+     */
+    public static final double DEFAULT_SCALE = 1.0;
 
     /**
      * Scale factor. Negative values mean that objects get reversed. Values
@@ -40,11 +43,6 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * and 1.0 means that objects get reduced.
      */
     private double scale;
-
-    /**
-     * Default scale factor, which leaves objects with the same scale.
-     */
-    public static final double DEFAULT_SCALE = 1.0;
 
     /**
      * Empty constructor.
@@ -107,8 +105,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @throws IllegalArgumentException raised if length of array is not equal
      *                                  to NUM_TRANSLATION_COORDS.
      */
-    public MetricTransformation2D(final Rotation2D rotation, final double[] translation,
-                                  final double scale) {
+    public MetricTransformation2D(final Rotation2D rotation, final double[] translation, final double scale) {
         super(rotation, translation);
         this.scale = scale;
     }
@@ -126,12 +123,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @throws CoincidentPointsException if points are in a degenerate configuration.
      */
     public MetricTransformation2D(
-            final Point2D inputPoint1, final Point2D inputPoint2,
-            final Point2D inputPoint3, final Point2D outputPoint1,
-            final Point2D outputPoint2, final Point2D outputPoint3)
-            throws CoincidentPointsException {
-        internalSetTransformationFromPoints(inputPoint1, inputPoint2,
-                inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3) throws CoincidentPointsException {
+        internalSetMetricTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, outputPoint1, outputPoint2,
+                outputPoint3);
     }
 
     /**
@@ -173,14 +168,14 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         }
 
         // set rotation
-        final Matrix rot = getRotation().asInhomogeneousMatrix();
+        final var rot = getRotation().asInhomogeneousMatrix();
         rot.multiplyByScalar(scale);
 
         m.setSubmatrix(0, 0,
                 Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS - 1,
                 Rotation2D.ROTATION2D_INHOM_MATRIX_COLS - 1, rot);
 
-        final double[] translation = getTranslation();
+        final var translation = getTranslation();
 
         // set translation
         m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
@@ -203,10 +198,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         inputPoint.normalize();
         getRotation().rotate(inputPoint, outputPoint);
 
-        final double[] translation = getTranslation();
+        final var translation = getTranslation();
 
-        outputPoint.setInhomogeneousCoordinates(
-                scale * outputPoint.getInhomX() + translation[0],
+        outputPoint.setInhomogeneousCoordinates(scale * outputPoint.getInhomX() + translation[0],
                 scale * outputPoint.getInhomY() + translation[1]);
     }
 
@@ -226,7 +220,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public Transformation2D inverseAndReturnNew() {
-        final MetricTransformation2D result = new MetricTransformation2D();
+        final var result = new MetricTransformation2D();
         inverse(result);
         return result;
     }
@@ -243,8 +237,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         // (1/s) * R'*t = x + (1/s) * R'*t
         // --> x = (1/s) * R'*x' - (1/s) * R'*t
         super.inverse(result);
-        final double[] translation = result.getTranslation();
-        final double invScale = 1.0 / scale;
+        final var translation = result.getTranslation();
+        final var invScale = 1.0 / scale;
         ArrayUtils.multiplyByScalar(translation, invScale, translation);
         result.scale = invScale;
     }
@@ -258,8 +252,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public MetricTransformation2D toMetric() {
-        return new MetricTransformation2D(getRotation(), getTranslation(),
-                scale);
+        return new MetricTransformation2D(getRotation(), getTranslation(), scale);
     }
 
     /**
@@ -268,8 +261,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @return this transformation converted into an affine transformation.
      */
     public AffineTransformation2D toAffine() {
-        return new AffineTransformation2D(scale, getRotation(),
-                getTranslation());
+        return new AffineTransformation2D(scale, getRotation(), getTranslation());
     }
 
     /**
@@ -295,10 +287,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * transformation and provided transformation.
      */
     @Override
-    public MetricTransformation2D combineAndReturnNew(
-            final EuclideanTransformation2D transformation) {
-
-        final MetricTransformation2D result = new MetricTransformation2D();
+    public MetricTransformation2D combineAndReturnNew(final EuclideanTransformation2D transformation) {
+        final var result = new MetricTransformation2D();
         combine(transformation.toMetric(), result);
         return result;
     }
@@ -324,10 +314,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @return a new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
-    public MetricTransformation2D combineAndReturnNew(
-            final MetricTransformation2D transformation) {
-
-        final MetricTransformation2D result = new MetricTransformation2D();
+    public MetricTransformation2D combineAndReturnNew(final MetricTransformation2D transformation) {
+        final var result = new MetricTransformation2D();
         combine(transformation, result);
         return result;
     }
@@ -351,12 +339,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public void setTransformationFromPoints(
-            final Point2D inputPoint1, final Point2D inputPoint2,
-            final Point2D inputPoint3, final Point2D outputPoint1,
-            final Point2D outputPoint2, final Point2D outputPoint3)
-            throws CoincidentPointsException {
-        internalSetTransformationFromPoints(inputPoint1, inputPoint2,
-                inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3) throws CoincidentPointsException {
+        internalSetMetricTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, outputPoint1, outputPoint2,
+                outputPoint3);
     }
 
     /**
@@ -369,27 +355,24 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @param outputTransformation transformation where result will be stored.
      */
     @SuppressWarnings("DuplicatedCode")
-    private void combine(final MetricTransformation2D inputTransformation,
-                         final MetricTransformation2D outputTransformation) {
+    private void combine(
+            final MetricTransformation2D inputTransformation, final MetricTransformation2D outputTransformation) {
         // combination in matrix representation is:
         // [s1*R1 t1] * [s2*R2 t2] = [s1*s2*R1*R2 + t1*0T  s1*R1*t2 + t1*1] = [s1*s2*R1*R2  s1*R1*t2 + t1]
         // [0T   1 ]    [0T    1 ]   [0T*s2*R2 + 1*0T      0T*t2 + 1*1    ]   [0T           1            ]
 
         try {
             // we do translation first, because this.rotation might change later
-            final Matrix r1 = getRotation().asInhomogeneousMatrix();
-            final Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(),
+            final var r1 = getRotation().asInhomogeneousMatrix();
+            final var t2 = Matrix.newFromArray(inputTransformation.getTranslation(),
                     true);
             // this is R1 * t2
             r1.multiply(t2);
             r1.multiplyByScalar(this.scale);
 
-            ArrayUtils.sum(r1.toArray(), this.getTranslation(),
-                    outputTransformation.getTranslation());
+            ArrayUtils.sum(r1.toArray(), this.getTranslation(), outputTransformation.getTranslation());
 
-            outputTransformation.setRotation(
-                    this.getRotation().combineAndReturnNew(
-                            inputTransformation.getRotation()));
+            outputTransformation.setRotation(this.getRotation().combineAndReturnNew(inputTransformation.getRotation()));
 
             outputTransformation.scale = this.scale * inputTransformation.scale;
 
@@ -416,23 +399,20 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      *                                   points or numerical instabilities).
      */
     @SuppressWarnings("DuplicatedCode")
-    private void internalSetTransformationFromPoints(
-            final Point2D inputPoint1, final Point2D inputPoint2,
-            final Point2D inputPoint3, final Point2D outputPoint1,
-            final Point2D outputPoint2, final Point2D outputPoint3)
-            throws CoincidentPointsException {
-        final List<Point2D> inputPoints = new ArrayList<>();
+    private void internalSetMetricTransformationFromPoints(
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3) throws CoincidentPointsException {
+        final var inputPoints = new ArrayList<Point2D>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
 
-        final List<Point2D> outputPoints = new ArrayList<>();
+        final var outputPoints = new ArrayList<Point2D>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
 
-        final MetricTransformation2DEstimator estimator =
-                new MetricTransformation2DEstimator(inputPoints, outputPoints);
+        final var estimator = new MetricTransformation2DEstimator(inputPoints, outputPoints);
 
         try {
             estimator.estimate(this);

@@ -41,9 +41,7 @@ public interface EuclideanTransformation2DRobustEstimatorListener {
      * @param estimator reference to robust estimator.
      * @param iteration current iteration.
      */
-    void onEstimateNextIteration(
-            final EuclideanTransformation2DRobustEstimator estimator,
-            final int iteration);
+    void onEstimateNextIteration(final EuclideanTransformation2DRobustEstimator estimator, final int iteration);
 
     /**
      * Called when estimation progress changes significantly.
@@ -52,7 +50,5 @@ public interface EuclideanTransformation2DRobustEstimatorListener {
      * @param progress  progress of estimation expressed as a value between 0.0
      *                  and 1.0.
      */
-    void onEstimateProgressChange(
-            final EuclideanTransformation2DRobustEstimator estimator,
-            final float progress);
+    void onEstimateProgressChange(final EuclideanTransformation2DRobustEstimator estimator, final float progress);
 }

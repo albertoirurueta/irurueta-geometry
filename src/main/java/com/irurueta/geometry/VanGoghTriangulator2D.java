@@ -47,15 +47,13 @@ public class VanGoghTriangulator2D extends Triangulator2D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
-    public List<Triangle2D> triangulate(final Polygon2D polygon)
-            throws TriangulatorException {
+    public List<Triangle2D> triangulate(final Polygon2D polygon) throws TriangulatorException {
         // triangulation will modify provided list of vertices, so we make a copy
         // of it
 
         // original vertices
-        final List<Point2D> vertices = polygon.getVertices();
-        final List<Point2D> verticesCopy = new ArrayList<>(
-                polygon.getVertices());
+        final var vertices = polygon.getVertices();
+        final var verticesCopy = new ArrayList<>(polygon.getVertices());
         return internalTriangulate(verticesCopy, null, vertices);
     }
 
@@ -68,15 +66,14 @@ public class VanGoghTriangulator2D extends Triangulator2D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
-    public List<Triangle2D> triangulate(final List<Point2D> vertices)
-            throws TriangulatorException {
+    public List<Triangle2D> triangulate(final List<Point2D> vertices) throws TriangulatorException {
         if (vertices.size() < MIN_VERTICES) {
             throw new TriangulatorException();
         }
 
         // triangulation will modify provided list of vertices, so we make a copy
         // of it
-        final List<Point2D> verticesCopy = new ArrayList<>(vertices);
+        final var verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, null, vertices);
     }
 
@@ -94,15 +91,15 @@ public class VanGoghTriangulator2D extends Triangulator2D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
-    public List<Triangle2D> triangulate(final List<Point2D> vertices,
-                                        final List<int[]> indices) throws TriangulatorException {
+    public List<Triangle2D> triangulate(final List<Point2D> vertices, final List<int[]> indices)
+            throws TriangulatorException {
         if (vertices.size() < MIN_VERTICES) {
             throw new TriangulatorException();
         }
 
         // triangulation will modify provided list of vertices, so we make a copy
         // of it
-        final List<Point2D> verticesCopy = new ArrayList<>(vertices);
+        final var verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, indices, vertices);
     }
 
@@ -124,13 +121,13 @@ public class VanGoghTriangulator2D extends Triangulator2D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     private static List<Triangle2D> internalTriangulate(
-            final List<Point2D> verticesCopy, final List<int[]> indices,
-            final List<Point2D> originalVertices) throws TriangulatorException {
+            final List<Point2D> verticesCopy, final List<int[]> indices, final List<Point2D> originalVertices)
+            throws TriangulatorException {
         if (verticesCopy.size() < MIN_VERTICES) {
             throw new TriangulatorException();
         }
 
-        final List<Triangle2D> result = new LinkedList<>();
+        final var result = new LinkedList<Triangle2D>();
 
         boolean madeCut;
 
@@ -139,25 +136,22 @@ public class VanGoghTriangulator2D extends Triangulator2D {
         // Second, apply algorithm
         while (verticesCopy.size() > MIN_VERTICES) {
             madeCut = false;
-            final int lastElement = verticesCopy.size() - 1;
+            final var lastElement = verticesCopy.size() - 1;
             for (int i = 0; i <= lastElement; i++) {
 
                 if (i == 0) {
                     if (triangle == null) {
                         // instantiate triangle if not already instantiated
-                        triangle = new Triangle2D(verticesCopy.get(lastElement),
-                                verticesCopy.get(0), verticesCopy.get(1));
+                        triangle = new Triangle2D(verticesCopy.get(lastElement), verticesCopy.get(0),
+                                verticesCopy.get(1));
                     } else {
-                        triangle.setVertices(verticesCopy.get(lastElement),
-                                verticesCopy.get(0), verticesCopy.get(1));
+                        triangle.setVertices(verticesCopy.get(lastElement), verticesCopy.get(0), verticesCopy.get(1));
                     }
                 } else if (i == lastElement) {
-                    triangle.setVertices(verticesCopy.get(lastElement - 1),
-                            verticesCopy.get(lastElement),
+                    triangle.setVertices(verticesCopy.get(lastElement - 1), verticesCopy.get(lastElement),
                             verticesCopy.get(0));
                 } else {
-                    triangle.setVertices(verticesCopy.get(i - 1),
-                            verticesCopy.get(i), verticesCopy.get(i + 1));
+                    triangle.setVertices(verticesCopy.get(i - 1), verticesCopy.get(i), verticesCopy.get(i + 1));
                 }
 
                 if (isEar(triangle, verticesCopy)) {
@@ -184,11 +178,10 @@ public class VanGoghTriangulator2D extends Triangulator2D {
         }
 
         // instantiate final triangle
-        triangle = new Triangle2D(verticesCopy.get(0),
-                verticesCopy.get(1), verticesCopy.get(2));
+        triangle = new Triangle2D(verticesCopy.get(0), verticesCopy.get(1), verticesCopy.get(2));
 
 
-        final boolean arePointsColinear = triangle.areVerticesColinear();
+        final var arePointsColinear = triangle.areVerticesColinear();
 
         // only add final triangle if not co-linear (area greater than small
         // threshold)
@@ -211,21 +204,19 @@ public class VanGoghTriangulator2D extends Triangulator2D {
      *                  vertices.
      */
     private static void computeIndices(
-            final List<Point2D> vertices, final List<Triangle2D> triangles,
-            final List<int[]> indices) {
+            final List<Point2D> vertices, final List<Triangle2D> triangles, final List<int[]> indices) {
         if (indices != null) {
             int vertexCounter;
             int triangleVertexCounter;
             int[] triangleIndices;
-            for (final Triangle2D t : triangles) {
+            for (final var t : triangles) {
                 triangleVertexCounter = 0;
                 triangleIndices = new int[Triangle2D.NUM_VERTICES];
-                for (final Point2D p1 : t.getVertices()) {
+                for (final var p1 : t.getVertices()) {
                     vertexCounter = 0;
-                    for (final Point2D p2 : vertices) {
+                    for (final var p2 : vertices) {
                         if (p1 == p2) {
-                            triangleIndices[triangleVertexCounter] =
-                                    vertexCounter;
+                            triangleIndices[triangleVertexCounter] = vertexCounter;
                             break;
                         }
                         vertexCounter++;
@@ -248,19 +239,18 @@ public class VanGoghTriangulator2D extends Triangulator2D {
      * @param polygonVertices A list of points forming the remaining polygon
      * @return true if triangle is ear, false otherwise.
      */
-    private static boolean isEar(
-            final Triangle2D triangle, final List<Point2D> polygonVertices) {
+    private static boolean isEar(final Triangle2D triangle, final List<Point2D> polygonVertices) {
 
         boolean isInside;
         boolean isNotConvex;
         // in a counterclockwise polygon, reversed orientation means that
         // triangle is not convex and cannot be an ear
 
-        final List<Point2D> triangleVertices = triangle.getVertices();
+        final var triangleVertices = triangle.getVertices();
 
         // check that no points in the polygon (aside from points belonging to
         // the triangle) lie inside the triangle
-        for (final Point2D testPoint : polygonVertices) {
+        for (final var testPoint : polygonVertices) {
             // Do not compare with polygon elements which are triangle points
             // if end is reached then polygon and triangle is equal and hence the
             // polygon is the ear

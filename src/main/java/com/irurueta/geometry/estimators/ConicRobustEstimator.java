@@ -84,26 +84,25 @@ public abstract class ConicRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected ConicRobustEstimatorListener mListener;
+    protected ConicRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -111,40 +110,40 @@ public abstract class ConicRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of points to be used to estimate a conic. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mPoints;
+    protected List<Point2D> points;
 
     /**
      * Matrix representation of a 2D point to be reused when computing
      * residuals.
      */
-    private Matrix mTestPoint;
+    private Matrix testPoint;
 
     /**
      * Matrix representation of a conic to be reused when computing
      * residuals.
      */
-    private Matrix mTestC;
+    private Matrix testC;
 
     /**
      * Constructor.
      */
     protected ConicRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -154,10 +153,10 @@ public abstract class ConicRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected ConicRobustEstimator(final ConicRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -168,9 +167,9 @@ public abstract class ConicRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected ConicRobustEstimator(final List<Point2D> points) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -185,10 +184,10 @@ public abstract class ConicRobustEstimator {
      */
     protected ConicRobustEstimator(final ConicRobustEstimatorListener listener,
                                    final List<Point2D> points) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -200,7 +199,7 @@ public abstract class ConicRobustEstimator {
      * @return listener to be notified of events.
      */
     public ConicRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -210,12 +209,11 @@ public abstract class ConicRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final ConicRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final ConicRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -225,7 +223,7 @@ public abstract class ConicRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -234,7 +232,7 @@ public abstract class ConicRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -245,7 +243,7 @@ public abstract class ConicRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -263,11 +261,10 @@ public abstract class ConicRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -279,7 +276,7 @@ public abstract class ConicRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -301,7 +298,7 @@ public abstract class ConicRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -312,7 +309,7 @@ public abstract class ConicRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -332,7 +329,7 @@ public abstract class ConicRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -342,7 +339,7 @@ public abstract class ConicRobustEstimator {
      * @return list of points to be used to estimate a conic.
      */
     public List<Point2D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -369,7 +366,7 @@ public abstract class ConicRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
+        return points != null && points.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -409,19 +406,13 @@ public abstract class ConicRobustEstimator {
      * @return an instance of a conic robust estimator.
      */
     public static ConicRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator();
-            case MSAC:
-                return new MSACConicRobustEstimator();
-            case PROSAC:
-                return new PROSACConicRobustEstimator();
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator();
+            case MSAC -> new MSACConicRobustEstimator();
+            case PROSAC -> new PROSACConicRobustEstimator();
+            case PROMEDS -> new PROMedSConicRobustEstimator();
+            default -> new RANSACConicRobustEstimator();
+        };
     }
 
     /**
@@ -435,21 +426,14 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static ConicRobustEstimator create(
-            final List<Point2D> points, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator(points);
-            case MSAC:
-                return new MSACConicRobustEstimator(points);
-            case PROSAC:
-                return new PROSACConicRobustEstimator(points);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(points);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator(points);
-        }
+    public static ConicRobustEstimator create(final List<Point2D> points, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator(points);
+            case MSAC -> new MSACConicRobustEstimator(points);
+            case PROSAC -> new PROSACConicRobustEstimator(points);
+            case PROMEDS -> new PROMedSConicRobustEstimator(points);
+            default -> new RANSACConicRobustEstimator(points);
+        };
     }
 
     /**
@@ -464,19 +448,13 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             final ConicRobustEstimatorListener listener, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator(listener);
-            case MSAC:
-                return new MSACConicRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACConicRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator(listener);
+            case MSAC -> new MSACConicRobustEstimator(listener);
+            case PROSAC -> new PROSACConicRobustEstimator(listener);
+            case PROMEDS -> new PROMedSConicRobustEstimator(listener);
+            default -> new RANSACConicRobustEstimator(listener);
+        };
     }
 
     /**
@@ -495,19 +473,13 @@ public abstract class ConicRobustEstimator {
     public static ConicRobustEstimator create(
             final ConicRobustEstimatorListener listener, final List<Point2D> points,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACConicRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACConicRobustEstimator(listener, points);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(listener, points);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator(listener, points);
+            case MSAC -> new MSACConicRobustEstimator(listener, points);
+            case PROSAC -> new PROSACConicRobustEstimator(listener, points);
+            case PROMEDS -> new PROMedSConicRobustEstimator(listener, points);
+            default -> new RANSACConicRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -521,21 +493,14 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public static ConicRobustEstimator create(
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator();
-            case MSAC:
-                return new MSACConicRobustEstimator();
-            case PROSAC:
-                return new PROSACConicRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator();
-        }
+    public static ConicRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator();
+            case MSAC -> new MSACConicRobustEstimator();
+            case PROSAC -> new PROSACConicRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSConicRobustEstimator(qualityScores);
+            default -> new RANSACConicRobustEstimator();
+        };
     }
 
     /**
@@ -552,21 +517,14 @@ public abstract class ConicRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(
-            final List<Point2D> points, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator(points);
-            case MSAC:
-                return new MSACConicRobustEstimator(points);
-            case PROSAC:
-                return new PROSACConicRobustEstimator(points, qualityScores);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(points, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator(points);
-        }
+            final List<Point2D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator(points);
+            case MSAC -> new MSACConicRobustEstimator(points);
+            case PROSAC -> new PROSACConicRobustEstimator(points, qualityScores);
+            case PROMEDS -> new PROMedSConicRobustEstimator(points, qualityScores);
+            default -> new RANSACConicRobustEstimator(points);
+        };
     }
 
     /**
@@ -585,19 +543,13 @@ public abstract class ConicRobustEstimator {
     public static ConicRobustEstimator create(
             final ConicRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator(listener);
-            case MSAC:
-                return new MSACConicRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACConicRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator(listener);
+            case MSAC -> new MSACConicRobustEstimator(listener);
+            case PROSAC -> new PROSACConicRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSConicRobustEstimator(listener, qualityScores);
+            default -> new RANSACConicRobustEstimator(listener);
+        };
     }
 
     /**
@@ -616,23 +568,15 @@ public abstract class ConicRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(
-            final ConicRobustEstimatorListener listener, final List<Point2D> points,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSConicRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACConicRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACConicRobustEstimator(listener, points,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSConicRobustEstimator(listener, points,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACConicRobustEstimator(listener, points);
-        }
+            final ConicRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSConicRobustEstimator(listener, points);
+            case MSAC -> new MSACConicRobustEstimator(listener, points);
+            case PROSAC -> new PROSACConicRobustEstimator(listener, points, qualityScores);
+            case PROMEDS -> new PROMedSConicRobustEstimator(listener, points, qualityScores);
+            default -> new RANSACConicRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -666,8 +610,7 @@ public abstract class ConicRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a conic robust estimator.
      */
-    public static ConicRobustEstimator create(
-            final ConicRobustEstimatorListener listener) {
+    public static ConicRobustEstimator create(final ConicRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -682,8 +625,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static ConicRobustEstimator create(
-            final ConicRobustEstimatorListener listener, final List<Point2D> points) {
+    public static ConicRobustEstimator create(final ConicRobustEstimatorListener listener, final List<Point2D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
 
@@ -711,8 +653,7 @@ public abstract class ConicRobustEstimator {
      *                                  the same size as the list of provided quality scores, or if their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static ConicRobustEstimator create(
-            final List<Point2D> points, final double[] qualityScores) {
+    public static ConicRobustEstimator create(final List<Point2D> points, final double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -746,8 +687,7 @@ public abstract class ConicRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(
-            final ConicRobustEstimatorListener listener, final List<Point2D> points,
-            final double[] qualityScores) {
+            final ConicRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -764,8 +704,7 @@ public abstract class ConicRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Conic estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Conic estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -786,7 +725,7 @@ public abstract class ConicRobustEstimator {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**
@@ -799,24 +738,22 @@ public abstract class ConicRobustEstimator {
     protected double residual(final Conic c, final Point2D point) {
         c.normalize();
         try {
-            if (mTestC == null) {
-                mTestC = c.asMatrix();
+            if (testC == null) {
+                testC = c.asMatrix();
             } else {
-                c.asMatrix(mTestC);
+                c.asMatrix(testC);
             }
 
-            if (mTestPoint == null) {
-                mTestPoint = new Matrix(
-                        Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
-                        1);
+            if (testPoint == null) {
+                testPoint = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             }
             point.normalize();
-            mTestPoint.setElementAt(0, 0, point.getHomX());
-            mTestPoint.setElementAt(1, 0, point.getHomY());
-            mTestPoint.setElementAt(2, 0, point.getHomW());
-            final Matrix locusMatrix = mTestPoint.transposeAndReturnNew();
-            locusMatrix.multiply(mTestC);
-            locusMatrix.multiply(mTestPoint);
+            testPoint.setElementAt(0, 0, point.getHomX());
+            testPoint.setElementAt(1, 0, point.getHomY());
+            testPoint.setElementAt(2, 0, point.getHomW());
+            final var locusMatrix = testPoint.transposeAndReturnNew();
+            locusMatrix.multiply(testC);
+            locusMatrix.multiply(testPoint);
             return Math.abs(locusMatrix.getElementAt(0, 0));
         } catch (final AlgebraException e) {
             return Double.MAX_VALUE;

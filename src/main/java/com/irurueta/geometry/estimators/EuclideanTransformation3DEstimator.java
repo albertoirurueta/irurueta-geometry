@@ -55,29 +55,29 @@ public class EuclideanTransformation3DEstimator {
     /**
      * 3D input points.
      */
-    private List<Point3D> mInputPoints;
+    private List<Point3D> inputPoints;
 
     /**
      * 3D output points.
      */
-    private List<Point3D> mOutputPoints;
+    private List<Point3D> outputPoints;
 
     /**
      * Listener to be notified of events such as when estimation starts or ends.
      */
-    private EuclideanTransformation3DEstimatorListener mListener;
+    private EuclideanTransformation3DEstimatorListener listener;
 
     /**
      * Indicates whether estimation can start with only 3 points or not.
      * True allows 3 points, false requires 4.
      */
-    private boolean mWeakMinimumSizeAllowed;
+    private boolean weakMinimumSizeAllowed;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    private boolean mLocked;
+    private boolean locked;
 
     /**
      * Constructor.
@@ -93,8 +93,8 @@ public class EuclideanTransformation3DEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than 4.
      */
-    public EuclideanTransformation3DEstimator(final List<Point3D> inputPoints,
-                                              final List<Point3D> outputPoints) {
+    public EuclideanTransformation3DEstimator(
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -104,9 +104,8 @@ public class EuclideanTransformation3DEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts or ends.
      */
-    public EuclideanTransformation3DEstimator(
-            final EuclideanTransformation3DEstimatorListener listener) {
-        mListener = listener;
+    public EuclideanTransformation3DEstimator(final EuclideanTransformation3DEstimatorListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -122,7 +121,7 @@ public class EuclideanTransformation3DEstimator {
     public EuclideanTransformation3DEstimator(
             final EuclideanTransformation3DEstimatorListener listener,
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
-        mListener = listener;
+        this.listener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -132,7 +131,7 @@ public class EuclideanTransformation3DEstimator {
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
     public EuclideanTransformation3DEstimator(final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -145,9 +144,8 @@ public class EuclideanTransformation3DEstimator {
      *                                  the same size or their size is smaller than 4.
      */
     public EuclideanTransformation3DEstimator(
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final boolean weakMinimumSizeAllowed) {
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -159,10 +157,9 @@ public class EuclideanTransformation3DEstimator {
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
     public EuclideanTransformation3DEstimator(
-            final EuclideanTransformation3DEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
-        mListener = listener;
+            final EuclideanTransformation3DEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.listener = listener;
     }
 
     /**
@@ -178,10 +175,9 @@ public class EuclideanTransformation3DEstimator {
      */
     public EuclideanTransformation3DEstimator(
             final EuclideanTransformation3DEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
-        mListener = listener;
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final boolean weakMinimumSizeAllowed) {
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.listener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -197,7 +193,7 @@ public class EuclideanTransformation3DEstimator {
      * transformation.
      */
     public List<Point3D> getInputPoints() {
-        return mInputPoints;
+        return inputPoints;
     }
 
     /**
@@ -212,7 +208,7 @@ public class EuclideanTransformation3DEstimator {
      * transformation.
      */
     public List<Point3D> getOutputPoints() {
-        return mOutputPoints;
+        return outputPoints;
     }
 
     /**
@@ -231,8 +227,7 @@ public class EuclideanTransformation3DEstimator {
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public void setPoints(final List<Point3D> inputPoints,
-                          final List<Point3D> outputPoints) throws LockedException {
+    public void setPoints(final List<Point3D> inputPoints, final List<Point3D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -246,7 +241,7 @@ public class EuclideanTransformation3DEstimator {
      * @return listener to be notified of events.
      */
     public EuclideanTransformation3DEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -256,12 +251,11 @@ public class EuclideanTransformation3DEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if estimator is locked.
      */
-    public void setListener(final EuclideanTransformation3DEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final EuclideanTransformation3DEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -270,7 +264,7 @@ public class EuclideanTransformation3DEstimator {
      * @return true allows 3 points, false requires 4.
      */
     public boolean isWeakMinimumSizeAllowed() {
-        return mWeakMinimumSizeAllowed;
+        return weakMinimumSizeAllowed;
     }
 
     /**
@@ -279,12 +273,11 @@ public class EuclideanTransformation3DEstimator {
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      * @throws LockedException if estimator is locked.
      */
-    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed)
-            throws LockedException {
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -294,7 +287,7 @@ public class EuclideanTransformation3DEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;
+        return weakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;
     }
 
     /**
@@ -304,7 +297,7 @@ public class EuclideanTransformation3DEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -314,7 +307,7 @@ public class EuclideanTransformation3DEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -326,9 +319,8 @@ public class EuclideanTransformation3DEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputPoints != null && mOutputPoints != null &&
-                mInputPoints.size() == mOutputPoints.size() &&
-                mInputPoints.size() >= getMinimumPoints();
+        return inputPoints != null && outputPoints != null && inputPoints.size() == outputPoints.size()
+                && inputPoints.size() >= getMinimumPoints();
     }
 
     /**
@@ -344,9 +336,8 @@ public class EuclideanTransformation3DEstimator {
      *                                   estimated for some reason (point configuration degeneracy, duplicate
      *                                   points or numerical instabilities).
      */
-    public EuclideanTransformation3D estimate() throws LockedException,
-            NotReadyException, CoincidentPointsException {
-        final EuclideanTransformation3D result = new EuclideanTransformation3D();
+    public EuclideanTransformation3D estimate() throws LockedException, NotReadyException, CoincidentPointsException {
+        final var result = new EuclideanTransformation3D();
         estimate(result);
         return result;
     }
@@ -364,8 +355,8 @@ public class EuclideanTransformation3DEstimator {
      *                                   estimated for some reason (point configuration degeneracy, duplicate
      *                                   points or numerical instabilities).
      */
-    public void estimate(final EuclideanTransformation3D result)
-            throws LockedException, NotReadyException, CoincidentPointsException {
+    public void estimate(final EuclideanTransformation3D result) throws LockedException, NotReadyException,
+            CoincidentPointsException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -374,60 +365,48 @@ public class EuclideanTransformation3DEstimator {
         }
 
         try {
-            mLocked = true;
+            locked = true;
 
-            if (mListener != null) {
-                mListener.onEstimateStart(this);
+            if (listener != null) {
+                listener.onEstimateStart(this);
             }
 
-            final Matrix inCentroid = computeCentroid(mInputPoints);
-            final Matrix outCentroid = computeCentroid(mOutputPoints);
+            final var inCentroid = computeCentroid(inputPoints);
+            final var outCentroid = computeCentroid(outputPoints);
 
-            final Matrix m = new Matrix(
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
+            final var m = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
 
-            final int n = mInputPoints.size();
-            Point3D inputPoint;
-            Point3D outputPoint;
-            final Matrix col = new Matrix(
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-            final Matrix row = new Matrix(1,
+            final var n = inputPoints.size();
+            final var col = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var row = new Matrix(1, Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+            final var tmp = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-            final Matrix tmp = new Matrix(
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-            for (int i = 0; i < n; i++) {
-                inputPoint = mInputPoints.get(i);
-                outputPoint = mOutputPoints.get(i);
+            for (var i = 0; i < n; i++) {
+                final var inputPoint = inputPoints.get(i);
+                final var outputPoint = outputPoints.get(i);
 
-                col.setElementAtIndex(0, inputPoint.getInhomX() -
-                        inCentroid.getElementAtIndex(0));
-                col.setElementAtIndex(1, inputPoint.getInhomY() -
-                        inCentroid.getElementAtIndex(1));
-                col.setElementAtIndex(2, inputPoint.getInhomZ() -
-                        inCentroid.getElementAtIndex(2));
+                col.setElementAtIndex(0, inputPoint.getInhomX() - inCentroid.getElementAtIndex(0));
+                col.setElementAtIndex(1, inputPoint.getInhomY() - inCentroid.getElementAtIndex(1));
+                col.setElementAtIndex(2, inputPoint.getInhomZ() - inCentroid.getElementAtIndex(2));
 
-                row.setElementAtIndex(0, outputPoint.getInhomX() -
-                        outCentroid.getElementAtIndex(0));
-                row.setElementAtIndex(1, outputPoint.getInhomY() -
-                        outCentroid.getElementAtIndex(1));
-                row.setElementAtIndex(2, outputPoint.getInhomZ() -
-                        outCentroid.getElementAtIndex(2));
+                row.setElementAtIndex(0, outputPoint.getInhomX() - outCentroid.getElementAtIndex(0));
+                row.setElementAtIndex(1, outputPoint.getInhomY() - outCentroid.getElementAtIndex(1));
+                row.setElementAtIndex(2, outputPoint.getInhomZ() - outCentroid.getElementAtIndex(2));
 
                 col.multiply(row, tmp);
                 m.add(tmp);
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
-            if (!mWeakMinimumSizeAllowed && decomposer.getNullity() > 0) {
+            if (!weakMinimumSizeAllowed && decomposer.getNullity() > 0) {
                 throw new CoincidentPointsException();
             }
 
-            final Matrix u = decomposer.getU();
-            final Matrix v = decomposer.getV();
+            final var u = decomposer.getU();
+            final var v = decomposer.getV();
 
             // rotation R = V*U^T
             u.transpose();
@@ -440,24 +419,24 @@ public class EuclideanTransformation3DEstimator {
                 v.setElementAt(2, 2, -v.getElementAt(2, 2));
             }
 
-            final MatrixRotation3D rotation = new MatrixRotation3D(v);
+            final var rotation = new MatrixRotation3D(v);
 
             // translation
-            final Matrix t = v.multiplyAndReturnNew(inCentroid);
+            final var t = v.multiplyAndReturnNew(inCentroid);
             t.multiplyByScalar(-1.0);
             t.add(outCentroid);
 
             result.setRotation(rotation);
             result.setTranslation(t.getBuffer());
 
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
+            if (listener != null) {
+                listener.onEstimateEnd(this);
             }
 
         } catch (final AlgebraException | InvalidRotationMatrixException e) {
             throw new CoincidentPointsException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -469,20 +448,18 @@ public class EuclideanTransformation3DEstimator {
      * @return centroid.
      * @throws AlgebraException never thrown.
      */
-    private static Matrix computeCentroid(final List<Point3D> points)
-            throws AlgebraException {
-        double x = 0.0;
-        double y = 0.0;
-        double z = 0.0;
-        final double n = points.size();
-        for (final Point3D p : points) {
+    private static Matrix computeCentroid(final List<Point3D> points) throws AlgebraException {
+        var x = 0.0;
+        var y = 0.0;
+        var z = 0.0;
+        final var n = points.size();
+        for (final var p : points) {
             x += p.getInhomX() / n;
             y += p.getInhomY() / n;
             z += p.getInhomZ() / n;
         }
 
-        final Matrix result = new Matrix(
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+        final var result = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
         result.setElementAtIndex(0, x);
         result.setElementAtIndex(1, y);
         result.setElementAtIndex(2, z);
@@ -501,15 +478,14 @@ public class EuclideanTransformation3DEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than #getMinimumPoints.
      */
-    private void internalSetPoints(final List<Point3D> inputPoints,
-                                   final List<Point3D> outputPoints) {
+    private void internalSetPoints(final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }
         if (inputPoints.size() != outputPoints.size()) {
             throw new IllegalArgumentException();
         }
-        mInputPoints = inputPoints;
-        mOutputPoints = outputPoints;
+        this.inputPoints = inputPoints;
+        this.outputPoints = outputPoints;
     }
 }

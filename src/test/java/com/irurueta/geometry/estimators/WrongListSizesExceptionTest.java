@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class WrongListSizesExceptionTest {
+class WrongListSizesExceptionTest {
 
     @Test
-    public void testConstructor() {
-        WrongListSizesException ex = new WrongListSizesException();
+    void testConstructor() {
+        var ex = new WrongListSizesException();
         assertNotNull(ex);
 
         ex = new WrongListSizesException("message");

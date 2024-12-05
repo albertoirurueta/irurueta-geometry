@@ -48,17 +48,17 @@ public class Triangle3D implements Serializable {
     /**
      * 1st vertex of this triangle.
      */
-    private Point3D mVertex1;
+    private Point3D vertex1;
 
     /**
      * 2nd vertex of this triangle.
      */
-    private Point3D mVertex2;
+    private Point3D vertex2;
 
     /**
      * 3rd vertex of this triangle.
      */
-    private Point3D mVertex3;
+    private Point3D vertex3;
 
     /**
      * Constructor.
@@ -68,9 +68,7 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if any of the vertices is null.
      */
-    public Triangle3D(
-            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
-
+    public Triangle3D(final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
         setVertices(vertex1, vertex2, vertex3);
     }
 
@@ -80,7 +78,7 @@ public class Triangle3D implements Serializable {
      * @return 1st vertex.
      */
     public Point3D getVertex1() {
-        return mVertex1;
+        return vertex1;
     }
 
     /**
@@ -93,7 +91,7 @@ public class Triangle3D implements Serializable {
         if (vertex1 == null) {
             throw new NullPointerException();
         }
-        this.mVertex1 = vertex1;
+        this.vertex1 = vertex1;
     }
 
     /**
@@ -102,7 +100,7 @@ public class Triangle3D implements Serializable {
      * @return 2nd vertex.
      */
     public Point3D getVertex2() {
-        return mVertex2;
+        return vertex2;
     }
 
     /**
@@ -115,7 +113,7 @@ public class Triangle3D implements Serializable {
         if (vertex2 == null) {
             throw new NullPointerException();
         }
-        this.mVertex2 = vertex2;
+        this.vertex2 = vertex2;
     }
 
     /**
@@ -124,7 +122,7 @@ public class Triangle3D implements Serializable {
      * @return 3rd vertex.
      */
     public Point3D getVertex3() {
-        return mVertex3;
+        return vertex3;
     }
 
     /**
@@ -137,7 +135,7 @@ public class Triangle3D implements Serializable {
         if (vertex3 == null) {
             throw new NullPointerException();
         }
-        this.mVertex3 = vertex3;
+        this.vertex3 = vertex3;
     }
 
     /**
@@ -146,7 +144,7 @@ public class Triangle3D implements Serializable {
      * @return Vertices of this triangle.
      */
     public List<Point3D> getVertices() {
-        final List<Point3D> vertices = new ArrayList<>(NUM_VERTICES);
+        final var vertices = new ArrayList<Point3D>(NUM_VERTICES);
         vertices(vertices);
         return vertices;
     }
@@ -159,9 +157,9 @@ public class Triangle3D implements Serializable {
      */
     public void vertices(final List<Point3D> result) {
         result.clear();
-        result.add(mVertex1);
-        result.add(mVertex2);
-        result.add(mVertex3);
+        result.add(vertex1);
+        result.add(vertex2);
+        result.add(vertex3);
     }
 
     /**
@@ -172,15 +170,14 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if any of the vertices is null.
      */
-    public final void setVertices(
-            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
+    public final void setVertices(final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
         if (vertex1 == null || vertex2 == null || vertex3 == null) {
             throw new NullPointerException();
         }
 
-        mVertex1 = vertex1;
-        mVertex2 = vertex2;
-        mVertex3 = vertex3;
+        this.vertex1 = vertex1;
+        this.vertex2 = vertex2;
+        this.vertex3 = vertex3;
     }
 
     /**
@@ -190,8 +187,7 @@ public class Triangle3D implements Serializable {
      * @return Area of triangle.
      */
     public static double area(final Triangle3D triangle) {
-        return area(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3());
+        return area(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3());
     }
 
     /**
@@ -202,34 +198,32 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex of a triangle.
      * @return Area of a triangle.
      */
-    public static double area(
-            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
+    public static double area(final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
         // The signed area of a triangle is half the determinant of its vectors,
         // or half the modulus of the cross product of its vectors
 
         // Hence, having the vectors of the triangle defined as:
         // v1 = vertex2 - vertex1, and v2 = vertex3 - vertex1, then:
-        final double inhomX1 = vertex1.getInhomX();
-        final double inhomY1 = vertex1.getInhomY();
-        final double inhomZ1 = vertex1.getInhomZ();
+        final var inhomX1 = vertex1.getInhomX();
+        final var inhomY1 = vertex1.getInhomY();
+        final var inhomZ1 = vertex1.getInhomZ();
 
         // given triangle ABC made by vectors ab and ac
-        final double abX = vertex2.getInhomX() - inhomX1;
-        final double abY = vertex2.getInhomY() - inhomY1;
-        final double abZ = vertex2.getInhomZ() - inhomZ1;
+        final var abX = vertex2.getInhomX() - inhomX1;
+        final var abY = vertex2.getInhomY() - inhomY1;
+        final var abZ = vertex2.getInhomZ() - inhomZ1;
 
-        final double acX = vertex3.getInhomX() - inhomX1;
-        final double acY = vertex3.getInhomY() - inhomY1;
-        final double acZ = vertex3.getInhomZ() - inhomZ1;
+        final var acX = vertex3.getInhomX() - inhomX1;
+        final var acY = vertex3.getInhomY() - inhomY1;
+        final var acZ = vertex3.getInhomZ() - inhomZ1;
 
         // the area of ABC is half the modulus of the cross product of
         // vectors ab and ac
-        final double crossX = abY * acZ - abZ * acY;
-        final double crossY = abZ * acX - abX * acZ;
-        final double crossZ = abX * acY - abY * acX;
+        final var crossX = abY * acZ - abZ * acY;
+        final var crossY = abZ * acX - abX * acZ;
+        final var crossZ = abX * acY - abY * acX;
 
-        return 0.5 * Math.sqrt(crossX * crossX +
-                crossY * crossY + crossZ * crossZ);
+        return 0.5 * Math.sqrt(crossX * crossX + crossY * crossY + crossZ * crossZ);
     }
 
     /**
@@ -238,7 +232,7 @@ public class Triangle3D implements Serializable {
      * @return Area of this triangle.
      */
     public double getArea() {
-        return area(mVertex1, mVertex2, mVertex3);
+        return area(vertex1, vertex2, vertex3);
     }
 
     /**
@@ -264,7 +258,6 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean areVerticesColinear(final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -278,8 +271,7 @@ public class Triangle3D implements Serializable {
      * @return Perimeter of provided triangle.
      */
     public static double perimeter(final Triangle3D triangle) {
-        return perimeter(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3());
+        return perimeter(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3());
     }
 
     /**
@@ -290,10 +282,8 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex of a triangle.
      * @return Perimeter of a triangle.
      */
-    public static double perimeter(
-            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
-        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) +
-                vertex3.distanceTo(vertex1);
+    public static double perimeter(final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
+        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) + vertex3.distanceTo(vertex1);
     }
 
     /**
@@ -330,7 +320,7 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isInside(final Point3D point, final double threshold) {
-        return isInside(mVertex1, mVertex2, mVertex3, point, threshold);
+        return isInside(vertex1, vertex2, vertex3, point, threshold);
     }
 
     /**
@@ -342,8 +332,7 @@ public class Triangle3D implements Serializable {
      * @param point    Point to be checked.
      * @return True if point lies inside provided triangle, false otherwise.
      */
-    public static boolean isInside(
-            final Triangle3D triangle, final Point3D point) {
+    public static boolean isInside(final Triangle3D triangle, final Point3D point) {
         return isInside(triangle, point, DEFAULT_THRESHOLD);
     }
 
@@ -360,11 +349,8 @@ public class Triangle3D implements Serializable {
      * @return True if point lies inside this triangle, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isInside(
-            final Triangle3D triangle, final Point3D point,
-            final double threshold) {
-        return isInside(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3(), point, threshold);
+    public static boolean isInside(final Triangle3D triangle, final Point3D point, final double threshold) {
+        return isInside(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3(), point, threshold);
     }
 
     /**
@@ -381,8 +367,7 @@ public class Triangle3D implements Serializable {
      * false otherwise.
      */
     public static boolean isInside(
-            final Point3D vertex1, final Point3D vertex2,
-            final Point3D vertex3, final Point3D point) {
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3, final Point3D point) {
         return isInside(vertex1, vertex2, vertex3, point, DEFAULT_THRESHOLD);
     }
 
@@ -423,11 +408,11 @@ public class Triangle3D implements Serializable {
         // certain accuracy to account for numerical precision)
 
         // Then the areas of triangles are:
-        final double areaABC = area(vertex1, vertex2, vertex3);
+        final var areaABC = area(vertex1, vertex2, vertex3);
 
-        final double areaApB = area(vertex1, point, vertex2);
-        final double areaBpC = area(vertex2, point, vertex3);
-        final double areaApC = area(vertex3, point, vertex1);
+        final var areaApB = area(vertex1, point, vertex2);
+        final var areaBpC = area(vertex2, point, vertex3);
+        final var areaApC = area(vertex3, point, vertex1);
 
         return Math.abs(areaApB + areaBpC + areaApC - areaABC) <= threshold;
     }
@@ -442,7 +427,7 @@ public class Triangle3D implements Serializable {
      *                                 co-linear (triangle has area equal or very close to 0.0).
      */
     public Plane toPlane() throws ColinearPointsException {
-        return new Plane(mVertex1, mVertex2, mVertex3);
+        return new Plane(vertex1, vertex2, vertex3);
     }
 
     /**
@@ -456,7 +441,7 @@ public class Triangle3D implements Serializable {
      *                                 co-linear (triangle has area equal or very close to 0.0).
      */
     public void toPlane(final Plane result) throws ColinearPointsException {
-        result.setParametersFromThreePoints(mVertex1, mVertex2, mVertex3);
+        result.setParametersFromThreePoints(vertex1, vertex2, vertex3);
     }
 
     /**
@@ -466,7 +451,7 @@ public class Triangle3D implements Serializable {
      * @return Center of this triangle.
      */
     public Point3D getCenter() {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         center(result);
         return result;
     }
@@ -479,7 +464,7 @@ public class Triangle3D implements Serializable {
      * @param result Point instance where center will be stored.
      */
     public void center(final Point3D result) {
-        center(mVertex1, mVertex2, mVertex3, result);
+        center(vertex1, vertex2, vertex3, result);
     }
 
     /**
@@ -491,9 +476,8 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex of a triangle.
      * @return Center of a triangle formed by provided vertices.
      */
-    public static Point3D center(
-            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
-        final Point3D result = Point3D.create();
+    public static Point3D center(final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) {
+        final var result = Point3D.create();
         center(vertex1, vertex2, vertex3, result);
         return result;
     }
@@ -521,15 +505,11 @@ public class Triangle3D implements Serializable {
      * @param result  Point instance where center will be stored.
      */
     public static void center(
-            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3,
-            final Point3D result) {
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3, final Point3D result) {
 
-        final double x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) /
-                3.0;
-        final double y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) /
-                3.0;
-        final double z = (vertex1.getInhomZ() + vertex2.getInhomZ() + vertex3.getInhomZ()) /
-                3.0;
+        final var x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) / 3.0;
+        final var y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) / 3.0;
+        final var z = (vertex1.getInhomZ() + vertex2.getInhomZ() + vertex3.getInhomZ()) / 3.0;
 
         result.setInhomogeneousCoordinates(x, y, z);
     }
@@ -571,11 +551,8 @@ public class Triangle3D implements Serializable {
      * @param point    Point to be checked.
      * @return Shortest distance to this triangle.
      */
-    public static double shortestDistance(
-            final Triangle3D triangle, final Point3D point) {
-
-        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3(), point);
+    public static double shortestDistance(final Triangle3D triangle, final Point3D point) {
+        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3(), point);
     }
 
     /**
@@ -592,8 +569,7 @@ public class Triangle3D implements Serializable {
      * @return Shortest distance to the triangle formed by provided vertices.
      */
     public static double shortestDistance(
-            final Point3D vertex1, final Point3D vertex2,
-            final Point3D vertex3, final Point3D point) {
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3, final Point3D point) {
 
         // normalize points to increase accuracy
         vertex1.normalize();
@@ -601,8 +577,8 @@ public class Triangle3D implements Serializable {
         vertex3.normalize();
         point.normalize();
 
-        double bestDist = Double.MAX_VALUE;
-        double dist = Double.MAX_VALUE;
+        var bestDist = Double.MAX_VALUE;
+        var dist = Double.MAX_VALUE;
 
         Line3D line = null;
         try {
@@ -743,7 +719,7 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public Point3D getClosestPoint(final Point3D point, final double threshold) {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
     }
@@ -770,27 +746,26 @@ public class Triangle3D implements Serializable {
      *                  triangle or not.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(final Point3D point, final Point3D result,
-                             final double threshold) {
+    public void closestPoint(final Point3D point, final Point3D result, final double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         // normalize vertices and point to increase accuracy
-        mVertex1.normalize();
-        mVertex2.normalize();
-        mVertex3.normalize();
+        vertex1.normalize();
+        vertex2.normalize();
+        vertex3.normalize();
         point.normalize();
 
         Line3D line1;
         Line3D line2;
         Line3D line3;
         try {
-            line1 = new Line3D(mVertex1, mVertex2);
+            line1 = new Line3D(vertex1, vertex2);
             // to increase accuracy
             line1.normalize();
             if (line1.isLocus(point)) {
-                if (point.isBetween(mVertex1, mVertex2)) {
+                if (point.isBetween(vertex1, vertex2)) {
                     // point is on this side of the triangle, so point must
                     // be the result
                     result.setCoordinates(point);
@@ -798,18 +773,18 @@ public class Triangle3D implements Serializable {
                     // point belongs to the line forming this side of the
                     // triangle, hence the closest vertex of this line will be
                     // the closest point to the triangle
-                    final double dist1 = mVertex1.distanceTo(point);
-                    final double dist2 = mVertex2.distanceTo(point);
+                    final var dist1 = vertex1.distanceTo(point);
+                    final var dist2 = vertex2.distanceTo(point);
                     if (dist1 < dist2) {
-                        result.setCoordinates(mVertex1);
+                        result.setCoordinates(vertex1);
                     } else {
-                        result.setCoordinates(mVertex2);
+                        result.setCoordinates(vertex2);
                     }
                 }
                 return;
             }
         } catch (final CoincidentPointsException e) {
-            if (point.equals(mVertex1) || point.equals(mVertex2)) {
+            if (point.equals(vertex1) || point.equals(vertex2)) {
                 result.setCoordinates(point);
             }
             return;
@@ -818,11 +793,11 @@ public class Triangle3D implements Serializable {
 
         // try on second side of the triangle
         try {
-            line2 = new Line3D(mVertex1, mVertex3);
+            line2 = new Line3D(vertex1, vertex3);
             // to increase accuracy
             line2.normalize();
             if (line2.isLocus(point)) {
-                if (point.isBetween(mVertex1, mVertex3)) {
+                if (point.isBetween(vertex1, vertex3)) {
                     // point is on this side of the triangle, so point must be
                     // the result
                     result.setCoordinates(point);
@@ -830,18 +805,18 @@ public class Triangle3D implements Serializable {
                     // point belongs to the line forming this side of the
                     // triangle, hence the closest vertex of this line will be
                     // the closest point to the triangle
-                    final double dist1 = mVertex1.distanceTo(point);
-                    final double dist3 = mVertex3.distanceTo(point);
+                    final var dist1 = vertex1.distanceTo(point);
+                    final var dist3 = vertex3.distanceTo(point);
                     if (dist1 < dist3) {
-                        result.setCoordinates(mVertex1);
+                        result.setCoordinates(vertex1);
                     } else {
-                        result.setCoordinates(mVertex3);
+                        result.setCoordinates(vertex3);
                     }
                 }
                 return;
             }
         } catch (final CoincidentPointsException e) {
-            if (point.equals(mVertex1) || point.equals(mVertex3)) {
+            if (point.equals(vertex1) || point.equals(vertex3)) {
                 result.setCoordinates(point);
             }
             return;
@@ -850,11 +825,11 @@ public class Triangle3D implements Serializable {
 
         // try on third side of the triangle
         try {
-            line3 = new Line3D(mVertex2, mVertex3);
+            line3 = new Line3D(vertex2, vertex3);
             // to increase accuracy
             line3.normalize();
             if (line3.isLocus(point)) {
-                if (point.isBetween(mVertex2, mVertex3)) {
+                if (point.isBetween(vertex2, vertex3)) {
                     // point is on this side of the triangle, so point must be
                     // the result
                     result.setCoordinates(point);
@@ -862,18 +837,18 @@ public class Triangle3D implements Serializable {
                     // point belongs to the line forming this side of the
                     // triangle, hence the closest vertex of this line will be
                     // the closest point to the triangle
-                    final double dist2 = mVertex2.distanceTo(point);
-                    final double dist3 = mVertex3.distanceTo(point);
+                    final var dist2 = vertex2.distanceTo(point);
+                    final var dist3 = vertex3.distanceTo(point);
                     if (dist2 < dist3) {
-                        result.setCoordinates(mVertex2);
+                        result.setCoordinates(vertex2);
                     } else {
-                        result.setCoordinates(mVertex3);
+                        result.setCoordinates(vertex3);
                     }
                 }
                 return;
             }
         } catch (final CoincidentPointsException e) {
-            if (point.equals(mVertex2) || point.equals(mVertex3)) {
+            if (point.equals(vertex2) || point.equals(vertex3)) {
                 result.setCoordinates(point);
             }
             return;
@@ -899,39 +874,38 @@ public class Triangle3D implements Serializable {
         closest3.normalize();
 
         // check if points lie within sides of triangle
-        final boolean between1 = closest1.isBetween(mVertex1, mVertex2);
-        final boolean between2 = closest2.isBetween(mVertex1, mVertex3);
-        final boolean between3 = closest3.isBetween(mVertex2, mVertex3);
+        final var between1 = closest1.isBetween(vertex1, vertex2);
+        final var between2 = closest2.isBetween(vertex1, vertex3);
+        final var between3 = closest3.isBetween(vertex2, vertex3);
 
-        final double distClosest1 = closest1.distanceTo(point);
-        final double distClosest2 = closest2.distanceTo(point);
-        final double distClosest3 = closest3.distanceTo(point);
+        final var distClosest1 = closest1.distanceTo(point);
+        final var distClosest2 = closest2.distanceTo(point);
+        final var distClosest3 = closest3.distanceTo(point);
 
-        final double distVertex1 = mVertex1.distanceTo(point);
-        final double distVertex2 = mVertex2.distanceTo(point);
-        final double distVertex3 = mVertex3.distanceTo(point);
-
+        final var distVertex1 = vertex1.distanceTo(point);
+        final var distVertex2 = vertex2.distanceTo(point);
+        final var distVertex3 = vertex3.distanceTo(point);
 
         if (between1 && !between2 && !between3) {
             // choose closest1 or opposite vertex (vertex3)
             if (distClosest1 < distVertex3) {
                 result.setCoordinates(closest1);
             } else {
-                result.setCoordinates(mVertex3);
+                result.setCoordinates(vertex3);
             }
         } else if (!between1 && between2 && !between3) {
             // choose closest2 or opposite vertex (vertex2)
             if (distClosest2 < distVertex2) {
                 result.setCoordinates(closest2);
             } else {
-                result.setCoordinates(mVertex2);
+                result.setCoordinates(vertex2);
             }
         } else if (!between1 && !between2 && between3) {
             // choose closest3 or opposite vertex (vertex1)
             if (distClosest3 < distVertex1) {
                 result.setCoordinates(closest3);
             } else {
-                result.setCoordinates(mVertex1);
+                result.setCoordinates(vertex1);
             }
         } else if (between1 && between2 && !between3) {
             // determine if closest1 or closest2
@@ -965,8 +939,7 @@ public class Triangle3D implements Serializable {
             if (distClosest1 < distClosest2 && distClosest1 < distClosest3) {
                 // pick closest1
                 result.setCoordinates(closest1);
-            } else if (distClosest2 < distClosest1 &&
-                    distClosest2 < distClosest3) {
+            } else if (distClosest2 < distClosest1 && distClosest2 < distClosest3) {
                 // pick closest2
                 result.setCoordinates(closest2);
             } else {
@@ -976,16 +949,15 @@ public class Triangle3D implements Serializable {
         } else {
             // all closest points are outside vertex limits, so we pick the
             // closest vertex
-
             if (distVertex1 < distVertex2 && distVertex1 < distVertex3) {
                 // pick vertex1
-                result.setCoordinates(mVertex1);
+                result.setCoordinates(vertex1);
             } else if (distVertex2 < distVertex1 && distVertex2 < distVertex3) {
                 // pick vertex2
-                result.setCoordinates(mVertex2);
+                result.setCoordinates(vertex2);
             } else {
                 // pick vertex3
-                result.setCoordinates(mVertex3);
+                result.setCoordinates(vertex3);
             }
         }
     }
@@ -1005,9 +977,8 @@ public class Triangle3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        return point.isBetween(mVertex1, mVertex2, threshold) ||
-                point.isBetween(mVertex1, mVertex3, threshold) ||
-                point.isBetween(mVertex2, mVertex3, threshold);
+        return point.isBetween(vertex1, vertex2, threshold) || point.isBetween(vertex1, vertex3, threshold)
+                || point.isBetween(vertex2, vertex3, threshold);
     }
 
     /**
@@ -1043,8 +1014,7 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of this triangle
      *                                   are too close to each other.
      */
-    public double[] getOrientation(final double threshold)
-            throws CoincidentPointsException {
+    public double[] getOrientation(final double threshold) throws CoincidentPointsException {
         return orientation(this, threshold);
     }
 
@@ -1058,8 +1028,7 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of this triangle
      *                                   are too close to each other.
      */
-    public void orientation(final double[] result)
-            throws CoincidentPointsException {
+    public void orientation(final double[] result) throws CoincidentPointsException {
         orientation(this, result);
     }
 
@@ -1075,8 +1044,7 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of this triangle
      *                                   are too close to each other.
      */
-    public void orientation(final double[] result, final double threshold)
-            throws CoincidentPointsException {
+    public void orientation(final double[] result, final double threshold) throws CoincidentPointsException {
         orientation(this, result, threshold);
     }
 
@@ -1088,10 +1056,8 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of provided triangle
      *                                   are too close to each other.
      */
-    public static double[] orientation(final Triangle3D triangle)
-            throws CoincidentPointsException {
-        return orientation(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3());
+    public static double[] orientation(final Triangle3D triangle) throws CoincidentPointsException {
+        return orientation(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3());
     }
 
     /**
@@ -1122,10 +1088,8 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of provided triangle
      *                                   are too close to each other.
      */
-    public static void orientation(final Triangle3D triangle, final double[] result)
-            throws CoincidentPointsException {
-        orientation(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3(), result);
+    public static void orientation(final Triangle3D triangle, final double[] result) throws CoincidentPointsException {
+        orientation(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3(), result);
     }
 
     /**
@@ -1142,10 +1106,8 @@ public class Triangle3D implements Serializable {
      *                                   are too close to each other.
      */
     public static void orientation(
-            final Triangle3D triangle, final double[] result,
-            final double threshold) throws CoincidentPointsException {
-        orientation(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3(), result, threshold);
+            final Triangle3D triangle, final double[] result, final double threshold) throws CoincidentPointsException {
+        orientation(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3(), result, threshold);
     }
 
     /**
@@ -1159,8 +1121,7 @@ public class Triangle3D implements Serializable {
      *                                   close to each other.
      */
     public static double[] orientation(
-            final Point3D vertex1, final Point3D vertex2,
-            final Point3D vertex3) throws CoincidentPointsException {
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3) throws CoincidentPointsException {
         return orientation(vertex1, vertex2, vertex3, DEFAULT_THRESHOLD);
     }
 
@@ -1178,9 +1139,9 @@ public class Triangle3D implements Serializable {
      *                                   close to each other.
      */
     public static double[] orientation(
-            final Point3D vertex1, final Point3D vertex2,
-            final Point3D vertex3, final double threshold) throws CoincidentPointsException {
-        final double[] result = new double[INHOM_COORDS];
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3, final double threshold)
+            throws CoincidentPointsException {
+        final var result = new double[INHOM_COORDS];
         orientation(vertex1, vertex2, vertex3, result, threshold);
         return result;
     }
@@ -1199,8 +1160,8 @@ public class Triangle3D implements Serializable {
      *                                   close to each other.
      */
     public static void orientation(
-            final Point3D vertex1, final Point3D vertex2,
-            final Point3D vertex3, final double[] result) throws CoincidentPointsException {
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3, final double[] result)
+            throws CoincidentPointsException {
         orientation(vertex1, vertex2, vertex3, result, DEFAULT_THRESHOLD);
     }
 
@@ -1220,9 +1181,8 @@ public class Triangle3D implements Serializable {
      *                                   close to each other.
      */
     public static void orientation(
-            final Point3D vertex1, final Point3D vertex2,
-            final Point3D vertex3, final double[] result, final double threshold)
-            throws CoincidentPointsException {
+            final Point3D vertex1, final Point3D vertex2, final Point3D vertex3, final double[] result,
+            final double threshold) throws CoincidentPointsException {
 
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -1231,35 +1191,34 @@ public class Triangle3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        final double inhomX1 = vertex1.getInhomX();
-        final double inhomY1 = vertex1.getInhomY();
-        final double inhomZ1 = vertex1.getInhomZ();
+        final var inhomX1 = vertex1.getInhomX();
+        final var inhomY1 = vertex1.getInhomY();
+        final var inhomZ1 = vertex1.getInhomZ();
 
-        final double inhomX2 = vertex2.getInhomX();
-        final double inhomY2 = vertex2.getInhomY();
-        final double inhomZ2 = vertex2.getInhomZ();
+        final var inhomX2 = vertex2.getInhomX();
+        final var inhomY2 = vertex2.getInhomY();
+        final var inhomZ2 = vertex2.getInhomZ();
 
-        final double inhomX3 = vertex3.getInhomX();
-        final double inhomY3 = vertex3.getInhomY();
-        final double inhomZ3 = vertex3.getInhomZ();
+        final var inhomX3 = vertex3.getInhomX();
+        final var inhomY3 = vertex3.getInhomY();
+        final var inhomZ3 = vertex3.getInhomZ();
 
         // given triangle ABC made by vectors ab and ac
-        final double abX = inhomX2 - inhomX1;
-        final double abY = inhomY2 - inhomY1;
-        final double abZ = inhomZ2 - inhomZ1;
+        final var abX = inhomX2 - inhomX1;
+        final var abY = inhomY2 - inhomY1;
+        final var abZ = inhomZ2 - inhomZ1;
 
-        final double acX = inhomX3 - inhomX1;
-        final double acY = inhomY3 - inhomY1;
-        final double acZ = inhomZ3 - inhomZ1;
+        final var acX = inhomX3 - inhomX1;
+        final var acY = inhomY3 - inhomY1;
+        final var acZ = inhomZ3 - inhomZ1;
 
         // the area of ABC is half the modulus of the cross product of
         // vectors ab and ac
-        double crossX = abY * acZ - abZ * acY;
-        double crossY = abZ * acX - abX * acZ;
-        double crossZ = abX * acY - abY * acX;
+        var crossX = abY * acZ - abZ * acY;
+        var crossY = abZ * acX - abX * acZ;
+        var crossZ = abX * acY - abY * acX;
         // normalize orientation vector
-        double norm = Math.sqrt(crossX * crossX + crossY * crossY +
-                crossZ * crossZ);
+        var norm = Math.sqrt(crossX * crossX + crossY * crossY + crossZ * crossZ);
 
         if (norm < threshold) {
             throw new CoincidentPointsException();
@@ -1285,11 +1244,9 @@ public class Triangle3D implements Serializable {
      *                                   too close. This usually indicates numerical instability or triangle
      *                                   degeneracy.
      */
-    public static double getAngleBetweenTriangles(
-            final Triangle3D triangle1, final Triangle3D triangle2)
+    public static double getAngleBetweenTriangles(final Triangle3D triangle1, final Triangle3D triangle2)
             throws CoincidentPointsException {
-        return getAngleBetweenTriangles(triangle1.getOrientation(),
-                triangle2.getOrientation());
+        return getAngleBetweenTriangles(triangle1.getOrientation(), triangle2.getOrientation());
     }
 
     /**
@@ -1310,18 +1267,18 @@ public class Triangle3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        final double x1 = orientation1[0];
-        final double y1 = orientation1[1];
-        final double z1 = orientation1[2];
+        final var x1 = orientation1[0];
+        final var y1 = orientation1[1];
+        final var z1 = orientation1[2];
 
-        final double x2 = orientation2[0];
-        final double y2 = orientation2[1];
-        final double z2 = orientation2[2];
+        final var x2 = orientation2[0];
+        final var y2 = orientation2[1];
+        final var z2 = orientation2[2];
 
-        final double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-        final double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
+        final var norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+        final var norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
 
-        final double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);
+        final var dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);
 
         return Math.acos(dotProduct);
     }

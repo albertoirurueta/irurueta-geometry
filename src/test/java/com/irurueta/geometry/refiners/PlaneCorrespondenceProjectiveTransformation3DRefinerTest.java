@@ -23,21 +23,16 @@ import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator;
-import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
-        RefinerListener<ProjectiveTransformation3D> {
+class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements RefinerListener<ProjectiveTransformation3D> {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
@@ -54,29 +49,26 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
 
     private static final int TIMES = 1000;
 
-    private int mRefineStart;
-    private int mRefineEnd;
+    private int refineStart;
+    private int refineEnd;
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
-        final ProjectiveTransformation3D transformation = estimator.estimate();
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
-        final double[] residuals = inliersData.getResiduals();
-        final int numInliers = inliersData.getNumInliers();
-        final double refinementStandardDeviation = estimator.getThreshold();
-        final List<Plane> samples1 = estimator.getInputPlanes();
-        final List<Plane> samples2 = estimator.getOutputPlanes();
+    void testConstructor() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
+        final var transformation = estimator.estimate();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
+        final var residuals = inliersData.getResiduals();
+        final var numInliers = inliersData.getNumInliers();
+        final var refinementStandardDeviation = estimator.getThreshold();
+        final var samples1 = estimator.getInputPlanes();
+        final var samples2 = estimator.getOutputPlanes();
 
         assertNotNull(transformation);
         assertNotNull(inliersData);
 
         // test empty constructor
-        PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+        var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default values
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
@@ -93,13 +85,11 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
         assertNull(refiner.getListener());
 
         // test non-empty constructor
-        refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner(
-                transformation, true, inliers, residuals, numInliers, samples1,
-                samples2, refinementStandardDeviation);
+        refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner(transformation, true, inliers,
+                residuals, numInliers, samples1, samples2, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refiner.getRefinementStandardDeviation(), refinementStandardDeviation, 0.0);
         assertSame(samples1, refiner.getSamples1());
         assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
@@ -113,13 +103,11 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
 
-        refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner(
-                transformation, true, inliersData, samples1, samples2,
-                refinementStandardDeviation);
+        refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner(transformation, true,
+                inliersData, samples1, samples2, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refiner.getRefinementStandardDeviation(), refinementStandardDeviation, 0.0);
         assertSame(samples1, refiner.getSamples1());
         assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
@@ -135,9 +123,8 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetListener() {
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+    void testGetSetListener() {
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getListener());
@@ -150,34 +137,30 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetRefinementStandardDeviation() throws LockedException {
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+    void testGetSetRefinementStandardDeviation() throws LockedException {
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double refinementStandardDeviation = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var refinementStandardDeviation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
         // check correctness
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refiner.getRefinementStandardDeviation(), refinementStandardDeviation, 0.0);
     }
 
     @Test
-    public void testGetSetSamples1() throws LockedException {
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+    void testGetSetSamples1() throws LockedException {
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getSamples1());
 
         // set new value
-        final List<Plane> samples1 = new ArrayList<>();
+        final var samples1 = new ArrayList<Plane>();
         refiner.setSamples1(samples1);
 
         // check correctness
@@ -185,15 +168,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples2() throws LockedException {
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+    void testGetSetSamples2() throws LockedException {
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getSamples2());
 
         // set new value
-        final List<Plane> samples2 = new ArrayList<>();
+        final var samples2 = new ArrayList<Plane>();
         refiner.setSamples2(samples2);
 
         // check correctness
@@ -201,17 +183,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
 
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getInliers());
@@ -224,17 +203,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetResiduals() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetResiduals() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final double[] residuals = inliersData.getResiduals();
+        final var inliersData = estimator.getInliersData();
+        final var residuals = inliersData.getResiduals();
 
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getResiduals());
@@ -247,17 +223,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetNumInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetNumInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final int numInliers = inliersData.getNumInliers();
+        final var inliersData = estimator.getInliersData();
+        final var numInliers = inliersData.getNumInliers();
 
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertEquals(0, refiner.getNumInliers());
@@ -269,24 +242,17 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
         assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
-        try {
-            refiner.setNumInliers(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> refiner.setNumInliers(0));
     }
 
     @Test
-    public void testSetInliersData() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testSetInliersData() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
+        final var inliersData = estimator.getInliersData();
 
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default values
         assertNull(refiner.getInliers());
@@ -303,16 +269,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInitialEstimation() throws LockedException {
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+    void testGetSetInitialEstimation() throws LockedException {
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getInitialEstimation());
 
         // set new value
-        final ProjectiveTransformation3D transformation =
-                new ProjectiveTransformation3D();
+        final var transformation = new ProjectiveTransformation3D();
         refiner.setInitialEstimation(transformation);
 
         // check correctness
@@ -320,9 +284,8 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                new PlaneCorrespondenceProjectiveTransformation3DRefiner();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner();
 
         // check default value
         assertFalse(refiner.isCovarianceKept());
@@ -335,43 +298,38 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testRefine() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException, RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                    createRobustEstimator();
+    void testRefine() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException,
+            RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final ProjectiveTransformation3D transformation = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refineStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getInputPlanes();
-            final List<Plane> samples2 = estimator.getOutputPlanes();
+            final var transformation = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refineStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getInputPlanes();
+            final var samples2 = estimator.getOutputPlanes();
 
-            final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =
-                    new PlaneCorrespondenceProjectiveTransformation3DRefiner(
-                            transformation, true, inliersData, samples1, samples2,
-                            refineStandardDeviation);
+            final var refiner = new PlaneCorrespondenceProjectiveTransformation3DRefiner(transformation,
+                    true, inliersData, samples1, samples2, refineStandardDeviation);
             refiner.setListener(this);
 
-            final ProjectiveTransformation3D result1 =
-                    new ProjectiveTransformation3D();
+            final var result1 = new ProjectiveTransformation3D();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final ProjectiveTransformation3D result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
-            assertTrue(result1.asMatrix().equals(result2.asMatrix(),
-                    ABSOLUTE_ERROR));
+            assertTrue(result1.asMatrix().equals(result2.asMatrix(), ABSOLUTE_ERROR));
 
             numValid++;
             break;
@@ -380,38 +338,34 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
         assertTrue(numValid > 0);
     }
 
-    private RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator createRobustEstimator()
+    private static RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator createRobustEstimator()
             throws AlgebraException, LockedException {
 
-        final ProjectiveTransformation3D transformation = createTransformation();
+        final var transformation = createTransformation();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // generate random planes
-        final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+        final var nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
 
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanesWithError = new ArrayList<>();
-        Plane inputPlane;
-        Plane outputPlane;
-        Plane outputPlaneWithError;
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nPlanes; i++) {
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanesWithError = new ArrayList<Plane>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nPlanes; i++) {
             // generate input point
-            inputPlane = new Plane(
+            final var inputPlane = new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            outputPlane = transformation.transformAndReturnNew(inputPlane);
-
+            final var outputPlane = transformation.transformAndReturnNew(inputPlane);
+            Plane outputPlaneWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // line is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                final double errorD = errorRandomizer.nextDouble();
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                final var errorD = errorRandomizer.nextDouble();
                 outputPlaneWithError = new Plane(outputPlane.getA() + errorA,
                         outputPlane.getB() + errorB,
                         outputPlane.getC() + errorC,
@@ -425,9 +379,8 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
             outputPlanesWithError.add(outputPlaneWithError);
         }
 
-        final RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanesWithError);
+        final var estimator = new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(inputPlanes,
+                outputPlanesWithError);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
@@ -438,16 +391,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
         return estimator;
     }
 
-    private ProjectiveTransformation3D createTransformation()
-            throws AlgebraException {
+    private static ProjectiveTransformation3D createTransformation() throws AlgebraException {
 
         Matrix t;
         do {
             // ensure T matrix is invertible
-            t = Matrix.createWithUniformRandomValues(
-                    ProjectiveTransformation3D.HOM_COORDS,
+            t = Matrix.createWithUniformRandomValues(ProjectiveTransformation3D.HOM_COORDS,
                     ProjectiveTransformation3D.HOM_COORDS, -1.0, 1.0);
-            final double norm = Utils.normF(t);
+            final var norm = Utils.normF(t);
             // normalize T to increase accuracy
             t.multiplyByScalar(1.0 / norm);
         } while (Utils.rank(t) < ProjectiveTransformation3D.HOM_COORDS);
@@ -458,7 +409,7 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
     @Override
     public void onRefineStart(final Refiner<ProjectiveTransformation3D> refiner,
                               final ProjectiveTransformation3D initialEstimation) {
-        mRefineStart++;
+        refineStart++;
         checkLocked((PlaneCorrespondenceProjectiveTransformation3DRefiner) refiner);
     }
 
@@ -467,75 +418,26 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefinerTest implements
                             final ProjectiveTransformation3D initialEstimation,
                             final ProjectiveTransformation3D result,
                             final boolean errorDecreased) {
-        mRefineEnd++;
+        refineEnd++;
         checkLocked((PlaneCorrespondenceProjectiveTransformation3DRefiner) refiner);
     }
 
     private void reset() {
-        mRefineStart = mRefineEnd = 0;
+        refineStart = refineEnd = 0;
     }
 
-    private void checkLocked(
-            final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner) {
+    private static void checkLocked(final PlaneCorrespondenceProjectiveTransformation3DRefiner refiner) {
         assertTrue(refiner.isLocked());
-        try {
-            refiner.setInitialEstimation(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setCovarianceKept(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.refine(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.refine();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.setInliers(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setResiduals(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setNumInliers(0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setInliersData(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples1(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples2(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setRefinementStandardDeviation(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> refiner.setInitialEstimation(null));
+        assertThrows(LockedException.class, () -> refiner.setCovarianceKept(true));
+        assertThrows(LockedException.class, () -> refiner.refine(null));
+        assertThrows(LockedException.class, refiner::refine);
+        assertThrows(LockedException.class, () -> refiner.setInliers(null));
+        assertThrows(LockedException.class, () -> refiner.setResiduals(null));
+        assertThrows(LockedException.class, () -> refiner.setNumInliers(0));
+        assertThrows(LockedException.class, () -> refiner.setInliersData(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples1(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples2(null));
+        assertThrows(LockedException.class, () -> refiner.setRefinementStandardDeviation(0.0));
     }
 }

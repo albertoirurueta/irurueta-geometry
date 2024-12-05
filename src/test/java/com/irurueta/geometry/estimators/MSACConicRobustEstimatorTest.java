@@ -16,23 +16,19 @@
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Circle;
-import com.irurueta.geometry.Conic;
 import com.irurueta.geometry.HomogeneousPoint2D;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MSACConicRobustEstimatorTest implements
-        ConicRobustEstimatorListener {
+class MSACConicRobustEstimatorTest implements ConicRobustEstimatorListener {
 
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
@@ -54,108 +50,89 @@ public class MSACConicRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
-        assertEquals(1e-6, MSACConicRobustEstimator.DEFAULT_THRESHOLD,
-                0.0);
-        assertEquals(0.0, MSACConicRobustEstimator.MIN_THRESHOLD,
-                0.0);
+    void testConstants() {
+        assertEquals(1e-6, MSACConicRobustEstimator.DEFAULT_THRESHOLD, 0.0);
+        assertEquals(0.0, MSACConicRobustEstimator.MIN_THRESHOLD, 0.0);
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+        var estimator = new MSACConicRobustEstimator();
 
         // check correctness
-        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // test constructor with points
-        final List<Point2D> points = new ArrayList<>();
-        for (int i = 0; i < ConicRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point2D>();
+        for (var i = 0; i < ConicRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
 
         estimator = new MSACConicRobustEstimator(points);
 
         // check correctness
-        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = new MSACConicRobustEstimator(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class, () -> new MSACConicRobustEstimator(emptyPoints));
 
         // test constructor with listener
-        final ConicRobustEstimatorListener listener =
-                new ConicRobustEstimatorListener() {
+        final var listener = new ConicRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final ConicRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final ConicRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final ConicRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final ConicRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(final ConicRobustEstimator estimator,
-                                                        final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final ConicRobustEstimator estimator, final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(final ConicRobustEstimator estimator,
-                                                         final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final ConicRobustEstimator estimator, final float progress) {
+                // no action needed
+            }
+        };
 
         estimator = new MSACConicRobustEstimator(listener);
 
         // check correctness
-        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -164,39 +141,28 @@ public class MSACConicRobustEstimatorTest implements
         estimator = new MSACConicRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new MSACConicRobustEstimator(listener, emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new MSACConicRobustEstimator(listener, emptyPoints));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         // check default value
-        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(MSACConicRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
@@ -205,16 +171,12 @@ public class MSACConicRobustEstimatorTest implements
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -229,12 +191,11 @@ public class MSACConicRobustEstimatorTest implements
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         // check default value
-        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -243,25 +204,16 @@ public class MSACConicRobustEstimatorTest implements
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         // check default value
-        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(ConicRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
@@ -270,25 +222,16 @@ public class MSACConicRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         // check default value
-        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(ConicRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
@@ -297,24 +240,20 @@ public class MSACConicRobustEstimatorTest implements
         assertEquals(1, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetPoints() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         // check default value
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point2D> points = new ArrayList<>();
-        for (int i = 0; i < ConicRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point2D>();
+        for (var i = 0; i < ConicRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
         estimator.setPoints(points);
@@ -329,21 +268,17 @@ public class MSACConicRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-        try {
-            estimator.setPoints(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(emptyPoints));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final MSACConicRobustEstimator estimator = new MSACConicRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new MSACConicRobustEstimator();
 
         assertNull(estimator.getQualityScores());
 
-        final double[] qualityScores = new double[ConicRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[ConicRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
@@ -351,41 +286,37 @@ public class MSACConicRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    void testEstimate() throws LockedException, NotReadyException, RobustEstimatorException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        for (int t = 0; t < TIMES; t++) {
+        for (var t = 0; t < TIMES; t++) {
             // instantiate a random circle
-            final Point2D center = new HomogeneousPoint2D(
+            final var center = new HomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
-            final double radius = Math.abs(randomizer.nextDouble(
-                    MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE));
+            final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
-            final Circle circle = new Circle(center, radius);
-            final Conic conic = circle.toConic();
+            final var circle = new Circle(center, radius);
+            final var conic = circle.toConic();
 
             // compute points in the conic (i.e. circle) locus
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final double theta = (double) nPoints / 360.0 * Math.PI / 180.0;
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Point2D> points = new ArrayList<>();
-            final List<Point2D> pointsWithError = new ArrayList<>();
-            Point2D point, pointWithError;
-            for (int i = 0; i < nPoints; i++) {
-                final double angle = theta * (double) i;
-                point = new HomogeneousPoint2D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var theta = (double) nPoints / 360.0 * Math.PI / 180.0;
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var points = new ArrayList<Point2D>();
+            final var pointsWithError = new ArrayList<Point2D>();
+            for (var i = 0; i < nPoints; i++) {
+                final var angle = theta * (double) i;
+                final var point = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
 
+                Point2D pointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
                     pointWithError = new HomogeneousPoint2D(
                             point.getInhomX() + errorX,
                             point.getInhomY() + errorY, 1.0);
@@ -402,8 +333,7 @@ public class MSACConicRobustEstimatorTest implements
                 assertTrue(conic.isLocus(point, ABSOLUTE_ERROR));
             }
 
-            final MSACConicRobustEstimator estimator =
-                    new MSACConicRobustEstimator(this, pointsWithError);
+            final var estimator = new MSACConicRobustEstimator(this, pointsWithError);
 
             estimator.setThreshold(THRESHOLD);
 
@@ -414,7 +344,7 @@ public class MSACConicRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Conic conic2 = estimator.estimate();
+            final var conic2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -424,7 +354,7 @@ public class MSACConicRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all points
             // are within the estimated conic locus
-            for (final Point2D p : points) {
+            for (final var p : points) {
                 assertTrue(conic2.isLocus(p, ABSOLUTE_ERROR));
             }
         }
@@ -443,61 +373,28 @@ public class MSACConicRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(final ConicRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final ConicRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((MSACConicRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(final ConicRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final ConicRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((MSACConicRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(final MSACConicRobustEstimator estimator) {
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.5f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPoints(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception ignore) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final MSACConicRobustEstimator estimator) {
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(5));
+        assertThrows(LockedException.class, () -> estimator.setPoints(null));
+        assertThrows(LockedException.class, estimator::estimate);
     }
 }

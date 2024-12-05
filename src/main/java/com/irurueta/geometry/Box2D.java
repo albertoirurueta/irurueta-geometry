@@ -30,8 +30,8 @@ public class Box2D extends Box<Point2D> {
      */
     public Box2D() {
         super();
-        mLo = new InhomogeneousPoint2D(-0.5, -0.5);
-        mHi = new InhomogeneousPoint2D(0.5, 0.5);
+        lo = new InhomogeneousPoint2D(-0.5, -0.5);
+        hi = new InhomogeneousPoint2D(0.5, 0.5);
     }
 
     /**
@@ -62,8 +62,7 @@ public class Box2D extends Box<Point2D> {
      * @param hiY vertical high coordinate.
      */
     public final void setBounds(final double loX, final double loY, final double hiX, final double hiY) {
-        setBounds(new InhomogeneousPoint2D(loX, loY),
-                new InhomogeneousPoint2D(hiX, hiY));
+        setBounds(new InhomogeneousPoint2D(loX, loY), new InhomogeneousPoint2D(hiX, hiY));
     }
 
     /**
@@ -72,17 +71,17 @@ public class Box2D extends Box<Point2D> {
      * @param rectangle a rectangle containing boundaries.
      */
     public final void fromRectangle(final Rectangle rectangle) {
-        final Point2D topLeft = rectangle.getTopLeft();
-        final Point2D bottomRight = rectangle.getBottomRight();
+        final var topLeft = rectangle.getTopLeft();
+        final var bottomRight = rectangle.getBottomRight();
 
-        final double loX = topLeft.getInhomX();
-        final double loY = bottomRight.getInhomY();
+        final var loX = topLeft.getInhomX();
+        final var loY = bottomRight.getInhomY();
 
-        final double hiX = bottomRight.getInhomX();
-        final double hiY = topLeft.getInhomY();
+        final var hiX = bottomRight.getInhomX();
+        final var hiY = topLeft.getInhomY();
 
-        mLo = new InhomogeneousPoint2D(loX, loY);
-        mHi = new InhomogeneousPoint2D(hiX, hiY);
+        lo = new InhomogeneousPoint2D(loX, loY);
+        hi = new InhomogeneousPoint2D(hiX, hiY);
     }
 
     /**
@@ -91,7 +90,7 @@ public class Box2D extends Box<Point2D> {
      * @return a rectangle equivalent to this box.
      */
     public Rectangle toRectangle() {
-        final Rectangle result = new Rectangle();
+        final var result = new Rectangle();
         toRectangle(result);
         return result;
     }
@@ -102,11 +101,11 @@ public class Box2D extends Box<Point2D> {
      * @param result instance where values will be stored.
      */
     public void toRectangle(final Rectangle result) {
-        final double left = mLo.getInhomX();
-        final double right = mHi.getInhomX();
+        final var left = lo.getInhomX();
+        final var right = hi.getInhomX();
 
-        final double bottom = mLo.getInhomY();
-        final double top = mHi.getInhomY();
+        final var bottom = lo.getInhomY();
+        final var top = hi.getInhomY();
 
         result.setBounds(left, top, right, bottom);
     }

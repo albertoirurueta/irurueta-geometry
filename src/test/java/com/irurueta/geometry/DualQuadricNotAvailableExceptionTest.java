@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class DualQuadricNotAvailableExceptionTest {
+class DualQuadricNotAvailableExceptionTest {
 
     @Test
-    public void testConstructor() {
-        DualQuadricNotAvailableException ex = new DualQuadricNotAvailableException();
+    void testConstructor() {
+        var ex = new DualQuadricNotAvailableException();
         assertNotNull(ex);
 
         ex = new DualQuadricNotAvailableException("message");

@@ -15,17 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class InvalidPinholeCameraIntrinsicParametersExceptionTest {
+class InvalidPinholeCameraIntrinsicParametersExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InvalidPinholeCameraIntrinsicParametersException ex;
-
-        ex = new InvalidPinholeCameraIntrinsicParametersException();
+    void testConstructor() {
+        var ex = new InvalidPinholeCameraIntrinsicParametersException();
         assertNotNull(ex);
 
         ex = new InvalidPinholeCameraIntrinsicParametersException("message");

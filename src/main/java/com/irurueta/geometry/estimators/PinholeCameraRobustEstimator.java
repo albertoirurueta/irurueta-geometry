@@ -108,15 +108,13 @@ public abstract class PinholeCameraRobustEstimator {
      * Default value indicating whether horizontal focal length value is
      * suggested or not. By default, this is disabled.
      */
-    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
-            false;
+    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED = false;
 
     /**
      * Default value indicating whether vertical focal length value is suggested
      * or not. By default, this is disabled.
      */
-    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
-            false;
+    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED = false;
 
     /**
      * Default value indicating whether aspect ratio is suggested or not. By
@@ -153,19 +151,19 @@ public abstract class PinholeCameraRobustEstimator {
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected PinholeCameraRobustEstimatorListener mListener;
+    protected PinholeCameraRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -173,19 +171,19 @@ public abstract class PinholeCameraRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * Data related to inliers found after estimation.
      */
-    protected InliersData mInliersData;
+    protected InliersData inliersData;
 
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
@@ -193,13 +191,13 @@ public abstract class PinholeCameraRobustEstimator {
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
      */
-    protected boolean mRefineResult;
+    protected boolean refineResult;
 
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    protected boolean mKeepCovariance;
+    protected boolean keepCovariance;
 
     /**
      * Indicates whether fast refinement must be used or not.
@@ -207,14 +205,14 @@ public abstract class PinholeCameraRobustEstimator {
      * an initial Powell optimization is done and then Levenberg/Marquard is
      * used for covariance estimation if needed.
      */
-    protected boolean mUseFastRefinement;
+    protected boolean useFastRefinement;
 
     /**
      * Estimated covariance of estimated fundamental matrix.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    protected Matrix mCovariance;
+    protected Matrix covariance;
 
     /**
      * Indicates whether skewness value is suggested or not. When enabled, the
@@ -224,8 +222,7 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestSkewnessValueEnabled =
-            DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
+    protected boolean suggestSkewnessValueEnabled = DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
 
     /**
      * Suggested skewness value to be reached when suggestion is enabled.
@@ -233,7 +230,7 @@ public abstract class PinholeCameraRobustEstimator {
      * otherwise the iterative refinement might not converge to provided
      * value.
      */
-    protected double mSuggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;
+    protected double suggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;
 
     /**
      * Indicates whether horizontal focal length is suggested or not. When
@@ -243,8 +240,7 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestHorizontalFocalLengthEnabled =
-            DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
+    protected boolean suggestHorizontalFocalLengthEnabled = DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
 
     /**
      * Suggested horizontal focal length value to be reached when suggestion is
@@ -252,7 +248,7 @@ public abstract class PinholeCameraRobustEstimator {
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected double mSuggestedHorizontalFocalLengthValue;
+    protected double suggestedHorizontalFocalLengthValue;
 
     /**
      * Indicates whether vertical focal length is suggested or not. When
@@ -262,8 +258,7 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestVerticalFocalLengthEnabled =
-            DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
+    protected boolean suggestVerticalFocalLengthEnabled = DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
 
     /**
      * Suggested vertical focal length value to be reached when suggestion is
@@ -271,7 +266,7 @@ public abstract class PinholeCameraRobustEstimator {
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected double mSuggestedVerticalFocalLengthValue;
+    protected double suggestedVerticalFocalLengthValue;
 
     /**
      * Indicates whether aspect ratio is suggested or not. When enabled, the
@@ -281,16 +276,14 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestAspectRatioEnabled =
-            DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
+    protected boolean suggestAspectRatioEnabled = DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
 
     /**
      * Suggested aspect ratio value to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected double mSuggestedAspectRatioValue =
-            DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
+    protected double suggestedAspectRatioValue = DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
 
     /**
      * Indicates whether principal point is suggested or not. When enabled, the
@@ -300,15 +293,14 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestPrincipalPointEnabled =
-            DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
+    protected boolean suggestPrincipalPointEnabled = DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
 
     /**
      * Suggested principal point value to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected InhomogeneousPoint2D mSuggestedPrincipalPointValue;
+    protected InhomogeneousPoint2D suggestedPrincipalPointValue;
 
     /**
      * Indicates whether camera rotation is suggested or not. When enabled, the
@@ -318,15 +310,14 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestRotationEnabled =
-            DEFAULT_SUGGEST_ROTATION_ENABLED;
+    protected boolean suggestRotationEnabled = DEFAULT_SUGGEST_ROTATION_ENABLED;
 
     /**
      * Suggested rotation to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected Quaternion mSuggestedRotationValue;
+    protected Quaternion suggestedRotationValue;
 
     /**
      * Indicates whether camera center is suggested or not. When enabled, the
@@ -336,24 +327,24 @@ public abstract class PinholeCameraRobustEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestCenterEnabled;
+    protected boolean suggestCenterEnabled;
 
     /**
      * Suggested center to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected InhomogeneousPoint3D mSuggestedCenterValue;
+    protected InhomogeneousPoint3D suggestedCenterValue;
 
     /**
      * Constructor.
      */
     protected PinholeCameraRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -362,14 +353,13 @@ public abstract class PinholeCameraRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    protected PinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+    protected PinholeCameraRobustEstimator(final PinholeCameraRobustEstimatorListener listener) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -379,7 +369,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return listener to be notified of events.
      */
     public PinholeCameraRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -389,13 +379,11 @@ public abstract class PinholeCameraRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(
-            final PinholeCameraRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final PinholeCameraRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -405,7 +393,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -419,7 +407,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if skewness value is suggested, false otherwise.
      */
     public boolean isSuggestSkewnessValueEnabled() {
-        return mSuggestSkewnessValueEnabled;
+        return suggestSkewnessValueEnabled;
     }
 
     /**
@@ -434,12 +422,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                    false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestSkewnessValueEnabled(
-            final boolean suggestSkewnessValueEnabled) throws LockedException {
+    public void setSuggestSkewnessValueEnabled(final boolean suggestSkewnessValueEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestSkewnessValueEnabled = suggestSkewnessValueEnabled;
+        this.suggestSkewnessValueEnabled = suggestSkewnessValueEnabled;
     }
 
     /**
@@ -450,7 +437,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return suggested skewness value.
      */
     public double getSuggestedSkewnessValue() {
-        return mSuggestedSkewnessValue;
+        return suggestedSkewnessValue;
     }
 
     /**
@@ -461,12 +448,11 @@ public abstract class PinholeCameraRobustEstimator {
      * @param suggestedSkewnessValue suggested skewness value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue)
-            throws LockedException {
+    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedSkewnessValue = suggestedSkewnessValue;
+        this.suggestedSkewnessValue = suggestedSkewnessValue;
     }
 
     /**
@@ -480,7 +466,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if horizontal focal length is suggested, false otherwise.
      */
     public boolean isSuggestHorizontalFocalLengthEnabled() {
-        return mSuggestHorizontalFocalLengthEnabled;
+        return suggestHorizontalFocalLengthEnabled;
     }
 
     /**
@@ -495,14 +481,12 @@ public abstract class PinholeCameraRobustEstimator {
      *                                            length is suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestHorizontalFocalLengthEnabled(
-            final boolean suggestHorizontalFocalLengthEnabled)
+    public void setSuggestHorizontalFocalLengthEnabled(final boolean suggestHorizontalFocalLengthEnabled)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestHorizontalFocalLengthEnabled =
-                suggestHorizontalFocalLengthEnabled;
+        this.suggestHorizontalFocalLengthEnabled = suggestHorizontalFocalLengthEnabled;
     }
 
     /**
@@ -514,7 +498,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return suggested horizontal focal length value.
      */
     public double getSuggestedHorizontalFocalLengthValue() {
-        return mSuggestedHorizontalFocalLengthValue;
+        return suggestedHorizontalFocalLengthValue;
     }
 
     /**
@@ -527,13 +511,12 @@ public abstract class PinholeCameraRobustEstimator {
      *                                            length value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedHorizontalFocalLengthValue(
-            final double suggestedHorizontalFocalLengthValue) throws LockedException {
+    public void setSuggestedHorizontalFocalLengthValue(final double suggestedHorizontalFocalLengthValue)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedHorizontalFocalLengthValue =
-                suggestedHorizontalFocalLengthValue;
+        this.suggestedHorizontalFocalLengthValue = suggestedHorizontalFocalLengthValue;
     }
 
     /**
@@ -547,7 +530,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if vertical focal length is suggested, false otherwise.
      */
     public boolean isSuggestVerticalFocalLengthEnabled() {
-        return mSuggestVerticalFocalLengthEnabled;
+        return suggestVerticalFocalLengthEnabled;
     }
 
     /**
@@ -562,12 +545,12 @@ public abstract class PinholeCameraRobustEstimator {
      *                                          suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestVerticalFocalLengthEnabled(
-            final boolean suggestVerticalFocalLengthEnabled) throws LockedException {
+    public void setSuggestVerticalFocalLengthEnabled(final boolean suggestVerticalFocalLengthEnabled)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;
+        this.suggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;
     }
 
     /**
@@ -579,7 +562,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return suggested vertical focal length.
      */
     public double getSuggestedVerticalFocalLengthValue() {
-        return mSuggestedVerticalFocalLengthValue;
+        return suggestedVerticalFocalLengthValue;
     }
 
     /**
@@ -591,12 +574,12 @@ public abstract class PinholeCameraRobustEstimator {
      * @param suggestedVerticalFocalLengthValue suggested vertical focal length.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedVerticalFocalLengthValue(
-            final double suggestedVerticalFocalLengthValue) throws LockedException {
+    public void setSuggestedVerticalFocalLengthValue(final double suggestedVerticalFocalLengthValue)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;
+        this.suggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;
     }
 
     /**
@@ -610,7 +593,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if aspect ratio is suggested, false otherwise.
      */
     public boolean isSuggestAspectRatioEnabled() {
-        return mSuggestAspectRatioEnabled;
+        return suggestAspectRatioEnabled;
     }
 
     /**
@@ -625,12 +608,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled)
-            throws LockedException {
+    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestAspectRatioEnabled = suggestAspectRatioEnabled;
+        this.suggestAspectRatioEnabled = suggestAspectRatioEnabled;
     }
 
     /**
@@ -641,7 +623,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return suggested aspect ratio value.
      */
     public double getSuggestedAspectRatioValue() {
-        return mSuggestedAspectRatioValue;
+        return suggestedAspectRatioValue;
     }
 
     /**
@@ -652,12 +634,11 @@ public abstract class PinholeCameraRobustEstimator {
      * @param suggestedAspectRatioValue suggested aspect ratio value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue)
-            throws LockedException {
+    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedAspectRatioValue = suggestedAspectRatioValue;
+        this.suggestedAspectRatioValue = suggestedAspectRatioValue;
     }
 
     /**
@@ -671,7 +652,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if principal point is suggested, false otherwise.
      */
     public boolean isSuggestPrincipalPointEnabled() {
-        return mSuggestPrincipalPointEnabled;
+        return suggestPrincipalPointEnabled;
     }
 
     /**
@@ -686,15 +667,13 @@ public abstract class PinholeCameraRobustEstimator {
      *                                     false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestPrincipalPointEnabled(
-            final boolean suggestPrincipalPointEnabled) throws LockedException {
+    public void setSuggestPrincipalPointEnabled(final boolean suggestPrincipalPointEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestPrincipalPointEnabled = suggestPrincipalPointEnabled;
-        if (suggestPrincipalPointEnabled &&
-                mSuggestedPrincipalPointValue == null) {
-            mSuggestedPrincipalPointValue = new InhomogeneousPoint2D();
+        this.suggestPrincipalPointEnabled = suggestPrincipalPointEnabled;
+        if (suggestPrincipalPointEnabled && suggestedPrincipalPointValue == null) {
+            suggestedPrincipalPointValue = new InhomogeneousPoint2D();
         }
     }
 
@@ -707,7 +686,7 @@ public abstract class PinholeCameraRobustEstimator {
      * enabled.
      */
     public InhomogeneousPoint2D getSuggestedPrincipalPointValue() {
-        return mSuggestedPrincipalPointValue;
+        return suggestedPrincipalPointValue;
     }
 
     /**
@@ -719,13 +698,12 @@ public abstract class PinholeCameraRobustEstimator {
      *                                     reached when suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedPrincipalPointValue(
-            final InhomogeneousPoint2D suggestedPrincipalPointValue)
+    public void setSuggestedPrincipalPointValue(final InhomogeneousPoint2D suggestedPrincipalPointValue)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedPrincipalPointValue = suggestedPrincipalPointValue;
+        this.suggestedPrincipalPointValue = suggestedPrincipalPointValue;
     }
 
     /**
@@ -739,7 +717,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if camera rotation is suggested, false otherwise.
      */
     public boolean isSuggestRotationEnabled() {
-        return mSuggestRotationEnabled;
+        return suggestRotationEnabled;
     }
 
     /**
@@ -754,14 +732,13 @@ public abstract class PinholeCameraRobustEstimator {
      *                               otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled)
-            throws LockedException {
+    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestRotationEnabled = suggestRotationEnabled;
-        if (suggestRotationEnabled && mSuggestedRotationValue == null) {
-            mSuggestedRotationValue = new Quaternion();
+        this.suggestRotationEnabled = suggestRotationEnabled;
+        if (suggestRotationEnabled && suggestedRotationValue == null) {
+            suggestedRotationValue = new Quaternion();
         }
 
     }
@@ -774,7 +751,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return suggested rotation to be reached when suggestion is enabled.
      */
     public Quaternion getSuggestedRotationValue() {
-        return mSuggestedRotationValue;
+        return suggestedRotationValue;
     }
 
     /**
@@ -786,12 +763,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                               suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue)
-            throws LockedException {
+    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedRotationValue = suggestedRotationValue;
+        this.suggestedRotationValue = suggestedRotationValue;
     }
 
     /**
@@ -805,7 +781,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if camera center is suggested, false otherwise.
      */
     public boolean isSuggestCenterEnabled() {
-        return mSuggestCenterEnabled;
+        return suggestCenterEnabled;
     }
 
     /**
@@ -819,14 +795,13 @@ public abstract class PinholeCameraRobustEstimator {
      * @param suggestCenterEnabled true if camera is suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled)
-            throws LockedException {
+    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestCenterEnabled = suggestCenterEnabled;
-        if (suggestCenterEnabled && mSuggestedCenterValue == null) {
-            mSuggestedCenterValue = new InhomogeneousPoint3D();
+        this.suggestCenterEnabled = suggestCenterEnabled;
+        if (suggestCenterEnabled && suggestedCenterValue == null) {
+            suggestedCenterValue = new InhomogeneousPoint3D();
         }
     }
 
@@ -838,7 +813,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return suggested center to be reached when suggestion is enabled.
      */
     public InhomogeneousPoint3D getSuggestedCenterValue() {
-        return mSuggestedCenterValue;
+        return suggestedCenterValue;
     }
 
     /**
@@ -850,12 +825,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                             suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedCenterValue(
-            final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
+    public void setSuggestedCenterValue(final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedCenterValue = suggestedCenterValue;
+        this.suggestedCenterValue = suggestedCenterValue;
     }
 
     /**
@@ -865,7 +839,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -876,7 +850,7 @@ public abstract class PinholeCameraRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -894,11 +868,10 @@ public abstract class PinholeCameraRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -910,7 +883,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -932,7 +905,7 @@ public abstract class PinholeCameraRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -943,7 +916,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -963,7 +936,7 @@ public abstract class PinholeCameraRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -972,7 +945,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-        return mInliersData;
+        return inliersData;
     }
 
     /**
@@ -985,7 +958,7 @@ public abstract class PinholeCameraRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-        return mRefineResult;
+        return refineResult;
     }
 
     /**
@@ -1000,7 +973,7 @@ public abstract class PinholeCameraRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefineResult = refineResult;
+        this.refineResult = refineResult;
     }
 
     /**
@@ -1011,7 +984,7 @@ public abstract class PinholeCameraRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-        return mKeepCovariance;
+        return keepCovariance;
     }
 
     /**
@@ -1022,12 +995,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(final boolean keepCovariance)
-            throws LockedException {
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mKeepCovariance = keepCovariance;
+        this.keepCovariance = keepCovariance;
     }
 
     /**
@@ -1042,7 +1014,7 @@ public abstract class PinholeCameraRobustEstimator {
      * accurate and stable refinement.
      */
     public boolean isFastRefinementUsed() {
-        return mUseFastRefinement;
+        return useFastRefinement;
     }
 
     /**
@@ -1057,12 +1029,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                          but more accurate and stable refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setFastRefinementUsed(final boolean useFastRefinement)
-            throws LockedException {
+    public void setFastRefinementUsed(final boolean useFastRefinement) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mUseFastRefinement = useFastRefinement;
+        this.useFastRefinement = useFastRefinement;
     }
 
     /**
@@ -1073,7 +1044,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -1089,8 +1060,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract PinholeCamera estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -1127,10 +1097,8 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,
-                points2D, method);
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D, method);
     }
 
     /**
@@ -1151,10 +1119,8 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                points3D, points2D, method);
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D, method);
     }
 
     /**
@@ -1175,10 +1141,9 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final List<Point3D> points3D, List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,
-                points2D, qualityScores, method);
+            final List<Point3D> points3D, List<Point2D> points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D, qualityScores, method);
     }
 
     /**
@@ -1201,11 +1166,10 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                points3D, points2D, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D, qualityScores,
+                method);
     }
 
     /**
@@ -1222,8 +1186,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             final List<Point3D> points3D, final List<Point2D> points2D) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,
-                points2D);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D);
     }
 
     /**
@@ -1244,8 +1207,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             final PinholeCameraRobustEstimatorListener listener,
             final List<Point3D> points3D, final List<Point2D> points2D) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                points3D, points2D);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D);
     }
 
     /**
@@ -1264,10 +1226,8 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D,
-                points2D, qualityScores);
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D, qualityScores);
     }
 
     /**
@@ -1288,11 +1248,9 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                points3D, points2D, qualityScores);
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D, qualityScores);
     }
 
     /**
@@ -1313,8 +1271,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,
-                points3D, points2D, method);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, points3D, points2D, method);
     }
 
     /**
@@ -1335,11 +1292,9 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
-            final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                intrinsic, points3D, points2D, method);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, points3D, points2D, method);
     }
 
     /**
@@ -1362,10 +1317,9 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,
-                points3D, points2D, qualityScores, method);
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, points3D, points2D, qualityScores,
+                method);
     }
 
     /**
@@ -1389,12 +1343,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                intrinsic, points3D, points2D, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, points3D, points2D,
+                qualityScores, method);
     }
 
     /**
@@ -1411,34 +1364,31 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, points3D, points2D);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on 2D/3D point
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     *
+     * @param listener  listener to be notified of events such as when estimation
+     *                  starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D  list of 3D points used to estimate a pinhole camera.
+     * @param points2D  list of corresponding projected 2D points used to
+     *                  estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size
+     *                                  (6 correspondences).
+     */
+    public static PinholeCameraRobustEstimator createFromPoints(
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final List<Point3D> points3D, final List<Point2D> points2D) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,
-                points3D, points2D);
-    }
-
-    /**
-     * Creates a pinhole camera robust estimator based on 2D/3D point
-     * correspondences and using provided listener and default robust estimator
-     * method.
-     *
-     * @param listener  listener to be notified of events such as when estimation
-     *                  starts, ends or its progress significantly changes.
-     * @param intrinsic intrinsic parameters of camera to be estimated.
-     * @param points3D  list of 3D points used to estimate a pinhole camera.
-     * @param points2D  list of corresponding projected 2D points used to
-     *                  estimate a pinhole camera.
-     * @return an instance of a pinhole camera robust estimator.
-     * @throws IllegalArgumentException if provided lists of points don't have
-     *                                  the same size or their size is smaller than required minimum size
-     *                                  (6 correspondences).
-     */
-    public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
-            final List<Point2D> points2D) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                intrinsic, points3D, points2D);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, points3D, points2D);
     }
 
     /**
@@ -1460,8 +1410,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D, final double[] qualityScores) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic,
-                points3D, points2D, qualityScores);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, points3D, points2D, qualityScores);
     }
 
     /**
@@ -1483,11 +1432,10 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                intrinsic, points3D, points2D, qualityScores);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, points3D, points2D,
+                qualityScores);
     }
 
     /**
@@ -1511,12 +1459,10 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
-                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
-                points2D, method);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D, method);
     }
 
     /**
@@ -1542,13 +1488,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
             final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
-                points3D, points2D, method);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D, method);
     }
 
     /**
@@ -1575,13 +1519,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores,
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
-                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
-                points2D, qualityScores, method);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D, qualityScores, method);
     }
 
     /**
@@ -1610,14 +1552,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
-                points3D, points2D, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D, qualityScores, method);
     }
 
     /**
@@ -1639,12 +1578,10 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
-                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
-                points2D);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D);
     }
 
     /**
@@ -1669,13 +1606,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
             final List<Point2D> points2D) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
-                points3D, points2D);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D);
     }
 
     /**
@@ -1700,12 +1635,10 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
-                horizontalPrincipalPoint, verticalPrincipalPoint, points3D,
-                points2D, qualityScores);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
+        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D, qualityScores);
     }
 
     /**
@@ -1732,13 +1665,11 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  minimum size (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
             final List<Point2D> points2D, final double[] qualityScores) {
-        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
-                skewness, horizontalPrincipalPoint, verticalPrincipalPoint,
-                points3D, points2D, qualityScores);
+        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, skewness, horizontalPrincipalPoint,
+                verticalPrincipalPoint, points3D, points2D, qualityScores);
     }
 
     /**
@@ -1756,10 +1687,8 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
-            final List<Plane> planes, final List<Line2D> lines,
-            final RobustEstimatorMethod method) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, method);
+            final List<Plane> planes, final List<Line2D> lines, final RobustEstimatorMethod method) {
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, method);
     }
 
     /**
@@ -1779,11 +1708,9 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines,
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines,
             final RobustEstimatorMethod method) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, method);
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, method);
     }
 
     /**
@@ -1806,8 +1733,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores, method);
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores, method);
     }
 
     /**
@@ -1830,11 +1756,10 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  required minimum size (4 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
-            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
-            final List<Line2D> lines, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,
+                method);
     }
 
     /**
@@ -1851,8 +1776,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             final List<Plane> planes, final List<Line2D> lines) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines);
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines);
     }
 
     /**
@@ -1871,10 +1795,8 @@ public abstract class PinholeCameraRobustEstimator {
      *                                  correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines);
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines) {
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines);
     }
 
     /**
@@ -1894,8 +1816,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                planes, lines, qualityScores);
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores);
     }
 
     /**
@@ -1918,8 +1839,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
             final List<Line2D> lines, final double[] qualityScores) {
-        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
-                listener, planes, lines, qualityScores);
+        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores);
     }
 
     /**
@@ -1941,10 +1861,8 @@ public abstract class PinholeCameraRobustEstimator {
      * false otherwise.
      */
     private boolean hasIntrinsicSuggestions() {
-        return mSuggestSkewnessValueEnabled ||
-                mSuggestHorizontalFocalLengthEnabled ||
-                mSuggestVerticalFocalLengthEnabled ||
-                mSuggestAspectRatioEnabled;
+        return suggestSkewnessValueEnabled || suggestHorizontalFocalLengthEnabled || suggestVerticalFocalLengthEnabled
+                || suggestAspectRatioEnabled;
     }
 
     /**
@@ -1955,7 +1873,6 @@ public abstract class PinholeCameraRobustEstimator {
      * false otherwise.
      */
     private boolean hasExtrinsicSuggestions() {
-        return mSuggestPrincipalPointEnabled ||
-                mSuggestRotationEnabled || mSuggestCenterEnabled;
+        return suggestPrincipalPointEnabled || suggestRotationEnabled || suggestCenterEnabled;
     }
 }

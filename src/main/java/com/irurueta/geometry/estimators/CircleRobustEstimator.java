@@ -81,26 +81,25 @@ public abstract class CircleRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected CircleRobustEstimatorListener mListener;
+    protected CircleRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -108,28 +107,28 @@ public abstract class CircleRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of points to be used to estimate a circle. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mPoints;
+    protected List<Point2D> points;
 
     /**
      * Constructor.
      */
     protected CircleRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -139,10 +138,10 @@ public abstract class CircleRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected CircleRobustEstimator(final CircleRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -153,9 +152,9 @@ public abstract class CircleRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected CircleRobustEstimator(final List<Point2D> points) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -168,12 +167,11 @@ public abstract class CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected CircleRobustEstimator(final CircleRobustEstimatorListener listener,
-                                 final List<Point2D> points) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected CircleRobustEstimator(final CircleRobustEstimatorListener listener, final List<Point2D> points) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -185,7 +183,7 @@ public abstract class CircleRobustEstimator {
      * @return listener to be notified of events.
      */
     public CircleRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -195,12 +193,11 @@ public abstract class CircleRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final CircleRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final CircleRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -210,7 +207,7 @@ public abstract class CircleRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -219,7 +216,7 @@ public abstract class CircleRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -230,7 +227,7 @@ public abstract class CircleRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -244,16 +241,14 @@ public abstract class CircleRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setProgressDelta(final float progressDelta)
-            throws LockedException {
+    public void setProgressDelta(final float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -265,7 +260,7 @@ public abstract class CircleRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -280,15 +275,14 @@ public abstract class CircleRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimator
      *                                  is being computed.
      */
-    public void setConfidence(final double confidence)
-            throws LockedException {
+    public void setConfidence(final double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -299,7 +293,7 @@ public abstract class CircleRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -312,15 +306,14 @@ public abstract class CircleRobustEstimator {
      * @throws LockedException          if this estimator is locked because an estimation
      *                                  is being computed.
      */
-    public void setMaxIterations(final int maxIterations)
-            throws LockedException {
+    public void setMaxIterations(final int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -330,7 +323,7 @@ public abstract class CircleRobustEstimator {
      * @return list of points to be used to estimate a circle.
      */
     public List<Point2D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -357,7 +350,7 @@ public abstract class CircleRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
+        return points != null && points.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -396,19 +389,13 @@ public abstract class CircleRobustEstimator {
      * @return an instance of a circle robust estimator.
      */
     public static CircleRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator();
-            case MSAC:
-                return new MSACCircleRobustEstimator();
-            case PROSAC:
-                return new PROSACCircleRobustEstimator();
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator();
+            case MSAC -> new MSACCircleRobustEstimator();
+            case PROSAC -> new PROSACCircleRobustEstimator();
+            case PROMEDS -> new PROMedSCircleRobustEstimator();
+            default -> new RANSACCircleRobustEstimator();
+        };
     }
 
     /**
@@ -424,19 +411,13 @@ public abstract class CircleRobustEstimator {
      */
     public static CircleRobustEstimator create(
             final List<Point2D> points, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator(points);
-            case MSAC:
-                return new MSACCircleRobustEstimator(points);
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(points);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(points);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator(points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator(points);
+            case MSAC -> new MSACCircleRobustEstimator(points);
+            case PROSAC -> new PROSACCircleRobustEstimator(points);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(points);
+            default -> new RANSACCircleRobustEstimator(points);
+        };
     }
 
     /**
@@ -452,19 +433,13 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final CircleRobustEstimatorListener listener,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator(listener);
-            case MSAC:
-                return new MSACCircleRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator(listener);
+            case MSAC -> new MSACCircleRobustEstimator(listener);
+            case PROSAC -> new PROSACCircleRobustEstimator(listener);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(listener);
+            default -> new RANSACCircleRobustEstimator(listener);
+        };
     }
 
     /**
@@ -483,19 +458,13 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final CircleRobustEstimatorListener listener, final List<Point2D> points,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACCircleRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(listener, points);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(listener, points);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator(listener, points);
+            case MSAC -> new MSACCircleRobustEstimator(listener, points);
+            case PROSAC -> new PROSACCircleRobustEstimator(listener, points);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(listener, points);
+            default -> new RANSACCircleRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -511,19 +480,13 @@ public abstract class CircleRobustEstimator {
      */
     public static CircleRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator();
-            case MSAC:
-                return new MSACCircleRobustEstimator();
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator();
+            case MSAC -> new MSACCircleRobustEstimator();
+            case PROSAC -> new PROSACCircleRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(qualityScores);
+            default -> new RANSACCircleRobustEstimator();
+        };
     }
 
     /**
@@ -541,19 +504,13 @@ public abstract class CircleRobustEstimator {
      */
     public static CircleRobustEstimator create(
             final List<Point2D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator(points);
-            case MSAC:
-                return new MSACCircleRobustEstimator(points);
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(points, qualityScores);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(points, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator(points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator(points);
+            case MSAC -> new MSACCircleRobustEstimator(points);
+            case PROSAC -> new PROSACCircleRobustEstimator(points, qualityScores);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(points, qualityScores);
+            default -> new RANSACCircleRobustEstimator(points);
+        };
     }
 
     /**
@@ -572,19 +529,13 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final CircleRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator(listener);
-            case MSAC:
-                return new MSACCircleRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator(listener);
+            case MSAC -> new MSACCircleRobustEstimator(listener);
+            case PROSAC -> new PROSACCircleRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(listener, qualityScores);
+            default -> new RANSACCircleRobustEstimator(listener);
+        };
     }
 
     /**
@@ -605,21 +556,15 @@ public abstract class CircleRobustEstimator {
     public static CircleRobustEstimator create(
             final CircleRobustEstimatorListener listener, final List<Point2D> points,
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSCircleRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACCircleRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACCircleRobustEstimator(listener, points,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSCircleRobustEstimator(listener, points,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACCircleRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSCircleRobustEstimator(listener, points);
+            case MSAC -> new MSACCircleRobustEstimator(listener, points);
+            case PROSAC -> new PROSACCircleRobustEstimator(listener, points,
+                    qualityScores);
+            case PROMEDS -> new PROMedSCircleRobustEstimator(listener, points,
+                    qualityScores);
+            default -> new RANSACCircleRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -653,8 +598,7 @@ public abstract class CircleRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a circle robust estimator.
      */
-    public static CircleRobustEstimator create(
-            final CircleRobustEstimatorListener listener) {
+    public static CircleRobustEstimator create(final CircleRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -669,8 +613,8 @@ public abstract class CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static CircleRobustEstimator create(
-            final CircleRobustEstimatorListener listener, final List<Point2D> points) {
+    public static CircleRobustEstimator create(final CircleRobustEstimatorListener listener,
+                                               final List<Point2D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
 
@@ -733,8 +677,7 @@ public abstract class CircleRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static CircleRobustEstimator create(
-            final CircleRobustEstimatorListener listener, final List<Point2D> points,
-            final double[] qualityScores) {
+            final CircleRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -751,8 +694,7 @@ public abstract class CircleRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Circle estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Circle estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -773,7 +715,7 @@ public abstract class CircleRobustEstimator {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**

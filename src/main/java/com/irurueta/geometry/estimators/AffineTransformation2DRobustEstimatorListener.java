@@ -41,8 +41,7 @@ public interface AffineTransformation2DRobustEstimatorListener {
      * @param iteration current iteration.
      */
     void onEstimateNextIteration(
-            final AffineTransformation2DRobustEstimator estimator,
-            final int iteration);
+            final AffineTransformation2DRobustEstimator estimator, final int iteration);
 
     /**
      * Called when estimation progress changes significantly.
@@ -52,6 +51,5 @@ public interface AffineTransformation2DRobustEstimatorListener {
      *                  and 1.0.
      */
     void onEstimateProgressChange(
-            final AffineTransformation2DRobustEstimator estimator,
-            final float progress);
+            final AffineTransformation2DRobustEstimator estimator, final float progress);
 }

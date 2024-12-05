@@ -54,20 +54,20 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROSACConicRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -79,7 +79,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      */
     public PROSACConicRobustEstimator(final List<Point2D> points) {
         super(points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -90,7 +90,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      */
     public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
 
@@ -103,10 +103,9 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
-                                      final List<Point2D> points) {
+    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener, final List<Point2D> points) {
         super(listener, points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -118,7 +117,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      */
     public PROSACConicRobustEstimator(final double[] qualityScores) {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -131,15 +130,14 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROSACConicRobustEstimator(final List<Point2D> points,
-                                      final double[] qualityScores) {
+    public PROSACConicRobustEstimator(final List<Point2D> points, final double[] qualityScores) {
         super(points);
 
         if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -152,10 +150,9 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
-                                      final double[] qualityScores) {
+    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -171,15 +168,15 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
-                                      final List<Point2D> points, final double[] qualityScores) {
+    public PROSACConicRobustEstimator(
+            final ConicRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores) {
         super(listener, points);
 
         if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -193,7 +190,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -215,7 +212,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -226,7 +223,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -256,8 +253,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mPoints.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == points.size();
     }
 
     /**
@@ -274,8 +270,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Conic estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Conic estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -283,17 +278,16 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
             throw new NotReadyException();
         }
 
-        final PROSACRobustEstimator<Conic> innerEstimator =
-                new PROSACRobustEstimator<>(new PROSACRobustEstimatorListener<Conic>() {
+        final var innerEstimator = new PROSACRobustEstimator<>(new PROSACRobustEstimatorListener<Conic>() {
 
                     @Override
                     public double getThreshold() {
-                        return mThreshold;
+                        return threshold;
                     }
 
                     @Override
                     public int getTotalSamples() {
-                        return mPoints.size();
+                        return points.size();
                     }
 
                     @Override
@@ -302,17 +296,15 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
                     }
 
                     @Override
-                    public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                            final List<Conic> solutions) {
-                        final Point2D point1 = mPoints.get(samplesIndices[0]);
-                        final Point2D point2 = mPoints.get(samplesIndices[1]);
-                        final Point2D point3 = mPoints.get(samplesIndices[2]);
-                        final Point2D point4 = mPoints.get(samplesIndices[3]);
-                        final Point2D point5 = mPoints.get(samplesIndices[4]);
+                    public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Conic> solutions) {
+                        final var point1 = points.get(samplesIndices[0]);
+                        final var point2 = points.get(samplesIndices[1]);
+                        final var point3 = points.get(samplesIndices[2]);
+                        final var point4 = points.get(samplesIndices[3]);
+                        final var point5 = points.get(samplesIndices[4]);
 
                         try {
-                            final Conic conic = new Conic(point1, point2, point3, point4,
-                                    point5);
+                            final var conic = new Conic(point1, point2, point3, point4, point5);
                             solutions.add(conic);
                         } catch (final CoincidentPointsException e) {
                             // if points are coincident, no solution is added
@@ -321,7 +313,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
 
                     @Override
                     public double computeResidual(final Conic currentEstimation, final int i) {
-                        return residual(currentEstimation, mPoints.get(i));
+                        return residual(currentEstimation, points.get(i));
                     }
 
                     @Override
@@ -331,54 +323,50 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
 
                     @Override
                     public void onEstimateStart(final RobustEstimator<Conic> estimator) {
-                        if (mListener != null) {
-                            mListener.onEstimateStart(PROSACConicRobustEstimator.this);
+                        if (listener != null) {
+                            listener.onEstimateStart(PROSACConicRobustEstimator.this);
                         }
                     }
 
                     @Override
                     public void onEstimateEnd(final RobustEstimator<Conic> estimator) {
-                        if (mListener != null) {
-                            mListener.onEstimateEnd(PROSACConicRobustEstimator.this);
+                        if (listener != null) {
+                            listener.onEstimateEnd(PROSACConicRobustEstimator.this);
                         }
                     }
 
                     @Override
-                    public void onEstimateNextIteration(
-                            final RobustEstimator<Conic> estimator, final int iteration) {
-                        if (mListener != null) {
-                            mListener.onEstimateNextIteration(
-                                    PROSACConicRobustEstimator.this, iteration);
+                    public void onEstimateNextIteration(final RobustEstimator<Conic> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(PROSACConicRobustEstimator.this, iteration);
                         }
                     }
 
                     @Override
-                    public void onEstimateProgressChange(
-                            final RobustEstimator<Conic> estimator, final float progress) {
-                        if (mListener != null) {
-                            mListener.onEstimateProgressChange(
-                                    PROSACConicRobustEstimator.this, progress);
+                    public void onEstimateProgressChange(final RobustEstimator<Conic> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(PROSACConicRobustEstimator.this, progress);
                         }
                     }
 
                     @Override
                     public double[] getQualityScores() {
-                        return mQualityScores;
+                        return qualityScores;
                     }
                 });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -406,6 +394,6 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

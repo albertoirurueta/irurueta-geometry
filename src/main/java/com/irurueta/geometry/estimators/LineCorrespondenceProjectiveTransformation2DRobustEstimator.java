@@ -34,8 +34,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of lines to be used to estimate a projective 2D transformation.
@@ -44,7 +43,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * position. Hence, both input lines and output lines must have the
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Line2D> mInputLines;
+    protected List<Line2D> inputLines;
 
     /**
      * List of lines to be used to estimate a projective 2D transformation.
@@ -53,7 +52,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * position. Hence, both input lines and output lines must have the
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Line2D> mOutputLines;
+    protected List<Line2D> outputLines;
 
     /**
      * Constructor.
@@ -128,7 +127,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * transformation.
      */
     public List<Line2D> getInputLines() {
-        return mInputLines;
+        return inputLines;
     }
 
     /**
@@ -143,7 +142,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * transformation.
      */
     public List<Line2D> getOutputLines() {
-        return mOutputLines;
+        return outputLines;
     }
 
     /**
@@ -162,8 +161,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public final void setLines(final List<Line2D> inputLines,
-                               final List<Line2D> outputLines) throws LockedException {
+    public final void setLines(final List<Line2D> inputLines, final List<Line2D> outputLines) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -179,9 +177,8 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputLines != null && mOutputLines != null &&
-                mInputLines.size() == mOutputLines.size() &&
-                mInputLines.size() >= MINIMUM_SIZE;
+        return inputLines != null && outputLines != null && inputLines.size() == outputLines.size()
+                && inputLines.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -222,19 +219,13 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -252,26 +243,16 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputLines, outputLines);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputLines, outputLines);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(inputLines, outputLines);
+        };
     }
 
     /**
@@ -285,26 +266,14 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @return an instance of projective 2D transformation estimator.
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-        }
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -325,26 +294,19 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+        };
     }
 
     /**
@@ -359,21 +321,13 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(qualityScores);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -393,26 +347,17 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines, qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputLines, outputLines, qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputLines, outputLines, qualityScores);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(inputLines, outputLines);
+        };
     }
 
     /**
@@ -428,26 +373,17 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @return an instance of projective 2D transformation estimator.
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-        }
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, qualityScores);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -470,26 +406,20 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines, qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines, qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines, qualityScores);
+            default -> new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+        };
     }
 
     /**
@@ -549,8 +479,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
-        return create(listener, inputLines, outputLines,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, inputLines, outputLines, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -561,8 +490,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      *                      points.
      * @return an instance of affine 2D transformation estimator.
      */
-    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final double[] qualityScores) {
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -581,10 +509,8 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
-        return create(inputLines, outputLines, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
+        return create(inputLines, outputLines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -598,8 +524,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @return an instance of projective 2D transformation estimator.
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -621,10 +546,8 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      */
     public static LineCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
-        return create(listener, inputLines, outputLines, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
+        return create(listener, inputLines, outputLines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -639,16 +562,15 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @throws IllegalArgumentException if provided lists of lines don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetLines(final List<Line2D> inputLines,
-                                  final List<Line2D> outputLines) {
+    private void internalSetLines(final List<Line2D> inputLines, final List<Line2D> outputLines) {
         if (inputLines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
         if (inputLines.size() != outputLines.size()) {
             throw new IllegalArgumentException();
         }
-        mInputLines = inputLines;
-        mOutputLines = outputLines;
+        this.inputLines = inputLines;
+        this.outputLines = outputLines;
     }
 
     /**
@@ -667,13 +589,7 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * @return computed residual.
      */
     protected static double getResidual(final Line2D line, final Line2D transformedLine) {
-        line.normalize();
-        transformedLine.normalize();
-
-        final double dotProduct = Math.abs(line.getA() * transformedLine.getA() +
-                line.getB() * transformedLine.getB() +
-                line.getC() * transformedLine.getC());
-        return 1.0 - dotProduct;
+        return LineCorrespondenceAffineTransformation2DRobustEstimator.getResidual(line, transformedLine);
     }
 
     /**
@@ -689,23 +605,18 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
      * non-refined solution if not requested or refinement failed.
      */
     @SuppressWarnings("DuplicatedCode")
-    protected ProjectiveTransformation2D attemptRefine(
-            final ProjectiveTransformation2D transformation) {
-        if (mRefineResult) {
-            final LineCorrespondenceProjectiveTransformation2DRefiner refiner =
-                    new LineCorrespondenceProjectiveTransformation2DRefiner(
-                            transformation, mKeepCovariance, getInliersData(),
-                            mInputLines, mOutputLines,
-                            getRefinementStandardDeviation());
+    protected ProjectiveTransformation2D attemptRefine(final ProjectiveTransformation2D transformation) {
+        if (refineResult) {
+            final var refiner = new LineCorrespondenceProjectiveTransformation2DRefiner(transformation, keepCovariance,
+                    getInliersData(), inputLines, outputLines, getRefinementStandardDeviation());
 
             try {
-                final ProjectiveTransformation2D result =
-                        new ProjectiveTransformation2D();
-                final boolean improved = refiner.refine(result);
+                final var result = new ProjectiveTransformation2D();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : transformation;
@@ -717,5 +628,4 @@ public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimato
             return transformation;
         }
     }
-
 }

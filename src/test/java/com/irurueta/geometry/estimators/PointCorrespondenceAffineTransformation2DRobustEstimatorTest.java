@@ -17,908 +17,724 @@ package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
+class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
 
     @Test
-    public void testConstant() {
+    void testConstant() {
         assertEquals(RobustEstimatorMethod.PROMEDS,
                 PointCorrespondenceAffineTransformation2DRobustEstimator.DEFAULT_ROBUST_METHOD);
     }
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         // create with robust estimator method
-        PointCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                PointCorrespondenceAffineTransformation2DRobustEstimator.
-                        create(RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        var estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // create with points and method
-        final List<Point2D> inputPoints = new ArrayList<>();
-        final List<Point2D> outputPoints = new ArrayList<>();
-        for (int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPoints = new ArrayList<Point2D>();
+        final var outputPoints = new ArrayList<Point2D>();
+        for (var i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-
-        estimator = null;
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(emptyPoints, outputPoints,
-                            RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(inputPoints, emptyPoints,
-                            RobustEstimatorMethod.LMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(emptyPoints, outputPoints,
+                        RobustEstimatorMethod.LMEDS));
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, emptyPoints,
+                        RobustEstimatorMethod.LMEDS));
 
         // create with listener and method
-        final AffineTransformation2DRobustEstimatorListener listener =
-                new AffineTransformation2DRobustEstimatorListener() {
+        final var listener = new AffineTransformation2DRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final AffineTransformation2DRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final AffineTransformation2DRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final AffineTransformation2DRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final AffineTransformation2DRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final AffineTransformation2DRobustEstimator estimator, final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final AffineTransformation2DRobustEstimator estimator,
+                                                final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final AffineTransformation2DRobustEstimator estimator, final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final AffineTransformation2DRobustEstimator estimator,
+                                                 final float progress) {
+                // no action needed
+            }
+        };
 
-
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with listener and points
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints,
-                        RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints,
-                        RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints,
-                        RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints,
-                        RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints,
-                        RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with quality scores and method
-        final double[] qualityScores = new double[
-                PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE];
-        final double[] wrongQualityScores = new double[1];
+        final var qualityScores = new double[PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE];
+        final var wrongQualityScores = new double[1];
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(qualityScores, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(qualityScores, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(qualityScores, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(qualityScores, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(qualityScores, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(qualityScores,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with points, quality scores and method
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(emptyPoints, outputPoints, qualityScores,
-                            RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(inputPoints, emptyPoints, qualityScores,
-                            RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(inputPoints, outputPoints, wrongQualityScores,
-                            RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(emptyPoints, outputPoints,
+                        qualityScores, RobustEstimatorMethod.PROMEDS));
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, emptyPoints,
+                        qualityScores, RobustEstimatorMethod.PROMEDS));
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                        wrongQualityScores, RobustEstimatorMethod.PROMEDS));
 
         // test with listener, quality scores and method
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, qualityScores, RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, qualityScores, RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, qualityScores, RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, qualityScores, RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, qualityScores, RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, qualityScores,
+                RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with listener, points, quality scores and method
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.RANSAC);
-        assertTrue(estimator instanceof
-                RANSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.RANSAC);
+        assertInstanceOf(RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.LMEDS);
-        assertTrue(estimator instanceof
-                LMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.LMEDS);
+        assertInstanceOf(LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.MSAC);
-        assertTrue(estimator instanceof
-                MSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.MSAC);
+        assertInstanceOf(MSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.PROSAC);
-        assertTrue(estimator instanceof
-                PROSACPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.PROSAC);
+        assertInstanceOf(PROSACPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores,
-                        RobustEstimatorMethod.PROMEDS);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, RobustEstimatorMethod.PROMEDS);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(listener, emptyPoints, outputPoints, qualityScores,
-                            RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(listener, inputPoints, emptyPoints, qualityScores,
-                            RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(listener, inputPoints, outputPoints, wrongQualityScores,
-                            RobustEstimatorMethod.PROMEDS);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PointCorrespondenceAffineTransformation2DRobustEstimator
+                .create(listener, emptyPoints, outputPoints, qualityScores, RobustEstimatorMethod.PROMEDS));
+        assertThrows(IllegalArgumentException.class, () -> PointCorrespondenceAffineTransformation2DRobustEstimator
+                .create(listener, inputPoints, emptyPoints, qualityScores, RobustEstimatorMethod.PROMEDS));
+        assertThrows(IllegalArgumentException.class, () -> PointCorrespondenceAffineTransformation2DRobustEstimator
+                .create(listener, inputPoints, outputPoints, wrongQualityScores, RobustEstimatorMethod.PROMEDS));
 
         // test no arguments
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create();
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create();
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with points
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(emptyPoints, outputPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(inputPoints, emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(emptyPoints, outputPoints));
+        assertThrows(IllegalArgumentException.class,
+                () -> PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, emptyPoints));
 
         // test with listener
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with listener and points
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints,
+                outputPoints);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(listener, emptyPoints, outputPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                    create(listener, inputPoints, emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> PointCorrespondenceAffineTransformation2DRobustEstimator
+                .create(listener, emptyPoints, outputPoints));
+        assertThrows(IllegalArgumentException.class, () -> PointCorrespondenceAffineTransformation2DRobustEstimator
+                .create(listener, inputPoints, emptyPoints));
 
         // test with quality scores
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(qualityScores);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with points and quality scores
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with listener and quality scores
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, qualityScores);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
         assertFalse(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test with listener, points and quality scores
-        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores);
-        assertTrue(estimator instanceof
-                PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator);
+        estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores);
+        assertInstanceOf(PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.class, estimator);
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
         assertTrue(estimator.isReady());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
     }

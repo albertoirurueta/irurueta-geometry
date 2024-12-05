@@ -55,14 +55,14 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACConicRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -74,7 +74,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      */
     public MSACConicRobustEstimator(final List<Point2D> points) {
         super(points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -85,7 +85,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      */
     public MSACConicRobustEstimator(final ConicRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -97,10 +97,9 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public MSACConicRobustEstimator(final ConicRobustEstimatorListener listener,
-                                    final List<Point2D> points) {
+    public MSACConicRobustEstimator(final ConicRobustEstimatorListener listener, final List<Point2D> points) {
         super(listener, points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -113,7 +112,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -135,7 +134,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -152,8 +151,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Conic estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Conic estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -161,97 +159,90 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
             throw new NotReadyException();
         }
 
-        final MSACRobustEstimator<Conic> innerEstimator =
-                new MSACRobustEstimator<>(new MSACRobustEstimatorListener<Conic>() {
+        final var innerEstimator = new MSACRobustEstimator<>(new MSACRobustEstimatorListener<Conic>() {
 
-                    @Override
-                    public double getThreshold() {
-                        return mThreshold;
-                    }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                    @Override
-                    public int getTotalSamples() {
-                        return mPoints.size();
-                    }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                    @Override
-                    public int getSubsetSize() {
-                        return ConicRobustEstimator.MINIMUM_SIZE;
-                    }
+            @Override
+            public int getSubsetSize() {
+                return ConicRobustEstimator.MINIMUM_SIZE;
+            }
 
-                    @Override
-                    public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                            final List<Conic> solutions) {
-                        final Point2D point1 = mPoints.get(samplesIndices[0]);
-                        final Point2D point2 = mPoints.get(samplesIndices[1]);
-                        final Point2D point3 = mPoints.get(samplesIndices[2]);
-                        final Point2D point4 = mPoints.get(samplesIndices[3]);
-                        final Point2D point5 = mPoints.get(samplesIndices[4]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Conic> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
+                final var point4 = points.get(samplesIndices[3]);
+                final var point5 = points.get(samplesIndices[4]);
 
-                        try {
-                            final Conic conic = new Conic(point1, point2, point3, point4,
-                                    point5);
-                            solutions.add(conic);
-                        } catch (final CoincidentPointsException e) {
-                            // if points are coincident, no solution is added
-                        }
-                    }
+                try {
+                    final var conic = new Conic(point1, point2, point3, point4, point5);
+                    solutions.add(conic);
+                } catch (final CoincidentPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                    @Override
-                    public double computeResidual(final Conic currentEstimation, final int i) {
-                        return residual(currentEstimation, mPoints.get(i));
-                    }
+            @Override
+            public double computeResidual(final Conic currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                    @Override
-                    public boolean isReady() {
-                        return MSACConicRobustEstimator.this.isReady();
-                    }
+            @Override
+            public boolean isReady() {
+                return MSACConicRobustEstimator.this.isReady();
+            }
 
-                    @Override
-                    public void onEstimateStart(final RobustEstimator<Conic> estimator) {
-                        if (mListener != null) {
-                            mListener.onEstimateStart(MSACConicRobustEstimator.this);
-                        }
-                    }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Conic> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(MSACConicRobustEstimator.this);
+                }
+            }
 
-                    @Override
-                    public void onEstimateEnd(final RobustEstimator<Conic> estimator) {
-                        if (mListener != null) {
-                            mListener.onEstimateEnd(MSACConicRobustEstimator.this);
-                        }
-                    }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Conic> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(MSACConicRobustEstimator.this);
+                }
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final RobustEstimator<Conic> estimator, final int iteration) {
-                        if (mListener != null) {
-                            mListener.onEstimateNextIteration(
-                                    MSACConicRobustEstimator.this, iteration);
-                        }
-                    }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Conic> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(MSACConicRobustEstimator.this, iteration);
+                }
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final RobustEstimator<Conic> estimator, final float progress) {
-                        if (mListener != null) {
-                            mListener.onEstimateProgressChange(
-                                    MSACConicRobustEstimator.this, progress);
-                        }
-                    }
-                });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Conic> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(MSACConicRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

@@ -49,20 +49,20 @@ public class Sphere implements Serializable {
     /**
      * Center of sphere.
      */
-    private Point3D mCenter;
+    private Point3D center;
 
     /**
      * Radius of sphere.
      */
-    private double mRadius;
+    private double radius;
 
     /**
      * Empty constructor.
      * Creates sphere located at space origin (0,0) with radius 1.0.
      */
     public Sphere() {
-        mCenter = Point3D.create();
-        mRadius = 1.0;
+        center = Point3D.create();
+        radius = 1.0;
     }
 
     /**
@@ -90,8 +90,8 @@ public class Sphere implements Serializable {
      *                                 since a sphere having an infinite radius would be required to contain all
      *                                 four points in its locus.
      */
-    public Sphere(final Point3D point1, final Point3D point2, final Point3D point3,
-                  final Point3D point4) throws CoplanarPointsException {
+    public Sphere(final Point3D point1, final Point3D point2, final Point3D point3, final Point3D point4)
+            throws CoplanarPointsException {
         setParametersFromPoints(point1, point2, point3, point4);
     }
 
@@ -112,7 +112,7 @@ public class Sphere implements Serializable {
      * @return Center of sphere.
      */
     public Point3D getCenter() {
-        return mCenter;
+        return center;
     }
 
     /**
@@ -126,7 +126,7 @@ public class Sphere implements Serializable {
             throw new NullPointerException();
         }
 
-        mCenter = center;
+        this.center = center;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Sphere implements Serializable {
      * @return Radius of sphere.
      */
     public double getRadius() {
-        return mRadius;
+        return radius;
     }
 
     /**
@@ -149,7 +149,7 @@ public class Sphere implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        mRadius = radius;
+        this.radius = radius;
     }
 
     /**
@@ -179,8 +179,8 @@ public class Sphere implements Serializable {
      *                                 four points in its locus.
      */
     public final void setParametersFromPoints(
-            final Point3D point1, final Point3D point2,
-            final Point3D point3, final Point3D point4) throws CoplanarPointsException {
+            final Point3D point1, final Point3D point2, final Point3D point3, final Point3D point4)
+            throws CoplanarPointsException {
 
         // normalize points to increase accuracy
         point1.normalize();
@@ -189,14 +189,14 @@ public class Sphere implements Serializable {
         point4.normalize();
 
         try {
-            final Matrix m = new Matrix(4, 4);
-            final double[] b = new double[4];
+            final var m = new Matrix(4, 4);
+            final var b = new double[4];
 
             // 1st point
-            double x = point1.getHomX();
-            double y = point1.getHomY();
-            double z = point1.getHomZ();
-            double w = point1.getHomW();
+            var x = point1.getHomX();
+            var y = point1.getHomY();
+            var z = point1.getHomZ();
+            var w = point1.getHomW();
             m.setElementAt(0, 0, 2.0 * x * w);
             m.setElementAt(0, 1, 2.0 * y * w);
             m.setElementAt(0, 2, 2.0 * z * w);
@@ -237,41 +237,39 @@ public class Sphere implements Serializable {
             b[3] = -x * x - y * y - z * z;
 
             // normalize each row to increase accuracy
-            final double[] row = new double[4];
+            final var row = new double[4];
             double rowNorm;
 
-            for (int j = 0; j < 4; j++) {
+            for (var j = 0; j < 4; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 3, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for (int i = 0; i < 4; i++) {
+                for (var i = 0; i < 4; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
                 }
                 b[j] /= rowNorm;
             }
 
-            final double[] params = com.irurueta.algebra.Utils.solve(m, b);
+            final var params = com.irurueta.algebra.Utils.solve(m, b);
 
             // g = -cx
-            final double g = params[0];
+            final var g = params[0];
             // h = -cy
-            final double h = params[1];
+            final var h = params[1];
             // i = -cz
-            final double i = params[2];
+            final var i = params[2];
             // j = cx^2 + cy^2 + cz^2 - R^2
-            final double j = params[3];
+            final var j = params[3];
 
             // compute center
-            final double inhomCx = -g;
-            final double inhomCy = -h;
-            final double inhomCz = -i;
-            final Point3D center = new InhomogeneousPoint3D(inhomCx, inhomCy,
-                    inhomCz);
+            final var inhomCx = -g;
+            final var inhomCy = -h;
+            final var inhomCz = -i;
+            final var c = new InhomogeneousPoint3D(inhomCx, inhomCy, inhomCz);
 
             // compute radius
-            final double radius = Math.sqrt(inhomCx * inhomCx + inhomCy * inhomCy +
-                    inhomCz * inhomCz - j);
+            final var r = Math.sqrt(inhomCx * inhomCx + inhomCy * inhomCy + inhomCz * inhomCz - j);
 
-            setCenterAndRadius(center, radius);
+            setCenterAndRadius(c, r);
         } catch (final AlgebraException e) {
             throw new CoplanarPointsException(e);
         }
@@ -297,7 +295,7 @@ public class Sphere implements Serializable {
      * @return Volume of this sphere.
      */
     public double getVolume() {
-        return volume(mRadius);
+        return volume(radius);
     }
 
     /**
@@ -320,7 +318,7 @@ public class Sphere implements Serializable {
      * @return Surface of this sphere.
      */
     public double getSurface() {
-        return surface(mRadius);
+        return surface(radius);
     }
 
     /**
@@ -337,7 +335,7 @@ public class Sphere implements Serializable {
      * otherwise.
      */
     public boolean isInside(final Point3D point, final double threshold) {
-        return point.distanceTo(mCenter) - threshold <= mRadius;
+        return point.distanceTo(center) - threshold <= radius;
     }
 
     /**
@@ -410,9 +408,8 @@ public class Sphere implements Serializable {
      * @throws UndefinedPointException Raised if provided point is at sphere
      *                                 center or very close to it.
      */
-    public Point3D getClosestPoint(final Point3D point)
-            throws UndefinedPointException {
-        final Point3D result = Point3D.create();
+    public Point3D getClosestPoint(final Point3D point) throws UndefinedPointException {
+        final var result = Point3D.create();
         closestPoint(point, result);
         return result;
     }
@@ -426,16 +423,14 @@ public class Sphere implements Serializable {
      * @throws UndefinedPointException Raised if provided point is at sphere
      *                                 center or very close to ti.
      */
-    public void closestPoint(final Point3D point, final Point3D result)
-            throws UndefinedPointException {
+    public void closestPoint(final Point3D point, final Point3D result) throws UndefinedPointException {
 
-        double directionX = point.getInhomX() - mCenter.getInhomX();
-        double directionY = point.getInhomY() - mCenter.getInhomY();
-        double directionZ = point.getInhomZ() - mCenter.getInhomZ();
+        var directionX = point.getInhomX() - center.getInhomX();
+        var directionY = point.getInhomY() - center.getInhomY();
+        var directionZ = point.getInhomZ() - center.getInhomZ();
         // normalize direction and multiply by radius to set result as locus of
         // circle
-        final double norm = Math.sqrt(directionX * directionX +
-                directionY * directionY + directionZ * directionZ);
+        final var norm = Math.sqrt(directionX * directionX + directionY * directionY + directionZ * directionZ);
 
         // check if point is at center or very close to center, in that case the
         // closest point cannot be found (would be all points of a circle)
@@ -443,13 +438,12 @@ public class Sphere implements Serializable {
             throw new UndefinedPointException();
         }
 
-        directionX *= mRadius / norm;
-        directionY *= mRadius / norm;
-        directionZ *= mRadius / norm;
+        directionX *= radius / norm;
+        directionY *= radius / norm;
+        directionZ *= radius / norm;
 
-        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX,
-                mCenter.getInhomY() + directionY,
-                mCenter.getInhomZ() + directionZ);
+        result.setInhomogeneousCoordinates(center.getInhomX() + directionX,
+                center.getInhomY() + directionY, center.getInhomZ() + directionZ);
     }
 
     /**
@@ -467,7 +461,7 @@ public class Sphere implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        return Math.abs(point.distanceTo(mCenter) - mRadius) <= threshold;
+        return Math.abs(point.distanceTo(center) - radius) <= threshold;
     }
 
     /**
@@ -506,9 +500,8 @@ public class Sphere implements Serializable {
      *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public Plane getTangentPlaneAt(final Point3D point, final double threshold)
-            throws NotLocusException {
-        final Plane plane = new Plane();
+    public Plane getTangentPlaneAt(final Point3D point, final double threshold) throws NotLocusException {
+        final var plane = new Plane();
         tangentPlaneAt(point, plane, threshold);
         return plane;
     }
@@ -524,15 +517,14 @@ public class Sphere implements Serializable {
      * @throws NotLocusException        if provided point is not locus of this sphere.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public void tangentPlaneAt(final Point3D point, final Plane plane,
-                               final double threshold) throws NotLocusException {
-
+    public void tangentPlaneAt(final Point3D point, final Plane plane, final double threshold)
+            throws NotLocusException {
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
         }
 
         point.normalize();
-        mCenter.normalize();
+        center.normalize();
 
         // Q =   [a      d       f       g]
         //       [d      b       e       h]
@@ -552,23 +544,22 @@ public class Sphere implements Serializable {
         // Hence plane is P = Q * p, where Q is the sphere quadric and p is
         // a point in the locus of the sphere
 
-        final double homX = point.getHomX();
-        final double homY = point.getHomY();
-        final double homZ = point.getHomZ();
-        final double homW = point.getHomW();
-        final double cx = mCenter.getInhomX();
-        final double cy = mCenter.getInhomY();
-        final double cz = mCenter.getInhomZ();
-        final double quadricG = -cx;
-        final double quadricH = -cy;
-        final double quadricI = -cz;
-        final double quadricJ = cx * cx + cy * cy + cz * cz - mRadius * mRadius;
+        final var homX = point.getHomX();
+        final var homY = point.getHomY();
+        final var homZ = point.getHomZ();
+        final var homW = point.getHomW();
+        final var cx = center.getInhomX();
+        final var cy = center.getInhomY();
+        final var cz = center.getInhomZ();
+        final var quadricG = -cx;
+        final var quadricH = -cy;
+        final var quadricI = -cz;
+        final var quadricJ = cx * cx + cy * cy + cz * cz - radius * radius;
 
-        final double planeA = homX + quadricG * homW;
-        final double planeB = homY + quadricH * homW;
-        final double planeC = homZ + quadricI * homW;
-        final double planeD = quadricG * homX + quadricH * homY + quadricI * homZ +
-                quadricJ * homW;
+        final var planeA = homX + quadricG * homW;
+        final var planeB = homY + quadricH * homW;
+        final var planeC = homZ + quadricI * homW;
+        final var planeD = quadricG * homX + quadricH * homY + quadricI * homZ + quadricJ * homW;
         plane.setParameters(planeA, planeB, planeC, planeD);
     }
 
@@ -579,22 +570,22 @@ public class Sphere implements Serializable {
      * @return A quadric representing this circle.
      */
     public Quadric toQuadric() {
-        mCenter.normalize();
+        center.normalize();
         // use inhomogeneous center coordinates
-        final double cx = mCenter.getInhomX();
-        final double cy = mCenter.getInhomY();
-        final double cz = mCenter.getInhomZ();
+        final var cx = center.getInhomX();
+        final var cy = center.getInhomY();
+        final var cz = center.getInhomZ();
 
-        final double a = 1.0;
-        final double b = 1.0;
-        final double c = 1.0;
-        final double d = 0.0;
-        final double e = 0.0;
-        final double f = 0.0;
-        final double g = -cx;
-        final double h = -cy;
-        final double i = -cz;
-        final double j = cx * cx + cy * cy + cz * cz - mRadius * mRadius;
+        final var a = 1.0;
+        final var b = 1.0;
+        final var c = 1.0;
+        final var d = 0.0;
+        final var e = 0.0;
+        final var f = 0.0;
+        final var g = -cx;
+        final var h = -cy;
+        final var i = -cz;
+        final var j = cx * cx + cy * cy + cz * cz - radius * radius;
 
         return new Quadric(a, b, c, d, e, f, g, h, i, j);
     }
@@ -607,10 +598,8 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
     public final void setFromQuadric(final Quadric quadric) {
-        boolean isSphere = quadric.getA() == quadric.getB() &&
-                quadric.getB() == quadric.getC() && quadric.getA() != 0.0 &&
-                quadric.getD() == 0.0 && quadric.getE() == 0.0 &&
-                quadric.getF() == 0.0;
+        final var isSphere = quadric.getA() == quadric.getB() && quadric.getB() == quadric.getC()
+                && quadric.getA() != 0.0 && quadric.getD() == 0.0 && quadric.getE() == 0.0 && quadric.getF() == 0.0;
 
         if (!isSphere) {
             throw new IllegalArgumentException();
@@ -618,23 +607,23 @@ public class Sphere implements Serializable {
 
         quadric.normalize();
 
-        final double a = quadric.getA();
+        final var a = quadric.getA();
         // normalize parameters so that
         // a = b = c = 1.0
         // d = e = f = 0.0
         // g = -cx, h = -cy, i = -cz
         // j = cx^2 + cy^2 + cz^2 - r^2
-        final double normG = quadric.getG() / a;
-        final double normH = quadric.getH() / a;
-        final double normI = quadric.getI() / a;
-        final double normJ = quadric.getJ() / a;
+        final var normG = quadric.getG() / a;
+        final var normH = quadric.getH() / a;
+        final var normI = quadric.getI() / a;
+        final var normJ = quadric.getJ() / a;
 
-        final double cx = -normG;
-        final double cy = -normH;
-        final double cz = -normI;
-        final double radius = Math.sqrt(cx * cx + cy * cy + cz * cz - normJ);
+        final var cx = -normG;
+        final var cy = -normH;
+        final var cz = -normI;
+        final var r = Math.sqrt(cx * cx + cy * cy + cz * cz - normJ);
 
-        mCenter = new InhomogeneousPoint3D(cx, cy, cz);
-        mRadius = radius;
+        center = new InhomogeneousPoint3D(cx, cy, cz);
+        this.radius = r;
     }
 }

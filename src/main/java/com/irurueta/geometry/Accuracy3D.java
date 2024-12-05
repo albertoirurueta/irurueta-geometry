@@ -95,7 +95,7 @@ public class Accuracy3D extends Accuracy {
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
     public Ellipsoid toEllipsoid() throws InvalidRotationMatrixException {
-        return toEllipsoid(mStandardDeviationFactor);
+        return toEllipsoid(standardDeviationFactor);
     }
 
     /**
@@ -108,14 +108,14 @@ public class Accuracy3D extends Accuracy {
      */
     public Accuracy2D flattenTo2D() throws GeometryException {
         // get intersected ellipse for unitary standard deviation
-        final Ellipse ellipse = intersectWithPlane(1.0);
+        final var ellipse = intersectWithPlane(1.0);
 
-        final double semiMajorAxis = ellipse.getSemiMajorAxis();
-        final double semiMinorAxis = ellipse.getSemiMinorAxis();
-        final Rotation2D rotation = ellipse.getRotation();
+        final var semiMajorAxis = ellipse.getSemiMajorAxis();
+        final var semiMinorAxis = ellipse.getSemiMinorAxis();
+        final var rotation = ellipse.getRotation();
 
-        final Matrix u = rotation.asInhomogeneousMatrix();
-        final Matrix s2 = Matrix.diagonal(new double[]{
+        final var u = rotation.asInhomogeneousMatrix();
+        final var s2 = Matrix.diagonal(new double[]{
                 semiMajorAxis * semiMajorAxis,
                 semiMinorAxis * semiMinorAxis});
 
@@ -126,7 +126,7 @@ public class Accuracy3D extends Accuracy {
             s2.multiply(u);
             u.multiply(s2);
 
-            return new Accuracy2D(u, mConfidence);
+            return new Accuracy2D(u, confidence);
         } catch (final AlgebraException e) {
             throw new GeometryException(e);
         }
@@ -140,7 +140,7 @@ public class Accuracy3D extends Accuracy {
      * @throws GeometryException    if intersection cannot be computed.
      */
     public Ellipse intersectWithPlane() throws GeometryException {
-        return intersectWithPlane(mStandardDeviationFactor);
+        return intersectWithPlane(standardDeviationFactor);
     }
 
     /**
@@ -155,9 +155,9 @@ public class Accuracy3D extends Accuracy {
      */
     private Ellipsoid toEllipsoid(final double standardDeviationFactor)
             throws InvalidRotationMatrixException {
-        final double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
-                mSqrtSingularValues, standardDeviationFactor);
-        final Rotation3D rotation = new MatrixRotation3D(mU);
+        final var semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
+                sqrtSingularValues, standardDeviationFactor);
+        final var rotation = new MatrixRotation3D(u);
         return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);
     }
 
@@ -170,17 +170,16 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix is not defined.
      * @throws GeometryException    if intersection cannot be computed.
      */
-    private Ellipse intersectWithPlane(final double standardDeviationFactor)
-            throws GeometryException {
-        final Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);
-        final Quadric quadric = ellipsoid.toQuadric();
+    private Ellipse intersectWithPlane(final double standardDeviationFactor) throws GeometryException {
+        final var ellipsoid = toEllipsoid(standardDeviationFactor);
+        final var quadric = ellipsoid.toQuadric();
 
         // create horizontal xy plane located at ellipsoid center
-        final Point3D center = ellipsoid.getCenter();
-        final double[] directorVector = new double[]{0.0, 0.0, 1.0};
-        final Plane plane = new Plane(center, directorVector);
+        final var center = ellipsoid.getCenter();
+        final var directorVector = new double[]{0.0, 0.0, 1.0};
+        final var plane = new Plane(center, directorVector);
 
-        final Conic conic = quadric.intersectWith(plane);
+        final var conic = quadric.intersectWith(plane);
 
         return new Ellipse(conic);
     }

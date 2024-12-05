@@ -18,14 +18,13 @@ package com.irurueta.geometry;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class QuadricTest {
+class QuadricTest {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -44,7 +43,7 @@ public class QuadricTest {
     private static final int TIMES = 100;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_ROW_SIZE);
         assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_COLUMN_SIZE);
         assertEquals(10, BaseQuadric.N_PARAMS);
@@ -54,14 +53,13 @@ public class QuadricTest {
     }
 
     @Test
-    public void testConstructor() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException,
+    void testConstructor() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentPointsException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // Constructor
-        Quadric quadric = new Quadric();
+        var quadric = new Quadric();
         assertEquals(0.0, quadric.getA(), 0.0);
         assertEquals(0.0, quadric.getB(), 0.0);
         assertEquals(0.0, quadric.getC(), 0.0);
@@ -74,16 +72,16 @@ public class QuadricTest {
         assertEquals(0.0, quadric.getJ(), 0.0);
 
         // Constructor with params
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         quadric = new Quadric(a, b, c, d, e, f, g, h, i, j);
         assertEquals(a, quadric.getA(), 0.0);
@@ -99,7 +97,7 @@ public class QuadricTest {
         assertFalse(quadric.isNormalized());
 
         // Constructor using matrix
-        Matrix m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
+        var m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
         // get random values
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -143,44 +141,31 @@ public class QuadricTest {
         assertEquals(m.getElementAt(3, 3), quadric.getJ(), 0.0);
 
         // Constructor using matrix with wrong size exception
-        m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS + 1);
-        quadric = null;
-        try {
-            quadric = new Quadric(m);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(quadric);
+        final var wrongM1 = new Matrix(QUADRIC_ROWS, QUADRIC_COLS + 1);
+        assertThrows(IllegalArgumentException.class, () -> new Quadric(wrongM1));
 
         // Constructor using non-symmetric matrix
-        m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
-        m.setElementAt(0, 0, a);
-        m.setElementAt(1, 1, b);
-        m.setElementAt(2, 2, c);
-        m.setElementAt(3, 3, j);
-        m.setElementAt(1, 0, d);
-        m.setElementAt(0, 1, d + 1.0);
-        m.setElementAt(2, 1, e);
-        m.setElementAt(1, 2, e + 1.0);
-        m.setElementAt(2, 0, f);
-        m.setElementAt(0, 2, f + 1.0);
-        m.setElementAt(3, 0, g);
-        m.setElementAt(0, 3, g + 1.0);
-        m.setElementAt(3, 1, h);
-        m.setElementAt(1, 3, h + 1.0);
-        m.setElementAt(3, 2, i);
-        m.setElementAt(2, 3, i + 1.0);
-
-        try {
-            quadric = new Quadric(m);
-            fail("NonSymmetricMatrixException expected but not thrown");
-        } catch (final NonSymmetricMatrixException ignore) {
-        }
-        assertNull(quadric);
+        final var wrongM2 = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
+        wrongM2.setElementAt(0, 0, a);
+        wrongM2.setElementAt(1, 1, b);
+        wrongM2.setElementAt(2, 2, c);
+        wrongM2.setElementAt(3, 3, j);
+        wrongM2.setElementAt(1, 0, d);
+        wrongM2.setElementAt(0, 1, d + 1.0);
+        wrongM2.setElementAt(2, 1, e);
+        wrongM2.setElementAt(1, 2, e + 1.0);
+        wrongM2.setElementAt(2, 0, f);
+        wrongM2.setElementAt(0, 2, f + 1.0);
+        wrongM2.setElementAt(3, 0, g);
+        wrongM2.setElementAt(0, 3, g + 1.0);
+        wrongM2.setElementAt(3, 1, h);
+        wrongM2.setElementAt(1, 3, h + 1.0);
+        wrongM2.setElementAt(3, 2, i);
+        wrongM2.setElementAt(2, 3, i + 1.0);
+        assertThrows(NonSymmetricMatrixException.class, () -> new Quadric(wrongM2));
 
         // Constructor from 9 points
-        m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         HomogeneousPoint3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1), m.getElementAt(0, 2), 1.0);
@@ -202,11 +187,11 @@ public class QuadricTest {
                 m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
 
         // estimate quadric that lies inside provided 9 points
-        Matrix quadricMatrix = new Matrix(9, 10);
-        double x = point1.getHomX();
-        double y = point1.getHomY();
-        double z = point1.getHomZ();
-        double w = point1.getHomW();
+        var quadricMatrix = new Matrix(9, 10);
+        var x = point1.getHomX();
+        var y = point1.getHomY();
+        var z = point1.getHomZ();
+        var w = point1.getHomW();
         quadricMatrix.setElementAt(0, 0, x * x);
         quadricMatrix.setElementAt(0, 1, y * y);
         quadricMatrix.setElementAt(0, 2, z * z);
@@ -331,8 +316,7 @@ public class QuadricTest {
         quadricMatrix.setElementAt(8, 9, w * w);
 
         while (com.irurueta.algebra.Utils.rank(quadricMatrix) < 9) {
-            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                     m.getElementAt(0, 1), m.getElementAt(0, 2), 1.0);
@@ -495,33 +479,33 @@ public class QuadricTest {
         assertTrue(quadric.isLocus(point9, PRECISION_ERROR));
 
         // Force CoincidentPointsException
-        quadric = null;
-        try {
-            quadric = new Quadric(point1, point2, point3, point4, point5,
-                    point6, point7, point8, point8);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        assertNull(quadric);
+        final var finalPoint1 = point1;
+        final var finalPoint2 = point2;
+        final var finalPoint3 = point3;
+        final var finalPoint4 = point4;
+        final var finalPoint5 = point5;
+        final var finalPoint6 = point6;
+        final var finalPoint7 = point7;
+        final var finalPoint8 = point8;
+        assertThrows(CoincidentPointsException.class, () -> new Quadric(finalPoint1, finalPoint2, finalPoint3,
+                finalPoint4, finalPoint5, finalPoint6, finalPoint7, finalPoint8, finalPoint8));
     }
 
     @Test
-    public void testGettersAndSetters() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testGettersAndSetters() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
+        final var randomizer = new UniformRandomizer();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-
-        final Quadric quadric = new Quadric();
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var quadric = new Quadric();
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         quadric.setA(a);
         quadric.setB(b);
         quadric.setC(c);
@@ -565,7 +549,7 @@ public class QuadricTest {
         assertEquals(i, quadric.getI(), 0.0);
         assertEquals(j, quadric.getJ(), 0.0);
 
-        Matrix m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
+        var m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -604,15 +588,11 @@ public class QuadricTest {
         assertEquals(m.getElementAt(3, 2), quadric.getI(), 0.0);
 
         // Force IllegalArgumentException
-        m = new Matrix(QUADRIC_ROWS + 1, QUADRIC_COLS + 1);
-        try {
-            quadric.setParameters(m);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrongM3 = new Matrix(QUADRIC_ROWS + 1, QUADRIC_COLS + 1);
+        assertThrows(IllegalArgumentException.class, () -> quadric.setParameters(wrongM3));
 
         // Force NonSymmetricMatrixException
-        m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
+        final var wrongM4 = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -623,48 +603,42 @@ public class QuadricTest {
         h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        m.setElementAt(0, 0, a);
-        m.setElementAt(1, 1, b);
-        m.setElementAt(2, 2, c);
-        m.setElementAt(3, 3, j);
-        m.setElementAt(1, 0, d);
-        m.setElementAt(0, 1, d + 1.0);
-        m.setElementAt(2, 1, e);
-        m.setElementAt(1, 2, e + 1.0);
-        m.setElementAt(2, 0, f);
-        m.setElementAt(0, 2, f + 1.0);
-        m.setElementAt(3, 0, g);
-        m.setElementAt(0, 3, g + 1.0);
-        m.setElementAt(3, 1, h);
-        m.setElementAt(1, 3, h + 1.0);
-        m.setElementAt(3, 2, i);
-        m.setElementAt(2, 3, i + 1.0);
-        try {
-            quadric.setParameters(m);
-            fail("NonSymmetricMatrixException expected but not thrown");
-        } catch (final NonSymmetricMatrixException ignore) {
-        }
-        quadric.setParameters(m, 1.0);
-
+        wrongM4.setElementAt(0, 0, a);
+        wrongM4.setElementAt(1, 1, b);
+        wrongM4.setElementAt(2, 2, c);
+        wrongM4.setElementAt(3, 3, j);
+        wrongM4.setElementAt(1, 0, d);
+        wrongM4.setElementAt(0, 1, d + 1.0);
+        wrongM4.setElementAt(2, 1, e);
+        wrongM4.setElementAt(1, 2, e + 1.0);
+        wrongM4.setElementAt(2, 0, f);
+        wrongM4.setElementAt(0, 2, f + 1.0);
+        wrongM4.setElementAt(3, 0, g);
+        wrongM4.setElementAt(0, 3, g + 1.0);
+        wrongM4.setElementAt(3, 1, h);
+        wrongM4.setElementAt(1, 3, h + 1.0);
+        wrongM4.setElementAt(3, 2, i);
+        wrongM4.setElementAt(2, 3, i + 1.0);
+        assertThrows(NonSymmetricMatrixException.class, () -> quadric.setParameters(wrongM4));
+        assertDoesNotThrow(() -> quadric.setParameters(wrongM4, 1.0));
     }
 
     @Test
-    public void testAsMatrix() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testAsMatrix() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Quadric quadric = new Quadric();
-        final Matrix m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var quadric = new Quadric();
+        final var m = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         m.setElementAt(0, 0, a);
         m.setElementAt(1, 1, b);
         m.setElementAt(2, 2, c);
@@ -683,47 +657,36 @@ public class QuadricTest {
         m.setElementAt(2, 3, i);
         quadric.setParameters(m);
 
-        final Matrix m2 = quadric.asMatrix();
+        final var m2 = quadric.asMatrix();
 
         assertTrue(m.equals(m2));
     }
 
     @Test
-    public void testIsLocus() throws WrongSizeException, DecomposerException,
-            NotReadyException, LockedException,
+    void testIsLocus() throws WrongSizeException, DecomposerException, NotReadyException, LockedException,
             com.irurueta.algebra.NotAvailableException, IllegalArgumentException,
             NonSymmetricMatrixException, CoincidentPointsException {
 
-        Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        HomogeneousPoint3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
-                m.getElementAt(0, 1), m.getElementAt(0, 2),
-                m.getElementAt(0, 3));
-        HomogeneousPoint3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
-                m.getElementAt(1, 1), m.getElementAt(1, 2),
-                m.getElementAt(1, 3));
-        HomogeneousPoint3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
-                m.getElementAt(2, 1), m.getElementAt(2, 2),
-                m.getElementAt(2, 3));
-        HomogeneousPoint3D point4 = new HomogeneousPoint3D(m.getElementAt(3, 0),
-                m.getElementAt(3, 1), m.getElementAt(3, 2),
-                m.getElementAt(3, 3));
-        HomogeneousPoint3D point5 = new HomogeneousPoint3D(m.getElementAt(4, 0),
-                m.getElementAt(4, 1), m.getElementAt(4, 2),
-                m.getElementAt(4, 3));
-        HomogeneousPoint3D point6 = new HomogeneousPoint3D(m.getElementAt(5, 0),
-                m.getElementAt(5, 1), m.getElementAt(5, 2),
-                m.getElementAt(5, 3));
-        HomogeneousPoint3D point7 = new HomogeneousPoint3D(m.getElementAt(6, 0),
-                m.getElementAt(6, 1), m.getElementAt(6, 2),
-                m.getElementAt(6, 3));
-        HomogeneousPoint3D point8 = new HomogeneousPoint3D(m.getElementAt(7, 0),
-                m.getElementAt(7, 1), m.getElementAt(7, 2),
-                m.getElementAt(7, 3));
-        HomogeneousPoint3D point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
-                m.getElementAt(8, 1), m.getElementAt(8, 2),
-                m.getElementAt(8, 3));
+        var point1 = new HomogeneousPoint3D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+                m.getElementAt(0, 2), m.getElementAt(0, 3));
+        var point2 = new HomogeneousPoint3D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+                m.getElementAt(1, 2), m.getElementAt(1, 3));
+        var point3 = new HomogeneousPoint3D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+                m.getElementAt(2, 2), m.getElementAt(2, 3));
+        var point4 = new HomogeneousPoint3D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+                m.getElementAt(3, 2), m.getElementAt(3, 3));
+        var point5 = new HomogeneousPoint3D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+                m.getElementAt(4, 2), m.getElementAt(4, 3));
+        var point6 = new HomogeneousPoint3D(m.getElementAt(5, 0), m.getElementAt(5, 1),
+                m.getElementAt(5, 2), m.getElementAt(5, 3));
+        var point7 = new HomogeneousPoint3D(m.getElementAt(6, 0), m.getElementAt(6, 1),
+                m.getElementAt(6, 2), m.getElementAt(6, 3));
+        var point8 = new HomogeneousPoint3D(m.getElementAt(7, 0), m.getElementAt(7, 1),
+                m.getElementAt(7, 2), m.getElementAt(7, 3));
+        var point9 = new HomogeneousPoint3D(m.getElementAt(8, 0), m.getElementAt(8, 1),
+                m.getElementAt(8, 2), m.getElementAt(8, 3));
 
         point1.normalize();
         point2.normalize();
@@ -736,11 +699,11 @@ public class QuadricTest {
         point9.normalize();
 
         // estimate quadric that lies inside provided 9 points
-        Matrix quadricMatrix = new Matrix(9, 10);
-        double x = point1.getHomX();
-        double y = point1.getHomY();
-        double z = point1.getHomZ();
-        double w = point1.getHomW();
+        var quadricMatrix = new Matrix(9, 10);
+        var x = point1.getHomX();
+        var y = point1.getHomY();
+        var z = point1.getHomZ();
+        var w = point1.getHomW();
         quadricMatrix.setElementAt(0, 0, x * x);
         quadricMatrix.setElementAt(0, 1, y * y);
         quadricMatrix.setElementAt(0, 2, z * z);
@@ -865,36 +828,26 @@ public class QuadricTest {
         quadricMatrix.setElementAt(8, 9, w * w);
 
         while (com.irurueta.algebra.Utils.rank(quadricMatrix) < 9) {
-            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
-                    m.getElementAt(0, 1), m.getElementAt(0, 2),
-                    m.getElementAt(0, 3));
-            point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
-                    m.getElementAt(1, 1), m.getElementAt(1, 2),
-                    m.getElementAt(1, 3));
-            point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
-                    m.getElementAt(2, 1), m.getElementAt(2, 2),
-                    m.getElementAt(2, 3));
-            point4 = new HomogeneousPoint3D(m.getElementAt(3, 0),
-                    m.getElementAt(3, 1), m.getElementAt(3, 2),
-                    m.getElementAt(3, 3));
-            point5 = new HomogeneousPoint3D(m.getElementAt(4, 0),
-                    m.getElementAt(4, 1), m.getElementAt(4, 2),
-                    m.getElementAt(4, 3));
-            point6 = new HomogeneousPoint3D(m.getElementAt(5, 0),
-                    m.getElementAt(5, 1), m.getElementAt(5, 2),
-                    m.getElementAt(5, 3));
-            point7 = new HomogeneousPoint3D(m.getElementAt(6, 0),
-                    m.getElementAt(6, 1), m.getElementAt(6, 2),
-                    m.getElementAt(6, 3));
-            point8 = new HomogeneousPoint3D(m.getElementAt(7, 0),
-                    m.getElementAt(7, 1), m.getElementAt(7, 2),
-                    m.getElementAt(7, 3));
-            point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
-                    m.getElementAt(8, 1), m.getElementAt(8, 2),
-                    m.getElementAt(8, 3));
+            point1 = new HomogeneousPoint3D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+                    m.getElementAt(0, 2), m.getElementAt(0, 3));
+            point2 = new HomogeneousPoint3D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+                    m.getElementAt(1, 2), m.getElementAt(1, 3));
+            point3 = new HomogeneousPoint3D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+                    m.getElementAt(2, 2), m.getElementAt(2, 3));
+            point4 = new HomogeneousPoint3D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+                    m.getElementAt(3, 2), m.getElementAt(3, 3));
+            point5 = new HomogeneousPoint3D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+                    m.getElementAt(4, 2), m.getElementAt(4, 3));
+            point6 = new HomogeneousPoint3D(m.getElementAt(5, 0), m.getElementAt(5, 1),
+                    m.getElementAt(5, 2), m.getElementAt(5, 3));
+            point7 = new HomogeneousPoint3D(m.getElementAt(6, 0), m.getElementAt(6, 1),
+                    m.getElementAt(6, 2), m.getElementAt(6, 3));
+            point8 = new HomogeneousPoint3D(m.getElementAt(7, 0), m.getElementAt(7, 1),
+                    m.getElementAt(7, 2), m.getElementAt(7, 3));
+            point9 = new HomogeneousPoint3D(m.getElementAt(8, 0), m.getElementAt(8, 1),
+                    m.getElementAt(8, 2), m.getElementAt(8, 3));
 
             point1.normalize();
             point2.normalize();
@@ -1036,35 +989,34 @@ public class QuadricTest {
             quadricMatrix.setElementAt(8, 9, w * w);
         }
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(
-                quadricMatrix);
+        final var decomposer = new SingularValueDecomposer(quadricMatrix);
         decomposer.decompose();
 
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
-        final double a = v.getElementAt(0, 9);
-        final double b = v.getElementAt(1, 9);
-        final double c = v.getElementAt(2, 9);
-        final double d = v.getElementAt(3, 9);
+        final var a = v.getElementAt(0, 9);
+        final var b = v.getElementAt(1, 9);
+        final var c = v.getElementAt(2, 9);
+        final var d = v.getElementAt(3, 9);
 
-        final double f = v.getElementAt(4, 9);
-        final double e = v.getElementAt(5, 9);
+        final var f = v.getElementAt(4, 9);
+        final var e = v.getElementAt(5, 9);
 
-        final double g = v.getElementAt(6, 9);
-        final double h = v.getElementAt(7, 9);
-        final double i = v.getElementAt(8, 9);
-        final double j = v.getElementAt(9, 9);
+        final var g = v.getElementAt(6, 9);
+        final var h = v.getElementAt(7, 9);
+        final var i = v.getElementAt(8, 9);
+        final var j = v.getElementAt(9, 9);
 
-        final Matrix quadricPoint = new Matrix(QUADRIC_ROWS, 1);
+        final var quadricPoint = new Matrix(QUADRIC_ROWS, 1);
         quadricPoint.setElementAt(0, 0, point1.getHomX());
         quadricPoint.setElementAt(1, 0, point1.getHomY());
         quadricPoint.setElementAt(2, 0, point1.getHomZ());
         quadricPoint.setElementAt(3, 0, point1.getHomW());
 
-        double norm = com.irurueta.algebra.Utils.normF(quadricPoint);
+        var norm = com.irurueta.algebra.Utils.normF(quadricPoint);
         quadricPoint.multiplyByScalar(1.0 / norm);
 
-        final Matrix resultQuadricMatrix = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
+        final var resultQuadricMatrix = new Matrix(QUADRIC_ROWS, QUADRIC_COLS);
         resultQuadricMatrix.setElementAt(0, 0, a);
         resultQuadricMatrix.setElementAt(1, 1, b);
         resultQuadricMatrix.setElementAt(2, 2, c);
@@ -1087,28 +1039,27 @@ public class QuadricTest {
 
         // find plane tangent to quadric resultQuadricMatrix at point
         // quadricPoint
-        final Matrix planeParams = resultQuadricMatrix.multiplyAndReturnNew(
-                quadricPoint);
+        final var planeParams = resultQuadricMatrix.multiplyAndReturnNew(quadricPoint);
 
         norm = com.irurueta.algebra.Utils.normF(planeParams);
         planeParams.multiplyByScalar(1.0 / norm);
 
         // use director vector of tangent plane to find a point outside quadric
-        double directVectorA = planeParams.getElementAt(0, 0);
-        double directVectorB = planeParams.getElementAt(1, 0);
-        double directVectorC = planeParams.getElementAt(2, 0);
-        final double directVectorNorm = Math.sqrt(directVectorA * directVectorA +
-                directVectorB * directVectorB + directVectorC * directVectorC);
+        var directVectorA = planeParams.getElementAt(0, 0);
+        var directVectorB = planeParams.getElementAt(1, 0);
+        var directVectorC = planeParams.getElementAt(2, 0);
+        final var directVectorNorm = Math.sqrt(directVectorA * directVectorA + directVectorB * directVectorB
+                + directVectorC * directVectorC);
         directVectorA /= directVectorNorm;
         directVectorB /= directVectorNorm;
         directVectorC /= directVectorNorm;
-        final InhomogeneousPoint3D outsidePoint = new InhomogeneousPoint3D(
+        final var outsidePoint = new InhomogeneousPoint3D(
                 point1.getInhomX() + directVectorA,
                 point1.getInhomY() + directVectorB,
                 point1.getInhomZ() + directVectorC);
 
         // instantiate new quadric instance
-        final Quadric quadric = new Quadric(resultQuadricMatrix);
+        final var quadric = new Quadric(resultQuadricMatrix);
 
         // check that initial 5 points lie inside the quadric
         assertTrue(quadric.isLocus(point1, LOCUS_THRESHOLD));
@@ -1125,8 +1076,7 @@ public class QuadricTest {
         assertFalse(quadric.isLocus(outsidePoint, LOCUS_THRESHOLD));
 
         // test constructor from 9 points
-        final Quadric quadric2 = new Quadric(point1, point2, point3, point4, point5,
-                point6, point7, point8, point9);
+        final var quadric2 = new Quadric(point1, point2, point3, point4, point5, point6, point7, point8, point9);
         assertTrue(quadric2.isLocus(point1, LOCUS_THRESHOLD));
         assertTrue(quadric2.isLocus(point2, LOCUS_THRESHOLD));
         assertTrue(quadric2.isLocus(point3, LOCUS_THRESHOLD));
@@ -1139,51 +1089,49 @@ public class QuadricTest {
     }
 
     @Test
-    public void testAngleBetweenPoints() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testAngleBetweenPoints() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
         // initial 3D points
-        final Matrix point1Matrix = Matrix.createWithUniformRandomValues(HOM_COORDS,
+        final var point1Matrix = Matrix.createWithUniformRandomValues(HOM_COORDS,
                 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix point2Matrix = Matrix.createWithUniformRandomValues(HOM_COORDS,
+        final var point2Matrix = Matrix.createWithUniformRandomValues(HOM_COORDS,
                 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // transformation matrix
-        final Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
 
         // transform points
-        final Matrix tPoint1 = transform.multiplyAndReturnNew(point1Matrix);
-        final Matrix tPoint2 = transform.multiplyAndReturnNew(point2Matrix);
+        final var tPoint1 = transform.multiplyAndReturnNew(point1Matrix);
+        final var tPoint2 = transform.multiplyAndReturnNew(point2Matrix);
 
         // compute angle of transformed points
-        final double norm1 = com.irurueta.algebra.Utils.normF(tPoint1);
-        final double norm2 = com.irurueta.algebra.Utils.normF(tPoint2);
+        final var norm1 = com.irurueta.algebra.Utils.normF(tPoint1);
+        final var norm2 = com.irurueta.algebra.Utils.normF(tPoint2);
 
-        final double numerator = tPoint1.transposeAndReturnNew().multiplyAndReturnNew(
+        final var numerator = tPoint1.transposeAndReturnNew().multiplyAndReturnNew(
                 tPoint2).getElementAt(0, 0);
 
-        final double cosAngle = numerator / (norm1 * norm2);
+        final var cosAngle = numerator / (norm1 * norm2);
 
-        final double angle = Math.acos(cosAngle);
+        final var angle = Math.acos(cosAngle);
 
         // compute quadric matrix as the product of transposed transform matrix
         // with itself
-        final Matrix transposedTransform = transform.transposeAndReturnNew();
-        final Matrix quadricMatrix = transposedTransform.multiplyAndReturnNew(
-                transform);
+        final var transposedTransform = transform.transposeAndReturnNew();
+        final var quadricMatrix = transposedTransform.multiplyAndReturnNew(transform);
 
         // normalize conic matrix
-        final double normQuadric = com.irurueta.algebra.Utils.normF(quadricMatrix);
+        final var normQuadric = com.irurueta.algebra.Utils.normF(quadricMatrix);
         quadricMatrix.multiplyByScalar(1.0 / normQuadric);
 
-        final Quadric quadric = new Quadric(quadricMatrix);
+        final var quadric = new Quadric(quadricMatrix);
 
-        final Point3D point1 = new HomogeneousPoint3D(point1Matrix.getElementAt(0, 0),
+        final var point1 = new HomogeneousPoint3D(point1Matrix.getElementAt(0, 0),
                 point1Matrix.getElementAt(1, 0),
                 point1Matrix.getElementAt(2, 0),
                 point1Matrix.getElementAt(3, 0));
-        final Point3D point2 = new HomogeneousPoint3D(point2Matrix.getElementAt(0, 0),
+        final var point2 = new HomogeneousPoint3D(point2Matrix.getElementAt(0, 0),
                 point2Matrix.getElementAt(1, 0),
                 point2Matrix.getElementAt(2, 0),
                 point2Matrix.getElementAt(3, 0));
@@ -1192,20 +1140,19 @@ public class QuadricTest {
     }
 
     @Test
-    public void testArePerpendicularPoints() throws WrongSizeException,
-            DecomposerException, RankDeficientMatrixException, IllegalArgumentException,
-            NonSymmetricMatrixException {
+    void testArePerpendicularPoints() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            Matrix matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            var matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
 
-            double norm = com.irurueta.algebra.Utils.normF(matrixPoint1);
+            var norm = com.irurueta.algebra.Utils.normF(matrixPoint1);
             matrixPoint1.multiplyByScalar(1.0 / norm);
 
-            Matrix matrixPoint2 = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var matrixPoint2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             matrixPoint2.setElementAt(0, 0, matrixPoint1.getElementAt(1, 0) +
                     matrixPoint1.getElementAt(2, 0) +
                     matrixPoint1.getElementAt(3, 0));
@@ -1216,66 +1163,63 @@ public class QuadricTest {
             norm = com.irurueta.algebra.Utils.normF(matrixPoint2);
             matrixPoint2.multiplyByScalar(1.0 / norm);
 
-            Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             while (com.irurueta.algebra.Utils.rank(transform) < 4) {
-                transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                        HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
             }
 
-            final Matrix invTransform = com.irurueta.algebra.Utils.inverse(transform);
+            final var invTransform = com.irurueta.algebra.Utils.inverse(transform);
 
-            Matrix transformPointMatrix1 = transform.multiplyAndReturnNew(matrixPoint1);
-            Matrix transformPointMatrix2 = transform.multiplyAndReturnNew(matrixPoint2);
+            var transformPointMatrix1 = transform.multiplyAndReturnNew(matrixPoint1);
+            var transformPointMatrix2 = transform.multiplyAndReturnNew(matrixPoint2);
 
-            final Matrix transInvTransform = invTransform.transposeAndReturnNew();
+            final var transInvTransform = invTransform.transposeAndReturnNew();
 
-            final Matrix quadricMatrix = transInvTransform.multiplyAndReturnNew(invTransform);
+            final var quadricMatrix = transInvTransform.multiplyAndReturnNew(invTransform);
             norm = com.irurueta.algebra.Utils.normF(quadricMatrix);
             quadricMatrix.multiplyByScalar(1.0 / norm);
 
-            Point3D transformPoint1 = new HomogeneousPoint3D(
-                    transformPointMatrix1.toArray());
-            Point3D transformPoint2 = new HomogeneousPoint3D(
-                    transformPointMatrix2.toArray());
+            var transformPoint1 = new HomogeneousPoint3D(transformPointMatrix1.toArray());
+            var transformPoint2 = new HomogeneousPoint3D(transformPointMatrix2.toArray());
 
-            final Quadric quadric = new Quadric(quadricMatrix);
+            final var quadric = new Quadric(quadricMatrix);
 
-            assertTrue(quadric.arePerpendicularPoints(transformPoint1, transformPoint2,
-                    PERPENDICULAR_THRESHOLD));
-            assertEquals(quadric.arePerpendicularPoints(transformPoint1,
-                    transformPoint2, Quadric.DEFAULT_PERPENDICULAR_THRESHOLD),
+            assertTrue(quadric.arePerpendicularPoints(transformPoint1, transformPoint2, PERPENDICULAR_THRESHOLD));
+            assertEquals(quadric.arePerpendicularPoints(transformPoint1, transformPoint2,
+                    Quadric.DEFAULT_PERPENDICULAR_THRESHOLD),
                     quadric.arePerpendicularPoints(transformPoint1, transformPoint2));
 
             // trying non-perpendicular points
-            matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             norm = com.irurueta.algebra.Utils.normF(matrixPoint1);
 
             matrixPoint1.multiplyByScalar(1.0 / norm);
 
-            matrixPoint2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            matrixPoint2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             norm = com.irurueta.algebra.Utils.normF(matrixPoint2);
             matrixPoint2.multiplyByScalar(1.0 / norm);
 
-            double dotProduct = matrixPoint1.transposeAndReturnNew().
-                    multiplyAndReturnNew(matrixPoint2).getElementAt(0, 0);
+            var dotProduct = matrixPoint1.transposeAndReturnNew().multiplyAndReturnNew(matrixPoint2)
+                    .getElementAt(0, 0);
 
             // ensure points are not perpendicular
             while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD) {
-                matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixPoint1);
                 matrixPoint1.multiplyByScalar(1.0 / norm);
 
-                matrixPoint2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                matrixPoint2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixPoint2);
                 matrixPoint2.multiplyByScalar(1.0 / norm);
 
-                dotProduct = matrixPoint1.transposeAndReturnNew().
-                        multiplyAndReturnNew(matrixPoint2).getElementAt(0, 0);
+                dotProduct = matrixPoint1.transposeAndReturnNew().multiplyAndReturnNew(matrixPoint2)
+                        .getElementAt(0, 0);
             }
 
             transformPointMatrix1 = transform.multiplyAndReturnNew(matrixPoint1);
@@ -1288,8 +1232,8 @@ public class QuadricTest {
                     5.0 * PERPENDICULAR_THRESHOLD)) {
                 continue;
             }
-            assertFalse(quadric.arePerpendicularPoints(transformPoint1,
-                    transformPoint2, 5.0 * PERPENDICULAR_THRESHOLD));
+            assertFalse(quadric.arePerpendicularPoints(transformPoint1, transformPoint2,
+                    5.0 * PERPENDICULAR_THRESHOLD));
 
             numValid++;
             break;
@@ -1299,37 +1243,35 @@ public class QuadricTest {
     }
 
     @Test
-    public void testGetDualQuadric() throws WrongSizeException,
-            DecomposerException, RankDeficientMatrixException,
-            IllegalArgumentException, NonSymmetricMatrixException,
-            DualQuadricNotAvailableException {
+    void testGetDualQuadric() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException, DualQuadricNotAvailableException {
 
-        Matrix transformMatrix = Matrix.createWithUniformRandomValues(
-                HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
         while (com.irurueta.algebra.Utils.rank(transformMatrix) != 4) {
-            transformMatrix = Matrix.createWithUniformRandomValues(
-                    HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
         }
 
-        final Matrix transformTransposedMatrix = transformMatrix.transposeAndReturnNew();
+        final var transformTransposedMatrix = transformMatrix.transposeAndReturnNew();
 
-        final Matrix quadricMatrix = transformTransposedMatrix.multiplyAndReturnNew(transformMatrix);
+        final var quadricMatrix = transformTransposedMatrix.multiplyAndReturnNew(transformMatrix);
 
-        final Matrix dualQuadricMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);
+        final var dualQuadricMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);
 
-        final Quadric quadric = new Quadric(quadricMatrix);
-        final DualQuadric dualQuadric = quadric.getDualQuadric();
-        final Matrix dualQuadricMatrix2 = dualQuadric.asMatrix();
+        final var quadric = new Quadric(quadricMatrix);
+        final var dualQuadric = quadric.getDualQuadric();
+        final var dualQuadricMatrix2 = dualQuadric.asMatrix();
 
         // normalize dual conic matrices
-        double norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix);
+        var norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix);
         dualQuadricMatrix.multiplyByScalar(1.0 / norm);
 
         norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix2);
         dualQuadricMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute difference of normalized dual conic matrices
-        final Matrix diffMatrix = dualQuadricMatrix.subtractAndReturnNew(dualQuadricMatrix2);
+        final var diffMatrix = dualQuadricMatrix.subtractAndReturnNew(dualQuadricMatrix2);
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
@@ -1337,31 +1279,29 @@ public class QuadricTest {
     }
 
     @Test
-    public void testSetParametersFromPoints() throws WrongSizeException,
-            CoincidentPointsException {
-        Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testSetParametersFromPoints() throws WrongSizeException, CoincidentPointsException {
+        var m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        HomogeneousPoint3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+        var point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1), m.getElementAt(0, 2), 1.0);
-        HomogeneousPoint3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+        var point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
                 m.getElementAt(1, 1), m.getElementAt(1, 2), 1.0);
-        HomogeneousPoint3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+        var point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
                 m.getElementAt(2, 1), m.getElementAt(2, 2), 1.0);
-        HomogeneousPoint3D point4 = new HomogeneousPoint3D(m.getElementAt(3, 0),
+        var point4 = new HomogeneousPoint3D(m.getElementAt(3, 0),
                 m.getElementAt(3, 1), m.getElementAt(3, 2), 1.0);
-        HomogeneousPoint3D point5 = new HomogeneousPoint3D(m.getElementAt(4, 0),
+        var point5 = new HomogeneousPoint3D(m.getElementAt(4, 0),
                 m.getElementAt(4, 1), m.getElementAt(4, 2), 1.0);
-        HomogeneousPoint3D point6 = new HomogeneousPoint3D(m.getElementAt(5, 0),
+        var point6 = new HomogeneousPoint3D(m.getElementAt(5, 0),
                 m.getElementAt(5, 1), m.getElementAt(5, 2), 1.0);
-        HomogeneousPoint3D point7 = new HomogeneousPoint3D(m.getElementAt(6, 0),
+        var point7 = new HomogeneousPoint3D(m.getElementAt(6, 0),
                 m.getElementAt(6, 1), m.getElementAt(6, 2), 1.0);
-        HomogeneousPoint3D point8 = new HomogeneousPoint3D(m.getElementAt(7, 0),
+        var point8 = new HomogeneousPoint3D(m.getElementAt(7, 0),
                 m.getElementAt(7, 1), m.getElementAt(7, 2), 1.0);
-        HomogeneousPoint3D point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
+        var point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
                 m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
 
-        final Quadric quadric = new Quadric();
+        final var quadric = new Quadric();
         quadric.setParametersFromPoints(point1, point2, point3, point4, point5, point6, point7, point8, point9);
 
         assertTrue(quadric.isLocus(point1, PRECISION_ERROR));
@@ -1375,26 +1315,21 @@ public class QuadricTest {
         assertTrue(quadric.isLocus(point9, PRECISION_ERROR));
 
         // Force CoincidentPointsException
-        try {
-            quadric.setParametersFromPoints(point1, point2, point3, point4, point5,
-                    point6, point7, point8, point8);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
+        assertThrows(CoincidentPointsException.class,
+                () -> quadric.setParametersFromPoints(point1, point2, point3, point4, point5, point6, point7, point8,
+                        point8));
     }
 
     @Test
-    public void testNormalize() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testNormalize() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix transT = t.transposeAndReturnNew();
+        final var t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var transT = t.transposeAndReturnNew();
 
         // make symmetric matrix
-        final Matrix quadricMatrix = transT.multiplyAndReturnNew(t);
+        final var quadricMatrix = transT.multiplyAndReturnNew(t);
 
-        final Quadric quadric = new Quadric(quadricMatrix);
+        final var quadric = new Quadric(quadricMatrix);
         assertFalse(quadric.isNormalized());
 
         // normalize quadric
@@ -1402,18 +1337,18 @@ public class QuadricTest {
         assertTrue(quadric.isNormalized());
 
         // return quadric as matrix
-        final Matrix quadricMatrix2 = quadric.asMatrix();
+        final var quadricMatrix2 = quadric.asMatrix();
 
         // compare that both matrices are equal up to scale, for that reason we
         // first normalize both matrices
-        double norm = com.irurueta.algebra.Utils.normF(quadricMatrix);
+        var norm = com.irurueta.algebra.Utils.normF(quadricMatrix);
         quadricMatrix.multiplyByScalar(1.0 / norm);
 
         norm = com.irurueta.algebra.Utils.normF(quadricMatrix2);
         quadricMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute their difference
-        final Matrix diffMatrix = quadricMatrix.subtractAndReturnNew(quadricMatrix2);
+        final var diffMatrix = quadricMatrix.subtractAndReturnNew(quadricMatrix2);
 
         // finally, ensure that the norm of the difference matrix is almost zero
         // up to machine precision
@@ -1421,9 +1356,8 @@ public class QuadricTest {
         assertEquals(0.0, norm, PRECISION_ERROR);
 
         // check that when setting new values quadric becomes non-normalized
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         quadric.setA(value);
         assertFalse(quadric.isNormalized());
 
@@ -1490,24 +1424,20 @@ public class QuadricTest {
     }
 
     @Test
-    public void testGetTangentPlaneAt() throws NotLocusException {
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE));
+    void testGetTangentPlaneAt() throws NotLocusException {
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+            final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-            final Sphere sphere = new Sphere(center, radius);
-            final Quadric quadric = sphere.toQuadric();
+            final var sphere = new Sphere(center, radius);
+            final var quadric = sphere.toQuadric();
 
-            final double angle1 = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-            final double angle2 = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-            final Point3D point = new HomogeneousPoint3D(
+            final var angle1 = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+            final var angle2 = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+            final var point = new HomogeneousPoint3D(
                     center.getInhomX() + radius * Math.cos(angle1) * Math.cos(angle2),
                     center.getInhomY() + radius * Math.sin(angle1) * Math.cos(angle2),
                     center.getInhomZ() + radius * Math.sin(angle2),
@@ -1518,11 +1448,11 @@ public class QuadricTest {
             assertTrue(quadric.isLocus(point));
 
             // find tangent plane at locus point
-            final Plane plane = sphere.getTangentPlaneAt(point);
-            final Plane plane2 = quadric.getTangentPlaneAt(point);
-            final Plane plane3 = new Plane();
+            final var plane = sphere.getTangentPlaneAt(point);
+            final var plane2 = quadric.getTangentPlaneAt(point);
+            final var plane3 = new Plane();
             quadric.tangentPlaneAt(point, plane3, ABSOLUTE_ERROR);
-            final Plane plane4 = new Plane();
+            final var plane4 = new Plane();
             quadric.tangentPlaneAt(point, plane4, ABSOLUTE_ERROR);
 
             assertTrue(plane.equals(plane2, ABSOLUTE_ERROR));
@@ -1533,23 +1463,23 @@ public class QuadricTest {
             assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
             assertTrue(plane2.isLocus(point, ABSOLUTE_ERROR));
 
-            final double[] directorVector = plane.getDirectorVector();
-            final double[] directorVector2 = plane2.getDirectorVector();
+            final var directorVector = plane.getDirectorVector();
+            final var directorVector2 = plane2.getDirectorVector();
 
-            final double[] pointVector = new double[]{
+            final var pointVector = new double[]{
                     point.getInhomX() - center.getInhomX(),
                     point.getInhomY() - center.getInhomY(),
                     point.getInhomZ() - center.getInhomZ()
             };
 
             // normalize both vectors
-            final double norm1 = com.irurueta.algebra.Utils.normF(directorVector);
-            final double norm1b = com.irurueta.algebra.Utils.normF(directorVector2);
-            final double norm2 = com.irurueta.algebra.Utils.normF(pointVector);
+            final var norm1 = com.irurueta.algebra.Utils.normF(directorVector);
+            final var norm1b = com.irurueta.algebra.Utils.normF(directorVector2);
+            final var norm2 = com.irurueta.algebra.Utils.normF(pointVector);
 
-            final double[] vector1 = new double[3];
-            final double[] vector1b = new double[3];
-            final double[] vector2 = new double[3];
+            final var vector1 = new double[3];
+            final var vector1b = new double[3];
+            final var vector2 = new double[3];
             ArrayUtils.multiplyByScalar(directorVector, 1.0 / norm1, vector1);
             ArrayUtils.multiplyByScalar(directorVector2, 1.0 / norm1b, vector1b);
             ArrayUtils.multiplyByScalar(pointVector, 1.0 / norm2, vector2);
@@ -1560,27 +1490,26 @@ public class QuadricTest {
     }
 
     @Test
-    public void testIntersectWithSphereAndXYPlane() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+    void testIntersectWithSphereAndXYPlane() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Sphere sphere = new Sphere(center, radius);
-        final Quadric quadric = sphere.toQuadric();
+        final var sphere = new Sphere(center, radius);
+        final var quadric = sphere.toQuadric();
 
         // create xy plane at z value of sphere center
-        final double[] directorVector = new double[]{0.0, 0.0, 1.0};
+        final var directorVector = new double[]{0.0, 0.0, 1.0};
         ArrayUtils.normalize(directorVector);
 
-        final Plane plane = new Plane(center, directorVector);
+        final var plane = new Plane(center, directorVector);
 
         assertTrue(plane.isLocus(center));
 
-        final Conic conic1 = quadric.intersectWith(plane);
-        final Conic conic2 = new Conic();
+        final var conic1 = quadric.intersectWith(plane);
+        final var conic2 = new Conic();
         quadric.intersectWith(plane, conic2);
 
         assertEquals(conic1.getA(), conic2.getA(), ABSOLUTE_ERROR);
@@ -1593,10 +1522,10 @@ public class QuadricTest {
         assertEquals(ConicType.CIRCLE_CONIC_TYPE, conic1.getConicType());
         assertEquals(ConicType.CIRCLE_CONIC_TYPE, conic2.getConicType());
 
-        final Circle circle = new Circle(conic1);
+        final var circle = new Circle(conic1);
 
-        final Point2D circleCenter = circle.getCenter();
-        final double circleRadius = circle.getRadius();
+        final var circleCenter = circle.getCenter();
+        final var circleRadius = circle.getRadius();
 
         assertEquals(circleCenter.getInhomX(), center.getInhomX(), ABSOLUTE_ERROR);
         assertEquals(circleCenter.getInhomY(), center.getInhomY(), ABSOLUTE_ERROR);
@@ -1604,28 +1533,27 @@ public class QuadricTest {
     }
 
     @Test
-    public void testIntersectWithSphereAndAnyPlane()
-            throws AlgebraException, GeometryException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(
+    void testIntersectWithSphereAndAnyPlane() throws AlgebraException, GeometryException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Sphere sphere = new Sphere(center, radius);
-        final Quadric quadric = sphere.toQuadric();
+        final var sphere = new Sphere(center, radius);
+        final var quadric = sphere.toQuadric();
 
-        final double[] directorVector = new double[3];
+        final var directorVector = new double[3];
         randomizer.fill(directorVector);
         ArrayUtils.normalize(directorVector);
 
-        final Plane plane = new Plane(center, directorVector);
+        final var plane = new Plane(center, directorVector);
 
         assertTrue(plane.isLocus(center));
 
-        final Conic conic1 = quadric.intersectWith(plane);
-        final Conic conic2 = new Conic();
+        final var conic1 = quadric.intersectWith(plane);
+        final var conic2 = new Conic();
         quadric.intersectWith(plane, conic2);
 
         assertEquals(conic1.getA(), conic2.getA(), ABSOLUTE_ERROR);
@@ -1641,24 +1569,21 @@ public class QuadricTest {
         assertEquals(ConicType.ELLIPSE_CONIC_TYPE, conic2.getConicType());
 
         // Rotate plane and quadric to make it an xy-plane
-        final double[] directorVector2 = new double[]{0.0, 0.0, 1.0};
-        final double angle = ArrayUtils.angle(directorVector,
-                directorVector2);
-        final double[] axis = Utils.crossProduct(directorVector,
-                directorVector2);
+        final var directorVector2 = new double[]{0.0, 0.0, 1.0};
+        final var angle = ArrayUtils.angle(directorVector, directorVector2);
+        final var axis = Utils.crossProduct(directorVector, directorVector2);
 
-        final AxisRotation3D rotation = new AxisRotation3D(axis, angle);
+        final var rotation = new AxisRotation3D(axis, angle);
 
         // translate quadric and plane to origin
-        EuclideanTransformation3D transformation = new EuclideanTransformation3D(new double[]{
+        var transformation = new EuclideanTransformation3D(new double[]{
                         -center.getInhomX(),
                         -center.getInhomY(),
                         -center.getInhomZ()});
 
-        Quadric transformedQuadric =
-                transformation.transformAndReturnNew(quadric);
-        Plane transformedPlane = transformation.transformAndReturnNew(plane);
-        Point3D transformedCenter = transformation.transformAndReturnNew(center);
+        var transformedQuadric = transformation.transformAndReturnNew(quadric);
+        var transformedPlane = transformation.transformAndReturnNew(plane);
+        var transformedCenter = transformation.transformAndReturnNew(center);
 
         // center is at the origin
         assertTrue(transformedCenter.equals(new InhomogeneousPoint3D(), ABSOLUTE_ERROR));
@@ -1667,7 +1592,7 @@ public class QuadricTest {
         assertTrue(transformedPlane.isLocus(transformedCenter, ABSOLUTE_ERROR));
 
         // sphere is at the origin and has same size
-        final Sphere transformedSphere = new Sphere(transformedQuadric);
+        final var transformedSphere = new Sphere(transformedQuadric);
 
         assertTrue(transformedSphere.getCenter().equals(transformedCenter, ABSOLUTE_ERROR));
         assertEquals(transformedSphere.getRadius(), radius, ABSOLUTE_ERROR);
@@ -1685,21 +1610,21 @@ public class QuadricTest {
         transformedPlane.normalize();
         assertTrue(transformedPlane.isLocus(transformedCenter, ABSOLUTE_ERROR));
 
-        double[] transformedDirectorVector = transformedPlane.getDirectorVector();
+        var transformedDirectorVector = transformedPlane.getDirectorVector();
         assertArrayEquals(transformedDirectorVector, directorVector2, ABSOLUTE_ERROR);
 
         // because of numerical accuracy, transformed quadric is an ellipsoid rather
         // than an ellipse, but having almost equal semi-axes.
 
-        Conic conic3 = transformedQuadric.intersectWith(transformedPlane);
+        var conic3 = transformedQuadric.intersectWith(transformedPlane);
 
         // because of numerical accuracy, conic is considered an ellipse, but
         // the ellipse has almost equal semi-minor and semi-major axes
-        Ellipse ellipse = new Ellipse(conic3);
+        var ellipse = new Ellipse(conic3);
 
-        Point2D ellipseCenter = ellipse.getCenter();
-        double semiMajorAxis = ellipse.getSemiMajorAxis();
-        double semiMinorAxis = ellipse.getSemiMinorAxis();
+        var ellipseCenter = ellipse.getCenter();
+        var semiMajorAxis = ellipse.getSemiMajorAxis();
+        var semiMinorAxis = ellipse.getSemiMinorAxis();
 
         // check that conic is centered at origin and keeps radius
         assertEquals(0.0, ellipseCenter.getInhomX(), ABSOLUTE_ERROR);
@@ -1707,8 +1632,8 @@ public class QuadricTest {
         assertEquals(radius, semiMajorAxis, ABSOLUTE_ERROR);
         assertEquals(radius, semiMinorAxis, ABSOLUTE_ERROR);
 
-        assertTrue(conic3.getConicType() == ConicType.CIRCLE_CONIC_TYPE ||
-                conic3.getConicType() == ConicType.ELLIPSE_CONIC_TYPE);
+        assertTrue(conic3.getConicType() == ConicType.CIRCLE_CONIC_TYPE
+                || conic3.getConicType() == ConicType.ELLIPSE_CONIC_TYPE);
 
         // transform plane and quadric to their original position (but now they are
         // rotated so that plane points towards z axis)
@@ -1729,9 +1654,7 @@ public class QuadricTest {
         assertTrue(transformedPlane.isLocus(center, ABSOLUTE_ERROR));
 
         transformedDirectorVector = transformedPlane.getDirectorVector();
-        assertArrayEquals(
-                ArrayUtils.normalizeAndReturnNew(transformedDirectorVector),
-                directorVector2, ABSOLUTE_ERROR);
+        assertArrayEquals(ArrayUtils.normalizeAndReturnNew(transformedDirectorVector), directorVector2, ABSOLUTE_ERROR);
 
         // because of numerical accuracy, transformed quadric is an ellipsoid rather
         // than an ellipse, but having almost equal semi-axes.
@@ -1750,25 +1673,25 @@ public class QuadricTest {
         assertEquals(radius, semiMajorAxis, ABSOLUTE_ERROR);
         assertEquals(radius, semiMinorAxis, ABSOLUTE_ERROR);
 
-        assertTrue(conic3.getConicType() == ConicType.CIRCLE_CONIC_TYPE ||
-                conic3.getConicType() == ConicType.ELLIPSE_CONIC_TYPE);
+        assertTrue(conic3.getConicType() == ConicType.CIRCLE_CONIC_TYPE
+                || conic3.getConicType() == ConicType.ELLIPSE_CONIC_TYPE);
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
 
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Quadric quadric1 = new Quadric(a, b, c, d, e, f, g, h, i, j);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var quadric1 = new Quadric(a, b, c, d, e, f, g, h, i, j);
 
         // check
         assertEquals(a, quadric1.getA(), 0.0);
@@ -1784,8 +1707,8 @@ public class QuadricTest {
         assertFalse(quadric1.isNormalized());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(quadric1);
-        final Quadric quadric2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(quadric1);
+        final var quadric2 = SerializationHelper.<Quadric>deserialize(bytes);
 
         // check
         assertEquals(quadric1.getA(), quadric2.getA(), 0.0);

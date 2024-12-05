@@ -30,8 +30,8 @@ public class Box3D extends Box<Point3D> {
      */
     public Box3D() {
         super();
-        mLo = new InhomogeneousPoint3D(-0.5, -0.5, -0.5);
-        mHi = new InhomogeneousPoint3D(0.5, 0.5, 0.5);
+        lo = new InhomogeneousPoint3D(-0.5, -0.5, -0.5);
+        hi = new InhomogeneousPoint3D(0.5, 0.5, 0.5);
     }
 
     /**
@@ -56,7 +56,6 @@ public class Box3D extends Box<Point3D> {
      */
     public final void setBounds(final double loX, final double loY, final double loZ,
                                 final double hiX, final double hiY, final double hiZ) {
-        setBounds(new InhomogeneousPoint3D(loX, loY, loZ),
-                new InhomogeneousPoint3D(hiX, hiY, hiZ));
+        setBounds(new InhomogeneousPoint3D(loX, loY, loZ), new InhomogeneousPoint3D(hiX, hiY, hiZ));
     }
 }

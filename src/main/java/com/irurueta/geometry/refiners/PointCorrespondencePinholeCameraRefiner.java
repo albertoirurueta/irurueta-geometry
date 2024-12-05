@@ -33,14 +33,12 @@ import java.util.List;
  * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
-public abstract class PointCorrespondencePinholeCameraRefiner extends
-        PinholeCameraRefiner<Point3D, Point2D> {
+public abstract class PointCorrespondencePinholeCameraRefiner extends PinholeCameraRefiner<Point3D, Point2D> {
 
     /**
      * Point to be reused when computing residuals.
      */
-    private final Point2D mResidualTestPoint = Point2D.create(
-            CoordinatesType.HOMOGENEOUS_COORDINATES);
+    private final Point2D residualTestPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
     /**
      * Constructor.
@@ -64,11 +62,10 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
      */
     protected PointCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Point3D> samples1, final List<Point2D> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+            final BitSet inliers, final double[] residuals, final int numInliers, final List<Point3D> samples1,
+            final List<Point2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -85,11 +82,9 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected PointCorrespondencePinholeCameraRefiner(
-            final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Point3D> samples1,
-            final List<Point2D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+            final PinholeCamera initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<Point3D> samples1, final List<Point2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -106,10 +101,8 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
      * @param weight        weight for suggestion residual.
      * @return total residual during Powell refinement.
      */
-    protected double residualPowell(final PinholeCamera pinholeCamera,
-                                    final double[] params, final double weight) {
-        return projectionResidual(pinholeCamera) +
-                suggestionResidual(params, weight);
+    protected double residualPowell(final PinholeCamera pinholeCamera, final double[] params, final double weight) {
+        return projectionResidual(pinholeCamera) + suggestionResidual(params, weight);
     }
 
     /**
@@ -124,15 +117,13 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
         pinholeCamera.normalize();
 
         // project inlier 3D points into test point
-        final int nSamples = mInliers.length();
-        Point3D point3D;
-        Point2D point2D;
-        final Point2D projectedPoint2D = Point2D.create();
-        double residual = 0.0;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
-                point3D = mSamples1.get(i);
-                point2D = mSamples2.get(i);
+        final var nSamples = inliers.length();
+        final var projectedPoint2D = Point2D.create();
+        var residual = 0.0;
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
+                final var point3D = samples1.get(i);
+                final var point2D = samples2.get(i);
 
                 point3D.normalize();
                 point2D.normalize();
@@ -163,10 +154,9 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
      * @return total residual.
      */
     protected double residualLevenbergMarquardt(
-            final PinholeCamera pinholeCamera,
-            final Point3D point3D, final Point2D point2D, final double[] params, final double weight) {
-        double residual = singleProjectionResidual(pinholeCamera, point3D,
-                point2D);
+            final PinholeCamera pinholeCamera, final Point3D point3D, final Point2D point2D, final double[] params,
+            final double weight) {
+        var residual = singleProjectionResidual(pinholeCamera, point3D, point2D);
         if (hasSuggestions()) {
             residual += suggestionResidual(params, weight);
         }
@@ -182,12 +172,11 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
      * @return distance between projected point and 2D point.
      */
     private double singleProjectionResidual(
-            final PinholeCamera pinholeCamera,
-            final Point3D point3D, final Point2D point2D) {
+            final PinholeCamera pinholeCamera, final Point3D point3D, final Point2D point2D) {
         // project point3D into test point
-        pinholeCamera.project(point3D, mResidualTestPoint);
+        pinholeCamera.project(point3D, residualTestPoint);
 
         // compare test point and 2D point
-        return mResidualTestPoint.distanceTo(point2D);
+        return residualTestPoint.distanceTo(point2D);
     }
 }

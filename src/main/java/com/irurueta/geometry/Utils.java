@@ -84,18 +84,18 @@ public class Utils {
      * @return the same angle but normalized.
      */
     private static double normalizeAngle(final double angle, final double halfTurn) {
-        double result = angle;
-        final double fullTurn = 2.0 * halfTurn;
+        var result = angle;
+        final var fullTurn = 2.0 * halfTurn;
         
         if (result <= -halfTurn) {
-            int nTurns = (int)Math.ceil(-result / fullTurn);
+            var nTurns = (int) Math.ceil(-result / fullTurn);
             result += nTurns * fullTurn;
             if (result > halfTurn) {
                 result -= fullTurn;
             }
         }
         if (result > halfTurn) {
-            int nTurns = (int)Math.ceil(result / fullTurn);
+            var nTurns = (int) Math.ceil(result / fullTurn);
             result -= nTurns * fullTurn;
             if(result <= -halfTurn){
                 result += fullTurn;

@@ -22,16 +22,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LMedSPlaneRobustEstimatorTest implements
-        PlaneRobustEstimatorListener {
+class LMedSPlaneRobustEstimatorTest implements PlaneRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -1.0;
     private static final double MAX_RANDOM_VALUE = 1.0;
@@ -55,108 +52,89 @@ public class LMedSPlaneRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1e-3, LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, 0.0);
         assertEquals(0.0, LMedSPlaneRobustEstimator.MIN_STOP_THRESHOLD, 0.0);
     }
 
     @Test
-    public void testConstructor() {
-        LMedSPlaneRobustEstimator estimator;
-
+    void testConstructor() {
         // test constructor without arguments
-        estimator = new LMedSPlaneRobustEstimator();
+        var estimator = new LMedSPlaneRobustEstimator();
 
         // check correctness
-        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // test constructor with points
-        final List<Point3D> points = new ArrayList<>();
-        for (int i = 0; i < PlaneRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point3D>();
+        for (var i = 0; i < PlaneRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point3D.create());
         }
 
         estimator = new LMedSPlaneRobustEstimator(points);
 
         // check correctness
-        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final List<Point3D> emptyPoints = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = new LMedSPlaneRobustEstimator(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPoints = new ArrayList<Point3D>();
+        assertThrows(IllegalArgumentException.class, () -> new LMedSPlaneRobustEstimator(emptyPoints));
 
         // test constructor with listener
-        final PlaneRobustEstimatorListener listener =
-                new PlaneRobustEstimatorListener() {
+        final var listener = new PlaneRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final PlaneRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final PlaneRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final PlaneRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final PlaneRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final PlaneRobustEstimator estimator, final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final PlaneRobustEstimator estimator, final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final PlaneRobustEstimator estimator, final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final PlaneRobustEstimator estimator, final float progress) {
+                // no action needed
+            }
+        };
 
         estimator = new LMedSPlaneRobustEstimator(listener);
 
         // check correctness
-        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -165,40 +143,28 @@ public class LMedSPlaneRobustEstimatorTest implements
         estimator = new LMedSPlaneRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.LMEDS, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(estimator.getPoints(), points);
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new LMedSPlaneRobustEstimator(listener, emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new LMedSPlaneRobustEstimator(listener, emptyPoints));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(LMedSPlaneRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(0.5);
@@ -206,17 +172,12 @@ public class LMedSPlaneRobustEstimatorTest implements
         assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setStopThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setStopThreshold(0.0));
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -231,13 +192,11 @@ public class LMedSPlaneRobustEstimatorTest implements
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -246,26 +205,16 @@ public class LMedSPlaneRobustEstimatorTest implements
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(PlaneRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5f);
@@ -274,26 +223,16 @@ public class LMedSPlaneRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         // check default value
-        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PlaneRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
@@ -302,25 +241,20 @@ public class LMedSPlaneRobustEstimatorTest implements
         assertEquals(1, estimator.getMaxIterations());
 
         // Fail IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetPoints() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point3D> points = new ArrayList<>();
-        for (int i = 0; i < PlaneRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point3D>();
+        for (var i = 0; i < PlaneRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point3D.create());
         }
         estimator.setPoints(points);
@@ -335,23 +269,17 @@ public class LMedSPlaneRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point3D> emptyPoints = new ArrayList<>();
-        try {
-            estimator.setPoints(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var emptyPoints = new ArrayList<Point3D>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(emptyPoints));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final LMedSPlaneRobustEstimator estimator =
-                new LMedSPlaneRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new LMedSPlaneRobustEstimator();
 
         assertNull(estimator.getQualityScores());
 
-        final double[] qualityScores = new double[
-                PlaneRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[PlaneRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
@@ -359,55 +287,45 @@ public class LMedSPlaneRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    void testEstimate() throws LockedException, NotReadyException, RobustEstimatorException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        for (int t = 0; t < TIMES; t++) {
-            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double d = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final Plane plane = new Plane(a, b, c, d);
+        for (var t = 0; t < TIMES; t++) {
+            final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var plane = new Plane(a, b, c, d);
 
             // compute random points passing through the line
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Point3D> points = new ArrayList<>();
-            final List<Point3D> pointsWithError = new ArrayList<>();
-            Point3D point, pointWithError;
-            for (int i = 0; i < nPoints; i++) {
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var points = new ArrayList<Point3D>();
+            final var pointsWithError = new ArrayList<Point3D>();
+            for (var i = 0; i < nPoints; i++) {
                 // get a random point belonging to the plane
                 // (a*x + b*y + c*z + d*w = 0)
                 // y = -(a*x + c*z + d*w)/b or x = -(b*y + c*z + d*w)/a
                 final double homX;
                 final double homY;
-                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+                final var homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
                 }
-                point = new HomogeneousPoint3D(homX, homY, homZ, homW);
+                final var point = new HomogeneousPoint3D(homX, homY, homZ, homW);
 
+                Point3D pointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorZ = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorZ = errorRandomizer.nextDouble();
                     pointWithError = new HomogeneousPoint3D(
                             point.getHomX() + errorX * point.getHomW(),
                             point.getHomY() + errorY * point.getHomW(),
@@ -425,8 +343,7 @@ public class LMedSPlaneRobustEstimatorTest implements
                 assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
             }
 
-            final LMedSPlaneRobustEstimator estimator =
-                    new LMedSPlaneRobustEstimator(this, pointsWithError);
+            final var estimator = new LMedSPlaneRobustEstimator(this, pointsWithError);
 
             estimator.setStopThreshold(STOP_THRESHOLD);
 
@@ -437,7 +354,7 @@ public class LMedSPlaneRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Plane plane2 = estimator.estimate();
+            final var plane2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -447,7 +364,7 @@ public class LMedSPlaneRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all points without
             // error have estimated line as locus
-            for (final Point3D p : points) {
+            for (final var p : points) {
                 assertTrue(plane2.isLocus(p, ABSOLUTE_ERROR));
             }
 
@@ -471,62 +388,29 @@ public class LMedSPlaneRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(final PlaneRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final PlaneRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((LMedSPlaneRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(final PlaneRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final PlaneRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((LMedSPlaneRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(final LMedSPlaneRobustEstimator estimator) {
-        try {
-            estimator.setStopThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.5f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPoints(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final LMedSPlaneRobustEstimator estimator) {
+        assertThrows(LockedException.class, () -> estimator.setStopThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(5));
+        assertThrows(LockedException.class, () -> estimator.setPoints(null));
+        assertThrows(LockedException.class, estimator::estimate);
         assertTrue(estimator.isLocked());
     }
 }

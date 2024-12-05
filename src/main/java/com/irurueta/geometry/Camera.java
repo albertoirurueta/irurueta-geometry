@@ -26,8 +26,7 @@ public abstract class Camera {
     /**
      * Constant defining default camera type.
      */
-    public static final CameraType DEFAULT_CAMERA_TYPE =
-            CameraType.PINHOLE_CAMERA;
+    public static final CameraType DEFAULT_CAMERA_TYPE = CameraType.PINHOLE_CAMERA;
 
     /**
      * Projects a 3D point into a 2D point in a retinal plane.
@@ -36,8 +35,7 @@ public abstract class Camera {
      * @return 2D projected point.
      */
     public Point2D project(final Point3D point) {
-        final Point2D projected = Point2D.create(
-                CoordinatesType.HOMOGENEOUS_COORDINATES);
+        final var projected = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
         project(point, projected);
         return projected;
     }
@@ -58,7 +56,7 @@ public abstract class Camera {
      * @return 2D projected points.
      */
     public List<Point2D> project(final List<Point3D> points) {
-        final List<Point2D> projected = new ArrayList<>(points.size());
+        final var projected = new ArrayList<Point2D>(points.size());
         project(points, projected);
         return projected;
     }
@@ -74,7 +72,7 @@ public abstract class Camera {
      */
     public void project(final List<Point3D> inputPoints, final List<Point2D> result) {
         result.clear();
-        for (final Point3D point : inputPoints) {
+        for (final var point : inputPoints) {
             result.add(project(point));
         }
     }
@@ -86,7 +84,7 @@ public abstract class Camera {
      * @return 3D plane that has been back-projected.
      */
     public Plane backProject(final Line2D line) {
-        final Plane plane = new Plane();
+        final var plane = new Plane();
         backProject(line, plane);
         return plane;
     }
@@ -114,7 +112,7 @@ public abstract class Camera {
      * @return 3D planes that have been back-projected.
      */
     public List<Plane> backProjectLines(final List<Line2D> lines) {
-        final List<Plane> planes = new ArrayList<>(lines.size());
+        final var planes = new ArrayList<Plane>(lines.size());
         backProjectLines(lines, planes);
         return planes;
     }
@@ -130,7 +128,7 @@ public abstract class Camera {
      */
     public void backProjectLines(final List<Line2D> lines, final List<Plane> result) {
         result.clear();
-        for (final Line2D line : lines) {
+        for (final var line : lines) {
             result.add(backProject(line));
         }
     }
@@ -153,7 +151,7 @@ public abstract class Camera {
      *                         because camera is degenerate.
      */
     public Point3D backProject(final Point2D point) throws CameraException {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         backProject(point, result);
         return result;
     }
@@ -173,8 +171,7 @@ public abstract class Camera {
      * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
-    public abstract void backProject(final Point2D point, final Point3D result)
-            throws CameraException;
+    public abstract void backProject(final Point2D point, final Point3D result) throws CameraException;
 
     /**
      * Back-projects provided 2D points into their corresponding 3D points.
@@ -184,10 +181,8 @@ public abstract class Camera {
      * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
-    public List<Point3D> backProjectPoints(final List<Point2D> points)
-            throws CameraException {
-
-        final List<Point3D> result = new ArrayList<>(points.size());
+    public List<Point3D> backProjectPoints(final List<Point2D> points) throws CameraException {
+        final var result = new ArrayList<Point3D>(points.size());
         backProjectPoints(points, result);
         return result;
     }
@@ -203,11 +198,10 @@ public abstract class Camera {
      * @throws CameraException thrown if 2D point cannot be back-projected
      *                         because camera is degenerate.
      */
-    public void backProjectPoints(final List<Point2D> points, final List<Point3D> result)
-            throws CameraException {
+    public void backProjectPoints(final List<Point2D> points, final List<Point3D> result) throws CameraException {
 
         result.clear();
-        for (final Point2D point : points) {
+        for (final var point : points) {
             result.add(backProject(point));
         }
     }
@@ -219,7 +213,7 @@ public abstract class Camera {
      * @return A back-projected 3D quadric.
      */
     public Quadric backProject(final Conic conic) {
-        final Quadric quadric = new Quadric();
+        final var quadric = new Quadric();
         backProject(conic, quadric);
         return quadric;
     }
@@ -241,7 +235,7 @@ public abstract class Camera {
      * @return A 2D dual conic.
      */
     public DualConic project(final DualQuadric dualQuadric) {
-        final DualConic dualConic = new DualConic();
+        final var dualConic = new DualConic();
         project(dualQuadric, dualConic);
         return dualConic;
     }
@@ -269,7 +263,7 @@ public abstract class Camera {
      * @throws CameraException thrown if there are geometric degeneracies.
      */
     public Conic project(final Quadric quadric) throws CameraException {
-        final Conic conic = new Conic();
+        final var conic = new Conic();
         project(quadric, conic);
         return conic;
     }
@@ -291,8 +285,8 @@ public abstract class Camera {
     public void project(final Quadric quadric, final Conic result) throws CameraException {
         quadric.normalize();
         try {
-            final DualQuadric dualQuadric = quadric.getDualQuadric();
-            final DualConic dualConic = new DualConic();
+            final var dualQuadric = quadric.getDualQuadric();
+            final var dualConic = new DualConic();
             project(dualQuadric, dualConic);
             dualConic.conic(result);
         } catch (final GeometryException e) {
@@ -313,7 +307,7 @@ public abstract class Camera {
      * @throws CameraException thrown if there are geometric degeneracies.
      */
     public DualQuadric backProject(final DualConic dualConic) throws CameraException {
-        final DualQuadric dualQuadric = new DualQuadric();
+        final var dualQuadric = new DualQuadric();
         backProject(dualConic, dualQuadric);
         return dualQuadric;
     }
@@ -332,12 +326,11 @@ public abstract class Camera {
      *                  be stored.
      * @throws CameraException thrown if there are geometric degeneracies.
      */
-    public void backProject(final DualConic dualConic, final DualQuadric result)
-            throws CameraException {
+    public void backProject(final DualConic dualConic, final DualQuadric result) throws CameraException {
         try {
             dualConic.normalize();
-            final Conic conic = dualConic.getConic();
-            final Quadric quadric = new Quadric();
+            final var conic = dualConic.getConic();
+            final var quadric = new Quadric();
             backProject(conic, quadric);
             quadric.dualQuadric(result);
         } catch (final GeometryException e) {
@@ -358,21 +351,6 @@ public abstract class Camera {
      * @return A newly instantiated camera.
      */
     public static Camera create() {
-        return create(DEFAULT_CAMERA_TYPE);
-    }
-
-    /**
-     * Creates an instance of a camera using provided type.
-     *
-     * @param type Type of camera to be created.
-     * @return A newly instantiated camera.
-     */
-    public static Camera create(final CameraType type) {
-        //noinspection SwitchStatementWithTooFewBranches
-        switch (type) {
-            case PINHOLE_CAMERA:
-            default:
-                return new PinholeCamera();
-        }
+        return new PinholeCamera();
     }
 }

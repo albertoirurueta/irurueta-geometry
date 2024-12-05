@@ -83,26 +83,25 @@ public abstract class DualQuadricRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected DualQuadricRobustEstimatorListener mListener;
+    protected DualQuadricRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -110,40 +109,40 @@ public abstract class DualQuadricRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of planes to be used to estimate a dual quadric. Provided list must
      * have a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Plane> mPlanes;
+    protected List<Plane> planes;
 
     /**
      * Matrix representation of a 3D plane to be reused when computing
      * residuals
      */
-    private Matrix mTestPlane;
+    private Matrix testPlane;
 
     /**
      * Matrix representation of a dual quadric to be reused when computing
      * residuals.
      */
-    private Matrix mTestDualQ;
+    private Matrix testDualQ;
 
     /**
      * Constructor.
      */
     protected DualQuadricRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -152,12 +151,11 @@ public abstract class DualQuadricRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    protected DualQuadricRobustEstimator(
-            final DualQuadricRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected DualQuadricRobustEstimator(final DualQuadricRobustEstimatorListener listener) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -168,9 +166,9 @@ public abstract class DualQuadricRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected DualQuadricRobustEstimator(final List<Plane> planes) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPlanes(planes);
     }
 
@@ -183,12 +181,11 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    protected DualQuadricRobustEstimator(
-            final DualQuadricRobustEstimatorListener listener, final List<Plane> planes) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected DualQuadricRobustEstimator(final DualQuadricRobustEstimatorListener listener, final List<Plane> planes) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPlanes(planes);
     }
 
@@ -199,7 +196,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return listener to be notified of events.
      */
     public DualQuadricRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -209,12 +206,11 @@ public abstract class DualQuadricRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final DualQuadricRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final DualQuadricRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -224,7 +220,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -233,7 +229,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -244,7 +240,7 @@ public abstract class DualQuadricRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -262,11 +258,10 @@ public abstract class DualQuadricRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -278,7 +273,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -300,7 +295,7 @@ public abstract class DualQuadricRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -311,7 +306,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -331,7 +326,7 @@ public abstract class DualQuadricRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -341,7 +336,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return list of planes to be used to estimate a dual quadric.
      */
     public List<Plane> getPlanes() {
-        return mPlanes;
+        return planes;
     }
 
     /**
@@ -368,7 +363,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPlanes != null && mPlanes.size() >= MINIMUM_SIZE;
+        return planes != null && planes.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -407,19 +402,13 @@ public abstract class DualQuadricRobustEstimator {
      * @return an instance of a dual quadric robust estimator.
      */
     public static DualQuadricRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator();
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator();
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator();
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator();
+            case MSAC -> new MSACDualQuadricRobustEstimator();
+            case PROSAC -> new PROSACDualQuadricRobustEstimator();
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator();
+            default -> new RANSACDualQuadricRobustEstimator();
+        };
     }
 
     /**
@@ -433,21 +422,14 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static DualQuadricRobustEstimator create(
-            final List<Plane> planes, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator(planes);
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator(planes);
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(planes);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(planes);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator(planes);
-        }
+    public static DualQuadricRobustEstimator create(final List<Plane> planes, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator(planes);
+            case MSAC -> new MSACDualQuadricRobustEstimator(planes);
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(planes);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(planes);
+            default -> new RANSACDualQuadricRobustEstimator(planes);
+        };
     }
 
     /**
@@ -461,21 +443,14 @@ public abstract class DualQuadricRobustEstimator {
      * @return an instance of a dual quadric robust estimator.
      */
     public static DualQuadricRobustEstimator create(
-            final DualQuadricRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator(listener);
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator(listener);
-        }
+            final DualQuadricRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator(listener);
+            case MSAC -> new MSACDualQuadricRobustEstimator(listener);
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(listener);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(listener);
+            default -> new RANSACDualQuadricRobustEstimator(listener);
+        };
     }
 
     /**
@@ -494,19 +469,13 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             final DualQuadricRobustEstimatorListener listener, final List<Plane> planes,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator(listener, planes);
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator(listener, planes);
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(listener, planes);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(listener, planes);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator(listener, planes);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator(listener, planes);
+            case MSAC -> new MSACDualQuadricRobustEstimator(listener, planes);
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(listener, planes);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(listener, planes);
+            default -> new RANSACDualQuadricRobustEstimator(listener, planes);
+        };
     }
 
     /**
@@ -520,21 +489,14 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
-    public static DualQuadricRobustEstimator create(
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator();
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator();
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator();
-        }
+    public static DualQuadricRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator();
+            case MSAC -> new MSACDualQuadricRobustEstimator();
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(qualityScores);
+            default -> new RANSACDualQuadricRobustEstimator();
+        };
     }
 
     /**
@@ -551,23 +513,14 @@ public abstract class DualQuadricRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(
-            final List<Plane> planes, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator(planes);
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator(planes);
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(planes,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(planes,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator(planes);
-        }
+            final List<Plane> planes, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator(planes);
+            case MSAC -> new MSACDualQuadricRobustEstimator(planes);
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(planes, qualityScores);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(planes, qualityScores);
+            default -> new RANSACDualQuadricRobustEstimator(planes);
+        };
     }
 
     /**
@@ -586,21 +539,13 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             final DualQuadricRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator(listener);
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(listener,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(listener,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator(listener);
+            case MSAC -> new MSACDualQuadricRobustEstimator(listener);
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(listener, qualityScores);
+            default -> new RANSACDualQuadricRobustEstimator(listener);
+        };
     }
 
     /**
@@ -621,21 +566,13 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             final DualQuadricRobustEstimatorListener listener, final List<Plane> planes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDualQuadricRobustEstimator(listener, planes);
-            case MSAC:
-                return new MSACDualQuadricRobustEstimator(listener, planes);
-            case PROSAC:
-                return new PROSACDualQuadricRobustEstimator(listener, planes,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSDualQuadricRobustEstimator(listener, planes,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDualQuadricRobustEstimator(listener, planes);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSDualQuadricRobustEstimator(listener, planes);
+            case MSAC -> new MSACDualQuadricRobustEstimator(listener, planes);
+            case PROSAC -> new PROSACDualQuadricRobustEstimator(listener, planes, qualityScores);
+            case PROMEDS -> new PROMedSDualQuadricRobustEstimator(listener, planes, qualityScores);
+            default -> new RANSACDualQuadricRobustEstimator(listener, planes);
+        };
     }
 
     /**
@@ -669,8 +606,7 @@ public abstract class DualQuadricRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a dual quadric robust estimator.
      */
-    public static DualQuadricRobustEstimator create(
-            final DualQuadricRobustEstimatorListener listener) {
+    public static DualQuadricRobustEstimator create(final DualQuadricRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -714,8 +650,7 @@ public abstract class DualQuadricRobustEstimator {
      *                                  same size as the list of provided quality scores, or if their size is not
      *                                  greater or equal than MINIMUM_SIZE.
      */
-    public static DualQuadricRobustEstimator create(
-            final List<Plane> planes, final double[] qualityScores) {
+    public static DualQuadricRobustEstimator create(final List<Plane> planes, final double[] qualityScores) {
         return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -749,8 +684,7 @@ public abstract class DualQuadricRobustEstimator {
      *                                  not greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(
-            final DualQuadricRobustEstimatorListener listener, final List<Plane> planes,
-            final double[] qualityScores) {
+            final DualQuadricRobustEstimatorListener listener, final List<Plane> planes, final double[] qualityScores) {
         return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -767,8 +701,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason (i.e.
      *                                  numerical instability, no solution available, etc).
      */
-    public abstract DualQuadric estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract DualQuadric estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -790,7 +723,7 @@ public abstract class DualQuadricRobustEstimator {
         if (planes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPlanes = planes;
+        this.planes = planes;
     }
 
     /**
@@ -803,23 +736,23 @@ public abstract class DualQuadricRobustEstimator {
     protected double residual(final DualQuadric dq, final Plane plane) {
         dq.normalize();
         try {
-            if (mTestDualQ == null) {
-                mTestDualQ = dq.asMatrix();
+            if (testDualQ == null) {
+                testDualQ = dq.asMatrix();
             } else {
-                dq.asMatrix(mTestDualQ);
+                dq.asMatrix(testDualQ);
             }
 
-            if (mTestPlane == null) {
-                mTestPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            if (testPlane == null) {
+                testPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
             }
             plane.normalize();
-            mTestPlane.setElementAt(0, 0, plane.getA());
-            mTestPlane.setElementAt(1, 0, plane.getB());
-            mTestPlane.setElementAt(2, 0, plane.getC());
-            mTestPlane.setElementAt(3, 0, plane.getD());
-            final Matrix locusMatrix = mTestPlane.transposeAndReturnNew();
-            locusMatrix.multiply(mTestDualQ);
-            locusMatrix.multiply(mTestPlane);
+            testPlane.setElementAt(0, 0, plane.getA());
+            testPlane.setElementAt(1, 0, plane.getB());
+            testPlane.setElementAt(2, 0, plane.getC());
+            testPlane.setElementAt(3, 0, plane.getD());
+            final var locusMatrix = testPlane.transposeAndReturnNew();
+            locusMatrix.multiply(testDualQ);
+            locusMatrix.multiply(testPlane);
             return Math.abs(locusMatrix.getElementAt(0, 0));
         } catch (final AlgebraException e) {
             return Double.MAX_VALUE;

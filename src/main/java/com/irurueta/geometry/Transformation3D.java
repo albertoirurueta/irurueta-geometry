@@ -41,7 +41,7 @@ public abstract class Transformation3D {
      * @return a new transformed point.
      */
     public Point3D transformAndReturnNew(final Point3D inputPoint) {
-        final Point3D outputPoint = Point3D.create();
+        final var outputPoint = Point3D.create();
         transform(inputPoint, outputPoint);
         return outputPoint;
     }
@@ -70,9 +70,8 @@ public abstract class Transformation3D {
      * @param inputPoints points to be transformed.
      * @return new transformed points.
      */
-    public List<Point3D> transformPointsAndReturnNew(
-            final List<Point3D> inputPoints) {
-        final List<Point3D> outputPoints = new ArrayList<>(inputPoints.size());
+    public List<Point3D> transformPointsAndReturnNew(final List<Point3D> inputPoints) {
+        final var outputPoints = new ArrayList<Point3D>(inputPoints.size());
         transformPoints(inputPoints, outputPoints);
         return outputPoints;
     }
@@ -86,11 +85,9 @@ public abstract class Transformation3D {
      * @param inputPoints  points to be transformed.
      * @param outputPoints transformed points.
      */
-    public void transformPoints(final List<Point3D> inputPoints,
-                                final List<Point3D> outputPoints) {
-
+    public void transformPoints(final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         outputPoints.clear();
-        for (final Point3D point : inputPoints) {
+        for (final var point : inputPoints) {
             outputPoints.add(transformAndReturnNew(point));
         }
     }
@@ -102,8 +99,7 @@ public abstract class Transformation3D {
      * @param points points to be transformed and overwritten.
      */
     public void transformAndOverwritePoints(final List<Point3D> points) {
-
-        for (final Point3D point : points) {
+        for (final var point : points) {
             transform(point, point);
         }
     }
@@ -118,9 +114,9 @@ public abstract class Transformation3D {
      * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
-    public Quadric transformAndReturnNew(final Quadric inputQuadric)
-            throws NonSymmetricMatrixException, AlgebraException {
-        final Quadric outputQuadric = new Quadric();
+    public Quadric transformAndReturnNew(final Quadric inputQuadric) throws NonSymmetricMatrixException,
+            AlgebraException {
+        final var outputQuadric = new Quadric();
         transform(inputQuadric, outputQuadric);
         return outputQuadric;
     }
@@ -134,8 +130,7 @@ public abstract class Transformation3D {
      * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
-    public void transform(final Quadric quadric) throws NonSymmetricMatrixException,
-            AlgebraException {
+    public void transform(final Quadric quadric) throws NonSymmetricMatrixException, AlgebraException {
         transform(quadric, quadric);
     }
 
@@ -168,7 +163,7 @@ public abstract class Transformation3D {
      */
     public DualQuadric transformAndReturnNew(final DualQuadric inputDualQuadric)
             throws NonSymmetricMatrixException, AlgebraException {
-        final DualQuadric outputDualQuadric = new DualQuadric();
+        final var outputDualQuadric = new DualQuadric();
         transform(inputDualQuadric, outputDualQuadric);
         return outputDualQuadric;
     }
@@ -183,8 +178,7 @@ public abstract class Transformation3D {
      * @throws AlgebraException            raised if transform cannot be computed because
      *                                     of numerical instabilities.
      */
-    public void transform(final DualQuadric dualQuadric)
-            throws NonSymmetricMatrixException, AlgebraException {
+    public void transform(final DualQuadric dualQuadric) throws NonSymmetricMatrixException, AlgebraException {
         transform(dualQuadric, dualQuadric);
     }
 
@@ -201,9 +195,8 @@ public abstract class Transformation3D {
      * @throws AlgebraException            raised if transform cannot be computed because
      *                                     of numerical instabilities.
      */
-    public abstract void transform(final DualQuadric inputDualQuadric,
-                                   final DualQuadric outputDualQuadric) throws NonSymmetricMatrixException,
-            AlgebraException;
+    public abstract void transform(final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric)
+            throws NonSymmetricMatrixException, AlgebraException;
 
     /**
      * Transforms provided plane using this transformation and returns a new
@@ -214,9 +207,8 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public Plane transformAndReturnNew(final Plane inputPlane)
-            throws AlgebraException {
-        final Plane outputPlane = new Plane();
+    public Plane transformAndReturnNew(final Plane inputPlane) throws AlgebraException {
+        final var outputPlane = new Plane();
         transform(inputPlane, outputPlane);
         return outputPlane;
     }
@@ -242,8 +234,7 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public abstract void transform(final Plane inputPlane, final Plane outputPlane)
-            throws AlgebraException;
+    public abstract void transform(final Plane inputPlane, final Plane outputPlane) throws AlgebraException;
 
     /**
      * Transforms provided list of planes using this transformation.
@@ -253,9 +244,8 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public List<Plane> transformPlanesAndReturnNew(final List<Plane> inputPlanes)
-            throws AlgebraException {
-        final List<Plane> outputPlanes = new ArrayList<>(inputPlanes.size());
+    public List<Plane> transformPlanesAndReturnNew(final List<Plane> inputPlanes) throws AlgebraException {
+        final var outputPlanes = new ArrayList<Plane>(inputPlanes.size());
         transformPlanes(inputPlanes, outputPlanes);
         return outputPlanes;
     }
@@ -271,11 +261,9 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public void transformPlanes(final List<Plane> inputPlanes,
-                                final List<Plane> outputPlanes) throws AlgebraException {
-
+    public void transformPlanes(final List<Plane> inputPlanes, final List<Plane> outputPlanes) throws AlgebraException {
         outputPlanes.clear();
-        for (final Plane plane : inputPlanes) {
+        for (final var plane : inputPlanes) {
             outputPlanes.add(transformAndReturnNew(plane));
         }
     }
@@ -288,10 +276,8 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public void transformAndOverwritePlanes(final List<Plane> planes)
-            throws AlgebraException {
-
-        for (final Plane plane : planes) {
+    public void transformAndOverwritePlanes(final List<Plane> planes) throws AlgebraException {
+        for (final var plane : planes) {
             transform(plane, plane);
         }
     }
@@ -306,10 +292,9 @@ public abstract class Transformation3D {
      * @throws AlgebraException          raised if transform cannot be computed because
      *                                   of numerical instabilities.
      */
-    public Line3D transformAndReturnNew(final Line3D inputLine)
-            throws CoincidentPlanesException, AlgebraException {
-        final Plane plane1 = transformAndReturnNew(inputLine.getPlane1());
-        final Plane plane2 = transformAndReturnNew(inputLine.getPlane2());
+    public Line3D transformAndReturnNew(final Line3D inputLine) throws CoincidentPlanesException, AlgebraException {
+        final var plane1 = transformAndReturnNew(inputLine.getPlane1());
+        final var plane2 = transformAndReturnNew(inputLine.getPlane2());
 
         return new Line3D(plane1, plane2);
     }
@@ -323,8 +308,7 @@ public abstract class Transformation3D {
      * @throws AlgebraException          raised if transform cannot be computed because
      *                                   of numerical instabilities.
      */
-    public void transform(final Line3D line) throws CoincidentPlanesException,
-            AlgebraException {
+    public void transform(final Line3D line) throws CoincidentPlanesException, AlgebraException {
         transform(line, line);
     }
 
@@ -339,11 +323,11 @@ public abstract class Transformation3D {
      * @throws AlgebraException          raised if transform cannot be computed because
      *                                   of numerical instabilities.
      */
-    public void transform(final Line3D inputLine, final Line3D outputLine)
-            throws CoincidentPlanesException, AlgebraException {
+    public void transform(final Line3D inputLine, final Line3D outputLine) throws CoincidentPlanesException,
+            AlgebraException {
 
-        final Plane plane1 = transformAndReturnNew(inputLine.getPlane1());
-        final Plane plane2 = transformAndReturnNew(inputLine.getPlane2());
+        final var plane1 = transformAndReturnNew(inputLine.getPlane1());
+        final var plane2 = transformAndReturnNew(inputLine.getPlane2());
 
         outputLine.setPlanes(plane1, plane2);
     }
@@ -358,9 +342,9 @@ public abstract class Transformation3D {
      * @throws AlgebraException          raised if transform cannot be computed because
      *                                   of numerical instabilities.
      */
-    public List<Line3D> transformLines(final List<Line3D> inputLines)
-            throws CoincidentPlanesException, AlgebraException {
-        final List<Line3D> outputLines = new ArrayList<>(inputLines.size());
+    public List<Line3D> transformLines(final List<Line3D> inputLines) throws CoincidentPlanesException,
+            AlgebraException {
+        final var outputLines = new ArrayList<Line3D>(inputLines.size());
         transformLines(inputLines, outputLines);
         return outputLines;
     }
@@ -379,11 +363,11 @@ public abstract class Transformation3D {
      *                                   of numerical instabilities.
      */
     public void transformLines(
-            final List<Line3D> inputLines, final List<Line3D> outputLines)
-            throws CoincidentPlanesException, AlgebraException {
+            final List<Line3D> inputLines, final List<Line3D> outputLines) throws CoincidentPlanesException,
+            AlgebraException {
 
         outputLines.clear();
-        for (final Line3D line : inputLines) {
+        for (final var line : inputLines) {
             outputLines.add(transformAndReturnNew(line));
         }
     }
@@ -398,10 +382,10 @@ public abstract class Transformation3D {
      * @throws AlgebraException          raised if transform cannot be computed because
      *                                   of numerical instabilities.
      */
-    public void transformAndOverwriteLines(final List<Line3D> lines)
-            throws CoincidentPlanesException, AlgebraException {
+    public void transformAndOverwriteLines(final List<Line3D> lines) throws CoincidentPlanesException,
+            AlgebraException {
 
-        for (final Line3D line : lines) {
+        for (final var line : lines) {
             transform(line, line);
         }
     }
@@ -414,8 +398,7 @@ public abstract class Transformation3D {
      * @return a new transformed polygon.
      */
     public Polygon3D transformAndReturnNew(final Polygon3D inputPolygon) {
-        final List<Point3D> outVertices = transformPointsAndReturnNew(
-                inputPolygon.getVertices());
+        final var outVertices = transformPointsAndReturnNew(inputPolygon.getVertices());
         try {
             return new Polygon3D(outVertices);
         } catch (final NotEnoughVerticesException ignore) {
@@ -444,8 +427,7 @@ public abstract class Transformation3D {
      */
     public void transform(final Polygon3D inputPolygon, final Polygon3D outputPolygon) {
         try {
-            outputPolygon.setVertices(transformPointsAndReturnNew(
-                    inputPolygon.getVertices()));
+            outputPolygon.setVertices(transformPointsAndReturnNew(inputPolygon.getVertices()));
         } catch (final NotEnoughVerticesException ignore) {
             // this will never happen because all existing polygons have enough
             // vertices
@@ -460,9 +442,9 @@ public abstract class Transformation3D {
      * @return a new transformed triangle.
      */
     public Triangle3D transformAndReturnNew(final Triangle3D inputTriangle) {
-        final Point3D vertex1 = transformAndReturnNew(inputTriangle.getVertex1());
-        final Point3D vertex2 = transformAndReturnNew(inputTriangle.getVertex2());
-        final Point3D vertex3 = transformAndReturnNew(inputTriangle.getVertex3());
+        final var vertex1 = transformAndReturnNew(inputTriangle.getVertex1());
+        final var vertex2 = transformAndReturnNew(inputTriangle.getVertex2());
+        final var vertex3 = transformAndReturnNew(inputTriangle.getVertex3());
         return new Triangle3D(vertex1, vertex2, vertex3);
     }
 
@@ -516,9 +498,8 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public PinholeCamera transformAndReturnNew(final PinholeCamera camera)
-            throws AlgebraException {
-        final PinholeCamera outputCamera = new PinholeCamera();
+    public PinholeCamera transformAndReturnNew(final PinholeCamera camera) throws AlgebraException {
+        final var outputCamera = new PinholeCamera();
         transform(camera, outputCamera);
         return outputCamera;
     }
@@ -544,7 +525,6 @@ public abstract class Transformation3D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public abstract void transform(
-            final PinholeCamera inputCamera, final PinholeCamera outputCamera)
+    public abstract void transform(final PinholeCamera inputCamera, final PinholeCamera outputCamera)
             throws AlgebraException;
 }

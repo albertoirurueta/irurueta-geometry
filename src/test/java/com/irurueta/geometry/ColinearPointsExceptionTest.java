@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ColinearPointsExceptionTest {
+class ColinearPointsExceptionTest {
 
     @Test
-    public void testConstructor() {
-        ColinearPointsException ex = new ColinearPointsException();
+    void testConstructor() {
+        var ex = new ColinearPointsException();
         assertNotNull(ex);
 
         ex = new ColinearPointsException("message");

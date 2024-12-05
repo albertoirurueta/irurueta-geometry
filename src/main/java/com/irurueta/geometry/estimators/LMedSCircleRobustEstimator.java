@@ -71,14 +71,14 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSCircleRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -90,7 +90,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      */
     public LMedSCircleRobustEstimator(final List<Point2D> points) {
         super(points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -101,7 +101,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      */
     public LMedSCircleRobustEstimator(final CircleRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
 
@@ -114,10 +114,9 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSCircleRobustEstimator(final CircleRobustEstimatorListener listener,
-                                      final List<Point2D> points) {
+    public LMedSCircleRobustEstimator(final CircleRobustEstimatorListener listener, final List<Point2D> points) {
         super(listener, points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -140,7 +139,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -173,7 +172,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -191,8 +190,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public Circle estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Circle estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -200,91 +198,84 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<Circle> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<Circle>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(new LMedSRobustEstimatorListener<Circle>() {
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return CircleRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return CircleRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Circle> solutions) {
-                                final Point2D point1 = mPoints.get(samplesIndices[0]);
-                                final Point2D point2 = mPoints.get(samplesIndices[1]);
-                                final Point2D point3 = mPoints.get(samplesIndices[2]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Circle> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
 
-                                try {
-                                    final Circle circle = new Circle(point1, point2, point3);
-                                    solutions.add(circle);
-                                } catch (final ColinearPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var circle = new Circle(point1, point2, point3);
+                    solutions.add(circle);
+                } catch (final ColinearPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Circle currentEstimation, int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(final Circle currentEstimation, int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSCircleRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return LMedSCircleRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Circle> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(LMedSCircleRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Circle> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(LMedSCircleRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Circle> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(LMedSCircleRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Circle> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(LMedSCircleRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Circle> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSCircleRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Circle> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(LMedSCircleRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Circle> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSCircleRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Circle> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(LMedSCircleRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

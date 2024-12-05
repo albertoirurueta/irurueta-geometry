@@ -81,26 +81,25 @@ public abstract class SphereRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected SphereRobustEstimatorListener mListener;
+    protected SphereRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -108,28 +107,28 @@ public abstract class SphereRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of points to be used to estimate a sphere. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point3D> mPoints;
+    protected List<Point3D> points;
 
     /**
      * Constructor.
      */
     protected SphereRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -139,10 +138,10 @@ public abstract class SphereRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected SphereRobustEstimator(final SphereRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -153,9 +152,9 @@ public abstract class SphereRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected SphereRobustEstimator(final List<Point3D> points) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -168,12 +167,11 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected SphereRobustEstimator(final SphereRobustEstimatorListener listener,
-                                    final List<Point3D> points) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected SphereRobustEstimator(final SphereRobustEstimatorListener listener, final List<Point3D> points) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -185,7 +183,7 @@ public abstract class SphereRobustEstimator {
      * @return listener to be notified of events.
      */
     public SphereRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -195,12 +193,11 @@ public abstract class SphereRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final SphereRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final SphereRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -210,7 +207,7 @@ public abstract class SphereRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -219,7 +216,7 @@ public abstract class SphereRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -230,7 +227,7 @@ public abstract class SphereRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -248,11 +245,10 @@ public abstract class SphereRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -264,7 +260,7 @@ public abstract class SphereRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -286,7 +282,7 @@ public abstract class SphereRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -297,7 +293,7 @@ public abstract class SphereRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -317,7 +313,7 @@ public abstract class SphereRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -327,7 +323,7 @@ public abstract class SphereRobustEstimator {
      * @return list of points to be used to estimate a sphere.
      */
     public List<Point3D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -354,7 +350,7 @@ public abstract class SphereRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
+        return points != null && points.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -394,19 +390,13 @@ public abstract class SphereRobustEstimator {
      * @return an instance of a sphere robust estimator.
      */
     public static SphereRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator();
-            case MSAC:
-                return new MSACSphereRobustEstimator();
-            case PROSAC:
-                return new PROSACSphereRobustEstimator();
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator();
+            case MSAC -> new MSACSphereRobustEstimator();
+            case PROSAC -> new PROSACSphereRobustEstimator();
+            case PROMEDS -> new PROMedSSphereRobustEstimator();
+            default -> new RANSACSphereRobustEstimator();
+        };
     }
 
     /**
@@ -420,21 +410,14 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static SphereRobustEstimator create(final List<Point3D> points,
-                                               final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator(points);
-            case MSAC:
-                return new MSACSphereRobustEstimator(points);
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(points);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(points);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator(points);
-        }
+    public static SphereRobustEstimator create(final List<Point3D> points, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator(points);
+            case MSAC -> new MSACSphereRobustEstimator(points);
+            case PROSAC -> new PROSACSphereRobustEstimator(points);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(points);
+            default -> new RANSACSphereRobustEstimator(points);
+        };
     }
 
     /**
@@ -448,21 +431,14 @@ public abstract class SphereRobustEstimator {
      * @return an instance of a sphere robust estimator.
      */
     public static SphereRobustEstimator create(
-            final SphereRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator(listener);
-            case MSAC:
-                return new MSACSphereRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator(listener);
-        }
+            final SphereRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator(listener);
+            case MSAC -> new MSACSphereRobustEstimator(listener);
+            case PROSAC -> new PROSACSphereRobustEstimator(listener);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(listener);
+            default -> new RANSACSphereRobustEstimator(listener);
+        };
     }
 
     /**
@@ -481,19 +457,13 @@ public abstract class SphereRobustEstimator {
     public static SphereRobustEstimator create(
             final SphereRobustEstimatorListener listener, final List<Point3D> points,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACSphereRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(listener, points);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(listener, points);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator(listener, points);
+            case MSAC -> new MSACSphereRobustEstimator(listener, points);
+            case PROSAC -> new PROSACSphereRobustEstimator(listener, points);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(listener, points);
+            default -> new RANSACSphereRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -507,21 +477,14 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 4 points).
      */
-    public static SphereRobustEstimator create(final double[] qualityScores,
-                                               final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator();
-            case MSAC:
-                return new MSACSphereRobustEstimator();
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator();
-        }
+    public static SphereRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator();
+            case MSAC -> new MSACSphereRobustEstimator();
+            case PROSAC -> new PROSACSphereRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(qualityScores);
+            default -> new RANSACSphereRobustEstimator();
+        };
     }
 
     /**
@@ -538,21 +501,14 @@ public abstract class SphereRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(
-            final List<Point3D> points, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator(points);
-            case MSAC:
-                return new MSACSphereRobustEstimator(points);
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(points, qualityScores);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(points, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator(points);
-        }
+            final List<Point3D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator(points);
+            case MSAC -> new MSACSphereRobustEstimator(points);
+            case PROSAC -> new PROSACSphereRobustEstimator(points, qualityScores);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(points, qualityScores);
+            default -> new RANSACSphereRobustEstimator(points);
+        };
     }
 
     /**
@@ -571,19 +527,13 @@ public abstract class SphereRobustEstimator {
     public static SphereRobustEstimator create(
             final SphereRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator(listener);
-            case MSAC:
-                return new MSACSphereRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator(listener);
+            case MSAC -> new MSACSphereRobustEstimator(listener);
+            case PROSAC -> new PROSACSphereRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(listener, qualityScores);
+            default -> new RANSACSphereRobustEstimator(listener);
+        };
     }
 
     /**
@@ -602,23 +552,15 @@ public abstract class SphereRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(
-            final SphereRobustEstimatorListener listener, final List<Point3D> points,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSSphereRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACSphereRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACSphereRobustEstimator(listener, points,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSSphereRobustEstimator(listener, points,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACSphereRobustEstimator(listener, points);
-        }
+            final SphereRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSSphereRobustEstimator(listener, points);
+            case MSAC -> new MSACSphereRobustEstimator(listener, points);
+            case PROSAC -> new PROSACSphereRobustEstimator(listener, points, qualityScores);
+            case PROMEDS -> new PROMedSSphereRobustEstimator(listener, points, qualityScores);
+            default -> new RANSACSphereRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -652,8 +594,7 @@ public abstract class SphereRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a sphere robust estimator.
      */
-    public static SphereRobustEstimator create(
-            final SphereRobustEstimatorListener listener) {
+    public static SphereRobustEstimator create(final SphereRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -697,8 +638,7 @@ public abstract class SphereRobustEstimator {
      *                                  the same size as the list of provided quality scores, or if their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static SphereRobustEstimator create(final List<Point3D> points,
-                                               final double[] qualityScores) {
+    public static SphereRobustEstimator create(final List<Point3D> points, final double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -732,8 +672,7 @@ public abstract class SphereRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(
-            final SphereRobustEstimatorListener listener, final List<Point3D> points,
-            final double[] qualityScores) {
+            final SphereRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -750,8 +689,7 @@ public abstract class SphereRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Sphere estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Sphere estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -772,7 +710,7 @@ public abstract class SphereRobustEstimator {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**

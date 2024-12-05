@@ -19,15 +19,13 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CircleTest {
-
+class CircleTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -36,7 +34,7 @@ public class CircleTest {
     private static final double MAX_RANDOM_DEGREES = 180.0;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(0.0, Circle.MIN_RADIUS, 0.0);
         assertEquals(1e-9, Circle.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, Circle.MIN_THRESHOLD, 0.0);
@@ -44,22 +42,19 @@ public class CircleTest {
     }
 
     @Test
-    public void testConstructor() throws ColinearPointsException {
+    void testConstructor() throws ColinearPointsException {
         // Test empty constructor
-        Circle circle = new Circle();
+        var circle = new Circle();
 
         // check center is at origin and radius is 1.0
-        assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0),
-                ABSOLUTE_ERROR));
+        assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0), ABSOLUTE_ERROR));
         assertEquals(1.0, circle.getRadius(), ABSOLUTE_ERROR);
 
         // Test constructor with center and radius
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         circle = new Circle(center, radius);
         // check correctness
@@ -67,13 +62,7 @@ public class CircleTest {
         assertEquals(radius, circle.getRadius(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        circle = null;
-        try {
-            circle = new Circle(center, -radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(circle);
+        assertThrows(IllegalArgumentException.class, () -> new Circle(center, -radius));
 
         // test constructor with three points
 
@@ -83,77 +72,60 @@ public class CircleTest {
         Point2D point3;
         boolean areEqual;
         do {
-            double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+            var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
             point1 = new HomogeneousPoint2D(
                     center.getInhomX() + radius * Math.cos(angle),
                     center.getInhomY() + radius * Math.sin(angle), 1.0);
-            angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+            angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
             point2 = new HomogeneousPoint2D(
                     center.getInhomX() + radius * Math.cos(angle),
                     center.getInhomY() + radius * Math.sin(angle), 1.0);
-            angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+            angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
             point3 = new HomogeneousPoint2D(
                     center.getInhomX() + radius * Math.cos(angle),
                     center.getInhomY() + radius * Math.sin(angle), 1.0);
 
             // ensure that all three points are different
-            areEqual = point1.equals(point2, ABSOLUTE_ERROR) ||
-                    point2.equals(point3, ABSOLUTE_ERROR) ||
-                    point3.equals(point1, ABSOLUTE_ERROR);
+            areEqual = point1.equals(point2, ABSOLUTE_ERROR) || point2.equals(point3, ABSOLUTE_ERROR)
+                    || point3.equals(point1, ABSOLUTE_ERROR);
         } while (areEqual);
 
 
         // compute circle
-        Circle circle2 = new Circle(point1, point2, point3);
+        var circle2 = new Circle(point1, point2, point3);
 
         // check that both circles are equal
         circle = new Circle(center, radius);
-        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()),
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
         // Force ColinearPointsException
-        circle = null;
-        try {
-            circle = new Circle(point1, point2, point2);
-            fail("ColinearPointsException expected but not thrown");
-        } catch (final ColinearPointsException ignore) {
-        }
-        assertNull(circle);
+        final var finalPoint1 = point1;
+        final var finalPoint2 = point2;
+        assertThrows(ColinearPointsException.class, () -> new Circle(finalPoint1, finalPoint2, finalPoint2));
 
         // test from conic
         circle = new Circle(center, radius);
-        Conic conic = circle.toConic();
+        var conic = circle.toConic();
         circle2 = new Circle(conic);
-        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()),
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         conic = new Conic();
-        circle = null;
-        try {
-            circle = new Circle(conic);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(circle);
+        final var finalConic = conic;
+        assertThrows(IllegalArgumentException.class, () -> new Circle(finalConic));
     }
 
     @Test
-    public void testGetSetCenter() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+    void testGetSetCenter() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle();
+        final var circle = new Circle();
         // check center
-        assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0),
-                ABSOLUTE_ERROR));
+        assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0), ABSOLUTE_ERROR));
 
         // set center
         circle.setCenter(center);
@@ -161,20 +133,15 @@ public class CircleTest {
         assertTrue(circle.getCenter().equals(center, ABSOLUTE_ERROR));
 
         // Force NullPointerException
-        try {
-            circle.setCenter(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> circle.setCenter(null));
     }
 
     @Test
-    public void testGetSetRadius() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+    void testGetSetRadius() {
+        final var randomizer = new UniformRandomizer();
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle();
+        final var circle = new Circle();
         // check radius
         assertEquals(1.0, circle.getRadius(), 0.0);
 
@@ -184,27 +151,21 @@ public class CircleTest {
         assertEquals(radius, circle.getRadius(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            circle.setRadius(-radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> circle.setRadius(-radius));
     }
 
     @Test
-    public void testSetCenterAndRadius() {
+    void testSetCenterAndRadius() {
         // Test constructor with center and radius
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle();
+        final var circle = new Circle();
         // check center
-        assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0),
-                ABSOLUTE_ERROR));
+        assertTrue(circle.getCenter().equals(new InhomogeneousPoint2D(0.0, 0.0), ABSOLUTE_ERROR));
         // check radius
         assertEquals(1.0, circle.getRadius(), 0.0);
 
@@ -215,30 +176,20 @@ public class CircleTest {
         assertEquals(radius, circle.getRadius(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            circle.setCenterAndRadius(center, -radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> circle.setCenterAndRadius(center, -radius));
 
         // Force NullPointerException
-        try {
-            circle.setCenterAndRadius(null, radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> circle.setCenterAndRadius(null, radius));
     }
 
     @Test
-    public void testSetParametersFromPoints() throws ColinearPointsException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE));
+    void testSetParametersFromPoints() throws ColinearPointsException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
-        final Circle circle1 = new Circle(center, radius);
+        final var circle1 = new Circle(center, radius);
 
         // pick 3 points belonging to the circle locus
         Point2D point1;
@@ -246,58 +197,49 @@ public class CircleTest {
         Point2D point3;
         boolean areEqual;
         do {
-            double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+            var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
             point1 = new HomogeneousPoint2D(
                     center.getInhomX() + radius * Math.cos(angle),
                     center.getInhomY() + radius * Math.sin(angle), 1.0);
-            angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+            angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
             point2 = new HomogeneousPoint2D(
                     center.getInhomX() + radius * Math.cos(angle),
                     center.getInhomY() + radius * Math.sin(angle), 1.0);
-            angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-            point3 = new HomogeneousPoint2D(
-                    center.getInhomX() + radius * Math.cos(angle),
+            angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+            point3 = new HomogeneousPoint2D(center.getInhomX() + radius * Math.cos(angle),
                     center.getInhomY() + radius * Math.sin(angle), 1.0);
 
             // ensure that all three points are different
-            areEqual = point1.equals(point2, ABSOLUTE_ERROR) ||
-                    point2.equals(point3, ABSOLUTE_ERROR) ||
-                    point3.equals(point1, ABSOLUTE_ERROR);
+            areEqual = point1.equals(point2, ABSOLUTE_ERROR) || point2.equals(point3, ABSOLUTE_ERROR)
+                    || point3.equals(point1, ABSOLUTE_ERROR);
         } while (areEqual);
 
         // create new circle and set parameters
-        final Circle circle2 = new Circle();
+        final var circle2 = new Circle();
 
         circle2.setParametersFromPoints(point1, point2, point3);
 
         // check that both circles are equal
-        assertEquals(0.0, circle1.getCenter().distanceTo(circle2.getCenter()),
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, circle1.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(circle1.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
         // Force ColinearPointsException
-        try {
-            circle2.setParametersFromPoints(point1, point2, point2);
-            fail("ColinearPointsException expected but not thrown");
-        } catch (final ColinearPointsException ignore) {
-        }
+        final var finalPoint1 = point1;
+        final var finalPoint2 = point2;
+        assertThrows(ColinearPointsException.class,
+                () -> circle2.setParametersFromPoints(finalPoint1, finalPoint2, finalPoint2));
     }
 
     @Test
-    public void testArea() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+    void testArea() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
-        final double area = Math.PI * radius * radius;
+        final var area = Math.PI * radius * radius;
 
         // Check correctness
         assertEquals(area, circle.getArea(), ABSOLUTE_ERROR);
@@ -305,17 +247,15 @@ public class CircleTest {
     }
 
     @Test
-    public void testPerimeter() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+    void testPerimeter() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
-        final double perimeter = 2.0 * Math.PI * radius;
+        final var perimeter = 2.0 * Math.PI * radius;
 
         // Check correctness
         assertEquals(perimeter, circle.getPerimeter(), ABSOLUTE_ERROR);
@@ -323,39 +263,34 @@ public class CircleTest {
     }
 
     @Test
-    public void testCurvature() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+    void testCurvature() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
         assertEquals(1.0 / radius, Circle.curvature(radius), ABSOLUTE_ERROR);
         assertEquals(1.0 / radius, circle.getCurvature(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testIsInside() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
-        final double value = randomizer.nextDouble(0.2, 0.8);
-        final double value2 = 1.0 + value;
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testIsInside() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var value = randomizer.nextDouble(0.2, 0.8);
+        final var value2 = 1.0 + value;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
-        final Point2D inside = new InhomogeneousPoint2D(
+        final var inside = new InhomogeneousPoint2D(
                 center.getInhomX() + value * radius * Math.cos(theta),
                 center.getInhomY() + value * radius * Math.sin(theta));
-        final Point2D outside = new InhomogeneousPoint2D(
+        final var outside = new InhomogeneousPoint2D(
                 center.getInhomX() + value2 * radius * Math.cos(theta),
                 center.getInhomY() + value2 * radius * Math.sin(theta));
 
@@ -375,19 +310,16 @@ public class CircleTest {
     }
 
     @Test
-    public void testSignedDistanceDistanceAndIsLocus() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
-        final double value = randomizer.nextDouble(0.2, 0.8);
-        final double value2 = 1.0 + value;
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testSignedDistanceDistanceAndIsLocus() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var value = randomizer.nextDouble(0.2, 0.8);
+        final var value2 = 1.0 + value;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
         // center is not locus
         assertFalse(circle.isLocus(center));
@@ -395,21 +327,19 @@ public class CircleTest {
         // but for a large enough threshold it might be
         assertTrue(circle.isLocus(center, 2.0 * radius));
 
-        final Point2D inside = new InhomogeneousPoint2D(
+        final var inside = new InhomogeneousPoint2D(
                 center.getInhomX() + value * radius * Math.cos(theta),
                 center.getInhomY() + value * radius * Math.sin(theta));
-        final Point2D outside = new InhomogeneousPoint2D(
+        final var outside = new InhomogeneousPoint2D(
                 center.getInhomX() + value2 * radius * Math.cos(theta),
                 center.getInhomY() + value2 * radius * Math.sin(theta));
-        final Point2D zero = new InhomogeneousPoint2D(
+        final var zero = new InhomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta));
 
         // check correctness
-        assertEquals(circle.getSignedDistance(inside), (value - 1.0) * radius,
-                ABSOLUTE_ERROR);
-        assertEquals(Circle.signedDistance(circle, inside),
-                (value - 1.0) * radius, ABSOLUTE_ERROR);
+        assertEquals((value - 1.0) * radius, circle.getSignedDistance(inside), ABSOLUTE_ERROR);
+        assertEquals((value - 1.0) * radius, Circle.signedDistance(circle, inside), ABSOLUTE_ERROR);
 
         assertEquals(Math.abs((value - 1.0) * radius), circle.getDistance(inside), ABSOLUTE_ERROR);
         assertEquals(Math.abs((value - 1.0) * radius), Circle.distance(circle, inside), ABSOLUTE_ERROR);
@@ -423,12 +353,10 @@ public class CircleTest {
         assertTrue(circle.isLocus(inside, radius));
 
         assertEquals((value2 - 1.0) * radius, circle.getSignedDistance(outside), ABSOLUTE_ERROR);
-        assertEquals((value2 - 1.0) * radius, Circle.signedDistance(circle, outside),
-                ABSOLUTE_ERROR);
+        assertEquals((value2 - 1.0) * radius, Circle.signedDistance(circle, outside), ABSOLUTE_ERROR);
 
         assertEquals(Math.abs((value2 - 1.0) * radius), circle.getDistance(outside), ABSOLUTE_ERROR);
-        assertEquals(Math.abs((value2 - 1.0) * radius), Circle.distance(circle, outside),
-                ABSOLUTE_ERROR);
+        assertEquals(Math.abs((value2 - 1.0) * radius), Circle.distance(circle, outside), ABSOLUTE_ERROR);
 
         // for outside point distance is positive
         assertTrue(circle.getSignedDistance(outside) >= 0.0);
@@ -447,27 +375,21 @@ public class CircleTest {
         assertTrue(circle.isLocus(zero, radius));
 
         // Force IllegalArgumentException
-        try {
-            circle.isLocus(zero, -radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> circle.isLocus(zero, -radius));
     }
 
     @Test
-    public void testClosestPointAndIsLocus() throws UndefinedPointException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
+    void testClosestPointAndIsLocus() throws UndefinedPointException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
-        final double value = randomizer.nextDouble(0.2, 0.8);
-        final double value2 = 1.0 + value;
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var value = randomizer.nextDouble(0.2, 0.8);
+        final var value2 = 1.0 + value;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
         // center is not locus
         assertFalse(circle.isLocus(center));
@@ -475,20 +397,19 @@ public class CircleTest {
         // but for a large enough threshold it might be
         assertTrue(circle.isLocus(center, 2.0 * radius));
 
-
-        final Point2D inside = new InhomogeneousPoint2D(
+        final var inside = new InhomogeneousPoint2D(
                 center.getInhomX() + value * radius * Math.cos(theta),
                 center.getInhomY() + value * radius * Math.sin(theta));
-        final Point2D outside = new InhomogeneousPoint2D(
+        final var outside = new InhomogeneousPoint2D(
                 center.getInhomX() + value2 * radius * Math.cos(theta),
                 center.getInhomY() + value2 * radius * Math.sin(theta));
-        final Point2D zero = new InhomogeneousPoint2D(
+        final var zero = new InhomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta));
 
-        final Point2D expectedPoint = new InhomogeneousPoint2D(zero);
+        final var expectedPoint = new InhomogeneousPoint2D(zero);
 
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
 
         // test for point inside (but far from center)
         assertTrue(circle.getClosestPoint(inside).equals(expectedPoint, ABSOLUTE_ERROR));
@@ -511,8 +432,7 @@ public class CircleTest {
         assertTrue(circle.isLocus(outside, radius));
 
         // test for point in circle boundary
-        assertTrue(circle.getClosestPoint(zero).equals(expectedPoint,
-                ABSOLUTE_ERROR));
+        assertTrue(circle.getClosestPoint(zero).equals(expectedPoint, ABSOLUTE_ERROR));
         circle.closestPoint(zero, result);
         assertTrue(result.equals(expectedPoint, ABSOLUTE_ERROR));
 
@@ -521,35 +441,20 @@ public class CircleTest {
         assertTrue(circle.isLocus(zero, radius));
 
         // Force UndefinedPointException (by testing at center)
-        try {
-            circle.getClosestPoint(center);
-            fail("UndefinedPointException expected but not thrown");
-        } catch (final UndefinedPointException ignore) {
-        }
-        try {
-            circle.closestPoint(center, result);
-            fail("UndefinedPointException expected but not thrown");
-        } catch (final UndefinedPointException ignore) {
-        }
+        assertThrows(UndefinedPointException.class, () -> circle.getClosestPoint(center));
+        assertThrows(UndefinedPointException.class, () -> circle.closestPoint(center, result));
 
         // Force IllegalArgumentException
-        try {
-            circle.isLocus(zero, -radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> circle.isLocus(zero, -radius));
     }
 
     @Test
-    public void testGetTangentLineAt() throws NotLocusException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
-        final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE));
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testGetTangentLineAt() throws NotLocusException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new HomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
+        final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
         // angle corresponding to line slope
         final double theta2;
         if (theta > Math.PI / 2.0) {
@@ -560,9 +465,9 @@ public class CircleTest {
             theta2 = theta;
         }
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
-        final Point2D point = new HomogeneousPoint2D(
+        final var point = new HomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta), 1.0);
         point.normalize();
@@ -570,9 +475,9 @@ public class CircleTest {
         assertTrue(circle.isLocus(point));
 
         // find tangent line at locus point
-        final Line2D line = circle.getTangentLineAt(point);
-        final Line2D line2 = circle.getTangentLineAt(point, Circle.DEFAULT_THRESHOLD);
-        final Line2D line3 = new Line2D();
+        final var line = circle.getTangentLineAt(point);
+        final var line2 = circle.getTangentLineAt(point, Circle.DEFAULT_THRESHOLD);
+        final var line3 = new Line2D();
         circle.tangentLineAt(point, line3, Circle.DEFAULT_THRESHOLD);
 
         // check that point is also at line's locus
@@ -581,31 +486,27 @@ public class CircleTest {
         assertEquals(line2, line3);
 
         // check that line angle is equal to theta
-        final double lineAngle = line.getAngle();
-        double theta3 = theta2 - Math.PI / 2.0;
+        final var lineAngle = line.getAngle();
+        var theta3 = theta2 - Math.PI / 2.0;
         if (theta3 < -Math.PI / 2.0) {
             theta3 += Math.PI;
         } else if (theta3 > Math.PI / 2.0) {
             theta3 -= Math.PI;
         }
-        assertEquals(lineAngle * 180.0 / Math.PI,
-                theta3 * 180.0 / Math.PI, ABSOLUTE_ERROR);
+        assertEquals(lineAngle * 180.0 / Math.PI, theta3 * 180.0 / Math.PI, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testToConic() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
-        final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE));
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testToConic() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new HomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
+        final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
         center.normalize();
 
-        final Circle circle = new Circle(center, radius);
-        final Conic conic = circle.toConic();
+        final var circle = new Circle(center, radius);
+        final var conic = circle.toConic();
 
         // center is not locus
         assertFalse(circle.isLocus(center));
@@ -616,7 +517,7 @@ public class CircleTest {
         assertTrue(circle.isLocus(center, 2.0 * radius));
         assertTrue(conic.isLocus(center, 2.0 * radius));
 
-        final Point2D locus = new HomogeneousPoint2D(
+        final var locus = new HomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta), 1.0);
         locus.normalize();
@@ -626,8 +527,7 @@ public class CircleTest {
         assertTrue(conic.isLocus(locus, ABSOLUTE_ERROR));
 
         // check correctness of estimated conic matrix (up to scale)
-        final Matrix m = new Matrix(Conic.BASECONIC_MATRIX_ROW_SIZE,
-                Conic.BASECONIC_MATRIX_COLUMN_SIZE);
+        final var m = new Matrix(Conic.BASECONIC_MATRIX_ROW_SIZE, Conic.BASECONIC_MATRIX_COLUMN_SIZE);
         m.setElementAt(0, 0, 1.0);
         m.setElementAt(1, 0, 0.0);
         m.setElementAt(2, 0, -center.getInhomX());
@@ -638,63 +538,56 @@ public class CircleTest {
 
         m.setElementAt(0, 2, -center.getInhomX());
         m.setElementAt(1, 2, -center.getInhomY());
-        m.setElementAt(2, 2, center.getInhomX() * center.getInhomX() +
-                center.getInhomY() * center.getInhomY() - radius * radius);
+        m.setElementAt(2, 2, center.getInhomX() * center.getInhomX()
+                + center.getInhomY() * center.getInhomY() - radius * radius);
 
-        final double norm = Utils.normF(m);
+        final var norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
 
         assertTrue(m.equals(conic.asMatrix(), ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testSetFromConic() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
+    void testSetFromConic() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
         // test from conic
-        Conic conic = circle.toConic();
-        final Circle circle2 = new Circle();
+        var conic = circle.toConic();
+        final var circle2 = new Circle();
         circle2.setFromConic(conic);
 
         // check correctness
-        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()),
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
         assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
         conic = new Conic();
-        try {
-            circle2.setFromConic(conic);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var finalConic = conic;
+        assertThrows(IllegalArgumentException.class, () -> circle2.setFromConic(finalConic));
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Circle circle1 = new Circle(center, radius);
+        final var circle1 = new Circle(center, radius);
 
         // check
         assertSame(center, circle1.getCenter());
         assertEquals(radius, circle1.getRadius(), 0.0);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(circle1);
-        final Circle circle2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(circle1);
+        final var circle2 = SerializationHelper.<Circle>deserialize(bytes);
 
         // check
         assertEquals(circle1.getCenter(), circle2.getCenter());

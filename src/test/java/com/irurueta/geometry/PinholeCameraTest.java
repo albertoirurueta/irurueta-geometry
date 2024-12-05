@@ -21,17 +21,14 @@ import com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraEstim
 import com.irurueta.geometry.estimators.PinholeCameraEstimatorException;
 import com.irurueta.geometry.estimators.WrongListSizesException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PinholeCameraTest {
+class PinholeCameraTest {
 
     private static final int PINHOLE_CAMERA_ROWS = 3;
     private static final int PINHOLE_CAMERA_COLS = 4;
@@ -91,7 +88,7 @@ public class PinholeCameraTest {
     private static final int TIMES = 10;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS);
         assertEquals(4, PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
         assertEquals(3, PinholeCamera.INHOM_COORDS);
@@ -99,14 +96,12 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testConstructors() throws WrongSizeException, RotationException,
-            CameraException, NotAvailableException, WrongListSizesException,
-            com.irurueta.geometry.estimators.LockedException,
-            com.irurueta.geometry.estimators.NotReadyException,
-            PinholeCameraEstimatorException {
+    void testConstructors() throws WrongSizeException, RotationException, CameraException, NotAvailableException,
+            WrongListSizesException, com.irurueta.geometry.estimators.LockedException,
+            com.irurueta.geometry.estimators.NotReadyException, PinholeCameraEstimatorException {
 
         // test default constructor
-        PinholeCamera camera = new PinholeCamera();
+        var camera = new PinholeCamera();
 
         // test type
         assertEquals(CameraType.PINHOLE_CAMERA, camera.getType());
@@ -114,74 +109,54 @@ public class PinholeCameraTest {
         // test that internal matrix is the 3x4 identity, which corresponds to
         // canonical camera located at origin of coordinates, pointing towards
         // z-axis and with retinal plane located at Z = 1 (unitary focal length)
-        assertEquals(Matrix.identity(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS),
-                camera.getInternalMatrix());
+        assertEquals(Matrix.identity(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS), camera.getInternalMatrix());
 
         // test constructor by providing internal matrix
-        Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         camera = new PinholeCamera(cameraMatrix);
         assertEquals(cameraMatrix, camera.getInternalMatrix());
 
         // Force WrongSizeException
-        cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS + 1, PINHOLE_CAMERA_COLS + 1,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        camera = null;
-        try {
-            camera = new PinholeCamera(cameraMatrix);
-            fail("WrongSizeException expected but not thrown");
-        } catch (final WrongSizeException ignore) {
-        }
-        assertNull(camera);
+        cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS + 1,
+                PINHOLE_CAMERA_COLS + 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var finalCameraMatrix = cameraMatrix;
+        assertThrows(WrongSizeException.class, () -> new PinholeCamera(finalCameraMatrix));
 
         // create intrinsic parameters
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var randomizer = new UniformRandomizer();
+        var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
         // rotation
-        double alphaEuler = randomizer.nextDouble(
-                MIN_ANGLE_DEGREES * Math.PI / 180.0,
-                MAX_ANGLE_DEGREES * Math.PI / 180.0);
-        double betaEuler = randomizer.nextDouble(
-                MIN_ANGLE_DEGREES * Math.PI / 180.0,
-                MAX_ANGLE_DEGREES * Math.PI / 180.0);
-        double gammaEuler = randomizer.nextDouble(
-                MIN_ANGLE_DEGREES * Math.PI / 180.0,
-                MAX_ANGLE_DEGREES * Math.PI / 180.0);
+        var alphaEuler = randomizer.nextDouble(
+                MIN_ANGLE_DEGREES * Math.PI / 180.0, MAX_ANGLE_DEGREES * Math.PI / 180.0);
+        var betaEuler = randomizer.nextDouble(
+                MIN_ANGLE_DEGREES * Math.PI / 180.0, MAX_ANGLE_DEGREES * Math.PI / 180.0);
+        var gammaEuler = randomizer.nextDouble(
+                MIN_ANGLE_DEGREES * Math.PI / 180.0, MAX_ANGLE_DEGREES * Math.PI / 180.0);
 
-        PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
-        final Matrix intrinsicMatrix = intrinsic.getInternalMatrix();
+        var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+        final var intrinsicMatrix = intrinsic.getInternalMatrix();
 
-        MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
-        final Matrix rotationMatrix = rotation.getInternalMatrix();
+        var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var rotationMatrix = rotation.getInternalMatrix();
 
-        final double[] axis = rotation.getRotationAxis();
-        final double theta = rotation.getRotationAngle();
+        final var axis = rotation.getRotationAxis();
+        final var theta = rotation.getRotationAngle();
 
         // image of world origin
-        final double[] originImageArray = new double[INHOM_2D_COORDS];
+        final var originImageArray = new double[INHOM_2D_COORDS];
         randomizer.fill(originImageArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint2D originImage = new InhomogeneousPoint2D(
-                originImageArray);
+        final var originImage = new InhomogeneousPoint2D(originImageArray);
 
         // camera center
-        double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // test constructor with intrinsic parameters, rotation and image or
         // origin
@@ -194,10 +169,10 @@ public class PinholeCameraTest {
         assertEquals(CameraType.PINHOLE_CAMERA, camera.getType());
 
         // build internal matrix
-        Matrix cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
-        Matrix mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
-            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
+        var cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
+        var mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
+        for (var v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (var u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, mp.getElementAt(u, v));
             }
         }
@@ -221,21 +196,20 @@ public class PinholeCameraTest {
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
 
-        Rotation3D rotation2 = camera.getCameraRotation();
-        PinholeCameraIntrinsicParameters intrinsic2 =
-                camera.getIntrinsicParameters();
-        final Point2D originImage2 = camera.getImageOfWorldOrigin();
+        var rotation2 = camera.getCameraRotation();
+        var intrinsic2 = camera.getIntrinsicParameters();
+        final var originImage2 = camera.getImageOfWorldOrigin();
 
         // Obtain rotation axis and angle from 2nd rotation
-        double[] axis2 = rotation2.getRotationAxis();
-        double theta2 = rotation2.getRotationAngle();
+        var axis2 = rotation2.getRotationAxis();
+        var theta2 = rotation2.getRotationAngle();
 
         // check correctness of axis and angle
 
         // axis can be equal up to sign
-        double scaleAxisX = axis[0] / axis2[0];
-        double scaleAxisY = axis[1] / axis2[1];
-        double scaleAxisZ = axis[2] / axis2[2];
+        var scaleAxisX = axis[0] / axis2[0];
+        var scaleAxisY = axis[1] / axis2[1];
+        var scaleAxisZ = axis[2] / axis2[2];
 
         assertEquals(scaleAxisX, scaleAxisY, ABSOLUTE_ERROR);
         assertEquals(scaleAxisY, scaleAxisZ, ABSOLUTE_ERROR);
@@ -250,15 +224,11 @@ public class PinholeCameraTest {
         }
 
         // compare intrinsic parameters
-        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         // compare images of origin
         assertTrue(originImage.equals(originImage2, ABSOLUTE_ERROR));
@@ -275,18 +245,17 @@ public class PinholeCameraTest {
         // build internal matrix
         cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
         mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
-            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
+        for (var v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (var u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, mp.getElementAt(u, v));
             }
         }
 
-        final Matrix inhomCenter = new Matrix(PINHOLE_CAMERA_ROWS, 1);
+        final var inhomCenter = new Matrix(PINHOLE_CAMERA_ROWS, 1);
         inhomCenter.setElementAtIndex(0, cameraCenter.getInhomX());
         inhomCenter.setElementAtIndex(1, cameraCenter.getInhomY());
         inhomCenter.setElementAtIndex(2, cameraCenter.getInhomZ());
-        final Matrix p4 = mp.multiplyAndReturnNew(inhomCenter).
-                multiplyByScalarAndReturnNew(-1.0);
+        final var p4 = mp.multiplyAndReturnNew(inhomCenter).multiplyByScalarAndReturnNew(-1.0);
 
         // set last column of camera matrix with homogeneous coordinates of image
         // of world origin
@@ -297,15 +266,14 @@ public class PinholeCameraTest {
         cameraMatrix = camera.getInternalMatrix();
 
         // test that camera center is the null-space of camera matrix
-        final Matrix homCenter = new Matrix(PINHOLE_CAMERA_COLS, 1);
-        HomogeneousPoint3D homCameraCenter = new HomogeneousPoint3D(
-                cameraCenter);
+        final var homCenter = new Matrix(PINHOLE_CAMERA_COLS, 1);
+        var homCameraCenter = new HomogeneousPoint3D(cameraCenter);
         homCameraCenter.normalize();
         homCenter.setElementAtIndex(0, homCameraCenter.getHomX());
         homCenter.setElementAtIndex(1, homCameraCenter.getHomY());
         homCenter.setElementAtIndex(2, homCameraCenter.getHomZ());
         homCenter.setElementAtIndex(3, homCameraCenter.getHomW());
-        Matrix nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
+        var nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
         assertEquals(0.0, nullMatrix.getElementAtIndex(0), ABSOLUTE_ERROR);
         assertEquals(0.0, nullMatrix.getElementAtIndex(1), ABSOLUTE_ERROR);
         assertEquals(0.0, nullMatrix.getElementAtIndex(2), ABSOLUTE_ERROR);
@@ -323,7 +291,7 @@ public class PinholeCameraTest {
 
         rotation2 = camera.getCameraRotation();
         intrinsic2 = camera.getIntrinsicParameters();
-        Point3D cameraCenter2 = camera.getCameraCenter();
+        var cameraCenter2 = camera.getCameraCenter();
 
         homCameraCenter = new HomogeneousPoint3D(cameraCenter2);
         homCameraCenter.normalize();
@@ -360,15 +328,11 @@ public class PinholeCameraTest {
         }
 
         // compare intrinsic parameters
-        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         // compare camera centers
         assertTrue(cameraCenter.equals(cameraCenter2, LARGE_ABSOLUTE_ERROR));
@@ -376,34 +340,25 @@ public class PinholeCameraTest {
         // test constructor with point correspondences
 
         // create intrinsic parameters
-        horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2,
-                MAX_FOCAL_LENGTH2);
-        verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2,
-                MAX_FOCAL_LENGTH2);
+        horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
+        verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
         skewness = randomizer.nextDouble(MIN_SKEWNESS2, MAX_SKEWNESS2);
-        horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                MAX_PRINCIPAL_POINT);
-        verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                MAX_PRINCIPAL_POINT);
+        horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                verticalFocalLength, horizontalPrincipalPoint,
-                verticalPrincipalPoint, skewness);
+        intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // create rotation parameters
-        alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
-        betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
-        gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
+        alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
 
         rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // create camera center
         cameraCenterArray = new double[INHOM_3D_COORDS];
-        randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE,
-                MAX_RANDOM_POINT_VALUE);
+        randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE);
         cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
@@ -413,57 +368,39 @@ public class PinholeCameraTest {
         camera.normalize();
 
         // create 6 point correspondences
-        final Point3D point3D1 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+        final var point3D1 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
         Point3D point3D2 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
         final Point3D point3D3 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
         final Point3D point3D4 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
         final Point3D point3D5 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
         final Point3D point3D6 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
 
-        final Point2D point2D1 = camera.project(point3D1);
-        Point2D point2D2 = camera.project(point3D2);
-        final Point2D point2D3 = camera.project(point3D3);
-        final Point2D point2D4 = camera.project(point3D4);
-        final Point2D point2D5 = camera.project(point3D5);
-        final Point2D point2D6 = camera.project(point3D6);
+        final var point2D1 = camera.project(point3D1);
+        var point2D2 = camera.project(point3D2);
+        final var point2D3 = camera.project(point3D3);
+        final var point2D4 = camera.project(point3D4);
+        final var point2D5 = camera.project(point3D5);
+        final var point2D6 = camera.project(point3D6);
 
-        final List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        final var points3D = new ArrayList<Point3D>(N_POINTS);
         points3D.add(point3D1);
         points3D.add(point3D2);
         points3D.add(point3D3);
@@ -471,34 +408,26 @@ public class PinholeCameraTest {
         points3D.add(point3D5);
         points3D.add(point3D6);
 
-        final List<Point2D> points2D = camera.project(points3D);
+        final var points2D = camera.project(points3D);
 
-        camera = new PinholeCamera(point3D1, point3D2, point3D3, point3D4,
-                point3D5, point3D6, point2D1, point2D2, point2D3, point2D4,
-                point2D5, point2D6);
-        final DLTPointCorrespondencePinholeCameraEstimator estimator =
-                new DLTPointCorrespondencePinholeCameraEstimator(points3D,
-                        points2D);
+        camera = new PinholeCamera(point3D1, point3D2, point3D3, point3D4, point3D5, point3D6, point2D1, point2D2,
+                point2D3, point2D4, point2D5, point2D6);
+        final var estimator = new DLTPointCorrespondencePinholeCameraEstimator(points3D, points2D);
         estimator.setLMSESolutionAllowed(false);
-        PinholeCamera estimatedCamera = estimator.estimate();
+        var estimatedCamera = estimator.estimate();
 
         // check equal-ness of cameras
         camera.decompose();
         estimatedCamera.decompose();
 
         intrinsic2 = camera.getIntrinsicParameters();
-        PinholeCameraIntrinsicParameters intrinsic3 =
-                estimatedCamera.getIntrinsicParameters();
+        var intrinsic3 = estimatedCamera.getIntrinsicParameters();
 
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalFocalLength(), intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalFocalLength(), intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalPrincipalPoint(), intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalPrincipalPoint(), intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         rotation2 = camera.getCameraRotation();
         Rotation3D rotation3 = estimatedCamera.getCameraRotation();
@@ -506,7 +435,7 @@ public class PinholeCameraTest {
         assertTrue(rotation2.equals(rotation3, ABSOLUTE_ERROR));
 
         cameraCenter2 = camera.getCameraCenter();
-        Point3D cameraCenter3 = estimatedCamera.getCameraCenter();
+        var cameraCenter3 = estimatedCamera.getCameraCenter();
 
         assertTrue(cameraCenter2.equals(cameraCenter3, ABSOLUTE_ERROR));
 
@@ -514,15 +443,10 @@ public class PinholeCameraTest {
         // degeneracy
         point3D2 = point3D1;
         point2D2 = camera.project(point3D2);
-        camera = null;
-        try {
-            camera = new PinholeCamera(point3D1, point3D2, point3D3, point3D4,
-                    point3D5, point3D6, point2D1, point2D2, point2D3, point2D4,
-                    point2D5, point2D6);
-            fail("CameraException expected but not thrown");
-        } catch (final CameraException ignore) {
-        }
-        assertNull(camera);
+        final var wrongPoint3D2 = point3D2;
+        final var wrongPoint2D2 = point2D2;
+        assertThrows(CameraException.class, () -> new PinholeCamera(point3D1, wrongPoint3D2, point3D3, point3D4,
+                point3D5, point3D6, point2D1, wrongPoint2D2, point2D3, point2D4, point2D5, point2D6));
 
         // constructor with line/plane correspondence
 
@@ -530,48 +454,34 @@ public class PinholeCameraTest {
         camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // create 4 2D lines
-        final Line2D line2D1 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
-        Line2D line2D2 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
-        final Line2D line2D3 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
-        final Line2D line2D4 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                        MAX_RANDOM_LINE_VALUE));
+        final var line2D1 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
+        var line2D2 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
+        final var line2D3 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
+        final var line2D4 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
 
-        final Plane plane1 = camera.backProject(line2D1);
-        Plane plane2 = camera.backProject(line2D2);
-        final Plane plane3 = camera.backProject(line2D3);
-        final Plane plane4 = camera.backProject(line2D4);
+        final var plane1 = camera.backProject(line2D1);
+        var plane2 = camera.backProject(line2D2);
+        final var plane3 = camera.backProject(line2D3);
+        final var plane4 = camera.backProject(line2D4);
 
-        final List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
+        final var lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
         lines2D.add(line2D1);
         lines2D.add(line2D2);
         lines2D.add(line2D3);
         lines2D.add(line2D4);
 
-        final List<Plane> planes = camera.backProjectLines(lines2D);
+        final var planes = camera.backProjectLines(lines2D);
 
-        camera = new PinholeCamera(plane1, plane2, plane3, plane4,
-                line2D1, line2D2, line2D3, line2D4);
-        final DLTLinePlaneCorrespondencePinholeCameraEstimator estimator2 =
-                new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, lines2D);
+        camera = new PinholeCamera(plane1, plane2, plane3, plane4, line2D1, line2D2, line2D3, line2D4);
+        final var estimator2 = new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, lines2D);
         estimator2.setLMSESolutionAllowed(false);
         estimatedCamera = estimator2.estimate();
 
@@ -582,15 +492,12 @@ public class PinholeCameraTest {
         intrinsic2 = camera.getIntrinsicParameters();
         intrinsic3 = estimatedCamera.getIntrinsicParameters();
 
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalFocalLength(), intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalFocalLength(), intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalPrincipalPoint(), intrinsic3.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalPrincipalPoint(), intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         rotation2 = camera.getCameraRotation();
         rotation3 = estimatedCamera.getCameraRotation();
@@ -606,118 +513,90 @@ public class PinholeCameraTest {
         // degeneracy
         line2D2 = line2D1;
         plane2 = camera.backProject(line2D2);
-        camera = null;
-        try {
-            camera = new PinholeCamera(plane1, plane2, plane3, plane4,
-                    line2D1, line2D4, line2D3, line2D4);
-            fail("CameraException expected but not thrown");
-        } catch (final CameraException ignore) {
-        }
-        assertNull(camera);
+        final var wrongPlane2 = plane2;
+        assertThrows(CameraException.class, () -> new PinholeCamera(plane1, wrongPlane2, plane3, plane4, line2D1,
+                line2D4, line2D3, line2D4));
     }
 
     @Test
-    public void testProjectPoints() throws WrongSizeException {
+    void testProjectPoints() throws WrongSizeException {
         // create intrinsic parameters
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var randomizer = new UniformRandomizer();
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
         // rotation
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
-        final Matrix internalMatrix = camera.getInternalMatrix();
+        final var internalMatrix = camera.getInternalMatrix();
 
         assertEquals(PINHOLE_CAMERA_ROWS, internalMatrix.getRows());
         assertEquals(PINHOLE_CAMERA_COLS, internalMatrix.getColumns());
 
         // project list of world points
-        final int nPoints = randomizer.nextInt(MIN_NUMBER_POINTS, MAX_NUMBER_POINTS);
+        final var nPoints = randomizer.nextInt(MIN_NUMBER_POINTS, MAX_NUMBER_POINTS);
 
-        final List<Point3D> worldPointList = new ArrayList<>(nPoints);
-        final Matrix worldPointListMatrix = new Matrix(nPoints,
-                Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
-        for (int i = 0; i < nPoints; i++) {
-            final double[] pointArray = new double[
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
+        final var worldPointList = new ArrayList<Point3D>(nPoints);
+        final var worldPointListMatrix = new Matrix(nPoints, Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
+        for (var i = 0; i < nPoints; i++) {
+            final var pointArray = new double[Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(pointArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Point3D point = new HomogeneousPoint3D(pointArray);
+            final var point = new HomogeneousPoint3D(pointArray);
             worldPointList.add(point);
             worldPointListMatrix.setSubmatrix(i, 0, i,
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH - 1,
-                    pointArray);
+                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH - 1, pointArray);
         }
 
-        final Matrix transWorldPointListMatrix =
-                worldPointListMatrix.transposeAndReturnNew();
+        final var transWorldPointListMatrix = worldPointListMatrix.transposeAndReturnNew();
 
-        final Matrix transImagePointListMatrix =
-                internalMatrix.multiplyAndReturnNew(transWorldPointListMatrix);
+        final var transImagePointListMatrix = internalMatrix.multiplyAndReturnNew(transWorldPointListMatrix);
 
-        final Matrix imagePointListMatrix =
-                transImagePointListMatrix.transposeAndReturnNew();
+        final var imagePointListMatrix = transImagePointListMatrix.transposeAndReturnNew();
 
         // list of image points projected by ourselves
-        final List<Point2D> imagePointList = new ArrayList<>(nPoints);
-        for (int i = 0; i < nPoints; i++) {
-            final double[] pointArray = new double[
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];
+        final var imagePointList = new ArrayList<Point2D>(nPoints);
+        for (var i = 0; i < nPoints; i++) {
+            final var pointArray = new double[Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];
             imagePointListMatrix.getSubmatrixAsArray(i, 0, i,
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH - 1,
-                    pointArray);
-            final Point2D point = new HomogeneousPoint2D(pointArray);
+                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH - 1, pointArray);
+            final var point = new HomogeneousPoint2D(pointArray);
             imagePointList.add(point);
         }
 
         // list of image points to be tested
-        final List<Point2D> imagePointList2 = camera.project(worldPointList);
-        final List<Point2D> imagePointList3 = new ArrayList<>();
+        final var imagePointList2 = camera.project(worldPointList);
+        final var imagePointList3 = new ArrayList<Point2D>();
         camera.project(worldPointList, imagePointList3);
 
         assertEquals(imagePointList2.size(), nPoints);
         assertEquals(imagePointList.size(), nPoints);
 
-        final Iterator<Point2D> iterator = imagePointList.iterator();
-        final Iterator<Point2D> iterator2 = imagePointList2.iterator();
-        final Iterator<Point3D> iteratorWorld = worldPointList.iterator();
+        final var iterator = imagePointList.iterator();
+        final var iterator2 = imagePointList2.iterator();
+        final var iteratorWorld = worldPointList.iterator();
 
-        Point2D imagePoint;
-        Point2D imagePoint2;
-        while (iterator.hasNext() && iterator2.hasNext() &&
-                iteratorWorld.hasNext()) {
-            imagePoint = iterator.next();
-            imagePoint2 = iterator2.next();
+        while (iterator.hasNext() && iterator2.hasNext() && iteratorWorld.hasNext()) {
+            final var imagePoint = iterator.next();
+            final var imagePoint2 = iterator2.next();
 
             assertTrue(imagePoint.equals(imagePoint2, ABSOLUTE_ERROR));
         }
@@ -725,23 +604,18 @@ public class PinholeCameraTest {
         assertEquals(imagePointList2, imagePointList3);
 
         // project single world point
-        final double[] homWorldPointArray = new double[
-                Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
+        final var homWorldPointArray = new double[Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
         randomizer.fill(homWorldPointArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        HomogeneousPoint3D homWorldPoint = new HomogeneousPoint3D(
-                homWorldPointArray);
+        var homWorldPoint = new HomogeneousPoint3D(homWorldPointArray);
 
-        imagePoint = camera.project(homWorldPoint);
+        var imagePoint = camera.project(homWorldPoint);
 
-        Matrix homImagePointMatrix = internalMatrix.multiplyAndReturnNew(
+        var homImagePointMatrix = internalMatrix.multiplyAndReturnNew(
                 Matrix.newFromArray(homWorldPointArray, true));
 
-        double scaleX = imagePoint.getHomX() /
-                homImagePointMatrix.getElementAtIndex(0);
-        double scaleY = imagePoint.getHomY() /
-                homImagePointMatrix.getElementAtIndex(1);
-        double scaleW = imagePoint.getHomW() /
-                homImagePointMatrix.getElementAtIndex(2);
+        var scaleX = imagePoint.getHomX() / homImagePointMatrix.getElementAtIndex(0);
+        var scaleY = imagePoint.getHomY() / homImagePointMatrix.getElementAtIndex(1);
+        var scaleW = imagePoint.getHomW() / homImagePointMatrix.getElementAtIndex(2);
 
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
@@ -757,12 +631,9 @@ public class PinholeCameraTest {
         homImagePointMatrix = internalMatrix.multiplyAndReturnNew(
                 Matrix.newFromArray(homWorldPointArray, true));
 
-        scaleX = imagePoint.getHomX() /
-                homImagePointMatrix.getElementAtIndex(0);
-        scaleY = imagePoint.getHomY() /
-                homImagePointMatrix.getElementAtIndex(1);
-        scaleW = imagePoint.getHomW() /
-                homImagePointMatrix.getElementAtIndex(2);
+        scaleX = imagePoint.getHomX() / homImagePointMatrix.getElementAtIndex(0);
+        scaleY = imagePoint.getHomY() / homImagePointMatrix.getElementAtIndex(1);
+        scaleW = imagePoint.getHomW() / homImagePointMatrix.getElementAtIndex(2);
 
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
@@ -770,69 +641,57 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testBackProjectLines() throws WrongSizeException,
-            NotReadyException, LockedException, DecomposerException,
+    void testBackProjectLines() throws WrongSizeException, NotReadyException, LockedException, DecomposerException,
             com.irurueta.algebra.NotAvailableException {
 
         // create intrinsic parameters
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var randomizer = new UniformRandomizer();
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
         // rotation
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
-        final Matrix cameraMatrix = camera.getInternalMatrix();
+        final var cameraMatrix = camera.getInternalMatrix();
 
         // instantiate random line to back-project
-        final double[] lineArray = new double[HOM_2D_COORDS];
+        final var lineArray = new double[HOM_2D_COORDS];
         randomizer.fill(lineArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix lineMatrix = Matrix.newFromArray(lineArray, true);
+        final var lineMatrix = Matrix.newFromArray(lineArray, true);
 
-        final Line2D line = new Line2D(lineArray);
+        final var line = new Line2D(lineArray);
 
-        final Matrix transCameraMatrix = cameraMatrix.transposeAndReturnNew();
+        final var transCameraMatrix = cameraMatrix.transposeAndReturnNew();
 
-        final Matrix planeMatrix = transCameraMatrix.multiplyAndReturnNew(
-                lineMatrix);
+        final var planeMatrix = transCameraMatrix.multiplyAndReturnNew(lineMatrix);
 
-        Plane plane = camera.backProject(line);
-        final Plane plane2 = new Plane();
+        var plane = camera.backProject(line);
+        final var plane2 = new Plane();
         camera.backProject(line, plane2);
 
-        double scaleA = plane.getA() / planeMatrix.getElementAtIndex(0);
-        double scaleB = plane.getB() / planeMatrix.getElementAtIndex(1);
-        double scaleC = plane.getC() / planeMatrix.getElementAtIndex(2);
-        double scaleD = plane.getD() / planeMatrix.getElementAtIndex(3);
+        var scaleA = plane.getA() / planeMatrix.getElementAtIndex(0);
+        var scaleB = plane.getB() / planeMatrix.getElementAtIndex(1);
+        var scaleC = plane.getC() / planeMatrix.getElementAtIndex(2);
+        var scaleD = plane.getD() / planeMatrix.getElementAtIndex(3);
 
         assertEquals(scaleA, scaleB, ABSOLUTE_ERROR);
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
@@ -859,12 +718,12 @@ public class PinholeCameraTest {
         // provided line
 
         // row matrix containing plane parameters
-        final Matrix a = planeMatrix.transposeAndReturnNew();
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+        final var a = planeMatrix.transposeAndReturnNew();
+        final var decomposer = new SingularValueDecomposer(a);
         decomposer.decompose();
 
         // a row matrix 1x4 will have rank 1 and nullity 3 (1 + 3 = 4)
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
         assertEquals(1, decomposer.getRank());
         assertEquals(3, decomposer.getNullity());
 
@@ -872,13 +731,13 @@ public class PinholeCameraTest {
         // These three columns correspond to homogeneous 3D point coordinates
         // that belong to back-projected plane. Any linear-combination of such
         // three 3D points will also belong to such plane
-        final HomogeneousPoint3D worldPoint1 = new HomogeneousPoint3D(
+        final var worldPoint1 = new HomogeneousPoint3D(
                 v.getElementAt(0, 1), v.getElementAt(1, 1),
                 v.getElementAt(2, 1), v.getElementAt(3, 1));
-        final HomogeneousPoint3D worldPoint2 = new HomogeneousPoint3D(
+        final var worldPoint2 = new HomogeneousPoint3D(
                 v.getElementAt(0, 2), v.getElementAt(1, 2),
                 v.getElementAt(2, 2), v.getElementAt(3, 2));
-        final HomogeneousPoint3D worldPoint3 = new HomogeneousPoint3D(
+        final var worldPoint3 = new HomogeneousPoint3D(
                 v.getElementAt(0, 3), v.getElementAt(1, 3),
                 v.getElementAt(2, 3), v.getElementAt(3, 3));
 
@@ -888,9 +747,9 @@ public class PinholeCameraTest {
         assertTrue(plane.isLocus(worldPoint3, ABSOLUTE_ERROR));
 
         // project world points
-        final Point2D imagePoint1 = camera.project(worldPoint1);
-        final Point2D imagePoint2 = camera.project(worldPoint2);
-        final Point2D imagePoint3 = camera.project(worldPoint3);
+        final var imagePoint1 = camera.project(worldPoint1);
+        final var imagePoint2 = camera.project(worldPoint2);
+        final var imagePoint3 = camera.project(worldPoint3);
 
         // check that projected image points belong to line
         assertTrue(line.isLocus(imagePoint1, ABSOLUTE_ERROR));
@@ -899,69 +758,59 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testBackprojectPoints() throws CameraException {
+    void testBackprojectPoints() throws CameraException {
         // create intrinsic parameters
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var randomizer = new UniformRandomizer();
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
         // rotation
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                cameraCenterArray);
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // instantiate random 3D point
-        final double[] worldPointArray = new double[HOM_3D_COORDS];
+        final var worldPointArray = new double[HOM_3D_COORDS];
         randomizer.fill(worldPointArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final HomogeneousPoint3D worldPoint = new HomogeneousPoint3D(worldPointArray);
+        final var worldPoint = new HomogeneousPoint3D(worldPointArray);
 
         // project it
-        Point2D imagePoint = camera.project(worldPoint);
+        var imagePoint = camera.project(worldPoint);
 
         // test that any point on such ray of light at any random distance will
         // project on the same image point
-        final Point3D rayOfLight = camera.backProject(imagePoint);
-        final Point3D rayOfLight2 = Point3D.create();
+        final var rayOfLight = camera.backProject(imagePoint);
+        final var rayOfLight2 = Point3D.create();
         camera.backProject(imagePoint, rayOfLight2);
 
-        Point2D imagePoint2 = camera.project(rayOfLight);
+        var imagePoint2 = camera.project(rayOfLight);
 
         assertTrue(imagePoint.equals(imagePoint2, ABSOLUTE_ERROR));
         assertEquals(rayOfLight, rayOfLight2);
 
         // now make a list of world points
-        final int nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
+        final var nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
 
-        final List<Point3D> worldPointList = new ArrayList<>(nPoints);
-        for (int i = 0; i < nPoints; i++) {
-            final HomogeneousPoint3D point = new HomogeneousPoint3D(
+        final var worldPointList = new ArrayList<Point3D>(nPoints);
+        for (var i = 0; i < nPoints; i++) {
+            final var point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -970,24 +819,23 @@ public class PinholeCameraTest {
         }
 
         // project list of world points into image points
-        final List<Point2D> imagePointList = camera.project(worldPointList);
+        final var imagePointList = camera.project(worldPointList);
 
         // back project image points to obtain a list of world points containing
         // rays of light
-        final List<Point3D> worldPointList2 = camera.backProjectPoints(
-                imagePointList);
-        final List<Point3D> worldPointList3 = new ArrayList<>();
+        final var worldPointList2 = camera.backProjectPoints(imagePointList);
+        final var worldPointList3 = new ArrayList<Point3D>();
         camera.backProjectPoints(imagePointList, worldPointList3);
 
         // project again to ensure that projected rays of light produce the same
         // image points
-        final List<Point2D> imagePointList2 = camera.project(worldPointList2);
-        final List<Point2D> imagePointList3 = camera.project(worldPointList3);
+        final var imagePointList2 = camera.project(worldPointList2);
+        final var imagePointList3 = camera.project(worldPointList3);
 
         // iterate over image lists and check that both are equal
-        final Iterator<Point2D> iterator1 = imagePointList.iterator();
-        final Iterator<Point2D> iterator2 = imagePointList2.iterator();
-        final Iterator<Point2D> iterator3 = imagePointList3.iterator();
+        final var iterator1 = imagePointList.iterator();
+        final var iterator2 = imagePointList2.iterator();
+        final var iterator3 = imagePointList3.iterator();
 
         while (iterator1.hasNext() && iterator2.hasNext() && iterator3.hasNext()) {
             imagePoint = iterator1.next();
@@ -1000,75 +848,65 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testDecomposeGetCameraRotationIntrinsicsCenterAndImageOfWorldOrigin()
-            throws RotationException, WrongSizeException, CameraException,
-            NotAvailableException {
+    void testDecomposeGetCameraRotationIntrinsicsCenterAndImageOfWorldOrigin() throws RotationException,
+            WrongSizeException, CameraException, NotAvailableException {
 
         // create intrinsic parameters
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var randomizer = new UniformRandomizer();
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
         // rotation
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final Matrix intrinsicMatrix = intrinsic.getInternalMatrix();
+        final var intrinsicMatrix = intrinsic.getInternalMatrix();
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
-        final Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var rotationMatrix = rotation.asInhomogeneousMatrix();
 
-        final double[] axis = rotation.getRotationAxis();
-        final double theta = rotation.getRotationAngle();
+        final var axis = rotation.getRotationAxis();
+        final var theta = rotation.getRotationAngle();
 
         // image of world origin
-        final double[] originImageArray = new double[INHOM_2D_COORDS];
+        final var originImageArray = new double[INHOM_2D_COORDS];
         randomizer.fill(originImageArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint2D originImage = new InhomogeneousPoint2D(originImageArray);
+        final var originImage = new InhomogeneousPoint2D(originImageArray);
 
         // camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // test constructor with intrinsic parameters, rotation and image of
         // origin
-        PinholeCamera camera = new PinholeCamera(intrinsic, rotation, originImage);
+        var camera = new PinholeCamera(intrinsic, rotation, originImage);
         assertFalse(camera.isCameraCenterAvailable());
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
 
         // build internal camera matrix
-        Matrix cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS,
-                PINHOLE_CAMERA_COLS);
-        Matrix mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
-            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
+        var cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
+        var mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
+        for (var v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (var u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, mp.getElementAt(u, v));
             }
         }
 
-        // set last column of camera matrix with homogeneous coordinates of image
-        // of world origin
+        // set last column of camera matrix with homogeneous coordinates of image of world origin
         cameraMatrix2.setElementAt(0, 3, originImage.getHomX());
         cameraMatrix2.setElementAt(1, 3, originImage.getHomY());
         cameraMatrix2.setElementAt(2, 3, originImage.getHomW());
 
-        Matrix cameraMatrix = camera.getInternalMatrix();
+        var cameraMatrix = camera.getInternalMatrix();
 
         // compare matrices cameraMatrix and cameraMatrix2
         assertTrue(cameraMatrix.equals(cameraMatrix2, ABSOLUTE_ERROR));
@@ -1081,28 +919,26 @@ public class PinholeCameraTest {
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
 
-        Rotation3D rotation2 = camera.getCameraRotation();
-        PinholeCameraIntrinsicParameters intrinsic2 =
-                camera.getIntrinsicParameters();
-        final Point2D originImage2 = camera.getImageOfWorldOrigin();
+        var rotation2 = camera.getCameraRotation();
+        var intrinsic2 = camera.getIntrinsicParameters();
+        final var originImage2 = camera.getImageOfWorldOrigin();
 
         // obtain rotation axis and angle from 2nd rotation
-        double[] axis2 = rotation2.getRotationAxis();
-        double theta2 = rotation2.getRotationAngle();
+        var axis2 = rotation2.getRotationAxis();
+        var theta2 = rotation2.getRotationAngle();
 
         // check correctness of axis and angle
 
         // axis can be equal up to sign
-        double scaleAxisX = axis[0] / axis2[0];
-        double scaleAxisY = axis[1] / axis2[1];
-        double scaleAxisZ = axis[2] / axis2[2];
+        var scaleAxisX = axis[0] / axis2[0];
+        var scaleAxisY = axis[1] / axis2[1];
+        var scaleAxisZ = axis[2] / axis2[2];
 
         assertEquals(scaleAxisX, scaleAxisY, ABSOLUTE_ERROR);
         assertEquals(scaleAxisY, scaleAxisZ, ABSOLUTE_ERROR);
         assertEquals(scaleAxisZ, scaleAxisX, ABSOLUTE_ERROR);
 
-        // if sign of rotation axis is the opposite (-1.0), then theta will be
-        // -theta (opposite sign)
+        // if sign of rotation axis is the opposite (-1.0), then theta will be -theta (opposite sign)
         if (scaleAxisX > 0.0) {
             assertEquals(theta2, theta, ABSOLUTE_ERROR);
         } else {
@@ -1110,15 +946,11 @@ public class PinholeCameraTest {
         }
 
         // compare intrinsic parameters
-        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         // Compare images of origin
         assertTrue(originImage.equals(originImage2, ABSOLUTE_ERROR));
@@ -1132,21 +964,19 @@ public class PinholeCameraTest {
         // build internal matrix
         cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
         mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
-            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
+        for (var v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (var u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, mp.getElementAt(u, v));
             }
         }
 
-        Matrix inhomCenter = new Matrix(PINHOLE_CAMERA_ROWS, 1);
+        var inhomCenter = new Matrix(PINHOLE_CAMERA_ROWS, 1);
         inhomCenter.setElementAtIndex(0, cameraCenter.getInhomX());
         inhomCenter.setElementAtIndex(1, cameraCenter.getInhomY());
         inhomCenter.setElementAtIndex(2, cameraCenter.getInhomZ());
-        final Matrix p4 = mp.multiplyAndReturnNew(inhomCenter).
-                multiplyByScalarAndReturnNew(-1.0);
+        final var p4 = mp.multiplyAndReturnNew(inhomCenter).multiplyByScalarAndReturnNew(-1.0);
 
-        // set last column of camera matrix with homogeneous coordinates of image
-        // of world origin
+        // set last column of camera matrix with homogeneous coordinates of image of world origin
         cameraMatrix.setElementAt(0, 3, p4.getElementAtIndex(0));
         cameraMatrix.setElementAt(1, 3, p4.getElementAtIndex(1));
         cameraMatrix.setElementAt(2, 3, p4.getElementAtIndex(2));
@@ -1154,15 +984,14 @@ public class PinholeCameraTest {
         cameraMatrix = camera.getInternalMatrix();
 
         // test that camera center is the null-space of camera matrix
-        final Matrix homCenter = new Matrix(PINHOLE_CAMERA_COLS, 1);
-        HomogeneousPoint3D homCameraCenter = new HomogeneousPoint3D(
-                cameraCenter);
+        final var homCenter = new Matrix(PINHOLE_CAMERA_COLS, 1);
+        var homCameraCenter = new HomogeneousPoint3D(cameraCenter);
         homCameraCenter.normalize();
         homCenter.setElementAtIndex(0, homCameraCenter.getHomX());
         homCenter.setElementAtIndex(1, homCameraCenter.getHomY());
         homCenter.setElementAtIndex(2, homCameraCenter.getHomZ());
         homCenter.setElementAtIndex(3, homCameraCenter.getHomW());
-        Matrix nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
+        var nullMatrix = cameraMatrix.multiplyAndReturnNew(homCenter);
         assertEquals(0.0, nullMatrix.getElementAtIndex(0), ABSOLUTE_ERROR);
         assertEquals(0.0, nullMatrix.getElementAtIndex(1), ABSOLUTE_ERROR);
         assertEquals(0.0, nullMatrix.getElementAtIndex(2), ABSOLUTE_ERROR);
@@ -1180,7 +1009,7 @@ public class PinholeCameraTest {
 
         rotation2 = camera.getCameraRotation();
         intrinsic2 = camera.getIntrinsicParameters();
-        final Point3D cameraCenter2 = camera.getCameraCenter();
+        final var cameraCenter2 = camera.getCameraCenter();
 
         homCameraCenter = new HomogeneousPoint3D(cameraCenter2);
         homCameraCenter.normalize();
@@ -1217,15 +1046,11 @@ public class PinholeCameraTest {
         }
 
         // compare intrinsic parameters
-        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalFocalLength, intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(verticalFocalLength, intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(skewness, intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(),
-                ABSOLUTE_ERROR);
-        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(),
-                ABSOLUTE_ERROR);
+        assertEquals(horizontalPrincipalPoint, intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(verticalPrincipalPoint, intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         // compare camera centers
         assertTrue(cameraCenter.equals(cameraCenter2, ABSOLUTE_ERROR));
@@ -1284,24 +1109,20 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testNormalize() throws WrongSizeException {
-        final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testNormalize() throws WrongSizeException {
+        final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final PinholeCamera camera = new PinholeCamera(cameraMatrix);
+        final var camera = new PinholeCamera(cameraMatrix);
 
-        final double norm = Math.sqrt(
-                Math.pow(cameraMatrix.getElementAt(2, 0), 2.0) +
-                        Math.pow(cameraMatrix.getElementAt(2, 1), 2.0) +
-                        Math.pow(cameraMatrix.getElementAt(2, 2), 2.0));
+        final var norm = Math.sqrt(Math.pow(cameraMatrix.getElementAt(2, 0), 2.0)
+                + Math.pow(cameraMatrix.getElementAt(2, 1), 2.0)
+                + Math.pow(cameraMatrix.getElementAt(2, 2), 2.0));
 
         // normalize and copy
-        final Matrix cameraMatrix2 = cameraMatrix.multiplyByScalarAndReturnNew(
-                1.0 / norm);
+        final var cameraMatrix2 = cameraMatrix.multiplyByScalarAndReturnNew(1.0 / norm);
 
-        // normalize camera which also normalizes internal matrix passed by
-        // reference
+        // normalize camera which also normalizes internal matrix passed by reference
         camera.normalize();
 
         // compare both matrices
@@ -1309,29 +1130,26 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testCameraSign() throws WrongSizeException, DecomposerException,
-            CameraException {
+    void testCameraSign() throws WrongSizeException, DecomposerException, CameraException {
 
-        final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final PinholeCamera camera = new PinholeCamera(cameraMatrix);
+        final var camera = new PinholeCamera(cameraMatrix);
 
         // obtain camera sign and check correctness
-        final Matrix mp = cameraMatrix.getSubmatrix(0, 0,
-                2, 2);
+        final var mp = cameraMatrix.getSubmatrix(0, 0, 2, 2);
 
-        final double detMp = com.irurueta.algebra.Utils.det(mp);
+        final var detMp = com.irurueta.algebra.Utils.det(mp);
 
-        final double cameraSign = (detMp > 0.0) ? 1.0 : -1.0;
-        final double cameraSign2 = camera.getCameraSign();
+        final var cameraSign = (detMp > 0.0) ? 1.0 : -1.0;
+        final var cameraSign2 = camera.getCameraSign();
 
         assertEquals(cameraSign, cameraSign2, ABSOLUTE_ERROR);
 
         // set threshold equal to detMp
-        final double cameraSign3 = camera.getCameraSign(detMp);
-        assertEquals(cameraSign3, -1.0, ABSOLUTE_ERROR);
+        final var cameraSign3 = camera.getCameraSign(detMp);
+        assertEquals(-1.0, cameraSign3, ABSOLUTE_ERROR);
 
         // camera hasn't fixed sign yet
         assertFalse(camera.isCameraSignFixed());
@@ -1343,48 +1161,36 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testGetSetInternalMatrix() throws WrongSizeException {
-        final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testGetSetInternalMatrix() throws WrongSizeException {
+        final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final PinholeCamera camera = new PinholeCamera(cameraMatrix);
-        assertTrue(cameraMatrix.equals(camera.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        final var camera = new PinholeCamera(cameraMatrix);
+        assertTrue(cameraMatrix.equals(camera.getInternalMatrix(), ABSOLUTE_ERROR));
 
         // set new camera matrix
-        final Matrix cameraMatrix2 = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var cameraMatrix2 = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         camera.setInternalMatrix(cameraMatrix2);
-        assertTrue(cameraMatrix2.equals(camera.getInternalMatrix(),
-                ABSOLUTE_ERROR));
+        assertTrue(cameraMatrix2.equals(camera.getInternalMatrix(), ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testGetSetCameraRotation() throws CameraException, NotAvailableException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testGetSetCameraRotation() throws CameraException, NotAvailableException {
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // instantiate canonical camera
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
         assertFalse(camera.isCameraRotationAvailable());
 
         // Force NotAvailableException
-        try {
-            camera.getCameraRotation();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, camera::getCameraRotation);
 
         // set new rotation
         camera.setCameraRotation(rotation);
@@ -1398,45 +1204,32 @@ public class PinholeCameraTest {
         assertTrue(camera.isCameraRotationAvailable());
 
         // retrieve new rotation instance
-        final Rotation3D rotation2 = camera.getCameraRotation();
+        final var rotation2 = camera.getCameraRotation();
 
         // compare euler angles
-        assertTrue(rotation2.asInhomogeneousMatrix().equals(
-                rotation.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        assertTrue(rotation2.asInhomogeneousMatrix().equals(rotation.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testGetSetIntrinsicsAndAvailability() throws CameraException,
-            NotAvailableException {
-        final UniformRandomizer randomizer =
-                new UniformRandomizer(new Random());
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+    void testGetSetIntrinsicsAndAvailability() throws CameraException, NotAvailableException {
+        final var randomizer = new UniformRandomizer();
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final PinholeCameraIntrinsicParameters k =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var k = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // instantiate canonical camera
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
         assertFalse(camera.areIntrinsicParametersAvailable());
 
         // Force NotAvailableException
-        try {
-            camera.getIntrinsicParameters();
-            fail("NotAvailableException expected but not thrown");
-        } catch (final NotAvailableException ignore) {
-        }
+        assertThrows(NotAvailableException.class, camera::getIntrinsicParameters);
 
         // set new intrinsic parameters
         camera.setIntrinsicParameters(k);
@@ -1450,7 +1243,7 @@ public class PinholeCameraTest {
         assertTrue(camera.areIntrinsicParametersAvailable());
 
         // retrieve new intrinsics instance
-        final PinholeCameraIntrinsicParameters k2 = camera.getIntrinsicParameters();
+        final var k2 = camera.getIntrinsicParameters();
 
         // compare intrinsic parameters
         assertEquals(horizontalFocalLength, k2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -1461,27 +1254,24 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testRotate() throws WrongSizeException, CameraException,
-            NotAvailableException, RotationException {
+    void testRotate() throws WrongSizeException, CameraException, NotAvailableException, RotationException {
 
-        final Matrix axisMatrix = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double norm = com.irurueta.algebra.Utils.normF(axisMatrix);
+        final var axisMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var norm = com.irurueta.algebra.Utils.normF(axisMatrix);
         axisMatrix.multiplyByScalar(1.0 / norm);
 
-        final double[] axisArray = axisMatrix.toArray();
+        final var axisArray = axisMatrix.toArray();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double theta2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var theta1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var theta2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final Rotation3D rotation1 = new MatrixRotation3D(axisArray, theta1);
-        final Rotation3D rotation2 = new MatrixRotation3D(axisArray, theta2);
+        final var rotation1 = new MatrixRotation3D(axisArray, theta1);
+        final var rotation2 = new MatrixRotation3D(axisArray, theta2);
 
         // instantiate canonical camera
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
 
         // set initial rotation with computed axis and rotation angle theta1
         camera.setCameraRotation(rotation1);
@@ -1491,16 +1281,16 @@ public class PinholeCameraTest {
         assertTrue(camera.isCameraRotationAvailable());
 
         // obtain current rotation
-        final Rotation3D rotation3 = camera.getCameraRotation();
+        final var rotation3 = camera.getCameraRotation();
 
         // obtain current axis and rotation angle
-        final double[] axis3 = rotation3.getRotationAxis();
-        final double theta3 = rotation3.getRotationAngle();
+        final var axis3 = rotation3.getRotationAxis();
+        final var theta3 = rotation3.getRotationAngle();
 
         // check that rotation axis is equal up to sign
-        final double scaleX = axisArray[0] / axis3[0];
-        final double scaleY = axisArray[1] / axis3[1];
-        final double scaleZ = axisArray[2] / axis3[2];
+        final var scaleX = axisArray[0] / axis3[0];
+        final var scaleY = axisArray[1] / axis3[1];
+        final var scaleZ = axisArray[2] / axis3[2];
 
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
@@ -1516,52 +1306,41 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testPointAt() throws WrongSizeException, CameraException,
-            NotAvailableException {
+    void testPointAt() throws WrongSizeException, CameraException, NotAvailableException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Matrix centerMatrix = Matrix.createWithUniformRandomValues(
-                    INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var centerMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(
                     centerMatrix.getElementAtIndex(0),
                     centerMatrix.getElementAtIndex(1),
                     centerMatrix.getElementAtIndex(2));
 
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            final var randomizer = new UniformRandomizer();
+            final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                    MAX_FOCAL_LENGTH);
-            final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                    MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                    gammaEuler);
+            final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                            verticalFocalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // random camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // point to a new random location
-            final Matrix pointAtMatrix = Matrix.createWithUniformRandomValues(
-                    INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D pointAt = new InhomogeneousPoint3D(
+            final var pointAtMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var pointAt = new InhomogeneousPoint3D(
                     pointAtMatrix.getElementAtIndex(0),
                     pointAtMatrix.getElementAtIndex(1),
                     pointAtMatrix.getElementAtIndex(2));
@@ -1572,56 +1351,49 @@ public class PinholeCameraTest {
             camera.decompose(true, true);
             // and retrieve new intrinsics, rotation and camera center, and ensure
             // that intrinsics and camera center have not been modified
-            final PinholeCameraIntrinsicParameters intrinsic2 =
-                    camera.getIntrinsicParameters();
-            final Point3D cameraCenter2 = camera.getCameraCenter();
+            final var intrinsic2 = camera.getIntrinsicParameters();
+            final var cameraCenter2 = camera.getCameraCenter();
 
             assertTrue(camera.areIntrinsicParametersAvailable());
             assertTrue(camera.isCameraCenterAvailable());
 
-            assertEquals(intrinsic.getHorizontalFocalLength(),
-                    intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(intrinsic.getVerticalFocalLength(),
-                    intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(intrinsic.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(intrinsic.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
             assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(intrinsic.getHorizontalPrincipalPoint(),
-                    intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(intrinsic.getVerticalPrincipalPoint(),
-                    intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(intrinsic.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(),
+                    ABSOLUTE_ERROR);
+            assertEquals(intrinsic.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
             if (Math.abs(cameraCenter.getInhomX() - cameraCenter2.getInhomX()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(cameraCenter.getInhomX(), cameraCenter2.getInhomX(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(cameraCenter.getInhomX(), cameraCenter2.getInhomX(), LARGE_ABSOLUTE_ERROR);
             if (Math.abs(cameraCenter.getInhomY() - cameraCenter2.getInhomY()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(cameraCenter.getInhomY(), cameraCenter2.getInhomY(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(cameraCenter.getInhomY(), cameraCenter2.getInhomY(), LARGE_ABSOLUTE_ERROR);
             if (Math.abs(cameraCenter.getInhomZ() - cameraCenter2.getInhomZ()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(cameraCenter.getInhomZ(), cameraCenter2.getInhomZ(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(cameraCenter.getInhomZ(), cameraCenter2.getInhomZ(), LARGE_ABSOLUTE_ERROR);
 
             // principal axis array is a 3-component array indicating direction
             // where camera is looking at
-            final double[] principalAxis = camera.getPrincipalAxisArray();
+            final var principalAxis = camera.getPrincipalAxisArray();
 
             // diff array contains the difference between provided 3D point to
             // look at and camera center. This array has to be proportional (up to
             // scale) to the principal axis array
-            final double[] diffArray = new double[INHOM_3D_COORDS];
+            final var diffArray = new double[INHOM_3D_COORDS];
             diffArray[0] = pointAt.getInhomX() - cameraCenter2.getInhomX();
             diffArray[1] = pointAt.getInhomY() - cameraCenter2.getInhomY();
             diffArray[2] = pointAt.getInhomZ() - cameraCenter2.getInhomZ();
-            final double norm = com.irurueta.algebra.Utils.normF(diffArray);
+            final var norm = com.irurueta.algebra.Utils.normF(diffArray);
             ArrayUtils.multiplyByScalar(diffArray, 1.0 / norm, diffArray);
 
-            final double scaleX = diffArray[0] / principalAxis[0];
-            final double scaleY = diffArray[1] / principalAxis[1];
-            final double scaleZ = diffArray[2] / principalAxis[2];
+            final var scaleX = diffArray[0] / principalAxis[0];
+            final var scaleY = diffArray[1] / principalAxis[1];
+            final var scaleZ = diffArray[2] / principalAxis[2];
 
             if (Math.abs(scaleX - scaleY) > LARGE_ABSOLUTE_ERROR) {
                 continue;
@@ -1643,49 +1415,40 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testGetSetCameraCenterAvailabilityAndComputeCameraCenterSVDDetAndFinite()
-            throws WrongSizeException, CameraException, NotAvailableException {
+    void testGetSetCameraCenterAvailabilityAndComputeCameraCenterSVDDetAndFinite() throws WrongSizeException,
+            CameraException, NotAvailableException {
 
-        final Matrix cameraCenterMatrix = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+        final var cameraCenterMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var cameraCenter = new InhomogeneousPoint3D(
                 cameraCenterMatrix.getElementAtIndex(0),
                 cameraCenterMatrix.getElementAtIndex(1),
                 cameraCenterMatrix.getElementAtIndex(2));
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // instantiate new pinhole camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // set new camera center
-        final Matrix cameraCenterMatrix2 = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter2 = new InhomogeneousPoint3D(
+        final var cameraCenterMatrix2 = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var cameraCenter2 = new InhomogeneousPoint3D(
                 cameraCenterMatrix2.getElementAtIndex(0),
                 cameraCenterMatrix2.getElementAtIndex(1),
                 cameraCenterMatrix2.getElementAtIndex(2));
@@ -1702,20 +1465,19 @@ public class PinholeCameraTest {
         assertTrue(camera.isCameraCenterAvailable());
         assertTrue(camera.isCameraRotationAvailable());
 
-        final Rotation3D rotation2 = camera.getCameraRotation();
-        final PinholeCameraIntrinsicParameters intrinsic2 =
-                camera.getIntrinsicParameters();
-        final Point3D cameraCenter3 = camera.getCameraCenter();
+        final var rotation2 = camera.getCameraRotation();
+        final var intrinsic2 = camera.getIntrinsicParameters();
+        final var cameraCenter3 = camera.getCameraCenter();
 
         // also compute center without decomposition using different methods
-        final Point3D cameraCenterSVD = camera.computeCameraCenterSVD();
-        final Point3D cameraCenterSVD2 = Point3D.create();
+        final var cameraCenterSVD = camera.computeCameraCenterSVD();
+        final var cameraCenterSVD2 = Point3D.create();
         camera.computeCameraCenterSVD(cameraCenterSVD2);
-        final Point3D cameraCenterDet = camera.computeCameraCenterDet();
-        final Point3D cameraCenterDet2 = Point3D.create();
+        final var cameraCenterDet = camera.computeCameraCenterDet();
+        final var cameraCenterDet2 = Point3D.create();
         camera.computeCameraCenterDet(cameraCenterDet2);
-        final Point3D cameraCenterFinite = camera.computeCameraCenterFiniteCamera();
-        final Point3D cameraCenterFinite2 = Point3D.create();
+        final var cameraCenterFinite = camera.computeCameraCenterFiniteCamera();
+        final var cameraCenterFinite2 = Point3D.create();
         camera.computeCameraCenterFiniteCamera(cameraCenterFinite2);
 
         // check that rotation and intrinsics haven't changed while
@@ -1731,55 +1493,39 @@ public class PinholeCameraTest {
         assertEquals(cameraCenterFinite, cameraCenterFinite2);
 
         // rotation remains the same
-        assertTrue(rotation.asInhomogeneousMatrix().equals(
-                rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        assertTrue(rotation.asInhomogeneousMatrix().equals(rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
         // intrinsics remains the same
-        assertEquals(intrinsic.getHorizontalFocalLength(),
-                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(),
-                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(),
-                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(),
-                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSetIntrinsicParametersAndRotation() throws CameraException,
-            NotAvailableException {
+    void testSetIntrinsicParametersAndRotation() throws CameraException, NotAvailableException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // instantiate canonical pinhole camera (focal length equal to 1,
         // pointing towards z axis and located at origin)
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
 
         // set intrinsic parameters and rotation
         camera.setIntrinsicParametersAndRotation(intrinsic, rotation);
@@ -1791,10 +1537,9 @@ public class PinholeCameraTest {
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
 
-        final Point3D cameraCenter2 = camera.getCameraCenter();
-        final Rotation3D rotation2 = camera.getCameraRotation();
-        final PinholeCameraIntrinsicParameters intrinsic2 =
-                camera.getIntrinsicParameters();
+        final var cameraCenter2 = camera.getCameraCenter();
+        final var rotation2 = camera.getCameraRotation();
+        final var intrinsic2 = camera.getIntrinsicParameters();
 
         // check camera center remains at origin
         assertEquals(0.0, cameraCenter2.getInhomX(), ABSOLUTE_ERROR);
@@ -1804,99 +1549,72 @@ public class PinholeCameraTest {
         // check camera rotation correctness
         // are different instances
         assertNotSame(rotation, rotation2);
-        assertTrue(rotation.asInhomogeneousMatrix().equals(
-                rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        assertTrue(rotation.asInhomogeneousMatrix().equals(rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
         // check camera intrinsic parameters
         // are different instances
         assertNotSame(intrinsic, intrinsic2);
-        assertEquals(intrinsic.getHorizontalFocalLength(),
-                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(),
-                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(),
-                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(),
-                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSetIntrinsicAndExtrinsicParameters()
-            throws WrongSizeException, CameraException, NotAvailableException {
+    void testSetIntrinsicAndExtrinsicParameters() throws WrongSizeException, CameraException, NotAvailableException {
 
-        final Matrix centerMatrix = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+        final var centerMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var cameraCenter = new InhomogeneousPoint3D(
                 centerMatrix.getElementAtIndex(0),
                 centerMatrix.getElementAtIndex(1),
                 centerMatrix.getElementAtIndex(2));
 
-        final Matrix worldOriginMatrix = Matrix.createWithUniformRandomValues(
-                HOM_2D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final HomogeneousPoint2D imageOfWorldOrigin = new HomogeneousPoint2D(
+        final var worldOriginMatrix = Matrix.createWithUniformRandomValues(HOM_2D_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var imageOfWorldOrigin = new HomogeneousPoint2D(
                 worldOriginMatrix.getElementAtIndex(0),
                 worldOriginMatrix.getElementAtIndex(1),
                 worldOriginMatrix.getElementAtIndex(2));
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double horizontalFocalLength1 = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength1 = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength1 = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength1 = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double horizontalFocalLength2 = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength2 = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength2 = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength2 = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness1 = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        final double skewness2 = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness1 = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness2 = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint1 = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint1 = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint1 = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint1 = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final double horizontalPrincipalPoint2 = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint2 = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint2 = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint2 = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation1 = new MatrixRotation3D(alphaEuler1, betaEuler1,
-                gammaEuler1);
-        final Rotation3D rotation2 = new MatrixRotation3D(alphaEuler2, betaEuler2,
-                gammaEuler2);
+        final var rotation1 = new MatrixRotation3D(alphaEuler1, betaEuler1, gammaEuler1);
+        final var rotation2 = new MatrixRotation3D(alphaEuler2, betaEuler2, gammaEuler2);
 
-        final PinholeCameraIntrinsicParameters intrinsic1 =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength1,
-                        verticalFocalLength1, horizontalPrincipalPoint1,
-                        verticalPrincipalPoint1, skewness1);
-        final PinholeCameraIntrinsicParameters intrinsic2 =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength2,
-                        verticalFocalLength2, horizontalPrincipalPoint2,
-                        verticalPrincipalPoint2, skewness2);
+        final var intrinsic1 = new PinholeCameraIntrinsicParameters(horizontalFocalLength1, verticalFocalLength1,
+                horizontalPrincipalPoint1, verticalPrincipalPoint1, skewness1);
+        final var intrinsic2 = new PinholeCameraIntrinsicParameters(horizontalFocalLength2, verticalFocalLength2,
+                horizontalPrincipalPoint2, verticalPrincipalPoint2, skewness2);
 
         // instantiate canonical pinhole camera
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
 
         // set intrinsic and extrinsic parameters using image of world origin
-        camera.setIntrinsicAndExtrinsicParameters(intrinsic1, rotation1,
-                imageOfWorldOrigin);
+        camera.setIntrinsicAndExtrinsicParameters(intrinsic1, rotation1, imageOfWorldOrigin);
         assertFalse(camera.isCameraCenterAvailable());
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
@@ -1908,29 +1626,24 @@ public class PinholeCameraTest {
         assertTrue(camera.areIntrinsicParametersAvailable());
 
         // check correctness of image of world origin
-        final Point2D imageOfWorldOrigin2 = camera.getImageOfWorldOrigin();
+        final var imageOfWorldOrigin2 = camera.getImageOfWorldOrigin();
         assertTrue(imageOfWorldOrigin.equals(imageOfWorldOrigin2, ABSOLUTE_ERROR));
 
         // check correctness of intrinsic parameters
-        final PinholeCameraIntrinsicParameters intrinsic3 = camera.getIntrinsicParameters();
-        assertEquals(intrinsic3.getHorizontalFocalLength(),
-                intrinsic1.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic3.getVerticalFocalLength(),
-                intrinsic1.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        final var intrinsic3 = camera.getIntrinsicParameters();
+        assertEquals(intrinsic3.getHorizontalFocalLength(), intrinsic1.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic3.getVerticalFocalLength(), intrinsic1.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic3.getSkewness(), intrinsic1.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic3.getHorizontalPrincipalPoint(),
-                intrinsic1.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic3.getVerticalPrincipalPoint(),
-                intrinsic1.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic3.getHorizontalPrincipalPoint(), intrinsic1.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(intrinsic3.getVerticalPrincipalPoint(), intrinsic1.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         // check correctness of rotation
-        final Rotation3D rotation3 = camera.getCameraRotation();
-        assertTrue(rotation3.asInhomogeneousMatrix().equals(
-                rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        final var rotation3 = camera.getCameraRotation();
+        assertTrue(rotation3.asInhomogeneousMatrix().equals(rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
         // set new intrinsic and extrinsic parameters using camera center
-        camera.setIntrinsicAndExtrinsicParameters(intrinsic2, rotation2,
-                cameraCenter);
+        camera.setIntrinsicAndExtrinsicParameters(intrinsic2, rotation2, cameraCenter);
         assertTrue(camera.isCameraCenterAvailable());
         assertTrue(camera.isCameraRotationAvailable());
         assertTrue(camera.areIntrinsicParametersAvailable());
@@ -1942,83 +1655,68 @@ public class PinholeCameraTest {
         assertTrue(camera.areIntrinsicParametersAvailable());
 
         // check correctness of camera center
-        final Point3D cameraCenter2 = camera.getCameraCenter();
+        final var cameraCenter2 = camera.getCameraCenter();
         assertTrue(cameraCenter.equals(cameraCenter2, LARGE_ABSOLUTE_ERROR));
 
         // check correctness of intrinsic parameters
-        final PinholeCameraIntrinsicParameters intrinsic4 = camera.getIntrinsicParameters();
-        assertEquals(intrinsic4.getHorizontalFocalLength(),
-                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic4.getVerticalFocalLength(),
-                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        final var intrinsic4 = camera.getIntrinsicParameters();
+        assertEquals(intrinsic4.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic4.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic4.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic4.getHorizontalPrincipalPoint(),
-                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic4.getVerticalPrincipalPoint(),
-                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic4.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(intrinsic4.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
         // check correctness of rotation
-        final Rotation3D rotation4 = camera.getCameraRotation();
-        assertTrue(rotation4.asInhomogeneousMatrix().equals(
-                rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+        final var rotation4 = camera.getCameraRotation();
+        assertTrue(rotation4.asInhomogeneousMatrix().equals(rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testGetSetVanishingPointsAndImageOfWorldOrigin()
-            throws WrongSizeException {
-        Matrix internalMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testGetSetVanishingPointsAndImageOfWorldOrigin() throws WrongSizeException {
+        var internalMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final PinholeCamera camera = new PinholeCamera(internalMatrix);
+        final var camera = new PinholeCamera(internalMatrix);
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // test get set x-axis vanishing point
-        final Point2D xAxisVanishingPoint = camera.getXAxisVanishingPoint();
-        double scaleX = internalMatrix.getElementAt(0, 0) /
-                xAxisVanishingPoint.getHomX();
-        double scaleY = internalMatrix.getElementAt(1, 0) /
-                xAxisVanishingPoint.getHomY();
-        double scaleW = internalMatrix.getElementAt(2, 0) /
-                xAxisVanishingPoint.getHomW();
+        final var xAxisVanishingPoint = camera.getXAxisVanishingPoint();
+        var scaleX = internalMatrix.getElementAt(0, 0) / xAxisVanishingPoint.getHomX();
+        var scaleY = internalMatrix.getElementAt(1, 0) / xAxisVanishingPoint.getHomY();
+        var scaleW = internalMatrix.getElementAt(2, 0) / xAxisVanishingPoint.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
-        final Point2D xAxisVanishingPoint2 = Point2D.create();
+        final var xAxisVanishingPoint2 = Point2D.create();
         camera.xAxisVanishingPoint(xAxisVanishingPoint2);
         assertEquals(xAxisVanishingPoint, xAxisVanishingPoint2);
 
         // set new x-axis vanishing point
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double w = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var w = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         xAxisVanishingPoint.setHomogeneousCoordinates(x, y, w);
         camera.setXAxisVanishingPoint(xAxisVanishingPoint);
         // when setting x-axis vanishing point, internal matrix will be modified
         internalMatrix = camera.getInternalMatrix();
-        scaleX = internalMatrix.getElementAt(0, 0) /
-                xAxisVanishingPoint.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 0) /
-                xAxisVanishingPoint.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 0) /
-                xAxisVanishingPoint.getHomW();
+        scaleX = internalMatrix.getElementAt(0, 0) / xAxisVanishingPoint.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 0) / xAxisVanishingPoint.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 0) / xAxisVanishingPoint.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
 
         // test get set y-axis vanishing point
-        final Point2D yAxisVanishingPoint = camera.getYAxisVanishingPoint();
-        scaleX = internalMatrix.getElementAt(0, 1) /
-                yAxisVanishingPoint.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 1) /
-                yAxisVanishingPoint.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 1) /
-                yAxisVanishingPoint.getHomW();
+        final var yAxisVanishingPoint = camera.getYAxisVanishingPoint();
+        scaleX = internalMatrix.getElementAt(0, 1) / yAxisVanishingPoint.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 1) / yAxisVanishingPoint.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 1) / yAxisVanishingPoint.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
-        final Point2D yAxisVanishingPoint2 = Point2D.create();
+        final var yAxisVanishingPoint2 = Point2D.create();
         camera.yAxisVanishingPoint(yAxisVanishingPoint2);
         assertEquals(yAxisVanishingPoint, yAxisVanishingPoint2);
 
@@ -2030,28 +1728,22 @@ public class PinholeCameraTest {
         camera.setYAxisVanishingPoint(yAxisVanishingPoint);
         // when setting y-axis vanishing point, internal matrix will be modified
         internalMatrix = camera.getInternalMatrix();
-        scaleX = internalMatrix.getElementAt(0, 1) /
-                yAxisVanishingPoint.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 1) /
-                yAxisVanishingPoint.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 1) /
-                yAxisVanishingPoint.getHomW();
+        scaleX = internalMatrix.getElementAt(0, 1) / yAxisVanishingPoint.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 1) / yAxisVanishingPoint.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 1) / yAxisVanishingPoint.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
 
         // test get set z-axis vanishing point
-        final Point2D zAxisVanishingPoint = camera.getZAxisVanishingPoint();
-        scaleX = internalMatrix.getElementAt(0, 2) /
-                zAxisVanishingPoint.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 2) /
-                zAxisVanishingPoint.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 2) /
-                zAxisVanishingPoint.getHomW();
+        final var zAxisVanishingPoint = camera.getZAxisVanishingPoint();
+        scaleX = internalMatrix.getElementAt(0, 2) / zAxisVanishingPoint.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 2) / zAxisVanishingPoint.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 2) / zAxisVanishingPoint.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
-        final Point2D zAxisVanishingPoint2 = Point2D.create();
+        final var zAxisVanishingPoint2 = Point2D.create();
         camera.zAxisVanishingPoint(zAxisVanishingPoint2);
         assertEquals(zAxisVanishingPoint, zAxisVanishingPoint2);
 
@@ -2063,28 +1755,22 @@ public class PinholeCameraTest {
         camera.setZAxisVanishingPoint(zAxisVanishingPoint);
         // when setting z-axis vanishing point, internal matrix will be modified
         internalMatrix = camera.getInternalMatrix();
-        scaleX = internalMatrix.getElementAt(0, 2) /
-                zAxisVanishingPoint.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 2) /
-                zAxisVanishingPoint.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 2) /
-                zAxisVanishingPoint.getHomW();
+        scaleX = internalMatrix.getElementAt(0, 2) / zAxisVanishingPoint.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 2) / zAxisVanishingPoint.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 2) / zAxisVanishingPoint.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
 
         // test get set image of world origin
-        final Point2D imageOfWorldOrigin = camera.getImageOfWorldOrigin();
-        scaleX = internalMatrix.getElementAt(0, 3) /
-                imageOfWorldOrigin.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 3) /
-                imageOfWorldOrigin.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 3) /
-                imageOfWorldOrigin.getHomW();
+        final var imageOfWorldOrigin = camera.getImageOfWorldOrigin();
+        scaleX = internalMatrix.getElementAt(0, 3) / imageOfWorldOrigin.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 3) / imageOfWorldOrigin.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 3) / imageOfWorldOrigin.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
-        final Point2D imageOfWorldOrigin2 = Point2D.create();
+        final var imageOfWorldOrigin2 = Point2D.create();
         camera.imageOfWorldOrigin(imageOfWorldOrigin2);
         assertEquals(imageOfWorldOrigin, imageOfWorldOrigin2);
 
@@ -2096,51 +1782,42 @@ public class PinholeCameraTest {
         camera.setImageOfWorldOrigin(imageOfWorldOrigin);
         // when setting image of world origin, internal matrix will be modified
         internalMatrix = camera.getInternalMatrix();
-        scaleX = internalMatrix.getElementAt(0, 3) /
-                imageOfWorldOrigin.getHomX();
-        scaleY = internalMatrix.getElementAt(1, 3) /
-                imageOfWorldOrigin.getHomY();
-        scaleW = internalMatrix.getElementAt(2, 3) /
-                imageOfWorldOrigin.getHomW();
+        scaleX = internalMatrix.getElementAt(0, 3) / imageOfWorldOrigin.getHomX();
+        scaleY = internalMatrix.getElementAt(1, 3) / imageOfWorldOrigin.getHomY();
+        scaleW = internalMatrix.getElementAt(2, 3) / imageOfWorldOrigin.getHomW();
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleW, ABSOLUTE_ERROR);
         assertEquals(scaleW, scaleX, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSetHorizontalVerticalAndPrincipalPlanesAndAxis()
-            throws WrongSizeException, CameraException {
-        Matrix internalMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testGetSetHorizontalVerticalAndPrincipalPlanesAndAxis() throws WrongSizeException, CameraException {
+        var internalMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final PinholeCamera camera = new PinholeCamera(internalMatrix);
+        final var camera = new PinholeCamera(internalMatrix);
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // test get set vertical axis plane
-        final Plane verticalAxisPlane = camera.getVerticalAxisPlane();
-        double scaleA = internalMatrix.getElementAt(0, 0) /
-                verticalAxisPlane.getA();
-        double scaleB = internalMatrix.getElementAt(0, 1) /
-                verticalAxisPlane.getB();
-        double scaleC = internalMatrix.getElementAt(0, 2) /
-                verticalAxisPlane.getC();
-        double scaleD = internalMatrix.getElementAt(0, 3) /
-                verticalAxisPlane.getD();
+        final var verticalAxisPlane = camera.getVerticalAxisPlane();
+        var scaleA = internalMatrix.getElementAt(0, 0) / verticalAxisPlane.getA();
+        var scaleB = internalMatrix.getElementAt(0, 1) / verticalAxisPlane.getB();
+        var scaleC = internalMatrix.getElementAt(0, 2) / verticalAxisPlane.getC();
+        var scaleD = internalMatrix.getElementAt(0, 3) / verticalAxisPlane.getD();
         assertEquals(scaleA, scaleB, ABSOLUTE_ERROR);
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
         assertEquals(scaleC, scaleD, ABSOLUTE_ERROR);
         assertEquals(scaleD, scaleA, ABSOLUTE_ERROR);
-        final Plane verticalAxisPlane2 = new Plane();
+        final var verticalAxisPlane2 = new Plane();
         camera.verticalAxisPlane(verticalAxisPlane2);
         assertEquals(verticalAxisPlane, verticalAxisPlane2);
 
         // set new vertical axis plane
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         verticalAxisPlane.setParameters(a, b, c, d);
         camera.setVerticalAxisPlane(verticalAxisPlane);
         // when setting vertical axis plane, internal matrix, which has been
@@ -2155,7 +1832,7 @@ public class PinholeCameraTest {
         assertEquals(scaleD, scaleA, ABSOLUTE_ERROR);
 
         // test get set horizontal axis plane
-        final Plane horizontalAxisPlane = camera.getHorizontalAxisPlane();
+        final var horizontalAxisPlane = camera.getHorizontalAxisPlane();
         scaleA = internalMatrix.getElementAt(1, 0) / horizontalAxisPlane.getA();
         scaleB = internalMatrix.getElementAt(1, 1) / horizontalAxisPlane.getB();
         scaleC = internalMatrix.getElementAt(1, 2) / horizontalAxisPlane.getC();
@@ -2164,7 +1841,7 @@ public class PinholeCameraTest {
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
         assertEquals(scaleC, scaleD, ABSOLUTE_ERROR);
         assertEquals(scaleD, scaleA, ABSOLUTE_ERROR);
-        final Plane horizontalAxisPlane2 = new Plane();
+        final var horizontalAxisPlane2 = new Plane();
         camera.horizontalAxisPlane(horizontalAxisPlane2);
         assertEquals(horizontalAxisPlane, horizontalAxisPlane2);
 
@@ -2187,7 +1864,7 @@ public class PinholeCameraTest {
         assertEquals(scaleD, scaleA, ABSOLUTE_ERROR);
 
         // test get set principal plane
-        final Plane principalPlane = camera.getPrincipalPlane();
+        final var principalPlane = camera.getPrincipalPlane();
         scaleA = internalMatrix.getElementAt(2, 0) / principalPlane.getA();
         scaleB = internalMatrix.getElementAt(2, 1) / principalPlane.getB();
         scaleC = internalMatrix.getElementAt(2, 2) / principalPlane.getC();
@@ -2196,13 +1873,13 @@ public class PinholeCameraTest {
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
         assertEquals(scaleC, scaleD, ABSOLUTE_ERROR);
         assertEquals(scaleD, scaleA, ABSOLUTE_ERROR);
-        final Plane principalPlane2 = new Plane();
+        final var principalPlane2 = new Plane();
         camera.principalPlane(principalPlane2);
         assertEquals(principalPlane, principalPlane2);
 
         // test that principal axis array is up to scale with principal plane
         // director vector (its first 3 components)
-        double[] principalAxisArray = camera.getPrincipalAxisArray();
+        var principalAxisArray = camera.getPrincipalAxisArray();
         scaleA = principalAxisArray[0] / principalPlane.getA();
         scaleB = principalAxisArray[1] / principalPlane.getB();
         scaleC = principalAxisArray[2] / principalPlane.getC();
@@ -2236,52 +1913,42 @@ public class PinholeCameraTest {
         assertEquals(scaleA, scaleB, ABSOLUTE_ERROR);
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
         assertEquals(scaleC, scaleA, ABSOLUTE_ERROR);
-        final double[] principalAxisArray2 = new double[3];
+        final var principalAxisArray2 = new double[3];
         camera.principalAxisArray(principalAxisArray2);
         assertArrayEquals(principalAxisArray, principalAxisArray2, 0.0);
     }
 
     @Test
-    public void testGetPrincipalPoint() throws WrongSizeException {
-        final Matrix centerMatrix = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+    void testGetPrincipalPoint() throws WrongSizeException {
+        final var centerMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var cameraCenter = new InhomogeneousPoint3D(
                 centerMatrix.getElementAtIndex(0),
                 centerMatrix.getElementAtIndex(1),
                 centerMatrix.getElementAtIndex(2));
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // get principal point
-        final Point2D principalPoint = camera.getPrincipalPoint();
-        final Point2D principalPoint2 = Point2D.create();
+        final var principalPoint = camera.getPrincipalPoint();
+        final var principalPoint2 = Point2D.create();
         camera.principalPoint(principalPoint2);
 
         // and check correctness
@@ -2291,18 +1958,15 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testGetAndFixCameraSign() throws WrongSizeException,
-            DecomposerException, CameraException {
-        final Matrix internalMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+    void testGetAndFixCameraSign() throws WrongSizeException, DecomposerException, CameraException {
+        final var internalMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Matrix Mp = internalMatrix
-                .getSubmatrix(0, 0, 2, 2);
-        final double detMp = com.irurueta.algebra.Utils.det(Mp);
-        final double cameraSign = (detMp > 0.0) ? 1.0 : -1.0;
+        final var mp = internalMatrix.getSubmatrix(0, 0, 2, 2);
+        final var detMp = com.irurueta.algebra.Utils.det(mp);
+        final var cameraSign = (detMp > 0.0) ? 1.0 : -1.0;
 
-        final PinholeCamera camera = new PinholeCamera(internalMatrix);
+        final var camera = new PinholeCamera(internalMatrix);
 
         assertEquals(camera.getCameraSign(), cameraSign, ABSOLUTE_ERROR);
         // if we set threshold to determinant value, then camera sign is negative
@@ -2318,51 +1982,42 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testGetDepthCheiralityAndFrontOfCamera()
-            throws WrongSizeException, CameraException, NotReadyException,
-            LockedException, DecomposerException,
-            com.irurueta.algebra.NotAvailableException {
+    void testGetDepthCheiralityAndFrontOfCamera() throws WrongSizeException, CameraException, NotReadyException,
+            LockedException, DecomposerException, com.irurueta.algebra.NotAvailableException {
 
-        final Matrix centerMatrix = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+        final var centerMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var cameraCenter = new InhomogeneousPoint3D(
                 centerMatrix.getElementAtIndex(0),
                 centerMatrix.getElementAtIndex(1),
                 centerMatrix.getElementAtIndex(2));
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final double positiveDepth = randomizer.nextDouble(MIN_DEPTH, MAX_DEPTH);
-        final double negativeDepth = randomizer.nextDouble(-MAX_DEPTH, -MIN_DEPTH);
+        final var positiveDepth = randomizer.nextDouble(MIN_DEPTH, MAX_DEPTH);
+        final var negativeDepth = randomizer.nextDouble(-MAX_DEPTH, -MIN_DEPTH);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
-        final double[] principalAxisArray = camera.getPrincipalAxisArray();
+        final var principalAxisArray = camera.getPrincipalAxisArray();
 
-        final Plane principalPlane = camera.getPrincipalPlane();
-        final Matrix principalPlaneMatrix = new Matrix(1, HOM_3D_COORDS);
+        final var principalPlane = camera.getPrincipalPlane();
+        final var principalPlaneMatrix = new Matrix(1, HOM_3D_COORDS);
         principalPlaneMatrix.setElementAtIndex(0, principalPlane.getA());
         principalPlaneMatrix.setElementAtIndex(1, principalPlane.getB());
         principalPlaneMatrix.setElementAtIndex(2, principalPlane.getC());
@@ -2371,23 +2026,22 @@ public class PinholeCameraTest {
         // use SVD decomposition of principalPlaneMatrix to find points on the
         // plane as any arbitrary linear combination of the null-space of
         // principalPlaneMatrix
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(
-                principalPlaneMatrix);
+        final var decomposer = new SingularValueDecomposer(principalPlaneMatrix);
 
         decomposer.decompose();
 
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
         // first column of V is the principal plane matrix itself. Remaining
         // three columns are three homogeneous world points defining such plane
         // (hence they are its null-space)
-        final HomogeneousPoint3D planePoint1 = new HomogeneousPoint3D(
+        final var planePoint1 = new HomogeneousPoint3D(
                 v.getElementAt(0, 1), v.getElementAt(1, 1),
                 v.getElementAt(2, 1), v.getElementAt(3, 1));
-        final HomogeneousPoint3D planePoint2 = new HomogeneousPoint3D(
+        final var planePoint2 = new HomogeneousPoint3D(
                 v.getElementAt(0, 2), v.getElementAt(1, 2),
                 v.getElementAt(2, 2), v.getElementAt(3, 2));
-        final HomogeneousPoint3D planePoint3 = new HomogeneousPoint3D(
+        final var planePoint3 = new HomogeneousPoint3D(
                 v.getElementAt(0, 3), v.getElementAt(1, 3),
                 v.getElementAt(2, 3), v.getElementAt(3, 3));
 
@@ -2396,28 +2050,28 @@ public class PinholeCameraTest {
         // points on the principal plane and adding to their inhomogeneous
         // coordinates some positiveDepth or negativeDepth value on the principal
         // axis direction (which is normalized)
-        final InhomogeneousPoint3D frontPoint1 = new InhomogeneousPoint3D(
+        final var frontPoint1 = new InhomogeneousPoint3D(
                 planePoint1.getInhomX() + (positiveDepth * principalAxisArray[0]),
                 planePoint1.getInhomY() + (positiveDepth * principalAxisArray[1]),
                 planePoint1.getInhomZ() + (positiveDepth * principalAxisArray[2]));
-        final InhomogeneousPoint3D frontPoint2 = new InhomogeneousPoint3D(
+        final var frontPoint2 = new InhomogeneousPoint3D(
                 planePoint2.getInhomX() + (positiveDepth * principalAxisArray[0]),
                 planePoint2.getInhomY() + (positiveDepth * principalAxisArray[1]),
                 planePoint2.getInhomZ() + (positiveDepth * principalAxisArray[2]));
-        final InhomogeneousPoint3D frontPoint3 = new InhomogeneousPoint3D(
+        final var frontPoint3 = new InhomogeneousPoint3D(
                 planePoint3.getInhomX() + (positiveDepth * principalAxisArray[0]),
                 planePoint3.getInhomY() + (positiveDepth * principalAxisArray[1]),
                 planePoint3.getInhomZ() + (positiveDepth * principalAxisArray[2]));
 
-        final InhomogeneousPoint3D backPoint1 = new InhomogeneousPoint3D(
+        final var backPoint1 = new InhomogeneousPoint3D(
                 planePoint1.getInhomX() + (negativeDepth * principalAxisArray[0]),
                 planePoint1.getInhomY() + (negativeDepth * principalAxisArray[1]),
                 planePoint1.getInhomZ() + (negativeDepth * principalAxisArray[2]));
-        final InhomogeneousPoint3D backPoint2 = new InhomogeneousPoint3D(
+        final var backPoint2 = new InhomogeneousPoint3D(
                 planePoint2.getInhomX() + (negativeDepth * principalAxisArray[0]),
                 planePoint2.getInhomY() + (negativeDepth * principalAxisArray[1]),
                 planePoint2.getInhomZ() + (negativeDepth * principalAxisArray[2]));
-        final InhomogeneousPoint3D backPoint3 = new InhomogeneousPoint3D(
+        final var backPoint3 = new InhomogeneousPoint3D(
                 planePoint3.getInhomX() + (negativeDepth * principalAxisArray[0]),
                 planePoint3.getInhomY() + (negativeDepth * principalAxisArray[1]),
                 planePoint3.getInhomZ() + (negativeDepth * principalAxisArray[2]));
@@ -2455,20 +2109,19 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testGetDepthsCheiralitiesAndInFrontOfCamera()
-            throws WrongSizeException, CameraException {
+    void testGetDepthsCheiralitiesAndInFrontOfCamera() throws WrongSizeException, CameraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
+        final var randomizer = new UniformRandomizer();
+        final var nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
 
         // generate a random camera and a list of random world points, and then
         // compare depth, cheiral and if each point is in front of camera by
         // using the methods that have been previously tested
 
         // list of random points
-        final List<Point3D> worldPointList = new ArrayList<>(nPoints);
-        for (int i = 0; i < nPoints; i++) {
-            final HomogeneousPoint3D point = new HomogeneousPoint3D(
+        final var worldPointList = new ArrayList<Point3D>(nPoints);
+        for (var i = 0; i < nPoints; i++) {
+            final var point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -2478,82 +2131,67 @@ public class PinholeCameraTest {
         assertEquals(worldPointList.size(), nPoints);
 
         // random camera
-        final Matrix centerMatrix = Matrix.createWithUniformRandomValues(
-                INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
+        final var centerMatrix = Matrix.createWithUniformRandomValues(INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        final var cameraCenter = new InhomogeneousPoint3D(
                 centerMatrix.getElementAtIndex(0),
                 centerMatrix.getElementAtIndex(1),
                 centerMatrix.getElementAtIndex(2));
 
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
 
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // get depths of all points in the list
-        final List<Double> depths = camera.getDepths(worldPointList);
-        final List<Double> depths2 = new ArrayList<>(worldPointList.size());
+        final var depths = camera.getDepths(worldPointList);
+        final var depths2 = new ArrayList<Double>(worldPointList.size());
         camera.depths(worldPointList, depths2);
         assertEquals(depths, depths2);
 
         // get cheiralities for all points in the list
-        final List<Double> cheiralities = camera.getCheiralities(worldPointList);
-        final List<Boolean> fronts = camera.arePointsInFrontOfCamera(worldPointList);
-        final List<Boolean> fronts2 = new ArrayList<>(worldPointList.size());
+        final var cheiralities = camera.getCheiralities(worldPointList);
+        final var fronts = camera.arePointsInFrontOfCamera(worldPointList);
+        final var fronts2 = new ArrayList<Boolean>(worldPointList.size());
         camera.arePointsInFrontOfCamera(worldPointList, fronts2);
-        final List<Boolean> fronts3 = camera.arePointsInFrontOfCamera(worldPointList, 0.0);
-        final List<Boolean> fronts4 = new ArrayList<>(worldPointList.size());
+        final var fronts3 = camera.arePointsInFrontOfCamera(worldPointList, 0.0);
+        final var fronts4 = new ArrayList<Boolean>(worldPointList.size());
         camera.arePointsInFrontOfCamera(worldPointList, fronts4, 0.0);
 
-        final List<Double> cheiralities2 = new ArrayList<>(worldPointList.size());
+        final var cheiralities2 = new ArrayList<Double>(worldPointList.size());
         camera.cheiralities(worldPointList, cheiralities2);
         assertEquals(cheiralities, cheiralities2);
 
         // iterate over lists to test each points individually
-        final Iterator<Point3D> pointsIterator = worldPointList.iterator();
-        final Iterator<Double> depthsIterator = depths.iterator();
-        final Iterator<Double> cheiralitiesIterator = cheiralities.iterator();
-        final Iterator<Boolean> frontsIterator = fronts.iterator();
-        final Iterator<Boolean> fronts2Iterator = fronts2.iterator();
-        Point3D point;
-        Double depth;
-        Double cheirality;
-        Boolean front;
-        Boolean front2;
-        double camDepth;
-        double camCheirality;
-        boolean camFront;
+        final var pointsIterator = worldPointList.iterator();
+        final var depthsIterator = depths.iterator();
+        final var cheiralitiesIterator = cheiralities.iterator();
+        final var frontsIterator = fronts.iterator();
+        final var fronts2Iterator = fronts2.iterator();
         while (pointsIterator.hasNext()) {
-            point = pointsIterator.next();
+            final var point = pointsIterator.next();
 
-            depth = depthsIterator.next();
-            cheirality = cheiralitiesIterator.next();
-            front = frontsIterator.next();
-            front2 = fronts2Iterator.next();
+            final var depth = depthsIterator.next();
+            final var cheirality = cheiralitiesIterator.next();
+            final var front = frontsIterator.next();
+            final var front2 = fronts2Iterator.next();
 
-            camDepth = camera.getDepth(point);
-            camCheirality = camera.getCheirality(point);
-            camFront = camera.isPointInFrontOfCamera(point);
+            final var camDepth = camera.getDepth(point);
+            final var camCheirality = camera.getCheirality(point);
+            final var camFront = camera.isPointInFrontOfCamera(point);
 
             assertEquals(depth, camDepth, ABSOLUTE_ERROR);
             assertEquals(cheirality, camCheirality, ABSOLUTE_ERROR);
@@ -2567,26 +2205,24 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testCreateCanonicalCamera() throws WrongSizeException {
-        final PinholeCamera camera = PinholeCamera.createCanonicalCamera();
-        final Matrix internalMatrix = camera.getInternalMatrix();
+    void testCreateCanonicalCamera() throws WrongSizeException {
+        final var camera = PinholeCamera.createCanonicalCamera();
+        final var internalMatrix = camera.getInternalMatrix();
 
         // check that internal matrix is the 3x4 identity matrix
-        assertTrue(internalMatrix.equals(Matrix.identity(PINHOLE_CAMERA_ROWS,
-                PINHOLE_CAMERA_COLS), ABSOLUTE_ERROR));
+        assertTrue(internalMatrix.equals(Matrix.identity(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS), ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testIsNormalized() throws WrongSizeException, CameraException {
+    void testIsNormalized() throws WrongSizeException, CameraException {
         // test that whenever a parameter is modified in a camera, it becomes non
         // normalized
 
-        final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Testing isNormalized after setInternalMatrix
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
         assertFalse(camera.isNormalized());
         camera.setInternalMatrix(cameraMatrix);
         assertFalse(camera.isNormalized());
@@ -2596,15 +2232,12 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after setCameraRotation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
         assertFalse(camera.isNormalized());
         camera.setCameraRotation(rotation);
         assertFalse(camera.isNormalized());
@@ -2614,18 +2247,14 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after setCameraIntrinsicParameters
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final PinholeCameraIntrinsicParameters k =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                        verticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, skewness);
+        final var k = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         assertFalse(camera.isNormalized());
         camera.setIntrinsicParameters(k);
@@ -2636,9 +2265,9 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after setCameraCenter
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         assertFalse(camera.isNormalized());
         camera.setCameraCenter(cameraCenter);
@@ -2658,9 +2287,9 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after setIntrinsicAndExtrinsicParameters
-        final double[] worldOriginArray = new double[HOM_2D_COORDS];
+        final var worldOriginArray = new double[HOM_2D_COORDS];
         randomizer.fill(worldOriginArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final HomogeneousPoint2D imageOfWorldOrigin = new HomogeneousPoint2D(worldOriginArray);
+        final var imageOfWorldOrigin = new HomogeneousPoint2D(worldOriginArray);
 
         assertFalse(camera.isNormalized());
         camera.setIntrinsicAndExtrinsicParameters(k, rotation, imageOfWorldOrigin);
@@ -2680,18 +2309,18 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after set X Y Z axis vanishing point
-        double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double w = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point2D xAxisVanishingPoint = new HomogeneousPoint2D(x, y, w);
+        var x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var w = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var xAxisVanishingPoint = new HomogeneousPoint2D(x, y, w);
         x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         w = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point2D yAxisVanishingPoint = new HomogeneousPoint2D(x, y, w);
+        final var yAxisVanishingPoint = new HomogeneousPoint2D(x, y, w);
         x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         w = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point2D zAxisVanishingPoint = new HomogeneousPoint2D(x, y, w);
+        final var zAxisVanishingPoint = new HomogeneousPoint2D(x, y, w);
 
         assertFalse(camera.isNormalized());
         camera.setXAxisVanishingPoint(xAxisVanishingPoint);
@@ -2717,25 +2346,24 @@ public class PinholeCameraTest {
         camera.setZAxisVanishingPoint(zAxisVanishingPoint);
         assertFalse(camera.isNormalized());
 
-        // testing isNormalized after setting horizontal, vertical and principal
-        // plane
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Plane verticalAxisPlane = new Plane(a, b, c, d);
+        // testing isNormalized after setting horizontal, vertical and principal plane
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var verticalAxisPlane = new Plane(a, b, c, d);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Plane horizontalAxisPlane = new Plane(a, b, c, d);
+        final var horizontalAxisPlane = new Plane(a, b, c, d);
 
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Plane principalPlane = new Plane(a, b, c, d);
+        final var principalPlane = new Plane(a, b, c, d);
 
         assertFalse(camera.isNormalized());
         camera.setVerticalAxisPlane(verticalAxisPlane);
@@ -2771,9 +2399,9 @@ public class PinholeCameraTest {
         assertFalse(camera.isNormalized());
 
         // testing isNormalized after pointAt
-        final double[] pointAtArray = new double[INHOM_3D_COORDS];
+        final var pointAtArray = new double[INHOM_3D_COORDS];
         randomizer.fill(pointAtArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D pointAt = new InhomogeneousPoint3D(pointAtArray);
+        final var pointAt = new InhomogeneousPoint3D(pointAtArray);
 
         assertFalse(camera.isNormalized());
         camera.pointAt(pointAt);
@@ -2785,25 +2413,23 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testProjectBackProjectDualQuadricAndDualConic()
-            throws DecomposerException, WrongSizeException,
+    void testProjectBackProjectDualQuadricAndDualConic() throws DecomposerException, WrongSizeException,
             CoincidentLinesException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // instantiate dual conic from set of lines
-            Matrix m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            Line2D line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+            var line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2));
-            Line2D line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+            var line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
                     m.getElementAt(1, 2));
-            Line2D line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+            var line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
                     m.getElementAt(2, 2));
-            Line2D line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+            var line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
                     m.getElementAt(3, 2));
-            Line2D line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+            var line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
                     m.getElementAt(4, 2));
 
             line1.normalize();
@@ -2814,11 +2440,11 @@ public class PinholeCameraTest {
 
             // estimate dual conic that lies inside provided 5 lines (we need to
             // ensure that line configuration is not degenerate)
-            final Matrix m2 = new Matrix(5, 6);
+            final var m2 = new Matrix(5, 6);
 
-            double l1 = line1.getA();
-            double l2 = line1.getB();
-            double l3 = line1.getC();
+            var l1 = line1.getA();
+            var l2 = line1.getB();
+            var l3 = line1.getC();
             m2.setElementAt(0, 0, l1 * l1);
             m2.setElementAt(0, 1, 2.0 * l1 * l2);
             m2.setElementAt(0, 2, l2 * l2);
@@ -2867,8 +2493,7 @@ public class PinholeCameraTest {
             m2.setElementAt(4, 5, l3 * l3);
 
             while (com.irurueta.algebra.Utils.rank(m2) < 5) {
-                m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
                 line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                         m.getElementAt(0, 2));
@@ -2938,7 +2563,7 @@ public class PinholeCameraTest {
                 m2.setElementAt(4, 5, l3 * l3);
             }
 
-            final DualConic dualConic = new DualConic(line1, line2, line3, line4, line5);
+            final var dualConic = new DualConic(line1, line2, line3, line4, line5);
 
             // check that lines are locus of dual conic
             assertTrue(dualConic.isLocus(line1, ABSOLUTE_ERROR));
@@ -2948,28 +2573,26 @@ public class PinholeCameraTest {
             assertTrue(dualConic.isLocus(line5, ABSOLUTE_ERROR));
 
             // instantiate random camera
-            final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                    PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final PinholeCamera camera = new PinholeCamera(cameraMatrix);
+            final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var camera = new PinholeCamera(cameraMatrix);
 
             try {
                 // back-project dual conic into dual quadric
-                final DualQuadric dualQuadric = camera.backProject(dualConic);
-                final DualQuadric dualQuadric2 = new DualQuadric();
+                final var dualQuadric = camera.backProject(dualConic);
+                final var dualQuadric2 = new DualQuadric();
                 camera.backProject(dualConic, dualQuadric2);
 
                 assertEquals(dualQuadric.asMatrix(), dualQuadric2.asMatrix());
 
                 // back-project planes of dual conic
-                final Plane plane1 = camera.backProject(line1);
-                final Plane plane2 = camera.backProject(line2);
-                final Plane plane3 = camera.backProject(line3);
-                final Plane plane4 = camera.backProject(line4);
-                final Plane plane5 = camera.backProject(line5);
+                final var plane1 = camera.backProject(line1);
+                final var plane2 = camera.backProject(line2);
+                final var plane3 = camera.backProject(line3);
+                final var plane4 = camera.backProject(line4);
+                final var plane5 = camera.backProject(line5);
 
-                // check that back-projected planes are locus of back-projected dual
-                // quadric
+                // check that back-projected planes are locus of back-projected dual quadric
                 assertTrue(dualQuadric.isLocus(plane1));
                 assertTrue(dualQuadric.isLocus(plane2));
                 assertTrue(dualQuadric.isLocus(plane3));
@@ -2977,8 +2600,8 @@ public class PinholeCameraTest {
                 assertTrue(dualQuadric.isLocus(plane5));
 
                 // project dual quadric into dual conic
-                final DualConic dualConic2 = camera.project(dualQuadric);
-                final DualConic dualConic3 = new DualConic();
+                final var dualConic2 = camera.project(dualQuadric);
+                final var dualConic3 = new DualConic();
                 camera.project(dualQuadric, dualConic3);
 
                 assertEquals(dualConic2.asMatrix(), dualConic3.asMatrix());
@@ -3001,35 +2624,28 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testProjectBackProjectQuadricAndConic()
-            throws WrongSizeException, DecomposerException,
+    void testProjectBackProjectQuadricAndConic() throws WrongSizeException, DecomposerException,
             CoincidentPointsException, CameraException {
         // create conic
-        Matrix m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        HomogeneousPoint2D point1 = new HomogeneousPoint2D(
-                m.getElementAt(0, 0), m.getElementAt(0, 1),
-                m.getElementAt(0, 2));
-        HomogeneousPoint2D point2 = new HomogeneousPoint2D(
-                m.getElementAt(1, 0), m.getElementAt(1, 1),
-                m.getElementAt(1, 2));
-        HomogeneousPoint2D point3 = new HomogeneousPoint2D(
-                m.getElementAt(2, 0), m.getElementAt(2, 1),
-                m.getElementAt(2, 2));
-        HomogeneousPoint2D point4 = new HomogeneousPoint2D(
-                m.getElementAt(3, 0), m.getElementAt(3, 1),
-                m.getElementAt(3, 2));
-        HomogeneousPoint2D point5 = new HomogeneousPoint2D(
-                m.getElementAt(4, 0), m.getElementAt(4, 1),
-                m.getElementAt(4, 2));
+        var point1 = new HomogeneousPoint2D(
+                m.getElementAt(0, 0), m.getElementAt(0, 1), m.getElementAt(0, 2));
+        var point2 = new HomogeneousPoint2D(
+                m.getElementAt(1, 0), m.getElementAt(1, 1), m.getElementAt(1, 2));
+        var point3 = new HomogeneousPoint2D(
+                m.getElementAt(2, 0), m.getElementAt(2, 1), m.getElementAt(2, 2));
+        var point4 = new HomogeneousPoint2D(
+                m.getElementAt(3, 0), m.getElementAt(3, 1), m.getElementAt(3, 2));
+        var point5 = new HomogeneousPoint2D(
+                m.getElementAt(4, 0), m.getElementAt(4, 1), m.getElementAt(4, 2));
 
         // estimate conic that lies inside provided 5 homogeneous 2D
         // points
-        Matrix conicMatrix = new Matrix(5, 6);
-        double x = point1.getHomX();
-        double y = point1.getHomY();
-        double w = point1.getHomW();
+        var conicMatrix = new Matrix(5, 6);
+        var x = point1.getHomX();
+        var y = point1.getHomY();
+        var w = point1.getHomW();
         conicMatrix.setElementAt(0, 0, x * x);
         conicMatrix.setElementAt(0, 1, x * y);
         conicMatrix.setElementAt(0, 2, y * y);
@@ -3074,8 +2690,7 @@ public class PinholeCameraTest {
         conicMatrix.setElementAt(4, 5, w * w);
 
         while (com.irurueta.algebra.Utils.rank(conicMatrix) < 5) {
-            m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             point1 = new HomogeneousPoint2D(
                     m.getElementAt(0, 0), m.getElementAt(0, 1),
@@ -3141,7 +2756,7 @@ public class PinholeCameraTest {
             conicMatrix.setElementAt(4, 5, w * w);
         }
 
-        final Conic conic = new Conic(point1, point2, point3, point4, point5);
+        final var conic = new Conic(point1, point2, point3, point4, point5);
 
         // check that points are locus of conic
         assertTrue(conic.isLocus(point1, ABSOLUTE_ERROR));
@@ -3151,23 +2766,23 @@ public class PinholeCameraTest {
         assertTrue(conic.isLocus(point5, ABSOLUTE_ERROR));
 
         // instantiate random camera
-        final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final PinholeCamera camera = new PinholeCamera(cameraMatrix);
+        final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var camera = new PinholeCamera(cameraMatrix);
 
         // back-project conic into quadric
-        final Quadric quadric = camera.backProject(conic);
-        final Quadric quadric2 = new Quadric();
+        final var quadric = camera.backProject(conic);
+        final var quadric2 = new Quadric();
         camera.backProject(conic, quadric2);
 
         assertEquals(quadric.asMatrix(), quadric2.asMatrix());
 
         // back-project planes of dual conic
-        final Point3D point1b = camera.backProject(point1);
-        final Point3D point2b = camera.backProject(point2);
-        final Point3D point3b = camera.backProject(point3);
-        final Point3D point4b = camera.backProject(point4);
-        final Point3D point5b = camera.backProject(point5);
+        final var point1b = camera.backProject(point1);
+        final var point2b = camera.backProject(point2);
+        final var point3b = camera.backProject(point3);
+        final var point4b = camera.backProject(point4);
+        final var point5b = camera.backProject(point5);
 
         // check that back-projected points are locus of back-projected quadric
         assertTrue(quadric.isLocus(point1b, ABSOLUTE_ERROR));
@@ -3177,8 +2792,8 @@ public class PinholeCameraTest {
         assertTrue(quadric.isLocus(point5b, ABSOLUTE_ERROR));
 
         // project quadric into conic
-        final Conic conic2 = camera.project(quadric);
-        final Conic conic3 = new Conic();
+        final var conic2 = camera.project(quadric);
+        final var conic3 = new Conic();
         camera.project(quadric, conic3);
 
         conic.normalize();
@@ -3189,101 +2804,73 @@ public class PinholeCameraTest {
     }
 
     @Test
-    public void testSetFromPointCorrespondences() throws CameraException,
-            WrongListSizesException,
-            com.irurueta.geometry.estimators.LockedException,
-            com.irurueta.geometry.estimators.NotReadyException,
-            PinholeCameraEstimatorException, NotAvailableException,
-            RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSetFromPointCorrespondences() throws CameraException, WrongListSizesException,
+            com.irurueta.geometry.estimators.LockedException, com.irurueta.geometry.estimators.NotReadyException,
+            PinholeCameraEstimatorException, NotAvailableException, RotationException {
+        final var randomizer = new UniformRandomizer();
 
         // create intrinsic parameters
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS2, MAX_SKEWNESS2);
-        final double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                MAX_PRINCIPAL_POINT);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS2, MAX_SKEWNESS2);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final PinholeCameraIntrinsicParameters intrinsic = new PinholeCameraIntrinsicParameters(
-                horizontalFocalLength, verticalFocalLength,
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
                 horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // create rotation parameters
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // create camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
-        randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE,
-                MAX_RANDOM_POINT_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
+        randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE);
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // normalize the camera to improve accuracy
         camera1.normalize();
 
         // create 6 point correspondences
-        final Point3D point3D1 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
-        Point3D point3D2 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
-        final Point3D point3D3 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
-        final Point3D point3D4 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
-        final Point3D point3D5 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
-        final Point3D point3D6 = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE,
-                        MAX_RANDOM_POINT_VALUE));
+        final var point3D1 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+        var point3D2 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+        final var point3D3 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+        final var point3D4 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+        final var point3D5 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+        final var point3D6 = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
 
-        final Point2D point2D1 = camera1.project(point3D1);
-        Point2D point2D2 = camera1.project(point3D2);
-        final Point2D point2D3 = camera1.project(point3D3);
-        final Point2D point2D4 = camera1.project(point3D4);
-        final Point2D point2D5 = camera1.project(point3D5);
-        final Point2D point2D6 = camera1.project(point3D6);
+        final var point2D1 = camera1.project(point3D1);
+        var point2D2 = camera1.project(point3D2);
+        final var point2D3 = camera1.project(point3D3);
+        final var point2D4 = camera1.project(point3D4);
+        final var point2D5 = camera1.project(point3D5);
+        final var point2D6 = camera1.project(point3D6);
 
-        final List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        final var points3D = new ArrayList<Point3D>(N_POINTS);
         points3D.add(point3D1);
         points3D.add(point3D2);
         points3D.add(point3D3);
@@ -3291,51 +2878,41 @@ public class PinholeCameraTest {
         points3D.add(point3D5);
         points3D.add(point3D6);
 
-        final List<Point2D> points2D = camera1.project(points3D);
+        final var points2D = camera1.project(points3D);
 
-        final PinholeCamera camera2 = new PinholeCamera();
-        camera2.setFromPointCorrespondences(point3D1, point3D2, point3D3, point3D4,
-                point3D5, point3D6, point2D1, point2D2, point2D3, point2D4,
-                point2D5, point2D6);
+        final var camera2 = new PinholeCamera();
+        camera2.setFromPointCorrespondences(point3D1, point3D2, point3D3, point3D4, point3D5, point3D6, point2D1,
+                point2D2, point2D3, point2D4, point2D5, point2D6);
         camera2.decompose();
 
-        final DLTPointCorrespondencePinholeCameraEstimator estimator =
-                new DLTPointCorrespondencePinholeCameraEstimator(points3D, points2D);
+        final var estimator = new DLTPointCorrespondencePinholeCameraEstimator(points3D, points2D);
         estimator.setLMSESolutionAllowed(false);
-        final PinholeCamera camera3 = estimator.estimate();
+        final var camera3 = estimator.estimate();
         camera3.decompose();
 
-        final PinholeCameraIntrinsicParameters intrinsic2 = camera2.getIntrinsicParameters();
-        final PinholeCameraIntrinsicParameters intrinsic3 = camera3.getIntrinsicParameters();
+        final var intrinsic2 = camera2.getIntrinsicParameters();
+        final var intrinsic3 = camera3.getIntrinsicParameters();
 
-        assertEquals(intrinsic.getHorizontalFocalLength(),
-                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(),
-                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(),
-                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(),
-                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(),
+        assertEquals(intrinsic2.getHorizontalFocalLength(), intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalFocalLength(), intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalPrincipalPoint(), intrinsic3.getHorizontalPrincipalPoint(),
                 ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalPrincipalPoint(), intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-        final Rotation3D rotation2 = camera2.getCameraRotation();
-        final Rotation3D rotation3 = camera3.getCameraRotation();
+        final var rotation2 = camera2.getCameraRotation();
+        final var rotation3 = camera3.getCameraRotation();
 
         assertTrue(rotation2.equals(rotation3, ABSOLUTE_ERROR));
 
-        final Point3D cameraCenter2 = camera2.getCameraCenter();
-        final Point3D cameraCenter3 = camera3.getCameraCenter();
+        final var cameraCenter2 = camera2.getCameraCenter();
+        final var cameraCenter3 = camera3.getCameraCenter();
 
         assertTrue(cameraCenter2.equals(cameraCenter3, ABSOLUTE_ERROR));
         assertTrue(cameraCenter2.equals(cameraCenter, ABSOLUTE_ERROR));
@@ -3344,125 +2921,103 @@ public class PinholeCameraTest {
         // degeneracy
         point3D2 = point3D1;
         point2D2 = camera1.project(point3D2);
-        try {
-            camera2.setFromPointCorrespondences(point3D1, point3D2, point3D3, point3D4,
-                    point3D5, point3D6, point2D1, point2D2, point2D3, point2D4,
-                    point2D5, point2D6);
-            fail("CameraException expected but not thrown");
-        } catch (final CameraException ignore) {
-        }
+        final var wrongPoint3D2 = point3D2;
+        final var wrongPoint2D2 = point2D2;
+        assertThrows(CameraException.class, () -> camera2.setFromPointCorrespondences(point3D1, wrongPoint3D2, point3D3,
+                point3D4, point3D5, point3D6, point2D1, wrongPoint2D2, point2D3, point2D4, point2D5, point2D6));
     }
 
     @Test
-    public void testSetFromLineAndPlaneCorrespondences() throws CameraException,
-            WrongListSizesException,
-            com.irurueta.geometry.estimators.LockedException,
-            com.irurueta.geometry.estimators.NotReadyException,
-            PinholeCameraEstimatorException, NotAvailableException,
-            RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSetFromLineAndPlaneCorrespondences() throws CameraException, WrongListSizesException,
+            com.irurueta.geometry.estimators.LockedException, com.irurueta.geometry.estimators.NotReadyException,
+            PinholeCameraEstimatorException, NotAvailableException, RotationException {
+        final var randomizer = new UniformRandomizer();
 
         // create intrinsic parameters
-        final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2,
-                MAX_FOCAL_LENGTH2);
-        final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2,
-                MAX_FOCAL_LENGTH2);
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS2, MAX_SKEWNESS2);
-        final double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                MAX_PRINCIPAL_POINT);
+        final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
+        final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH2, MAX_FOCAL_LENGTH2);
+        final var skewness = randomizer.nextDouble(MIN_SKEWNESS2, MAX_SKEWNESS2);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-        final PinholeCameraIntrinsicParameters intrinsic = new PinholeCameraIntrinsicParameters(
-                horizontalFocalLength, verticalFocalLength,
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
                 horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
         // create rotation parameters
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                MAX_ANGLE_DEGREES2) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // create camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE);
-        final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
         // normalize the camera to improve accuracy
         camera1.normalize();
 
         // create 4 2D lines
-        final Line2D line2D1 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
+        final var line2D1 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
-        Line2D line2D2 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
+        var line2D2 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
-        final Line2D line2D3 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
+        final var line2D3 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
-        final Line2D line2D4 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE,
-                MAX_RANDOM_LINE_VALUE),
+        final var line2D4 = new Line2D(randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_LINE_VALUE, MAX_RANDOM_LINE_VALUE));
 
-        final Plane plane1 = camera1.backProject(line2D1);
-        Plane plane2 = camera1.backProject(line2D2);
-        final Plane plane3 = camera1.backProject(line2D3);
-        final Plane plane4 = camera1.backProject(line2D4);
+        final var plane1 = camera1.backProject(line2D1);
+        var plane2 = camera1.backProject(line2D2);
+        final var plane3 = camera1.backProject(line2D3);
+        final var plane4 = camera1.backProject(line2D4);
 
-        final List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
+        final var lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
         lines2D.add(line2D1);
         lines2D.add(line2D2);
         lines2D.add(line2D3);
         lines2D.add(line2D4);
 
-        final List<Plane> planes = camera1.backProjectLines(lines2D);
-        final List<Plane> planes2 = new ArrayList<>();
+        final var planes = camera1.backProjectLines(lines2D);
+        final var planes2 = new ArrayList<Plane>();
         camera1.backProjectLines(lines2D, planes2);
 
         assertEquals(planes, planes2);
 
-        final PinholeCamera camera2 = new PinholeCamera();
-        camera2.setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4,
-                line2D1, line2D2, line2D3, line2D4);
+        final var camera2 = new PinholeCamera();
+        camera2.setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4, line2D1, line2D2, line2D3, line2D4);
         camera2.decompose();
 
-        final DLTLinePlaneCorrespondencePinholeCameraEstimator estimator =
-                new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, lines2D);
+        final var estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, lines2D);
         estimator.setLMSESolutionAllowed(false);
-        final PinholeCamera camera3 = estimator.estimate();
+        final var camera3 = estimator.estimate();
         camera3.decompose();
 
-        final PinholeCameraIntrinsicParameters intrinsic2 = camera2.getIntrinsicParameters();
-        final PinholeCameraIntrinsicParameters intrinsic3 = camera3.getIntrinsicParameters();
+        final var intrinsic2 = camera2.getIntrinsicParameters();
+        final var intrinsic3 = camera3.getIntrinsicParameters();
 
-        assertEquals(intrinsic2.getHorizontalFocalLength(),
-                intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalFocalLength(),
-                intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalFocalLength(), intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalFocalLength(), intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getSkewness(), intrinsic3.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getHorizontalPrincipalPoint(),
-                intrinsic3.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic2.getVerticalPrincipalPoint(),
-                intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getHorizontalPrincipalPoint(), intrinsic3.getHorizontalPrincipalPoint(),
+                ABSOLUTE_ERROR);
+        assertEquals(intrinsic2.getVerticalPrincipalPoint(), intrinsic3.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-        final Rotation3D rotation2 = camera2.getCameraRotation();
-        final Rotation3D rotation3 = camera3.getCameraRotation();
+        final var rotation2 = camera2.getCameraRotation();
+        final var rotation3 = camera3.getCameraRotation();
 
         assertTrue(rotation2.equals(rotation3, ABSOLUTE_ERROR));
 
-        final Point3D cameraCenter2 = camera2.getCameraCenter();
-        final Point3D cameraCenter3 = camera3.getCameraCenter();
+        final var cameraCenter2 = camera2.getCameraCenter();
+        final var cameraCenter3 = camera3.getCameraCenter();
 
         assertTrue(cameraCenter2.equals(cameraCenter3, ABSOLUTE_ERROR));
 
@@ -3470,53 +3025,43 @@ public class PinholeCameraTest {
         // degeneracy
         line2D2 = line2D1;
         plane2 = camera1.backProject(line2D2);
-        try {
-            camera2.setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4,
-                    line2D1, line2D4, line2D3, line2D4);
-            fail("CameraException expected but not thrown");
-        } catch (final CameraException ignore) {
-        }
+        final var wrongPlane2 = plane2;
+        assertThrows(CameraException.class, () -> camera2.setFromLineAndPlaneCorrespondences(plane1, wrongPlane2,
+                plane3, plane4, line2D1, line2D4, line2D3, line2D4));
     }
 
     @Test
-    public void testSerializeDeserialize() throws CameraException, IOException, ClassNotFoundException {
+    void testSerializeDeserialize() throws CameraException, IOException, ClassNotFoundException {
         // create camera
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-        double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var randomizer = new UniformRandomizer();
+        var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
         // rotation
-        double alphaEuler = randomizer.nextDouble(
-                MIN_ANGLE_DEGREES * Math.PI / 180.0,
-                MAX_ANGLE_DEGREES * Math.PI / 180.0);
-        double betaEuler = randomizer.nextDouble(
-                MIN_ANGLE_DEGREES * Math.PI / 180.0,
-                MAX_ANGLE_DEGREES * Math.PI / 180.0);
-        double gammaEuler = randomizer.nextDouble(
-                MIN_ANGLE_DEGREES * Math.PI / 180.0,
-                MAX_ANGLE_DEGREES * Math.PI / 180.0);
+        var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
-                        horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
-        final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
         // camera center
-        double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // test constructor with intrinsic parameters, rotation and image or
         // origin
-        final PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
+        final var camera1 = new PinholeCamera(intrinsic, rotation, cameraCenter);
         camera1.decompose();
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(camera1);
-        final PinholeCamera camera2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(camera1);
+        final var camera2 = SerializationHelper.<PinholeCamera>deserialize(bytes);
 
         // check
         assertEquals(camera1.getInternalMatrix(), camera2.getInternalMatrix());

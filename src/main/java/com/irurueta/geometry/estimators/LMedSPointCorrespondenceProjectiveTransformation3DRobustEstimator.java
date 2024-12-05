@@ -74,14 +74,14 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -101,7 +101,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -113,7 +113,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             final ProjectiveTransformation3DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -136,7 +136,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -159,7 +159,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -192,7 +192,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -209,8 +209,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public ProjectiveTransformation3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public ProjectiveTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -218,126 +217,116 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<ProjectiveTransformation3D> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<ProjectiveTransformation3D>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<ProjectiveTransformation3D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point3D mTestPoint = Point3D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point3D testPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<ProjectiveTransformation3D> solutions) {
-                                final Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);
-                                final Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);
-                                final Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);
-                                final Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);
-                                final Point3D inputPoint5 = mInputPoints.get(samplesIndices[4]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<ProjectiveTransformation3D> solutions) {
+                        final var inputPoint1 = inputPoints.get(samplesIndices[0]);
+                        final var inputPoint2 = inputPoints.get(samplesIndices[1]);
+                        final var inputPoint3 = inputPoints.get(samplesIndices[2]);
+                        final var inputPoint4 = inputPoints.get(samplesIndices[3]);
+                        final var inputPoint5 = inputPoints.get(samplesIndices[4]);
 
-                                final Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);
-                                final Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);
-                                final Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);
-                                final Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);
-                                final Point3D outputPoint5 = mOutputPoints.get(samplesIndices[4]);
+                        final var outputPoint1 = outputPoints.get(samplesIndices[0]);
+                        final var outputPoint2 = outputPoints.get(samplesIndices[1]);
+                        final var outputPoint3 = outputPoints.get(samplesIndices[2]);
+                        final var outputPoint4 = outputPoints.get(samplesIndices[3]);
+                        final var outputPoint5 = outputPoints.get(samplesIndices[4]);
 
-                                try {
-                                    final ProjectiveTransformation3D transformation =
-                                            new ProjectiveTransformation3D(inputPoint1, inputPoint2,
-                                                    inputPoint3, inputPoint4, inputPoint5, outputPoint1,
-                                                    outputPoint2, outputPoint3, outputPoint4, outputPoint5);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new ProjectiveTransformation3D(inputPoint1, inputPoint2,
+                                    inputPoint3, inputPoint4, inputPoint5, outputPoint1, outputPoint2, outputPoint3,
+                                    outputPoint4, outputPoint5);
+                            solutions.add(transformation);
+                        } catch (final CoincidentPointsException e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final ProjectiveTransformation3D currentEstimation, final int i) {
-                                final Point3D inputPoint = mInputPoints.get(i);
-                                final Point3D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final ProjectiveTransformation3D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<ProjectiveTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<ProjectiveTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(
+                                    LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<ProjectiveTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<ProjectiveTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(
+                                    LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<ProjectiveTransformation3D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<ProjectiveTransformation3D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<ProjectiveTransformation3D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<ProjectiveTransformation3D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
-            final ProjectiveTransformation3D transformation =
-                    innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -364,11 +353,10 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final LMedSRobustEstimator.LMedSInliersData inliersData =
-                (LMedSRobustEstimator.LMedSInliersData) getInliersData();
+        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();
 
         // avoid setting a threshold too strict
-        final double threshold = inliersData.getEstimatedThreshold();
-        return Math.max(threshold, mStopThreshold);
+        final var threshold = inliersData.getEstimatedThreshold();
+        return Math.max(threshold, stopThreshold);
     }
 }

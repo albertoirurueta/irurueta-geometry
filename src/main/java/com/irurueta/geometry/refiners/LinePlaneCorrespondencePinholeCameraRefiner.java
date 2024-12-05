@@ -32,13 +32,12 @@ import java.util.List;
  * Typically, a refiner is used by a robust estimator, however it can also be
  * useful in some other situations.
  */
-public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
-        PinholeCameraRefiner<Plane, Line2D> {
+public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends PinholeCameraRefiner<Plane, Line2D> {
 
     /**
      * Plane to be reused when computing residuals.
      */
-    private final Plane mResidualTestPlane = new Plane();
+    private final Plane residualTestPlane = new Plane();
 
     /**
      * Constructor.
@@ -63,10 +62,9 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
     protected LinePlaneCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
             final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Plane> samples1, final List<Line2D> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+            final List<Plane> samples1, final List<Line2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -84,10 +82,9 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
      */
     protected LinePlaneCorrespondencePinholeCameraRefiner(
             final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Plane> samples1,
-            final List<Line2D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+            final InliersData inliersData, final List<Plane> samples1, final List<Line2D> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -104,10 +101,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
      * @param weight        weight for suggestion residual.
      * @return total residual during Powell refinement.
      */
-    protected double residualPowell(final PinholeCamera pinholeCamera,
-                                    final double[] params, final double weight) {
-        return backprojectionResidual(pinholeCamera) +
-                suggestionResidual(params, weight);
+    protected double residualPowell(final PinholeCamera pinholeCamera, final double[] params, final double weight) {
+        return backprojectionResidual(pinholeCamera) + suggestionResidual(params, weight);
     }
 
     /**
@@ -122,20 +117,17 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
         pinholeCamera.normalize();
 
         // back-projection inlier lines into test plane
-        final int nSamples = mInliers.length();
-        Line2D line;
-        Plane plane;
-        double residual = 0.0;
+        final var nSamples = inliers.length();
+        var residual = 0.0;
         for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
-                line = mSamples2.get(i);
-                plane = mSamples1.get(i);
+            if (inliers.get(i)) {
+                final var line = samples2.get(i);
+                final var plane = samples1.get(i);
 
                 line.normalize();
                 plane.normalize();
 
-                residual += Math.pow(singleBackprojectionResidual(
-                        pinholeCamera, line, plane), 2.0);
+                residual += Math.pow(singleBackprojectionResidual(pinholeCamera, line, plane), 2.0);
             }
         }
 
@@ -157,10 +149,9 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
      * @return total residual.
      */
     protected double residualLevenbergMarquardt(
-            final PinholeCamera pinholeCamera, final Line2D line, final Plane plane,
-            final double[] params, final double weight) {
-        double residual = singleBackprojectionResidual(pinholeCamera, line,
-                plane);
+            final PinholeCamera pinholeCamera, final Line2D line, final Plane plane, final double[] params,
+            final double weight) {
+        var residual = singleBackprojectionResidual(pinholeCamera, line, plane);
         if (hasSuggestions()) {
             residual += suggestionResidual(params, weight);
         }
@@ -176,16 +167,16 @@ public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends
      * @return dot product distance between back-projected line and plane.
      */
     @SuppressWarnings("DuplicatedCode")
-    private double singleBackprojectionResidual(final PinholeCamera pinholeCamera,
-                                                final Line2D line, final Plane plane) {
+    private double singleBackprojectionResidual(final PinholeCamera pinholeCamera, final Line2D line,
+                                                final Plane plane) {
         // back-project line into test plane
-        pinholeCamera.backProject(line, mResidualTestPlane);
-        mResidualTestPlane.normalize();
+        pinholeCamera.backProject(line, residualTestPlane);
+        residualTestPlane.normalize();
 
-        final double dotProduct = Math.abs(plane.getA() * mResidualTestPlane.getA() +
-                plane.getB() * mResidualTestPlane.getB() +
-                plane.getC() * mResidualTestPlane.getC() +
-                plane.getD() * mResidualTestPlane.getD());
+        final var dotProduct = Math.abs(plane.getA() * residualTestPlane.getA()
+                + plane.getB() * residualTestPlane.getB()
+                + plane.getC() * residualTestPlane.getC()
+                + plane.getD() * residualTestPlane.getD());
         return 1.0 - dotProduct;
     }
 }

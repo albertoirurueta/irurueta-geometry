@@ -23,7 +23,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -46,7 +45,7 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
     /**
      * Plane to be reused when computing residuals.
      */
-    private final Plane mResidualTestPlane = new Plane();
+    private final Plane residualTestPlane = new Plane();
 
     /**
      * Constructor.
@@ -69,12 +68,11 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public PlaneCorrespondenceProjectiveTransformation3DRefiner(
-            final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance,
-            final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Plane> samples1, final List<Plane> samples2,
+            final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List<Plane> samples1, final List<Plane> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -92,10 +90,9 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
      */
     public PlaneCorrespondenceProjectiveTransformation3DRefiner(
             final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Plane> samples1,
-            final List<Plane> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+            final InliersData inliersData, final List<Plane> samples1, final List<Plane> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -113,8 +110,8 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final ProjectiveTransformation3D result)
-            throws NotReadyException, LockedException, RefinerException {
+    public boolean refine(final ProjectiveTransformation3D result) throws NotReadyException, LockedException,
+            RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -122,36 +119,32 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
-            final double[] initParams = new double[
-                    ProjectiveTransformation3D.HOM_COORDS *
-                            ProjectiveTransformation3D.HOM_COORDS];
+            final var initParams = new double[
+                    ProjectiveTransformation3D.HOM_COORDS * ProjectiveTransformation3D.HOM_COORDS];
             // copy values
-            System.arraycopy(mInitialEstimation.getT().getBuffer(), 0,
-                    initParams, 0, initParams.length);
+            System.arraycopy(initialEstimation.getT().getBuffer(), 0, initParams, 0, initParams.length);
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 2 sets of 2D points to compute residuals
-            final int nDims = 2 * Plane.PLANE_NUMBER_PARAMS;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Plane inputPlane;
-            Plane outputPlane;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = 2 * Plane.PLANE_NUMBER_PARAMS;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    inputPlane = mSamples1.get(i);
-                    outputPlane = mSamples2.get(i);
+                    final var inputPlane = samples1.get(i);
+                    final var outputPlane = samples2.get(i);
                     inputPlane.normalize();
                     outputPlane.normalize();
                     x.setElementAt(pos, 0, inputPlane.getA());
@@ -163,93 +156,74 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
                     x.setElementAt(pos, 6, outputPlane.getC());
                     x.setElementAt(pos, 7, outputPlane.getD());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Plane mInputPlane = new Plane();
+                private final Plane inputPlane = new Plane();
 
-                        private final Plane mOutputPlane = new Plane();
+                private final Plane outputPlane = new Plane();
 
-                        private final ProjectiveTransformation3D mTransformation =
-                                new ProjectiveTransformation3D();
+                private final ProjectiveTransformation3D transformation = new ProjectiveTransformation3D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
-                                                // copy values
-                                                System.arraycopy(params, 0,
-                                                        mTransformation.getT().getBuffer(), 0,
-                                                        params.length);
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    // copy values
+                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);
+                    return residual(transformation, inputPlane, outputPlane);
+                });
 
-                                                return residual(mTransformation, mInputPlane,
-                                                        mOutputPlane);
-                                            }
-                                        });
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    inputPlane.setParameters(point[0], point[1], point[2], point[3]);
+                    outputPlane.setParameters(point[4], point[5], point[6], point[7]);
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mInputPlane.setParameters(point[0], point[1], point[2],
-                                    point[3]);
-                            mOutputPlane.setParameters(point[4], point[5], point[6],
-                                    point[7]);
+                    // copy values
+                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);
 
-                            // copy values
-                            System.arraycopy(params, 0,
-                                    mTransformation.getT().getBuffer(), 0,
-                                    params.length);
+                    final var y = residual(transformation, inputPlane, outputPlane);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            final double y = residual(mTransformation, mInputPlane,
-                                    mOutputPlane);
-                            mGradientEstimator.gradient(params, derivatives);
+                    return y;
+                }
+            };
 
-                            return y;
-                        }
-                    };
-
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update transformation
 
             // copy values for A matrix
-            System.arraycopy(params, 0, result.getT().getBuffer(), 0,
-                    params.length);
+            System.arraycopy(params, 0, result.getT().getBuffer(), 0, params.length);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -257,7 +231,7 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -270,14 +244,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
      * @param outputPlane    output 3D plane.
      * @return residual.
      */
-    private double residual(final ProjectiveTransformation3D transformation,
-                            final Plane inputPlane, final Plane outputPlane) {
+    private double residual(final ProjectiveTransformation3D transformation, final Plane inputPlane,
+                            final Plane outputPlane) {
         try {
             inputPlane.normalize();
             outputPlane.normalize();
 
-            transformation.transform(inputPlane, mResidualTestPlane);
-            return 1.0 - Math.abs(outputPlane.dotProduct(mResidualTestPlane));
+            transformation.transform(inputPlane, residualTestPlane);
+            return 1.0 - Math.abs(outputPlane.dotProduct(residualTestPlane));
         } catch (final AlgebraException e) {
             return 1.0;
         }
@@ -290,16 +264,14 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(final ProjectiveTransformation3D transformation) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Plane inputPlane;
-        Plane outputPlane;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                inputPlane = mSamples1.get(i);
-                outputPlane = mSamples2.get(i);
+                final var inputPlane = samples1.get(i);
+                final var outputPlane = samples2.get(i);
                 inputPlane.normalize();
                 outputPlane.normalize();
                 result += residual(transformation, inputPlane, outputPlane);

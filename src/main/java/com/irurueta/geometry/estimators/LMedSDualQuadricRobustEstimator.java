@@ -71,14 +71,14 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSDualQuadricRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -90,7 +90,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      */
     public LMedSDualQuadricRobustEstimator(final List<Plane> planes) {
         super(planes);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -99,10 +99,9 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public LMedSDualQuadricRobustEstimator(
-            final DualQuadricRobustEstimatorListener listener) {
+    public LMedSDualQuadricRobustEstimator(final DualQuadricRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
 
@@ -116,10 +115,9 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSDualQuadricRobustEstimator(
-            final DualQuadricRobustEstimatorListener listener,
-            final List<Plane> planes) {
+            final DualQuadricRobustEstimatorListener listener, final List<Plane> planes) {
         super(listener, planes);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -142,7 +140,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -167,8 +165,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      * @throws LockedException          if robust estimator is locked because an
      *                                  estimation is already in progress.
      */
-    public void setStopThreshold(final double stopThreshold)
-            throws LockedException {
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -176,7 +173,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
 
@@ -194,8 +191,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public DualQuadric estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public DualQuadric estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -203,102 +199,91 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator 
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<DualQuadric> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<DualQuadric>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(new LMedSRobustEstimatorListener<DualQuadric>() {
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPlanes.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return planes.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return DualQuadricRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return DualQuadricRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<DualQuadric> solutions) {
-                                final Plane plane1 = mPlanes.get(samplesIndices[0]);
-                                final Plane plane2 = mPlanes.get(samplesIndices[1]);
-                                final Plane plane3 = mPlanes.get(samplesIndices[2]);
-                                final Plane plane4 = mPlanes.get(samplesIndices[3]);
-                                final Plane plane5 = mPlanes.get(samplesIndices[4]);
-                                final Plane plane6 = mPlanes.get(samplesIndices[5]);
-                                final Plane plane7 = mPlanes.get(samplesIndices[6]);
-                                final Plane plane8 = mPlanes.get(samplesIndices[7]);
-                                final Plane plane9 = mPlanes.get(samplesIndices[8]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<DualQuadric> solutions) {
+                final var plane1 = planes.get(samplesIndices[0]);
+                final var plane2 = planes.get(samplesIndices[1]);
+                final var plane3 = planes.get(samplesIndices[2]);
+                final var plane4 = planes.get(samplesIndices[3]);
+                final var plane5 = planes.get(samplesIndices[4]);
+                final var plane6 = planes.get(samplesIndices[5]);
+                final var plane7 = planes.get(samplesIndices[6]);
+                final var plane8 = planes.get(samplesIndices[7]);
+                final var plane9 = planes.get(samplesIndices[8]);
 
-                                try {
-                                    final DualQuadric dualQuadric = new DualQuadric(plane1, plane2,
-                                            plane3, plane4, plane5, plane6, plane7, plane8,
-                                            plane9);
-                                    solutions.add(dualQuadric);
-                                } catch (final CoincidentPlanesException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final DualQuadric dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5, plane6,
+                            plane7, plane8, plane9);
+                    solutions.add(dualQuadric);
+                } catch (final CoincidentPlanesException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final DualQuadric currentEstimation,
-                                                          final int i) {
-                                return residual(currentEstimation, mPlanes.get(i));
-                            }
+            @Override
+            public double computeResidual(final DualQuadric currentEstimation, final int i) {
+                return residual(currentEstimation, planes.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSDualQuadricRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return LMedSDualQuadricRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<DualQuadric> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            LMedSDualQuadricRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<DualQuadric> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(LMedSDualQuadricRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<DualQuadric> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            LMedSDualQuadricRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<DualQuadric> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(LMedSDualQuadricRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<DualQuadric> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSDualQuadricRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<DualQuadric> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(LMedSDualQuadricRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<DualQuadric> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSDualQuadricRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<DualQuadric> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(LMedSDualQuadricRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

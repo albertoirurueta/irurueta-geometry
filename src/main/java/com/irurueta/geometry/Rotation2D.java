@@ -130,8 +130,7 @@ public class Rotation2D implements Serializable {
      * @throws IllegalArgumentException       Raised if provided threshold is negative
      * @see #isValidRotationMatrix(Matrix)
      */
-    public Rotation2D(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
+    public Rotation2D(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
         fromMatrix(m, threshold);
     }
 
@@ -171,7 +170,7 @@ public class Rotation2D implements Serializable {
      * @return Inverse 2D rotation.
      */
     public Rotation2D inverseRotation() {
-        final Rotation2D result = new Rotation2D();
+        final var result = new Rotation2D();
         inverseRotation(result);
         return result;
     }
@@ -195,8 +194,7 @@ public class Rotation2D implements Serializable {
     public Matrix asInhomogeneousMatrix() {
         Matrix result = null;
         try {
-            result = new Matrix(ROTATION2D_INHOM_MATRIX_ROWS,
-                    ROTATION2D_INHOM_MATRIX_COLS);
+            result = new Matrix(ROTATION2D_INHOM_MATRIX_ROWS, ROTATION2D_INHOM_MATRIX_COLS);
             asInhomogeneousMatrix(result);
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -213,14 +211,13 @@ public class Rotation2D implements Serializable {
      *                                  have size 2x2.
      */
     public void asInhomogeneousMatrix(final Matrix result) {
-        if (result.getRows() != ROTATION2D_INHOM_MATRIX_ROWS ||
-                result.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {
+        if (result.getRows() != ROTATION2D_INHOM_MATRIX_ROWS || result.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException();
         }
 
         // set result
-        final double sinTheta = Math.sin(theta);
-        final double cosTheta = Math.cos(theta);
+        final var sinTheta = Math.sin(theta);
+        final var cosTheta = Math.cos(theta);
         result.setElementAt(0, 0, cosTheta);
         result.setElementAt(1, 0, sinTheta);
         result.setElementAt(0, 1, -sinTheta);
@@ -235,8 +232,7 @@ public class Rotation2D implements Serializable {
     public Matrix asHomogeneousMatrix() {
         Matrix result = null;
         try {
-            result = new Matrix(ROTATION2D_HOM_MATRIX_ROWS,
-                    ROTATION2D_HOM_MATRIX_COLS);
+            result = new Matrix(ROTATION2D_HOM_MATRIX_ROWS, ROTATION2D_HOM_MATRIX_COLS);
             asHomogeneousMatrix(result);
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -253,14 +249,13 @@ public class Rotation2D implements Serializable {
      *                                  have size 3x3.
      */
     public void asHomogeneousMatrix(final Matrix result) {
-        if (result.getRows() != ROTATION2D_HOM_MATRIX_ROWS ||
-                result.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {
+        if (result.getRows() != ROTATION2D_HOM_MATRIX_ROWS || result.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {
             throw new IllegalArgumentException();
         }
 
         // set result
-        final double sinTheta = Math.sin(theta);
-        final double cosTheta = Math.cos(theta);
+        final var sinTheta = Math.sin(theta);
+        final var cosTheta = Math.cos(theta);
         result.setElementAt(0, 0, cosTheta);
         result.setElementAt(1, 0, sinTheta);
         result.setElementAt(2, 0, 0.0);
@@ -286,14 +281,11 @@ public class Rotation2D implements Serializable {
      * @throws IllegalArgumentException       Raised if provided threshold is negative
      * @see #isValidRotationMatrix(Matrix)
      */
-    public final void fromMatrix(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
-        if (m.getRows() == ROTATION2D_INHOM_MATRIX_ROWS &&
-                m.getColumns() == ROTATION2D_INHOM_MATRIX_COLS) {
+    public final void fromMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+        if (m.getRows() == ROTATION2D_INHOM_MATRIX_ROWS && m.getColumns() == ROTATION2D_INHOM_MATRIX_COLS) {
             // inhomogeneous matrix
             fromInhomogeneousMatrix(m, threshold);
-        } else if (m.getRows() == ROTATION2D_HOM_MATRIX_ROWS &&
-                m.getColumns() == ROTATION2D_HOM_MATRIX_COLS) {
+        } else if (m.getRows() == ROTATION2D_HOM_MATRIX_ROWS && m.getColumns() == ROTATION2D_HOM_MATRIX_COLS) {
             // homogeneous matrix
             fromHomogeneousMatrix(m, threshold);
         } else {
@@ -332,18 +324,16 @@ public class Rotation2D implements Serializable {
      * @throws IllegalArgumentException       Raised if provided threshold is negative.
      * @see #isValidRotationMatrix(Matrix)
      */
-    public void fromInhomogeneousMatrix(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
-        if (m.getRows() != ROTATION2D_INHOM_MATRIX_ROWS ||
-                m.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {
+    public void fromInhomogeneousMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+        if (m.getRows() != ROTATION2D_INHOM_MATRIX_ROWS || m.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {
             throw new InvalidRotationMatrixException();
         }
         if (!isValidRotationMatrix(m, threshold)) {
             throw new InvalidRotationMatrixException();
         }
 
-        final double cosTheta = m.getElementAt(0, 0);
-        final double sinTheta = m.getElementAt(1, 0);
+        final var cosTheta = m.getElementAt(0, 0);
+        final var sinTheta = m.getElementAt(1, 0);
 
         // estimated theta will be in the range -pi, pi.
         theta = Math.atan2(sinTheta, cosTheta);
@@ -362,8 +352,7 @@ public class Rotation2D implements Serializable {
      *                                        valid (has wrong size, or it is not orthonormal).
      * @see #isValidRotationMatrix(Matrix)
      */
-    public void fromInhomogeneousMatrix(final Matrix m)
-            throws InvalidRotationMatrixException {
+    public void fromInhomogeneousMatrix(final Matrix m) throws InvalidRotationMatrixException {
         fromInhomogeneousMatrix(m, MATRIX_VALID_THRESHOLD);
     }
 
@@ -381,25 +370,23 @@ public class Rotation2D implements Serializable {
      * @throws IllegalArgumentException       Raised if provided threshold is negative.
      * @see #isValidRotationMatrix(Matrix)
      */
-    public void fromHomogeneousMatrix(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
-        if (m.getRows() != ROTATION2D_HOM_MATRIX_ROWS ||
-                m.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {
+    public void fromHomogeneousMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+        if (m.getRows() != ROTATION2D_HOM_MATRIX_ROWS || m.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {
             throw new InvalidRotationMatrixException();
         }
         if (!isValidRotationMatrix(m, threshold)) {
             throw new InvalidRotationMatrixException();
         }
-        if (Math.abs(m.getElementAt(2, 0)) > threshold ||
-                Math.abs(m.getElementAt(2, 1)) > threshold ||
-                Math.abs(m.getElementAt(0, 2)) > threshold ||
-                Math.abs(m.getElementAt(1, 2)) > threshold ||
-                Math.abs(m.getElementAt(2, 2) - 1.0) > threshold) {
+        if (Math.abs(m.getElementAt(2, 0)) > threshold
+                || Math.abs(m.getElementAt(2, 1)) > threshold
+                || Math.abs(m.getElementAt(0, 2)) > threshold
+                || Math.abs(m.getElementAt(1, 2)) > threshold
+                || Math.abs(m.getElementAt(2, 2) - 1.0) > threshold) {
             throw new InvalidRotationMatrixException();
         }
 
-        final double cosTheta = m.getElementAt(0, 0);
-        final double sinTheta = m.getElementAt(1, 0);
+        final var cosTheta = m.getElementAt(0, 0);
+        final var sinTheta = m.getElementAt(1, 0);
 
         // estimated theta will be in the range -pi, pi.
         theta = Math.atan2(sinTheta, cosTheta);
@@ -419,8 +406,7 @@ public class Rotation2D implements Serializable {
      *                                        valid (has wrong size, or it is not orthonormal).
      * @see #isValidRotationMatrix(Matrix)
      */
-    public void fromHomogeneousMatrix(final Matrix m)
-            throws InvalidRotationMatrixException {
+    public void fromHomogeneousMatrix(final Matrix m) throws InvalidRotationMatrixException {
         fromHomogeneousMatrix(m, MATRIX_VALID_THRESHOLD);
     }
 
@@ -435,9 +421,8 @@ public class Rotation2D implements Serializable {
      */
     public void rotate(final Point2D inputPoint, final Point2D resultPoint) {
         try {
-            final Matrix r = asHomogeneousMatrix();
-            final Matrix p = new Matrix(
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var r = asHomogeneousMatrix();
+            final var p = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
 
             // to increase accuracy
             inputPoint.normalize();
@@ -448,8 +433,8 @@ public class Rotation2D implements Serializable {
             // Rotated point below is R * p
             r.multiply(p);
 
-            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0),
-                    r.getElementAt(1, 0), r.getElementAt(2, 0));
+            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0), r.getElementAt(1, 0),
+                    r.getElementAt(2, 0));
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -466,7 +451,7 @@ public class Rotation2D implements Serializable {
      * @return Rotated point.
      */
     public Point2D rotate(final Point2D point) {
-        final Point2D result = new HomogeneousPoint2D();
+        final var result = new HomogeneousPoint2D();
         rotate(point, result);
         return result;
     }
@@ -481,7 +466,7 @@ public class Rotation2D implements Serializable {
      */
     public void rotate(final Line2D inputLine, final Line2D resultLine) {
         try {
-            final Matrix r = asHomogeneousMatrix();
+            final var r = asHomogeneousMatrix();
             // because of the duality theorem:
             // l'*m = 0 --> l*R^-1*R*m = 0 --> l2' = l'*R^-1 and m2 = R*m
             // where l2 and m2 are rotated line and point, however rotated
@@ -489,7 +474,7 @@ public class Rotation2D implements Serializable {
             // Hence l2' = l' * R', and by undoing the transposition
             // l2 = (l' * R')' = R'' * l'' = R * l
 
-            final Matrix l = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
+            final var l = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
 
             // to increase accuracy
             inputLine.normalize();
@@ -500,8 +485,8 @@ public class Rotation2D implements Serializable {
             // Rotated line below is R * l
             r.multiply(l);
 
-            resultLine.setParameters(r.getElementAt(0, 0),
-                    r.getElementAt(1, 0), r.getElementAt(2, 0));
+            resultLine.setParameters(r.getElementAt(0, 0), r.getElementAt(1, 0),
+                    r.getElementAt(2, 0));
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -518,7 +503,7 @@ public class Rotation2D implements Serializable {
      * @return Rotated line.
      */
     public Line2D rotate(final Line2D line) {
-        final Line2D result = new Line2D();
+        final var result = new Line2D();
         rotate(line, result);
         return result;
     }
@@ -534,15 +519,13 @@ public class Rotation2D implements Serializable {
      * @return True if matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidRotationMatrix(
-            final Matrix m, final double threshold) {
+    public static boolean isValidRotationMatrix(final Matrix m, final double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         try {
-            return Utils.isOrthogonal(m, threshold) &&
-                    (Math.abs(Utils.det(m)) - 1.0) < threshold;
+            return Utils.isOrthogonal(m, threshold) && (Math.abs(Utils.det(m)) - 1.0) < threshold;
         } catch (final AlgebraException e) {
             return false;
         }
@@ -572,7 +555,7 @@ public class Rotation2D implements Serializable {
      * with this rotation.
      */
     public Rotation2D combineAndReturnNew(final Rotation2D rotation) {
-        final Rotation2D result = new Rotation2D();
+        final var result = new Rotation2D();
         combine(this, rotation, result);
         return result;
     }
@@ -596,9 +579,7 @@ public class Rotation2D implements Serializable {
      * @param result Combined rotation, which is equal to the sum of provided
      *               input rotations.
      */
-    public static void combine(
-            final Rotation2D rot1, final Rotation2D rot2,
-            final Rotation2D result) {
+    public static void combine(final Rotation2D rot1, final Rotation2D rot2, final Rotation2D result) {
         result.theta = rot1.theta + rot2.theta;
     }
 

@@ -35,8 +35,7 @@ import java.util.List;
  * <a href="http://cvlab.epfl.ch/EPnP/index.php">http://cvlab.epfl.ch/EPnP/index.php</a>
  */
 @SuppressWarnings("DuplicatedCode")
-public class EPnPPointCorrespondencePinholeCameraEstimator extends
-        PointCorrespondencePinholeCameraEstimator {
+public class EPnPPointCorrespondencePinholeCameraEstimator extends PointCorrespondencePinholeCameraEstimator {
 
     /**
      * Indicates that by default planar configuration is checked to determine
@@ -79,8 +78,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * point correspondences are in such configuration and find a specific
      * solution for such case.
      */
-    private boolean mPlanarConfigurationAllowed =
-            DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
+    private boolean planarConfigurationAllowed = DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
 
     /**
      * Indicates whether the case where a dimension 2 null-space is allowed.
@@ -88,8 +86,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      */
-    private boolean mNullspaceDimension2Allowed =
-            DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
+    private boolean nullspaceDimension2Allowed = DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
 
     /**
      * Indicates whether the case where a dimension 3 null-space is allowed.
@@ -98,8 +95,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * Enabling this parameter is usually ok although less precise than
      * when a null-space of dimension 2 is used.
      */
-    private boolean mNullspaceDimension3Allowed =
-            DEFAULT_NULLSPACE_DIMENSION3_ALLOWED;
+    private boolean nullspaceDimension3Allowed = DEFAULT_NULLSPACE_DIMENSION3_ALLOWED;
 
     /**
      * Threshold to determine whether 3D matched points are in a planar
@@ -108,23 +104,23 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * value of their covariance matrix has a value much smaller than the
      * largest one as many times as this value.
      */
-    private double mPlanarThreshold = DEFAULT_PLANAR_THRESHOLD;
+    private double planarThreshold = DEFAULT_PLANAR_THRESHOLD;
 
     /**
      * Intrinsic parameters of camera to be estimated.
      */
-    private PinholeCameraIntrinsicParameters mIntrinsic;
+    private PinholeCameraIntrinsicParameters intrinsic;
 
     /**
      * Indicates whether provided correspondences were found to be laying in a
      * planar configuration during the estimation.
      */
-    private boolean mIsPlanar;
+    private boolean isPlanar;
 
     /**
      * Computed control points in world coordinates.
      */
-    private List<Point3D> mControlWorldPoints;
+    private List<Point3D> controlWorldPoints;
 
     /**
      * Contains barycentric coordinates to express 3D world point in terms of
@@ -136,7 +132,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * both reference frames are centered in the centroid, alphas can be used
      * in both world and camera coordinates.
      */
-    private Matrix mAlphas;
+    private Matrix alphas;
 
     /**
      * M matrix to find control points in camera coordinates.
@@ -144,7 +140,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * (planar configuration), where n is the number of provided 2D observed
      * points.
      */
-    private Matrix mM;
+    private Matrix m;
 
     /**
      * List containing columns of null-space of M. Linear combinations of these
@@ -155,12 +151,12 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * Last item of the list contains (column - number of control points) column
      * of v.
      */
-    private List<double[]> mNullspace;
+    private List<double[]> nullspace;
 
     /**
      * Possible solutions for the estimation.
      */
-    private List<Solution> mSolutions;
+    private List<Solution> solutions;
 
     /**
      * Constructor.
@@ -175,8 +171,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    public EPnPPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    public EPnPPointCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
     }
 
@@ -190,8 +185,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D)
-            throws WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D) throws WrongListSizesException {
         super();
         internalSetListsEpnP(points3D, points2D);
     }
@@ -208,8 +202,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final PinholeCameraEstimatorListener listener)
+            final List<Point3D> points3D, final List<Point2D> points2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(listener);
         internalSetListsEpnP(points3D, points2D);
@@ -220,10 +213,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
-    public EPnPPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraIntrinsicParameters intrinsic) {
+    public EPnPPointCorrespondencePinholeCameraEstimator(final PinholeCameraIntrinsicParameters intrinsic) {
         this();
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -236,10 +228,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                  too small.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final PinholeCameraEstimatorListener listener) {
+            final PinholeCameraIntrinsicParameters intrinsic, final PinholeCameraEstimatorListener listener) {
         this(listener);
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -254,11 +245,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D)
-            throws WrongListSizesException {
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D) throws WrongListSizesException {
         this(points3D, points2D);
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -275,12 +265,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final PinholeCameraEstimatorListener listener)
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         this(points3D, points2D, listener);
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -294,8 +283,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     @Override
-    public void setLists(final List<Point3D> points3D, final List<Point2D> points2D)
-            throws LockedException, WrongListSizesException {
+    public void setLists(final List<Point3D> points3D, final List<Point2D> points2D) throws LockedException,
+            WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -312,7 +301,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * false to always find a solution assuming the general case.
      */
     public boolean isPlanarConfigurationAllowed() {
-        return mPlanarConfigurationAllowed;
+        return planarConfigurationAllowed;
     }
 
     /**
@@ -325,12 +314,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                   general case.
      * @throws LockedException if estimator is locked.
      */
-    public void setPlanarConfigurationAllowed(
-            final boolean planarConfigurationAllowed) throws LockedException {
+    public void setPlanarConfigurationAllowed(final boolean planarConfigurationAllowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mPlanarConfigurationAllowed = planarConfigurationAllowed;
+        this.planarConfigurationAllowed = planarConfigurationAllowed;
     }
 
     /**
@@ -342,7 +330,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return true to allow 2-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
-        return mNullspaceDimension2Allowed;
+        return nullspaceDimension2Allowed;
     }
 
     /**
@@ -355,12 +343,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setNullspaceDimension2Allowed(
-            final boolean nullspaceDimension2Allowed) throws LockedException {
+    public void setNullspaceDimension2Allowed(final boolean nullspaceDimension2Allowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mNullspaceDimension2Allowed = nullspaceDimension2Allowed;
+        this.nullspaceDimension2Allowed = nullspaceDimension2Allowed;
     }
 
     /**
@@ -373,7 +360,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return true to allow 3-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension3Allowed() {
-        return mNullspaceDimension3Allowed;
+        return nullspaceDimension3Allowed;
     }
 
     /**
@@ -387,12 +374,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setNullspaceDimension3Allowed(
-            final boolean nullspaceDimension3Allowed) throws LockedException {
+    public void setNullspaceDimension3Allowed(final boolean nullspaceDimension3Allowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mNullspaceDimension3Allowed = nullspaceDimension3Allowed;
+        this.nullspaceDimension3Allowed = nullspaceDimension3Allowed;
     }
 
     /**
@@ -406,7 +392,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * configuration.
      */
     public double getPlanarThreshold() {
-        return mPlanarThreshold;
+        return planarThreshold;
     }
 
     /**
@@ -421,15 +407,14 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws IllegalArgumentException if provided threshold is negative.
      * @throws LockedException          if estimator is locked.
      */
-    public void setPlanarThreshold(final double planarThreshold)
-            throws LockedException {
+    public void setPlanarThreshold(final double planarThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (planarThreshold < 0.0) {
             throw new IllegalArgumentException();
         }
-        mPlanarThreshold = planarThreshold;
+        this.planarThreshold = planarThreshold;
     }
 
     /**
@@ -438,7 +423,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return intrinsic parameters of camera to be estimated.
      */
     public PinholeCameraIntrinsicParameters getIntrinsic() {
-        return mIntrinsic;
+        return intrinsic;
     }
 
     /**
@@ -447,12 +432,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param intrinsic intrinsic parameters of camera to be estimated.
      * @throws LockedException if estimator is locked.
      */
-    public void setIntrinsic(final PinholeCameraIntrinsicParameters intrinsic)
-            throws LockedException {
+    public void setIntrinsic(final PinholeCameraIntrinsicParameters intrinsic) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -462,8 +446,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public boolean isReady() {
-        return areListsAvailable() && areValidLists(mPoints3D, mPoints2D) &&
-                mIntrinsic != null;
+        return areListsAvailable() && areValidLists(points3D, points2D) && intrinsic != null;
     }
 
     /**
@@ -497,9 +480,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException if estimator is locked.
      */
     @Override
-    public void setPointCorrespondencesNormalized(final boolean normalize)
-            throws LockedException {
-
+    public void setPointCorrespondencesNormalized(final boolean normalize) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -515,8 +496,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                                         estimation, usually because input data is not valid.
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            PinholeCameraEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -525,9 +505,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         }
 
         try {
-            mLocked = true;
-            if (mListener != null) {
-                mListener.onEstimateStart(this);
+            locked = true;
+            if (listener != null) {
+                listener.onEstimateStart(this);
             }
 
             computeWorldControlPointsAndPointConfiguration();
@@ -535,12 +515,12 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             buildM();
             solveNullspace();
         } catch (final AlgebraException e) {
-            mLocked = false;
+            locked = false;
             throw new PinholeCameraEstimatorException(e);
         }
 
 
-        mSolutions = new ArrayList<>();
+        solutions = new ArrayList<>();
 
         // general case
         try {
@@ -548,14 +528,14 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         } catch (final GeometryException ignore) {
             // continue attempting 2nd solution if 1st one fails
         }
-        if (mNullspaceDimension2Allowed) {
+        if (nullspaceDimension2Allowed) {
             try {
                 generalSolution2();
             } catch (final GeometryException | AlgebraException ignore) {
                 // continue attempting 3rd solution if 2nd one fails
             }
         }
-        if (mNullspaceDimension3Allowed && !mIsPlanar) {
+        if (nullspaceDimension3Allowed && !isPlanar) {
             try {
                 generalSolution3();
             } catch (final GeometryException | AlgebraException ignore) {
@@ -564,16 +544,16 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         }
 
         // pick best solution
-        final Solution bestSolution = pickBestSolution();
+        final var bestSolution = pickBestSolution();
 
-        if (mListener != null) {
-            mListener.onEstimateEnd(this);
+        if (listener != null) {
+            listener.onEstimateEnd(this);
         }
 
         if (bestSolution == null) {
             throw new PinholeCameraEstimatorException();
         }
-        mLocked = false;
+        locked = false;
         return attemptRefine(bestSolution.camera);
     }
 
@@ -586,7 +566,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * false otherwise.
      */
     public boolean isPlanar() {
-        return mIsPlanar;
+        return isPlanar;
     }
 
     /**
@@ -601,8 +581,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return matrix of estimated pinhole camera.
      */
     @Override
-    protected Matrix internalEstimate(final List<Point3D> points3D,
-                                      final List<Point2D> points2D) {
+    protected Matrix internalEstimate(final List<Point3D> points3D, final List<Point2D> points2D) {
         return null;
     }
 
@@ -616,8 +595,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    private void internalSetListsEpnP(final List<Point3D> points3D,
-                                      final List<Point2D> points2D) throws WrongListSizesException {
+    private void internalSetListsEpnP(final List<Point3D> points3D, final List<Point2D> points2D)
+            throws WrongListSizesException {
 
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -627,8 +606,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             throw new WrongListSizesException();
         }
 
-        mPoints3D = points3D;
-        mPoints2D = points2D;
+        this.points3D = points3D;
+        this.points2D = points2D;
     }
 
     /**
@@ -638,8 +617,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private Solution pickBestSolution() {
         Solution bestSolution = null;
-        double bestError = Double.MAX_VALUE;
-        for (final Solution s : mSolutions) {
+        var bestError = Double.MAX_VALUE;
+        for (final var s : solutions) {
             if (s.reprojectionError < bestError) {
                 bestError = s.reprojectionError;
                 bestSolution = s;
@@ -659,9 +638,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws NotReadyException         never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
      */
-    private void generalSolution3() throws AlgebraException,
-            LockedException, NotReadyException, CoincidentPointsException {
-        if (mIsPlanar) {
+    private void generalSolution3() throws AlgebraException, LockedException, NotReadyException,
+            CoincidentPointsException {
+        if (isPlanar) {
             return;
         }
 
@@ -713,19 +692,18 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
         // this also produces 6 equations as in case 2.
 
-        final double[] va = mNullspace.get(0);
-        final double[] vb = mNullspace.get(1);
-        final double[] vc = mNullspace.get(2);
+        final var va = nullspace.get(0);
+        final var vb = nullspace.get(1);
+        final var vc = nullspace.get(2);
 
-        final List<Point3D> controlCameraPointsA = controlPointsFromV(va);
-        final List<Point3D> controlCameraPointsB = controlPointsFromV(vb);
-        final List<Point3D> controlCameraPointsC = controlPointsFromV(vc);
+        final var controlCameraPointsA = controlPointsFromV(va);
+        final var controlCameraPointsB = controlPointsFromV(vb);
+        final var controlCameraPointsC = controlPointsFromV(vc);
 
-        final Matrix c = constraintMatrixSolution3(controlCameraPointsA,
-                controlCameraPointsB, controlCameraPointsC);
-        final double[] rhos = rhos(mControlWorldPoints);
+        final var c = constraintMatrixSolution3(controlCameraPointsA, controlCameraPointsB, controlCameraPointsC);
+        final var rhos = rhos(controlWorldPoints);
 
-        final double[] a = Utils.solve(c, rhos);
+        final var a = Utils.solve(c, rhos);
 
         double beta1;
         double beta2;
@@ -753,22 +731,21 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // alpha5 = beta*beta3
         // alpha6 = beta3^2
 
-        final double initialBeta1 = beta1;
-        final double initialBeta2 = beta2;
-        final double initialBeta3 = beta3;
+        final var initialBeta1 = beta1;
+        final var initialBeta2 = beta2;
+        final var initialBeta3 = beta3;
 
         // compute linear combination of va and vb as
         // v = beta1*va + beta2*vb + beta3*vc
-        final double[] tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);
-        final double[] tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);
-        final double[] tmp3 = ArrayUtils.multiplyByScalarAndReturnNew(vc, beta3);
+        final var tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);
+        final var tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);
+        final var tmp3 = ArrayUtils.multiplyByScalarAndReturnNew(vc, beta3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        List<Point3D> controlCameraPoints = controlPointsFromV(tmp1);
+        var controlCameraPoints = controlPointsFromV(tmp1);
 
-        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        var solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         // because solutions are square roots, beta1, beta2 and beta3 can have
         // different signs, so we add solutions for each combination so that the
@@ -785,9 +762,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
 
         beta1 = initialBeta1;
@@ -802,10 +778,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = -initialBeta1;
         beta2 = -initialBeta2;
@@ -819,10 +793,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = initialBeta1;
         beta2 = initialBeta2;
@@ -836,10 +808,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = -initialBeta1;
         // no need to set beta2 = initialBeta2, because it already has this value
@@ -853,10 +823,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = initialBeta1;
         beta2 = -initialBeta2;
@@ -870,10 +838,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = -initialBeta1;
         beta2 = -initialBeta2;
@@ -887,9 +853,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
     }
 
     /**
@@ -902,8 +867,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws NotReadyException         never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
      */
-    private void generalSolution2() throws AlgebraException,
-            LockedException, NotReadyException, CoincidentPointsException {
+    private void generalSolution2() throws AlgebraException, LockedException, NotReadyException,
+            CoincidentPointsException {
         // we have the distance constraints between control world points (c) and
         // control camera points (v):
         // ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4
@@ -944,17 +909,16 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // terms of the equation can be built by calling method
         // #rhos(List<Point3D>) in this class
 
-        final double[] va = mNullspace.get(0);
-        final double[] vb = mNullspace.get(1);
+        final var va = nullspace.get(0);
+        final var vb = nullspace.get(1);
 
-        final List<Point3D> controlCameraPointsA = controlPointsFromV(va);
-        final List<Point3D> controlCameraPointsB = controlPointsFromV(vb);
+        final var controlCameraPointsA = controlPointsFromV(va);
+        final var controlCameraPointsB = controlPointsFromV(vb);
 
-        final Matrix c = constraintMatrixSolution2(controlCameraPointsA,
-                controlCameraPointsB);
-        final double[] rhos = rhos(mControlWorldPoints);
+        final var c = constraintMatrixSolution2(controlCameraPointsA, controlCameraPointsB);
+        final var rhos = rhos(controlWorldPoints);
 
-        final double[] a = Utils.solve(c, rhos);
+        final var a = Utils.solve(c, rhos);
 
         // obtained a values are related to betas with the following expressions
         // due to linearization:
@@ -977,19 +941,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             beta1 = -beta1;
         }
 
-        final double initialBeta1 = beta1;
-        final double initialBeta2 = beta2;
-
+        final var initialBeta1 = beta1;
+        final var initialBeta2 = beta2;
 
         // compute linear combination of va and vb as v = beta1*va + beta2*vb
-        final double[] tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);
-        final double[] tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);
+        final var tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);
+        final var tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
-        List<Point3D> controlCameraPoints = controlPointsFromV(tmp1);
+        var controlCameraPoints = controlPointsFromV(tmp1);
 
-        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        var solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         // because solutions are square roots, beta1 and beta2 can have different
         // signs, so we add solutions for each combination so that the one with
@@ -1003,10 +965,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, as it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = initialBeta1;
         beta2 = -initialBeta2;
@@ -1017,10 +977,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, as it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
-
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         beta1 = -initialBeta1;
         beta2 = initialBeta2;
@@ -1031,9 +989,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // no need to set v = tmp1, as it already has this value
         controlCameraPoints = controlPointsFromV(tmp1);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
     }
 
     /**
@@ -1050,27 +1007,25 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws AlgebraException never happens.
      */
     private static Matrix constraintMatrixSolution3(
-            final List<Point3D> controlCameraPointsA,
-            final List<Point3D> controlCameraPointsB,
+            final List<Point3D> controlCameraPointsA, final List<Point3D> controlCameraPointsB,
             final List<Point3D> controlCameraPointsC) throws AlgebraException {
 
-        final int numControl = controlCameraPointsA.size();
-        final int numEquations = numEquations(numControl);
+        final var numControl = controlCameraPointsA.size();
+        final var numEquations = numEquations(numControl);
 
-        final Matrix c = new Matrix(numEquations, 6);
+        final var c = new Matrix(numEquations, 6);
         int row = 0;
-        for (int i = 0; i < numControl; i++) {
-            final Point3D vai = controlCameraPointsA.get(i);
-            final Point3D vbi = controlCameraPointsB.get(i);
-            final Point3D vci = controlCameraPointsC.get(i);
+        for (var i = 0; i < numControl; i++) {
+            final var vai = controlCameraPointsA.get(i);
+            final var vbi = controlCameraPointsB.get(i);
+            final var vci = controlCameraPointsC.get(i);
 
-            for (int j = i + 1; j < numControl; j++) {
-                final Point3D vaj = controlCameraPointsA.get(j);
-                final Point3D vbj = controlCameraPointsB.get(j);
-                final Point3D vcj = controlCameraPointsC.get(j);
+            for (var j = i + 1; j < numControl; j++) {
+                final var vaj = controlCameraPointsA.get(j);
+                final var vbj = controlCameraPointsB.get(j);
+                final var vcj = controlCameraPointsC.get(j);
 
-                fillRowConstraintMatrixSolution3(row, c, vai, vaj, vbi, vbj,
-                        vci, vcj);
+                fillRowConstraintMatrixSolution3(row, c, vai, vaj, vbi, vbj, vci, vcj);
                 row++;
             }
         }
@@ -1091,21 +1046,21 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws AlgebraException never happens.
      */
     private static Matrix constraintMatrixSolution2(
-            final List<Point3D> controlCameraPointsA,
-            final List<Point3D> controlCameraPointsB) throws AlgebraException {
+            final List<Point3D> controlCameraPointsA, final List<Point3D> controlCameraPointsB)
+            throws AlgebraException {
 
-        final int numControl = controlCameraPointsA.size();
-        final int numEquations = numEquations(numControl);
+        final var numControl = controlCameraPointsA.size();
+        final var numEquations = numEquations(numControl);
 
-        final Matrix c = new Matrix(numEquations, 3);
-        int row = 0;
-        for (int i = 0; i < numControl; i++) {
-            final Point3D vai = controlCameraPointsA.get(i);
-            final Point3D vbi = controlCameraPointsB.get(i);
+        final var c = new Matrix(numEquations, 3);
+        var row = 0;
+        for (var i = 0; i < numControl; i++) {
+            final var vai = controlCameraPointsA.get(i);
+            final var vbi = controlCameraPointsB.get(i);
 
-            for (int j = i + 1; j < numControl; j++) {
-                final Point3D vaj = controlCameraPointsA.get(j);
-                final Point3D vbj = controlCameraPointsB.get(j);
+            for (var j = i + 1; j < numControl; j++) {
+                final var vaj = controlCameraPointsA.get(j);
+                final var vbj = controlCameraPointsB.get(j);
 
                 fillRowConstraintMatrixSolution2(row, c, vai, vaj, vbi, vbj);
                 row++;
@@ -1134,57 +1089,56 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *            of v (i.e. the null-space).
      */
     private static void fillRowConstraintMatrixSolution3(
-            final int row, final Matrix c, final Point3D vai,
-            final Point3D vaj, final Point3D vbi, final Point3D vbj,
+            final int row, final Matrix c, final Point3D vai, final Point3D vaj, final Point3D vbi, final Point3D vbj,
             final Point3D vci, final Point3D vcj) {
 
-        final double vaix = vai.getInhomX();
-        final double vaiy = vai.getInhomY();
-        final double vaiz = vai.getInhomZ();
+        final var vaix = vai.getInhomX();
+        final var vaiy = vai.getInhomY();
+        final var vaiz = vai.getInhomZ();
 
-        final double vajx = vaj.getInhomX();
-        final double vajy = vaj.getInhomY();
-        final double vajz = vaj.getInhomZ();
+        final var vajx = vaj.getInhomX();
+        final var vajy = vaj.getInhomY();
+        final var vajz = vaj.getInhomZ();
 
-        final double vbix = vbi.getInhomX();
-        final double vbiy = vbi.getInhomY();
-        final double vbiz = vbi.getInhomZ();
+        final var vbix = vbi.getInhomX();
+        final var vbiy = vbi.getInhomY();
+        final var vbiz = vbi.getInhomZ();
 
-        final double vbjx = vbj.getInhomX();
-        final double vbjy = vbj.getInhomY();
-        final double vbjz = vbj.getInhomZ();
+        final var vbjx = vbj.getInhomX();
+        final var vbjy = vbj.getInhomY();
+        final var vbjz = vbj.getInhomZ();
 
-        final double vcix = vci.getInhomX();
-        final double vciy = vci.getInhomY();
-        final double vciz = vci.getInhomZ();
+        final var vcix = vci.getInhomX();
+        final var vciy = vci.getInhomY();
+        final var vciz = vci.getInhomZ();
 
-        final double vcjx = vcj.getInhomX();
-        final double vcjy = vcj.getInhomY();
-        final double vcjz = vcj.getInhomZ();
+        final var vcjx = vcj.getInhomX();
+        final var vcjy = vcj.getInhomY();
+        final var vcjz = vcj.getInhomZ();
 
         // 1st column
-        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) +
-                Math.pow(vaiy - vajy, 2.0) + Math.pow(vaiz - vajz, 2.0));
+        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) + Math.pow(vaiy - vajy, 2.0)
+                + Math.pow(vaiz - vajz, 2.0));
 
         // 2nd column
-        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) +
-                (vaiy - vajy) * (vbiy - vbjy) + (vaiz - vajz) * (vbiz - vbjz)));
+        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) + (vaiy - vajy) * (vbiy - vbjy)
+                + (vaiz - vajz) * (vbiz - vbjz)));
 
         // 3rd column
-        c.setElementAt(row, 2, 2.0 * ((vaix - vajx) * (vcix - vcjx) +
-                (vaiy - vajy) * (vciy - vcjy) + (vaiz - vajz) * (vciz - vcjz)));
+        c.setElementAt(row, 2, 2.0 * ((vaix - vajx) * (vcix - vcjx) + (vaiy - vajy) * (vciy - vcjy)
+                + (vaiz - vajz) * (vciz - vcjz)));
 
         // 4th column
-        c.setElementAt(row, 3, Math.pow(vbix - vbjx, 2.0) +
-                Math.pow(vbiy - vbjy, 2.0) + Math.pow(vbiz - vbjz, 2.0));
+        c.setElementAt(row, 3, Math.pow(vbix - vbjx, 2.0) + Math.pow(vbiy - vbjy, 2.0)
+                + Math.pow(vbiz - vbjz, 2.0));
 
         // 5th column
-        c.setElementAt(row, 4, 2.0 * ((vbix - vbjx) * (vcix - vcjx) +
-                (vbiy - vbjy) * (vciy - vcjy) + (vbiz - vbjz) * (vciz - vcjz)));
+        c.setElementAt(row, 4, 2.0 * ((vbix - vbjx) * (vcix - vcjx) + (vbiy - vbjy) * (vciy - vcjy)
+                + (vbiz - vbjz) * (vciz - vcjz)));
 
         // 6th column
-        c.setElementAt(row, 5, Math.pow(vcix - vcjx, 2.0) +
-                Math.pow(vciy - vcjy, 2.0) + Math.pow(vciz - vcjz, 2.0));
+        c.setElementAt(row, 5, Math.pow(vcix - vcjx, 2.0) + Math.pow(vciy - vcjy, 2.0)
+                + Math.pow(vciz - vcjz, 2.0));
     }
 
     /**
@@ -1202,36 +1156,35 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *            of v (i.e. the null-space).
      */
     private static void fillRowConstraintMatrixSolution2(
-            final int row, final Matrix c, final Point3D vai,
-            final Point3D vaj, final Point3D vbi, final Point3D vbj) {
+            final int row, final Matrix c, final Point3D vai, final Point3D vaj, final Point3D vbi, final Point3D vbj) {
 
-        final double vaix = vai.getInhomX();
-        final double vaiy = vai.getInhomY();
-        final double vaiz = vai.getInhomZ();
+        final var vaix = vai.getInhomX();
+        final var vaiy = vai.getInhomY();
+        final var vaiz = vai.getInhomZ();
 
-        final double vajx = vaj.getInhomX();
-        final double vajy = vaj.getInhomY();
-        final double vajz = vaj.getInhomZ();
+        final var vajx = vaj.getInhomX();
+        final var vajy = vaj.getInhomY();
+        final var vajz = vaj.getInhomZ();
 
-        final double vbix = vbi.getInhomX();
-        final double vbiy = vbi.getInhomY();
-        final double vbiz = vbi.getInhomZ();
+        final var vbix = vbi.getInhomX();
+        final var vbiy = vbi.getInhomY();
+        final var vbiz = vbi.getInhomZ();
 
-        final double vbjx = vbj.getInhomX();
-        final double vbjy = vbj.getInhomY();
-        final double vbjz = vbj.getInhomZ();
+        final var vbjx = vbj.getInhomX();
+        final var vbjy = vbj.getInhomY();
+        final var vbjz = vbj.getInhomZ();
 
         // 1st column
-        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) +
-                Math.pow(vaiy - vajy, 2.0) + Math.pow(vaiz - vajz, 2.0));
+        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) + Math.pow(vaiy - vajy, 2.0)
+                + Math.pow(vaiz - vajz, 2.0));
 
         // 2nd column
-        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) +
-                (vaiy - vajy) * (vbiy - vbjy) + (vaiz - vajz) * (vbiz - vbjz)));
+        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) + (vaiy - vajy) * (vbiy - vbjy)
+                + (vaiz - vajz) * (vbiz - vbjz)));
 
         // 3rd column
-        c.setElementAt(row, 2, Math.pow(vbix - vbjx, 2.0) +
-                Math.pow(vbiy - vbjy, 2.0) + Math.pow(vbiz - vbjz, 2.0));
+        c.setElementAt(row, 2, Math.pow(vbix - vbjx, 2.0) + Math.pow(vbiy - vbjy, 2.0)
+                + Math.pow(vbiz - vbjz, 2.0));
     }
 
     /**
@@ -1244,12 +1197,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws NotReadyException         never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
      */
-    private void generalSolution1() throws LockedException,
-            NotReadyException, CoincidentPointsException {
+    private void generalSolution1() throws LockedException, NotReadyException, CoincidentPointsException {
         // pick last column of null-space, contains control points in camera
         // coordinates up to scale (including sign change)
-        double[] v = mNullspace.get(0);
-        List<Point3D> controlCameraPoints = controlPointsFromV(v);
+        var v = nullspace.get(0);
+        var controlCameraPoints = controlPointsFromV(v);
 
         // similarly to solution2 and solution3, we could find the scale by
         // imposing the restriction: ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4
@@ -1270,18 +1222,16 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // is used, which is capable to determine the scale relating input and
         // output points, and thus, solving the linear system of equations is not
         // required in this case.
-        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        var solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
 
         // because v is a solution up to scale, we provide a solution with
         // opposite sign
         v = ArrayUtils.multiplyByScalarAndReturnNew(v, -1.0);
         controlCameraPoints = controlPointsFromV(v);
 
-        solution = computePossibleSolutionWithPoseAndReprojectionError(
-                controlCameraPoints);
-        mSolutions.add(solution);
+        solution = computePossibleSolutionWithPoseAndReprojectionError(controlCameraPoints);
+        solutions.add(solution);
     }
 
     /**
@@ -1295,25 +1245,23 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws CoincidentPointsException if a point degeneracy has occurred.
      */
     private Solution computePossibleSolutionWithPoseAndReprojectionError(
-            final List<Point3D> controlCameraPoints) throws LockedException,
-            NotReadyException, CoincidentPointsException {
+            final List<Point3D> controlCameraPoints) throws LockedException, NotReadyException,
+            CoincidentPointsException {
 
-        final MetricTransformation3D worldToCameraTransformation =
-                worldToCameraTransformationMetric(controlCameraPoints);
+        final var worldToCameraTransformation = worldToCameraTransformationMetric(controlCameraPoints);
 
-        final Rotation3D rotation = worldToCameraTransformation.getRotation();
-        final double[] t = worldToCameraTransformation.getTranslation();
-        final double scale = worldToCameraTransformation.getScale();
+        final var rotation = worldToCameraTransformation.getRotation();
+        final var t = worldToCameraTransformation.getTranslation();
+        final var scale = worldToCameraTransformation.getScale();
 
         // Camera center is C = -1/s*R'*t
-        final InhomogeneousPoint3D center = new InhomogeneousPoint3D(
-                -t[0] / scale, -t[1] / scale, -t[2] / scale);
-        final Rotation3D invRotation = rotation.inverseRotationAndReturnNew();
+        final var center = new InhomogeneousPoint3D(-t[0] / scale, -t[1] / scale, -t[2] / scale);
+        final var invRotation = rotation.inverseRotationAndReturnNew();
         invRotation.rotate(center, center);
 
-        final PinholeCamera camera = new PinholeCamera(mIntrinsic, rotation, center);
+        final var camera = new PinholeCamera(intrinsic, rotation, center);
 
-        final Solution solution = new Solution();
+        final var solution = new Solution();
         solution.controlCameraPoints = controlCameraPoints;
         solution.worldToCameraTransformation = worldToCameraTransformation;
         solution.camera = camera;
@@ -1335,12 +1283,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws NotReadyException         never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
      */
-    private MetricTransformation3D worldToCameraTransformationMetric(
-            final List<Point3D> controlCameraPoints) throws LockedException,
-            NotReadyException, CoincidentPointsException {
-        final MetricTransformation3DEstimator estimator =
-                new MetricTransformation3DEstimator(mControlWorldPoints,
-                        controlCameraPoints, mIsPlanar);
+    private MetricTransformation3D worldToCameraTransformationMetric(final List<Point3D> controlCameraPoints)
+            throws LockedException, NotReadyException, CoincidentPointsException {
+        final var estimator = new MetricTransformation3DEstimator(controlWorldPoints, controlCameraPoints, isPlanar);
         return estimator.estimate();
     }
 
@@ -1351,8 +1296,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return number of constraint equations.
      */
     private static int numEquations(final int numControl) {
-        int numEquations = 0;
-        for (int i = 1; i < numControl; i++) {
+        var numEquations = 0;
+        for (var i = 1; i < numControl; i++) {
             numEquations += i;
         }
         return numEquations;
@@ -1365,18 +1310,18 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return right term.
      */
     private static double[] rhos(final List<Point3D> controlWorldPoints) {
-        final int numControl = controlWorldPoints.size();
-        final int numEquations = numEquations(numControl);
-        final double[] rhos = new double[numEquations];
+        final var numControl = controlWorldPoints.size();
+        final var numEquations = numEquations(numControl);
+        final var rhos = new double[numEquations];
 
         // squared distance from control world i to control world j
         double dcijSqr;
-        int pos = 0;
-        for (int i = 0; i < numControl; i++) {
-            final Point3D ci = controlWorldPoints.get(i);
+        var pos = 0;
+        for (var i = 0; i < numControl; i++) {
+            final var ci = controlWorldPoints.get(i);
 
-            for (int j = i + 1; j < numControl; j++) {
-                final Point3D cj = controlWorldPoints.get(j);
+            for (var j = i + 1; j < numControl; j++) {
+                final var cj = controlWorldPoints.get(j);
 
                 dcijSqr = Math.pow(ci.distanceTo(cj), 2.0);
                 rhos[pos] = dcijSqr;
@@ -1394,15 +1339,15 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return reprojection error.
      */
     private double reprojectionError(final PinholeCamera camera) {
-        final int n = mPoints2D.size();
+        final var n = points2D.size();
 
         Point3D point3D;
-        final Point2D projected = Point2D.create();
+        final var projected = Point2D.create();
         Point2D point2D;
-        double error = 0.0;
-        for (int i = 0; i < n; i++) {
-            point3D = mPoints3D.get(i);
-            point2D = mPoints2D.get(i);
+        var error = 0.0;
+        for (var i = 0; i < n; i++) {
+            point3D = points3D.get(i);
+            point2D = points2D.get(i);
             camera.project(point3D, projected);
             error += projected.distanceTo(point2D);
         }
@@ -1419,13 +1364,12 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return control points.
      */
     private List<Point3D> controlPointsFromV(final double[] v) {
-        final int numControl = mControlWorldPoints.size();
-        final List<Point3D> points = new ArrayList<>();
+        final var numControl = controlWorldPoints.size();
+        final var points = new ArrayList<Point3D>();
 
-        InhomogeneousPoint3D p;
-        for (int j = 0; j < numControl; j++) {
-            final int k = j * 3;
-            p = new InhomogeneousPoint3D(v[k], v[k + 1], v[k + 2]);
+        for (var j = 0; j < numControl; j++) {
+            final var k = j * 3;
+            final var p = new InhomogeneousPoint3D(v[k], v[k + 1], v[k + 2]);
             points.add(p);
         }
 
@@ -1440,17 +1384,16 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      *                          instabilities.
      */
     private void solveNullspace() throws AlgebraException {
-        final int rows = mM.getRows();
-        final int cols = mM.getColumns();
-        final int numControl = cols /
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;
+        final var rows = m.getRows();
+        final var cols = m.getColumns();
+        final var numControl = cols / Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;
 
         // normalize rows of m to increase numerical accuracy
-        for (int i = 0; i < rows; i++) {
-            normalizeRow(mM, i);
+        for (var i = 0; i < rows; i++) {
+            normalizeRow(m, i);
         }
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(mM);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         // Singular values are always in descending order, hence null space is in
@@ -1460,7 +1403,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // coordinates.
         // A solution for the linear system M*x = 0 is obtained as a linear
         // combination of the columns of v forming the null-space.
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
         // although nullity of M could be determined after SVD, it is assumed
         // instead that null-space could be located in any of the latter columns
@@ -1469,15 +1412,14 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // for planar configuration we pick the last 3.
 
         // extract null points from the null space
-        mNullspace = new ArrayList<>();
-        final int colsMinusOne = cols - 1;
-        double[] vCol;
-        for (int i = 0; i < numControl; i++) {
-            final int column = colsMinusOne - i;
+        nullspace = new ArrayList<>();
+        final var colsMinusOne = cols - 1;
+        for (var i = 0; i < numControl; i++) {
+            final var column = colsMinusOne - i;
 
             // each picked column of v contains a possible solution
-            vCol = v.getSubmatrixAsArray(0, column, colsMinusOne, column);
-            mNullspace.add(vCol);
+            final var vCol = v.getSubmatrixAsArray(0, column, colsMinusOne, column);
+            nullspace.add(vCol);
         }
     }
 
@@ -1488,15 +1430,15 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param row row to be normalized.
      */
     private static void normalizeRow(final Matrix m, final int row) {
-        final int cols = m.getColumns();
+        final var cols = m.getColumns();
 
-        double norm = 0.0;
+        var norm = 0.0;
         for (int i = 0; i < cols; i++) {
             norm += Math.pow(m.getElementAt(row, i), 2.0);
         }
         norm = Math.sqrt(norm);
 
-        for (int i = 0; i < cols; i++) {
+        for (var i = 0; i < cols; i++) {
             m.setElementAt(row, i, m.getElementAt(row, i) / norm);
         }
     }
@@ -1518,46 +1460,43 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws AlgebraException if numerical instabilities occur.
      */
     private void buildM() throws AlgebraException {
-        final int n = mPoints2D.size();
-        final int numControlPoints = mAlphas.getColumns();
+        final var n = points2D.size();
+        final var numControlPoints = alphas.getColumns();
 
-        mM = new Matrix(2 * n, 3 * numControlPoints);
+        m = new Matrix(2 * n, 3 * numControlPoints);
 
         int row;
         int col;
         double alpha;
 
-        final double horizontalFocalLength = mIntrinsic.getHorizontalFocalLength();
-        final double verticalFocalLength = mIntrinsic.getVerticalFocalLength();
-        final double skewness = mIntrinsic.getSkewness();
-        final double horizontalPrincipalPoint =
-                mIntrinsic.getHorizontalPrincipalPoint();
-        final double verticalPrincipalPoint = mIntrinsic.getVerticalPrincipalPoint();
+        final var horizontalFocalLength = intrinsic.getHorizontalFocalLength();
+        final var verticalFocalLength = intrinsic.getVerticalFocalLength();
+        final var skewness = intrinsic.getSkewness();
+        final var horizontalPrincipalPoint = intrinsic.getHorizontalPrincipalPoint();
+        final var verticalPrincipalPoint = intrinsic.getVerticalPrincipalPoint();
 
         Point2D p;
         double pX;
         double pY;
-        for (int i = 0; i < n; i++) {
-            p = mPoints2D.get(i);
+        for (var i = 0; i < n; i++) {
+            p = points2D.get(i);
             pX = p.getInhomX();
             pY = p.getInhomY();
 
             row = i * 2;
 
-            for (int j = 0; j < numControlPoints; j++) {
+            for (var j = 0; j < numControlPoints; j++) {
                 col = j * 3;
 
-                alpha = mAlphas.getElementAt(i, j);
+                alpha = alphas.getElementAt(i, j);
 
-                mM.setElementAt(row, col, alpha * horizontalFocalLength);
-                mM.setElementAt(row, col + 1, alpha * skewness);
-                mM.setElementAt(row, col + 2,
-                        alpha * (horizontalPrincipalPoint - pX));
+                m.setElementAt(row, col, alpha * horizontalFocalLength);
+                m.setElementAt(row, col + 1, alpha * skewness);
+                m.setElementAt(row, col + 2, alpha * (horizontalPrincipalPoint - pX));
 
-                mM.setElementAt(row + 1, col, 0.0);
-                mM.setElementAt(row + 1, col + 1, alpha * verticalFocalLength);
-                mM.setElementAt(row + 1, col + 2,
-                        alpha * (verticalPrincipalPoint - pY));
+                m.setElementAt(row + 1, col, 0.0);
+                m.setElementAt(row + 1, col + 1, alpha * verticalFocalLength);
+                m.setElementAt(row + 1, col + 2, alpha * (verticalPrincipalPoint - pY));
             }
         }
     }
@@ -1619,21 +1558,19 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // In the planar case we have only 3 control points, and the last one
         // (c3) is the centroid.
 
-        final int numControl = mControlWorldPoints.size();
-        final int numDimensions = numControl - 1;
-        final int numControlMinusTwo = numControl - 2;
-        final Matrix c = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
-                numDimensions);
+        final var numControl = controlWorldPoints.size();
+        final var numDimensions = numControl - 1;
+        final var numControlMinusTwo = numControl - 2;
+        final var c = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, numDimensions);
 
         // the last control point is the centroid (or mean point)
-        final Point3D mean = mControlWorldPoints.get(numDimensions);
-        final double meanX = mean.getInhomX();
-        final double meanY = mean.getInhomY();
-        final double meanZ = mean.getInhomZ();
+        final var mean = controlWorldPoints.get(numDimensions);
+        final var meanX = mean.getInhomX();
+        final var meanY = mean.getInhomY();
+        final var meanZ = mean.getInhomZ();
 
-        Point3D controlPoint;
-        for (int i = 0; i < numDimensions; i++) {
-            controlPoint = mControlWorldPoints.get(i);
+        for (var i = 0; i < numDimensions; i++) {
+            final var controlPoint = controlWorldPoints.get(i);
             c.setElementAt(0, i, controlPoint.getInhomX() - meanX);
             c.setElementAt(1, i, controlPoint.getInhomY() - meanY);
             c.setElementAt(2, i, controlPoint.getInhomZ() - meanZ);
@@ -1643,18 +1580,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         // multiply it by [p - centroid], where centroid can be c4 or c3 in
         // planar case.
 
-        final Matrix invC = Utils.inverse(c);
+        final var invC = Utils.inverse(c);
 
         // x is p - centroid, where p is each 3D world point
-        final int n = mPoints3D.size();
-        final Matrix reducedPoint = new Matrix(
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-        final Matrix reducedAlpha = new Matrix(numDimensions, 1);
+        final var n = points3D.size();
+        final var reducedPoint = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+        final var reducedAlpha = new Matrix(numDimensions, 1);
         double[] buffer;
         Point3D worldPoint;
-        mAlphas = new Matrix(n, numControl);
-        for (int i = 0; i < n; i++) {
-            worldPoint = mPoints3D.get(i);
+        alphas = new Matrix(n, numControl);
+        for (var i = 0; i < n; i++) {
+            worldPoint = points3D.get(i);
             reducedPoint.setElementAtIndex(0, worldPoint.getInhomX() - meanX);
             reducedPoint.setElementAtIndex(1, worldPoint.getInhomY() - meanY);
             reducedPoint.setElementAtIndex(2, worldPoint.getInhomZ() - meanZ);
@@ -1663,18 +1599,16 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             buffer = reducedAlpha.getBuffer();
 
             // copy reducedAlpha into the former components of i-th row of alphas
-            mAlphas.setSubmatrix(i, 0, i, numControlMinusTwo, buffer);
+            alphas.setSubmatrix(i, 0, i, numControlMinusTwo, buffer);
 
             // The last component of each alpha for each point is computed so
             // that their sum is equal to one
             if (numControl == GENERAL_NUM_CONTROL_POINTS) {
                 // general configuration
-                mAlphas.setElementAt(i, numDimensions,
-                        1.0 - buffer[0] - buffer[1] - buffer[2]);
+                alphas.setElementAt(i, numDimensions, 1.0 - buffer[0] - buffer[1] - buffer[2]);
             } else {
                 // planar configuration
-                mAlphas.setElementAt(i, numDimensions,
-                        1.0 - buffer[0] - buffer[1]);
+                alphas.setElementAt(i, numDimensions, 1.0 - buffer[0] - buffer[1]);
             }
         }
     }
@@ -1703,22 +1637,21 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws AlgebraException if something fails because of numerical
      *                          instabilities.
      */
-    private void computeWorldControlPointsAndPointConfiguration()
-            throws AlgebraException {
-        final Point3D centroid = Point3D.centroid(mPoints3D);
+    private void computeWorldControlPointsAndPointConfiguration() throws AlgebraException {
+        final var centroid = Point3D.centroid(points3D);
 
         // covariance matrix elements, summed up here for speed
-        double c11 = 0.0;
-        double c12 = 0.0;
-        double c13 = 0.0;
-        double c22 = 0.0;
-        double c23 = 0.0;
-        double c33 = 0.0;
+        var c11 = 0.0;
+        var c12 = 0.0;
+        var c13 = 0.0;
+        var c22 = 0.0;
+        var c23 = 0.0;
+        var c33 = 0.0;
         double dx;
         double dy;
         double dz;
-        final int n = mPoints3D.size();
-        for (final Point3D point : mPoints3D) {
+        final var n = points3D.size();
+        for (final var point : points3D) {
             dx = point.getInhomX() - centroid.getInhomX();
             dy = point.getInhomY() - centroid.getInhomY();
             dz = point.getInhomZ() - centroid.getInhomZ();
@@ -1739,7 +1672,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         c23 /= n;
         c33 /= n;
 
-        final Matrix covar = new Matrix(3, 3);
+        final var covar = new Matrix(3, 3);
         covar.setElementAt(0, 0, c11);
         covar.setElementAt(1, 0, c12);
         covar.setElementAt(2, 0, c13);
@@ -1752,49 +1685,47 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         covar.setElementAt(1, 2, c23);
         covar.setElementAt(2, 2, c33);
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(covar);
+        final var decomposer = new SingularValueDecomposer(covar);
         decomposer.decompose();
 
-        final double[] singularValues = decomposer.getSingularValues();
-        final Matrix v = decomposer.getV();
+        final var singularValues = decomposer.getSingularValues();
+        final var v = decomposer.getV();
 
         // planar check
         int numControl;
-        if (!mPlanarConfigurationAllowed ||
-                Math.abs(singularValues[0]) <
-                        Math.abs(singularValues[2]) * mPlanarThreshold) {
+        if (!planarConfigurationAllowed
+                || Math.abs(singularValues[0]) < Math.abs(singularValues[2]) * planarThreshold) {
             // general configuration
             numControl = GENERAL_NUM_CONTROL_POINTS;
-            mIsPlanar = false;
+            isPlanar = false;
         } else {
             // planar configuration (only if allowed)
             numControl = PLANAR_NUM_CONTROL_POINTS;
-            mIsPlanar = true;
+            isPlanar = true;
         }
 
-        mControlWorldPoints = new ArrayList<>();
+        controlWorldPoints = new ArrayList<>();
 
-        final double centroidX = centroid.getInhomX();
-        final double centroidY = centroid.getInhomY();
-        final double centroidZ = centroid.getInhomZ();
+        final var centroidX = centroid.getInhomX();
+        final var centroidY = centroid.getInhomY();
+        final var centroidZ = centroid.getInhomZ();
 
-        final int numDimensions = numControl - 1;
-        final double k = Math.sqrt(singularValues[0] / n);
+        final var numDimensions = numControl - 1;
+        final var k = Math.sqrt(singularValues[0] / n);
         double vx;
         double vy;
         double vz;
-        for (int i = 0; i < numDimensions; i++) {
+        for (var i = 0; i < numDimensions; i++) {
             vx = v.getElementAt(0, i) * k;
             vy = v.getElementAt(1, i) * k;
             vz = v.getElementAt(2, i) * k;
 
-            mControlWorldPoints.add(new InhomogeneousPoint3D(centroidX + vx,
-                    centroidY + vy, centroidZ + vz));
+            controlWorldPoints.add(new InhomogeneousPoint3D(centroidX + vx, centroidY + vy, centroidZ + vz));
         }
 
         // add centroid (it will be used for the metric transformation
         // estimation)
-        mControlWorldPoints.add(centroid);
+        controlWorldPoints.add(centroid);
     }
 
     /**

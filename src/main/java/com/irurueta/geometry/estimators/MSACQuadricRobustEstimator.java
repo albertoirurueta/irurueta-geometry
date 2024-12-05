@@ -55,14 +55,14 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACQuadricRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -74,7 +74,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public MSACQuadricRobustEstimator(final List<Point3D> points) {
         super(points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -83,10 +83,9 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public MSACQuadricRobustEstimator(
-            final QuadricRobustEstimatorListener listener) {
+    public MSACQuadricRobustEstimator(final QuadricRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
 
@@ -99,10 +98,9 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACQuadricRobustEstimator(final QuadricRobustEstimatorListener listener,
-                                      final List<Point3D> points) {
+    public MSACQuadricRobustEstimator(final QuadricRobustEstimatorListener listener, final List<Point3D> points) {
         super(listener, points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -115,7 +113,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -137,7 +135,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
 
@@ -155,8 +153,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Quadric estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Quadric estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -164,102 +161,95 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator {
             throw new NotReadyException();
         }
 
-        final MSACRobustEstimator<Quadric> innerEstimator =
-                new MSACRobustEstimator<>(
-                        new MSACRobustEstimatorListener<Quadric>() {
+        final var innerEstimator = new MSACRobustEstimator<>(new MSACRobustEstimatorListener<Quadric>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return QuadricRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return QuadricRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Quadric> solutions) {
-                                final Point3D point1 = mPoints.get(samplesIndices[0]);
-                                final Point3D point2 = mPoints.get(samplesIndices[1]);
-                                final Point3D point3 = mPoints.get(samplesIndices[2]);
-                                final Point3D point4 = mPoints.get(samplesIndices[3]);
-                                final Point3D point5 = mPoints.get(samplesIndices[4]);
-                                final Point3D point6 = mPoints.get(samplesIndices[5]);
-                                final Point3D point7 = mPoints.get(samplesIndices[6]);
-                                final Point3D point8 = mPoints.get(samplesIndices[7]);
-                                final Point3D point9 = mPoints.get(samplesIndices[8]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Quadric> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
+                final var point4 = points.get(samplesIndices[3]);
+                final var point5 = points.get(samplesIndices[4]);
+                final var point6 = points.get(samplesIndices[5]);
+                final var point7 = points.get(samplesIndices[6]);
+                final var point8 = points.get(samplesIndices[7]);
+                final var point9 = points.get(samplesIndices[8]);
 
-                                try {
-                                    final Quadric quadric = new Quadric(point1, point2, point3,
-                                            point4, point5, point6, point7, point8, point9);
-                                    solutions.add(quadric);
-                                } catch (final CoincidentPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var quadric = new Quadric(point1, point2, point3, point4, point5, point6, point7, point8,
+                            point9);
+                    solutions.add(quadric);
+                } catch (final CoincidentPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Quadric currentEstimation, final int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(final Quadric currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return MSACQuadricRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return MSACQuadricRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Quadric> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(MSACQuadricRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Quadric> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(MSACQuadricRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Quadric> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(MSACQuadricRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Quadric> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(MSACQuadricRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Quadric> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            MSACQuadricRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Quadric> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(MSACQuadricRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Quadric> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            MSACQuadricRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Quadric> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(MSACQuadricRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

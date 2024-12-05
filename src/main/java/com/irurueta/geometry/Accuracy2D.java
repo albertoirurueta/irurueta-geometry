@@ -93,9 +93,9 @@ public class Accuracy2D extends Accuracy {
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
     public Ellipse toEllipse() throws InvalidRotationMatrixException {
-        final double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
-                mSqrtSingularValues, mStandardDeviationFactor);
-        final Rotation2D rotation = new Rotation2D(mU);
+        final var semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(sqrtSingularValues,
+                standardDeviationFactor);
+        final var rotation = new Rotation2D(u);
         return new Ellipse(Point2D.create(), semiAxesLengths[0], semiAxesLengths[1], rotation);
     }
 }

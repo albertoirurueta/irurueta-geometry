@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class InvalidRotationMatrixExceptionTest {
+class InvalidRotationMatrixExceptionTest {
 
     @Test
-    public void testConstructor() {
-        InvalidRotationMatrixException ex = new InvalidRotationMatrixException();
+    void testConstructor() {
+        var ex = new InvalidRotationMatrixException();
         assertNotNull(ex);
 
         ex = new InvalidRotationMatrixException("message");

@@ -19,17 +19,14 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.geometry.InhomogeneousPoint3D;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Point3DNormalizerTest {
+class Point3DNormalizerTest {
     private static final int MIN_POINTS = 2;
     private static final int MAX_POINTS = 10;
 
@@ -41,26 +38,25 @@ public class Point3DNormalizerTest {
     private static final int TIMES = 100;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(2, Point3DNormalizer.MIN_POINTS);
     }
 
     @Test
-    public void testConstructor() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testConstructor() {
+        final var randomizer = new UniformRandomizer();
 
-        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final List<Point3D> points = new ArrayList<>();
-        InhomogeneousPoint3D point;
-        for (int i = 0; i < nPoints; i++) {
-            final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            point = new InhomogeneousPoint3D(x, y, z);
+        final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var points = new ArrayList<Point3D>();
+        for (var i = 0; i < nPoints; i++) {
+            final var x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var point = new InhomogeneousPoint3D(x, y, z);
             points.add(point);
         }
 
-        Point3DNormalizer normalizer = new Point3DNormalizer(points);
+        var normalizer = new Point3DNormalizer(points);
 
         // check default values
         assertSame(normalizer.getPoints(), points);
@@ -84,42 +80,34 @@ public class Point3DNormalizerTest {
         // Force IllegalArgumentException
         points.clear();
         assertFalse(normalizer.isReady());
-
-        normalizer = null;
-        try {
-            normalizer = new Point3DNormalizer(points);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(normalizer);
+        assertThrows(IllegalArgumentException.class, () -> new Point3DNormalizer(points));
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetSetPoints() throws LockedException {
+        final var randomizer = new UniformRandomizer();
 
-        final int nPoints1 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final List<Point3D> points1 = new ArrayList<>();
-        InhomogeneousPoint3D point;
-        for (int i = 0; i < nPoints1; i++) {
-            final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            point = new InhomogeneousPoint3D(x, y, z);
+        final var nPoints1 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var points1 = new ArrayList<Point3D>();
+        for (var i = 0; i < nPoints1; i++) {
+            final var x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var point = new InhomogeneousPoint3D(x, y, z);
             points1.add(point);
         }
 
-        final int nPoints2 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final List<Point3D> points2 = new ArrayList<>();
-        for (int i = 0; i < nPoints2; i++) {
-            final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            final double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-            point = new InhomogeneousPoint3D(x, y, z);
+        final var nPoints2 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var points2 = new ArrayList<Point3D>();
+        for (var i = 0; i < nPoints2; i++) {
+            final var x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+            final var point = new InhomogeneousPoint3D(x, y, z);
             points2.add(point);
         }
 
-        final Point3DNormalizer normalizer = new Point3DNormalizer(points1);
+        final var normalizer = new Point3DNormalizer(points1);
 
         // check default value
         assertSame(points1, normalizer.getPoints());
@@ -132,22 +120,23 @@ public class Point3DNormalizerTest {
     }
 
     @Test
-    public void testCompute() throws NotReadyException, LockedException,
-            WrongSizeException, NormalizerException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testCompute() throws NotReadyException, LockedException, WrongSizeException, NormalizerException {
+        final var randomizer = new UniformRandomizer();
 
-        for (int times = 0; times < TIMES; times++) {
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points = new ArrayList<>();
-            InhomogeneousPoint3D point;
-            double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE,
-                    minZ = Double.MAX_VALUE, maxX = -Double.MAX_VALUE,
-                    maxY = -Double.MAX_VALUE, maxZ = -Double.MAX_VALUE;
-            for (int i = 0; i < nPoints; i++) {
-                final double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-                final double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-                final double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
-                point = new InhomogeneousPoint3D(x, y, z);
+        for (var times = 0; times < TIMES; times++) {
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points = new ArrayList<Point3D>();
+            var minX  = Double.MAX_VALUE;
+            var minY = Double.MAX_VALUE;
+            var minZ = Double.MAX_VALUE;
+            var maxX = -Double.MAX_VALUE;
+            var maxY = -Double.MAX_VALUE;
+            var maxZ = -Double.MAX_VALUE;
+            for (var i = 0; i < nPoints; i++) {
+                final var x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+                final var y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+                final var z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
+                final var point = new InhomogeneousPoint3D(x, y, z);
                 points.add(point);
 
                 if (x < minX) {
@@ -170,17 +159,17 @@ public class Point3DNormalizerTest {
                 }
             }
 
-            double width = maxX - minX;
-            double height = maxY - minY;
-            double depth = maxZ - minZ;
-            double scaleX = 1.0 / width;
-            double scaleY = 1.0 / height;
-            double scaleZ = 1.0 / depth;
-            double centroidX = (minX + maxX) / 2.0;
-            double centroidY = (minY + maxY) / 2.0;
-            double centroidZ = (minZ + maxZ) / 2.0;
+            var width = maxX - minX;
+            var height = maxY - minY;
+            var depth = maxZ - minZ;
+            var scaleX = 1.0 / width;
+            var scaleY = 1.0 / height;
+            var scaleZ = 1.0 / depth;
+            var centroidX = (minX + maxX) / 2.0;
+            var centroidY = (minY + maxY) / 2.0;
+            var centroidZ = (minZ + maxZ) / 2.0;
 
-            final Point3DNormalizer normalizer = new Point3DNormalizer(points);
+            final var normalizer = new Point3DNormalizer(points);
 
             assertTrue(normalizer.isReady());
             assertFalse(normalizer.isLocked());
@@ -202,36 +191,32 @@ public class Point3DNormalizerTest {
             assertEquals(centroidY, normalizer.getCentroidY(), 0.0);
             assertEquals(centroidZ, normalizer.getCentroidZ(), 0.0);
 
-            final ProjectiveTransformation3D transformation =
-                    normalizer.getTransformation();
+            final var transformation = normalizer.getTransformation();
 
-            final ProjectiveTransformation3D invTransformation =
-                    normalizer.getInverseTransformation();
+            final var invTransformation = normalizer.getInverseTransformation();
 
             // test that invTransformation is indeed the inverse transformation
-            final Matrix t = transformation.asMatrix();
-            final Matrix invT = invTransformation.asMatrix();
+            final var t = transformation.asMatrix();
+            final var invT = invTransformation.asMatrix();
 
-            final Matrix identity = invT.multiplyAndReturnNew(t);
-            final double norm = identity.getElementAt(0, 0);
+            final var identity = invT.multiplyAndReturnNew(t);
+            final var norm = identity.getElementAt(0, 0);
             // normalize
             identity.multiplyByScalar(1.0 / norm);
 
-            assertTrue(identity.equals(Matrix.identity(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH),
-                    ABSOLUTE_ERROR));
+            assertTrue(identity.equals(Matrix.identity(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
+                            Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH), ABSOLUTE_ERROR));
 
             // normalize points
-            final List<Point3D> normPoints = transformation.transformPointsAndReturnNew(points);
+            final var normPoints = transformation.transformPointsAndReturnNew(points);
 
             // compute centroid and scales
             minX = minY = minZ = Double.MAX_VALUE;
             maxX = maxY = maxZ = -Double.MAX_VALUE;
-            for (final Point3D normPoint : normPoints) {
-                final double x = normPoint.getInhomX();
-                final double y = normPoint.getInhomY();
-                final double z = normPoint.getInhomZ();
+            for (final var normPoint : normPoints) {
+                final var x = normPoint.getInhomX();
+                final var y = normPoint.getInhomY();
+                final var z = normPoint.getInhomZ();
 
                 if (x < minX) {
                     minX = x;
@@ -276,12 +261,10 @@ public class Point3DNormalizerTest {
             assertEquals(0.0, centroidZ, ABSOLUTE_ERROR);
 
             // denormalize points and check that are equal to the original ones
-            final List<Point3D> denomPoints = invTransformation.transformPointsAndReturnNew(
-                    normPoints);
+            final var denomPoints = invTransformation.transformPointsAndReturnNew(normPoints);
 
-            for (int i = 0; i < nPoints; i++) {
-                assertEquals(0.0, points.get(i).distanceTo(denomPoints.get(i)),
-                        ABSOLUTE_ERROR);
+            for (var i = 0; i < nPoints; i++) {
+                assertEquals(0.0, points.get(i).distanceTo(denomPoints.get(i)), ABSOLUTE_ERROR);
             }
         }
     }

@@ -23,7 +23,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -40,14 +39,12 @@ import java.util.List;
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")
-public class PointCorrespondenceAffineTransformation2DRefiner extends
-        AffineTransformation2DRefiner<Point2D, Point2D> {
+public class PointCorrespondenceAffineTransformation2DRefiner extends AffineTransformation2DRefiner<Point2D, Point2D> {
 
     /**
      * Point to be reused when computing residuals.
      */
-    private final Point2D mResidualTestPoint = Point2D.create(
-            CoordinatesType.HOMOGENEOUS_COORDINATES);
+    private final Point2D residualTestPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
     /**
      * Constructor.
@@ -70,12 +67,11 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public PointCorrespondenceAffineTransformation2DRefiner(
-            final AffineTransformation2D initialEstimation, final boolean keepCovariance,
-            final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Point2D> samples1, final List<Point2D> samples2,
+            final AffineTransformation2D initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List<Point2D> samples1, final List<Point2D> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -92,11 +88,9 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public PointCorrespondenceAffineTransformation2DRefiner(
-            final AffineTransformation2D initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Point2D> samples1,
-            final List<Point2D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+            final AffineTransformation2D initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<Point2D> samples1, final List<Point2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -114,8 +108,8 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final AffineTransformation2D result)
-            throws NotReadyException, LockedException, RefinerException {
+    public boolean refine(final AffineTransformation2D result) throws NotReadyException, LockedException,
+            RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -123,44 +117,37 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
-            final double[] initParams = new double[
-                    AffineTransformation2D.INHOM_COORDS *
-                            AffineTransformation2D.INHOM_COORDS +
-                            AffineTransformation2D.NUM_TRANSLATION_COORDS];
+            final var initParams = new double[AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS
+                    + AffineTransformation2D.NUM_TRANSLATION_COORDS];
             // copy values for A matrix
-            System.arraycopy(mInitialEstimation.getA().getBuffer(), 0,
-                    initParams, 0, AffineTransformation2D.INHOM_COORDS *
-                            AffineTransformation2D.INHOM_COORDS);
+            System.arraycopy(initialEstimation.getA().getBuffer(), 0, initParams, 0,
+                    AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS);
             // copy values for translation
-            System.arraycopy(mInitialEstimation.getTranslation(), 0,
-                    initParams, AffineTransformation2D.INHOM_COORDS *
-                            AffineTransformation2D.INHOM_COORDS,
+            System.arraycopy(initialEstimation.getTranslation(), 0, initParams,
+                    AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS,
                     AffineTransformation2D.NUM_TRANSLATION_COORDS);
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 2 sets of 2D points to compute residuals
-            final int nDims =
-                    2 * Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Point2D inputPoint;
-            Point2D outputPoint;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = 2 * Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    inputPoint = mSamples1.get(i);
-                    outputPoint = mSamples2.get(i);
+                    final var inputPoint = samples1.get(i);
+                    final var outputPoint = samples2.get(i);
                     inputPoint.normalize();
                     outputPoint.normalize();
                     x.setElementAt(pos, 0, inputPoint.getHomX());
@@ -170,115 +157,89 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
                     x.setElementAt(pos, 4, outputPoint.getHomY());
                     x.setElementAt(pos, 5, outputPoint.getHomW());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Point2D mInputPoint = Point2D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point2D inputPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final Point2D mOutputPoint = Point2D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point2D outputPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final AffineTransformation2D mTransformation =
-                                new AffineTransformation2D();
+                private final AffineTransformation2D transformation = new AffineTransformation2D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
-                                                // copy values for A matrix
-                                                System.arraycopy(params, 0,
-                                                        mTransformation.getA().getBuffer(), 0,
-                                                        AffineTransformation2D.INHOM_COORDS *
-                                                                AffineTransformation2D.INHOM_COORDS);
-                                                // copy values for translation
-                                                System.arraycopy(params,
-                                                        AffineTransformation2D.INHOM_COORDS *
-                                                                AffineTransformation2D.INHOM_COORDS,
-                                                        mTransformation.getTranslation(), 0,
-                                                        AffineTransformation2D.NUM_TRANSLATION_COORDS);
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    // copy values for A matrix
+                    System.arraycopy(params, 0, transformation.getA().getBuffer(), 0,
+                            AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS);
+                    // copy values for translation
+                    System.arraycopy(params,
+                            AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS,
+                            transformation.getTranslation(), 0, AffineTransformation2D.NUM_TRANSLATION_COORDS);
 
-                                                return residual(mTransformation, mInputPoint,
-                                                        mOutputPoint);
-                                            }
-                                        });
+                    return residual(transformation, inputPoint, outputPoint);
+                });
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],
-                                    point[2]);
-                            mOutputPoint.setHomogeneousCoordinates(point[3], point[4],
-                                    point[5]);
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    inputPoint.setHomogeneousCoordinates(point[0], point[1], point[2]);
+                    outputPoint.setHomogeneousCoordinates(point[3], point[4], point[5]);
 
-                            // copy values for A matrix
-                            System.arraycopy(params, 0,
-                                    mTransformation.getA().getBuffer(), 0,
-                                    AffineTransformation2D.INHOM_COORDS *
-                                            AffineTransformation2D.INHOM_COORDS);
-                            // copy values for translation
-                            System.arraycopy(params,
-                                    AffineTransformation2D.INHOM_COORDS *
-                                            AffineTransformation2D.INHOM_COORDS,
-                                    mTransformation.getTranslation(), 0,
-                                    AffineTransformation2D.NUM_TRANSLATION_COORDS);
+                    // copy values for A matrix
+                    System.arraycopy(params, 0, transformation.getA().getBuffer(), 0,
+                            AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS);
+                    // copy values for translation
+                    System.arraycopy(params,
+                            AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS,
+                            transformation.getTranslation(), 0, AffineTransformation2D.NUM_TRANSLATION_COORDS);
 
-                            final double y = residual(mTransformation, mInputPoint,
-                                    mOutputPoint);
-                            mGradientEstimator.gradient(params, derivatives);
+                    final var y = residual(transformation, inputPoint, outputPoint);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            return y;
-                        }
-                    };
+                    return y;
+                }
+            };
 
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update transformation
 
             // copy values for A matrix
             System.arraycopy(params, 0, result.getA().getBuffer(), 0,
-                    AffineTransformation2D.INHOM_COORDS *
-                            AffineTransformation2D.INHOM_COORDS);
+                    AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS);
             // copy values for translation
-            System.arraycopy(params, AffineTransformation2D.INHOM_COORDS *
-                            AffineTransformation2D.INHOM_COORDS,
-                    result.getTranslation(), 0,
-                    AffineTransformation2D.NUM_TRANSLATION_COORDS);
+            System.arraycopy(params, AffineTransformation2D.INHOM_COORDS * AffineTransformation2D.INHOM_COORDS,
+                    result.getTranslation(), 0, AffineTransformation2D.NUM_TRANSLATION_COORDS);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -286,7 +247,7 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -299,13 +260,13 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
      * @param outputPoint    output 2D point.
      * @return residual.
      */
-    private double residual(final AffineTransformation2D transformation,
-                            final Point2D inputPoint, final Point2D outputPoint) {
+    private double residual(final AffineTransformation2D transformation, final Point2D inputPoint,
+                            final Point2D outputPoint) {
         inputPoint.normalize();
         outputPoint.normalize();
 
-        transformation.transform(inputPoint, mResidualTestPoint);
-        return mResidualTestPoint.distanceTo(outputPoint);
+        transformation.transform(inputPoint, residualTestPoint);
+        return residualTestPoint.distanceTo(outputPoint);
     }
 
     /**
@@ -315,16 +276,14 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
      * @return total residual.
      */
     private double totalResidual(final AffineTransformation2D transformation) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Point2D inputPoint;
-        Point2D outputPoint;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                inputPoint = mSamples1.get(i);
-                outputPoint = mSamples2.get(i);
+                final var inputPoint = samples1.get(i);
+                final var outputPoint = samples2.get(i);
                 inputPoint.normalize();
                 outputPoint.normalize();
                 result += residual(transformation, inputPoint, outputPoint);

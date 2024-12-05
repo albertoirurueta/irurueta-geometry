@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class TriangulatorExceptionTest {
+class TriangulatorExceptionTest {
 
     @Test
-    public void testConstructor() {
-        TriangulatorException ex = new TriangulatorException();
+    void testConstructor() {
+        var ex = new TriangulatorException();
         assertNotNull(ex);
 
         ex = new TriangulatorException("message");
@@ -32,8 +32,7 @@ public class TriangulatorExceptionTest {
         ex = new TriangulatorException(new Exception());
         assertNotNull(ex);
 
-        ex = new TriangulatorException("message",
-                new Exception());
+        ex = new TriangulatorException("message", new Exception());
         assertNotNull(ex);
     }
 }

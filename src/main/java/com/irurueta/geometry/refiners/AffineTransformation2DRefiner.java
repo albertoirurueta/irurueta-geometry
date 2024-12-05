@@ -48,7 +48,7 @@ public abstract class AffineTransformation2DRefiner<S1, S2> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    private double mRefinementStandardDeviation;
+    private double refinementStandardDeviation;
 
     /**
      * Constructor.
@@ -71,13 +71,11 @@ public abstract class AffineTransformation2DRefiner<S1, S2> extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected AffineTransformation2DRefiner(
-            final AffineTransformation2D initialEstimation, final boolean keepCovariance,
-            final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<S1> samples1, final List<S2> samples2,
+            final AffineTransformation2D initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List<S1> samples1, final List<S2> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -94,12 +92,10 @@ public abstract class AffineTransformation2DRefiner<S1, S2> extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected AffineTransformation2DRefiner(
-            final AffineTransformation2D initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<S1> samples1, final List<S2> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final AffineTransformation2D initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<S1> samples1, final List<S2> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -114,7 +110,7 @@ public abstract class AffineTransformation2DRefiner<S1, S2> extends
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-        return mRefinementStandardDeviation;
+        return refinementStandardDeviation;
     }
 
     /**
@@ -130,12 +126,11 @@ public abstract class AffineTransformation2DRefiner<S1, S2> extends
      *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementStandardDeviation(
-            final double refinementStandardDeviation) throws LockedException {
+    public void setRefinementStandardDeviation(final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -149,9 +144,8 @@ public abstract class AffineTransformation2DRefiner<S1, S2> extends
      *                           to converge to a result).
      */
     @Override
-    public AffineTransformation2D refine() throws NotReadyException,
-            LockedException, RefinerException {
-        final AffineTransformation2D result = new AffineTransformation2D();
+    public AffineTransformation2D refine() throws NotReadyException, LockedException, RefinerException {
+        final var result = new AffineTransformation2D();
         refine(result);
         return result;
     }

@@ -49,8 +49,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     /**
      * Default type of coordinates.
      */
-    public static final CoordinatesType DEFAULT_COORDINATES_TYPE =
-            CoordinatesType.HOMOGENEOUS_COORDINATES;
+    public static final CoordinatesType DEFAULT_COORDINATES_TYPE = CoordinatesType.HOMOGENEOUS_COORDINATES;
 
     /**
      * Constructor of this class.
@@ -70,14 +69,11 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @throws IllegalArgumentException Raised if the size of provided array is
      *                                  not valid.
      */
-    public static Point3D create(final CoordinatesType coordinatesType,
-                                 final double[] v) {
-        switch (coordinatesType) {
-            case INHOMOGENEOUS_COORDINATES:
-                return new InhomogeneousPoint3D(v);
-            case HOMOGENEOUS_COORDINATES:
-            default:
-                return new HomogeneousPoint3D(v);
+    public static Point3D create(final CoordinatesType coordinatesType, final double[] v) {
+        if (coordinatesType == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+            return new InhomogeneousPoint3D(v);
+        } else {
+            return new HomogeneousPoint3D(v);
         }
     }
 
@@ -105,12 +101,10 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @return Created Point3D.
      */
     public static Point3D create(final CoordinatesType coordinatesType) {
-        switch (coordinatesType) {
-            case INHOMOGENEOUS_COORDINATES:
-                return new InhomogeneousPoint3D();
-            case HOMOGENEOUS_COORDINATES:
-            default:
-                return new HomogeneousPoint3D();
+        if (coordinatesType == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+            return new InhomogeneousPoint3D();
+        } else {
+            return new HomogeneousPoint3D();
         }
     }
 
@@ -283,14 +277,13 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Point3D)) {
+        if (!(obj instanceof Point3D point)) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        final Point3D point = (Point3D) obj;
         return equals(point);
     }
 
@@ -360,15 +353,11 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
             throw new IllegalArgumentException();
         }
 
-        switch (dim) {
-            case 0:
-                return getInhomX();
-            case 1:
-                return getInhomY();
-            case 2:
-            default:
-                return getInhomZ();
-        }
+        return switch (dim) {
+            case 0 -> getInhomX();
+            case 1 -> getInhomY();
+            default -> getInhomZ();
+        };
     }
 
     /**
@@ -414,9 +403,9 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      */
     @Override
     public double sqrDistanceTo(final Point3D point) {
-        final double diffX = getInhomX() - point.getInhomX();
-        final double diffY = getInhomY() - point.getInhomY();
-        final double diffZ = getInhomZ() - point.getInhomZ();
+        final var diffX = getInhomX() - point.getInhomX();
+        final var diffY = getInhomY() - point.getInhomY();
+        final var diffZ = getInhomZ() - point.getInhomZ();
 
         return diffX * diffX + diffY * diffY + diffZ * diffZ;
     }
@@ -429,23 +418,20 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @return dot product value.
      */
     public double dotProduct(final Point3D point) {
+        final var thisHomX = getHomX();
+        final var thisHomY = getHomY();
+        final var thisHomZ = getHomZ();
+        final var thisHomW = getHomW();
+        final var otherHomX = point.getHomX();
+        final var otherHomY = point.getHomY();
+        final var otherHomZ = point.getHomZ();
+        final var otherHomW = point.getHomW();
 
-        final double thisHomX = getHomX();
-        final double thisHomY = getHomY();
-        final double thisHomZ = getHomZ();
-        final double thisHomW = getHomW();
-        final double otherHomX = point.getHomX();
-        final double otherHomY = point.getHomY();
-        final double otherHomZ = point.getHomZ();
-        final double otherHomW = point.getHomW();
-
-        final double thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY +
-                thisHomZ * thisHomZ + thisHomW * thisHomW;
-        final double otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY +
-                otherHomZ * otherHomZ + otherHomW * otherHomW;
-        final double denom = Math.sqrt(thisNormSqr * otherNormSqr);
-        final double num = thisHomX * otherHomX + thisHomY * otherHomY +
-                thisHomZ * otherHomZ + thisHomW * otherHomW;
+        final var thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY + thisHomZ * thisHomZ + thisHomW * thisHomW;
+        final var otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY + otherHomZ * otherHomZ
+                + otherHomW * otherHomW;
+        final var denom = Math.sqrt(thisNormSqr * otherNormSqr);
+        final var num = thisHomX * otherHomX + thisHomY * otherHomY + thisHomZ * otherHomZ + thisHomW * otherHomW;
 
         return num / denom;
     }
@@ -478,8 +464,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
         // If this point is between point1 and point2 then,
         // dist(point1,this) + dist(point2, this) == dist(point1,point2) except
         // for some small difference due to machine precision
-        return Math.abs(distanceTo(point1) + distanceTo(point2) -
-                point1.distanceTo(point2)) <= threshold;
+        return Math.abs(distanceTo(point1) + distanceTo(point2) - point1.distanceTo(point2)) <= threshold;
     }
 
     /**
@@ -490,12 +475,12 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @param result instance where computed centroid will be stored.
      */
     public static void centroid(final Collection<Point3D> points, final Point3D result) {
-        double x = 0.0;
-        double y = 0.0;
-        double z = 0.0;
+        var x = 0.0;
+        var y = 0.0;
+        var z = 0.0;
         if (points != null) {
-            final int n = points.size();
-            for (final Point3D point : points) {
+            final var n = points.size();
+            for (final var point : points) {
                 x += point.getInhomX();
                 y += point.getInhomY();
                 z += point.getInhomZ();
@@ -516,7 +501,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @return computed centroid.
      */
     public static Point3D centroid(final Collection<Point3D> points) {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         centroid(points, result);
         return result;
     }

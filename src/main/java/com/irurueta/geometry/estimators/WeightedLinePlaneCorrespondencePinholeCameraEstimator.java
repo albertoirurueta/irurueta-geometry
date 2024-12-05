@@ -24,7 +24,6 @@ import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.WeightSelection;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,27 +53,27 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     /**
      * Maximum number of  correspondences to be weighted and taken into account.
      */
-    private int mMaxCorrespondences;
+    private int maxCorrespondences;
 
     /**
      * Indicates if weights are sorted by default so that largest weighted
      * correspondences are used first.
      */
-    private boolean mSortWeights;
+    private boolean sortWeights;
 
     /**
      * Array containing weights for all point correspondences.
      */
-    private double[] mWeights;
+    private double[] weights;
 
     /**
      * Constructor.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator() {
         super();
-        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -83,12 +82,11 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    public WeightedLinePlaneCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
-        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -100,12 +98,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of correspondences
      *                                  don't have the same size and enough correspondences.
      */
-    public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
-            final List<Plane> planes, final List<Line2D> lines2D) throws WrongListSizesException {
+    public WeightedLinePlaneCorrespondencePinholeCameraEstimator(final List<Plane> planes, final List<Line2D> lines2D)
+            throws WrongListSizesException {
         super(planes, lines2D);
-        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -120,12 +118,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                  don't have the same size and enough correspondences.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
-            final List<Plane> planes, final List<Line2D> lines2D,
-            final PinholeCameraEstimatorListener listener) throws WrongListSizesException {
+            final List<Plane> planes, final List<Line2D> lines2D, final PinholeCameraEstimatorListener listener)
+            throws WrongListSizesException {
         super(planes, lines2D, listener);
-        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        weights = null;
     }
 
     /**
@@ -144,9 +142,9 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
             final List<Plane> planes, final List<Line2D> lines2D, final double[] weights)
             throws WrongListSizesException {
         super();
-        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        this.weights = null;
         internalSetListsAndWeights(planes, lines2D, weights);
     }
 
@@ -166,12 +164,11 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             final List<Plane> planes, final List<Line2D> lines2D, final double[] weights,
-            final PinholeCameraEstimatorListener listener)
-            throws WrongListSizesException {
+            final PinholeCameraEstimatorListener listener) throws WrongListSizesException {
         super(listener);
-        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
-        mSortWeights = DEFAULT_SORT_WEIGHTS;
-        mWeights = null;
+        maxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
+        sortWeights = DEFAULT_SORT_WEIGHTS;
+        this.weights = null;
         internalSetListsAndWeights(planes, lines2D, weights);
     }
 
@@ -189,8 +186,8 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                  don't have the same size and enough correspondences.
      */
     private void internalSetListsAndWeights(
-            final List<Plane> planes, final List<Line2D> lines2D,
-            final double[] weights) throws WrongListSizesException {
+            final List<Plane> planes, final List<Line2D> lines2D, final double[] weights)
+            throws WrongListSizesException {
 
         if (planes == null || lines2D == null || weights == null) {
             throw new IllegalArgumentException();
@@ -200,9 +197,9 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
             throw new WrongListSizesException();
         }
 
-        mPlanes = planes;
-        mLines2D = lines2D;
-        mWeights = weights;
+        this.planes = planes;
+        this.lines2D = lines2D;
+        this.weights = weights;
     }
 
     /**
@@ -219,9 +216,8 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                  don't have the same size and enough correspondences.
      */
     public void setListsAndWeights(
-            final List<Plane> planes, final List<Line2D> lines2D,
-            final double[] weights)
-            throws LockedException, WrongListSizesException {
+            final List<Plane> planes, final List<Line2D> lines2D, final double[] weights) throws LockedException,
+            WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -243,14 +239,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if corresponding planes and lines are valid, false otherwise.
      */
     public static boolean areValidListsAndWeights(
-            final List<Plane> planes, final List<Line2D> lines2D,
-            final double[] weights) {
+            final List<Plane> planes, final List<Line2D> lines2D, final double[] weights) {
         if (planes == null || lines2D == null || weights == null) {
             return false;
         }
-        return planes.size() == lines2D.size() &&
-                lines2D.size() == weights.length &&
-                planes.size() >= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
+        return planes.size() == lines2D.size() && lines2D.size() == weights.length
+                && planes.size() >= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
     }
 
     /**
@@ -265,7 +259,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
         if (!areWeightsAvailable()) {
             throw new NotAvailableException();
         }
-        return mWeights;
+        return weights;
     }
 
     /**
@@ -275,7 +269,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if weights are available, false otherwise.
      */
     public boolean areWeightsAvailable() {
-        return mWeights != null;
+        return weights != null;
     }
 
     /**
@@ -285,7 +279,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return maximum number of points to be weighted.
      */
     public int getMaxCorrespondences() {
-        return mMaxCorrespondences;
+        return maxCorrespondences;
     }
 
     /**
@@ -298,8 +292,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                  minimum allowed number of point correspondences.
      * @throws LockedException          if this instance is locked.
      */
-    public void setMaxCorrespondences(final int maxCorrespondences)
-            throws LockedException {
+    public void setMaxCorrespondences(final int maxCorrespondences) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -307,7 +300,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mMaxCorrespondences = maxCorrespondences;
+        this.maxCorrespondences = maxCorrespondences;
     }
 
     /**
@@ -317,7 +310,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if weights are sorted, false otherwise.
      */
     public boolean isSortWeightsEnabled() {
-        return mSortWeights;
+        return sortWeights;
     }
 
     /**
@@ -327,13 +320,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @param sortWeights true if weights are sorted, false otherwise.
      * @throws LockedException if this instance is locked.
      */
-    public void setSortWeightsEnabled(final boolean sortWeights)
-            throws LockedException {
+    public void setSortWeightsEnabled(final boolean sortWeights) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
 
-        mSortWeights = sortWeights;
+        this.sortWeights = sortWeights;
     }
 
     /**
@@ -357,8 +349,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      *                                         estimation, usually because input data is not valid.
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            PinholeCameraEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -368,41 +359,32 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
         }
 
         try {
-            mLocked = true;
-            if (mListener != null) mListener.onEstimateStart(this);
+            locked = true;
+            if (listener != null) {
+                listener.onEstimateStart(this);
+            }
 
-            final WeightSelection selection = WeightSelection.selectWeights(mWeights,
-                    mSortWeights, mMaxCorrespondences);
-            final boolean[] selected = selection.getSelected();
+            final var selection = WeightSelection.selectWeights(weights, sortWeights, maxCorrespondences);
+            final var selected = selection.getSelected();
 
-            final Matrix a = new Matrix(12, 12);
-            final Matrix row = new Matrix(3, 12);
-            final Matrix transRow = new Matrix(12, 3);
-            final Matrix tmp = new Matrix(12, 12);
+            final var a = new Matrix(12, 12);
+            final var row = new Matrix(3, 12);
+            final var transRow = new Matrix(12, 3);
+            final var tmp = new Matrix(12, 12);
 
-            final Iterator<Line2D> iterator2D = mLines2D.iterator();
-            final Iterator<Plane> iterator3D = mPlanes.iterator();
+            final var iterator2D = lines2D.iterator();
+            final var iterator3D = planes.iterator();
 
-            Line2D line2D;
-            Plane plane;
-            int index = 0;
-            int nMatches = 0;
-            double la;
-            double lb;
-            double lc;
-            double pA;
-            double pB;
-            double pC;
-            double pD;
-            double weight;
-            double previousNorm = 1.0;
+            var index = 0;
+            var nMatches = 0;
+            var previousNorm = 1.0;
             double rowNorm;
             while (iterator2D.hasNext() && iterator3D.hasNext()) {
-                line2D = iterator2D.next();
-                plane = iterator3D.next();
+                final var line2D = iterator2D.next();
+                final var plane = iterator3D.next();
 
                 if (selected[index]) {
-                    weight = mWeights[index];
+                    final var weight = weights[index];
 
                     if (Math.abs(weight) < EPS) {
                         // skip, because weight is too small
@@ -414,14 +396,14 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                     line2D.normalize();
                     plane.normalize();
 
-                    la = line2D.getA();
-                    lb = line2D.getB();
-                    lc = line2D.getC();
+                    final var la = line2D.getA();
+                    final var lb = line2D.getB();
+                    final var lc = line2D.getC();
 
-                    pA = plane.getA();
-                    pB = plane.getB();
-                    pC = plane.getC();
-                    pD = plane.getD();
+                    final var pA = plane.getA();
+                    final var pB = plane.getB();
+                    final var pC = plane.getC();
+                    final var pD = plane.getD();
 
                     // first row
                     row.setElementAt(0, 0, -pD * la * weight);
@@ -435,13 +417,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                     row.setElementAt(0, 11, pA * lc * weight);
 
                     // normalize row
-                    rowNorm = Math.sqrt(
-                            Math.pow(row.getElementAt(0, 0), 2.0) +
-                                    Math.pow(row.getElementAt(0, 1), 2.0) +
-                                    Math.pow(row.getElementAt(0, 2), 2.0) +
-                                    Math.pow(row.getElementAt(0, 9), 2.0) +
-                                    Math.pow(row.getElementAt(0, 10), 2.0) +
-                                    Math.pow(row.getElementAt(0, 11), 2.0));
+                    rowNorm = Math.sqrt(Math.pow(row.getElementAt(0, 0), 2.0)
+                            + Math.pow(row.getElementAt(0, 1), 2.0)
+                            + Math.pow(row.getElementAt(0, 2), 2.0)
+                            + Math.pow(row.getElementAt(0, 9), 2.0)
+                            + Math.pow(row.getElementAt(0, 10), 2.0)
+                            + Math.pow(row.getElementAt(0, 11), 2.0));
 
                     row.setElementAt(0, 0, row.getElementAt(0, 0) / rowNorm);
                     row.setElementAt(0, 1, row.getElementAt(0, 1) / rowNorm);
@@ -465,13 +446,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                     row.setElementAt(1, 11, pB * lc * weight);
 
                     // normalize row
-                    rowNorm = Math.sqrt(
-                            Math.pow(row.getElementAt(1, 3), 2.0) +
-                                    Math.pow(row.getElementAt(1, 4), 2.0) +
-                                    Math.pow(row.getElementAt(1, 5), 2.0) +
-                                    Math.pow(row.getElementAt(1, 9), 2.0) +
-                                    Math.pow(row.getElementAt(1, 10), 2.0) +
-                                    Math.pow(row.getElementAt(1, 11), 2.0));
+                    rowNorm = Math.sqrt(Math.pow(row.getElementAt(1, 3), 2.0)
+                            + Math.pow(row.getElementAt(1, 4), 2.0)
+                            + Math.pow(row.getElementAt(1, 5), 2.0)
+                            + Math.pow(row.getElementAt(1, 9), 2.0)
+                            + Math.pow(row.getElementAt(1, 10), 2.0)
+                            + Math.pow(row.getElementAt(1, 11), 2.0));
 
                     row.setElementAt(1, 3, row.getElementAt(1, 3) / rowNorm);
                     row.setElementAt(1, 4, row.getElementAt(1, 4) / rowNorm);
@@ -479,7 +459,6 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                     row.setElementAt(1, 9, row.getElementAt(1, 9) / rowNorm);
                     row.setElementAt(1, 10, row.getElementAt(1, 10) / rowNorm);
                     row.setElementAt(1, 11, row.getElementAt(1, 11) / rowNorm);
-
 
                     // third row
 
@@ -494,13 +473,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                     row.setElementAt(2, 11, pC * lc * weight);
 
                     // normalize row
-                    rowNorm = Math.sqrt(
-                            Math.pow(row.getElementAt(2, 6), 2.0) +
-                                    Math.pow(row.getElementAt(2, 7), 2.0) +
-                                    Math.pow(row.getElementAt(2, 8), 2.0) +
-                                    Math.pow(row.getElementAt(2, 9), 2.0) +
-                                    Math.pow(row.getElementAt(2, 10), 2.0) +
-                                    Math.pow(row.getElementAt(2, 11), 2.0));
+                    rowNorm = Math.sqrt(Math.pow(row.getElementAt(2, 6), 2.0)
+                            + Math.pow(row.getElementAt(2, 7), 2.0)
+                            + Math.pow(row.getElementAt(2, 8), 2.0)
+                            + Math.pow(row.getElementAt(2, 9), 2.0)
+                            + Math.pow(row.getElementAt(2, 10), 2.0)
+                            + Math.pow(row.getElementAt(2, 11), 2.0));
 
                     row.setElementAt(2, 6, row.getElementAt(2, 6) / rowNorm);
                     row.setElementAt(2, 7, row.getElementAt(2, 7) / rowNorm);
@@ -531,7 +509,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                 throw new PinholeCameraEstimatorException();
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+            final var decomposer = new SingularValueDecomposer(a);
             decomposer.decompose();
 
             if (decomposer.getNullity() > 1) {
@@ -541,15 +519,14 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                 throw new PinholeCameraEstimatorException();
             }
 
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // use last column of V as pinhole camera vector
 
             // the last column of V contains pinhole camera matrix ordered by
             // columns as: P11, P21, P31, P12, P22, P32, P13, P23, P33, P14, P24,
             // P34, hence we reorder p
-            final Matrix pinholeCameraMatrix = new Matrix(
-                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
+            final var pinholeCameraMatrix = new Matrix(PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
 
             pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));
@@ -572,24 +549,24 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
             // of V, then its Frobenius norm will be 1 because SVD already
             // returns normalized singular vector
 
-            final PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);
+            final var camera = new PinholeCamera(pinholeCameraMatrix);
 
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
+            if (listener != null) {
+                listener.onEstimateEnd(this);
             }
 
             return attemptRefine(camera);
 
         } catch (final PinholeCameraEstimatorException e) {
             // ensure it is no longer locked
-            mLocked = false;
+            locked = false;
             throw e;
         } catch (final Exception e) {
             // ensure it is no longer locked
-            mLocked = false;
+            locked = false;
             throw new PinholeCameraEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -600,8 +577,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public PinholeCameraEstimatorType getType() {
-        return PinholeCameraEstimatorType.
-                WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR;
+        return PinholeCameraEstimatorType.WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR;
     }
 
 }

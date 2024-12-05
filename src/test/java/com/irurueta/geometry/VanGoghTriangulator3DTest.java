@@ -16,15 +16,14 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class VanGoghTriangulator3DTest {
+class VanGoghTriangulator3DTest {
 
     private static final double ABSOLUTE_ERROR = 1e-8;
     private static final double DEFAULT_ORIENTATION_THRESHOLD = Math.PI / 2.0;
@@ -42,7 +41,7 @@ public class VanGoghTriangulator3DTest {
     private static final double MAX_ANGLE_DEGREES = 180.0;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, Triangulator3D.MIN_VERTICES);
         assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, Triangulator3D.DEFAULT_TRIANGULATOR_METHOD);
         assertEquals(VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD, Math.PI / 2.0, 0.0);
@@ -51,8 +50,8 @@ public class VanGoghTriangulator3DTest {
     }
 
     @Test
-    public void testConstructorAndGetMethod() {
-        final VanGoghTriangulator2D triangulator = new VanGoghTriangulator2D();
+    void testConstructorAndGetMethod() {
+        final var triangulator = new VanGoghTriangulator2D();
         assertNotNull(triangulator);
 
         // check method correctness
@@ -60,21 +59,20 @@ public class VanGoghTriangulator3DTest {
     }
 
     @Test
-    public void testIsPolygonOrientationReversed()
-            throws NotEnoughVerticesException, CoincidentPointsException {
+    void testIsPolygonOrientationReversed() throws NotEnoughVerticesException, CoincidentPointsException {
         // X: -1, Y: 0, Z: 5 (W: 1)
-        final Point3D v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
+        final var v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
         // X: 1, Y: 0, Z: 5 (W: 1)
-        final Point3D v2 = new InhomogeneousPoint3D(1.0, 0.0, 5.0);
+        final var v2 = new InhomogeneousPoint3D(1.0, 0.0, 5.0);
         // X: 2, Y: 1, Z: 5 (W: 1)
-        final Point3D v3 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
+        final var v3 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
         // X: 0, Y: 1, Z: 5 (W: 1)
-        final Point3D v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
+        final var v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
 
         // parallelepiped
-        final List<Point3D> vertices1 = new ArrayList<>();
-        final List<Point3D> vertices2 = new ArrayList<>();
+        final var vertices1 = new ArrayList<Point3D>();
+        final var vertices2 = new ArrayList<Point3D>();
         vertices1.add(v1);
         vertices1.add(v2);
         vertices1.add(v3);
@@ -85,12 +83,12 @@ public class VanGoghTriangulator3DTest {
         vertices2.add(v2);
         vertices2.add(v1);
 
-        final Polygon3D polygon1 = new Polygon3D(vertices1);
+        final var polygon1 = new Polygon3D(vertices1);
         // because order of vertices is reversed, orientation will have opposite
         // direction
-        final Polygon3D polygon2 = new Polygon3D(vertices2);
+        final var polygon2 = new Polygon3D(vertices2);
 
-        double angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2);
+        var angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2);
         assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
         angle = Polygon3D.getAngleBetweenPolygons(vertices1, vertices2, ABSOLUTE_ERROR);
         assertEquals(Math.PI, angle, ABSOLUTE_ERROR);
@@ -123,50 +121,44 @@ public class VanGoghTriangulator3DTest {
     }
 
     @Test
-    public void testIsOrientationReversed() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-        if (Math.abs(angle) >
-                VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD) {
+    void testIsOrientationReversed() {
+        final var randomizer = new UniformRandomizer();
+        final var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        if (Math.abs(angle) > VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD) {
             assertTrue(VanGoghTriangulator3D.isOrientationReversed(angle));
         } else {
             assertFalse(VanGoghTriangulator3D.isOrientationReversed(angle));
         }
 
         if (Math.abs(angle) > DEFAULT_ORIENTATION_THRESHOLD) {
-            assertTrue(VanGoghTriangulator3D.isOrientationReversed(angle,
-                    DEFAULT_ORIENTATION_THRESHOLD));
+            assertTrue(VanGoghTriangulator3D.isOrientationReversed(angle, DEFAULT_ORIENTATION_THRESHOLD));
         } else {
-            assertFalse(VanGoghTriangulator3D.isOrientationReversed(angle,
-                    DEFAULT_ORIENTATION_THRESHOLD));
+            assertFalse(VanGoghTriangulator3D.isOrientationReversed(angle, DEFAULT_ORIENTATION_THRESHOLD));
         }
 
-        assertFalse(VanGoghTriangulator3D.isOrientationReversed(
-                VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD));
+        assertFalse(VanGoghTriangulator3D.isOrientationReversed(VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD));
         assertTrue(VanGoghTriangulator3D.isOrientationReversed(
                 2.0 * VanGoghTriangulator3D.DEFAULT_ORIENTATION_THRESHOLD));
 
         assertFalse(VanGoghTriangulator3D.isOrientationReversed(
                 DEFAULT_ORIENTATION_THRESHOLD, DEFAULT_ORIENTATION_THRESHOLD));
         assertTrue(VanGoghTriangulator3D.isOrientationReversed(
-                2.0 * DEFAULT_ORIENTATION_THRESHOLD,
-                DEFAULT_ORIENTATION_THRESHOLD));
+                2.0 * DEFAULT_ORIENTATION_THRESHOLD, DEFAULT_ORIENTATION_THRESHOLD));
     }
 
     @Test
-    public void testIsEar() throws CoincidentPointsException {
+    void testIsEar() throws CoincidentPointsException {
         // X: -1, Y: 0, Z: 5 (W: 1)
-        Point3D v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
+        var v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
         // X: 1, Y: 0, Z: 5 (W: 1)
-        Point3D v2 = new InhomogeneousPoint3D(1.0, 0.0, 5.0);
+        var v2 = new InhomogeneousPoint3D(1.0, 0.0, 5.0);
         // X: 2, Y: 1, Z: 5 (W: 1)
-        Point3D v3 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
+        var v3 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
         // X: 0, Y: 1, Z: 5 (W: 1)
-        Point3D v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
+        var v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
         // Triangle
-        final List<Point3D> polygonVertices = new ArrayList<>();
+        final var polygonVertices = new ArrayList<Point3D>();
 
         polygonVertices.add(v1);
         polygonVertices.add(v2);
@@ -176,7 +168,7 @@ public class VanGoghTriangulator3DTest {
         // consecutive vertices
 
         // 1st triangle
-        final Triangle3D triangle = new Triangle3D(v1, v2, v4);
+        final var triangle = new Triangle3D(v1, v2, v4);
 
         assertTrue(VanGoghTriangulator3D.isEar(triangle, polygonVertices));
 
@@ -223,7 +215,7 @@ public class VanGoghTriangulator3DTest {
         // X: 2, Y: 1, Z: 5 (W: 1)
         v4 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
         // X: 0, Y: 1, Z: 5 (W: 1)
-        final Point3D v5 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
+        final var v5 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
         polygonVertices.clear();
         polygonVertices.add(v1);
@@ -264,29 +256,29 @@ public class VanGoghTriangulator3DTest {
     }
 
     @Test
-    public void testTriangulateKnownPolygon() throws TriangulatorException {
+    void testTriangulateKnownPolygon() throws TriangulatorException {
         // X: -1, Y: 0, Z: 5 (W: 1)
-        Point3D v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
+        var v1 = new InhomogeneousPoint3D(-1.0, 0.0, 5.0);
         // X: 1, Y: 0, Z: 5 (W: 1)
-        Point3D v2 = new InhomogeneousPoint3D(1.0, 0.0, 5.0);
+        var v2 = new InhomogeneousPoint3D(1.0, 0.0, 5.0);
         // X: 2, Y: 1, Z: 5 (W: 1)
-        Point3D v3 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
+        var v3 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
         // X: 0, Y: 1, Z: 5 (W: 1)
-        Point3D v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
+        var v4 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
         // Test for Triangle polygon
-        final List<Point3D> polygonVertices = new ArrayList<>();
+        final var polygonVertices = new ArrayList<Point3D>();
 
         polygonVertices.add(v1);
         polygonVertices.add(v2);
         polygonVertices.add(v4);
 
-        final VanGoghTriangulator3D triangulator = new VanGoghTriangulator3D();
-        List<Triangle3D> triangles = triangulator.triangulate(polygonVertices);
+        final var triangulator = new VanGoghTriangulator3D();
+        var triangles = triangulator.triangulate(polygonVertices);
 
         // triangles contains a single triangle with vertices v1, v2 and v4
         assertEquals(1, triangles.size());
-        final Triangle3D triangle = triangles.get(0);
+        final var triangle = triangles.get(0);
         assertTrue(triangle.getVertex1().equals(v1, ABSOLUTE_ERROR));
         assertTrue(triangle.getVertex2().equals(v2, ABSOLUTE_ERROR));
         assertTrue(triangle.getVertex3().equals(v4, ABSOLUTE_ERROR));
@@ -324,7 +316,7 @@ public class VanGoghTriangulator3DTest {
         // X: 2, Y: 1, Z: 5 (W: 1)
         v4 = new InhomogeneousPoint3D(2.0, 1.0, 5.0);
         // X: 0, Y: 1, Z: 5 (W: 1)
-        final Point3D v5 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
+        final var v5 = new InhomogeneousPoint3D(0.0, 1.0, 5.0);
 
         polygonVertices.clear();
         polygonVertices.add(v1);
@@ -348,51 +340,48 @@ public class VanGoghTriangulator3DTest {
         assertTrue(triangle2.getVertex2().equals(v2, ABSOLUTE_ERROR));
         assertTrue(triangle2.getVertex3().equals(v3, ABSOLUTE_ERROR));
         // 3rd triangle is formed by v3, v4 and v5
-        final Triangle3D triangle3 = triangles.get(2);
+        final var triangle3 = triangles.get(2);
         assertTrue(triangle3.getVertex1().equals(v3, ABSOLUTE_ERROR));
         assertTrue(triangle3.getVertex2().equals(v4, ABSOLUTE_ERROR));
         assertTrue(triangle3.getVertex3().equals(v5, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
-
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-        final double phi = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES);
+    void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+        final var phi = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES);
 
         // build vertices list
-        final List<Point3D> vertices = buildPolygonVertices(sides, radius, phi);
+        final var vertices = buildPolygonVertices(sides, radius, phi);
 
         // build polygon
-        final Polygon3D polygon = new Polygon3D(vertices);
+        final var polygon = new Polygon3D(vertices);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
         // create point inside of vertex
-        final Point3D point1 = new InhomogeneousPoint3D(
+        final var point1 = new InhomogeneousPoint3D(
                 radius / 2.0 * Math.cos(theta) * Math.cos(phi),
                 radius / 2.0 * Math.sin(theta) * Math.cos(phi),
                 radius * Math.sin(phi));
 
         // create point outside of vertex
-        final Point3D point2 = new InhomogeneousPoint3D(
+        final var point2 = new InhomogeneousPoint3D(
                 2.0 * radius * Math.cos(theta) * Math.cos(phi),
                 2.0 * radius * Math.sin(theta) * Math.cos(phi),
                 radius * Math.sin(phi));
 
-        final VanGoghTriangulator3D triangulator = new VanGoghTriangulator3D();
-        final List<Triangle3D> triangles1 = triangulator.triangulate(polygon);
-        final List<Triangle3D> triangles2 = triangulator.triangulate(vertices);
-        final List<int[]> indices = new ArrayList<>();
-        final List<Triangle3D> triangles3 = triangulator.triangulate(vertices, indices);
+        final var triangulator = new VanGoghTriangulator3D();
+        final var triangles1 = triangulator.triangulate(polygon);
+        final var triangles2 = triangulator.triangulate(vertices);
+        final var indices = new ArrayList<int[]>();
+        final var triangles3 = triangulator.triangulate(vertices, indices);
 
-        double area1 = 0.0;
-        boolean inside1 = false;
-        boolean inside2 = false;
-        for (final Triangle3D triangle : triangles1) {
+        var area1 = 0.0;
+        var inside1 = false;
+        var inside2 = false;
+        for (final var triangle : triangles1) {
             area1 += triangle.getArea();
             if (triangle.isInside(point1)) {
                 inside1 = true;
@@ -411,9 +400,9 @@ public class VanGoghTriangulator3DTest {
         assertFalse(polygon.isInside(point2));
         assertFalse(inside2);
 
-        double area2 = 0.0;
+        var area2 = 0.0;
         inside1 = false;
-        for (final Triangle3D triangle : triangles2) {
+        for (final var triangle : triangles2) {
             area2 += triangle.getArea();
             if (triangle.isInside(point1)) {
                 inside1 = true;
@@ -432,9 +421,9 @@ public class VanGoghTriangulator3DTest {
         assertFalse(polygon.isInside(point2));
         assertFalse(inside2);
 
-        double area3 = 0.0;
+        var area3 = 0.0;
         inside1 = false;
-        for (final Triangle3D triangle : triangles3) {
+        for (final var triangle : triangles3) {
             area3 += triangle.getArea();
             if (triangle.isInside(point1)) {
                 inside1 = true;
@@ -456,14 +445,11 @@ public class VanGoghTriangulator3DTest {
         assertFalse(indices.isEmpty());
     }
 
-    private List<Point3D> buildPolygonVertices(
-            final int sides, final double radius,
-            final double theta) {
-        final List<Point3D> vertices = new ArrayList<>(sides);
-        Point3D vertex;
-        for (int i = 0; i < sides; i++) {
-            final double angle = (double) i / (double) sides * 2.0 * Math.PI;
-            vertex = new InhomogeneousPoint3D(
+    private static List<Point3D> buildPolygonVertices(final int sides, final double radius, final double theta) {
+        final var vertices = new ArrayList<Point3D>(sides);
+        for (var i = 0; i < sides; i++) {
+            final var angle = (double) i / (double) sides * 2.0 * Math.PI;
+            final var vertex = new InhomogeneousPoint3D(
                     radius * Math.cos(angle) * Math.cos(theta),
                     radius * Math.sin(angle) * Math.cos(theta),
                     radius * Math.sin(theta));

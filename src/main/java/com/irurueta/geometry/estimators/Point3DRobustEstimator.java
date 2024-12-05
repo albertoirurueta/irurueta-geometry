@@ -89,8 +89,7 @@ public abstract class Point3DRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Indicates that result is refined by default using Levenberg-Marquardt
@@ -107,19 +106,19 @@ public abstract class Point3DRobustEstimator {
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected Point3DRobustEstimatorListener mListener;
+    protected Point3DRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -127,25 +126,25 @@ public abstract class Point3DRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of lines to be used to estimate a 3D point. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Plane> mPlanes;
+    protected List<Plane> planes;
 
     /**
      * Data related to inliers found after estimation.
      */
-    protected InliersData mInliersData;
+    protected InliersData inliersData;
 
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
@@ -153,38 +152,37 @@ public abstract class Point3DRobustEstimator {
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
      */
-    protected boolean mRefineResult;
+    protected boolean refineResult;
 
     /**
      * Coordinates type to use for refinement. When using inhomogeneous
      * coordinates a 3x3 covariance matrix is estimated. When using homogeneous
      * coordinates a 4x4 covariance matrix is estimated.
      */
-    private CoordinatesType mRefinementCoordinatesType =
-            CoordinatesType.INHOMOGENEOUS_COORDINATES;
+    private CoordinatesType refinementCoordinatesType = CoordinatesType.INHOMOGENEOUS_COORDINATES;
 
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    private boolean mKeepCovariance;
+    private boolean keepCovariance;
 
     /**
      * Estimated covariance of estimated 3D point.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    private Matrix mCovariance;
+    private Matrix covariance;
 
     /**
      * Constructor.
      */
     protected Point3DRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -194,12 +192,12 @@ public abstract class Point3DRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected Point3DRobustEstimator(final Point3DRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -210,12 +208,12 @@ public abstract class Point3DRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected Point3DRobustEstimator(final List<Plane> planes) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPlanes(planes);
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -227,15 +225,14 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected Point3DRobustEstimator(final Point3DRobustEstimatorListener listener,
-                                     final List<Plane> planes) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected Point3DRobustEstimator(final Point3DRobustEstimatorListener listener, final List<Plane> planes) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPlanes(planes);
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
 
@@ -246,7 +243,7 @@ public abstract class Point3DRobustEstimator {
      * @return listener to be notified of events.
      */
     public Point3DRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -256,12 +253,11 @@ public abstract class Point3DRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final Point3DRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final Point3DRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -271,7 +267,7 @@ public abstract class Point3DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -280,7 +276,7 @@ public abstract class Point3DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -291,7 +287,7 @@ public abstract class Point3DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -309,11 +305,10 @@ public abstract class Point3DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -325,7 +320,7 @@ public abstract class Point3DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -347,7 +342,7 @@ public abstract class Point3DRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -358,7 +353,7 @@ public abstract class Point3DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -378,7 +373,7 @@ public abstract class Point3DRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -387,7 +382,7 @@ public abstract class Point3DRobustEstimator {
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-        return mInliersData;
+        return inliersData;
     }
 
     /**
@@ -400,7 +395,7 @@ public abstract class Point3DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-        return mRefineResult;
+        return refineResult;
     }
 
     /**
@@ -415,7 +410,7 @@ public abstract class Point3DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefineResult = refineResult;
+        this.refineResult = refineResult;
     }
 
     /**
@@ -426,7 +421,7 @@ public abstract class Point3DRobustEstimator {
      * @return coordinates type to use for refinement.
      */
     public CoordinatesType getRefinementCoordinatesType() {
-        return mRefinementCoordinatesType;
+        return refinementCoordinatesType;
     }
 
     /**
@@ -437,12 +432,11 @@ public abstract class Point3DRobustEstimator {
      * @param refinementCoordinatesType coordinates type to use for refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementCoordinatesType(
-            final CoordinatesType refinementCoordinatesType) throws LockedException {
+    public void setRefinementCoordinatesType(final CoordinatesType refinementCoordinatesType) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementCoordinatesType = refinementCoordinatesType;
+        this.refinementCoordinatesType = refinementCoordinatesType;
     }
 
     /**
@@ -453,7 +447,7 @@ public abstract class Point3DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-        return mKeepCovariance;
+        return keepCovariance;
     }
 
     /**
@@ -464,12 +458,11 @@ public abstract class Point3DRobustEstimator {
      *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(final boolean keepCovariance)
-            throws LockedException {
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mKeepCovariance = keepCovariance;
+        this.keepCovariance = keepCovariance;
     }
 
     /**
@@ -479,7 +472,7 @@ public abstract class Point3DRobustEstimator {
      * @return list of planes to be used to estimate a 3D point.
      */
     public List<Plane> getPlanes() {
-        return mPlanes;
+        return planes;
     }
 
     /**
@@ -506,7 +499,7 @@ public abstract class Point3DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPlanes != null && mPlanes.size() >= MINIMUM_SIZE;
+        return planes != null && planes.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -544,7 +537,7 @@ public abstract class Point3DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -555,21 +548,14 @@ public abstract class Point3DRobustEstimator {
      *               3D point.
      * @return an instance of a 3D point robust estimator.
      */
-    public static Point3DRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator();
-            case MSAC:
-                return new MSACPoint3DRobustEstimator();
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator();
-        }
+    public static Point3DRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator();
+            case MSAC -> new MSACPoint3DRobustEstimator();
+            case PROSAC -> new PROSACPoint3DRobustEstimator();
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator();
+            default -> new RANSACPoint3DRobustEstimator();
+        };
     }
 
     /**
@@ -583,22 +569,14 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static Point3DRobustEstimator create(
-            final List<Plane> planes,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator(planes);
-            case MSAC:
-                return new MSACPoint3DRobustEstimator(planes);
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(planes);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(planes);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator(planes);
-        }
+    public static Point3DRobustEstimator create(final List<Plane> planes, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator(planes);
+            case MSAC -> new MSACPoint3DRobustEstimator(planes);
+            case PROSAC -> new PROSACPoint3DRobustEstimator(planes);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(planes);
+            default -> new RANSACPoint3DRobustEstimator(planes);
+        };
     }
 
     /**
@@ -612,21 +590,14 @@ public abstract class Point3DRobustEstimator {
      * @return an instance of a 3D point robust estimator.
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator(listener);
-            case MSAC:
-                return new MSACPoint3DRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator(listener);
-        }
+            final Point3DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator(listener);
+            case MSAC -> new MSACPoint3DRobustEstimator(listener);
+            case PROSAC -> new PROSACPoint3DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(listener);
+            default -> new RANSACPoint3DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -643,21 +614,14 @@ public abstract class Point3DRobustEstimator {
      *                                  size greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener, List<Plane> planes,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator(listener, planes);
-            case MSAC:
-                return new MSACPoint3DRobustEstimator(listener, planes);
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(listener, planes);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(listener, planes);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator(listener, planes);
-        }
+            final Point3DRobustEstimatorListener listener, List<Plane> planes, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator(listener, planes);
+            case MSAC -> new MSACPoint3DRobustEstimator(listener, planes);
+            case PROSAC -> new PROSACPoint3DRobustEstimator(listener, planes);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(listener, planes);
+            default -> new RANSACPoint3DRobustEstimator(listener, planes);
+        };
     }
 
     /**
@@ -671,22 +635,14 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
-    public static Point3DRobustEstimator create(
-            final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator();
-            case MSAC:
-                return new MSACPoint3DRobustEstimator();
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator();
-        }
+    public static Point3DRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator();
+            case MSAC -> new MSACPoint3DRobustEstimator();
+            case PROSAC -> new PROSACPoint3DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(qualityScores);
+            default -> new RANSACPoint3DRobustEstimator();
+        };
     }
 
     /**
@@ -703,21 +659,14 @@ public abstract class Point3DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            final List<Plane> planes, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator(planes);
-            case MSAC:
-                return new MSACPoint3DRobustEstimator(planes);
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(planes, qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(planes, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator(planes);
-        }
+            final List<Plane> planes, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator(planes);
+            case MSAC -> new MSACPoint3DRobustEstimator(planes);
+            case PROSAC -> new PROSACPoint3DRobustEstimator(planes, qualityScores);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(planes, qualityScores);
+            default -> new RANSACPoint3DRobustEstimator(planes);
+        };
     }
 
     /**
@@ -734,22 +683,15 @@ public abstract class Point3DRobustEstimator {
      *                                  smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener,
-            final double[] qualityScores,
+            final Point3DRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator(listener);
-            case MSAC:
-                return new MSACPoint3DRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator(listener);
+            case MSAC -> new MSACPoint3DRobustEstimator(listener);
+            case PROSAC -> new PROSACPoint3DRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(listener, qualityScores);
+            default -> new RANSACPoint3DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -768,24 +710,15 @@ public abstract class Point3DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener,
-            final List<Plane> planes, final double[] qualityScores,
+            final Point3DRobustEstimatorListener listener, final List<Plane> planes, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint3DRobustEstimator(listener, planes);
-            case MSAC:
-                return new MSACPoint3DRobustEstimator(listener, planes);
-            case PROSAC:
-                return new PROSACPoint3DRobustEstimator(listener, planes,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint3DRobustEstimator(listener, planes,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint3DRobustEstimator(listener, planes);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPoint3DRobustEstimator(listener, planes);
+            case MSAC -> new MSACPoint3DRobustEstimator(listener, planes);
+            case PROSAC -> new PROSACPoint3DRobustEstimator(listener, planes, qualityScores);
+            case PROMEDS -> new PROMedSPoint3DRobustEstimator(listener, planes, qualityScores);
+            default -> new RANSACPoint3DRobustEstimator(listener, planes);
+        };
     }
 
     /**
@@ -819,8 +752,7 @@ public abstract class Point3DRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a 3D point robust estimator.
      */
-    public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener) {
+    public static Point3DRobustEstimator create(final Point3DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -836,8 +768,7 @@ public abstract class Point3DRobustEstimator {
      *                                  size greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener,
-            final List<Plane> planes) {
+            final Point3DRobustEstimatorListener listener, final List<Plane> planes) {
         return create(listener, planes, DEFAULT_ROBUST_METHOD);
     }
 
@@ -865,8 +796,7 @@ public abstract class Point3DRobustEstimator {
      *                                  the same size as the list of provided quality scores, or if their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static Point3DRobustEstimator create(
-            final List<Plane> planes, final double[] qualityScores) {
+    public static Point3DRobustEstimator create(final List<Plane> planes, final double[] qualityScores) {
         return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -882,8 +812,7 @@ public abstract class Point3DRobustEstimator {
      *                                  smaller than MINIMUM_SIZE (i.e. 3 planes).
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final Point3DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -901,8 +830,7 @@ public abstract class Point3DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            final Point3DRobustEstimatorListener listener,
-            final List<Plane> planes, final double[] qualityScores) {
+            final Point3DRobustEstimatorListener listener, final List<Plane> planes, final double[] qualityScores) {
         return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -918,8 +846,7 @@ public abstract class Point3DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Point3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Point3D estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -954,12 +881,12 @@ public abstract class Point3DRobustEstimator {
      * solution if not requested or if refinement failed.
      */
     protected Point3D attemptRefine(final Point3D point) {
-        if (mRefineResult) {
+        if (refineResult) {
             try {
                 Point3DRefiner<? extends Point3D> refiner;
                 Point3D result;
                 final boolean improved;
-                switch (mRefinementCoordinatesType) {
+                switch (refinementCoordinatesType) {
                     case HOMOGENEOUS_COORDINATES:
                         HomogeneousPoint3D homP;
                         if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {
@@ -967,11 +894,10 @@ public abstract class Point3DRobustEstimator {
                         } else {
                             homP = new HomogeneousPoint3D(point);
                         }
-                        final HomogeneousPoint3DRefiner homRefiner = new HomogeneousPoint3DRefiner(
-                                homP, mKeepCovariance, getInliersData(), mPlanes,
-                                getRefinementStandardDeviation());
+                        final HomogeneousPoint3DRefiner homRefiner = new HomogeneousPoint3DRefiner(homP, keepCovariance,
+                                getInliersData(), planes, getRefinementStandardDeviation());
                         refiner = homRefiner;
-                        final HomogeneousPoint3D homResult = new HomogeneousPoint3D();
+                        final var homResult = new HomogeneousPoint3D();
                         improved = homRefiner.refine(homResult);
                         result = homResult;
                         break;
@@ -984,19 +910,18 @@ public abstract class Point3DRobustEstimator {
                         } else {
                             inhomP = new InhomogeneousPoint3D(point);
                         }
-                        final InhomogeneousPoint3DRefiner inhomRefiner = new InhomogeneousPoint3DRefiner(
-                                inhomP, mKeepCovariance, getInliersData(), mPlanes,
-                                getRefinementStandardDeviation());
+                        final InhomogeneousPoint3DRefiner inhomRefiner = new InhomogeneousPoint3DRefiner(inhomP,
+                                keepCovariance, getInliersData(), planes, getRefinementStandardDeviation());
                         refiner = inhomRefiner;
-                        final InhomogeneousPoint3D inhomResult = new InhomogeneousPoint3D();
+                        final var inhomResult = new InhomogeneousPoint3D();
                         improved = inhomRefiner.refine(inhomResult);
                         result = inhomResult;
                         break;
                 }
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : point;
@@ -1035,6 +960,6 @@ public abstract class Point3DRobustEstimator {
         if (planes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPlanes = planes;
+        this.planes = planes;
     }
 }

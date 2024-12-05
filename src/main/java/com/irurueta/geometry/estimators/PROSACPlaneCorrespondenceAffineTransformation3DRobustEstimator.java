@@ -74,32 +74,32 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * vector angle difference) a possible solution has on a matched pair of
      * planes.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Quality scores corresponding to each pair of matched planes.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -119,9 +119,9 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         super(inputPlanes, outputPlanes);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -133,9 +133,9 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final AffineTransformation3DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -158,9 +158,9 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             final AffineTransformation3DRobustEstimatorListener listener,
             final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         super(listener, inputPlanes, outputPlanes);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -171,13 +171,12 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            final double[] qualityScores) {
+    public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(final double[] qualityScores) {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -198,18 +197,17 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  MINIMUM_SIZE.
      */
     public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores) {
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final double[] qualityScores) {
         super(inputPlanes, outputPlanes);
 
         if (qualityScores.length != inputPlanes.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -223,13 +221,12 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final AffineTransformation3DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -252,18 +249,17 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores) {
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final double[] qualityScores) {
         super(listener, inputPlanes, outputPlanes);
 
         if (qualityScores.length != inputPlanes.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -283,7 +279,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return threshold to determine whether matched planes are inliers or not.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -314,7 +310,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -325,7 +321,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -357,8 +353,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mInputPlanes.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == inputPlanes.size();
     }
 
     /**
@@ -368,7 +363,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -378,12 +373,11 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -393,7 +387,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -403,12 +397,11 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -425,8 +418,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public AffineTransformation3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public AffineTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -434,142 +426,131 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             throw new NotReadyException();
         }
 
-        final PROSACRobustEstimator<AffineTransformation3D> innerEstimator =
-                new PROSACRobustEstimator<>(
-                        new PROSACRobustEstimatorListener<AffineTransformation3D>() {
+        final var innerEstimator = new PROSACRobustEstimator<>(
+                new PROSACRobustEstimatorListener<AffineTransformation3D>() {
 
-                            // plane to be reused when computing residuals
-                            private final Plane mTestPlane = new Plane();
+                    // plane to be reused when computing residuals
+                    private final Plane testPlane = new Plane();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return threshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPlanes.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPlanes.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<AffineTransformation3D> solutions) {
-                                final Plane inputLine1 = mInputPlanes.get(samplesIndices[0]);
-                                final Plane inputLine2 = mInputPlanes.get(samplesIndices[1]);
-                                final Plane inputLine3 = mInputPlanes.get(samplesIndices[2]);
-                                final Plane inputLine4 = mInputPlanes.get(samplesIndices[3]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<AffineTransformation3D> solutions) {
+                        final var inputLine1 = inputPlanes.get(samplesIndices[0]);
+                        final var inputLine2 = inputPlanes.get(samplesIndices[1]);
+                        final var inputLine3 = inputPlanes.get(samplesIndices[2]);
+                        final var inputLine4 = inputPlanes.get(samplesIndices[3]);
 
-                                final Plane outputLine1 = mOutputPlanes.get(samplesIndices[0]);
-                                final Plane outputLine2 = mOutputPlanes.get(samplesIndices[1]);
-                                final Plane outputLine3 = mOutputPlanes.get(samplesIndices[2]);
-                                final Plane outputLine4 = mOutputPlanes.get(samplesIndices[3]);
+                        final var outputLine1 = outputPlanes.get(samplesIndices[0]);
+                        final var outputLine2 = outputPlanes.get(samplesIndices[1]);
+                        final var outputLine3 = outputPlanes.get(samplesIndices[2]);
+                        final var outputLine4 = outputPlanes.get(samplesIndices[3]);
 
-                                try {
-                                    final AffineTransformation3D transformation =
-                                            new AffineTransformation3D(inputLine1, inputLine2,
-                                                    inputLine3, inputLine4, outputLine1, outputLine2,
-                                                    outputLine3, outputLine4);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentPlanesException e) {
-                                    // if lines are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new AffineTransformation3D(inputLine1, inputLine2, inputLine3,
+                                    inputLine4, outputLine1, outputLine2, outputLine3, outputLine4);
+                            solutions.add(transformation);
+                        } catch (final CoincidentPlanesException e) {
+                            // if lines are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final AffineTransformation3D currentEstimation, final int i) {
-                                final Plane inputPlane = mInputPlanes.get(i);
-                                final Plane outputPlane = mOutputPlanes.get(i);
+                    @Override
+                    public double computeResidual(final AffineTransformation3D currentEstimation, final int i) {
+                        final var inputPlane = inputPlanes.get(i);
+                        final var outputPlane = outputPlanes.get(i);
 
-                                // transform input line and store result in mTestLine
-                                try {
-                                    currentEstimation.transform(inputPlane, mTestPlane);
+                        // transform input line and store result in mTestLine
+                        try {
+                            currentEstimation.transform(inputPlane, testPlane);
 
-                                    return getResidual(outputPlane, mTestPlane);
-                                } catch (final AlgebraException e) {
-                                    // this happens when internal matrix of affine transformation
-                                    // cannot be reverse (i.e. transformation is not well-defined,
-                                    // numerical instabilities, etc.)
-                                    return Double.MAX_VALUE;
-                                }
-                            }
+                            return getResidual(outputPlane, testPlane);
+                        } catch (final AlgebraException e) {
+                            // this happens when internal matrix of affine transformation
+                            // cannot be reverse (i.e. transformation is not well-defined,
+                            // numerical instabilities, etc.)
+                            return Double.MAX_VALUE;
+                        }
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<AffineTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<AffineTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(
+                                    PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<AffineTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<AffineTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(
+                                    PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<AffineTransformation3D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<AffineTransformation3D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<AffineTransformation3D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<AffineTransformation3D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+                    @Override
+                    public double[] getQualityScores() {
+                        return qualityScores;
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setComputeAndKeepInliersEnabled(
-                    mComputeAndKeepInliers || mRefineResult);
-            innerEstimator.setComputeAndKeepResidualsEnabled(
-                    mComputeAndKeepResiduals || mRefineResult);
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final AffineTransformation3D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);
+            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -596,7 +577,7 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -613,6 +594,6 @@ public class PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

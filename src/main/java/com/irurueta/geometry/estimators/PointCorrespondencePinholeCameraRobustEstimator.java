@@ -33,8 +33,7 @@ import java.util.List;
  * in order to find the best solution.
  */
 @SuppressWarnings("DuplicatedCode")
-public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
-        PinholeCameraRobustEstimator {
+public abstract class PointCorrespondencePinholeCameraRobustEstimator extends PinholeCameraRobustEstimator {
 
     /**
      * Minimum number of required point correspondences to estimate a pinhole
@@ -46,38 +45,35 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * Indicates if by default point correspondences for each picked subset of
      * samples is normalized to increase the accuracy of the estimation.
      */
-    public static final boolean DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES =
-            true;
+    public static final boolean DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES = true;
 
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of matched 3D points.
      */
-    protected List<Point3D> mPoints3D;
+    protected List<Point3D> points3D;
 
     /**
      * List of matched 2D points.
      */
-    protected List<Point2D> mPoints2D;
+    protected List<Point2D> points2D;
 
     /**
      * Indicates if each picked subset point correspondences are normalized to
      * increase the accuracy of the estimation.
      */
-    protected boolean mNormalizeSubsetPointCorrespondences;
+    protected boolean normalizeSubsetPointCorrespondences;
 
     /**
      * Constructor.
      */
     protected PointCorrespondencePinholeCameraRobustEstimator() {
         super();
-        mNormalizeSubsetPointCorrespondences =
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
+        normalizeSubsetPointCorrespondences = DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -96,8 +92,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     protected PointCorrespondencePinholeCameraRobustEstimator(
             final List<Point3D> points3D, final List<Point2D> points2D) {
         super();
-        mNormalizeSubsetPointCorrespondences =
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
+        normalizeSubsetPointCorrespondences = DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
         internalSetPoints(points3D, points2D);
     }
 
@@ -107,11 +102,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    protected PointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener) {
+    protected PointCorrespondencePinholeCameraRobustEstimator(final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
-        mNormalizeSubsetPointCorrespondences =
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
+        normalizeSubsetPointCorrespondences = DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -134,8 +127,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             final PinholeCameraRobustEstimatorListener listener,
             final List<Point3D> points3D, final List<Point2D> points2D) {
         super(listener);
-        mNormalizeSubsetPointCorrespondences =
-                DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
+        normalizeSubsetPointCorrespondences = DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
         internalSetPoints(points3D, points2D);
     }
 
@@ -150,7 +142,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return list of 3D points to be used to estimate a pinhole camera.
      */
     public List<Point3D> getPoints3D() {
-        return mPoints3D;
+        return points3D;
     }
 
     /**
@@ -164,7 +156,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return list of 2D points to be used to estimate a pinhole camera.
      */
     public List<Point2D> getPoints2D() {
-        return mPoints2D;
+        return points2D;
     }
 
     /**
@@ -182,8 +174,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public final void setPoints(final List<Point3D> points3D, final List<Point2D> points2D)
-            throws LockedException {
+    public final void setPoints(final List<Point3D> points3D, final List<Point2D> points2D) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -199,9 +190,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints3D != null && mPoints2D != null &&
-                mPoints3D.size() == mPoints2D.size() &&
-                mPoints3D.size() >= MIN_NUMBER_OF_POINT_CORRESPONDENCES;
+        return points3D != null && points2D != null && points3D.size() == points2D.size()
+                && points3D.size() >= MIN_NUMBER_OF_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -240,7 +230,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * false otherwise.
      */
     public boolean isNormalizeSubsetPointCorrespondences() {
-        return mNormalizeSubsetPointCorrespondences;
+        return normalizeSubsetPointCorrespondences;
     }
 
     /**
@@ -252,14 +242,12 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an
      *                         estimation is already in progress.
      */
-    public void setNormalizeSubsetPointCorrespondences(
-            final boolean normalizeSubsetPointCorrespondences)
+    public void setNormalizeSubsetPointCorrespondences(final boolean normalizeSubsetPointCorrespondences)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mNormalizeSubsetPointCorrespondences =
-                normalizeSubsetPointCorrespondences;
+        this.normalizeSubsetPointCorrespondences = normalizeSubsetPointCorrespondences;
     }
 
     /**
@@ -270,10 +258,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
-    public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                method);
+    public static PointCorrespondencePinholeCameraRobustEstimator create(final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(method);
     }
 
     /**
@@ -291,10 +277,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, method);
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D, method);
     }
 
     /**
@@ -309,10 +293,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, method);
+            final PinholeCameraRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(listener, method);
     }
 
     /**
@@ -333,11 +315,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, method);
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D, method);
     }
 
     /**
@@ -354,8 +334,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                qualityScores, method);
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(qualityScores, method);
     }
 
     /**
@@ -376,10 +355,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                points3D, points2D, qualityScores, method);
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D, qualityScores, method);
     }
 
     /**
@@ -398,10 +376,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the required minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores, method);
     }
 
     /**
@@ -424,11 +401,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, points3D, points2D, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D, qualityScores,
+                method);
     }
 
     /**
@@ -441,10 +417,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                intrinsic, method);
+            final PinholeCameraIntrinsicParameters intrinsic, final RobustEstimatorMethod method) {
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, method);
     }
 
     /**
@@ -465,8 +439,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                intrinsic, points3D, points2D, method);
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, points3D, points2D, method);
     }
 
     /**
@@ -482,11 +455,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, intrinsic, method);
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, method);
     }
 
     /**
@@ -508,12 +479,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, intrinsic, points3D, points2D, method);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, points3D, points2D,
+                method);
     }
 
     /**
@@ -532,8 +501,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final PinholeCameraIntrinsicParameters intrinsic, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                intrinsic, qualityScores, method);
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, qualityScores, method);
     }
 
     /**
@@ -555,11 +523,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                intrinsic, points3D, points2D, qualityScores, method);
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, points3D, points2D, qualityScores,
+                method);
     }
 
     /**
@@ -579,11 +546,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the required minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, intrinsic, qualityScores, method);
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, qualityScores, method);
     }
 
     /**
@@ -607,12 +572,11 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                listener, intrinsic, points3D, points2D, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, intrinsic, points3D, points2D,
+                qualityScores, method);
     }
 
     /**
@@ -630,12 +594,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint,
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
             final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        method);
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -667,12 +628,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        points3D, points2D, method);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D, method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -700,12 +658,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        listener, method);
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final RobustEstimatorMethod method) {
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -740,13 +696,11 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
             final List<Point2D> points2D, final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        listener, points3D, points2D, method);
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D,
+                method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -776,12 +730,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  smaller than required minimum size (6 samples).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        qualityScores, method);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(qualityScores, method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -816,13 +767,11 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores,
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        points3D, points2D, qualityScores, method);
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(points3D, points2D,
+                qualityScores, method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -855,13 +804,11 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the required minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final double[] qualityScores,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        listener, qualityScores, method);
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores,
+                method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -898,14 +845,11 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        final UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(
-                        listener, points3D, points2D, qualityScores, method);
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        final var estimator = UPnPPointCorrespondencePinholeCameraRobustEstimator.create(listener, points3D, points2D,
+                qualityScores, method);
         try {
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -974,8 +918,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D) {
         return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
 
@@ -990,8 +934,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than required minimum size (6 samples).
      */
-    public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double[] qualityScores) {
+    public static PointCorrespondencePinholeCameraRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1011,8 +954,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
         return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1030,8 +972,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the required minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1053,11 +994,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
-        return create(listener, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores) {
+        return create(listener, points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1103,8 +1042,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic) {
         return create(listener, intrinsic, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1125,11 +1063,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final List<Point3D> points3D, final List<Point2D> points2D) {
-        return create(listener, intrinsic, points3D, points2D,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1168,8 +1104,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D, final double[] qualityScores) {
-        return create(intrinsic, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+        return create(intrinsic, points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1187,11 +1122,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the required minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final double[] qualityScores) {
-        return create(listener, intrinsic, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1213,12 +1146,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, List<Point2D> points2D,
-            final double[] qualityScores) {
-        return create(listener, intrinsic, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, List<Point2D> points2D, final double[] qualityScores) {
+        return create(listener, intrinsic, points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1234,10 +1164,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint) {
-        return create(skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, DEFAULT_ROBUST_METHOD);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint) {
+        return create(skewness, horizontalPrincipalPoint, verticalPrincipalPoint, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1260,11 +1188,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D) {
-        return create(skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, points3D, points2D, DEFAULT_ROBUST_METHOD);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D) {
+        return create(skewness, horizontalPrincipalPoint, verticalPrincipalPoint, points3D, points2D,
+                DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1283,11 +1210,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint) {
-        return create(listener, skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint) {
+        return create(listener, skewness, horizontalPrincipalPoint, verticalPrincipalPoint, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1312,12 +1237,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
             final List<Point2D> points2D) {
-        return create(listener, skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, points3D, points2D,
+        return create(listener, skewness, horizontalPrincipalPoint, verticalPrincipalPoint, points3D, points2D,
                 DEFAULT_ROBUST_METHOD);
     }
 
@@ -1339,10 +1262,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  smaller than required minimum size (6 samples).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final double[] qualityScores) {
-        return create(skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, qualityScores, DEFAULT_ROBUST_METHOD);
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final double[] qualityScores) {
+        return create(skewness, horizontalPrincipalPoint, verticalPrincipalPoint, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1367,11 +1289,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
-            final List<Point2D> points2D, final double[] qualityScores) {
-        return create(skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, points3D, points2D, qualityScores,
+            final double skewness, final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
+        return create(skewness, horizontalPrincipalPoint, verticalPrincipalPoint, points3D, points2D, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
 
@@ -1395,11 +1315,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the required minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final double[] qualityScores) {
-        return create(listener, skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, qualityScores, DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final double[] qualityScores) {
+        return create(listener, skewness, horizontalPrincipalPoint, verticalPrincipalPoint, qualityScores,
+                DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1426,13 +1345,11 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  minimum size (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double skewness, final double horizontalPrincipalPoint,
-            final double verticalPrincipalPoint, final List<Point3D> points3D,
+            final PinholeCameraRobustEstimatorListener listener, final double skewness,
+            final double horizontalPrincipalPoint, final double verticalPrincipalPoint, final List<Point3D> points3D,
             final List<Point2D> points2D, final double[] qualityScores) {
-        return create(listener, skewness, horizontalPrincipalPoint,
-                verticalPrincipalPoint, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, skewness, horizontalPrincipalPoint, verticalPrincipalPoint, points3D, points2D,
+                qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1442,9 +1359,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param weight        weight for suggestion residual.
      * @return refined camera or provided camera if anything fails.
      */
-    protected PinholeCamera attemptRefine(final PinholeCamera pinholeCamera,
-                                          final double weight) {
-        if (hasSuggestions() && mUseFastRefinement) {
+    protected PinholeCamera attemptRefine(final PinholeCamera pinholeCamera, final double weight) {
+        if (hasSuggestions() && useFastRefinement) {
             return attemptFastRefine(pinholeCamera, weight);
         } else {
             return attemptSlowRefine(pinholeCamera, weight);
@@ -1463,16 +1379,15 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      *                                  the same size or their size is smaller than required minimum size (6
      *                                  points).
      */
-    private void internalSetPoints(final List<Point3D> points3D,
-                                   final List<Point2D> points2D) {
+    private void internalSetPoints(final List<Point3D> points3D, final List<Point2D> points2D) {
         if (points3D.size() < MIN_NUMBER_OF_POINT_CORRESPONDENCES) {
             throw new IllegalArgumentException();
         }
         if (points3D.size() != points2D.size()) {
             throw new IllegalArgumentException();
         }
-        mPoints3D = points3D;
-        mPoints2D = points2D;
+        this.points3D = points3D;
+        this.points2D = points2D;
     }
 
     /**
@@ -1484,50 +1399,38 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param weight        weight for suggestion residual.
      * @return refined camera or provided camera if anything fails.
      */
-    private PinholeCamera attemptSlowRefine(final PinholeCamera pinholeCamera,
-                                            final double weight) {
-        final InliersData inliersData = getInliersData();
-        if ((mRefineResult || mKeepCovariance) && inliersData != null) {
-            final DecomposedPointCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedPointCorrespondencePinholeCameraRefiner(
-                            pinholeCamera, mKeepCovariance, inliersData, mPoints3D,
-                            mPoints2D, getRefinementStandardDeviation());
+    private PinholeCamera attemptSlowRefine(final PinholeCamera pinholeCamera, final double weight) {
+        final var inliersData = getInliersData();
+        if ((refineResult || keepCovariance) && inliersData != null) {
+            final var refiner = new DecomposedPointCorrespondencePinholeCameraRefiner(pinholeCamera, keepCovariance,
+                    inliersData, points3D, points2D, getRefinementStandardDeviation());
             try {
-                if (mRefineResult) {
+                if (refineResult) {
                     refiner.setMinSuggestionWeight(weight);
                     refiner.setMaxSuggestionWeight(weight);
 
-                    refiner.setSuggestSkewnessValueEnabled(
-                            mSuggestSkewnessValueEnabled);
-                    refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);
-                    refiner.setSuggestHorizontalFocalLengthEnabled(
-                            mSuggestHorizontalFocalLengthEnabled);
-                    refiner.setSuggestedHorizontalFocalLengthValue(
-                            mSuggestedHorizontalFocalLengthValue);
-                    refiner.setSuggestVerticalFocalLengthEnabled(
-                            mSuggestVerticalFocalLengthEnabled);
-                    refiner.setSuggestedVerticalFocalLengthValue(
-                            mSuggestedVerticalFocalLengthValue);
-                    refiner.setSuggestAspectRatioEnabled(
-                            mSuggestAspectRatioEnabled);
-                    refiner.setSuggestedAspectRatioValue(
-                            mSuggestedAspectRatioValue);
-                    refiner.setSuggestPrincipalPointEnabled(
-                            mSuggestPrincipalPointEnabled);
-                    refiner.setSuggestedPrincipalPointValue(
-                            mSuggestedPrincipalPointValue);
-                    refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);
-                    refiner.setSuggestedRotationValue(mSuggestedRotationValue);
-                    refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);
-                    refiner.setSuggestedCenterValue(mSuggestedCenterValue);
+                    refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);
+                    refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);
+                    refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);
+                    refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);
+                    refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);
+                    refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);
+                    refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);
+                    refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);
+                    refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);
+                    refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);
+                    refiner.setSuggestRotationEnabled(suggestRotationEnabled);
+                    refiner.setSuggestedRotationValue(suggestedRotationValue);
+                    refiner.setSuggestCenterEnabled(suggestCenterEnabled);
+                    refiner.setSuggestedCenterValue(suggestedCenterValue);
                 }
 
-                final PinholeCamera result = new PinholeCamera();
-                final boolean improved = refiner.refine(result);
+                final var result = new PinholeCamera();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : pinholeCamera;
@@ -1536,7 +1439,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
                 return pinholeCamera;
             }
         } else {
-            mCovariance = null;
+            covariance = null;
             return pinholeCamera;
         }
     }
@@ -1549,48 +1452,36 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @param weight        weight for suggestion residual.
      * @return refined camera or provided camera if anything fails.
      */
-    private PinholeCamera attemptFastRefine(final PinholeCamera pinholeCamera,
-                                            final double weight) {
-        final InliersData inliersData = getInliersData();
-        if (mRefineResult && inliersData != null) {
-            final NonDecomposedPointCorrespondencePinholeCameraRefiner refiner =
-                    new NonDecomposedPointCorrespondencePinholeCameraRefiner(
-                            pinholeCamera, mKeepCovariance, inliersData, mPoints3D,
-                            mPoints2D, getRefinementStandardDeviation());
+    private PinholeCamera attemptFastRefine(final PinholeCamera pinholeCamera, final double weight) {
+        final var inliersData = getInliersData();
+        if (refineResult && inliersData != null) {
+            final var refiner = new NonDecomposedPointCorrespondencePinholeCameraRefiner(pinholeCamera, keepCovariance,
+                    inliersData, points3D, points2D, getRefinementStandardDeviation());
 
             try {
                 refiner.setSuggestionErrorWeight(weight);
 
-                refiner.setSuggestSkewnessValueEnabled(
-                        mSuggestSkewnessValueEnabled);
-                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);
-                refiner.setSuggestHorizontalFocalLengthEnabled(
-                        mSuggestHorizontalFocalLengthEnabled);
-                refiner.setSuggestedHorizontalFocalLengthValue(
-                        mSuggestedHorizontalFocalLengthValue);
-                refiner.setSuggestVerticalFocalLengthEnabled(
-                        mSuggestVerticalFocalLengthEnabled);
-                refiner.setSuggestedVerticalFocalLengthValue(
-                        mSuggestedVerticalFocalLengthValue);
-                refiner.setSuggestAspectRatioEnabled(
-                        mSuggestAspectRatioEnabled);
-                refiner.setSuggestedAspectRatioValue(
-                        mSuggestedAspectRatioValue);
-                refiner.setSuggestPrincipalPointEnabled(
-                        mSuggestPrincipalPointEnabled);
-                refiner.setSuggestedPrincipalPointValue(
-                        mSuggestedPrincipalPointValue);
-                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);
-                refiner.setSuggestedRotationValue(mSuggestedRotationValue);
-                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);
-                refiner.setSuggestedCenterValue(mSuggestedCenterValue);
+                refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);
+                refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);
+                refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);
+                refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);
+                refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);
+                refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);
+                refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);
+                refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);
+                refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);
+                refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);
+                refiner.setSuggestRotationEnabled(suggestRotationEnabled);
+                refiner.setSuggestedRotationValue(suggestedRotationValue);
+                refiner.setSuggestCenterEnabled(suggestCenterEnabled);
+                refiner.setSuggestedCenterValue(suggestedCenterValue);
 
-                final PinholeCamera result = new PinholeCamera();
-                final boolean improved = refiner.refine(result);
+                final var result = new PinholeCamera();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : pinholeCamera;

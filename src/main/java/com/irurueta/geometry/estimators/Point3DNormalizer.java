@@ -36,84 +36,84 @@ public class Point3DNormalizer {
     /**
      * Collection of points used to compute normalization.
      */
-    private List<Point3D> mPoints;
+    private List<Point3D> points;
 
     /**
      * Flag indicating that this instance is locked because computation is in
      * progress.
      */
-    private boolean mLocked;
+    private boolean locked;
 
     /**
      * Minimum x inhomogeneous coordinate found in provided points.
      */
-    private double mMinInhomX;
+    private double minInhomX;
 
     /**
      * Minimum y inhomogeneous coordinate found in provided points.
      */
-    private double mMinInhomY;
+    private double minInhomY;
 
     /**
      * Minimum z inhomogeneous coordinate found in provided points.
      */
-    private double mMinInhomZ;
+    private double minInhomZ;
 
     /**
      * Maximum x inhomogeneous coordinate found in provided points.
      */
-    private double mMaxInhomX;
+    private double maxInhomX;
 
     /**
      * Maximum y inhomogeneous coordinate found in provided points.
      */
-    private double mMaxInhomY;
+    private double maxInhomY;
 
     /**
      * Maximum z inhomogeneous coordinate found in provided points.
      */
-    private double mMaxInhomZ;
+    private double maxInhomZ;
 
     /**
      * Computed scale on x coordinates to normalize points.
      */
-    private double mScaleX;
+    private double scaleX;
 
     /**
      * Computed scale on y coordinates to normalize points.
      */
-    private double mScaleY;
+    private double scaleY;
 
     /**
      * Computed scale on z coordinates to normalize points.
      */
-    private double mScaleZ;
+    private double scaleZ;
 
     /**
      * Computed x coordinate of centroid of points.
      */
-    private double mCentroidX;
+    private double centroidX;
 
     /**
      * Computed y coordinate of centroid of points.
      */
-    private double mCentroidY;
+    private double centroidY;
 
     /**
      * Computed z coordinate of centroid of points.
      */
-    private double mCentroidZ;
+    private double centroidZ;
 
     /**
      * Transformation to normalize points.
      */
-    private ProjectiveTransformation3D mTransformation;
+    private ProjectiveTransformation3D transformation;
 
     /**
      * Transformation to denormalize points, which corresponds to the
      * inverse transformation.
      */
-    private ProjectiveTransformation3D mInverseTransformation;
+    private ProjectiveTransformation3D inverseTransformation;
 
     /**
      * Constructor.
@@ -133,7 +133,7 @@ public class Point3DNormalizer {
      * @return collection of points used to compute normalization.
      */
     public List<Point3D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -160,7 +160,7 @@ public class Point3DNormalizer {
      * @return true if this instance is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MIN_POINTS;
+        return points != null && points.size() >= MIN_POINTS;
     }
 
     /**
@@ -172,7 +172,7 @@ public class Point3DNormalizer {
      * @return true if instance is locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -181,7 +181,7 @@ public class Point3DNormalizer {
      * @return minimum x inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomX() {
-        return mMinInhomX;
+        return minInhomX;
     }
 
     /**
@@ -190,7 +190,7 @@ public class Point3DNormalizer {
      * @return minimum y inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomY() {
-        return mMinInhomY;
+        return minInhomY;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Point3DNormalizer {
      * @return minimum z inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomZ() {
-        return mMinInhomZ;
+        return minInhomZ;
     }
 
     /**
@@ -208,7 +208,7 @@ public class Point3DNormalizer {
      * @return maximum x inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomX() {
-        return mMaxInhomX;
+        return maxInhomX;
     }
 
     /**
@@ -217,7 +217,7 @@ public class Point3DNormalizer {
      * @return maximum y inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomY() {
-        return mMaxInhomY;
+        return maxInhomY;
     }
 
     /**
@@ -226,7 +226,7 @@ public class Point3DNormalizer {
      * @return maximum z inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomZ() {
-        return mMaxInhomZ;
+        return maxInhomZ;
     }
 
     /**
@@ -235,7 +235,7 @@ public class Point3DNormalizer {
      * @return computed scale to normalize points on x coordinate.
      */
     public double getScaleX() {
-        return mScaleX;
+        return scaleX;
     }
 
     /**
@@ -244,7 +244,7 @@ public class Point3DNormalizer {
      * @return computed scale to normalize points on y coordinate.
      */
     public double getScaleY() {
-        return mScaleY;
+        return scaleY;
     }
 
     /**
@@ -253,7 +253,7 @@ public class Point3DNormalizer {
      * @return computed scale to normalize points on z coordinate.
      */
     public double getScaleZ() {
-        return mScaleZ;
+        return scaleZ;
     }
 
     /**
@@ -262,7 +262,7 @@ public class Point3DNormalizer {
      * @return computed x coordinate of centroid of points.
      */
     public double getCentroidX() {
-        return mCentroidX;
+        return centroidX;
     }
 
     /**
@@ -271,7 +271,7 @@ public class Point3DNormalizer {
      * @return computed y coordinate of centroid of points.
      */
     public double getCentroidY() {
-        return mCentroidY;
+        return centroidY;
     }
 
     /**
@@ -280,7 +280,7 @@ public class Point3DNormalizer {
      * @return computed z coordinate of centroid of points.
      */
     public double getCentroidZ() {
-        return mCentroidZ;
+        return centroidZ;
     }
 
     /**
@@ -289,7 +289,7 @@ public class Point3DNormalizer {
      * @return transformation to normalize points.
      */
     public ProjectiveTransformation3D getTransformation() {
-        return mTransformation;
+        return transformation;
     }
 
     /**
@@ -299,7 +299,7 @@ public class Point3DNormalizer {
      * @return transformation to denormalize points.
      */
     public ProjectiveTransformation3D getInverseTransformation() {
-        return mInverseTransformation;
+        return inverseTransformation;
     }
 
     /**
@@ -309,7 +309,7 @@ public class Point3DNormalizer {
      * @return true if result is available, false otherwise.
      */
     public boolean isResultAvailable() {
-        return mTransformation != null;
+        return transformation != null;
     }
 
     /**
@@ -324,8 +324,7 @@ public class Point3DNormalizer {
      *                             close to each other, which results in a singularity when computing proper
      *                             normalization scale.
      */
-    public void compute() throws NotReadyException, LockedException,
-            NormalizerException {
+    public void compute() throws NotReadyException, LockedException, NormalizerException {
         if (!isReady()) {
             throw new NotReadyException();
         }
@@ -333,69 +332,64 @@ public class Point3DNormalizer {
             throw new LockedException();
         }
         try {
-            mLocked = true;
+            locked = true;
 
             reset();
             computeLimits();
 
             // compute scale and centroids
-            final double width = mMaxInhomX - mMinInhomX;
-            final double height = mMaxInhomY - mMinInhomY;
-            final double depth = mMaxInhomZ - mMinInhomZ;
+            final var width = maxInhomX - minInhomX;
+            final var height = maxInhomY - minInhomY;
+            final var depth = maxInhomZ - minInhomZ;
 
-            if (width < Double.MIN_VALUE || height < Double.MIN_VALUE ||
-                    depth < Double.MIN_VALUE) {
+            if (width < Double.MIN_VALUE || height < Double.MIN_VALUE || depth < Double.MIN_VALUE) {
                 // numerical degeneracy
                 throw new NormalizerException();
             }
 
-            mScaleX = 1.0 / width;
-            mScaleY = 1.0 / height;
-            mScaleZ = 1.0 / depth;
+            scaleX = 1.0 / width;
+            scaleY = 1.0 / height;
+            scaleZ = 1.0 / depth;
 
             // centroids of points
-            mCentroidX = (mMinInhomX + mMaxInhomX) / 2.0;
-            mCentroidY = (mMinInhomY + mMaxInhomY) / 2.0;
-            mCentroidZ = (mMinInhomZ + mMaxInhomZ) / 2.0;
+            centroidX = (minInhomX + maxInhomX) / 2.0;
+            centroidY = (minInhomY + maxInhomY) / 2.0;
+            centroidZ = (minInhomZ + maxInhomZ) / 2.0;
 
             // transformation to normalize points
-            final Matrix t = new Matrix(
-                    ProjectiveTransformation3D.HOM_COORDS,
-                    ProjectiveTransformation3D.HOM_COORDS);
+            final var t = new Matrix(ProjectiveTransformation3D.HOM_COORDS, ProjectiveTransformation3D.HOM_COORDS);
 
             // X' = s * X + s * t -->
             // s * X = X' - s * t -->
             // X = 1/s*X' - t
-            t.setElementAt(0, 0, mScaleX);
-            t.setElementAt(1, 1, mScaleY);
-            t.setElementAt(2, 2, mScaleZ);
-            t.setElementAt(0, 3, -mScaleX * mCentroidX);
-            t.setElementAt(1, 3, -mScaleY * mCentroidY);
-            t.setElementAt(2, 3, -mScaleZ * mCentroidZ);
+            t.setElementAt(0, 0, scaleX);
+            t.setElementAt(1, 1, scaleY);
+            t.setElementAt(2, 2, scaleZ);
+            t.setElementAt(0, 3, -scaleX * centroidX);
+            t.setElementAt(1, 3, -scaleY * centroidY);
+            t.setElementAt(2, 3, -scaleZ * centroidZ);
             t.setElementAt(3, 3, 1.0);
 
-            mTransformation = new ProjectiveTransformation3D(t);
-            mTransformation.normalize();
+            transformation = new ProjectiveTransformation3D(t);
+            transformation.normalize();
 
             // transformation to denormalize points
-            final Matrix invT = new Matrix(
-                    ProjectiveTransformation3D.HOM_COORDS,
-                    ProjectiveTransformation3D.HOM_COORDS);
+            final var invT = new Matrix(ProjectiveTransformation3D.HOM_COORDS, ProjectiveTransformation3D.HOM_COORDS);
 
             invT.setElementAt(0, 0, width);
             invT.setElementAt(1, 1, height);
             invT.setElementAt(2, 2, depth);
-            invT.setElementAt(0, 3, mCentroidX);
-            invT.setElementAt(1, 3, mCentroidY);
-            invT.setElementAt(2, 3, mCentroidZ);
+            invT.setElementAt(0, 3, centroidX);
+            invT.setElementAt(1, 3, centroidY);
+            invT.setElementAt(2, 3, centroidZ);
             invT.setElementAt(3, 3, 1.0);
 
-            mInverseTransformation = new ProjectiveTransformation3D(invT);
-            mInverseTransformation.normalize();
+            inverseTransformation = new ProjectiveTransformation3D(invT);
+            inverseTransformation.normalize();
         } catch (final Exception e) {
             throw new NormalizerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -405,28 +399,28 @@ public class Point3DNormalizer {
      */
     @SuppressWarnings("DuplicatedCode")
     private void computeLimits() {
-        for (final Point3D point : mPoints) {
-            final double inhomX = point.getInhomX();
-            final double inhomY = point.getInhomY();
-            final double inhomZ = point.getInhomZ();
-            if (inhomX < mMinInhomX) {
-                mMinInhomX = inhomX;
+        for (final var point : points) {
+            final var inhomX = point.getInhomX();
+            final var inhomY = point.getInhomY();
+            final var inhomZ = point.getInhomZ();
+            if (inhomX < minInhomX) {
+                minInhomX = inhomX;
             }
-            if (inhomY < mMinInhomY) {
-                mMinInhomY = inhomY;
+            if (inhomY < minInhomY) {
+                minInhomY = inhomY;
             }
-            if (inhomZ < mMinInhomZ) {
-                mMinInhomZ = inhomZ;
+            if (inhomZ < minInhomZ) {
+                minInhomZ = inhomZ;
             }
 
-            if (inhomX > mMaxInhomX) {
-                mMaxInhomX = inhomX;
+            if (inhomX > maxInhomX) {
+                maxInhomX = inhomX;
             }
-            if (inhomY > mMaxInhomY) {
-                mMaxInhomY = inhomY;
+            if (inhomY > maxInhomY) {
+                maxInhomY = inhomY;
             }
-            if (inhomZ > mMaxInhomZ) {
-                mMaxInhomZ = inhomZ;
+            if (inhomZ > maxInhomZ) {
+                maxInhomZ = inhomZ;
             }
         }
     }
@@ -442,7 +436,7 @@ public class Point3DNormalizer {
         if (points.size() < MIN_POINTS) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**
@@ -450,12 +444,11 @@ public class Point3DNormalizer {
      */
     private void reset() {
         // reset result
-        mTransformation = mInverseTransformation = null;
+        transformation = inverseTransformation = null;
         // reset limits
-        mMinInhomX = mMinInhomY = mMinInhomZ = Double.MAX_VALUE;
-        mMaxInhomX = mMaxInhomY = mMaxInhomZ = -Double.MAX_VALUE;
-        mScaleX = mScaleY = mScaleZ = 1.0;
-        mCentroidX = mCentroidY = mCentroidZ = 0.0;
+        minInhomX = minInhomY = minInhomZ = Double.MAX_VALUE;
+        maxInhomX = maxInhomY = maxInhomZ = -Double.MAX_VALUE;
+        scaleX = scaleY = scaleZ = 1.0;
+        centroidX = centroidY = centroidZ = 0.0;
     }
-
 }

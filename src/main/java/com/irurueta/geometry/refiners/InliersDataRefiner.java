@@ -34,7 +34,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
     /**
      * Array indicating which of the provided matches are inliers.
      */
-    protected BitSet mInliers;
+    protected BitSet inliers;
 
     /**
      * Residuals for matched data corresponding to the initial estimation.
@@ -42,12 +42,12 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * in order to find a refined solution that minimizes the LMSE error of all
      * inlier matches.
      */
-    protected double[] mResiduals;
+    protected double[] residuals;
 
     /**
      * Number of inliers on initial estimation.
      */
-    protected int mNumInliers;
+    protected int numInliers;
 
     /**
      * Constructor.
@@ -65,12 +65,12 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * @param residuals         residuals for matched samples.
      * @param numInliers        number of inliers on initial estimation.
      */
-    protected InliersDataRefiner(final T initialEstimation, final boolean keepCovariance,
-                                 final BitSet inliers, final double[] residuals, final int numInliers) {
+    protected InliersDataRefiner(final T initialEstimation, final boolean keepCovariance, final BitSet inliers,
+                                 final double[] residuals, final int numInliers) {
         super(initialEstimation, keepCovariance);
-        mInliers = inliers;
-        mResiduals = residuals;
-        mNumInliers = numInliers;
+        this.inliers = inliers;
+        this.residuals = residuals;
+        this.numInliers = numInliers;
     }
 
     /**
@@ -85,9 +85,9 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
     protected InliersDataRefiner(final T initialEstimation, final boolean keepCovariance,
                                  final InliersData inliersData) {
         super(initialEstimation, keepCovariance);
-        mInliers = inliersData.getInliers();
-        mResiduals = inliersData.getResiduals();
-        mNumInliers = inliersData.getNumInliers();
+        inliers = inliersData.getInliers();
+        residuals = inliersData.getResiduals();
+        numInliers = inliersData.getNumInliers();
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * @return set indicating which of the provided matches are inliers.
      */
     public BitSet getInliers() {
-        return mInliers;
+        return inliers;
     }
 
     /**
@@ -109,7 +109,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
         if (isLocked()) {
             throw new LockedException();
         }
-        mInliers = inliers;
+        this.inliers = inliers;
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * @return residuals for matched samples.
      */
     public double[] getResiduals() {
-        return mResiduals;
+        return residuals;
     }
 
     /**
@@ -139,7 +139,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
         if (isLocked()) {
             throw new LockedException();
         }
-        mResiduals = residuals;
+        this.residuals = residuals;
     }
 
     /**
@@ -148,7 +148,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * @return number of inliers on initial estimation.
      */
     public int getNumInliers() {
-        return mNumInliers;
+        return numInliers;
     }
 
     /**
@@ -165,7 +165,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
         if (numInliers <= 0) {
             throw new IllegalArgumentException();
         }
-        mNumInliers = numInliers;
+        this.numInliers = numInliers;
     }
 
     /**
@@ -174,7 +174,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * @return total number of provided matched samples.
      */
     public int getTotalSamples() {
-        return mResiduals != null ? mResiduals.length : 0;
+        return residuals != null ? residuals.length : 0;
     }
 
     /**
@@ -188,8 +188,8 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
         if (isLocked()) {
             throw new LockedException();
         }
-        mInliers = inliersData.getInliers();
-        mResiduals = inliersData.getResiduals();
-        mNumInliers = inliersData.getNumInliers();
+        inliers = inliersData.getInliers();
+        residuals = inliersData.getResiduals();
+        numInliers = inliersData.getNumInliers();
     }
 }

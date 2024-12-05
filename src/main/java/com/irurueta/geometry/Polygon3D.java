@@ -17,7 +17,6 @@ package com.irurueta.geometry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -50,29 +49,28 @@ public class Polygon3D implements Serializable {
     /**
      * Default method for triangulation.
      */
-    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD =
-            TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
+    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD = TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
 
     /**
      * List containing vertices of this polygon. Each vertex is a 3D point.
      */
-    private List<Point3D> mVertices;
+    private List<Point3D> vertices;
 
     /**
      * Boolean indicating whether polygon has already been triangulated.
      */
-    private boolean mTriangulated;
+    private boolean triangulated;
 
     /**
      * List containing triangles found after triangulating this polygon.
      * Initially this list will be null until triangulation is done.
      */
-    private List<Triangle3D> mTriangles;
+    private List<Triangle3D> triangles;
 
     /**
      * Method to do triangulation.
      */
-    private TriangulatorMethod mTriangulatorMethod;
+    private TriangulatorMethod triangulatorMethod;
 
     /**
      * Constructor.
@@ -84,7 +82,7 @@ public class Polygon3D implements Serializable {
      */
     public Polygon3D(final List<Point3D> vertices) throws NotEnoughVerticesException {
         setVertices(vertices);
-        mTriangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;
+        triangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;
     }
 
     /**
@@ -95,7 +93,7 @@ public class Polygon3D implements Serializable {
      * @return Triangulator method.
      */
     public TriangulatorMethod getTriangulatorMethod() {
-        return mTriangulatorMethod;
+        return triangulatorMethod;
     }
 
     /**
@@ -105,7 +103,7 @@ public class Polygon3D implements Serializable {
      * @param triangulatorMethod A triangulator method.
      */
     public void setTriangulatorMethod(final TriangulatorMethod triangulatorMethod) {
-        mTriangulatorMethod = triangulatorMethod;
+        this.triangulatorMethod = triangulatorMethod;
     }
 
     /**
@@ -114,7 +112,7 @@ public class Polygon3D implements Serializable {
      * @return List of vertices.
      */
     public List<Point3D> getVertices() {
-        return mVertices;
+        return vertices;
     }
 
     /**
@@ -125,19 +123,18 @@ public class Polygon3D implements Serializable {
      *                                    enough vertices.
      * @see #MIN_VERTICES
      */
-    public final void setVertices(final List<Point3D> vertices)
-            throws NotEnoughVerticesException {
+    public final void setVertices(final List<Point3D> vertices) throws NotEnoughVerticesException {
         if (vertices.size() < MIN_VERTICES) {
             throw new NotEnoughVerticesException();
         }
 
         if (vertices instanceof Serializable) {
-            mVertices = vertices;
+            this.vertices = vertices;
         } else {
-            mVertices = new ArrayList<>(vertices);
+            this.vertices = new ArrayList<>(vertices);
         }
-        mTriangulated = false;
-        mTriangles = null;
+        triangulated = false;
+        triangles = null;
     }
 
     /**
@@ -148,7 +145,7 @@ public class Polygon3D implements Serializable {
      * @return True if polygon has already been triangulated, false otherwise.
      */
     public boolean isTriangulated() {
-        return mTriangulated;
+        return triangulated;
     }
 
     /**
@@ -164,7 +161,7 @@ public class Polygon3D implements Serializable {
         if (!isTriangulated()) {
             triangulate();
         }
-        return mTriangles;
+        return triangles;
     }
 
     /**
@@ -175,44 +172,44 @@ public class Polygon3D implements Serializable {
      * @return Signed area of this polygon.
      */
     public double getArea() {
-        final Point3D origin = mVertices.get(0);
-        final double inhomX0 = origin.getInhomX();
-        final double inhomY0 = origin.getInhomY();
-        final double inhomZ0 = origin.getInhomZ();
+        final var origin = vertices.get(0);
+        final var inhomX0 = origin.getInhomX();
+        final var inhomY0 = origin.getInhomY();
+        final var inhomZ0 = origin.getInhomZ();
 
-        final Iterator<Point3D> iterator = mVertices.iterator();
+        final var iterator = vertices.iterator();
 
         // because there are at least 3
         // vertices
-        Point3D prevPoint = iterator.next();
+        var prevPoint = iterator.next();
         Point3D curPoint;
-        double avgX = 0.0;
-        double avgY = 0.0;
-        double avgZ = 0.0;
+        var avgX = 0.0;
+        var avgY = 0.0;
+        var avgZ = 0.0;
         while (iterator.hasNext()) {
             curPoint = iterator.next();
 
-            final double inhomX1 = prevPoint.getInhomX();
-            final double inhomY1 = prevPoint.getInhomY();
-            final double inhomZ1 = prevPoint.getInhomZ();
+            final var inhomX1 = prevPoint.getInhomX();
+            final var inhomY1 = prevPoint.getInhomY();
+            final var inhomZ1 = prevPoint.getInhomZ();
 
-            final double inhomX2 = curPoint.getInhomX();
-            final double inhomY2 = curPoint.getInhomY();
-            final double inhomZ2 = curPoint.getInhomZ();
+            final var inhomX2 = curPoint.getInhomX();
+            final var inhomY2 = curPoint.getInhomY();
+            final var inhomZ2 = curPoint.getInhomZ();
 
             // compute cross product of ab = (prevPoint - origin) and
             // ac = (curPoint - origin)
-            final double abX = inhomX1 - inhomX0;
-            final double abY = inhomY1 - inhomY0;
-            final double abZ = inhomZ1 - inhomZ0;
+            final var abX = inhomX1 - inhomX0;
+            final var abY = inhomY1 - inhomY0;
+            final var abZ = inhomZ1 - inhomZ0;
 
-            final double acX = inhomX2 - inhomX0;
-            final double acY = inhomY2 - inhomY0;
-            final double acZ = inhomZ2 - inhomZ0;
+            final var acX = inhomX2 - inhomX0;
+            final var acY = inhomY2 - inhomY0;
+            final var acZ = inhomZ2 - inhomZ0;
 
-            final double crossX = abY * acZ - abZ * acY;
-            final double crossY = abZ * acX - abX * acZ;
-            final double crossZ = abX * acY - abY * acX;
+            final var crossX = abY * acZ - abZ * acY;
+            final var crossY = abZ * acX - abX * acZ;
+            final var crossZ = abX * acY - abY * acX;
 
             avgX += crossX;
             avgY += crossY;
@@ -233,17 +230,17 @@ public class Polygon3D implements Serializable {
      */
     public double getPerimeter() {
         // iterate over all vertices and compute their distance
-        final Iterator<Point3D> iterator = mVertices.iterator();
-        Point3D prevPoint = iterator.next();
+        final var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
         Point3D point;
-        double perimeter = 0.0;
+        var perimeter = 0.0;
         while (iterator.hasNext()) {
             point = iterator.next();
             perimeter += prevPoint.distanceTo(point);
             prevPoint = point;
         }
         // get distance from last point with first one
-        perimeter += prevPoint.distanceTo(mVertices.get(0));
+        perimeter += prevPoint.distanceTo(vertices.get(0));
         return perimeter;
     }
 
@@ -286,7 +283,7 @@ public class Polygon3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        for (final Triangle3D triangle : getTriangles()) {
+        for (final var triangle : getTriangles()) {
             if (triangle.isInside(point, threshold)) {
                 return true;
             }
@@ -302,7 +299,7 @@ public class Polygon3D implements Serializable {
      * @return Center of this polygon.
      */
     public Point3D getCenter() {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         center(result);
         return result;
     }
@@ -316,12 +313,12 @@ public class Polygon3D implements Serializable {
      */
     public void center(final Point3D result) {
         // compute average location of all vertices
-        double inhomX = 0.0;
-        double inhomY = 0.0;
-        double inhomZ = 0.0;
-        final int total = mVertices.size();
+        var inhomX = 0.0;
+        var inhomY = 0.0;
+        var inhomZ = 0.0;
+        final var total = vertices.size();
 
-        for (final Point3D point : mVertices) {
+        for (final var point : vertices) {
             inhomX += point.getInhomX() / total;
             inhomY += point.getInhomY() / total;
             inhomZ += point.getInhomZ() / total;
@@ -350,10 +347,10 @@ public class Polygon3D implements Serializable {
         // normalize point to increase accuracy
         point.normalize();
 
-        final Iterator<Point3D> iterator = mVertices.iterator();
+        final var iterator = vertices.iterator();
         // it's ok because there are at
         // least 3 vertices
-        Point3D prevPoint = iterator.next();
+        var prevPoint = iterator.next();
         // normalize to increase accuracy
         prevPoint.normalize();
 
@@ -369,7 +366,7 @@ public class Polygon3D implements Serializable {
         }
 
         // check last point with first
-        return point.isBetween(prevPoint, mVertices.get(0), threshold);
+        return point.isBetween(prevPoint, vertices.get(0), threshold);
     }
 
     /**
@@ -394,19 +391,18 @@ public class Polygon3D implements Serializable {
      * @throws CoincidentPointsException Raised if points in a polygon are too
      *                                   close. This usually indicates numerical instability or polygon degeneracy.
      */
-    public double getShortestDistance(final Point3D point)
-            throws CoincidentPointsException {
+    public double getShortestDistance(final Point3D point) throws CoincidentPointsException {
         // iterate over all vertices and compute their distance
-        Iterator<Point3D> iterator = mVertices.iterator();
-        Point3D prevPoint = iterator.next();
+        var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
         // to increase accuracy
         prevPoint.normalize();
         Point3D curPoint;
-        double bestDist = Double.MAX_VALUE;
+        var bestDist = Double.MAX_VALUE;
         double dist;
-        boolean found = false;
+        var found = false;
         Line3D line = null;
-        final Point3D pointInLine = Point3D.create();
+        final var pointInLine = Point3D.create();
 
         while (iterator.hasNext()) {
             curPoint = iterator.next();
@@ -447,7 +443,7 @@ public class Polygon3D implements Serializable {
 
         // try last vertex with first
         // check if point lies in the segment of the boundary of this polygon
-        final Point3D first = mVertices.get(0);
+        final var first = vertices.get(0);
         if (point.isBetween(prevPoint, first)) {
             return 0.0;
         }
@@ -476,11 +472,10 @@ public class Polygon3D implements Serializable {
             }
         }
 
-
         if (!found) {
             // no closest point was found on a segment belonging to polygon
             // boundary, so we search for the closest vertex
-            iterator = mVertices.iterator();
+            iterator = vertices.iterator();
             while (iterator.hasNext()) {
                 // a better vertex has been found
                 curPoint = iterator.next();
@@ -503,9 +498,8 @@ public class Polygon3D implements Serializable {
      * @throws CoincidentPointsException Raised if points in a polygon are too
      *                                   close. This usually indicates numerical instability or polygon degeneracy.
      */
-    public Point3D getClosestPoint(final Point3D point)
-            throws CoincidentPointsException {
-        final Point3D result = Point3D.create();
+    public Point3D getClosestPoint(final Point3D point) throws CoincidentPointsException {
+        final var result = Point3D.create();
         closestPoint(point, result);
         return result;
     }
@@ -519,20 +513,19 @@ public class Polygon3D implements Serializable {
      * @throws CoincidentPointsException Raised if points in a polygon are too
      *                                   close. This usually indicates numerical instability or polygon degeneracy.
      */
-    public void closestPoint(final Point3D point, final Point3D result)
-            throws CoincidentPointsException {
+    public void closestPoint(final Point3D point, final Point3D result) throws CoincidentPointsException {
         // iterate over all vertices and compute their distance
-        Iterator<Point3D> iterator = mVertices.iterator();
-        Point3D prevPoint = iterator.next();
+        var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
         // to increase accuracy
         prevPoint.normalize();
 
         Point3D curPoint;
-        double bestDist = Double.MAX_VALUE;
+        var bestDist = Double.MAX_VALUE;
         double dist;
-        boolean found = false;
+        var found = false;
         Line3D line = null;
-        final Point3D pointInLine = Point3D.create();
+        final var pointInLine = Point3D.create();
 
         while (iterator.hasNext()) {
             curPoint = iterator.next();
@@ -575,7 +568,7 @@ public class Polygon3D implements Serializable {
 
         // try last vertex with first
         // check if point lies in the segment of the boundary of this polygon
-        final Point3D first = mVertices.get(0);
+        final var first = vertices.get(0);
         if (point.isBetween(prevPoint, first)) {
             result.setCoordinates(point);
             return;
@@ -610,7 +603,7 @@ public class Polygon3D implements Serializable {
         if (!found) {
             // no closest point was found on a segment belonging to polygon
             // boundary, so we search for the closest vertex
-            iterator = mVertices.iterator();
+            iterator = vertices.iterator();
             while (iterator.hasNext()) {
                 curPoint = iterator.next();
                 dist = point.distanceTo(curPoint);
@@ -635,11 +628,10 @@ public class Polygon3D implements Serializable {
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
     public void triangulate() throws TriangulatorException {
-        if (!mTriangulated) {
-            final Triangulator3D triangulator = Triangulator3D.create(
-                    mTriangulatorMethod);
-            mTriangles = triangulator.triangulate(mVertices);
-            mTriangulated = true;
+        if (!triangulated) {
+            final var triangulator = Triangulator3D.create(triangulatorMethod);
+            triangles = triangulator.triangulate(vertices);
+            triangulated = true;
         }
     }
 
@@ -668,9 +660,9 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(
-            final List<Point3D> vertices, final double[] result,
-            final double threshold) throws CoincidentPointsException {
-        final int numVertices = vertices.size();
+            final List<Point3D> vertices, final double[] result, final double threshold)
+            throws CoincidentPointsException {
+        final var numVertices = vertices.size();
         if (numVertices < MIN_VERTICES) {
             throw new IllegalArgumentException();
         }
@@ -681,43 +673,41 @@ public class Polygon3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
+        var avgX = 0.0;
+        var avgY = 0.0;
+        var avgZ = 0.0;
 
-        double avgX = 0.0;
-        double avgY = 0.0;
-        double avgZ = 0.0;
-
-        final Iterator<Point3D> iterator = vertices.iterator();
-        Point3D prevPoint = iterator.next();
-        Point3D origin = prevPoint;
+        final var iterator = vertices.iterator();
+        var prevPoint = iterator.next();
+        var origin = prevPoint;
         Point3D curPoint;
-        final double inhomX0 = origin.getInhomX();
-        final double inhomY0 = origin.getInhomY();
-        final double inhomZ0 = origin.getInhomZ();
-
+        final var inhomX0 = origin.getInhomX();
+        final var inhomY0 = origin.getInhomY();
+        final var inhomZ0 = origin.getInhomZ();
 
         while (iterator.hasNext()) {
             curPoint = iterator.next();
-            final double inhomX1 = prevPoint.getInhomX();
-            final double inhomY1 = prevPoint.getInhomY();
-            final double inhomZ1 = prevPoint.getInhomZ();
+            final var inhomX1 = prevPoint.getInhomX();
+            final var inhomY1 = prevPoint.getInhomY();
+            final var inhomZ1 = prevPoint.getInhomZ();
 
-            final double inhomX2 = curPoint.getInhomX();
-            final double inhomY2 = curPoint.getInhomY();
-            final double inhomZ2 = curPoint.getInhomZ();
+            final var inhomX2 = curPoint.getInhomX();
+            final var inhomY2 = curPoint.getInhomY();
+            final var inhomZ2 = curPoint.getInhomZ();
 
             // compute cross product of ab = (vertex1 - origin) and ac = (vertex2
             // - origin)
-            final double abX = inhomX1 - inhomX0;
-            final double abY = inhomY1 - inhomY0;
-            final double abZ = inhomZ1 - inhomZ0;
+            final var abX = inhomX1 - inhomX0;
+            final var abY = inhomY1 - inhomY0;
+            final var abZ = inhomZ1 - inhomZ0;
 
-            final double acX = inhomX2 - inhomX0;
-            final double acY = inhomY2 - inhomY0;
-            final double acZ = inhomZ2 - inhomZ0;
+            final var acX = inhomX2 - inhomX0;
+            final var acY = inhomY2 - inhomY0;
+            final var acZ = inhomZ2 - inhomZ0;
 
-            final double crossX = abY * acZ - abZ * acY;
-            final double crossY = abZ * acX - abX * acZ;
-            final double crossZ = abX * acY - abY * acX;
+            final var crossX = abY * acZ - abZ * acY;
+            final var crossY = abZ * acX - abX * acZ;
+            final var crossZ = abX * acY - abY * acX;
 
             avgX += crossX;
             avgY += crossY;
@@ -726,7 +716,7 @@ public class Polygon3D implements Serializable {
             prevPoint = curPoint;
         }
 
-        final double norm = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);
+        final var norm = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);
 
         if (norm < threshold) {
             throw new CoincidentPointsException();
@@ -760,8 +750,7 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(
-            final List<Point3D> vertices, final double[] result)
-            throws CoincidentPointsException {
+            final List<Point3D> vertices, final double[] result) throws CoincidentPointsException {
         orientation(vertices, result, DEFAULT_THRESHOLD);
     }
 
@@ -790,9 +779,8 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
     public static double[] orientation(
-            final List<Point3D> vertices, final double threshold)
-            throws CoincidentPointsException {
-        double[] out = new double[INHOM_COORDS];
+            final List<Point3D> vertices, final double threshold) throws CoincidentPointsException {
+        final var out = new double[INHOM_COORDS];
         orientation(vertices, out, threshold);
         return out;
     }
@@ -814,8 +802,7 @@ public class Polygon3D implements Serializable {
      *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
-    public static double[] orientation(final List<Point3D> vertices)
-            throws CoincidentPointsException {
+    public static double[] orientation(final List<Point3D> vertices) throws CoincidentPointsException {
         return orientation(vertices, DEFAULT_THRESHOLD);
     }
 
@@ -843,8 +830,7 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(
-            final Polygon3D polygon, final double[] result,
-            final double threshold) throws CoincidentPointsException {
+            final Polygon3D polygon, final double[] result, final double threshold) throws CoincidentPointsException {
         orientation(polygon.getVertices(), result, threshold);
     }
 
@@ -866,8 +852,7 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(
-            final Polygon3D polygon, final double[] result)
-            throws CoincidentPointsException {
+            final Polygon3D polygon, final double[] result) throws CoincidentPointsException {
         orientation(polygon, result, DEFAULT_THRESHOLD);
     }
 
@@ -895,8 +880,7 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
     public static double[] orientation(
-            final Polygon3D polygon, final double threshold)
-            throws CoincidentPointsException {
+            final Polygon3D polygon, final double threshold) throws CoincidentPointsException {
         return orientation(polygon.getVertices(), threshold);
     }
 
@@ -915,8 +899,7 @@ public class Polygon3D implements Serializable {
      *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
-    public static double[] orientation(final Polygon3D polygon)
-            throws CoincidentPointsException {
+    public static double[] orientation(final Polygon3D polygon) throws CoincidentPointsException {
         return orientation(polygon, DEFAULT_THRESHOLD);
     }
 
@@ -942,9 +925,8 @@ public class Polygon3D implements Serializable {
      *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
-    public void orientation(final double[] result, final double threshold)
-            throws CoincidentPointsException {
-        orientation(mVertices, result, threshold);
+    public void orientation(final double[] result, final double threshold) throws CoincidentPointsException {
+        orientation(vertices, result, threshold);
     }
 
     /**
@@ -989,9 +971,8 @@ public class Polygon3D implements Serializable {
      *                                   that consecutive vertices of the polygon are too close (i.e. coincident)
      *                                   or when there are polygon degeneracies or numerical instabilities.
      */
-    public double[] getOrientation(final double threshold)
-            throws CoincidentPointsException {
-        return orientation(mVertices, threshold);
+    public double[] getOrientation(final double threshold) throws CoincidentPointsException {
+        return orientation(vertices, threshold);
     }
 
     /**
@@ -1031,10 +1012,9 @@ public class Polygon3D implements Serializable {
      * @see #orientation(Polygon3D, double[])
      */
     public static double getAngleBetweenPolygons(
-            final Polygon3D polygon1, final Polygon3D polygon2,
-            final double threshold) throws CoincidentPointsException {
-        return getAngleBetweenPolygons(polygon1.getVertices(),
-                polygon2.getVertices(), threshold);
+            final Polygon3D polygon1, final Polygon3D polygon2, final double threshold)
+            throws CoincidentPointsException {
+        return getAngleBetweenPolygons(polygon1.getVertices(), polygon2.getVertices(), threshold);
     }
 
     /**
@@ -1052,8 +1032,7 @@ public class Polygon3D implements Serializable {
      *                                   or when there are polygon degeneracies or numerical instabilities.
      * @see #orientation(Polygon3D, double[])
      */
-    public static double getAngleBetweenPolygons(
-            final Polygon3D polygon1, final Polygon3D polygon2)
+    public static double getAngleBetweenPolygons(final Polygon3D polygon1, final Polygon3D polygon2)
             throws CoincidentPointsException {
         return getAngleBetweenPolygons(polygon1, polygon2, DEFAULT_THRESHOLD);
     }
@@ -1080,10 +1059,10 @@ public class Polygon3D implements Serializable {
      * @see #orientation(Polygon3D, double[])
      */
     public static double getAngleBetweenPolygons(
-            final List<Point3D> vertices1, final List<Point3D> vertices2,
-            final double threshold) throws CoincidentPointsException {
-        return getAngleBetweenOrientations(Polygon3D.orientation(vertices1,
-                threshold), Polygon3D.orientation(vertices2, threshold));
+            final List<Point3D> vertices1, final List<Point3D> vertices2, final double threshold)
+            throws CoincidentPointsException {
+        return getAngleBetweenOrientations(Polygon3D.orientation(vertices1, threshold),
+                Polygon3D.orientation(vertices2, threshold));
     }
 
     /**
@@ -1105,8 +1084,7 @@ public class Polygon3D implements Serializable {
      * @see #orientation(Polygon3D, double[])
      */
     public static double getAngleBetweenPolygons(
-            final List<Point3D> vertices1, final List<Point3D> vertices2)
-            throws CoincidentPointsException {
+            final List<Point3D> vertices1, final List<Point3D> vertices2) throws CoincidentPointsException {
         return getAngleBetweenPolygons(vertices1, vertices2, DEFAULT_THRESHOLD);
     }
 
@@ -1122,25 +1100,23 @@ public class Polygon3D implements Serializable {
      * @throws IllegalArgumentException Raised if any of the orientation arrays
      *                                  do not have length 3.
      */
-    private static double getAngleBetweenOrientations(
-            final double[] orientation1, final double[] orientation2) {
-        if (orientation1.length != INHOM_COORDS ||
-                orientation2.length != INHOM_COORDS) {
+    private static double getAngleBetweenOrientations(final double[] orientation1, final double[] orientation2) {
+        if (orientation1.length != INHOM_COORDS || orientation2.length != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        final double x1 = orientation1[0];
-        final double y1 = orientation1[1];
-        final double z1 = orientation1[2];
+        final var x1 = orientation1[0];
+        final var y1 = orientation1[1];
+        final var z1 = orientation1[2];
 
-        final double x2 = orientation2[0];
-        final double y2 = orientation2[1];
-        final double z2 = orientation2[2];
+        final var x2 = orientation2[0];
+        final var y2 = orientation2[1];
+        final var z2 = orientation2[2];
 
-        final double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-        final double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
+        final var norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+        final var norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
 
-        final double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);
+        final var dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);
 
         return Math.acos(dotProduct);
     }

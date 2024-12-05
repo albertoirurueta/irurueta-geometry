@@ -71,20 +71,20 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSPlaneRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -96,7 +96,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     public PROMedSPlaneRobustEstimator(final List<Point3D> points) {
         super(points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -107,7 +107,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
 
@@ -120,10 +120,9 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
-                                       final List<Point3D> points) {
+    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener, final List<Point3D> points) {
         super(listener, points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -135,7 +134,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     public PROMedSPlaneRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -148,15 +147,14 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(final List<Point3D> points,
-                                       final double[] qualityScores) {
+    public PROMedSPlaneRobustEstimator(final List<Point3D> points, final double[] qualityScores) {
         super(points);
 
         if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -169,10 +167,9 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
-                                       final double[] qualityScores) {
+    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -188,15 +185,15 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
-                                       final List<Point3D> points, final double[] qualityScores) {
+    public PROMedSPlaneRobustEstimator(
+            final PlaneRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores) {
         super(listener, points);
 
         if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -220,7 +217,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -253,7 +250,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -264,7 +261,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -294,8 +291,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mPoints.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == points.size();
     }
 
     /**
@@ -312,8 +308,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Plane estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Plane estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -321,100 +316,93 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<Plane> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<Plane>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(new PROMedSRobustEstimatorListener<Plane>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return stopThreshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return PlaneRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return PlaneRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Plane> solutions) {
-                                final Point3D point1 = mPoints.get(samplesIndices[0]);
-                                final Point3D point2 = mPoints.get(samplesIndices[1]);
-                                final Point3D point3 = mPoints.get(samplesIndices[2]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Plane> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
 
-                                try {
-                                    final Plane plane = new Plane(point1, point2, point3);
-                                    solutions.add(plane);
-                                } catch (final ColinearPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var plane = new Plane(point1, point2, point3);
+                    solutions.add(plane);
+                } catch (final ColinearPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(Plane currentEstimation, int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(Plane currentEstimation, int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSPlaneRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return PROMedSPlaneRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Plane> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(PROMedSPlaneRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Plane> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(PROMedSPlaneRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Plane> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(PROMedSPlaneRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Plane> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(PROMedSPlaneRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Plane> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSPlaneRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Plane> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(PROMedSPlaneRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Plane> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSPlaneRobustEstimator.this, progress);
-                                }
-                            }
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Plane> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(PROMedSPlaneRobustEstimator.this, progress);
+                }
+            }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+            @Override
+            public double[] getQualityScores() {
+                return qualityScores;
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -442,6 +430,6 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

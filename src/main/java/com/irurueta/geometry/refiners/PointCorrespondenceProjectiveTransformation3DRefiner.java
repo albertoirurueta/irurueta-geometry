@@ -46,8 +46,7 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
     /**
      * Point to be reused when computing residuals.
      */
-    private final Point3D mResidualTestPoint = Point3D.create(
-            CoordinatesType.HOMOGENEOUS_COORDINATES);
+    private final Point3D residualTestPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
     /**
      * Constructor.
@@ -70,12 +69,11 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public PointCorrespondenceProjectiveTransformation3DRefiner(
-            final ProjectiveTransformation3D initialEstimation,
-            final boolean keepCovariance, final BitSet inliers, final double[] residuals,
-            final int numInliers, final List<Point3D> samples1, final List<Point3D> samples2,
+            final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List<Point3D> samples1, final List<Point3D> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -92,12 +90,10 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public PointCorrespondenceProjectiveTransformation3DRefiner(
-            final ProjectiveTransformation3D initialEstimation,
-            final boolean keepCovariance, final InliersData inliersData,
-            final List<Point3D> samples1, final List<Point3D> samples2,
+            final ProjectiveTransformation3D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List<Point3D> samples1, final List<Point3D> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -115,8 +111,8 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final ProjectiveTransformation3D result) throws NotReadyException,
-            LockedException, RefinerException {
+    public boolean refine(final ProjectiveTransformation3D result) throws NotReadyException, LockedException,
+            RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -124,39 +120,34 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        mInitialEstimation.normalize();
+        initialEstimation.normalize();
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
-            final double[] initParams = new double[
-                    ProjectiveTransformation3D.HOM_COORDS *
-                            ProjectiveTransformation3D.HOM_COORDS];
+            final var initParams = new double[ProjectiveTransformation3D.HOM_COORDS
+                    * ProjectiveTransformation3D.HOM_COORDS];
             // copy values
-            System.arraycopy(mInitialEstimation.getT().getBuffer(), 0,
-                    initParams, 0, initParams.length);
+            System.arraycopy(initialEstimation.getT().getBuffer(), 0, initParams, 0, initParams.length);
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 2 sets of 2D points to compute residuals
-            final int nDims =
-                    2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Point3D inputPoint;
-            Point3D outputPoint;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = 2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    inputPoint = mSamples1.get(i);
-                    outputPoint = mSamples2.get(i);
+                    final var inputPoint = samples1.get(i);
+                    final var outputPoint = samples2.get(i);
                     inputPoint.normalize();
                     outputPoint.normalize();
                     x.setElementAt(pos, 0, inputPoint.getHomX());
@@ -168,96 +159,75 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
                     x.setElementAt(pos, 6, outputPoint.getHomZ());
                     x.setElementAt(pos, 7, outputPoint.getHomW());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Point3D mInputPoint = Point3D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point3D inputPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final Point3D mOutputPoint = Point3D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point3D outputPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final ProjectiveTransformation3D mTransformation =
-                                new ProjectiveTransformation3D();
+                private final ProjectiveTransformation3D transformation = new ProjectiveTransformation3D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
-                                                // copy values
-                                                System.arraycopy(params, 0,
-                                                        mTransformation.getT().getBuffer(), 0,
-                                                        params.length);
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    // copy values
+                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);
+                    return residual(transformation, inputPoint, outputPoint);
+                });
 
-                                                return residual(mTransformation, mInputPoint,
-                                                        mOutputPoint);
-                                            }
-                                        });
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    inputPoint.setHomogeneousCoordinates(point[0], point[1], point[2], point[3]);
+                    outputPoint.setHomogeneousCoordinates(point[4], point[5], point[6], point[7]);
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],
-                                    point[2], point[3]);
-                            mOutputPoint.setHomogeneousCoordinates(point[4], point[5],
-                                    point[6], point[7]);
+                    // copy values
+                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);
 
-                            // copy values
-                            System.arraycopy(params, 0,
-                                    mTransformation.getT().getBuffer(), 0,
-                                    params.length);
+                    final var y = residual(transformation, inputPoint, outputPoint);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            final double y = residual(mTransformation, mInputPoint,
-                                    mOutputPoint);
-                            mGradientEstimator.gradient(params, derivatives);
+                    return y;
 
-                            return y;
+                }
+            };
 
-                        }
-                    };
-
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update transformation
 
             // copy values
-            System.arraycopy(params, 0, result.getT().getBuffer(), 0,
-                    params.length);
+            System.arraycopy(params, 0, result.getT().getBuffer(), 0, params.length);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -265,7 +235,7 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -278,13 +248,13 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
      * @param outputPoint    output 2D point.
      * @return residual.
      */
-    private double residual(final ProjectiveTransformation3D transformation,
-                            final Point3D inputPoint, final Point3D outputPoint) {
+    private double residual(final ProjectiveTransformation3D transformation, final Point3D inputPoint,
+                            final Point3D outputPoint) {
         inputPoint.normalize();
         outputPoint.normalize();
 
-        transformation.transform(inputPoint, mResidualTestPoint);
-        return mResidualTestPoint.distanceTo(outputPoint);
+        transformation.transform(inputPoint, residualTestPoint);
+        return residualTestPoint.distanceTo(outputPoint);
     }
 
     /**
@@ -294,16 +264,14 @@ public class PointCorrespondenceProjectiveTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(final ProjectiveTransformation3D transformation) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Point3D inputPoint;
-        Point3D outputPoint;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                inputPoint = mSamples1.get(i);
-                outputPoint = mSamples2.get(i);
+                final var inputPoint = samples1.get(i);
+                final var outputPoint = samples2.get(i);
                 inputPoint.normalize();
                 outputPoint.normalize();
                 result += residual(transformation, inputPoint, outputPoint);

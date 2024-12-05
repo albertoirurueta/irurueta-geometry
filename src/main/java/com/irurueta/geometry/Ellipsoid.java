@@ -38,18 +38,18 @@ public class Ellipsoid implements Serializable {
     /**
      * Center of ellipse.
      */
-    private Point3D mCenter;
+    private Point3D center;
 
 
     /**
      * Lengths of all three semi-axes.
      */
-    private double[] mSemiAxesLengths;
+    private double[] semiAxesLengths;
 
     /**
      * Rotation.
      */
-    private Rotation3D mRotation;
+    private Rotation3D rotation;
 
     /**
      * Empty constructor.
@@ -57,10 +57,10 @@ public class Ellipsoid implements Serializable {
      * with radius 1.0.
      */
     public Ellipsoid() {
-        mCenter = Point3D.create();
-        mSemiAxesLengths = new double[DIMENSIONS];
-        Arrays.fill(mSemiAxesLengths, 1.0);
-        mRotation = Rotation3D.create();
+        center = Point3D.create();
+        semiAxesLengths = new double[DIMENSIONS];
+        Arrays.fill(semiAxesLengths, 1.0);
+        rotation = Rotation3D.create();
     }
 
     /**
@@ -72,8 +72,7 @@ public class Ellipsoid implements Serializable {
      * @throws IllegalArgumentException if length of provided array is not
      *                                  three.
      */
-    public Ellipsoid(final Point3D center, final double[] semiAxesLengths,
-                     final Rotation3D rotation) {
+    public Ellipsoid(final Point3D center, final double[] semiAxesLengths, final Rotation3D rotation) {
         setCenterAxesAndRotation(center, semiAxesLengths, rotation);
     }
 
@@ -83,7 +82,7 @@ public class Ellipsoid implements Serializable {
      * @return center of ellipsoid.
      */
     public Point3D getCenter() {
-        return mCenter;
+        return center;
     }
 
     /**
@@ -96,7 +95,7 @@ public class Ellipsoid implements Serializable {
         if (center == null) {
             throw new NullPointerException();
         }
-        mCenter = center;
+        this.center = center;
     }
 
     /**
@@ -105,7 +104,7 @@ public class Ellipsoid implements Serializable {
      * @return lengths of all three semi-axes.
      */
     public double[] getSemiAxesLengths() {
-        return mSemiAxesLengths;
+        return semiAxesLengths;
     }
 
     /**
@@ -119,7 +118,7 @@ public class Ellipsoid implements Serializable {
         if (semiAxesLengths.length != DIMENSIONS) {
             throw new IllegalArgumentException();
         }
-        mSemiAxesLengths = semiAxesLengths;
+        this.semiAxesLengths = semiAxesLengths;
     }
 
     /**
@@ -128,7 +127,7 @@ public class Ellipsoid implements Serializable {
      * @return rotation.
      */
     public Rotation3D getRotation() {
-        return mRotation;
+        return rotation;
     }
 
     /**
@@ -137,7 +136,7 @@ public class Ellipsoid implements Serializable {
      * @param rotation rotation.
      */
     public void setRotation(final Rotation3D rotation) {
-        mRotation = rotation;
+        this.rotation = rotation;
     }
 
     /**
@@ -150,14 +149,13 @@ public class Ellipsoid implements Serializable {
      *                                  three.
      */
     public final void setCenterAxesAndRotation(
-            final Point3D center, final double[] semiAxesLengths,
-            final Rotation3D rotation) {
+            final Point3D center, final double[] semiAxesLengths, final Rotation3D rotation) {
         if (semiAxesLengths.length != DIMENSIONS) {
             throw new IllegalArgumentException();
         }
-        mCenter = center;
-        mSemiAxesLengths = semiAxesLengths;
-        mRotation = rotation;
+        this.center = center;
+        this.semiAxesLengths = semiAxesLengths;
+        this.rotation = rotation;
     }
 
     /**
@@ -166,9 +164,9 @@ public class Ellipsoid implements Serializable {
      * @return volume of this ellipsoid.
      */
     public double getVolume() {
-        final double a = mSemiAxesLengths[0];
-        final double b = mSemiAxesLengths[1];
-        final double c = mSemiAxesLengths[2];
+        final var a = semiAxesLengths[0];
+        final var b = semiAxesLengths[1];
+        final var c = semiAxesLengths[2];
         return 4.0 / 3.0 * Math.PI * a * b * c;
     }
 
@@ -178,13 +176,11 @@ public class Ellipsoid implements Serializable {
      * @return surface of this ellipsoid.
      */
     public double getSurface() {
-        final double a = mSemiAxesLengths[0];
-        final double b = mSemiAxesLengths[1];
-        final double c = mSemiAxesLengths[2];
+        final var a = semiAxesLengths[0];
+        final var b = semiAxesLengths[1];
+        final var c = semiAxesLengths[2];
 
-        return 4.0 * Math.PI * Math.pow(
-                (Math.pow(a * b, P) + Math.pow(a * c, P) + Math.pow(b * c, P)) / 3.0,
-                1.0 / P);
+        return 4.0 * Math.PI * Math.pow((Math.pow(a * b, P) + Math.pow(a * c, P) + Math.pow(b * c, P)) / 3.0, 1.0 / P);
     }
 
     /**
@@ -216,22 +212,20 @@ public class Ellipsoid implements Serializable {
         // when centered at origin and having no rotation
 
         // if we take an arbitrary center position:
-        final double a = 1.0 / Math.pow(mSemiAxesLengths[0], 2.0);
-        final double b = 1.0 / Math.pow(mSemiAxesLengths[1], 2.0);
-        final double c = 1.0 / Math.pow(mSemiAxesLengths[2], 2.0);
-        final double d = 0.0;
-        final double e = 0.0;
-        final double f = 0.0;
-        final double g = 0.0;
-        final double h = 0.0;
-        final double i = 0.0;
-        final double j = -1;
+        final var a = 1.0 / Math.pow(semiAxesLengths[0], 2.0);
+        final var b = 1.0 / Math.pow(semiAxesLengths[1], 2.0);
+        final var c = 1.0 / Math.pow(semiAxesLengths[2], 2.0);
+        final var d = 0.0;
+        final var e = 0.0;
+        final var f = 0.0;
+        final var g = 0.0;
+        final var h = 0.0;
+        final var i = 0.0;
+        final var j = -1;
 
-        final Quadric q = new Quadric(a, b, c, d, e, f, g, h, i, j);
-        final EuclideanTransformation3D t =
-                new EuclideanTransformation3D(mRotation, new double[]{
-                        mCenter.getInhomX(), mCenter.getInhomY(),
-                        mCenter.getInhomZ()});
+        final var q = new Quadric(a, b, c, d, e, f, g, h, i, j);
+        final var t = new EuclideanTransformation3D(rotation, new double[]{
+                center.getInhomX(), center.getInhomY(), center.getInhomZ()});
 
         try {
             t.transform(q);
@@ -248,8 +242,8 @@ public class Ellipsoid implements Serializable {
      * @param sphere a sphere to set parameters from.
      */
     public final void setFromSphere(final Sphere sphere) {
-        mCenter = sphere.getCenter();
-        Arrays.fill(mSemiAxesLengths, sphere.getRadius());
-        mRotation = Rotation3D.create();
+        center = sphere.getCenter();
+        Arrays.fill(semiAxesLengths, sphere.getRadius());
+        rotation = Rotation3D.create();
     }
 }

@@ -67,29 +67,29 @@ public class Line2D implements Serializable {
     /**
      * Parameter A of a line.
      */
-    private double mA;
+    private double a;
 
     /**
      * Parameter B of a line.
      */
-    private double mB;
+    private double b;
 
     /**
      * Parameter C of a line.
      */
-    private double mC;
+    private double c;
 
     /**
      * Indicates if line is normalized or not.
      */
-    private boolean mNormalized;
+    private boolean normalized;
 
     /**
      * Constructor.
      */
     public Line2D() {
-        mA = mB = mC = 0.0;
-        mNormalized = false;
+        a = b = c = 0.0;
+        normalized = false;
     }
 
     /**
@@ -115,8 +115,7 @@ public class Line2D implements Serializable {
      *                coincident.
      * @throws CoincidentPointsException Raised if points are equal.
      */
-    public Line2D(final Point2D pointA, final Point2D pointB, final boolean noThrow)
-            throws CoincidentPointsException {
+    public Line2D(final Point2D pointA, final Point2D pointB, final boolean noThrow) throws CoincidentPointsException {
         setParametersFromPairOfPoints(pointA, pointB, noThrow);
     }
 
@@ -159,7 +158,7 @@ public class Line2D implements Serializable {
      * @return Parameter A of this line.
      */
     public double getA() {
-        return mA;
+        return a;
     }
 
     /**
@@ -168,7 +167,7 @@ public class Line2D implements Serializable {
      * @return Parameter B of this line.
      */
     public double getB() {
-        return mB;
+        return b;
     }
 
     /**
@@ -177,7 +176,7 @@ public class Line2D implements Serializable {
      * @return Parameter C of this line.
      */
     public double getC() {
-        return mC;
+        return c;
     }
 
     /**
@@ -188,10 +187,10 @@ public class Line2D implements Serializable {
      * @param c Parameter C of this line.
      */
     public final void setParameters(final double a, final double b, final double c) {
-        mA = a;
-        mB = b;
-        mC = c;
-        mNormalized = false;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        normalized = false;
     }
 
     /**
@@ -206,10 +205,10 @@ public class Line2D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        mA = array[0];
-        mB = array[1];
-        mC = array[2];
-        mNormalized = false;
+        a = array[0];
+        b = array[1];
+        c = array[2];
+        normalized = false;
     }
 
     /**
@@ -218,8 +217,8 @@ public class Line2D implements Serializable {
      * @param a Parameter A of this line.
      */
     public void setA(final double a) {
-        mA = a;
-        mNormalized = false;
+        this.a = a;
+        normalized = false;
     }
 
     /**
@@ -228,8 +227,8 @@ public class Line2D implements Serializable {
      * @param b Parameter B of this line.
      */
     public void setB(final double b) {
-        mB = b;
-        mNormalized = false;
+        this.b = b;
+        normalized = false;
     }
 
     /**
@@ -238,8 +237,8 @@ public class Line2D implements Serializable {
      * @param c Parameter C of this line.
      */
     public void setC(final double c) {
-        mC = c;
-        mNormalized = false;
+        this.c = c;
+        normalized = false;
     }
 
     /**
@@ -248,7 +247,7 @@ public class Line2D implements Serializable {
      * @return Slope of this line.
      */
     public double getSlope() {
-        return (-mA / mB);
+        return (-a / b);
     }
 
     /**
@@ -259,13 +258,13 @@ public class Line2D implements Serializable {
     public void setSlope(final double slope) {
         normalize();
         if (Math.abs(slope) > 1.0) {
-            mA = 1.0;
-            mB = -mA / slope;
+            a = 1.0;
+            b = -a / slope;
         } else {
-            mB = 1.0;
-            mA = -mB * slope;
+            b = 1.0;
+            a = -b * slope;
         }
-        mNormalized = false;
+        normalized = false;
     }
 
     /**
@@ -274,7 +273,7 @@ public class Line2D implements Serializable {
      * @return Angle of this line in radians.
      */
     public double getAngle() {
-        double alpha = Math.atan2(-mA, mB);
+        var alpha = Math.atan2(-a, b);
         // if alpha is not between -90 and 90 degrees, then fix angle
         if (alpha > Math.PI / 2.0) {
             alpha = alpha - Math.PI;
@@ -291,7 +290,7 @@ public class Line2D implements Serializable {
      * @param angle Angle of this line in radians.
      */
     public void setAngle(final double angle) {
-        final double slope = Math.tan(angle);
+        final var slope = Math.tan(angle);
         setSlope(slope);
     }
 
@@ -303,7 +302,7 @@ public class Line2D implements Serializable {
      * @return Vertical coordinate where the line intercepts with the Y axis.
      */
     public double getYIntercept() {
-        return -(mC / mB);
+        return -(c / b);
     }
 
     /**
@@ -315,8 +314,8 @@ public class Line2D implements Serializable {
      *                   Y axis.
      */
     public void setYIntercept(final double yIntercept) {
-        mC = -mB * yIntercept;
-        mNormalized = false;
+        c = -b * yIntercept;
+        normalized = false;
     }
 
     /**
@@ -329,15 +328,13 @@ public class Line2D implements Serializable {
      * @throws CoincidentPointsException Raised if provided points are equal.
      */
     public final void setParametersFromPairOfPoints(
-            final Point2D pointA, final Point2D pointB,
-            final boolean noThrow) throws CoincidentPointsException {
+            final Point2D pointA, final Point2D pointB, final boolean noThrow) throws CoincidentPointsException {
 
         try {
             pointA.normalize();
             pointB.normalize();
 
-            final Matrix m = new Matrix(2,
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+            final var m = new Matrix(2, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
 
             m.setElementAt(0, 0, pointA.getHomX());
             m.setElementAt(0, 1, pointA.getHomY());
@@ -348,7 +345,7 @@ public class Line2D implements Serializable {
             m.setElementAt(1, 2, pointB.getHomW());
 
             // m = U * S * V', where m is 2x3, U is 2x3, S is 3x3 and V is 3x3
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // because we have only 2 points, matrix will be rank 2 only if
@@ -364,12 +361,12 @@ public class Line2D implements Serializable {
             // Hence, l is the null space for both pointA and pointB, or in other
             // words, pointA and pointB are the locus of l, or l is the line
             // passing through both pointA and pointB
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
-            mA = v.getElementAt(0, 2);
-            mB = v.getElementAt(1, 2);
-            mC = v.getElementAt(2, 2);
-            mNormalized = false;
+            a = v.getElementAt(0, 2);
+            b = v.getElementAt(1, 2);
+            c = v.getElementAt(2, 2);
+            normalized = false;
         } catch (final AlgebraException ignore) {
             // never happens
         }
@@ -382,8 +379,7 @@ public class Line2D implements Serializable {
      * @param pointA First point laying on this line.
      * @param pointB Second point laying on this line.
      */
-    public final void setParametersFromPairOfPoints(
-            final Point2D pointA, final Point2D pointB) {
+    public final void setParametersFromPairOfPoints(final Point2D pointA, final Point2D pointB) {
         try {
             setParametersFromPairOfPoints(pointA, pointB, true);
         } catch (final CoincidentPointsException ignore) {
@@ -399,9 +395,7 @@ public class Line2D implements Serializable {
      * @param vector director vector.
      * @throws IllegalArgumentException raised if vector length is not 2.
      */
-    public final void setParametersFromPointAndDirectorVector(
-            final Point2D point, final double[] vector) {
-
+    public final void setParametersFromPointAndDirectorVector(final Point2D point, final double[] vector) {
         if (vector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
         }
@@ -409,12 +403,12 @@ public class Line2D implements Serializable {
         // normalize point to increase accuracy
         point.normalize();
 
-        mA = vector[0];
-        mB = vector[1];
+        a = vector[0];
+        b = vector[1];
 
-        mC = -(mA * point.getHomX() + mB * point.getHomY()) / point.getHomW();
+        c = -(a * point.getHomX() + b * point.getHomY()) / point.getHomW();
 
-        mNormalized = false;
+        normalized = false;
     }
 
     /**
@@ -439,8 +433,7 @@ public class Line2D implements Serializable {
         point.normalize();
         normalize();
 
-        final double dotProd = point.getHomX() * mA + point.getHomY() * mB +
-                point.getHomW() * mC;
+        final var dotProd = point.getHomX() * a + point.getHomY() * b + point.getHomW() * c;
 
         return Math.abs(dotProd) < threshold;
     }
@@ -469,10 +462,9 @@ public class Line2D implements Serializable {
         normalize();
 
         // numerator is the dot product of point and line
-        final double num = point.getHomX() * mA + point.getHomY() * mB +
-                point.getHomW() * mC;
+        final var num = point.getHomX() * a + point.getHomY() * b + point.getHomW() * c;
 
-        final double den = Math.sqrt(mA * mA + mB * mB) * point.getHomW();
+        final var den = Math.sqrt(a * a + b * b) * point.getHomW();
 
         return num / den;
     }
@@ -503,7 +495,7 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public Point2D getClosestPoint(final Point2D point, final double threshold) {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         closestPoint(point, result, threshold);
         return result;
     }
@@ -533,8 +525,7 @@ public class Line2D implements Serializable {
      *                  line's locus.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public void closestPoint(final Point2D point, final Point2D result,
-                             final double threshold) {
+    public void closestPoint(final Point2D point, final Point2D result, final double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -552,13 +543,10 @@ public class Line2D implements Serializable {
         // (point.getInhomX() + mA * amount) * mA + (point.getInhomY() +
         // mB * amount) * mB + mC = 0
 
-        final double amount = -(point.getHomX() * mA + point.getHomY() * mB +
-                point.getHomW() * mC) /
-                (point.getHomW() * (mA * mA + mB * mB));
-        result.setHomogeneousCoordinates(point.getHomX() +
-                        mA * amount * point.getHomW(),
-                point.getHomY() + mB * amount * point.getHomW(),
-                point.getHomW());
+        final var amount = -(point.getHomX() * a + point.getHomY() * b + point.getHomW() * c)
+                / (point.getHomW() * (a * a + b * b));
+        result.setHomogeneousCoordinates(point.getHomX() + a * amount * point.getHomW(),
+                point.getHomY() + b * amount * point.getHomW(), point.getHomW());
         result.normalize();
     }
 
@@ -568,7 +556,7 @@ public class Line2D implements Serializable {
      * @return Array containing all the parameters that describe this line.
      */
     public double[] asArray() {
-        final double[] array = new double[LINE_NUMBER_PARAMS];
+        final var array = new double[LINE_NUMBER_PARAMS];
         asArray(array);
         return array;
     }
@@ -585,9 +573,9 @@ public class Line2D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        array[0] = mA;
-        array[1] = mB;
-        array[2] = mC;
+        array[0] = a;
+        array[1] = b;
+        array[2] = c;
     }
 
     /**
@@ -596,15 +584,15 @@ public class Line2D implements Serializable {
      */
     @SuppressWarnings("DuplicatedCode")
     public void normalize() {
-        if (!mNormalized) {
-            double norm = Math.sqrt(mA * mA + mB * mB + mC * mC);
+        if (!normalized) {
+            var norm = Math.sqrt(a * a + b * b + c * c);
 
             if (norm > PRECISION) {
-                mA /= norm;
-                mB /= norm;
-                mC /= norm;
+                a /= norm;
+                b /= norm;
+                c /= norm;
 
-                mNormalized = true;
+                normalized = true;
             }
         }
     }
@@ -615,7 +603,7 @@ public class Line2D implements Serializable {
      * @return True if this line is normalized, false otherwise.
      */
     public boolean isNormalized() {
-        return mNormalized;
+        return normalized;
     }
 
     /**
@@ -624,7 +612,7 @@ public class Line2D implements Serializable {
      * @return Director vector of this line.
      */
     public double[] getDirectorVector() {
-        final double[] out = new double[INHOM_VECTOR_SIZE];
+        final var out = new double[INHOM_VECTOR_SIZE];
         directorVector(out);
         return out;
     }
@@ -642,8 +630,8 @@ public class Line2D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        directorVector[0] = mA;
-        directorVector[1] = mB;
+        directorVector[0] = a;
+        directorVector[1] = b;
     }
 
     /**
@@ -655,9 +643,8 @@ public class Line2D implements Serializable {
      * @throws NoIntersectionException if for numerical instabilities the
      *                                 intersection cannot be computed.
      */
-    public Point2D getIntersection(final Line2D otherLine)
-            throws NoIntersectionException {
-        final Point2D result = Point2D.create();
+    public Point2D getIntersection(final Line2D otherLine) throws NoIntersectionException {
+        final var result = Point2D.create();
         intersection(otherLine, result);
         return result;
     }
@@ -672,8 +659,7 @@ public class Line2D implements Serializable {
      * @throws NoIntersectionException if for numerical instabilities the
      *                                 intersection cannot be computed.
      */
-    public void intersection(final Line2D otherLine, final Point2D result)
-            throws NoIntersectionException {
+    public void intersection(final Line2D otherLine, final Point2D result) throws NoIntersectionException {
 
         // normalize lines to increase accuracy
         normalize();
@@ -681,10 +667,10 @@ public class Line2D implements Serializable {
 
         // set matrix where each row contains the parameters of the line
         try {
-            final Matrix m = new Matrix(2, 3);
-            m.setElementAt(0, 0, mA);
-            m.setElementAt(0, 1, mB);
-            m.setElementAt(0, 2, mC);
+            final var m = new Matrix(2, 3);
+            m.setElementAt(0, 0, a);
+            m.setElementAt(0, 1, b);
+            m.setElementAt(0, 2, c);
 
             m.setElementAt(1, 0, otherLine.getA());
             m.setElementAt(1, 1, otherLine.getB());
@@ -692,7 +678,7 @@ public class Line2D implements Serializable {
 
             // If lines are not parallel, then matrix has rank 2, and its right
             // null-space is equal to their intersection.
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // lines are parallel
@@ -700,14 +686,14 @@ public class Line2D implements Serializable {
                 throw new NoIntersectionException();
             }
 
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // last column of V contains the right null-space of m, which is the
             // intersection of lines expressed in homogeneous coordinates.
             // because column is already normalized by SVD decomposition, point
             // will also be normalized
-            result.setHomogeneousCoordinates(v.getElementAt(0, 2),
-                    v.getElementAt(1, 2), v.getElementAt(2, 2));
+            result.setHomogeneousCoordinates(v.getElementAt(0, 2), v.getElementAt(1, 2),
+                    v.getElementAt(2, 2));
         } catch (final AlgebraException e) {
             // lines are numerically unstable
             throw new NoIntersectionException(e);
@@ -725,7 +711,7 @@ public class Line2D implements Serializable {
     public double dotProduct(final Line2D line) {
         normalize();
         line.normalize();
-        return mA * line.mA + mB * line.mB + mC * line.mC;
+        return a * line.a + b * line.b + c * line.c;
     }
 
     /**
@@ -742,7 +728,6 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException if threshold is negative.
      */
     public boolean equals(final Line2D line, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -773,14 +758,13 @@ public class Line2D implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Line2D)) {
+        if (!(obj instanceof Line2D line)) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        final Line2D line = (Line2D) obj;
         return equals(line);
     }
 
@@ -792,7 +776,7 @@ public class Line2D implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(mA, mB, mC);
+        return Objects.hash(a, b, c);
     }
 
     /**
@@ -803,7 +787,7 @@ public class Line2D implements Serializable {
      * @return a new instance of a 2D line located at the canonical infinity.
      */
     public static Line2D createCanonicalLineAtInfinity() {
-        final Line2D l = new Line2D();
+        final var l = new Line2D();
         setAsCanonicalLineAtInfinity(l);
         return l;
     }
@@ -816,8 +800,8 @@ public class Line2D implements Serializable {
      * @param line 2D line to be set at infinity.
      */
     public static void setAsCanonicalLineAtInfinity(final Line2D line) {
-        line.mA = line.mB = 0.0;
-        line.mC = 1.0;
-        line.mNormalized = true;
+        line.a = line.b = 0.0;
+        line.c = 1.0;
+        line.normalized = true;
     }
 }

@@ -56,29 +56,29 @@ public class EuclideanTransformation2DEstimator {
     /**
      * 2D input points.
      */
-    private List<Point2D> mInputPoints;
+    private List<Point2D> inputPoints;
 
     /**
      * 2D output points.
      */
-    private List<Point2D> mOutputPoints;
+    private List<Point2D> outputPoints;
 
     /**
      * Listener to be notified of events such as when estimation starts or ends.
      */
-    private EuclideanTransformation2DEstimatorListener mListener;
+    private EuclideanTransformation2DEstimatorListener listener;
 
     /**
      * Indicates whether estimation can start with only 2 points or not.
      * True allows 2 points, false requires 3.
      */
-    private boolean mWeakMinimumSizeAllowed;
+    private boolean weakMinimumSizeAllowed;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    private boolean mLocked;
+    private boolean locked;
 
     /**
      * Constructor.
@@ -94,8 +94,7 @@ public class EuclideanTransformation2DEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than 3.
      */
-    public EuclideanTransformation2DEstimator(final List<Point2D> inputPoints,
-                                              final List<Point2D> outputPoints) {
+    public EuclideanTransformation2DEstimator(final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -105,9 +104,8 @@ public class EuclideanTransformation2DEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts or ends.
      */
-    public EuclideanTransformation2DEstimator(
-            final EuclideanTransformation2DEstimatorListener listener) {
-        mListener = listener;
+    public EuclideanTransformation2DEstimator(final EuclideanTransformation2DEstimatorListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -123,7 +121,7 @@ public class EuclideanTransformation2DEstimator {
     public EuclideanTransformation2DEstimator(
             final EuclideanTransformation2DEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
-        mListener = listener;
+        this.listener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -133,7 +131,7 @@ public class EuclideanTransformation2DEstimator {
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
     public EuclideanTransformation2DEstimator(final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -146,9 +144,8 @@ public class EuclideanTransformation2DEstimator {
      *                                  the same size or their size is smaller than 3.
      */
     public EuclideanTransformation2DEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -160,10 +157,9 @@ public class EuclideanTransformation2DEstimator {
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
     public EuclideanTransformation2DEstimator(
-            final EuclideanTransformation2DEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
-        mListener = listener;
+            final EuclideanTransformation2DEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.listener = listener;
     }
 
     /**
@@ -179,10 +175,9 @@ public class EuclideanTransformation2DEstimator {
      */
     public EuclideanTransformation2DEstimator(
             final EuclideanTransformation2DEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
-        mListener = listener;
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.listener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
 
@@ -198,7 +193,7 @@ public class EuclideanTransformation2DEstimator {
      * transformation.
      */
     public List<Point2D> getInputPoints() {
-        return mInputPoints;
+        return inputPoints;
     }
 
     /**
@@ -213,7 +208,7 @@ public class EuclideanTransformation2DEstimator {
      * transformation.
      */
     public List<Point2D> getOutputPoints() {
-        return mOutputPoints;
+        return outputPoints;
     }
 
     /**
@@ -232,8 +227,7 @@ public class EuclideanTransformation2DEstimator {
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public void setPoints(final List<Point2D> inputPoints,
-                          final List<Point2D> outputPoints) throws LockedException {
+    public void setPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -247,7 +241,7 @@ public class EuclideanTransformation2DEstimator {
      * @return listener to be notified of events.
      */
     public EuclideanTransformation2DEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -257,12 +251,11 @@ public class EuclideanTransformation2DEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if estimator is locked.
      */
-    public void setListener(final EuclideanTransformation2DEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final EuclideanTransformation2DEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -271,7 +264,7 @@ public class EuclideanTransformation2DEstimator {
      * @return true allows 2 points, false requires 3.
      */
     public boolean isWeakMinimumSizeAllowed() {
-        return mWeakMinimumSizeAllowed;
+        return weakMinimumSizeAllowed;
     }
 
     /**
@@ -280,12 +273,11 @@ public class EuclideanTransformation2DEstimator {
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      * @throws LockedException if estimator is locked.
      */
-    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed)
-            throws LockedException {
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
+        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;
     }
 
     /**
@@ -295,7 +287,7 @@ public class EuclideanTransformation2DEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;
+        return weakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;
     }
 
     /**
@@ -305,7 +297,7 @@ public class EuclideanTransformation2DEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -315,7 +307,7 @@ public class EuclideanTransformation2DEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -327,9 +319,8 @@ public class EuclideanTransformation2DEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputPoints != null && mOutputPoints != null &&
-                mInputPoints.size() == mOutputPoints.size() &&
-                mInputPoints.size() >= getMinimumPoints();
+        return inputPoints != null && outputPoints != null && inputPoints.size() == outputPoints.size()
+                && inputPoints.size() >= getMinimumPoints();
     }
 
     /**
@@ -345,9 +336,8 @@ public class EuclideanTransformation2DEstimator {
      *                                   estimated for some reason (point configuration degeneracy, duplicate
      *                                   points or numerical instabilities).
      */
-    public EuclideanTransformation2D estimate() throws LockedException,
-            NotReadyException, CoincidentPointsException {
-        final EuclideanTransformation2D result = new EuclideanTransformation2D();
+    public EuclideanTransformation2D estimate() throws LockedException, NotReadyException, CoincidentPointsException {
+        final var result = new EuclideanTransformation2D();
         estimate(result);
         return result;
     }
@@ -365,8 +355,7 @@ public class EuclideanTransformation2DEstimator {
      *                                   estimated for some reason (point configuration degeneracy, duplicate
      *                                   points or numerical instabilities).
      */
-    public void estimate(final EuclideanTransformation2D result)
-            throws LockedException, NotReadyException,
+    public void estimate(final EuclideanTransformation2D result) throws LockedException, NotReadyException,
             CoincidentPointsException {
         if (isLocked()) {
             throw new LockedException();
@@ -376,32 +365,26 @@ public class EuclideanTransformation2DEstimator {
         }
 
         try {
-            mLocked = true;
+            locked = true;
 
-            if (mListener != null) {
-                mListener.onEstimateStart(this);
+            if (listener != null) {
+                listener.onEstimateStart(this);
             }
 
-            final Matrix inCentroid = computeCentroid(mInputPoints);
-            final Matrix outCentroid = computeCentroid(mOutputPoints);
+            final var inCentroid = computeCentroid(inputPoints);
+            final var outCentroid = computeCentroid(outputPoints);
 
-            final Matrix m = new Matrix(
-                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,
+            final var m = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
 
-            final int n = mInputPoints.size();
-            Point2D inputPoint;
-            Point2D outputPoint;
-            final Matrix col = new Matrix(
-                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-            final Matrix row = new Matrix(1,
+            final var n = inputPoints.size();
+            final var col = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var row = new Matrix(1, Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+            final var tmp = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
-            final Matrix tmp = new Matrix(
-                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,
-                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
-            for (int i = 0; i < n; i++) {
-                inputPoint = mInputPoints.get(i);
-                outputPoint = mOutputPoints.get(i);
+            for (var i = 0; i < n; i++) {
+                final var inputPoint = inputPoints.get(i);
+                final var outputPoint = outputPoints.get(i);
 
                 col.setElementAtIndex(0, inputPoint.getInhomX() -
                         inCentroid.getElementAtIndex(0));
@@ -417,15 +400,15 @@ public class EuclideanTransformation2DEstimator {
                 m.add(tmp);
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
-            if (!mWeakMinimumSizeAllowed && decomposer.getNullity() > 0) {
+            if (!weakMinimumSizeAllowed && decomposer.getNullity() > 0) {
                 throw new CoincidentPointsException();
             }
 
-            final Matrix u = decomposer.getU();
-            final Matrix v = decomposer.getV();
+            final var u = decomposer.getU();
+            final var v = decomposer.getV();
 
             // rotation R = V*U^T
             u.transpose();
@@ -437,23 +420,23 @@ public class EuclideanTransformation2DEstimator {
                 v.setElementAt(1, 1, -v.getElementAt(1, 1));
             }
 
-            final Rotation2D rotation = new Rotation2D(v);
+            final var rotation = new Rotation2D(v);
 
             // translation
-            final Matrix t = v.multiplyAndReturnNew(inCentroid);
+            final var t = v.multiplyAndReturnNew(inCentroid);
             t.multiplyByScalar(-1.0);
             t.add(outCentroid);
 
             result.setRotation(rotation);
             result.setTranslation(t.getBuffer());
 
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
+            if (listener != null) {
+                listener.onEstimateEnd(this);
             }
         } catch (final AlgebraException | InvalidRotationMatrixException e) {
             throw new CoincidentPointsException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -465,18 +448,16 @@ public class EuclideanTransformation2DEstimator {
      * @return centroid.
      * @throws AlgebraException never thrown.
      */
-    private static Matrix computeCentroid(final List<Point2D> points)
-            throws AlgebraException {
-        double x = 0.0;
-        double y = 0.0;
-        final double n = points.size();
-        for (final Point2D p : points) {
+    private static Matrix computeCentroid(final List<Point2D> points) throws AlgebraException {
+        var x = 0.0;
+        var y = 0.0;
+        final var n = points.size();
+        for (final var p : points) {
             x += p.getInhomX() / n;
             y += p.getInhomY() / n;
         }
 
-        final Matrix result = new Matrix(
-                Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+        final var result = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
         result.setElementAtIndex(0, x);
         result.setElementAtIndex(1, y);
         return result;
@@ -494,15 +475,14 @@ public class EuclideanTransformation2DEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than #getMinimumPoints.
      */
-    private void internalSetPoints(final List<Point2D> inputPoints,
-                                   final List<Point2D> outputPoints) {
+    private void internalSetPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }
         if (inputPoints.size() != outputPoints.size()) {
             throw new IllegalArgumentException();
         }
-        mInputPoints = inputPoints;
-        mOutputPoints = outputPoints;
+        this.inputPoints = inputPoints;
+        this.outputPoints = outputPoints;
     }
 }

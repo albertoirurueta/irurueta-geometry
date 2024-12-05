@@ -81,26 +81,25 @@ public abstract class PlaneRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected PlaneRobustEstimatorListener mListener;
+    protected PlaneRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -108,28 +107,28 @@ public abstract class PlaneRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of points to be used to estimate a 3D plane. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point3D> mPoints;
+    protected List<Point3D> points;
 
     /**
      * Constructor.
      */
     protected PlaneRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -139,10 +138,10 @@ public abstract class PlaneRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected PlaneRobustEstimator(final PlaneRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -153,9 +152,9 @@ public abstract class PlaneRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected PlaneRobustEstimator(final List<Point3D> points) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -168,12 +167,11 @@ public abstract class PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected PlaneRobustEstimator(final PlaneRobustEstimatorListener listener,
-                                   final List<Point3D> points) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected PlaneRobustEstimator(final PlaneRobustEstimatorListener listener, final List<Point3D> points) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -185,7 +183,7 @@ public abstract class PlaneRobustEstimator {
      * @return listener to be notified of events.
      */
     public PlaneRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -195,12 +193,11 @@ public abstract class PlaneRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final PlaneRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final PlaneRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -210,7 +207,7 @@ public abstract class PlaneRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -219,7 +216,7 @@ public abstract class PlaneRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -230,7 +227,7 @@ public abstract class PlaneRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -248,11 +245,10 @@ public abstract class PlaneRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -264,7 +260,7 @@ public abstract class PlaneRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -286,7 +282,7 @@ public abstract class PlaneRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -297,7 +293,7 @@ public abstract class PlaneRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -317,7 +313,7 @@ public abstract class PlaneRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -327,7 +323,7 @@ public abstract class PlaneRobustEstimator {
      * @return list of points to be used to estimate a 3D plane.
      */
     public List<Point3D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -354,7 +350,7 @@ public abstract class PlaneRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
+        return points != null && points.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -393,19 +389,13 @@ public abstract class PlaneRobustEstimator {
      * @return an instance of a 3D plane robust estimator.
      */
     public static PlaneRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator();
-            case MSAC:
-                return new MSACPlaneRobustEstimator();
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator();
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator();
+            case MSAC -> new MSACPlaneRobustEstimator();
+            case PROSAC -> new PROSACPlaneRobustEstimator();
+            case PROMEDS -> new PROMedSPlaneRobustEstimator();
+            default -> new RANSACPlaneRobustEstimator();
+        };
     }
 
     /**
@@ -419,21 +409,14 @@ public abstract class PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public static PlaneRobustEstimator create(final List<Point3D> points,
-                                              final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator(points);
-            case MSAC:
-                return new MSACPlaneRobustEstimator(points);
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(points);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(points);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator(points);
-        }
+    public static PlaneRobustEstimator create(final List<Point3D> points, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator(points);
+            case MSAC -> new MSACPlaneRobustEstimator(points);
+            case PROSAC -> new PROSACPlaneRobustEstimator(points);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(points);
+            default -> new RANSACPlaneRobustEstimator(points);
+        };
     }
 
     /**
@@ -447,21 +430,14 @@ public abstract class PlaneRobustEstimator {
      * @return an instance of a 3D plane robust estimator.
      */
     public static PlaneRobustEstimator create(
-            final PlaneRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator(listener);
-            case MSAC:
-                return new MSACPlaneRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator(listener);
-        }
+            final PlaneRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator(listener);
+            case MSAC -> new MSACPlaneRobustEstimator(listener);
+            case PROSAC -> new PROSACPlaneRobustEstimator(listener);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(listener);
+            default -> new RANSACPlaneRobustEstimator(listener);
+        };
     }
 
     /**
@@ -480,19 +456,13 @@ public abstract class PlaneRobustEstimator {
     public static PlaneRobustEstimator create(
             final PlaneRobustEstimatorListener listener, final List<Point3D> points,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACPlaneRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(listener, points);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(listener, points);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator(listener, points);
+            case MSAC -> new MSACPlaneRobustEstimator(listener, points);
+            case PROSAC -> new PROSACPlaneRobustEstimator(listener, points);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(listener, points);
+            default -> new RANSACPlaneRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -506,21 +476,14 @@ public abstract class PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public static PlaneRobustEstimator create(final double[] qualityScores,
-                                              final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator();
-            case MSAC:
-                return new MSACPlaneRobustEstimator();
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator();
-        }
+    public static PlaneRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator();
+            case MSAC -> new MSACPlaneRobustEstimator();
+            case PROSAC -> new PROSACPlaneRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(qualityScores);
+            default -> new RANSACPlaneRobustEstimator();
+        };
     }
 
     /**
@@ -537,21 +500,14 @@ public abstract class PlaneRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static PlaneRobustEstimator create(
-            final List<Point3D> points, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator(points);
-            case MSAC:
-                return new MSACPlaneRobustEstimator(points);
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(points, qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(points, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator(points);
-        }
+            final List<Point3D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator(points);
+            case MSAC -> new MSACPlaneRobustEstimator(points);
+            case PROSAC -> new PROSACPlaneRobustEstimator(points, qualityScores);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(points, qualityScores);
+            default -> new RANSACPlaneRobustEstimator(points);
+        };
     }
 
     /**
@@ -570,19 +526,13 @@ public abstract class PlaneRobustEstimator {
     public static PlaneRobustEstimator create(
             final PlaneRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator(listener);
-            case MSAC:
-                return new MSACPlaneRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator(listener);
+            case MSAC -> new MSACPlaneRobustEstimator(listener);
+            case PROSAC -> new PROSACPlaneRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(listener, qualityScores);
+            default -> new RANSACPlaneRobustEstimator(listener);
+        };
     }
 
     /**
@@ -601,23 +551,15 @@ public abstract class PlaneRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static PlaneRobustEstimator create(
-            final PlaneRobustEstimatorListener listener, final List<Point3D> points,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACPlaneRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACPlaneRobustEstimator(listener, points,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneRobustEstimator(listener, points,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneRobustEstimator(listener, points);
-        }
+            final PlaneRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneRobustEstimator(listener, points);
+            case MSAC -> new MSACPlaneRobustEstimator(listener, points);
+            case PROSAC -> new PROSACPlaneRobustEstimator(listener, points, qualityScores);
+            case PROMEDS -> new PROMedSPlaneRobustEstimator(listener, points, qualityScores);
+            default -> new RANSACPlaneRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -651,8 +593,7 @@ public abstract class PlaneRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a 3D plane robust estimator.
      */
-    public static PlaneRobustEstimator create(
-            final PlaneRobustEstimatorListener listener) {
+    public static PlaneRobustEstimator create(final PlaneRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -667,8 +608,7 @@ public abstract class PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public static PlaneRobustEstimator create(
-            final PlaneRobustEstimatorListener listener, final List<Point3D> points) {
+    public static PlaneRobustEstimator create(final PlaneRobustEstimatorListener listener, final List<Point3D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
 
@@ -696,8 +636,7 @@ public abstract class PlaneRobustEstimator {
      *                                  the same size as the list of provided quality scores, or if their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static PlaneRobustEstimator create(final List<Point3D> points,
-                                              final double[] qualityScores) {
+    public static PlaneRobustEstimator create(final List<Point3D> points, final double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -731,8 +670,7 @@ public abstract class PlaneRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static PlaneRobustEstimator create(
-            final PlaneRobustEstimatorListener listener, final List<Point3D> points,
-            final double[] qualityScores) {
+            final PlaneRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -749,8 +687,7 @@ public abstract class PlaneRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Plane estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Plane estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -772,7 +709,7 @@ public abstract class PlaneRobustEstimator {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**

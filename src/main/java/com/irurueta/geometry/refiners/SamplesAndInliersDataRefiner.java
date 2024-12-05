@@ -32,13 +32,12 @@ import java.util.List;
  * @param <T> type of instance to be refined.
  * @param <S> type of samples.
  */
-public abstract class SamplesAndInliersDataRefiner<T, S> extends
-        InliersDataRefiner<T> {
+public abstract class SamplesAndInliersDataRefiner<T, S> extends InliersDataRefiner<T> {
 
     /**
      * Collection of samples.
      */
-    protected List<S> mSamples;
+    protected List<S> samples;
 
     /**
      * Constructor.
@@ -58,11 +57,10 @@ public abstract class SamplesAndInliersDataRefiner<T, S> extends
      * @param samples           collection of samples.
      */
     protected SamplesAndInliersDataRefiner(
-            final T initialEstimation, final boolean keepCovariance, final BitSet inliers,
-            final double[] residuals, final int numInliers, final List<S> samples) {
-        super(initialEstimation, keepCovariance, inliers, residuals,
-                numInliers);
-        mSamples = samples;
+            final T initialEstimation, final boolean keepCovariance, final BitSet inliers, final double[] residuals,
+            final int numInliers, final List<S> samples) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers);
+        this.samples = samples;
     }
 
     /**
@@ -76,10 +74,10 @@ public abstract class SamplesAndInliersDataRefiner<T, S> extends
      * @param samples           collection of samples.
      */
     protected SamplesAndInliersDataRefiner(
-            final T initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<S> samples) {
+            final T initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<S> samples) {
         super(initialEstimation, keepCovariance, inliersData);
-        mSamples = samples;
+        this.samples = samples;
     }
 
     /**
@@ -88,7 +86,7 @@ public abstract class SamplesAndInliersDataRefiner<T, S> extends
      * @return collection of samples.
      */
     public List<S> getSamples() {
-        return mSamples;
+        return samples;
     }
 
     /**
@@ -101,7 +99,7 @@ public abstract class SamplesAndInliersDataRefiner<T, S> extends
         if (isLocked()) {
             throw new LockedException();
         }
-        mSamples = samples;
+        this.samples = samples;
     }
 
     /**
@@ -111,8 +109,7 @@ public abstract class SamplesAndInliersDataRefiner<T, S> extends
      */
     @Override
     public boolean isReady() {
-        return mInitialEstimation != null && mInliers != null &&
-                mResiduals != null && mSamples != null &&
-                mResiduals.length == mSamples.size() && mNumInliers > 0;
+        return initialEstimation != null && inliers != null && residuals != null && samples != null
+                && residuals.length == samples.size() && numInliers > 0;
     }
 }

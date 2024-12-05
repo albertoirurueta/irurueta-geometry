@@ -74,20 +74,20 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each pair of matched lines.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -107,7 +107,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
         super(inputLines, outputLines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -119,7 +119,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             final AffineTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -142,7 +142,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
             final AffineTransformation2DRobustEstimatorListener listener,
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -153,10 +153,9 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            final double[] qualityScores) {
+    public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -178,14 +177,13 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      *                                  MINIMUM_SIZE.
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
         super(inputLines, outputLines);
 
         if (qualityScores.length != inputLines.size())
             throw new IllegalArgumentException();
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -200,10 +198,9 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            final AffineTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final AffineTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -227,15 +224,14 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             final AffineTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
         super(listener, inputLines, outputLines);
 
         if (qualityScores.length != inputLines.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -259,7 +255,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -292,7 +288,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -303,7 +299,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -335,8 +331,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mInputLines.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == inputLines.size();
     }
 
     /**
@@ -353,8 +348,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public AffineTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public AffineTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -362,134 +356,127 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<AffineTransformation2D> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<AffineTransformation2D>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(
+                new PROMedSRobustEstimatorListener<AffineTransformation2D>() {
 
-                            // line to be reused when computing residuals
-                            private final Line2D mTestLine = new Line2D();
+                    // line to be reused when computing residuals
+                    private final Line2D mTestLine = new Line2D();
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return stopThreshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputLines.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputLines.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<AffineTransformation2D> solutions) {
-                                final Line2D inputLine1 = mInputLines.get(samplesIndices[0]);
-                                final Line2D inputLine2 = mInputLines.get(samplesIndices[1]);
-                                final Line2D inputLine3 = mInputLines.get(samplesIndices[2]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<AffineTransformation2D> solutions) {
+                        final var inputLine1 = inputLines.get(samplesIndices[0]);
+                        final var inputLine2 = inputLines.get(samplesIndices[1]);
+                        final var inputLine3 = inputLines.get(samplesIndices[2]);
 
-                                final Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);
-                                final Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);
-                                final Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);
+                        final var outputLine1 = outputLines.get(samplesIndices[0]);
+                        final var outputLine2 = outputLines.get(samplesIndices[1]);
+                        final var outputLine3 = outputLines.get(samplesIndices[2]);
 
-                                try {
-                                    final AffineTransformation2D transformation =
-                                            new AffineTransformation2D(inputLine1, inputLine2,
-                                                    inputLine3, outputLine1, outputLine2, outputLine3);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentLinesException e) {
-                                    // if lines are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new AffineTransformation2D(inputLine1, inputLine2, inputLine3,
+                                    outputLine1, outputLine2, outputLine3);
+                            solutions.add(transformation);
+                        } catch (final CoincidentLinesException e) {
+                            // if lines are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
-                                final Line2D inputLine = mInputLines.get(i);
-                                final Line2D outputLine = mOutputLines.get(i);
+                    @Override
+                    public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
+                        final var inputLine = inputLines.get(i);
+                        final var outputLine = outputLines.get(i);
 
-                                // transform input line and store result in mTestLine
-                                try {
-                                    currentEstimation.transform(inputLine, mTestLine);
+                        // transform input line and store result in mTestLine
+                        try {
+                            currentEstimation.transform(inputLine, mTestLine);
 
-                                    return getResidual(outputLine, mTestLine);
-                                } catch (final AlgebraException e) {
-                                    // this happens when internal matrix of affine transformation
-                                    // cannot be reverse (i.e. transformation is not well-defined,
-                                    // numerical instabilities, etc.)
-                                    return Double.MAX_VALUE;
-                                }
-                            }
+                            return getResidual(outputLine, mTestLine);
+                        } catch (final AlgebraException e) {
+                            // this happens when internal matrix of affine transformation
+                            // cannot be reverse (i.e. transformation is not well-defined,
+                            // numerical instabilities, etc.)
+                            return Double.MAX_VALUE;
+                        }
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<AffineTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<AffineTransformation2D> estimator) {
+                        if (mListener != null) {
+                            mListener.onEstimateStart(
+                                    PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<AffineTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<AffineTransformation2D> estimator) {
+                        if (mListener != null) {
+                            mListener.onEstimateEnd(
+                                    PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<AffineTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<AffineTransformation2D> estimator, final int iteration) {
+                        if (mListener != null) {
+                            mListener.onEstimateNextIteration(
+                                    PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<AffineTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<AffineTransformation2D> estimator, final float progress) {
+                        if (mListener != null) {
+                            mListener.onEstimateProgressChange(
+                                    PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+                    @Override
+                    public double[] getQualityScores() {
+                        return qualityScores;
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final AffineTransformation2D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -516,12 +503,11 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final PROMedSRobustEstimator.PROMedSInliersData inliersData =
-                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
+        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
 
         // avoid setting a threshold too strict
-        final double threshold = inliersData.getEstimatedThreshold();
-        return Math.max(threshold, mStopThreshold);
+        final var threshold = inliersData.getEstimatedThreshold();
+        return Math.max(threshold, stopThreshold);
     }
 
     /**
@@ -538,6 +524,6 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

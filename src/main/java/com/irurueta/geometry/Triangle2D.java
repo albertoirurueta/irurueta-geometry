@@ -44,17 +44,17 @@ public class Triangle2D implements Serializable {
     /**
      * 1st vertex of this triangle.
      */
-    private Point2D mVertex1;
+    private Point2D vertex1;
 
     /**
      * 2nd vertex of this triangle.
      */
-    private Point2D mVertex2;
+    private Point2D vertex2;
 
     /**
      * 3rd vertex of this triangle.
      */
-    private Point2D mVertex3;
+    private Point2D vertex3;
 
     /**
      * Constructor.
@@ -74,7 +74,7 @@ public class Triangle2D implements Serializable {
      * @return 1st vertex.
      */
     public Point2D getVertex1() {
-        return mVertex1;
+        return vertex1;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Triangle2D implements Serializable {
         if (vertex1 == null) {
             throw new NullPointerException();
         }
-        this.mVertex1 = vertex1;
+        this.vertex1 = vertex1;
     }
 
     /**
@@ -96,7 +96,7 @@ public class Triangle2D implements Serializable {
      * @return 2nd vertex.
      */
     public Point2D getVertex2() {
-        return mVertex2;
+        return vertex2;
     }
 
     /**
@@ -109,7 +109,7 @@ public class Triangle2D implements Serializable {
         if (vertex2 == null) {
             throw new NullPointerException();
         }
-        this.mVertex2 = vertex2;
+        this.vertex2 = vertex2;
     }
 
     /**
@@ -118,7 +118,7 @@ public class Triangle2D implements Serializable {
      * @return 3rd vertex.
      */
     public Point2D getVertex3() {
-        return mVertex3;
+        return vertex3;
     }
 
     /**
@@ -131,7 +131,7 @@ public class Triangle2D implements Serializable {
         if (vertex3 == null) {
             throw new NullPointerException();
         }
-        this.mVertex3 = vertex3;
+        this.vertex3 = vertex3;
     }
 
     /**
@@ -140,7 +140,7 @@ public class Triangle2D implements Serializable {
      * @return Vertices of this triangle.
      */
     public List<Point2D> getVertices() {
-        final List<Point2D> vertices = new ArrayList<>(NUM_VERTICES);
+        final var vertices = new ArrayList<Point2D>(NUM_VERTICES);
         vertices(vertices);
         return vertices;
     }
@@ -153,9 +153,9 @@ public class Triangle2D implements Serializable {
      */
     public void vertices(final List<Point2D> result) {
         result.clear();
-        result.add(mVertex1);
-        result.add(mVertex2);
-        result.add(mVertex3);
+        result.add(vertex1);
+        result.add(vertex2);
+        result.add(vertex3);
     }
 
     /**
@@ -166,15 +166,14 @@ public class Triangle2D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if any of the vertices is null.
      */
-    public final void setVertices(
-            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
+    public final void setVertices(final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
         if (vertex1 == null || vertex2 == null || vertex3 == null) {
             throw new NullPointerException();
         }
 
-        mVertex1 = vertex1;
-        mVertex2 = vertex2;
-        mVertex3 = vertex3;
+        this.vertex1 = vertex1;
+        this.vertex2 = vertex2;
+        this.vertex3 = vertex3;
     }
 
     /**
@@ -186,8 +185,7 @@ public class Triangle2D implements Serializable {
      * are clockwise, negative sign indicates that vertices are counterclockwise.
      */
     public static double signedArea(final Triangle2D triangle) {
-        return signedArea(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3());
+        return signedArea(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3());
     }
 
     /**
@@ -202,21 +200,20 @@ public class Triangle2D implements Serializable {
      * vertices are clockwise, positive sign indicates that vertices are
      * counterclockwise.
      */
-    public static double signedArea(
-            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
+    public static double signedArea(final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
         // The signed area of a triangle is half the determinant of its vectors,
         // or half the modulus of the cross product of its vectors
 
         // Hence, having the vectors of the triangle defined as:
         // v1 = vertex2 - vertex1, and v2 = vertex3 - vertex1, then:
-        final double p1x = vertex1.getInhomX();
-        final double p1y = vertex1.getInhomY();
+        final var p1x = vertex1.getInhomX();
+        final var p1y = vertex1.getInhomY();
 
-        final double x1 = vertex2.getInhomX() - p1x;
-        final double y1 = vertex2.getInhomY() - p1y;
+        final var x1 = vertex2.getInhomX() - p1x;
+        final var y1 = vertex2.getInhomY() - p1y;
 
-        final double x2 = vertex3.getInhomX() - p1x;
-        final double y2 = vertex3.getInhomY() - p1y;
+        final var x2 = vertex3.getInhomX() - p1x;
+        final var y2 = vertex3.getInhomY() - p1y;
 
         // Considering the matrix:
         // [x1   x2]
@@ -235,7 +232,7 @@ public class Triangle2D implements Serializable {
      * counterclockwise.
      */
     public double getSignedArea() {
-        return signedArea(mVertex1, mVertex2, mVertex3);
+        return signedArea(vertex1, vertex2, vertex3);
     }
 
     /**
@@ -245,8 +242,7 @@ public class Triangle2D implements Serializable {
      * @return Area of triangle.
      */
     public static double area(final Triangle2D triangle) {
-        return area(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3());
+        return area(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3());
     }
 
     /**
@@ -257,8 +253,7 @@ public class Triangle2D implements Serializable {
      * @param vertex3 3rd vertex of a triangle.
      * @return Area of a triangle.
      */
-    public static double area(
-            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
+    public static double area(final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
         return Math.abs(signedArea(vertex1, vertex2, vertex3));
     }
 
@@ -268,7 +263,7 @@ public class Triangle2D implements Serializable {
      * @return Area of this triangle.
      */
     public double getArea() {
-        return area(mVertex1, mVertex2, mVertex3);
+        return area(vertex1, vertex2, vertex3);
     }
 
     /**
@@ -294,7 +289,6 @@ public class Triangle2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean areVerticesColinear(final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -308,8 +302,7 @@ public class Triangle2D implements Serializable {
      * @return Perimeter of provided triangle.
      */
     public static double perimeter(final Triangle2D triangle) {
-        return perimeter(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3());
+        return perimeter(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3());
     }
 
     /**
@@ -320,10 +313,8 @@ public class Triangle2D implements Serializable {
      * @param vertex3 3rd vertex of a triangle.
      * @return Perimeter of a triangle.
      */
-    public static double perimeter(
-            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
-        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) +
-                vertex3.distanceTo(vertex1);
+    public static double perimeter(final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
+        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) + vertex3.distanceTo(vertex1);
     }
 
     /**
@@ -356,7 +347,7 @@ public class Triangle2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isInside(final Point2D point, final double threshold) {
-        return isInside(mVertex1, mVertex2, mVertex3, point, threshold);
+        return isInside(vertex1, vertex2, vertex3, point, threshold);
     }
 
     /**
@@ -381,10 +372,8 @@ public class Triangle2D implements Serializable {
      * @return True if point lies inside this triangle, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isInside(
-            final Triangle2D triangle, final Point2D point, final double threshold) {
-        return isInside(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3(), point, threshold);
+    public static boolean isInside(final Triangle2D triangle, final Point2D point, final double threshold) {
+        return isInside(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3(), point, threshold);
     }
 
     /**
@@ -399,8 +388,7 @@ public class Triangle2D implements Serializable {
      * false otherwise.
      */
     public static boolean isInside(
-            final Point2D vertex1, final Point2D vertex2,
-            final Point2D vertex3, final Point2D point) {
+            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3, final Point2D point) {
         return isInside(vertex1, vertex2, vertex3, point, DEFAULT_THRESHOLD);
     }
 
@@ -420,8 +408,8 @@ public class Triangle2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(
-            final Point2D vertex1, final Point2D vertex2,
-            final Point2D vertex3, final Point2D point, final double threshold) {
+            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3, final Point2D point,
+            final double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -439,11 +427,11 @@ public class Triangle2D implements Serializable {
         // certain accuracy to account for numerical precision)
 
         // Then the areas of triangles are:
-        final double areaABC = area(vertex1, vertex2, vertex3);
+        final var areaABC = area(vertex1, vertex2, vertex3);
 
-        final double areaApB = area(vertex1, point, vertex2);
-        final double areaBpC = area(vertex2, point, vertex3);
-        final double areaApC = area(vertex3, point, vertex1);
+        final var areaApB = area(vertex1, point, vertex2);
+        final var areaBpC = area(vertex2, point, vertex3);
+        final var areaApC = area(vertex3, point, vertex1);
 
         return Math.abs(areaApB + areaBpC + areaApC - areaABC) <= threshold;
     }
@@ -455,7 +443,7 @@ public class Triangle2D implements Serializable {
      * @return Center of this triangle.
      */
     public Point2D getCenter() {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         center(result);
         return result;
     }
@@ -468,7 +456,7 @@ public class Triangle2D implements Serializable {
      * @param result Point instance where center will be stored.
      */
     public void center(final Point2D result) {
-        center(mVertex1, mVertex2, mVertex3, result);
+        center(vertex1, vertex2, vertex3, result);
     }
 
     /**
@@ -480,9 +468,8 @@ public class Triangle2D implements Serializable {
      * @param vertex3 3rd vertex of a triangle.
      * @return Center of a triangle formed by provided vertices.
      */
-    public static Point2D center(
-            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
-        final Point2D result = Point2D.create();
+    public static Point2D center(final Point2D vertex1, final Point2D vertex2, final Point2D vertex3) {
+        final var result = Point2D.create();
         center(vertex1, vertex2, vertex3, result);
         return result;
     }
@@ -510,13 +497,10 @@ public class Triangle2D implements Serializable {
      * @param result  Point instance where center will be stored.
      */
     public static void center(
-            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3,
-            final Point2D result) {
+            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3, final Point2D result) {
 
-        final double x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) /
-                3.0;
-        final double y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) /
-                3.0;
+        final var x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) / 3.0;
+        final var y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) / 3.0;
 
         result.setInhomogeneousCoordinates(x, y);
     }
@@ -558,10 +542,8 @@ public class Triangle2D implements Serializable {
      * @param point    Point to be checked.
      * @return Shortest distance to this triangle.
      */
-    public static double shortestDistance(
-            final Triangle2D triangle, final Point2D point) {
-        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(),
-                triangle.getVertex3(), point);
+    public static double shortestDistance(final Triangle2D triangle, final Point2D point) {
+        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(), triangle.getVertex3(), point);
     }
 
     // shortest distance to the sides of the triangle, no matter if the point
@@ -581,8 +563,7 @@ public class Triangle2D implements Serializable {
      * @return Shortest distance to the triangle formed by provided vertices.
      */
     public static double shortestDistance(
-            final Point2D vertex1, final Point2D vertex2,
-            final Point2D vertex3, final Point2D point) {
+            final Point2D vertex1, final Point2D vertex2, final Point2D vertex3, final Point2D point) {
 
         // normalize points to increase accuracy
         vertex1.normalize();
@@ -593,7 +574,7 @@ public class Triangle2D implements Serializable {
         double bestDist;
         double dist;
 
-        final Line2D line = new Line2D();
+        final var line = new Line2D();
         line.setParametersFromPairOfPoints(vertex1, vertex2);
         // to increase accuracy
         line.normalize();
@@ -701,7 +682,7 @@ public class Triangle2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public Point2D getClosestPoint(final Point2D point, final double threshold) {
-        final Point2D result = Point2D.create();
+        final var result = Point2D.create();
         closestPoint(point, result, threshold);
         return result;
     }
@@ -728,23 +709,22 @@ public class Triangle2D implements Serializable {
      *                  triangle or not.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(final Point2D point, final Point2D result,
-                             final double threshold) {
+    public void closestPoint(final Point2D point, final Point2D result, final double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         // normalize vertices and point to increase accuracy
-        mVertex1.normalize();
-        mVertex2.normalize();
-        mVertex3.normalize();
+        vertex1.normalize();
+        vertex2.normalize();
+        vertex3.normalize();
         point.normalize();
 
-        final Line2D line1 = new Line2D(mVertex1, mVertex2);
+        final var line1 = new Line2D(vertex1, vertex2);
         // to increase accuracy
         line1.normalize();
         if (line1.isLocus(point)) {
-            if (point.isBetween(mVertex1, mVertex2)) {
+            if (point.isBetween(vertex1, vertex2)) {
                 // point is on this side of the triangle, so point must be the
                 // result
                 result.setCoordinates(point);
@@ -752,23 +732,23 @@ public class Triangle2D implements Serializable {
                 // point belongs to the line forming this side of the triangle,
                 // hence the closest vertex of this line will be the closest
                 // point to the triangle
-                final double dist1 = mVertex1.distanceTo(point);
-                final double dist2 = mVertex2.distanceTo(point);
+                final var dist1 = vertex1.distanceTo(point);
+                final var dist2 = vertex2.distanceTo(point);
                 if (dist1 < dist2) {
-                    result.setCoordinates(mVertex1);
+                    result.setCoordinates(vertex1);
                 } else {
-                    result.setCoordinates(mVertex2);
+                    result.setCoordinates(vertex2);
                 }
             }
             return;
         }
 
         // try on second side of the triangle
-        final Line2D line2 = new Line2D(mVertex1, mVertex3);
+        final var line2 = new Line2D(vertex1, vertex3);
         // to increase accuracy
         line2.normalize();
         if (line2.isLocus(point)) {
-            if (point.isBetween(mVertex1, mVertex3)) {
+            if (point.isBetween(vertex1, vertex3)) {
                 // point is on this side of the triangle, so point must be the
                 // result
                 result.setCoordinates(point);
@@ -776,24 +756,23 @@ public class Triangle2D implements Serializable {
                 // point belongs to the line forming this side of the triangle,
                 // hence the closest vertex of this line will be the closest
                 // point to the triangle
-                final double dist1 = mVertex1.distanceTo(point);
-                final double dist3 = mVertex3.distanceTo(point);
+                final var dist1 = vertex1.distanceTo(point);
+                final var dist3 = vertex3.distanceTo(point);
                 if (dist1 < dist3) {
-                    result.setCoordinates(mVertex1);
+                    result.setCoordinates(vertex1);
                 } else {
-                    result.setCoordinates(mVertex3);
+                    result.setCoordinates(vertex3);
                 }
             }
             return;
         }
 
-
         // try on third side of the triangle
-        final Line2D line3 = new Line2D(mVertex2, mVertex3);
+        final var line3 = new Line2D(vertex2, vertex3);
         // to increase accuracy
         line3.normalize();
         if (line3.isLocus(point)) {
-            if (point.isBetween(mVertex2, mVertex3)) {
+            if (point.isBetween(vertex2, vertex3)) {
                 // point is on this side of the triangle, so point must be the
                 // result
                 result.setCoordinates(point);
@@ -801,12 +780,12 @@ public class Triangle2D implements Serializable {
                 // point belongs to the line forming this side of the triangle,
                 // hence the closest vertex of this line will be the closest
                 // point to the triangle
-                final double dist2 = mVertex2.distanceTo(point);
-                final double dist3 = mVertex3.distanceTo(point);
+                final var dist2 = vertex2.distanceTo(point);
+                final var dist3 = vertex3.distanceTo(point);
                 if (dist2 < dist3) {
-                    result.setCoordinates(mVertex2);
+                    result.setCoordinates(vertex2);
                 } else {
-                    result.setCoordinates(mVertex3);
+                    result.setCoordinates(vertex3);
                 }
             }
             return;
@@ -814,50 +793,49 @@ public class Triangle2D implements Serializable {
 
         // point does not belong to any line forming a side of the triangle,
         // so we find the closest point for each side
-        final Point2D closest1 = line1.getClosestPoint(point, threshold);
+        final var closest1 = line1.getClosestPoint(point, threshold);
         // to increase accuracy
         closest1.normalize();
-        final Point2D closest2 = line2.getClosestPoint(point, threshold);
+        final var closest2 = line2.getClosestPoint(point, threshold);
         // to increase accuracy
         closest2.normalize();
-        final Point2D closest3 = line3.getClosestPoint(point, threshold);
+        final var closest3 = line3.getClosestPoint(point, threshold);
         // to increase accuracy
         closest3.normalize();
 
         // check if points lie within sides of triangle
-        final boolean between1 = closest1.isBetween(mVertex1, mVertex2);
-        final boolean between2 = closest2.isBetween(mVertex1, mVertex3);
-        final boolean between3 = closest3.isBetween(mVertex2, mVertex3);
+        final var between1 = closest1.isBetween(vertex1, vertex2);
+        final var between2 = closest2.isBetween(vertex1, vertex3);
+        final var between3 = closest3.isBetween(vertex2, vertex3);
 
-        final double distClosest1 = closest1.distanceTo(point);
-        final double distClosest2 = closest2.distanceTo(point);
-        final double distClosest3 = closest3.distanceTo(point);
+        final var distClosest1 = closest1.distanceTo(point);
+        final var distClosest2 = closest2.distanceTo(point);
+        final var distClosest3 = closest3.distanceTo(point);
 
-        final double distVertex1 = mVertex1.distanceTo(point);
-        final double distVertex2 = mVertex2.distanceTo(point);
-        final double distVertex3 = mVertex3.distanceTo(point);
-
+        final var distVertex1 = vertex1.distanceTo(point);
+        final var distVertex2 = vertex2.distanceTo(point);
+        final var distVertex3 = vertex3.distanceTo(point);
 
         if (between1 && !between2 && !between3) {
             // choose closest1 or opposite vertex (vertex3)
             if (distClosest1 < distVertex3) {
                 result.setCoordinates(closest1);
             } else {
-                result.setCoordinates(mVertex3);
+                result.setCoordinates(vertex3);
             }
         } else if (!between1 && between2 && !between3) {
             // choose closest2 or opposite vertex (vertex2)
             if (distClosest2 < distVertex2) {
                 result.setCoordinates(closest2);
             } else {
-                result.setCoordinates(mVertex2);
+                result.setCoordinates(vertex2);
             }
         } else if (!between1 && !between2 && between3) {
             // choose closest3 or opposite vertex (vertex1)
             if (distClosest3 < distVertex1) {
                 result.setCoordinates(closest3);
             } else {
-                result.setCoordinates(mVertex1);
+                result.setCoordinates(vertex1);
             }
         } else if (between1 && between2 && !between3) {
             // determine if closest1 or closest2
@@ -905,13 +883,13 @@ public class Triangle2D implements Serializable {
 
             if (distVertex1 < distVertex2 && distVertex1 < distVertex3) {
                 // pick vertex1
-                result.setCoordinates(mVertex1);
+                result.setCoordinates(vertex1);
             } else if (distVertex2 < distVertex1 && distVertex2 < distVertex3) {
                 // pick vertex2
-                result.setCoordinates(mVertex2);
+                result.setCoordinates(vertex2);
             } else {
                 // pick vertex3
-                result.setCoordinates(mVertex3);
+                result.setCoordinates(vertex3);
             }
         }
     }
@@ -931,9 +909,8 @@ public class Triangle2D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        return point.isBetween(mVertex1, mVertex2, threshold) ||
-                point.isBetween(mVertex1, mVertex3, threshold) ||
-                point.isBetween(mVertex2, mVertex3, threshold);
+        return point.isBetween(vertex1, vertex2, threshold) || point.isBetween(vertex1, vertex3, threshold)
+                || point.isBetween(vertex2, vertex3, threshold);
     }
 
     /**

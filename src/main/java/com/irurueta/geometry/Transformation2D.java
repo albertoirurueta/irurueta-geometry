@@ -33,7 +33,7 @@ public abstract class Transformation2D {
      * @return transformed point.
      */
     public Point2D transformAndReturnNew(final Point2D inputPoint) {
-        final Point2D outputPoint = Point2D.create();
+        final var outputPoint = Point2D.create();
         transform(inputPoint, outputPoint);
         return outputPoint;
     }
@@ -63,9 +63,8 @@ public abstract class Transformation2D {
      * @param inputPoints points to be transformed.
      * @return transformed points.
      */
-    public List<Point2D> transformPointsAndReturnNew(
-            final List<Point2D> inputPoints) {
-        final List<Point2D> outputPoints = new ArrayList<>(inputPoints.size());
+    public List<Point2D> transformPointsAndReturnNew(final List<Point2D> inputPoints) {
+        final var outputPoints = new ArrayList<Point2D>(inputPoints.size());
         transformPoints(inputPoints, outputPoints);
         return outputPoints;
     }
@@ -79,11 +78,10 @@ public abstract class Transformation2D {
      * @param inputPoints  points to be transformed.
      * @param outputPoints transformed points.
      */
-    public void transformPoints(final List<Point2D> inputPoints,
-                                final List<Point2D> outputPoints) {
+    public void transformPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
 
         outputPoints.clear();
-        for (final Point2D point : inputPoints) {
+        for (final var point : inputPoints) {
             outputPoints.add(Transformation2D.this.transformAndReturnNew(point));
         }
     }
@@ -95,8 +93,7 @@ public abstract class Transformation2D {
      * @param points points to be transformed and overwritten.
      */
     public void transformAndOverwritePoints(final List<Point2D> points) {
-
-        for (final Point2D point : points) {
+        for (final var point : points) {
             transform(point, point);
         }
     }
@@ -111,9 +108,8 @@ public abstract class Transformation2D {
      * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
-    public Conic transformAndReturnNew(final Conic inputConic)
-            throws NonSymmetricMatrixException, AlgebraException {
-        final Conic outputConic = new Conic();
+    public Conic transformAndReturnNew(final Conic inputConic) throws NonSymmetricMatrixException, AlgebraException {
+        final var outputConic = new Conic();
         transform(inputConic, outputConic);
         return outputConic;
     }
@@ -127,8 +123,7 @@ public abstract class Transformation2D {
      * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
-    public void transform(final Conic conic) throws NonSymmetricMatrixException,
-            AlgebraException {
+    public void transform(final Conic conic) throws NonSymmetricMatrixException, AlgebraException {
         transform(conic, conic);
     }
 
@@ -144,8 +139,8 @@ public abstract class Transformation2D {
      * @throws AlgebraException            raised if transform cannot be computed because of
      *                                     numerical instabilities.
      */
-    public abstract void transform(final Conic inputConic, final Conic outputConic)
-            throws NonSymmetricMatrixException, AlgebraException;
+    public abstract void transform(final Conic inputConic, final Conic outputConic) throws NonSymmetricMatrixException,
+            AlgebraException;
 
     /**
      * Transforms a dual conic using this transformation and returns a new one.
@@ -157,9 +152,9 @@ public abstract class Transformation2D {
      * @throws AlgebraException            raised if transform cannot be computed because
      *                                     of numerical instabilities.
      */
-    public DualConic transformAndReturnNew(final DualConic inputDualConic)
-            throws NonSymmetricMatrixException, AlgebraException {
-        final DualConic outputDualConic = new DualConic();
+    public DualConic transformAndReturnNew(final DualConic inputDualConic) throws NonSymmetricMatrixException,
+            AlgebraException {
+        final var outputDualConic = new DualConic();
         transform(inputDualConic, outputDualConic);
         return outputDualConic;
     }
@@ -173,8 +168,7 @@ public abstract class Transformation2D {
      * @throws AlgebraException            raised if transform cannot be computed because
      *                                     of numerical instabilities.
      */
-    public void transform(final DualConic dualConic)
-            throws NonSymmetricMatrixException, AlgebraException {
+    public void transform(final DualConic dualConic) throws NonSymmetricMatrixException, AlgebraException {
         transform(dualConic, dualConic);
     }
 
@@ -190,8 +184,7 @@ public abstract class Transformation2D {
      * @throws AlgebraException            Raised if transform cannot be computed because
      *                                     of numerical instabilities.
      */
-    public abstract void transform(
-            final DualConic inputDualConic, final DualConic outputDualConic)
+    public abstract void transform(final DualConic inputDualConic, final DualConic outputDualConic)
             throws NonSymmetricMatrixException, AlgebraException;
 
     /**
@@ -202,9 +195,8 @@ public abstract class Transformation2D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public Line2D transformAndReturnNew(final Line2D inputLine)
-            throws AlgebraException {
-        final Line2D outputLine = new Line2D();
+    public Line2D transformAndReturnNew(final Line2D inputLine) throws AlgebraException {
+        final var outputLine = new Line2D();
         transform(inputLine, outputLine);
         return outputLine;
     }
@@ -229,8 +221,7 @@ public abstract class Transformation2D {
      * @throws AlgebraException Raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public abstract void transform(final Line2D inputLine, final Line2D outputLine)
-            throws AlgebraException;
+    public abstract void transform(final Line2D inputLine, final Line2D outputLine) throws AlgebraException;
 
     /**
      * Transforms provided list of lines using this transformation and returns
@@ -241,9 +232,8 @@ public abstract class Transformation2D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public List<Line2D> transformLinesAndReturnNew(final List<Line2D> inputLines)
-            throws AlgebraException {
-        final List<Line2D> outputLines = new ArrayList<>(inputLines.size());
+    public List<Line2D> transformLinesAndReturnNew(final List<Line2D> inputLines) throws AlgebraException {
+        final var outputLines = new ArrayList<Line2D>(inputLines.size());
         transformLines(inputLines, outputLines);
         return outputLines;
     }
@@ -259,11 +249,9 @@ public abstract class Transformation2D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public void transformLines(final List<Line2D> inputLines,
-                               final List<Line2D> outputLines) throws AlgebraException {
-
+    public void transformLines(final List<Line2D> inputLines, final List<Line2D> outputLines) throws AlgebraException {
         outputLines.clear();
-        for (final Line2D line : inputLines) {
+        for (final var line : inputLines) {
             outputLines.add(Transformation2D.this.transformAndReturnNew(line));
         }
     }
@@ -276,10 +264,8 @@ public abstract class Transformation2D {
      * @throws AlgebraException raised if transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public void transformAndOverwriteLines(final List<Line2D> lines)
-            throws AlgebraException {
-
-        for (final Line2D line : lines) {
+    public void transformAndOverwriteLines(final List<Line2D> lines) throws AlgebraException {
+        for (final var line : lines) {
             transform(line, line);
         }
     }
@@ -292,8 +278,7 @@ public abstract class Transformation2D {
      * @return Transformed polygon.
      */
     public Polygon2D transformAndReturnNew(final Polygon2D inputPolygon) {
-        final List<Point2D> outVertices = transformPointsAndReturnNew(
-                inputPolygon.getVertices());
+        final var outVertices = transformPointsAndReturnNew(inputPolygon.getVertices());
         try {
             return new Polygon2D(outVertices);
         } catch (final NotEnoughVerticesException ignore) {
@@ -322,8 +307,7 @@ public abstract class Transformation2D {
      */
     public void transform(final Polygon2D inputPolygon, final Polygon2D outputPolygon) {
         try {
-            outputPolygon.setVertices(transformPointsAndReturnNew(
-                    inputPolygon.getVertices()));
+            outputPolygon.setVertices(transformPointsAndReturnNew(inputPolygon.getVertices()));
         } catch (final NotEnoughVerticesException ignore) {
             // this will never happen because all existing polygons have enough
             // vertices
@@ -338,12 +322,9 @@ public abstract class Transformation2D {
      * @return transformed triangle.
      */
     public Triangle2D transformAndReturnNew(final Triangle2D inputTriangle) {
-        final Point2D vertex1 = Transformation2D.this.transformAndReturnNew(
-                inputTriangle.getVertex1());
-        final Point2D vertex2 = Transformation2D.this.transformAndReturnNew(
-                inputTriangle.getVertex2());
-        final Point2D vertex3 = Transformation2D.this.transformAndReturnNew(
-                inputTriangle.getVertex3());
+        final var vertex1 = Transformation2D.this.transformAndReturnNew(inputTriangle.getVertex1());
+        final var vertex2 = Transformation2D.this.transformAndReturnNew(inputTriangle.getVertex2());
+        final var vertex3 = Transformation2D.this.transformAndReturnNew(inputTriangle.getVertex3());
         return new Triangle2D(vertex1, vertex2, vertex3);
     }
 
@@ -365,12 +346,9 @@ public abstract class Transformation2D {
      *                       stored
      */
     public void transform(final Triangle2D inputTriangle, final Triangle2D outputTriangle) {
-        outputTriangle.setVertex1(transformAndReturnNew(
-                inputTriangle.getVertex1()));
-        outputTriangle.setVertex2(transformAndReturnNew(
-                inputTriangle.getVertex2()));
-        outputTriangle.setVertex3(transformAndReturnNew(
-                inputTriangle.getVertex3()));
+        outputTriangle.setVertex1(transformAndReturnNew(inputTriangle.getVertex1()));
+        outputTriangle.setVertex2(transformAndReturnNew(inputTriangle.getVertex2()));
+        outputTriangle.setVertex3(transformAndReturnNew(inputTriangle.getVertex3()));
     }
 
     /**

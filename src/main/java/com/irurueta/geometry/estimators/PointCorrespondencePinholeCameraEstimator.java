@@ -37,8 +37,7 @@ import java.util.List;
  * based on point correspondences.
  */
 @SuppressWarnings("DuplicatedCode")
-public abstract class PointCorrespondencePinholeCameraEstimator extends
-        PinholeCameraEstimator {
+public abstract class PointCorrespondencePinholeCameraEstimator extends PinholeCameraEstimator {
 
     /**
      * Minimum number of required point correspondences to estimate a pinhole
@@ -60,26 +59,25 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
     /**
      * List of corresponding 3D points.
      */
-    protected List<Point3D> mPoints3D;
+    protected List<Point3D> points3D;
 
     /**
      * List of corresponding 2D points.
      */
-    protected List<Point2D> mPoints2D;
+    protected List<Point2D> points2D;
 
     /**
      * Indicates if provided point correspondences are normalized to increase
      * the accuracy of the estimation.
      */
-    private boolean mNormalizePointCorrespondences;
+    private boolean normalizePointCorrespondences;
 
     /**
      * Constructor.
      */
     protected PointCorrespondencePinholeCameraEstimator() {
         super();
-        mNormalizePointCorrespondences =
-                DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
+        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -88,11 +86,9 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    protected PointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    protected PointCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
-        mNormalizePointCorrespondences =
-                DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
+        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -104,12 +100,11 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    protected PointCorrespondencePinholeCameraEstimator(final List<Point3D> points3D,
-                                                        final List<Point2D> points2D) throws WrongListSizesException {
+    protected PointCorrespondencePinholeCameraEstimator(final List<Point3D> points3D, final List<Point2D> points2D)
+            throws WrongListSizesException {
         super();
         internalSetLists(points3D, points2D);
-        mNormalizePointCorrespondences =
-                DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
+        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -123,13 +118,12 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    protected PointCorrespondencePinholeCameraEstimator(final List<Point3D> points3D,
-                                                        final List<Point2D> points2D, final PinholeCameraEstimatorListener listener)
+    protected PointCorrespondencePinholeCameraEstimator(
+            final List<Point3D> points3D, final List<Point2D> points2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(listener);
         internalSetLists(points3D, points2D);
-        mNormalizePointCorrespondences =
-                DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
+        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -142,8 +136,8 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    private void internalSetLists(final List<Point3D> points3D,
-                                  final List<Point2D> points2D) throws WrongListSizesException {
+    private void internalSetLists(final List<Point3D> points3D, final List<Point2D> points2D)
+            throws WrongListSizesException {
 
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -153,8 +147,8 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
             throw new WrongListSizesException();
         }
 
-        mPoints3D = points3D;
-        mPoints2D = points2D;
+        this.points3D = points3D;
+        this.points2D = points2D;
     }
 
     /**
@@ -167,8 +161,8 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough points.
      */
-    public void setLists(final List<Point3D> points3D, final List<Point2D> points2D)
-            throws LockedException, WrongListSizesException {
+    public void setLists(final List<Point3D> points3D, final List<Point2D> points2D) throws LockedException,
+            WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -185,12 +179,12 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if list of points is not yet available.
      */
     public List<Point3D> getPoints3D() throws NotAvailableException {
-        if (mPoints3D == null) {
+        if (points3D == null) {
             throw new NotAvailableException();
         }
 
         // to avoid undesired modifications
-        return Collections.unmodifiableList(mPoints3D);
+        return Collections.unmodifiableList(points3D);
     }
 
     /**
@@ -202,12 +196,12 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if list of points is not yet available.
      */
     public List<Point2D> getPoints2D() throws NotAvailableException {
-        if (mPoints2D == null) {
+        if (points2D == null) {
             throw new NotAvailableException();
         }
 
         // to avoid undesired modifications
-        return Collections.unmodifiableList(mPoints2D);
+        return Collections.unmodifiableList(points2D);
     }
 
     /**
@@ -219,13 +213,11 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @param points2D list of corresponding 2D points.
      * @return true if corresponding 2D/3D points are valid, false otherwise.
      */
-    public static boolean areValidLists(final List<Point3D> points3D,
-                                        final List<Point2D> points2D) {
+    public static boolean areValidLists(final List<Point3D> points3D, final List<Point2D> points2D) {
         if (points3D == null || points2D == null) {
             return false;
         }
-        return points3D.size() == points2D.size() &&
-                points3D.size() >= MIN_NUMBER_OF_POINT_CORRESPONDENCES;
+        return points3D.size() == points2D.size() && points3D.size() >= MIN_NUMBER_OF_POINT_CORRESPONDENCES;
     }
 
     /**
@@ -235,7 +227,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @return true if available, false otherwise.
      */
     public boolean areListsAvailable() {
-        return mPoints3D != null && mPoints2D != null;
+        return points3D != null && points2D != null;
     }
 
     /**
@@ -246,7 +238,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * otherwise.
      */
     public boolean arePointCorrespondencesNormalized() {
-        return mNormalizePointCorrespondences;
+        return normalizePointCorrespondences;
     }
 
     /**
@@ -257,13 +249,12 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      *                  false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setPointCorrespondencesNormalized(final boolean normalize)
-            throws LockedException {
+    public void setPointCorrespondencesNormalized(final boolean normalize) throws LockedException {
 
         if (isLocked()) {
             throw new LockedException();
         }
-        mNormalizePointCorrespondences = normalize;
+        normalizePointCorrespondences = normalize;
     }
 
     /**
@@ -279,21 +270,18 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      *                                         computed because point configuration might be degenerate.
      */
     private List<Point2D> transformPoints2D(
-            final List<Point2D> list,
-            final ProjectiveTransformation2D inverseTransformation)
+            final List<Point2D> list, final ProjectiveTransformation2D inverseTransformation)
             throws PinholeCameraEstimatorException {
 
         // compute image point coordinates limits
-        double x;
-        double y;
-        double minX = Double.MAX_VALUE;
-        double maxX = -Double.MAX_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = -Double.MAX_VALUE;
-        for (final Point2D point : list) {
+        var minX = Double.MAX_VALUE;
+        var maxX = -Double.MAX_VALUE;
+        var minY = Double.MAX_VALUE;
+        var maxY = -Double.MAX_VALUE;
+        for (final var point : list) {
             point.normalize();
-            x = point.getInhomX();
-            y = point.getInhomY();
+            final var x = point.getInhomX();
+            final var y = point.getInhomY();
 
             if (x < minX) {
                 minX = x;
@@ -311,25 +299,24 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
 
         // compute size of image plane (based on 2D coordinates limits), scale
         // and centroid
-        final double width = maxX - minX;
-        final double height = maxY - minY;
+        final var width = maxX - minX;
+        final var height = maxY - minY;
 
-        final double norm = Math.sqrt(width * width + height * height);
+        final var norm = Math.sqrt(width * width + height * height);
         // points are too close to each other (norm is too small).
         // This is a degenerate configuration and results will be meaningless
         if (norm < EPS) {
             throw new PinholeCameraEstimatorException();
         }
 
-        final double scale = 1.0 / norm;
-        final double centroidX = (minX + maxX) / 2.0;
-        final double centroidY = (minY + maxY) / 2.0;
+        final var scale = 1.0 / norm;
+        final var centroidX = (minX + maxX) / 2.0;
+        final var centroidY = (minY + maxY) / 2.0;
 
         // set inverse transformation matrix
         try {
-            final Matrix inverseTransformationMatrix =
-                    new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
-                            Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+            final var inverseTransformationMatrix = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
+                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
 
             inverseTransformationMatrix.setElementAt(0, 0, norm);
             // 1.0 / scale
@@ -347,18 +334,14 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
 
 
         // transform list of image points
-        final List<Point2D> transformedPoints = new ArrayList<>(list.size());
-        HomogeneousPoint2D homPoint;
-        double homX;
-        double homY;
-        double homW;
-        for (final Point2D point : list) {
+        final var transformedPoints = new ArrayList<Point2D>(list.size());
+        for (final var point : list) {
             point.normalize();
-            homX = point.getHomX();
-            homY = point.getHomY();
-            homW = point.getHomW();
+            final var homX = point.getHomX();
+            final var homY = point.getHomY();
+            final var homW = point.getHomW();
 
-            homPoint = new HomogeneousPoint2D(
+            final var homPoint = new HomogeneousPoint2D(
                     scale * (homX - centroidX * homW),
                     scale * (homY - centroidY * homW), homW);
             // normalize point to increase accuracy
@@ -381,25 +364,21 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws PinholeCameraEstimatorException if transformation cannot be
      *                                         computed because point configuration might be degenerate.
      */
-    private List<Point3D> transformPoints3D(
-            final List<Point3D> list, final ProjectiveTransformation3D transformation)
+    private List<Point3D> transformPoints3D(final List<Point3D> list, final ProjectiveTransformation3D transformation)
             throws PinholeCameraEstimatorException {
 
         // compute image point coordinates limits
-        double x;
-        double y;
-        double z;
-        double minX = Double.MAX_VALUE;
-        double maxX = -Double.MAX_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = -Double.MAX_VALUE;
-        double minZ = Double.MAX_VALUE;
-        double maxZ = -Double.MAX_VALUE;
-        for (final Point3D point : list) {
+        var minX = Double.MAX_VALUE;
+        var maxX = -Double.MAX_VALUE;
+        var minY = Double.MAX_VALUE;
+        var maxY = -Double.MAX_VALUE;
+        var minZ = Double.MAX_VALUE;
+        var maxZ = -Double.MAX_VALUE;
+        for (final var point : list) {
             point.normalize();
-            x = point.getInhomX();
-            y = point.getInhomY();
-            z = point.getInhomZ();
+            final var x = point.getInhomX();
+            final var y = point.getInhomY();
+            final var z = point.getInhomZ();
 
             if (x < minX) {
                 minX = x;
@@ -423,27 +402,25 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
 
         // compute size of image plane (based on 2D coordinates limits), scale
         // and centroid
-        final double width = maxX - minX;
-        final double height = maxY - minY;
-        final double depth = maxZ - minZ;
+        final var width = maxX - minX;
+        final var height = maxY - minY;
+        final var depth = maxZ - minZ;
 
-        final double norm = Math.sqrt(width * width + height * height +
-                depth * depth);
+        final var norm = Math.sqrt(width * width + height * height + depth * depth);
         // points are too close to each other (norm is too small).
         // This is a degenerate configuration and results will be meaningless
         if (norm < EPS) {
             throw new PinholeCameraEstimatorException();
         }
 
-        final double scale = 1.0 / norm;
-        final double centroidX = (minX + maxX) / 2.0;
-        final double centroidY = (minY + maxY) / 2.0;
-        final double centroidZ = (minZ + maxZ) / 2.0;
+        final var scale = 1.0 / norm;
+        final var centroidX = (minX + maxX) / 2.0;
+        final var centroidY = (minY + maxY) / 2.0;
+        final var centroidZ = (minZ + maxZ) / 2.0;
 
         // set transformation matrix
         try {
-            final Matrix transformMatrix = new Matrix(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
+            final var transformMatrix = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
             transformMatrix.setElementAt(0, 0, scale);
             transformMatrix.setElementAt(1, 1, scale);
@@ -461,8 +438,8 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         transformation.normalize();
 
         // transform list of world points
-        final List<Point3D> transformedPoints = new ArrayList<>(list.size());
-        for (final Point3D point : list) {
+        final var transformedPoints = new ArrayList<Point3D>(list.size());
+        for (final var point : list) {
             transformedPoints.add(transformation.transformAndReturnNew(point));
         }
 
@@ -479,8 +456,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      *                                         estimation, usually because input data is not valid.
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            PinholeCameraEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException {
 
         if (isLocked()) {
             throw new LockedException();
@@ -490,37 +466,34 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         }
 
         try {
-            mLocked = true;
-            if (mListener != null) {
-                mListener.onEstimateStart(this);
+            locked = true;
+            if (listener != null) {
+                listener.onEstimateStart(this);
             }
 
-            final ProjectiveTransformation2D inverseTransformation2D =
-                    new ProjectiveTransformation2D();
-            final ProjectiveTransformation3D transformation3D =
-                    new ProjectiveTransformation3D();
+            final var inverseTransformation2D = new ProjectiveTransformation2D();
+            final var transformation3D = new ProjectiveTransformation3D();
             final List<Point2D> inputPoints2D;
             final List<Point3D> inputPoints3D;
 
-            if (mNormalizePointCorrespondences) {
+            if (normalizePointCorrespondences) {
                 // normalize 2D and 3D points and update transformations
-                inputPoints2D = transformPoints2D(mPoints2D, inverseTransformation2D);
-                inputPoints3D = transformPoints3D(mPoints3D, transformation3D);
+                inputPoints2D = transformPoints2D(points2D, inverseTransformation2D);
+                inputPoints3D = transformPoints3D(points3D, transformation3D);
             } else {
-                inputPoints2D = mPoints2D;
-                inputPoints3D = mPoints3D;
+                inputPoints2D = points2D;
+                inputPoints3D = points3D;
             }
 
-            Matrix pinholeCameraMatrix = internalEstimate(inputPoints3D,
-                    inputPoints2D);
+            var pinholeCameraMatrix = internalEstimate(inputPoints3D, inputPoints2D);
 
-            if (mNormalizePointCorrespondences) {
+            if (normalizePointCorrespondences) {
                 inverseTransformation2D.normalize();
                 transformation3D.normalize();
 
                 // denormalize pinhole camera
-                final Matrix invTrans2DMatrix = inverseTransformation2D.asMatrix();
-                final Matrix trans3DMatrix = transformation3D.asMatrix();
+                final var invTrans2DMatrix = inverseTransformation2D.asMatrix();
+                final var trans3DMatrix = transformation3D.asMatrix();
 
                 invTrans2DMatrix.multiply(pinholeCameraMatrix);
                 invTrans2DMatrix.multiply(trans3DMatrix);
@@ -529,14 +502,14 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
 
                 // normalize by Frobenius norm to increase accuracy after point
                 // de-normalization
-                final double norm = Utils.normF(pinholeCameraMatrix);
+                final var norm = Utils.normF(pinholeCameraMatrix);
                 pinholeCameraMatrix.multiplyByScalar(1.0 / norm);
             }
 
-            final PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);
+            final var camera = new PinholeCamera(pinholeCameraMatrix);
 
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
+            if (listener != null) {
+                listener.onEstimateEnd(this);
             }
 
             return attemptRefine(camera);
@@ -546,7 +519,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         } catch (final Exception e) {
             throw new PinholeCameraEstimatorException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -564,8 +537,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * @throws PinholeCameraEstimatorException if estimation fails for some
      *                                         reason (i.e. numerical instability or geometric degeneracy).
      */
-    protected abstract Matrix internalEstimate(
-            final List<Point3D> points3D, final List<Point2D> points2D)
+    protected abstract Matrix internalEstimate(final List<Point3D> points3D, final List<Point2D> points2D)
             throws PinholeCameraEstimatorException;
 
     /**
@@ -579,46 +551,35 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
     @Override
     protected PinholeCamera attemptRefine(final PinholeCamera pinholeCamera) {
         if (hasSuggestions()) {
-            final int numPoints = mPoints3D.size();
-            final BitSet inliers = new BitSet(numPoints);
+            final var numPoints = points3D.size();
+            final var inliers = new BitSet(numPoints);
             inliers.set(0, numPoints, true);
-            final double[] residuals = new double[numPoints];
+            final var residuals = new double[numPoints];
 
-            final DecomposedPointCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedPointCorrespondencePinholeCameraRefiner(
-                            pinholeCamera, false, inliers, residuals, numPoints,
-                            mPoints3D, mPoints2D, 0.0);
+            final var refiner = new DecomposedPointCorrespondencePinholeCameraRefiner(pinholeCamera,
+                    false, inliers, residuals, numPoints, points3D, points2D, 0.0);
             try {
-                refiner.setMinSuggestionWeight(mMinSuggestionWeight);
-                refiner.setMaxSuggestionWeight(mMaxSuggestionWeight);
-                refiner.setSuggestionWeightStep(mSuggestionWeightStep);
+                refiner.setMinSuggestionWeight(minSuggestionWeight);
+                refiner.setMaxSuggestionWeight(maxSuggestionWeight);
+                refiner.setSuggestionWeightStep(suggestionWeightStep);
 
-                refiner.setSuggestSkewnessValueEnabled(
-                        mSuggestSkewnessValueEnabled);
-                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);
-                refiner.setSuggestHorizontalFocalLengthEnabled(
-                        mSuggestHorizontalFocalLengthEnabled);
-                refiner.setSuggestedHorizontalFocalLengthValue(
-                        mSuggestedHorizontalFocalLengthValue);
-                refiner.setSuggestVerticalFocalLengthEnabled(
-                        mSuggestVerticalFocalLengthEnabled);
-                refiner.setSuggestedVerticalFocalLengthValue(
-                        mSuggestedVerticalFocalLengthValue);
-                refiner.setSuggestAspectRatioEnabled(
-                        mSuggestAspectRatioEnabled);
-                refiner.setSuggestedAspectRatioValue(
-                        mSuggestedAspectRatioValue);
-                refiner.setSuggestPrincipalPointEnabled(
-                        mSuggestPrincipalPointEnabled);
-                refiner.setSuggestedPrincipalPointValue(
-                        mSuggestedPrincipalPointValue);
-                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);
-                refiner.setSuggestedRotationValue(mSuggestedRotationValue);
-                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);
-                refiner.setSuggestedCenterValue(mSuggestedCenterValue);
+                refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);
+                refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);
+                refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);
+                refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);
+                refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);
+                refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);
+                refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);
+                refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);
+                refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);
+                refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);
+                refiner.setSuggestRotationEnabled(suggestRotationEnabled);
+                refiner.setSuggestedRotationValue(suggestedRotationValue);
+                refiner.setSuggestCenterEnabled(suggestCenterEnabled);
+                refiner.setSuggestedCenterValue(suggestedCenterValue);
 
-                final PinholeCamera result = new PinholeCamera();
-                final boolean improved = refiner.refine(result);
+                final var result = new PinholeCamera();
+                final var improved = refiner.refine(result);
 
                 return improved ? result : pinholeCamera;
 

@@ -44,22 +44,22 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     /**
      * x element of axis angle.
      */
-    private double mAxisX = 0.0;
+    private double axisX = 0.0;
 
     /**
      * y element of axis angle.
      */
-    private double mAxisY = 0.0;
+    private double axisY = 0.0;
 
     /**
      * z element of axis angle.
      */
-    private double mAxisZ = 1.0;
+    private double axisZ = 1.0;
 
     /**
      * angle element of axis angle.
      */
-    private double mTheta = 0.0;
+    private double theta = 0.0;
 
     /**
      * Constructor which allows initial value to be supplied as axis and angle.
@@ -70,8 +70,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @param axisZ z dimension of normalized axis.
      * @param theta angle in radians.
      */
-    public AxisRotation3D(final double axisX, final double axisY, final double axisZ,
-                          final double theta) {
+    public AxisRotation3D(final double axisX, final double axisY, final double axisZ, final double theta) {
         setAxisAndRotation(axisX, axisY, axisZ, theta);
     }
 
@@ -132,10 +131,17 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public final void fromRotation(final AxisRotation3D rot) {
-        mAxisX = (rot != null) ? rot.mAxisX : 0;
-        mAxisY = (rot != null) ? rot.mAxisY : 0;
-        mAxisZ = (rot != null) ? rot.mAxisZ : 1;
-        mTheta = (rot != null) ? rot.mTheta : 0;
+        if (rot != null) {
+            axisX = rot.axisX;
+            axisY = rot.axisY;
+            axisZ = rot.axisZ;
+            theta = rot.theta;
+        } else {
+            axisX = 0.0;
+            axisY = 0.0;
+            axisZ = 1.0;
+            theta = 0.0;
+        }
     }
 
     /**
@@ -147,15 +153,15 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @param axisZ Z coordinate of rotation axis.
      */
     public void setAxis(final double axisX, final double axisY, final double axisZ) {
-        mTheta = Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
-        if (mTheta == 0.0) {
-            mAxisX = 1;
-            mAxisY = mAxisZ = 0.0;
+        theta = Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
+        if (theta == 0.0) {
+            this.axisX = 1;
+            this.axisY = this.axisZ = 0.0;
             return;
         }
-        mAxisX = axisX / mTheta;
-        mAxisY = axisY / mTheta;
-        mAxisZ = axisZ / mTheta;
+        this.axisX = axisX / theta;
+        this.axisY = axisY / theta;
+        this.axisZ = axisZ / theta;
     }
 
     /**
@@ -171,12 +177,12 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @param theta Amount of rotation in radians.
      */
     @Override
-    public final void setAxisAndRotation(final double axisX, final double axisY,
-                                         final double axisZ, final double theta) {
-        mAxisX = axisX;
-        mAxisY = axisY;
-        mAxisZ = axisZ;
-        mTheta = theta;
+    public final void setAxisAndRotation(
+            final double axisX, final double axisY, final double axisZ, final double theta) {
+        this.axisX = axisX;
+        this.axisY = axisY;
+        this.axisZ = axisZ;
+        this.theta = theta;
     }
 
     /**
@@ -185,7 +191,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @return X coordinate of rotation axis.
      */
     public double getAxisX() {
-        return mAxisX;
+        return axisX;
     }
 
     /**
@@ -194,7 +200,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @return Y coordinate of rotation axis.
      */
     public double getAxisY() {
-        return mAxisY;
+        return axisY;
     }
 
     /**
@@ -203,7 +209,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @return Z coordinate of rotation axis.
      */
     public double getAxisZ() {
-        return mAxisZ;
+        return axisZ;
     }
 
     /**
@@ -220,9 +226,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        axis[0] = mAxisX;
-        axis[1] = mAxisY;
-        axis[2] = mAxisZ;
+        axis[0] = axisX;
+        axis[1] = axisY;
+        axis[2] = axisZ;
     }
 
     /**
@@ -233,7 +239,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public double getRotationAngle() {
-        return mTheta;
+        return theta;
     }
 
     /**
@@ -245,7 +251,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public AxisRotation3D inverseRotationAndReturnNew() {
-        final AxisRotation3D rot = new AxisRotation3D();
+        final var rot = new AxisRotation3D();
         inverseRotation(rot);
         return rot;
     }
@@ -261,7 +267,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         // copy this rotation into result
         result.fromRotation(this);
         // reverse angle
-        result.mTheta = -mTheta;
+        result.theta = -theta;
     }
 
     /**
@@ -273,11 +279,11 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void inverseRotation(final Rotation3D result) {
-        if (result instanceof AxisRotation3D) {
-            inverseRotation((AxisRotation3D) result);
+        if (result instanceof AxisRotation3D axixResult) {
+            inverseRotation(axixResult);
 
         } else if (result instanceof MatrixRotation3D) {
-            final AxisRotation3D rot = new AxisRotation3D();
+            final var rot = new AxisRotation3D();
             inverseRotation(rot);
             try {
                 result.fromMatrix(rot.asInhomogeneousMatrix());
@@ -325,40 +331,38 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void asInhomogeneousMatrix(final Matrix result) {
-        if (result.getRows() != INHOM_COORDS ||
-                result.getColumns() != INHOM_COORDS) {
+        if (result.getRows() != INHOM_COORDS || result.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        final double c = Math.cos(mTheta);
-        final double s = Math.sin(mTheta);
-        final double t = 1.0 - c;
+        final var c = Math.cos(theta);
+        final var s = Math.sin(theta);
+        final var t = 1.0 - c;
         // normalize axis
-        final double magnitude = Math.sqrt(mAxisX * mAxisX + mAxisY * mAxisY +
-                mAxisZ * mAxisZ);
+        final var magnitude = Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
         if (magnitude > EPS) {
             // normalize only if axis norm is large enough to avoid numerical
             // instability
-            mAxisX /= magnitude;
-            mAxisY /= magnitude;
-            mAxisZ /= magnitude;
+            axisX /= magnitude;
+            axisY /= magnitude;
+            axisZ /= magnitude;
         }
 
-        result.setElementAt(0, 0, c + mAxisX * mAxisX * t);
-        result.setElementAt(1, 1, c + mAxisY * mAxisY * t);
-        result.setElementAt(2, 2, c + mAxisZ * mAxisZ * t);
+        result.setElementAt(0, 0, c + axisX * axisX * t);
+        result.setElementAt(1, 1, c + axisY * axisY * t);
+        result.setElementAt(2, 2, c + axisZ * axisZ * t);
 
 
-        double tmp1 = mAxisX * mAxisY * t;
-        double tmp2 = mAxisZ * s;
+        var tmp1 = axisX * axisY * t;
+        var tmp2 = axisZ * s;
         result.setElementAt(1, 0, tmp1 + tmp2);
         result.setElementAt(0, 1, tmp1 - tmp2);
-        tmp1 = mAxisX * mAxisZ * t;
-        tmp2 = mAxisY * s;
+        tmp1 = axisX * axisZ * t;
+        tmp2 = axisY * s;
         result.setElementAt(2, 0, tmp1 - tmp2);
         result.setElementAt(0, 2, tmp1 + tmp2);
-        tmp1 = mAxisY * mAxisZ * t;
-        tmp2 = mAxisX * s;
+        tmp1 = axisY * axisZ * t;
+        tmp2 = axisX * s;
         result.setElementAt(2, 1, tmp1 + tmp2);
         result.setElementAt(1, 2, tmp1 - tmp2);
     }
@@ -375,8 +379,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             result = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // sets into 3x3 top-left sub-matrix the internal matrix of this
             // instance, the remaining part will continue to be the identity
-            result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
-                    asInhomogeneousMatrix());
+            result.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, asInhomogeneousMatrix());
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -393,15 +397,14 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void asHomogeneousMatrix(final Matrix result) {
-        if (result.getRows() != HOM_COORDS ||
-                result.getColumns() != HOM_COORDS) {
+        if (result.getRows() != HOM_COORDS || result.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
         result.initialize(0.0);
         // sets into 3x3 top-left sub-matrix the internal matrix of this instance
-        result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
-                asInhomogeneousMatrix());
+        result.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                INHOM_COORDS - 1, asInhomogeneousMatrix());
         // set las element to 1.0 (to be like the identity
         result.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);
     }
@@ -420,11 +423,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
     @Override
-    public void fromInhomogeneousMatrix(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
+    public void fromInhomogeneousMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
 
-        if (m.getRows() != INHOM_COORDS ||
-                m.getColumns() != INHOM_COORDS) {
+        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {
             throw new InvalidRotationMatrixException();
         }
         if (!Rotation3D.isValidRotationMatrix(m, threshold)) {
@@ -437,24 +438,21 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         // variables for result
         double z;
         // margin to allow for rounding errors
-        double epsilon = 0.01;
+        var epsilon = 0.01;
         // margin to distinguish between 0 and 180 degrees
-        double epsilon2 = 0.1;
+        var epsilon2 = 0.1;
 
-        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) < epsilon)
-                && (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) < epsilon)
-                && (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) < epsilon)) {
+        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) < epsilon) &&
+                (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) < epsilon) &&
+                (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) < epsilon)) {
             // singularity found
             // first check for identity matrix which must have +1 for all terms
             // in leading diagonal and zero in other terms
-            if ((Math.abs(m.getElementAt(0, 1) +
-                    m.getElementAt(1, 0)) < epsilon2)
-                    && (Math.abs(m.getElementAt(0, 2) +
-                    m.getElementAt(2, 0)) < epsilon2)
-                    && (Math.abs(m.getElementAt(1, 2) +
-                    m.getElementAt(2, 1)) < epsilon2)
-                    && (Math.abs(m.getElementAt(0, 0) + m.getElementAt(1, 1) +
-                    m.getElementAt(2, 2) - 3.0) < epsilon2)) {
+            if ((Math.abs(m.getElementAt(0, 1) + m.getElementAt(1, 0)) < epsilon2)
+                    && (Math.abs(m.getElementAt(0, 2) + m.getElementAt(2, 0)) < epsilon2)
+                    && (Math.abs(m.getElementAt(1, 2) + m.getElementAt(2, 1)) < epsilon2)
+                    && (Math.abs(m.getElementAt(0, 0) + m.getElementAt(1, 1)
+                    + m.getElementAt(2, 2) - 3.0) < epsilon2)) {
                 // this singularity is identity matrix so angle = 0
                 setAxisAndRotation(0.0, 0.0, 1.0, 0.0);  // zero angle,
                 // arbitrary axis
@@ -462,12 +460,12 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             }
             // otherwise this singularity is angle = 180
             angle = Math.PI;
-            final double xx = (m.getElementAt(0, 0) + 1.0) / 2.0;
-            final double yy = (m.getElementAt(1, 1) + 1.0) / 2.0;
-            final double zz = (m.getElementAt(2, 2) + 1.0) / 2.0;
-            final double xy = (m.getElementAt(0, 1) + m.getElementAt(1, 0)) / 4.0;
-            final double xz = (m.getElementAt(0, 2) + m.getElementAt(2, 0)) / 4.0;
-            final double yz = (m.getElementAt(1, 2) + m.getElementAt(2, 1)) / 4.0;
+            final var xx = (m.getElementAt(0, 0) + 1.0) / 2.0;
+            final var yy = (m.getElementAt(1, 1) + 1.0) / 2.0;
+            final var zz = (m.getElementAt(2, 2) + 1.0) / 2.0;
+            final var xy = (m.getElementAt(0, 1) + m.getElementAt(1, 0)) / 4.0;
+            final var xz = (m.getElementAt(0, 2) + m.getElementAt(2, 0)) / 4.0;
+            final var yz = (m.getElementAt(1, 2) + m.getElementAt(2, 1)) / 4.0;
             if ((xx > yy) && (xx > zz)) {
                 // m.getElementAt(0, 0) is the
                 // largest diagonal term
@@ -512,12 +510,12 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 
         // as we have reached here there are no singularities, so we can handle
         // normally
-        double s = Math.sqrt((m.getElementAt(2, 1) - m.getElementAt(1, 2)) *
-                (m.getElementAt(2, 1) - m.getElementAt(1, 2))
-                + (m.getElementAt(0, 2) - m.getElementAt(2, 0)) *
-                (m.getElementAt(0, 2) - m.getElementAt(2, 0))
-                + (m.getElementAt(1, 0) - m.getElementAt(0, 1)) *
-                (m.getElementAt(1, 0) - m.getElementAt(0, 1))); // used to 
+        var s = Math.sqrt((m.getElementAt(2, 1) - m.getElementAt(1, 2))
+                * (m.getElementAt(2, 1) - m.getElementAt(1, 2))
+                + (m.getElementAt(0, 2) - m.getElementAt(2, 0))
+                * (m.getElementAt(0, 2) - m.getElementAt(2, 0))
+                + (m.getElementAt(1, 0) - m.getElementAt(0, 1))
+                * (m.getElementAt(1, 0) - m.getElementAt(0, 1))); // used to
         // normalise
         if (Math.abs(s) < 0.001) {
             s = 1.0;
@@ -525,11 +523,11 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         // prevent divide by zero, should not happen if matrix is orthogonal and
         // should be caught by singularity test above, but I've left it in just
         // in case
-        mTheta = Math.acos((m.getElementAt(0, 0) + m.getElementAt(1, 1) +
-                m.getElementAt(2, 2) - 1.0) / 2.0);
-        mAxisX = (m.getElementAt(2, 1) - m.getElementAt(1, 2)) / s;
-        mAxisY = (m.getElementAt(0, 2) - m.getElementAt(2, 0)) / s;
-        mAxisZ = (m.getElementAt(1, 0) - m.getElementAt(0, 1)) / s;
+        theta = Math.acos((m.getElementAt(0, 0) + m.getElementAt(1, 1)
+                + m.getElementAt(2, 2) - 1.0) / 2.0);
+        axisX = (m.getElementAt(2, 1) - m.getElementAt(1, 2)) / s;
+        axisY = (m.getElementAt(0, 2) - m.getElementAt(2, 0)) / s;
+        axisZ = (m.getElementAt(1, 0) - m.getElementAt(0, 1)) / s;
     }
 
     /**
@@ -549,22 +547,20 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public void fromHomogeneousMatrix(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
-        if (m.getRows() != HOM_COORDS ||
-                m.getColumns() != HOM_COORDS) {
+    public void fromHomogeneousMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new InvalidRotationMatrixException();
         }
         if (!Rotation3D.isValidRotationMatrix(m, threshold)) {
             throw new InvalidRotationMatrixException();
         }
-        if (Math.abs(m.getElementAt(3, 0)) > threshold ||
-                Math.abs(m.getElementAt(3, 1)) > threshold ||
-                Math.abs(m.getElementAt(3, 2)) > threshold ||
-                Math.abs(m.getElementAt(0, 3)) > threshold ||
-                Math.abs(m.getElementAt(1, 3)) > threshold ||
-                Math.abs(m.getElementAt(2, 3)) > threshold ||
-                Math.abs(m.getElementAt(3, 3) - 1.0) > threshold) {
+        if (Math.abs(m.getElementAt(3, 0)) > threshold
+                || Math.abs(m.getElementAt(3, 1)) > threshold
+                || Math.abs(m.getElementAt(3, 2)) > threshold
+                || Math.abs(m.getElementAt(0, 3)) > threshold
+                || Math.abs(m.getElementAt(1, 3)) > threshold
+                || Math.abs(m.getElementAt(2, 3)) > threshold
+                || Math.abs(m.getElementAt(3, 3) - 1.0) > threshold) {
             throw new InvalidRotationMatrixException();
         }
 
@@ -583,28 +579,24 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void rotate(final Point3D inputPoint, final Point3D resultPoint) {
-        final double s = Math.sin(mTheta / 2.0);
-        final double xh = mAxisX * s;
-        final double yh = mAxisY * s;
-        final double zh = mAxisZ * s;
-        final double wh = Math.cos(mTheta / 2.0);
+        final var s = Math.sin(theta / 2.0);
+        final var xh = axisX * s;
+        final var yh = axisY * s;
+        final var zh = axisZ * s;
+        final var wh = Math.cos(theta / 2.0);
 
-        final double inhomX = inputPoint.getInhomX();
-        final double inhomY = inputPoint.getInhomY();
-        final double inhomZ = inputPoint.getInhomZ();
+        final var inhomX = inputPoint.getInhomX();
+        final var inhomY = inputPoint.getInhomY();
+        final var inhomZ = inputPoint.getInhomZ();
 
-        final double resultX = wh * wh * inhomX + 2.0 * yh * wh * inhomZ -
-                2.0 * zh * wh * inhomY + xh * xh * inhomX +
-                2.0 * yh * xh * inhomY + 2 * zh * xh * inhomZ -
-                zh * zh * inhomX - yh * yh * inhomX;
-        final double resultY = 2.0 * xh * yh * inhomX + yh * yh * inhomY +
-                2.0 * zh * yh * inhomZ + 2.0 * wh * zh * inhomX -
-                zh * zh * inhomY + wh * wh * inhomY - 2 * xh * wh * inhomZ -
-                xh * xh * inhomY;
-        final double resultZ = 2.0 * xh * zh * inhomX + 2.0 * yh * zh * inhomY +
-                zh * zh * inhomZ - 2.0 * wh * yh * inhomX -
-                yh * yh * inhomZ + 2.0 * wh * xh * inhomY - xh * xh * inhomZ +
-                wh * wh * inhomZ;
+        final var resultX = wh * wh * inhomX + 2.0 * yh * wh * inhomZ - 2.0 * zh * wh * inhomY + xh * xh * inhomX
+                + 2.0 * yh * xh * inhomY + 2 * zh * xh * inhomZ - zh * zh * inhomX - yh * yh * inhomX;
+        final var resultY = 2.0 * xh * yh * inhomX + yh * yh * inhomY + 2.0 * zh * yh * inhomZ
+                + 2.0 * wh * zh * inhomX - zh * zh * inhomY + wh * wh * inhomY - 2 * xh * wh * inhomZ
+                - xh * xh * inhomY;
+        final var resultZ = 2.0 * xh * zh * inhomX + 2.0 * yh * zh * inhomY + zh * zh * inhomZ
+                - 2.0 * wh * yh * inhomX - yh * yh * inhomZ + 2.0 * wh * xh * inhomY - xh * xh * inhomZ
+                + wh * wh * inhomZ;
         resultPoint.setInhomogeneousCoordinates(resultX, resultY, resultZ);
     }
 
@@ -617,9 +609,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * internal matrix of provided rotation with the internal matrix of this
      * instance.
      */
-    public AxisRotation3D combineAndReturnNew(
-            final AxisRotation3D rotation) {
-        final AxisRotation3D result = new AxisRotation3D();
+    public AxisRotation3D combineAndReturnNew(final AxisRotation3D rotation) {
+        final var result = new AxisRotation3D();
         combine(this, rotation, result);
         return result;
     }
@@ -635,8 +626,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public Rotation3D combineAndReturnNew(final Rotation3D rotation) {
-        if (rotation instanceof AxisRotation3D) {
-            return combineAndReturnNew((AxisRotation3D) rotation);
+        if (rotation instanceof AxisRotation3D axisRotation) {
+            return combineAndReturnNew(axisRotation);
         } else {
             return combineAndReturnNew(new AxisRotation3D(rotation));
         }
@@ -660,8 +651,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void combine(final Rotation3D rotation) {
-        if (rotation instanceof AxisRotation3D) {
-            combine((AxisRotation3D) rotation);
+        if (rotation instanceof AxisRotation3D axisRotation) {
+            combine(axisRotation);
         } else {
             combine(new AxisRotation3D(rotation));
         }
@@ -677,11 +668,10 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      *               the internal matrix of provided rotation with the internal matrix of this
      *               instance.
      */
-    public static void combine(final AxisRotation3D rot1,
-                               final AxisRotation3D rot2, final AxisRotation3D result) {
+    public static void combine(final AxisRotation3D rot1, final AxisRotation3D rot2, final AxisRotation3D result) {
 
-        final Matrix m1 = rot1.asInhomogeneousMatrix();
-        final Matrix m2 = rot2.asInhomogeneousMatrix();
+        final var m1 = rot1.asInhomogeneousMatrix();
+        final var m2 = rot2.asInhomogeneousMatrix();
         try {
             m1.multiply(m2);
             result.fromMatrix(m1);
@@ -708,8 +698,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void toMatrixRotation(final MatrixRotation3D result) {
-        result.setAxisAndRotation(new double[]{mAxisX, mAxisY, mAxisZ},
-                mTheta);
+        result.setAxisAndRotation(new double[]{axisX, axisY, axisZ}, theta);
     }
 
     /**
@@ -731,6 +720,6 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void toQuaternion(final Quaternion result) {
-        result.setFromAxisAndRotation(mAxisX, mAxisY, mAxisZ, mTheta);
+        result.setFromAxisAndRotation(axisX, axisY, axisZ, theta);
     }
 }

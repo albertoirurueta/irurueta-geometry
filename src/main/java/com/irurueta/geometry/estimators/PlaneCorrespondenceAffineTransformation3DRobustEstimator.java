@@ -34,8 +34,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of planes to be used to estimate an affine 3D transformation.
@@ -44,7 +43,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * position. Hence, both input lines and output lines must have the
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Plane> mInputPlanes;
+    protected List<Plane> inputPlanes;
 
     /**
      * List of planes to be used to estimate an affine 3D transformation.
@@ -53,7 +52,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * position. Hence, both input lines and output lines must have the
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Plane> mOutputPlanes;
+    protected List<Plane> outputPlanes;
 
     /**
      * Constructor.
@@ -128,7 +127,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      */
     public List<Plane> getInputPlanes() {
-        return mInputPlanes;
+        return inputPlanes;
     }
 
     /**
@@ -143,7 +142,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      */
     public List<Plane> getOutputPlanes() {
-        return mOutputPlanes;
+        return outputPlanes;
     }
 
     /**
@@ -161,8 +160,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public final void setPlanes(final List<Plane> inputPlanes,
-                                final List<Plane> outputPlanes) throws LockedException {
+    public final void setPlanes(final List<Plane> inputPlanes, final List<Plane> outputPlanes) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -178,9 +176,8 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputPlanes != null && mOutputPlanes != null &&
-                mInputPlanes.size() == mOutputPlanes.size() &&
-                mInputPlanes.size() >= MINIMUM_SIZE;
+        return inputPlanes != null && outputPlanes != null && inputPlanes.size() == outputPlanes.size()
+                && inputPlanes.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -219,21 +216,14 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *               the best affine 3D transformation.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-        }
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+        };
     }
 
     /**
@@ -251,26 +241,16 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-        }
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    inputPlanes, outputPlanes);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    inputPlanes, outputPlanes);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
+        };
     }
 
     /**
@@ -284,26 +264,14 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return an instance of affine 3D transformation estimator.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-        }
+            final AffineTransformation3DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -324,26 +292,19 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
             final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-        }
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+        };
     }
 
     /**
@@ -358,21 +319,13 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(qualityScores);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+        };
     }
 
     /**
@@ -392,26 +345,17 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes, qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanes);
-        }
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    inputPlanes, outputPlanes, qualityScores);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    inputPlanes, outputPlanes, qualityScores);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
+        };
     }
 
     /**
@@ -427,26 +371,16 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return an instance of affine 3D transformation estimator.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener);
-        }
+            final AffineTransformation3DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, qualityScores);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -471,24 +405,18 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
             final AffineTransformation3DRobustEstimatorListener listener,
             final List<Plane> inputPlanes, final List<Plane> outputPlanes,
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-            case MSAC:
-                return new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-            case PROSAC:
-                return new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes, qualityScores);
-            case PROMEDS:
-                return new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        listener, inputPlanes, outputPlanes);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+            case MSAC -> new MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+            case PROSAC -> new PROSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes, qualityScores);
+            case PROMEDS -> new PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes, qualityScores);
+            default -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+                    listener, inputPlanes, outputPlanes);
+        };
     }
 
     /**
@@ -548,8 +476,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
             final AffineTransformation3DRobustEstimatorListener listener,
             final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
-        return create(listener, inputPlanes, outputPlanes,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -560,8 +487,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                      planes.
      * @return an instance of affine 3D transformation estimator.
      */
-    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final double[] qualityScores) {
+    public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -580,10 +506,8 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores) {
-        return create(inputPlanes, outputPlanes, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Plane> inputPlanes, final List<Plane> outputPlanes, final double[] qualityScores) {
+        return create(inputPlanes, outputPlanes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -597,8 +521,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return an instance of affine 3D transformation estimator.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final AffineTransformation3DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -619,11 +542,9 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator create(
-            final AffineTransformation3DRobustEstimatorListener listener,
-            final List<Plane> inputPlanes, final List<Plane> outputPlanes,
-            final double[] qualityScores) {
-        return create(listener, inputPlanes, outputPlanes, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final AffineTransformation3DRobustEstimatorListener listener, final List<Plane> inputPlanes,
+            final List<Plane> outputPlanes, final double[] qualityScores) {
+        return create(listener, inputPlanes, outputPlanes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -638,16 +559,15 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided lists of lines don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetPlanes(final List<Plane> inputPlanes,
-                                   final List<Plane> outputPlanes) {
+    private void internalSetPlanes(final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         if (inputPlanes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
         if (inputPlanes.size() != outputPlanes.size()) {
             throw new IllegalArgumentException();
         }
-        mInputPlanes = inputPlanes;
-        mOutputPlanes = outputPlanes;
+        this.inputPlanes = inputPlanes;
+        this.outputPlanes = outputPlanes;
     }
 
     /**
@@ -670,10 +590,9 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
         plane.normalize();
         transformedPlane.normalize();
 
-        final double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +
-                plane.getB() * transformedPlane.getB() +
-                plane.getC() * transformedPlane.getC() +
-                plane.getD() * transformedPlane.getD());
+        final var dotProduct = Math.abs(plane.getA() * transformedPlane.getA()
+                + plane.getB() * transformedPlane.getB() + plane.getC() * transformedPlane.getC()
+                + plane.getD() * transformedPlane.getD());
         return 1.0 - dotProduct;
     }
 
@@ -690,22 +609,18 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * non-refined solution if not requested or refinement failed.
      */
     @SuppressWarnings("DuplicatedCode")
-    protected AffineTransformation3D attemptRefine(
-            final AffineTransformation3D transformation) {
-        if (mRefineResult) {
-            final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                    new PlaneCorrespondenceAffineTransformation3DRefiner(
-                            transformation, mKeepCovariance, getInliersData(),
-                            mInputPlanes, mOutputPlanes,
-                            getRefinementStandardDeviation());
+    protected AffineTransformation3D attemptRefine(final AffineTransformation3D transformation) {
+        if (refineResult) {
+            final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner(transformation, keepCovariance,
+                    getInliersData(), inputPlanes, outputPlanes, getRefinementStandardDeviation());
 
             try {
-                final AffineTransformation3D result = new AffineTransformation3D();
-                final boolean improved = refiner.refine(result);
+                final var result = new AffineTransformation3D();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : transformation;

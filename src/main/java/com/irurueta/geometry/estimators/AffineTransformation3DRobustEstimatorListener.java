@@ -25,8 +25,7 @@ public interface AffineTransformation3DRobustEstimatorListener {
      *
      * @param estimator reference to robust estimator.
      */
-    void onEstimateStart(
-            final AffineTransformation3DRobustEstimator estimator);
+    void onEstimateStart(final AffineTransformation3DRobustEstimator estimator);
 
     /**
      * Called when estimation ends.
@@ -42,8 +41,7 @@ public interface AffineTransformation3DRobustEstimatorListener {
      * @param iteration current iteration.
      */
     void onEstimateNextIteration(
-            final AffineTransformation3DRobustEstimator estimator,
-            final int iteration);
+            final AffineTransformation3DRobustEstimator estimator, final int iteration);
 
     /**
      * Called when estimation progress changes significantly.

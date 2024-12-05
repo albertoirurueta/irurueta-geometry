@@ -32,8 +32,7 @@ public abstract class Triangulator2D {
     /**
      * Constant defining default triangulator method.
      */
-    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD =
-            TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
+    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD = TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
 
     /**
      * Empty constructor.
@@ -58,8 +57,7 @@ public abstract class Triangulator2D {
      * @throws TriangulatorException Raised if triangulation cannot be done.
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
-    public abstract List<Triangle2D> triangulate(final Polygon2D polygon)
-            throws TriangulatorException;
+    public abstract List<Triangle2D> triangulate(final Polygon2D polygon) throws TriangulatorException;
 
     /**
      * Triangulates a polygon formed by provided vertices.
@@ -69,8 +67,7 @@ public abstract class Triangulator2D {
      * @throws TriangulatorException Raised if triangulation cannot be done.
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
-    public abstract List<Triangle2D> triangulate(final List<Point2D> vertices)
-            throws TriangulatorException;
+    public abstract List<Triangle2D> triangulate(final List<Point2D> vertices) throws TriangulatorException;
 
     /**
      * Triangulates a polygon formed by provided vertices.
@@ -85,8 +82,8 @@ public abstract class Triangulator2D {
      * @throws TriangulatorException Raised if triangulation cannot be done.
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
-    public abstract List<Triangle2D> triangulate(
-            final List<Point2D> vertices, final List<int[]> indices) throws TriangulatorException;
+    public abstract List<Triangle2D> triangulate(final List<Point2D> vertices, final List<int[]> indices)
+            throws TriangulatorException;
 
     /**
      * Instantiates a triangulator for 2D polygons using default method.
@@ -105,10 +102,8 @@ public abstract class Triangulator2D {
      */
     public static Triangulator2D create(final TriangulatorMethod method) {
         //noinspection SwitchStatementWithTooFewBranches
-        switch (method) {
-            case VAN_GOGH_TRIANGULATOR:
-            default:
-                return new VanGoghTriangulator2D();
-        }
+        return switch (method) {
+            default -> new VanGoghTriangulator2D();
+        };
     }
 }

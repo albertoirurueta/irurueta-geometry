@@ -23,7 +23,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -46,7 +45,7 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
     /**
      * Line to be reused when computing residuals.
      */
-    private final Line2D mResidualTestLine = new Line2D();
+    private final Line2D residualTestLine = new Line2D();
 
     /**
      * Constructor.
@@ -73,8 +72,8 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
             final boolean keepCovariance, final BitSet inliers, final double[] residuals,
             final int numInliers, final List<Line2D> samples1, final List<Line2D> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,
+                refinementStandardDeviation);
     }
 
     /**
@@ -95,8 +94,7 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
             final boolean keepCovariance, final InliersData inliersData,
             final List<Line2D> samples1, final List<Line2D> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);
     }
 
     /**
@@ -114,8 +112,8 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final ProjectiveTransformation2D result)
-            throws NotReadyException, LockedException, RefinerException {
+    public boolean refine(final ProjectiveTransformation2D result) throws NotReadyException, LockedException,
+            RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -123,38 +121,34 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        mInitialEstimation.normalize();
+        initialEstimation.normalize();
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
-            final double[] initParams = new double[
-                    ProjectiveTransformation2D.HOM_COORDS *
-                            ProjectiveTransformation2D.HOM_COORDS];
+            final var initParams = new double[
+                    ProjectiveTransformation2D.HOM_COORDS * ProjectiveTransformation2D.HOM_COORDS];
             // copy values
-            System.arraycopy(mInitialEstimation.getT().getBuffer(), 0,
-                    initParams, 0, initParams.length);
+            System.arraycopy(initialEstimation.getT().getBuffer(), 0, initParams, 0, initParams.length);
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 2 sets of 2D lines to compute residuals
-            final int nDims = 2 * Line2D.LINE_NUMBER_PARAMS;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Line2D inputLine;
-            Line2D outputLine;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = 2 * Line2D.LINE_NUMBER_PARAMS;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    inputLine = mSamples1.get(i);
-                    outputLine = mSamples2.get(i);
+                    final var inputLine = samples1.get(i);
+                    final var outputLine = samples2.get(i);
                     inputLine.normalize();
                     outputLine.normalize();
                     x.setElementAt(pos, 0, inputLine.getA());
@@ -164,92 +158,75 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
                     x.setElementAt(pos, 4, outputLine.getB());
                     x.setElementAt(pos, 5, outputLine.getC());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Line2D mInputLine = new Line2D();
+                private final Line2D inputLine = new Line2D();
 
-                        private final Line2D mOutputLine = new Line2D();
+                private final Line2D outputLine = new Line2D();
 
-                        private final ProjectiveTransformation2D mTransformation =
-                                new ProjectiveTransformation2D();
+                private final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
-                                                // copy values
-                                                System.arraycopy(params, 0,
-                                                        mTransformation.getT().getBuffer(), 0,
-                                                        params.length);
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    // copy values
+                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);
+                    return residual(transformation, inputLine, outputLine);
+                });
 
-                                                return residual(mTransformation, mInputLine,
-                                                        mOutputLine);
-                                            }
-                                        });
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    inputLine.setParameters(point[0], point[1], point[2]);
+                    outputLine.setParameters(point[3], point[4], point[5]);
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mInputLine.setParameters(point[0], point[1], point[2]);
-                            mOutputLine.setParameters(point[3], point[4], point[5]);
+                    // copy values
+                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);
 
-                            // copy values
-                            System.arraycopy(params, 0,
-                                    mTransformation.getT().getBuffer(), 0,
-                                    params.length);
+                    final var y = residual(transformation, inputLine, outputLine);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            final double y = residual(mTransformation, mInputLine,
-                                    mOutputLine);
-                            mGradientEstimator.gradient(params, derivatives);
+                    return y;
 
-                            return y;
+                }
+            };
 
-                        }
-                    };
-
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update transformation
 
             // copy values
-            System.arraycopy(params, 0, result.getT().getBuffer(), 0,
-                    params.length);
+            System.arraycopy(params, 0, result.getT().getBuffer(), 0, params.length);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -257,7 +234,7 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -270,14 +247,14 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
      * @param outputLine     output 2D line.
      * @return residual.
      */
-    private double residual(final ProjectiveTransformation2D transformation,
-                            final Line2D inputLine, final Line2D outputLine) {
+    private double residual(final ProjectiveTransformation2D transformation, final Line2D inputLine,
+                            final Line2D outputLine) {
         try {
             inputLine.normalize();
             outputLine.normalize();
 
-            transformation.transform(inputLine, mResidualTestLine);
-            return 1.0 - Math.abs(outputLine.dotProduct(mResidualTestLine));
+            transformation.transform(inputLine, residualTestLine);
+            return 1.0 - Math.abs(outputLine.dotProduct(residualTestLine));
         } catch (final AlgebraException e) {
             return 1.0;
         }
@@ -290,16 +267,14 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
      * @return total residual.
      */
     private double totalResidual(final ProjectiveTransformation2D transformation) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Line2D inputLine;
-        Line2D outputLine;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                inputLine = mSamples1.get(i);
-                outputLine = mSamples2.get(i);
+                final var inputLine = samples1.get(i);
+                final var outputLine = samples2.get(i);
                 inputLine.normalize();
                 outputLine.normalize();
                 result += residual(transformation, inputLine, outputLine);
